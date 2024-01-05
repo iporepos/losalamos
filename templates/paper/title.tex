@@ -1,0 +1,161 @@
+\documentclass[11pt]{article}
+
+% ------------ packages section ------------ 
+% page set up
+\usepackage{geometry}
+\geometry{
+ a4paper,
+ total={170mm,257mm},
+ left=40mm,
+ right=25mm,
+ top=20mm,
+ bottom=25mm
+ }
+% fonts
+\usepackage[T1]{fontenc}
+\usepackage{helvet}
+% numbering
+\usepackage[utf8]{inputenc}
+% language set up
+\usepackage[portuguese, main=english]{babel}
+% line spacing
+\usepackage{setspace}
+% adjust margins
+\usepackage{changepage}
+% number lines
+\usepackage{lineno}
+% titles
+\usepackage{titlesec}
+% colors
+\usepackage[table]{xcolor}
+\definecolor{rowgray}{gray}{0.9}
+% lorem ipsum generator
+\usepackage{blindtext}
+\usepackage{array}
+\usepackage{booktabs}
+% sorted lists package
+\usepackage{enumerate}
+% insert graphics
+\usepackage{graphicx}
+% wrapp figures in text
+\usepackage{wrapfig}
+% math package
+\usepackage{amsmath}
+% appendix
+\usepackage[title]{appendix}
+% letter symbol
+\usepackage[misc]{ifsym}
+% acronymns
+\usepackage[acronym,nonumberlist]{glossaries}
+% caption package - settings
+\usepackage[font={scriptsize,sf}, labelfont=bf]{caption}
+% quotes
+\usepackage{csquotes}
+\usepackage{dirtytalk}
+% BibLaTeX
+\usepackage[backend=biber, style=bwl-FU]{biblatex} % style=bwl-FU
+
+
+% ------------ links setup ------------
+\usepackage{hyperref}
+\hypersetup{
+	colorlinks=true,
+	linkcolor=blue,
+	citecolor=blue,
+	filecolor=magenta,             
+	urlcolor=cyan,
+	pdftitle={preprint sao leo},
+	pdfsubject=preprint,
+	pdfauthor=Ipora Brito Possantti
+}
+
+
+% ------------ page setup ------------
+%\pagecolor{black}
+%\color{white}
+
+% Set formats for each heading level
+\titleformat*{\section}{\Large\bfseries\sffamily}
+\titleformat*{\subsection}{\large\bfseries\sffamily}
+\titleformat*{\subsubsection}{\normalsize\bfseries\sffamily}
+
+
+% ------------ listing setup ------------
+\usepackage{listings}
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+\lstdefinestyle{mystyle}{
+	backgroundcolor=\color{backcolour},  
+	commentstyle=\color{gray},
+	keywordstyle=\color{brown},
+	numberstyle=\tiny\color{codegray},
+	stringstyle=\color{codepurple},
+	basicstyle=\ttfamily\footnotesize,
+	breakatwhitespace=false,              
+	breaklines=true,                  
+	captionpos=b,                      
+	keepspaces=true,                
+	numbers=left,                     
+	numbersep=2pt,                  
+	showspaces=false,              
+	showstringspaces=false,
+	showtabs=false,                  
+	tabsize=3
+}
+\lstset{style=mystyle}
+\renewcommand\lstlistingname{\algname}
+
+
+% ------------ custom commands ------------
+\newcommand{\eqname}{Eq.\,} % equation
+\newcommand{\secname}{Sec.\,} % section
+\newcommand{\algname}{Algorithm} % section
+\renewcommand{\figurename}{Fig.\,} % set name of figures
+\renewcommand{\tablename}{Tab.\,} % set name of tables
+
+
+% ------ set metadata ------
+\title{\Large{\textsf{\textbf{An integrated hydro-finance approach towards sustainable urban stormwater and flood control management}}}}
+
+\author{
+\href{https://orcid.org/0000-0003-0543-6279}{Guilherme Marques}\thanks{Instituto de Pesquisas Hidráulicas, Federal University of Rio Grande do Sul} \and \href{https://orcid.org/0000-0002-2194-4516}{Iporã Possantti}\thanks{\textbf{corresponding author} -- \href{mailto:ipora.possantti@ufrgs.br}{\texttt{ipora.possantti@ufrgs.br}}, Instituto de Pesquisas Hidráulicas, Federal University of Rio Grande do Sul Caixa, Postal Code 15029, Av. Bento Gonçalves, 9500, 91501-970 - Porto Alegre - RS - Brazil}\and \href{https://orcid.org/0000-0001-9871-7373}{Ana Paula Dalcin}\thanks{Instituto de Pesquisas Hidráulicas, Federal University of Rio Grande do Sul} \and \href{https://orcid.org/0009-0007-2388-5162}{Júlia Daiello}\thanks{Instituto de Pesquisas Hidráulicas, Federal University of Rio Grande do Sul} \and \href{https://orcid.org/0000-0003-1684-8885}{Itzayana González}\thanks{Instituto de Pesquisas Hidráulicas, Federal University of Rio Grande do Sul} \and Fernando Todeschini\thanks{Instituto de Pesquisas Hidráulicas, Federal University of Rio Grande do Sul} \and \href{https://orcid.org/0000-0003-4959-9053}{Joel Goldenfum}\thanks{Instituto de Pesquisas Hidráulicas, Federal University of Rio Grande do Sul}}
+% set the figure folder
+\graphicspath{{./figs}}
+% set up labelformat and labelsep for figure
+\captionsetup[figure]{labelformat=simple, labelsep=quad}
+% add references
+\addbibresource{refs.bib}
+
+% ------------ main document ------------
+\begin{document}
+\pagenumbering{roman}
+\maketitle  % fancy title
+	
+% abstracts
+\begin{adjustwidth}{20pt}{20pt}
+\begin{spacing}{0.8}
+	\small
+	\begin{center}
+		\vspace{10mm}
+		\textsf{\textbf{Abstract}}
+		\vspace{5mm}
+	\end{center}
+	
+	\noindent This paper presents an innovative approach to address the funding challenge associated with urban stormwater and flood control management services. The framework integrates decisions on (1) investments in physical infrastructure, such as portfolios of operation, maintenance, rehabilitation, and expansion; (2) cost-sharing mechanisms through a composite stormwater utility fee; and (3) externality-based ranking of urban lots using the Hydrologic Externality Index. This methodology enables the simulation of customized stormwater fee structures and funding scenarios, fostering negotiation and consensus among key stakeholders. The effectiveness of the method is demonstrated through a case study in São Leopoldo, Brazil. The study evaluated 71 portfolios outlined in the city's stormwater master plan and assessed the Hydrologic Externality Index for 51,631 urban lots through hydrological modeling (PLANS model). The evaluation considered the financial sustainability and household affordability performance of a stormwater fee structure across alternative funding scenarios in both space and time domains. Results indicate that this methodology not only provides a robust analytical framework but also acts as a catalyst for collaborative decision-making. It effectively addresses the intricate interplay of engineering, financial, and socio-economic factors within the urban stormwater management funding context. \\[2ex]
+	
+    \noindent \textit{\textbf{keywords}} --- urban stormwater management; hydrologic externality index; stormwater fee.
+    \newline
+    \newline
+    \newline
+    \noindent \textit{\textbf{highlights}}:
+        \begin{enumerate}
+            \item Integrated framework: a comprehensive approach is introduced for integration of infrastructure investments, stormwater utility fee and the Hydrologic Externality Index.
+            \item Simulation and evaluation: it allows for the simulation of diverse stormwater fee structures and funding scenarios, enabling the assessment of sustainability and affordability across space and time domains.
+            \item Case study: the method is demonstrated through a detailed case study in São Leopoldo, Brazil, involving the evaluation of stormwater master plan portfolios, hydrological modelling and performance evaluations of a fee structure under alternative funding scenarios.
+        \end{enumerate}
+\end{spacing}
+\end{adjustwidth}
+% end
+\end{document}
