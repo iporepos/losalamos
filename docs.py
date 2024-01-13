@@ -41,11 +41,8 @@ class DocTable(DataSet):
 
         return None
 
-    def to_latex(self, filename=None, folder=None, caption=None, label=None):
-        if filename is None:
-            filename = self.name
-        if folder is None:
-            folder = self.folder_data
+    @staticmethod
+    def to_latex(df, filename, folder, caption=None, label=None):
         list_bulk = list()
         # preable
         list_bulk.append(r"% Insert Table")
@@ -54,15 +51,14 @@ class DocTable(DataSet):
         list_bulk.append(r"\tiny")
         list_bulk.append(r"\rowcolors{2}{white}{rowgray}")
         # heading
-        str_aux = "p{1cm}" * len(self.data.columns)
+        str_aux = "p{1cm}" * len(df.columns)
         list_bulk.append(r"\begin{tabular}{" + str_aux + "}")
         list_bulk.append(r"\toprule")
         list_bulk.append(r"\midrule")
-        list_heading = [r"\textbf{" + c + "}" for c in self.data.columns]
+        list_heading = [r"\textbf{" + c + "}" for c in df.columns]
         str_heading = " & ".join(list_heading) + r"\\"
         list_bulk.append(str_heading)
         # data
-        df = self.data.copy()
         df.fillna(value="", inplace=True)
         for i in range(len(df)):
             row = df.values[i]
@@ -88,6 +84,35 @@ class DocTable(DataSet):
         f = open(filepath, mode="w")
         f.writelines(list_bulk)
         f.close()
+        return None
+
+    @staticmethod
+    def to_rst(df, filename, folder):
+        def format_row(row):
+            return "| " + " | ".join(f"{x:<{max_widths[i]}}" for i, x in enumerate(row)) + " |"
+
+        list_bulk = list()
+
+        # header setup
+        header = df.columns.tolist()
+        max_widths = [max(df[col].astype(str).apply(len).max(), len(col)) for col in header]
+
+        list_bulk.append("+" + "+".join(["-" * (w + 2) for w in max_widths]))
+        list_bulk.append(format_row(header))
+        list_bulk.append("+" + "+".join(["=" * (w + 2) for w in max_widths]))
+
+        for _, row in df.iterrows():
+            list_bulk.append(format_row(row))
+            list_bulk.append("+" + "+".join(["-" * (w + 2) for w in max_widths]))
+
+        # include new line
+        list_bulk = [line + "\n" for line in list_bulk]
+
+        filepath = os.path.join(folder, filename + ".txt")
+        f = open(filepath, mode="w")
+        f.writelines(list_bulk)
+        f.close()
+        return None
 
 
 if __name__ == "__main__":
@@ -108,9 +133,10 @@ if __name__ == "__main__":
 
     print(dt)
     #dt.update()
-    dt.to_latex(
-        caption="Ranges of hyperparameter values for tuning each ML model.",
-        label="tab:parameters"
+    dt.to_rst(
+        df=dt.data,
+        filename="teste",
+        folder="C:/data"
     )
 
 
