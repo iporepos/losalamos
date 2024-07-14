@@ -14,9 +14,9 @@ class DocTable(DataSet):
         # ... continues in downstream objects ... #
 
     def load_data(self, file_data):
-        """Load data from file. Expected to overwrite superior methods.
+        """Load data from file_doc. Expected to overwrite superior methods.
 
-        :param file_data: file path to data.
+        :param file_data: file_doc path to data.
         :type file_data: str
         :return: None
         :rtype: None

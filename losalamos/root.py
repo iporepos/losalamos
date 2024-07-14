@@ -76,7 +76,7 @@ class MbaE:
     .. code-block:: python
 
         # MbaE instantiation
-        m = MbaE(name="Algo", alias="al")
+        m = MbaE(filename="Algo", alias="al")
 
     Retrieve metadata (not all attributes)
 
@@ -115,11 +115,11 @@ class MbaE:
     def __init__(self, name="MyMbaE", alias=None):
         """Initialize the ``MbaE`` object.
 
-        :param name: unique object name
+        :param name: unique object filename
         :type name: str
 
         :param alias: unique object alias.
-            If None, it takes the first and last characters from ``name``
+            If None, it takes the first and last characters from ``filename``
         :type alias: str
 
         """
@@ -129,7 +129,7 @@ class MbaE:
         self.object_name = self.__class__.__name__
         self.object_alias = "mbae"
 
-        # name
+        # filename
         self.name = name
 
         # alias
@@ -163,7 +163,7 @@ class MbaE:
         return str_out
 
     def _create_alias(self):
-        """If ``alias`` is ``None``, it takes the first and last characters from ``name``"""
+        """If ``alias`` is ``None``, it takes the first and last characters from ``filename``"""
         if len(self.name) >= 2:
             self.alias = self.name[0] + self.name[len(self.name) - 1]
         else:
@@ -275,16 +275,16 @@ class Collection(MbaE):
 
     - ``catalog`` (:class:`pandas.DataFrame`): A catalog containing metadata of the objects in the test_collection.
     - ``collection`` (dict): A dictionary containing the objects in the ``Collection``.
-    - name (str): The name of the ``Collection``.
-    - alias (str): The name of the ``Collection``.
+    - filename (str): The filename of the ``Collection``.
+    - alias (str): The filename of the ``Collection``.
     - baseobject: The class of the base object used to initialize the ``Collection``.
 
     **Main Methods:**
 
-    - __init__(self, base_object, name="myCatalog"): Initializes a new ``Collection`` with a base object.
+    - __init__(self, base_object, filename="myCatalog"): Initializes a new ``Collection`` with a base object.
     - update(self, details=False): Updates the ``Collection`` catalog.
     - append(self, new_object): Appends a new object to the ``Collection``.
-    - remove(self, name): Removes an object from the ``Collection``.
+    - remove(self, filename): Removes an object from the ``Collection``.
 
     **Examples:**
 
@@ -305,14 +305,14 @@ class Collection(MbaE):
     .. code-block:: python
 
         # instantiate Collection object
-        c = Collection(base_object=MbaE, name="Collection")
+        c = Collection(base_object=MbaE, filename="Collection")
 
     Append a new object to the ``Collection``:
 
     .. code-block:: python
 
         # append a new object
-        m1 = MbaE(name="Thing1", alias="al1")
+        m1 = MbaE(filename="Thing1", alias="al1")
         c.append(m1)  # use .append()
 
     Append extra objects:
@@ -320,9 +320,9 @@ class Collection(MbaE):
     .. code-block:: python
 
         # append extra objects
-        m2 = MbaE(name="Thing2", alias="al2")
+        m2 = MbaE(filename="Thing2", alias="al2")
         c.append(m2)  # use .append()
-        m3 = MbaE(name="Res", alias="r")
+        m3 = MbaE(filename="Res", alias="r")
         c.append(m3)  # use .append()
 
     Print the catalog `pandas.DataFrame`:
@@ -339,12 +339,12 @@ class Collection(MbaE):
         # print collection dict
         print(c.collection)
 
-    Remove an object by using object name:
+    Remove an object by using object filename:
 
     .. code-block:: python
 
-        # remove object by object name
-        c.remove(name="Thing1")
+        # remove object by object filename
+        c.remove(filename="Thing1")
 
     Apply MbaE-based methods for Collection
 
@@ -367,11 +367,11 @@ class Collection(MbaE):
         :param base_object: ``MbaE``-based object for collection
         :type base_object: :class:`MbaE`
 
-        :param name: unique object name
+        :param name: unique object filename
         :type name: str
 
         :param alias: unique object alias.
-            If None, it takes the first and last characters from name
+            If None, it takes the first and last characters from filename
         :type alias: str
 
         """
@@ -379,7 +379,7 @@ class Collection(MbaE):
         super().__init__(name=name, alias=alias)
         # ------------ set pseudo-static ----------- #
         self.object_alias = "COL"
-        # Set the name and baseobject attributes
+        # Set the filename and baseobject attributes
         self.baseobject = base_object
         self.baseobject_name = base_object.__name__
 
@@ -479,7 +479,7 @@ class Collection(MbaE):
                 # Append to the new catalog
                 df_new_catalog = pd.concat([df_new_catalog, df_aux], ignore_index=True)
 
-            # consider if the name itself has changed in the
+            # consider if the filename itself has changed in the
             old_key_names = list(self.collection.keys())[:]
             new_key_names = list(df_new_catalog[self.catalog.columns[0]].values)
 
@@ -487,7 +487,7 @@ class Collection(MbaE):
             for i in range(len(old_key_names)):
                 old_key = old_key_names[i]
                 new_key = new_key_names[i]
-                # name change condition
+                # filename change condition
                 if old_key != new_key:
                     # rename key in the collection dictionary
                     self.collection[new_key] = self.collection.pop(old_key)
@@ -498,7 +498,7 @@ class Collection(MbaE):
             del df_new_catalog
 
         # Basic updates
-        # --- the first row is expected to be the Unique name
+        # --- the first row is expected to be the Unique filename
         str_unique_name = self.catalog.columns[0]
         self.catalog = self.catalog.drop_duplicates(subset=str_unique_name, keep="last")
         self.catalog = self.catalog.sort_values(by=str_unique_name).reset_index(
@@ -536,7 +536,7 @@ class Collection(MbaE):
         return None
 
     def remove(self, name):
-        """Remove an object from the ``Collection`` by the name.
+        """Remove an object from the ``Collection`` by the filename.
 
         :param name: Name attribute of the object to remove.
         :type name: str
@@ -546,10 +546,10 @@ class Collection(MbaE):
         """
         # Delete the object from the ``Collection``
         del self.collection[name]
-        # Delete the object's entry from the catalog
+        # Delete the object's bib_dict from the catalog
         str_unique_name = self.catalog.columns[
             0
-        ]  # assuming the first column is the unique name
+        ]  # assuming the first column is the unique filename
         self.catalog = self.catalog.drop(
             self.catalog[self.catalog[str_unique_name] == name].index
         ).reset_index(drop=True)
@@ -580,7 +580,7 @@ class DataSet(MbaE):
     .. code-block:: python
 
         # instantiate DataSet object
-        ds = DataSet(name="DataSet_1", alias="DS1")
+        ds = DataSet(filename="DataSet_1", alias="DS1")
 
     Set Object and Load Data
 
@@ -647,11 +647,11 @@ class DataSet(MbaE):
         """Initialize the ``DataSet`` object.
         Expected to increment superior methods.
 
-        :param name: unique object name
+        :param name: unique object filename
         :type name: str
 
         :param alias: unique object alias.
-            If None, it takes the first and last characters from name
+            If None, it takes the first and last characters from filename
         :type alias: str
 
         """
@@ -976,7 +976,7 @@ class RecordTable(DataSet):
     .. code-block:: python
 
         # Instantiate RecordTable object
-        rt = RecordTable(name="RecTable_1", alias="RT1")
+        rt = RecordTable(filename="RecTable_1", alias="RT1")
 
     Setup custom columns for the data
 
@@ -1027,7 +1027,7 @@ class RecordTable(DataSet):
 
         # Insert new record from incoming dict
         d2 = {
-            "Name": "k",
+            "Name": "bib_dict",
             "Size": 177,
             "Type": 'input',
             "File_P": "/filee.pdf",
@@ -1284,7 +1284,7 @@ class RecordTable(DataSet):
 
         :param folder_export: folder to export
         :type folder_export: str
-        :param filename: file name (name alone, without file extension)
+        :param filename: file filename (filename alone, without file extension)
         :type filename: str
         :param filter_archive: option for exporting only records with ``RecStatus`` = ``On``
         :type filter_archive: bool
@@ -1595,7 +1595,7 @@ class RecordTable(DataSet):
 
         :param rec_id: record id
         :type rec_id: str
-        :param filename: file name (name alone, without file extension)
+        :param filename: file filename (filename alone, without file extension)
         :type filename: str
         :param folder_export: folder to export
         :type folder_export: str
@@ -1894,11 +1894,11 @@ class FileSys(DataSet):
         :param folder_base: path to File System folder location
         :type folder_base: str
 
-        :param name: unique object name
+        :param name: unique object filename
         :type name: str
 
         :param alias: unique object alias.
-            If None, it takes the first and last characters from name
+            If None, it takes the first and last characters from filename
         :type alias: str
 
         """
@@ -2026,7 +2026,7 @@ class FileSys(DataSet):
             dict_status["Files"] = {}
             dict_files = {}
             for i in range(len(df)):
-                # get file name
+                # get file filename
                 lcl_file_name = df["File"].values[i]
                 dict_files[lcl_file_name] = {}
                 # get file format
@@ -2201,7 +2201,7 @@ class FileSys(DataSet):
     # ----------------- STATIC METHODS ----------------- #
     @staticmethod
     def archive(src_dir, dst_dir):
-        # Create a zip archive from the directory
+        # Create a zip archive from the output_dir
         shutil.make_archive(dst_dir, 'zip', src_dir)
         return None
 
@@ -2282,7 +2282,7 @@ class FileSys(DataSet):
         :rtype: None
         """
         # handle destination variables
-        dst_basename = os.path.basename(dst_pattern).split(".")[0].replace("*", "")  # k
+        dst_basename = os.path.basename(dst_pattern).split(".")[0].replace("*", "")  # bib_dict
         dst_folder = os.path.dirname(dst_pattern)  # folder
 
         # handle sourced variables
@@ -2306,7 +2306,7 @@ class FileSys(DataSet):
     def fill(dict_struct, folder, handle_files=True):
         """Recursive function for filling the ``FileSys`` structure
 
-        :param dict_struct: dicitonary of directory structure
+        :param dict_struct: dicitonary of output_dir structure
         :type dict_struct: dict
 
         :param folder: path to local folder
@@ -2333,7 +2333,7 @@ class FileSys(DataSet):
             src_name = lst_specs[1]
             src_dir = lst_specs[2]
 
-            # there is a sourcing directory
+            # there is a sourcing output_dir
             if os.path.isdir(src_dir):
                 # extension loop:
                 for extension in lst_exts:

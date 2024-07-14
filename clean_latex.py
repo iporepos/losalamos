@@ -39,9 +39,9 @@ def main():
     input_filename = 'C:/data/revision_tracked.tex'
     output_filename = 'C:/data/revision_cleaned.tex'
 
-    # Open input file for reading
+    # Open input file_doc for reading
     with open(input_filename, 'r', encoding="utf-8") as input_file:
-        # Read lines from input file
+        # Read lines from input file_doc
         lines = input_file.readlines()
 
     # Process individual lines
@@ -51,9 +51,9 @@ def main():
     processed_lines = process_removed_block(processed_lines)
     processed_lines = process_added_block(processed_lines)
 
-    # Open output file for writing
+    # Open output file_doc for writing
     with open(output_filename, 'w', encoding="utf-8") as output_file:
-        # Write processed lines to output file
+        # Write processed lines to output file_doc
         output_file.writelines(processed_lines)
 
     print("Processing complete. Output written to", output_filename)
