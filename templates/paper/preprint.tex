@@ -1,7 +1,7 @@
 \documentclass[11pt]{article}
 
 % ------------ packages section ------------ 
-% page set up
+% margins set up
 \usepackage{geometry}
 \geometry{
  a4paper,
@@ -11,49 +11,72 @@
  top=20mm,
  bottom=25mm
  }
+
 % fonts
 \usepackage[T1]{fontenc}
 \usepackage{helvet}
+
 % numbering
 \usepackage[utf8]{inputenc}
 % language set up
 \usepackage[portuguese, main=english]{babel}
+
 % line spacing
 \usepackage{setspace}
+
 % adjust margins
 \usepackage{changepage}
+
 % number lines
 \usepackage{lineno}
+
 % titles
 \usepackage{titlesec}
+
 % colors
 \usepackage[table]{xcolor}
 \definecolor{rowgray}{gray}{0.9}
+
 % lorem ipsum generator
 \usepackage{blindtext}
-\usepackage{array}
-\usepackage{booktabs}
+
 % sorted lists package
 \usepackage{enumerate}
+
 % insert graphics
 \usepackage{graphicx}
+
 % wrapp figures in text
 \usepackage{wrapfig}
+
 % math package
 \usepackage{amsmath}
-% appendix
-\usepackage[title]{appendix}
 % letter symbol
 \usepackage[misc]{ifsym}
-% acronymns
-\usepackage[acronym,nonumberlist]{glossaries}
-% caption package - settings
-\usepackage[font={scriptsize,sf}, labelfont=bf]{caption}
+
+% ------------ citations setup ------------
+
 % quotes
 \usepackage{csquotes}
 \usepackage{dirtytalk}
 % BibLaTeX
 \usepackage[backend=biber, style=bwl-FU]{biblatex} % style=bwl-FU
+
+% acronymns
+\usepackage[acronym,nonumberlist]{glossaries}
+
+
+% ------------ tables setup ------------
+\usepackage{array}
+\usepackage{booktabs}
+
+
+% ------------ caption setup ------------
+
+% caption package - settings
+\usepackage[font={scriptsize,sf}, labelfont=bf]{caption}
+% set up labelformat and labelsep for figure
+\captionsetup[figure]{labelformat=simple, labelsep=quad}
 
 
 % ------------ links setup ------------
@@ -64,13 +87,14 @@
 	citecolor=blue,
 	filecolor=magenta,             
 	urlcolor=cyan,
-	pdftitle={preprint sao leo},
+	pdftitle={preprint},
 	pdfsubject=preprint,
 	pdfauthor=Ipora Brito Possantti
 }
 
 
 % ------------ page setup ------------
+
 %\pagecolor{black}
 %\color{white}
 
@@ -80,7 +104,8 @@
 \titleformat*{\subsubsection}{\normalsize\bfseries\sffamily}
 
 
-% ------------ listing setup ------------
+% ------------ listing (code blocks) setup ------------
+
 \usepackage{listings}
 \definecolor{codegreen}{rgb}{0,0.6,0}
 \definecolor{codegray}{rgb}{0.5,0.5,0.5}
@@ -108,15 +133,8 @@
 \renewcommand\lstlistingname{\algname}
 
 
-% ------------ custom commands ------------
-\newcommand{\eqname}{Eq.\,} % equation
-\newcommand{\secname}{Sec.\,} % section
-\newcommand{\algname}{Algorithm} % section
-\renewcommand{\figurename}{Fig.\,} % set name of figures
-\renewcommand{\tablename}{Tab.\,} % set name of tables
+% ------------ metadata ------------
 
-
-% ------ set metadata ------
 \title{\Large{\textsf{\textbf{Enim neque volutpat ac tincidunt vitae semper quis lectus nulla}}}}
 
 \author{
@@ -125,14 +143,20 @@ Autor B\thanks{Instituto de Pesquisas Hidráulicas, Federal University of Rio Gr
 \and Autor C\thanks{Instituto de Pesquisas Hidráulicas, Federal University of Rio Grande do Sul}
 \and Autor D\thanks{Instituto de Pesquisas Hidráulicas, Federal University of Rio Grande do Sul}
 }
+
+% ------------ structure setups ------------
+
 % set the figure folder
 \graphicspath{{./figs}}
-% set up labelformat and labelsep for figure
-\captionsetup[figure]{labelformat=simple, labelsep=quad}
+
+% appendix
+\usepackage[title]{appendix}
+
 % add references
 \addbibresource{refs.bib}
 
 % ------------ main document ------------
+
 \begin{document}
 \pagenumbering{roman}
 \maketitle  % fancy title
@@ -232,7 +256,8 @@ Autor B\thanks{Instituto de Pesquisas Hidráulicas, Federal University of Rio Gr
 \end{linenomath*}
 In which $\text{HEI}_{i}$ (unitless) is the Hydrological Externality Index at the urban lot $i$; $N$ denotes the number of hydrological externalities at the urban lot $i$; $E{i,j}$ (unitless) is the average degree of hydrological externality $j$ generated the urban lot $i$; and $w_{j}$ (unitless) stands for the weight of hydrological externality $j$. The externalities factors may be normalized so that the value of $\text{HEI}$ falls within the range of 0 to 1.
 
-\par Est sit amet facilisis magna etiam tempor. Luctus accumsan tortor posuere ac ut consequat semper viverra \eqref{eq:eq}. Mauris commodo quis imperdiet massa tincidunt nunc. Arcu odio ut sem nulla. Iaculis eu non diam phasellus vestibulum lorem sed. Vitae tortor condimentum lacinia quis vel eros donec ac odio. Ornare arcu dui vivamus arcu. Nibh tellus molestie nunc non. Et netus et malesuada fames ac turpis egestas sed tempus. Eleifend donec pretium vulputate sapien nec. Table \ref{tbl:simple}, Est sit amet facilisis magna etiam tempor. Luctus accumsan tortor posuere ac ut consequat semper viverra \eqref{eq:eq}. Mauris commodo quis imperdiet massa tincidunt nunc. Arcu odio ut sem nulla. Iaculis eu non diam phasellus vestibulum lorem sed. Vitae tortor condimentum lacinia quis vel eros donec ac odio. Ornare arcu dui vivamus arcu. Nibh tellus molestie nunc non. Et netus et malesuada fames ac turpis egestas sed tempus. Eleifend donec pretium vulputate sapien nec. 
+\par Est sit amet facilisis magna etiam tempor. Luctus accumsan tortor posuere ac ut consequat semper viverra \eqref{eq:eq}. Mauris commodo quis imperdiet massa tincidunt nunc. Arcu odio ut sem nulla. Iaculis eu non diam phasellus vestibulum lorem sed. Vitae tortor condimentum lacinia quis vel eros donec ac odio. Ornare arcu dui vivamus arcu. Nibh tellus molestie nunc non. Et netus et malesuada fames ac turpis egestas sed tempus. Eleifend donec pretium vulputate sapien nec. Table \ref{tbl:simple}, Est sit amet facilisis magna etiam tempor. Luctus accumsan tortor posuere ac ut consequat semper viverra \eqref{eq:eq}. Mauris commodo quis imperdiet massa tincidunt nunc. Arcu odio ut sem nulla. Iaculis eu non diam phasellus vestibulum lorem sed. Vitae tortor condimentum lacinia quis vel eros donec ac odio. Ornare arcu dui vivamus arcu. Nibh tellus molestie nunc non. Et netus et malesuada fames ac turpis egestas sed tempus. Eleifend donec pretium vulputate sapien nec.
+
 \begin{table}[h!]
 % placed on top of page
 \centering   

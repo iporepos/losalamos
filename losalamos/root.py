@@ -1,8 +1,54 @@
+"""
+The root of everything. Here is the most basic objects for the whole ontology of objects
+
+Description:
+    The ``root`` module provides the most basic objects for the whole ontology of objects.
+
+License:
+    This software is released under the GNU General Public License v3.0 (GPL-3.0).
+    For details, see: https://www.gnu.org/licenses/gpl-3.0.html
+
+Author:
+    Iporã Possantti
+
+Contact:
+    possantti@gmail.com
+
+
+Overview
+--------
+
+todo
+Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+Nulla mollis tincidunt erat eget iaculis.
+Mauris gravida ex quam, in porttitor lacus lobortis vitae.
+In a lacinia nisl. Pellentesque habitant morbi tristique senectus
+et netus et malesuada fames ac turpis egestas.
+
+Class aptent taciti sociosqu ad litora torquent per
+conubia nostra, per inceptos himenaeos. Nulla facilisi. Mauris eget nisl
+eu eros euismod sodales. Cras pulvinar tincidunt enim nec semper.
+
+
+Examples
+--------
+
+todo
+Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+Nulla mollis tincidunt erat eget iaculis.
+Mauris gravida ex quam, in porttitor lacus lobortis vitae.
+In a lacinia nisl. Pellentesque habitant morbi tristique senectus
+et netus et malesuada fames ac turpis egestas.
+
+Class aptent taciti sociosqu ad litora torquent per
+conubia nostra, per inceptos himenaeos. Nulla facilisi. Mauris eget nisl
+eu eros euismod sodales. Cras pulvinar tincidunt enim nec semper.
+
+"""
 import glob
 import os, copy, shutil, datetime
 import pandas as pd
 import matplotlib.pyplot as plt
-
 
 class MbaE:
     """
@@ -12,6 +58,56 @@ class MbaE:
 
         **Mba'e is the origin**. The the very-basic almost-zero level object.
         Deeper than here is only the Python builtin ``object`` class.
+
+
+    **Examples:**
+
+    Here's how to use the ``MbaE`` class:
+
+    Import ``MbaE``:
+
+    .. code-block:: python
+
+        # import the object
+        from plans.root import MbaE
+
+    ``MbaE`` instantiation
+
+    .. code-block:: python
+
+        # MbaE instantiation
+        m = MbaE(name="Algo", alias="al")
+
+    Retrieve metadata (not all attributes)
+
+    .. code-block:: python
+
+        # Retrieve metadata (not all attributes)
+        d = m.get_metadata()
+        print(d)
+
+    Retrieve metadata in a `pandas.DataFrame`
+
+    .. code-block:: python
+
+        # Retrieve metadata in a `pandas.DataFrame`
+        df = m.get_metadata_df()
+        print(df.to_string(index=False))
+
+    Set new values for metadata
+
+    .. code-block:: python
+
+        # Set new values for metadata
+        d2 = {"Name": "Algo2", "Alias": "al2"}
+        m.set(dict_setter=d2)
+
+    Boot attributes from csv file:
+
+    .. code-block:: python
+
+        # Boot attributes from csv file:
+        m.boot(bootfile="/content/metadata.csv")
 
 
     """
@@ -175,7 +271,7 @@ class Collection(MbaE):
     Useful for large scale manipulations in ``MbaE``-based objects.
     Expected to have custom methods and attributes downstream.
 
-    Attributes:
+    **Main Attributes:**
 
     - ``catalog`` (:class:`pandas.DataFrame`): A catalog containing metadata of the objects in the test_collection.
     - ``collection`` (dict): A dictionary containing the objects in the ``Collection``.
@@ -183,34 +279,85 @@ class Collection(MbaE):
     - alias (str): The name of the ``Collection``.
     - baseobject: The class of the base object used to initialize the ``Collection``.
 
-    Methods:
+    **Main Methods:**
 
     - __init__(self, base_object, name="myCatalog"): Initializes a new ``Collection`` with a base object.
     - update(self, details=False): Updates the ``Collection`` catalog.
     - append(self, new_object): Appends a new object to the ``Collection``.
     - remove(self, name): Removes an object from the ``Collection``.
 
-
     **Examples:**
-    Here's how to use the Collection class:
 
-    1. Initializing a Collection
+    Here's how to use the `Collection` class:
 
-    >>> base_obj = YourBaseObject()
-    >>> test_collection = Collection(base_object=base_obj, name="myCatalog")
+    Import objects:
 
-    2. Appending a New Object
+    .. code-block:: python
 
-    >>> new_obj = YourNewObject()
-    >>> test_collection.append(new_object=new_obj)
+        # import MbaE-based object
+        from plans.root import MbaE
 
-    3. Removing an Object
+        # import Collection
+        from plans.root import Collection
 
-    >>> test_collection.remove(name="ObjectToRemove")
+    Instantiate ``Collection``:
 
-    4. Updating the Catalog
+    .. code-block:: python
 
-    >>> test_collection.update(details=True)
+        # instantiate Collection object
+        c = Collection(base_object=MbaE, name="Collection")
+
+    Append a new object to the ``Collection``:
+
+    .. code-block:: python
+
+        # append a new object
+        m1 = MbaE(name="Thing1", alias="al1")
+        c.append(m1)  # use .append()
+
+    Append extra objects:
+
+    .. code-block:: python
+
+        # append extra objects
+        m2 = MbaE(name="Thing2", alias="al2")
+        c.append(m2)  # use .append()
+        m3 = MbaE(name="Res", alias="r")
+        c.append(m3)  # use .append()
+
+    Print the catalog `pandas.DataFrame`:
+
+    .. code-block:: python
+
+        # print catalog `pandas.DataFrame`
+        print(c.catalog)
+
+    Print the collection dict:
+
+    .. code-block:: python
+
+        # print collection dict
+        print(c.collection)
+
+    Remove an object by using object name:
+
+    .. code-block:: python
+
+        # remove object by object name
+        c.remove(name="Thing1")
+
+    Apply MbaE-based methods for Collection
+
+    .. code-block:: python
+
+        # -- apply MbaE methods for Collection
+
+        # reset metadata
+        c.set(dict_setter={"Name": "Coll", "Alias": "C1"})
+
+        # Boot attributes from csv file:
+        c.boot(bootfile="/content/metadata_coll.csv")
+
 
     """
 
@@ -417,6 +564,83 @@ class DataSet(MbaE):
     This is a Base and Dummy object. Expected to be implemented downstream for
     custom applications.
 
+    **Examples**
+
+    Here's how to use the ``DataSet`` class:
+
+    Import Dataset
+
+    .. code-block:: python
+
+        # import Dataset
+        from plans.root import DataSet
+
+    Instantiate DataSet Object
+
+    .. code-block:: python
+
+        # instantiate DataSet object
+        ds = DataSet(name="DataSet_1", alias="DS1")
+
+    Set Object and Load Data
+
+    .. code-block:: python
+
+        # set object and load data.
+        # Note: this dummy object expects "RM", "P", and "TempDB" as columns in data
+        ds.set(
+            dict_setter={
+                "Name": "DataSet_2",
+                "Alias": "DS2",
+                "Color": "red",
+                "Source": "",
+                "Description": "This is DataSet Object",
+                "File_Data": "/content/data_ds1.csv"
+            },
+            load_data=True
+        )
+
+    Check Data
+
+    .. code-block:: python
+
+        # check data `pandas.DataFrame`
+        print(ds.data.head())
+
+    Reload New Data from File
+
+    .. code-block:: python
+
+        # re-load new data from file
+        ds.load_data(file_data="/content/data_ds2.csv")
+
+    Get Basic Visual
+
+    .. code-block:: python
+
+        # get basic visual
+        ds.view(show=True)
+
+    Customize View Parameters
+
+    .. code-block:: python
+
+        # customize view parameters via the view_specs attribute:
+        ds.view_specs["title"] = "My Custom Title"
+        ds.view_specs["xlabel"] = "The X variable"
+        ds.view(show=True)
+
+    Save the Figure
+
+    .. code-block:: python
+
+        # save the figure
+        ds.view_specs["folder"] = "path/to/folder"
+        ds.view_specs["filename"] = "my_visual"
+        ds.view_specs["fig_format"] = "png"
+        ds.view(show=False)
+
+
     """
 
     def __init__(self, name="MyDataSet", alias="DS0"):
@@ -621,7 +845,8 @@ class DataSet(MbaE):
         """
 
         # -------------- overwrite relative path input -------------- #
-        file_data = os.path.abspath(file_data)
+        self.file_data = os.path.abspath(file_data)
+
 
         # -------------- implement loading logic -------------- #
         default_columns = {
@@ -632,7 +857,7 @@ class DataSet(MbaE):
         }
         # -------------- call loading function -------------- #
         self.data = pd.read_csv(
-            file_data,
+            self.file_data,
             sep=self.file_data_sep,
             dtype=default_columns,
             usecols=list(default_columns.keys()),
@@ -640,6 +865,11 @@ class DataSet(MbaE):
 
         # -------------- post-loading logic -------------- #
         self.data.dropna(inplace=True)
+
+        # -------------- update other mutables -------------- #
+        self.update()
+
+        # ... continues in downstream objects ... #
 
         return None
 
@@ -659,6 +889,22 @@ class DataSet(MbaE):
 
         **Examples:**
 
+        Simple visualization:
+
+        >>> ds.view(show=True)
+
+        Customize view specs:
+
+        >>> ds.view_specs["title"] = "My Custom Title"
+        >>> ds.view_specs["xlabel"] = "The X variable"
+        >>> ds.view(show=True)
+
+        Save the figure:
+
+        >>> ds.view_specs["folder"] = "path/to/folder"
+        >>> ds.view_specs["filename"] = "my_visual"
+        >>> ds.view_specs["fig_format"] = "png"
+        >>> ds.view(show=False)
 
         """
         # get specs
@@ -716,6 +962,132 @@ class RecordTable(DataSet):
     The core object for Record Tables. A Record is expected to keep adding stamped records
     in order to keep track of large inventories, catalogs, etc.
     All records are expected to have a unique Id. It is considered to be a relational table.
+
+
+    Import RecordTable
+
+    .. code-block:: python
+
+        # Import RecordTable
+        from plans.root import RecordTable
+
+    Instantiate RecordTable Object
+
+    .. code-block:: python
+
+        # Instantiate RecordTable object
+        rt = RecordTable(name="RecTable_1", alias="RT1")
+
+    Setup custom columns for the data
+
+    .. code-block:: python
+
+        # Setup custom columns for the data
+        rt.columns_data_main = ["Name", "Size"]  # main data
+        rt.columns_data_extra = ["Type"]  # extra data
+        rt.columns_data_files = ["File_P"]  # file-related
+        rt.columns_data = rt.columns_data_main + rt.columns_data_extra + rt.columns_data_files
+
+    Set Object Metadata and Load Data
+
+    .. code-block:: python
+
+        # Set object metadata and load data.
+        # Note: this dummy object expects the following columns in data
+        rt.set(
+            dict_setter={
+                "Name": "RecTable_01",
+                "Alias": "RT01",
+                "Color": "red",
+                "Source": "-",
+                "Description": "This is RecordTable Object",
+                "File_Data": "/content/data_rt1.csv"
+            },
+            load_data=True
+        )
+
+
+    Check Data
+
+    .. code-block:: python
+
+        # Check data `pandas.DataFrame`
+        print(rt.data.head())
+
+    Load More Data from Other File
+
+    .. code-block:: python
+
+        # Load more new data from other file
+        rt.load_data(file_data="/content/data_rt2.csv")
+
+    Insert New Record
+
+    .. code-block:: python
+
+        # Insert new record from incoming dict
+        d2 = {
+            "Name": "k",
+            "Size": 177,
+            "Type": 'input',
+            "File_P": "/filee.pdf",
+        }
+        rt.insert_record(dict_rec=d2)
+
+    Edit Record
+
+    .. code-block:: python
+
+        # Edit record based on ``RecId`` and new dict
+        d = {
+            "Size": 34,
+            "Name": "C"
+        }
+        rt.edit_record(rec_id="Rec0002", dict_rec=d)
+
+    Archive a Record
+
+    .. code-block:: python
+
+        # Archive a record in the RT, that is ``RecStatus`` = ``Off``
+        rt.archive_record(rec_id="Rec0003")
+
+    Get a Record Dict by ID
+
+    .. code-block:: python
+
+        # Get a record dict by id
+        d = rt.get_record(rec_id="Rec0001")
+        print(d)
+
+    Get a Record DataFrame by ID
+
+    .. code-block:: python
+
+        # Get a record `pandas.DataFrame` by id
+        df = rt.get_record_df(rec_id="Rec0001")
+        print(df.to_string(index=False))
+
+    Load Record Data from CSV
+
+    .. code-block:: python
+
+        # Load record data from a ``csv`` file to a dict
+        d = rt.load_record_data(file_record_data="/content/rec_rt2.csv")
+        print(d)
+
+    Export a Record to CSV
+
+    .. code-block:: python
+
+        # Export a record from the table to a ``csv`` file
+        f = rt.export_record(
+            rec_id="Rec0001",
+            folder_export="/content",
+            filename="export_rt2"
+        )
+        print(f)
+
 
     """
 
@@ -795,7 +1167,7 @@ class RecordTable(DataSet):
         This is a Base and Dummy method. It is expected to be overwrited and implemented downstream.
 
         :return: None
-        :rtype:None
+        :rtype: None
         """
 
         # ------------- define sub routines here ------------- #
@@ -818,7 +1190,7 @@ class RecordTable(DataSet):
             "Age": func_age,
             "File_Status": func_file_status
         }
-        # remove here
+        # remove here for downstream objects!
         self.operator = None
         return None
 
@@ -827,7 +1199,7 @@ class RecordTable(DataSet):
         """Return the organized columns (base + data columns)
 
         :return: organized columns (base + data columns)
-        :rtype:list
+        :rtype: list
         """
         return self.columns_base + self.columns_data
 
@@ -835,7 +1207,7 @@ class RecordTable(DataSet):
         """Return a string timestamp
 
         :return: full timestamp text %Y-%m-%d %H:%M:%S
-        :rtype:str
+        :rtype: str
         """
         # compute timestamp
         _now = datetime.datetime.now()
@@ -971,6 +1343,12 @@ class RecordTable(DataSet):
         # ... continues in downstream objects ... #
 
     def refresh_data(self):
+        """Refresh data method for the object operator.
+        Performs spreadsheet-like formulas for columns.
+
+        :return: None
+        :rtype: None
+        """
         if self.operator is not None:
             for c in self.operator:
                 self.data[c] = self.operator[c]()
@@ -987,12 +1365,12 @@ class RecordTable(DataSet):
         :rtype: None
         """
         # -------------- overwrite relative path input -------------- #
-        file_data = os.path.abspath(file_data)
+        self.file_data = os.path.abspath(file_data)
         # -------------- implement loading logic -------------- #
 
         # -------------- call loading function -------------- #
         df = pd.read_csv(
-            file_data,
+            self.file_data,
             sep=self.file_data_sep
         )
 
@@ -1003,6 +1381,7 @@ class RecordTable(DataSet):
 
     def set_data(self, input_df, append=True, inplace=True):
         """Set RecordTable data from incoming dataframe.
+        It handles if the dataframe has or not the required RT columns
         Base Method. Expected to be incremented downstream.
 
         :param input_df: incoming dataframe
@@ -1097,6 +1476,8 @@ class RecordTable(DataSet):
         :type rec_id: str
         :param dict_rec: incoming record dictionary
         :type dict_rec: dict
+        :param filter_dict: option for filtering incoming record
+        :type filter_dict: bool
         :return: None
         :rtype: None
         """
@@ -1143,7 +1524,7 @@ class RecordTable(DataSet):
 
 
     def get_record(self, rec_id):
-        """Get a record dictionary
+        """Get a record dict by id
 
         :param rec_id: record id
         :type rec_id: str
@@ -1159,7 +1540,7 @@ class RecordTable(DataSet):
         return dict_rec
 
     def get_record_df(self, rec_id):
-        """Get a record dataframe
+        """Get a record dataframe by id
 
         :param rec_id: record id
         :type rec_id: str
@@ -1176,7 +1557,7 @@ class RecordTable(DataSet):
         return pd.DataFrame(dict_df)
 
     def load_record_data(self, file_record_data, input_field="Field", input_value="Value"):
-        """Load record data from a ``csv`` file.
+        """Load record data from a ``csv`` file to a dict
 
         .. note::
 
@@ -1210,7 +1591,7 @@ class RecordTable(DataSet):
         return dict_rec
 
     def export_record(self, rec_id, filename=None, folder_export=None):
-        """Export a record to a csv file.
+        """Export a record from the table to a ``csv`` file.
 
         :param rec_id: record id
         :type rec_id: str
@@ -1303,6 +1684,196 @@ class RecordTable(DataSet):
             running_time = [int(e.days / 365) for e in running_time]
 
         return running_time
+
+
+class Budget(RecordTable):
+
+    def __init__(self, name="MyBudget", alias="Bud"):
+        super().__init__(name=name, alias=alias)
+
+        # ------------- specifics attributes ------------- #
+        self.total_revenue = None
+        self.total_expenses = None
+        self.total_net = None
+        self.summary_ascend = False
+
+    def _set_fields(self):
+        """Set fields names.
+        Expected to increment superior methods.
+
+        """
+        # ------------ call super ----------- #
+        super()._set_fields()
+        # set temporary util fields
+        self.sign_field = "Sign"
+        self.value_signed = "Value_Signed"
+        # ... continues in downstream objects ... #
+
+    def _set_data_columns(self):
+        """Set specifics data columns names.
+        Base Dummy Method. Expected to be incremented in superior methods.
+
+        """
+        # Main data columns
+        self.columns_data_main = [
+            "Type",
+            "Status",
+            "Contract",
+            "Name",
+            "Value",
+        ]
+        # Extra data columns
+        self.columns_data_extra = [
+            # Status extra
+            "Date_Due",
+            "Date_Exe",
+
+            # Name extra
+            # tags
+            "Tags",
+
+            # Values extra
+            # Payment details
+            "Method",
+            "Protocol",
+        ]
+        # File columns
+        self.columns_data_files = [
+            "File_Receipt", "File_Invoice", "File_NF",
+        ]
+        # concat all lists
+        self.columns_data = self.columns_data_main + self.columns_data_extra + self.columns_data_files
+
+        # variations
+        self.columns_data_status = self.columns_data_main + [
+            self.columns_data_extra[0],
+            self.columns_data_extra[1],
+        ]
+
+        # ... continues in downstream objects ... #
+
+    def _set_operator(self):
+        """Private method for Budget operator
+
+        :return: None
+        :rtype: None
+        """
+
+        # ------------- define sub routines here ------------- #
+        def func_file_status():
+            return FileSys.check_file_status(files=self.data["File"].values)
+
+        def func_update_status():
+            # filter relevante data
+            df = self.data[["Status", "Method", "Date_Due"]].copy()
+            # Convert 'Date_Due' to datetime format
+            df['Date_Due'] = pd.to_datetime(self.data['Date_Due'])
+            # Get the current date
+            current_dt = datetime.datetime.now()
+
+            # Update 'Status' for records with 'Automatic' method and 'Expected' status based on the condition
+            condition = (df['Method'] == 'Automatic') & (df['Status'] == 'Expected') & (df['Date_Due'] <= current_dt)
+            df.loc[condition, 'Status'] = 'Executed'
+
+            # return values
+            return df["Status"].values
+
+        # todo implement all operations
+        # ---------------- the operator ---------------- #
+
+        self.operator = {
+            "Status": func_update_status,
+        }
+
+    def _get_total_expenses(self, filter=True):
+        filtered_df = self._filter_prospected_cancelled() if filter else self.data
+        _n = filtered_df[filtered_df["Type"] == "Expense"]["Value_Signed"].sum()
+        return round(_n, 3)
+
+    def _get_total_revenue(self, filter=True):
+        filtered_df = self._filter_prospected_cancelled() if filter else self.data
+        _n = filtered_df[filtered_df["Type"] == "Revenue"]["Value_Signed"].sum()
+        return round(_n, 3)
+
+    def _filter_prospected_cancelled(self):
+        return self.data[(self.data['Status'] != 'Prospected') & (self.data['Status'] != 'Cancelled')]
+
+    def update(self):
+        super().update()
+        if self.data is not None:
+            self.total_revenue = self._get_total_revenue(filter=True)
+            self.total_expenses = self._get_total_expenses(filter=True)
+            self.total_net = self.total_revenue + self.total_expenses
+            if self.total_net > 0:
+                self.summary_ascend = False
+            else:
+                self.summary_ascend = True
+
+        # ... continues in downstream objects ... #
+        return None
+
+    def set_data(self, input_df):
+        """Set RecordTable data from incoming dataframe.
+        Expected to be incremented downstream.
+
+        :param input_df: incoming dataframe
+        :type input_df: dataframe
+        :return: None
+        :rtype: None
+        """
+        super().set_data(input_df=input_df)
+        # convert to numeric
+        self.data["Value"] = pd.to_numeric(self.data["Value"])
+        # compute temporary field
+
+        # sign and value_signed
+        self.data["Sign"] = self.data["Type"].apply(lambda x: 1 if x == "Revenue" else -1)
+        self.data["Value_Signed"] = self.data["Sign"] * self.data["Value"]
+
+    @staticmethod
+    def parse_annual_budget(self, year, budget_df, freq_field="Freq"):
+        start_date = "{}-01-01".format(year)
+        end_date = "{}-01-01".format(int(year) + 1)
+
+        annual_budget = pd.DataFrame()
+
+        for _, row in budget_df.iterrows():
+            # Generate date range based on frequency
+            dates = pd.date_range(start=start_date, end=end_date, freq=row['Freq'])
+
+            # Replicate the row for each date
+            replicated_data = pd.DataFrame({col: [row[col]] * len(dates) for col in df.columns})
+            replicated_data['Date'] = dates
+
+            # Append to the expanded budget
+            annual_budget = pd.concat([annual_budget, replicated_data], ignore_index=True)
+
+        return annual_budget
+
+    def get_summary_by_type(self):
+        summary = pd.DataFrame({
+            "Total_Expenses": [self.total_expenses],
+            "Total_Revenue": [self.total_revenue],
+            "Total_Net": [self.total_net]
+        })
+        summary = summary.apply(lambda x: x.sort_values(ascending=self.summary_ascend), axis=1)
+        return summary
+
+    def get_summary_by_status(self, filter=True):
+        filtered_df = self._filter_prospected_cancelled() if filter else self.data
+        return filtered_df.groupby("Status")["Value_Signed"].sum().sort_values(ascending=self.summary_ascend)
+
+    def get_summary_by_contract(self, filter=True):
+        filtered_df = self._filter_prospected_cancelled() if filter else self.data
+        return filtered_df.groupby("Contract")["Value_Signed"].sum().sort_values(ascending=self.summary_ascend)
+
+    def get_summary_by_tags(self, filter=True):
+        filtered_df = self._filter_prospected_cancelled() if filter else self.data
+        tags_summary = filtered_df.groupby("Tags")["Value_Signed"].sum().sort_values(ascending=self.summary_ascend)
+        tags_summary = tags_summary.sort()
+        separate_tags_summary = filtered_df["Tags"].str.split(expand=True).stack().value_counts()
+        print(type(separate_tags_summary))
+        return tags_summary, separate_tags_summary
 
 
 
@@ -1398,6 +1969,9 @@ class FileSys(DataSet):
 
         # update
         dict_meta.update(dict_meta_local)
+
+        # removals
+
         # remove color
         dict_meta.pop(self.color_field)
         # remove source
@@ -1436,6 +2010,47 @@ class FileSys(DataSet):
                     row["Folder_Source"] if pd.notna(row["Folder_Source"]) else "",
                 ]
         return dict_structure
+
+    def get_status(self, folder_name): # todo dosctring
+        dict_status = {}
+        # get full folder path
+        folder = self.folder_main + "/" + folder_name
+        # filter expected files
+        df = self.data.copy()
+        df = df.query("Folder == '{}'".format(folder_name))
+        df = df.dropna(subset=["File"])
+        if len(df) == 0:
+            return None
+        else:
+            dict_status["Folder"] = df.copy()
+            dict_status["Files"] = {}
+            dict_files = {}
+            for i in range(len(df)):
+                # get file name
+                lcl_file_name = df["File"].values[i]
+                dict_files[lcl_file_name] = {}
+                # get file format
+                lcl_file_format = df["Format"].values[i]
+                # get extensions:
+                dict_extensions = self.get_extensions()
+                #
+                list_lcl_extensions = dict_extensions[lcl_file_format]
+                #print(list_lcl_extensions)
+                for ext in list_lcl_extensions:
+                    lcl_path = os.path.join(folder, lcl_file_name + "." + ext)
+                    list_files = glob.glob(lcl_path)
+                    lst_filenames_found = [os.path.basename(f) for f in list_files]
+                    dict_files[lcl_file_name][ext] = lst_filenames_found
+            for k in dict_files:
+                # Convert each list in the dictionary to a pandas Series and then create a DataFrame
+                _df = pd.DataFrame({key: pd.Series(value) for key, value in dict_files[k].items()})
+                if len(_df) == 0:
+                    for c in _df.columns:
+                        _df[c] = [None]
+                _df = _df.fillna("missing")
+                dict_status["Files"][k] = _df.copy()
+
+            return dict_status
 
     def update(self):
         super().update()
@@ -1516,6 +2131,11 @@ class FileSys(DataSet):
         # fill structure
         FileSys.fill(dict_struct=self.structure, folder=self.folder_main)
 
+    def backup(self, location_dir,  version_id="v-0-0",):  # todo docstring
+        dst_dir = os.path.join(location_dir, self.name + "_" + version_id)
+        FileSys.archive(src_dir=self.folder_main, dst_dir=dst_dir)
+        return None
+
     def view(self, show=True): # todo implement
         """Get a basic visualization.
         Expected to overwrite superior methods.
@@ -1579,6 +2199,12 @@ class FileSys(DataSet):
             return file_path
 
     # ----------------- STATIC METHODS ----------------- #
+    @staticmethod
+    def archive(src_dir, dst_dir):
+        # Create a zip archive from the directory
+        shutil.make_archive(dst_dir, 'zip', src_dir)
+        return None
+
     @staticmethod
     def get_extensions():
         list_basics = [
@@ -1750,3 +2376,20 @@ class FileSys(DataSet):
 
         return None
 
+
+if __name__ == "__main__":
+    fs = FileSys(folder_base="C:/data", name="MyPlans", alias="MPlans")
+    fs.load_data(file_data="./iofiles.csv")
+    print(fs.folder_main)
+    fs.data  = fs.data[["Folder", "File", "Format", "Description", "File_Source", "Folder_Source"]].copy()
+    #fs.setup()
+
+    d = fs.get_status(folder_name=r"datasets\\topo")
+    if d is None:
+        print("Not found expected files")
+    else:
+        print(d["Folder"][["Folder", "File", "Format", "Description"]].to_string(index=False))
+        for f in d["Files"]:
+            print("*"*40)
+            print(f)
+            print(d["Files"][f].to_string(index=False))

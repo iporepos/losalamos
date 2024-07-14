@@ -29,6 +29,11 @@
 % colors
 \usepackage[table]{xcolor}
 \definecolor{rowgray}{gray}{0.9}
+\definecolor{darkgreen}{rgb}{0,0.5,0} % This defines a dark green color
+% Commands for marking changes
+\usepackage{ulem}
+\newcommand{\removed}[1]{\textcolor{red}{\sout{#1}}}
+\newcommand{\added}[1]{\textcolor{darkgreen}{#1}}
 % lorem ipsum generator
 \usepackage{blindtext}
 \usepackage{array}

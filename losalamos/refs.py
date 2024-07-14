@@ -3,7 +3,7 @@ Classes for parsing, handling and managing references
 
 
 """
-from root import MbaE, Collection
+from losalamos.root import MbaE, Collection
 
 
 class Ref(MbaE):

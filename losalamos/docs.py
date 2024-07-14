@@ -4,7 +4,7 @@ Classes for parsing, handling and managing documents
 """
 import os
 import pandas as pd
-from root import DataSet, Collection
+from losalamos.root import DataSet
 
 
 class DocTable(DataSet):
