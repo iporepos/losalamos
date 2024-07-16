@@ -17,7 +17,7 @@ class DocTable(DataSet):
         """Load data from file_doc. Expected to overwrite superior methods.
 
         :param file_data: file_doc path to data.
-        :type file_data: str
+        :entry_type file_data: str
         :return: None
         :rtype: None
         """

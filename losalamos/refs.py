@@ -86,7 +86,7 @@ class Ref(MbaE):
                 bib_dict=bib_dict,
                 style="apa", # APA format
                 text_format='tex',  # markup format
-                entry_type=bib_dict["type"]
+                entry_type=bib_dict["entry_type"]
             )
             print(c)
 
@@ -97,13 +97,12 @@ class Ref(MbaE):
 
         # Instantiante a reference
         r = Ref(
-            type="book",
+            entry_type="book",
             title="The Origin of Species",
             author="Charles Darwin",
             year="1859",
             citation_key="darwin1859"
         )
-        print(r)
 
     Set Reference by Incoming Dict
 
@@ -112,14 +111,13 @@ class Ref(MbaE):
         # (Re)Set reference by incoming dict:
         r.set(
             dict_setter={
-                "type": "article",
+                "entry_type": "article",
                 "title": "Views of Nature"
                 "author": "Alexander von Humboldt",
                 "year": "1794",
                 "citation_key": "humboldt1793",
             }
         )
-        print(r)
 
     Load Reference from BibTeX File
 
@@ -128,34 +126,43 @@ class Ref(MbaE):
         # Load reference from `bib` file:
         # set order=0 for the first reference
         r.load_bib(file_note="./beven1989.bib", order=0)
-        print(r)
 
+    Search/Update bib info via CrossRef API
+
+    .. code-block:: python
+
+        r.bib_dict = Ref.search_info(
+            bib_dict=r.bib_dict, # bib entry
+            update=True, # default False
+            fields=["doi", "journal", "url", "publisher"],  # Selected fields
+            search_query="Beven 1989 changing ideas" # Default is the full-citation
+        )
 
 
     """
 
-    def __init__(self, type, title, author, year, citation_key=None, file_bib=None, file_note=None, file_doc=None):
+    def __init__(self, entry_type="book", title="The Origin of Species", author="Darwin, C", year="1859", citation_key=None, file_bib=None, file_note=None, file_doc=None):
         """Initialize the `Ref` object
 
-        :param type: reference type in BibTeX convetion (e.g., article, book, etc)
-        :type type: str
+        :param entry_type: reference entry_type in BibTeX convetion (e.g., article, book, etc)
+        :entry_type entry_type: str
         :param title: main title of the reference
-        :type title: str
+        :entry_type title: str
         :param author: author(s) filename(s)
-        :type author: str
+        :entry_type author: str
         :param year: year of publication
-        :type year: str
+        :entry_type year: str
         :param citation_key: citation key of the reference
-        :type citation_key: str
+        :entry_type citation_key: str
         :param file_note: path to BibTeX file
-        :type file_note: str
+        :entry_type file_note: str
         :param file_note: path to markdown note
-        :type file_note: str
+        :entry_type file_note: str
         :param file_doc: path to pdf document
-        :type file_doc: str
+        :entry_type file_doc: str
         """
         # set basic attributes
-        self.type = type
+        self.entry_type = entry_type
         self.citation_key = citation_key
         self.title = title
         self.author = author
@@ -188,7 +195,7 @@ class Ref(MbaE):
         super()._set_fields()
         # Attribute fields
         self.citation_key_field = "citation_key"
-        self.type_field = "type"
+        self.type_field = "entry_type"
         self.title_field = "title"
         self.author_field = "author"
         self.year_field = "year"
@@ -216,7 +223,7 @@ class Ref(MbaE):
 
         # customize local metadata:
         dict_meta_local = {
-            self.type_field: self.type,
+            self.type_field: self.entry_type,
             self.citation_key_field: self.citation_key,
             self.title_field: self.title,
             self.author_field: self.author,
@@ -233,7 +240,7 @@ class Ref(MbaE):
         """Set selected attributes based on an incoming dictionary
 
         :param dict_setter: incoming dictionary with attribute values
-        :type dict_setter: dict
+        :entry_type dict_setter: dict
         """
         # handle potentially missing fields
         list_dict_keys = list(dict_setter.keys())
@@ -274,7 +281,7 @@ class Ref(MbaE):
 
         # ---------- set basic attributes --------- #
         super().set(dict_setter=dict_setter)
-        self.type = dict_setter[self.type_field]
+        self.entry_type = dict_setter[self.type_field]
         self.citation_key = dict_setter[self.citation_key_field]
         self.title = dict_setter[self.title_field]
         self.author = dict_setter[self.author_field]
@@ -286,9 +293,9 @@ class Ref(MbaE):
         """Load reference from ``bib`` file.
 
         :param file_bib: file path to ``bib`` file
-        :type file_bib: str
+        :entry_type file_bib: str
         :param order: order number in the ``bib`` file (first = 0)
-        :type order: int
+        :entry_type order: int
         :return: None
         :rtype: None
         """
@@ -304,9 +311,9 @@ class Ref(MbaE):
         """Load notes from ``md`` file.
 
         :param file_note: file path to ``bib`` file
-        :type file_note: str
+        :entry_type file_note: str
         :param order: order number in the ``bib`` file (first = 0)
-        :type order: int
+        :entry_type order: int
         :return: None
         :rtype: None
         """
@@ -336,12 +343,11 @@ class Ref(MbaE):
         )
         self.alias = self.citation_key
 
-
     def export(self, output_dir, create_note=True):
         """Export all files to a directory with the same name (citation key)
 
         :param output_dir: path to output directory
-        :type output_dir: str
+        :entry_type output_dir: str
         :return: None
         :rtype: None
         """
@@ -349,10 +355,10 @@ class Ref(MbaE):
         export_name = self.citation_key
 
         # bib file
-        self.save_bib()  # save first
-        shutil.copy(
-            src=os.path.abspath(self.file_bib),
-            dst=os.path.join(output_dir, export_name + ".bib")
+        Ref.export_bibtex(
+            bib_dict=self.bib_dict,
+            output_dir=output_dir,
+            filename=export_name
         )
 
         # note file
@@ -395,24 +401,33 @@ class Ref(MbaE):
                          key not in [self.type_field, self.citation_key_field]]
         bibtex_code = f"@{bib_dict[self.type_field]}{{{citation_key},\n  " + ",\n  ".join(bibtex_fields) + "\n}}"
 
+        citation_full_plain = Ref.cite_full(self.bib_dict, text_format="plain")
+        citation_full_md = Ref.cite_full(self.bib_dict, text_format="md")
         # Create the markdown content
-        markdown_content = f"# {title}\n\n## Comments\n\n{comments}\n\n## Bibliometric information\n\n```bibtex\n{bibtex_code}\n```"
+        markdown_content = (
+            f"# {title}\n\n"
+            f"\n{self.entry_type.upper()}\n"
+            f"\n{citation_full_md}\n"
+            f"\n## Comments"
+            f"\n\n{comments}\n"
+            f"\n## Bibliometric information\n"
+            f"\nBibTeX entry:\n```\n{bibtex_code}\n```"
+        )
 
         # Write the content to the markdown file
-        with open(filepath, 'w') as file:
+        with open(filepath, "w", encoding="utf-8") as file:
             file.write(markdown_content)
 
         self.file_note = filepath
-
 
     def save_bib(self, output_dir=None, filename=None):
         """Save bibliography to bib file (default to bib_file attribute).
         Ref is expected to hold the bib_dict
 
         :param output_dir: the directory where the ``bib`` file will be saved.
-        :type output_dir: str
+        :entry_type output_dir: str
         :param filename: the name of the .bib file (without extension).
-        :type filename: str
+        :entry_type filename: str
         :return: None
         :rtype: None
         """
@@ -434,26 +449,26 @@ class Ref(MbaE):
     def export_bibtex(bib_dict, output_dir, filename):
         """Export a BibTeX entry to a ``bib`` file.
 
-        :param bib_dict: dict containing the BibTeX entry. Must include keys "type" and "citation_key".
-        :type bib_dict: dict
+        :param bib_dict: dict containing the BibTeX entry. Must include keys "entry_type" and "citation_key".
+        :entry_type bib_dict: dict
         :param output_dir: the directory where the ``bib`` file will be saved.
-        :type output_dir: str
+        :entry_type output_dir: str
         :param filename: the name of the .bib file (without extension).
-        :type filename: str
+        :entry_type filename: str
         :return: exported file path
         :rtype: str
         """
         if not os.path.exists(output_dir):
             os.makedirs(output_dir)
 
-        bibtex_content = f"@{bib_dict['type']}{{{bib_dict['citation_key']},\n"
+        bibtex_content = f"@{bib_dict['entry_type']}{{{bib_dict['citation_key']},\n"
         for key, value in bib_dict.items():
-            if key not in ["type", "citation_key"]:
+            if key not in ["entry_type", "citation_key"]:
                 bibtex_content += f"  {key} = {{{value}}},\n"
         bibtex_content = bibtex_content.rstrip(",\n") + "\n}\n"
 
         file_path = os.path.join(output_dir, f"{filename}.bib")
-        with open(file_path, "w") as bib_file:
+        with open(file_path, "w", encoding="utf-8") as bib_file:
             bib_file.write(bibtex_content)
         return file_path
 
@@ -481,14 +496,14 @@ class Ref(MbaE):
                     if entry is not None:
                         entries.append(entry)
                     entry = {}
-                    # Extracting the type and citation key
+                    # Extracting the entry_type and citation key
                     entry_type, citation_key = line.lstrip('@').split('{', 1)
-                    entry['type'] = entry_type
+                    entry['entry_type'] = entry_type
                     entry['citation_key'] = citation_key.rstrip(',').strip()
                 elif '=' in line and entry is not None:
                     # Extracting the field key and value
                     key, value = line.split('=', 1)
-                    key = key.strip()
+                    key = key.strip().lower()
                     value = value.strip().strip('{').strip(',').strip('}')
                     entry[key] = value
                 elif entry is not None and key:
@@ -529,9 +544,9 @@ class Ref(MbaE):
 
 
         :param file_note: path to `md` note
-        :type file_note: str
+        :entry_type file_note: str
         :param bibsec: title of bibliographic section
-        :type bibsec: str
+        :entry_type bibsec: str
         :return:
         :rtype:
         """
@@ -616,13 +631,13 @@ class Ref(MbaE):
 
         :param bib_dict: dict
             A dictionary containing bibliometric parameters from a reference.
-            Expected keys vary depending on the bib_dict type.
+            Expected keys vary depending on the bib_dict entry_type.
         :param style: str
             The citation text_format to format (e.g., 'apa', 'mla', 'chicago', 'harvard', 'vancouver', 'abnt').
         :param text_format: str
             The text format for styling (e.g., 'plain', 'html', 'md', 'tex').
         :param entry_type: str
-            The type of the BibTeX bib_dict (e.g., 'article', 'book', 'inbook', 'incollection', 'proceedings', 'inproceedings', 'conference', 'phdthesis', 'mastersthesis', 'techreport', 'manual', 'unpublished', 'misc').
+            The entry_type of the BibTeX bib_dict (e.g., 'article', 'book', 'inbook', 'incollection', 'proceedings', 'inproceedings', 'conference', 'phdthesis', 'mastersthesis', 'techreport', 'manual', 'unpublished', 'misc').
         :return: str
             The formatted citation string.
         """
@@ -670,7 +685,7 @@ class Ref(MbaE):
         title = apply_format(title, 'title')
         journal = apply_format(journal, 'journal')
 
-        # Determine citation format based on bib_dict type and text_format
+        # Determine citation format based on bib_dict entry_type and text_format
         if entry_type == 'article':
             volume_issue = f"{volume}({issue})" if issue else volume
             pages_str = f", {pages}" if pages else ""
@@ -845,7 +860,7 @@ class Ref(MbaE):
 
     @staticmethod
     def standard_key(bib_dict):
-        """Get the standard Citation Key in a BibTeX bib_dict dictionary to LastnameFirstAuthor + Year + Firsttitleword
+        """Get the standard Citation Key in a BibTeX bib_dict dictionary to LastnameFirstAuthor + Year + x (or a, b, c ...)
 
         :param bib_dict: dict
             A dictionary containing bibliometric parameters from a reference.
@@ -856,12 +871,78 @@ class Ref(MbaE):
         author = Ref.standard_author(bib_dict=bib_dict)
         first_author = author.split(" and ")[0].strip()
         first_name = first_author.split(",")[0].strip().capitalize()
-        first_title = bib_dict["title"].split(" ")[0].strip().lower()
+        # by default set suffix as x
+        suf = 'x'
         year = bib_dict["year"]
-        standard_key = f"{first_name}{year}{first_title}"
+        standard_key = f"{first_name}{year}{suf}"
         return standard_key
 
-class RefCollection(Collection):  # todo docstring
+    @staticmethod
+    def search_info(bib_dict, update=False, fields=None, search_query=None):
+        """Update or enrich a BibTeX entry based on a search in the CrossRef API.
+
+        :param bib_dict: A dictionary containing bibliometric parameters from a reference.
+        :type bib_dict: dict
+        :param update: if True, update all attributes; if False, only fill in missing attributes
+        :type update: bool
+        :param fields: specific fields to update; if None, operate on all fields
+        :type fields: list
+        :return: updated BibTeX entry
+        :rtype: dict
+        """
+        import requests
+
+        if search_query is None:
+            search_query = bib_dict["title"]
+
+        # CrossRef API search URL
+        search_url = f'https://api.crossref.org/works?query.bibliographic="{search_query}"&rows=2'
+
+        response = requests.get(search_url)
+        if response.status_code == 200:
+            data = response.json().get("message", {})
+            normalized_data = {k.lower(): v for k, v in data["items"][0].items()}
+            # Fields mapping from CrossRef response to BibTeX fields
+            crossref_fields = {
+                "title": normalized_data.get("title", [""])[0],
+                "author": " and ".join([f"{author.get('family', '')}, {author.get('given', '')}" for author in
+                                     normalized_data.get("author", [])]),
+                "year": normalized_data.get("issued", {}).get("date-parts", [[None]])[0][0],
+                "journal": normalized_data.get("container-title", [""])[0],
+                "volume": normalized_data.get("volume", ""),
+                "issue": normalized_data.get("issue", ""),
+                "pages": normalized_data.get("page", ""),
+                "doi": normalized_data.get("doi", ""),
+                "url": normalized_data.get("url", ""),
+            }
+            # Handle the abstract field separately as it might not be present
+            if "abstract" in normalized_data:
+                crossref_fields["abstract"] = normalized_data["abstract"]
+
+            # Iterate over keys in dict_b
+            for key in crossref_fields:
+                # If the key is not in dict_a, add it with an empty string as the value
+                if key not in bib_dict:
+                    bib_dict[key] = ""
+
+            # Update only specified fields if fields is provided
+            keys_to_update = fields if fields else bib_dict.keys()
+
+            for key in keys_to_update:
+                if key in ["citation_key", "entry_type"]:
+                    continue
+                if update or not bib_dict.get(key):
+                    bib_dict[key] = crossref_fields.get(key, bib_dict.get(key))
+
+        else:
+            print(f"Failed to fetch data for citation key {search_query}. Status code: {response.status_code}")
+
+        # Cleanup
+        bib_dict = {key: value.strip() for key, value in bib_dict.items() if value != ""}
+        return bib_dict
+
+
+class RefColl(Collection):  # todo docstring
 
     def __init__(self, name="MyRefCollection", alias="myRefCol"):  # todo docstring
         super().__init__(base_object=Ref, name=name, alias=alias)
@@ -869,12 +950,15 @@ class RefCollection(Collection):  # todo docstring
     def load(self, file_path):  # todo docstring
         list_refs = Ref.parse_bibtex(file_path)
         for i in range(len(list_refs)):
-            rf = Ref()
-            rf.load_bib(file_bib=f, order=i)
+            bib_dict = list_refs[i]
+            rf = Ref(
+                entry_type=bib_dict["entry_type"],
+                title=bib_dict["title"],
+                author=bib_dict["author"],
+                year=bib_dict["year"],
+                citation_key=bib_dict["citation_key"]
+            )
+            rf.bib_dict = bib_dict.copy()
             self.append(new_object=rf)
 
-
-
-if __name__ == "__main__":
-    print("Hi")
 

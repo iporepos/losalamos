@@ -116,11 +116,11 @@ class MbaE:
         """Initialize the ``MbaE`` object.
 
         :param name: unique object filename
-        :type name: str
+        :entry_type name: str
 
         :param alias: unique object alias.
             If None, it takes the first and last characters from ``filename``
-        :type alias: str
+        :entry_type alias: str
 
         """
         # ------------ pseudo-static ----------- #
@@ -216,7 +216,7 @@ class MbaE:
         """Set selected attributes based on an incoming dictionary
 
         :param dict_setter: incoming dictionary with attribute values
-        :type dict_setter: dict
+        :entry_type dict_setter: dict
         """
         # ---------- set basic attributes --------- #
         self.name = dict_setter[self.name_field]
@@ -236,7 +236,7 @@ class MbaE:
                 Name;ResTia
                 Alias;Ra
 
-        :type bootfile: str
+        :entry_type bootfile: str
 
         :return:
         :rtype: str
@@ -365,14 +365,14 @@ class Collection(MbaE):
         """Initialize the ``Collection`` object.
 
         :param base_object: ``MbaE``-based object for collection
-        :type base_object: :class:`MbaE`
+        :entry_type base_object: :class:`MbaE`
 
         :param name: unique object filename
-        :type name: str
+        :entry_type name: str
 
         :param alias: unique object alias.
             If None, it takes the first and last characters from filename
-        :type alias: str
+        :entry_type alias: str
 
         """
         # ------------ call super ----------- #
@@ -452,7 +452,7 @@ class Collection(MbaE):
         """Update the ``Collection`` catalog.
 
         :param details: Option to update catalog details, defaults to False.
-        :type details: bool
+        :entry_type details: bool
         :return: None
         :rtype: None
         """
@@ -515,7 +515,7 @@ class Collection(MbaE):
         returns a dictionary with metadata keys and values
 
         :param new_object: Object to append.
-        :type new_object: object
+        :entry_type new_object: object
 
         :return: None
         :rtype: None
@@ -539,7 +539,7 @@ class Collection(MbaE):
         """Remove an object from the ``Collection`` by the filename.
 
         :param name: Name attribute of the object to remove.
-        :type name: str
+        :entry_type name: str
 
         :return: None
         :rtype: None
@@ -648,11 +648,11 @@ class DataSet(MbaE):
         Expected to increment superior methods.
 
         :param name: unique object filename
-        :type name: str
+        :entry_type name: str
 
         :param alias: unique object alias.
             If None, it takes the first and last characters from filename
-        :type alias: str
+        :entry_type alias: str
 
         """
         # ------------ call super ----------- #
@@ -802,10 +802,10 @@ class DataSet(MbaE):
         Expected to increment superior methods.
 
         :param dict_setter: incoming dictionary with attribute values
-        :type dict_setter: dict
+        :entry_type dict_setter: dict
 
         :param load_data: option for loading data from incoming file. Default is True.
-        :type load_data: bool
+        :entry_type load_data: bool
 
         """
         super().set(dict_setter=dict_setter)
@@ -839,7 +839,7 @@ class DataSet(MbaE):
         """Load data from file. Expected to overwrite superior methods.
 
         :param file_data: file path to data.
-        :type file_data: str
+        :entry_type file_data: str
         :return: None
         :rtype: None
         """
@@ -878,7 +878,7 @@ class DataSet(MbaE):
         Expected to overwrite superior methods.
 
         :param show: option for showing instead of saving.
-        :type show: bool
+        :entry_type show: bool
 
         :return: None or file path to figure
         :rtype: None or str
@@ -1239,7 +1239,7 @@ class RecordTable(DataSet):
         """Filter input record dictionary based on the expected table data columns.
 
         :param input_dict: input record dictionary
-        :type input_dict: dict
+        :entry_type input_dict: dict
         :return: filtered record dictionary
         :rtype: dict
         """
@@ -1283,11 +1283,11 @@ class RecordTable(DataSet):
         """Export the ``RecordTable`` data.
 
         :param folder_export: folder to export
-        :type folder_export: str
+        :entry_type folder_export: str
         :param filename: file filename (filename alone, without file extension)
-        :type filename: str
+        :entry_type filename: str
         :param filter_archive: option for exporting only records with ``RecStatus`` = ``On``
-        :type filter_archive: bool
+        :entry_type filter_archive: bool
         :return: file path is export is successfull (1 otherwise)
         :rtype: str or int
         """
@@ -1320,10 +1320,10 @@ class RecordTable(DataSet):
         Expected to increment superior methods.
 
         :param dict_setter: incoming dictionary with attribute values
-        :type dict_setter: dict
+        :entry_type dict_setter: dict
 
         :param load_data: option for loading data from incoming file. Default is True.
-        :type load_data: bool
+        :entry_type load_data: bool
 
         """
         # ignore color
@@ -1360,7 +1360,7 @@ class RecordTable(DataSet):
         Expected to overwrite superior methods.
 
         :param file_data: file path to data.
-        :type file_data: str
+        :entry_type file_data: str
         :return: None
         :rtype: None
         """
@@ -1385,13 +1385,13 @@ class RecordTable(DataSet):
         Base Method. Expected to be incremented downstream.
 
         :param input_df: incoming dataframe
-        :type input_df: dataframe
+        :entry_type input_df: dataframe
 
         :param append: option for appending the dataframe to existing data. Default True
-        :type append: bool
+        :entry_type append: bool
 
         :param inplace: option for overwrite data. Else return dataframe. Default True
-        :type inplace: bool
+        :entry_type inplace: bool
 
         :return: None
         :rtype: None
@@ -1442,7 +1442,7 @@ class RecordTable(DataSet):
         """Insert a record in the RT
 
         :param dict_rec: input record dictionary
-        :type dict_rec: dict
+        :entry_type dict_rec: dict
         :return: None
         :rtype: None
         """
@@ -1473,11 +1473,11 @@ class RecordTable(DataSet):
         """Edit RT record
 
         :param rec_id: record id
-        :type rec_id: str
+        :entry_type rec_id: str
         :param dict_rec: incoming record dictionary
-        :type dict_rec: dict
+        :entry_type dict_rec: dict
         :param filter_dict: option for filtering incoming record
-        :type filter_dict: bool
+        :entry_type filter_dict: bool
         :return: None
         :rtype: None
         """
@@ -1512,7 +1512,7 @@ class RecordTable(DataSet):
         """Archive a record in the RT, that is ``RecStatus`` = ``Off``
 
         :param rec_id: record id
-        :type rec_id: str
+        :entry_type rec_id: str
         :return: None
         :rtype: None
         """
@@ -1527,7 +1527,7 @@ class RecordTable(DataSet):
         """Get a record dict by id
 
         :param rec_id: record id
-        :type rec_id: str
+        :entry_type rec_id: str
         :return: record dictionary
         :rtype: dict
         """
@@ -1543,7 +1543,7 @@ class RecordTable(DataSet):
         """Get a record dataframe by id
 
         :param rec_id: record id
-        :type rec_id: str
+        :entry_type rec_id: str
         :return: record dictionary
         :rtype: dict
         """
@@ -1565,11 +1565,11 @@ class RecordTable(DataSet):
 
 
         :param file_record_data: file path to ``csv`` file.
-        :type file_record_data: str
+        :entry_type file_record_data: str
         :param input_field: Name of ``Field`` column in the file.
-        :type input_field:
+        :entry_type input_field:
         :param input_value: Name of ``Value`` column in the file.
-        :type input_value:
+        :entry_type input_value:
         :return: record dictionary
         :rtype: dict
         """
@@ -1594,11 +1594,11 @@ class RecordTable(DataSet):
         """Export a record from the table to a ``csv`` file.
 
         :param rec_id: record id
-        :type rec_id: str
+        :entry_type rec_id: str
         :param filename: file filename (filename alone, without file extension)
-        :type filename: str
+        :entry_type filename: str
         :param folder_export: folder to export
-        :type folder_export: str
+        :entry_type folder_export: str
         :return: path to exported file
         :rtype: str
         """
@@ -1620,7 +1620,7 @@ class RecordTable(DataSet):
         """Util static method for dissaggregation of time delta
 
         :param timedelta: TimeDelta object from pandas
-        :type timedelta: :class:`pandas.TimeDelta`
+        :entry_type timedelta: :class:`pandas.TimeDelta`
         :return: dictionary of time delta
         :rtype: dict
         """
@@ -1643,9 +1643,9 @@ class RecordTable(DataSet):
         """Util static method for string conversion of timedelta
 
         :param timedelta: TimeDelta object from pandas
-        :type timedelta: :class:`pandas.TimeDelta`
+        :entry_type timedelta: :class:`pandas.TimeDelta`
         :param dct_struct: Dictionary of string strucuture. Ex: {'Expected days': 'Days'}
-        :type dct_struct: dict
+        :entry_type dct_struct: dict
         :return: text of time delta
         :rtype: str
         """
@@ -1660,9 +1660,9 @@ class RecordTable(DataSet):
         """Util static method for computing the runnning time for a list of starting dates
 
         :param start_datetimes: List of starting dates
-        :type start_datetimes: list
+        :entry_type start_datetimes: list
         :param kind: mode for output format ('raw', 'human' or 'age')
-        :type kind: str
+        :entry_type kind: str
         :return: list of running time
         :rtype: list
         """
@@ -1817,7 +1817,7 @@ class Budget(RecordTable):
         Expected to be incremented downstream.
 
         :param input_df: incoming dataframe
-        :type input_df: dataframe
+        :entry_type input_df: dataframe
         :return: None
         :rtype: None
         """
@@ -1892,14 +1892,14 @@ class FileSys(DataSet):
         Expected to increment superior methods.
 
         :param folder_base: path to File System folder location
-        :type folder_base: str
+        :entry_type folder_base: str
 
         :param name: unique object filename
-        :type name: str
+        :entry_type name: str
 
         :param alias: unique object alias.
             If None, it takes the first and last characters from filename
-        :type alias: str
+        :entry_type alias: str
 
         """
         # prior attributes
@@ -2063,10 +2063,10 @@ class FileSys(DataSet):
         Expected to increment superior methods.
 
         :param dict_setter: incoming dictionary with attribute values
-        :type dict_setter: dict
+        :entry_type dict_setter: dict
 
         :param load_data: option for loading data from incoming file. Default is True.
-        :type load_data: bool
+        :entry_type load_data: bool
 
         """
         # ignore color
@@ -2094,7 +2094,7 @@ class FileSys(DataSet):
         """Load data from file. Expected to overwrite superior methods.
 
         :param file_data: file path to data.
-        :type file_data: str
+        :entry_type file_data: str
         :return: None
         :rtype: None
         """
@@ -2141,7 +2141,7 @@ class FileSys(DataSet):
         Expected to overwrite superior methods.
 
         :param show: option for showing instead of saving.
-        :type show: bool
+        :entry_type show: bool
 
         :return: None or file path to figure
         :rtype: None or str
@@ -2239,7 +2239,7 @@ class FileSys(DataSet):
         """Static method for file existing checkup
 
         :param files: iterable with file paths
-        :type files: list
+        :entry_type files: list
         :return: list status ('ok' or 'missing')
         :rtype: list
         """
@@ -2256,7 +2256,7 @@ class FileSys(DataSet):
         """Util function for making a diretory
 
         :param str_path: path to dir
-        :type str_path: str
+        :entry_type str_path: str
         :return: None
         :rtype: None
         """
@@ -2275,9 +2275,9 @@ class FileSys(DataSet):
             Pattern is expected to be a prefix prior to ``*`` suffix.
 
         :param dst_pattern: destination path with file pattern. Example: path/to/dst_file_*.csv
-        :type dst_pattern: str
+        :entry_type dst_pattern: str
         :param src_pattern: source path with file pattern. Example: path/to/src_file_*.csv
-        :type src_pattern: str
+        :entry_type src_pattern: str
         :return: None
         :rtype: None
         """
@@ -2307,10 +2307,10 @@ class FileSys(DataSet):
         """Recursive function for filling the ``FileSys`` structure
 
         :param dict_struct: dicitonary of output_dir structure
-        :type dict_struct: dict
+        :entry_type dict_struct: dict
 
         :param folder: path to local folder
-        :type folder: str
+        :entry_type folder: str
 
         :return: None
         :rtype: None
@@ -2320,11 +2320,11 @@ class FileSys(DataSet):
             """Sub routine for handling expected files in the FileSys structure.
 
             :param dst_name: destination filename
-            :type dst_name: str
+            :entry_type dst_name: str
             :param lst_specs: list for expected file specifications
-            :type lst_specs: list
+            :entry_type lst_specs: list
             :param dst_folder: destination folder
-            :type dst_folder: str
+            :entry_type dst_folder: str
             :return: None
             :rtype: None
             """
