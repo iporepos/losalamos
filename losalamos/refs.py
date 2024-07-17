@@ -45,10 +45,12 @@ conubia nostra, per inceptos himenaeos. Nulla facilisi. Mauris eget nisl
 eu eros euismod sodales. Cras pulvinar tincidunt enim nec semper.
 
 """
+
 import os
 import re
 import shutil
 from losalamos.root import MbaE, Collection
+
 
 class Ref(MbaE):
     """
@@ -141,7 +143,14 @@ class Ref(MbaE):
 
     """
 
-    def __init__(self, entry_type="book", title="The Origin of Species", author="Darwin, C", year="1859", citation_key=None, file_bib=None, file_note=None, file_doc=None):
+    def __init__(
+        self,
+        entry_type="book",
+        title="The Origin of Species",
+        author="Darwin, C",
+        year="1859",
+        citation_key=None,
+    ):
         """Initialize the `Ref` object
 
         :param entry_type: reference entry_type in BibTeX convetion (e.g., article, book, etc)
@@ -168,19 +177,23 @@ class Ref(MbaE):
         self.author = author
         self.year = year
         # file paths
-        self.file_bib = file_bib
-        self.file_note = file_note
-        self.file_doc = file_doc
+        self.file_bib = None
+        self.file_note = None
+        self.file_doc = None
+        self.lib_folder = None
         # bib dict
         self.bib_dict = None
+        # note class
+        self.note = None
+
+        self.note_comments = None
+        self.note_tags = None
+        self.note_related = None
+        self.references_list = None
 
         # filename and alias setup
         _name = Ref.cite_intext(
-            bib_dict={
-                "author": self.author,
-                "year": self.year
-            },
-            text_format="plain"
+            bib_dict={"author": self.author, "year": self.year}, text_format="plain"
         )
         if self.citation_key is not None:
             _alias = self.citation_key
@@ -230,7 +243,7 @@ class Ref(MbaE):
             self.year_field: self.year,
             self.file_bib_field: self.file_bib,
             self.file_note_field: self.file_note,
-            self.file_doc_field: self.file_doc
+            self.file_doc_field: self.file_doc,
         }
         # update
         dict_meta.update(dict_meta_local)
@@ -255,11 +268,11 @@ class Ref(MbaE):
         if self.name_field not in list_dict_keys:
             # set as citation in-text
             dict_setter[self.name_field] = Ref.cite_intext(
-            bib_dict={
-                "author": dict_setter[self.author_field],
-                "year": dict_setter[self.year_field]
-            },
-            text_format="plain"
+                bib_dict={
+                    "author": dict_setter[self.author_field],
+                    "year": dict_setter[self.year_field],
+                },
+                text_format="plain",
             )
 
         # alias
@@ -289,63 +302,50 @@ class Ref(MbaE):
         self.file_note = dict_setter[self.file_note_field]
         # ... continues in downstream objects ... #
 
-    def load_bib(self, file_bib=None, order=0):
+    def load_bib(self, order=0, search_doi=True):
         """Load reference from ``bib`` file.
 
-        :param file_bib: file path to ``bib`` file
-        :entry_type file_bib: str
         :param order: order number in the ``bib`` file (first = 0)
         :entry_type order: int
         :return: None
         :rtype: None
         """
-        if file_bib is None:
-            file_bib = self.file_bib # use local
-        list_refs = self.parse_bibtex(file_bib=file_bib)
+        list_refs = self.parse_bibtex(file_bib=self.file_bib)
         self.bib_dict = list_refs[order]
-        self.file_bib = file_bib
         self.set(dict_setter=list_refs[order])
         return None
 
-    def load_note(self, file_note=None, order=0):
-        """Load notes from ``md`` file.
-
-        :param file_note: file path to ``bib`` file
-        :entry_type file_note: str
-        :param order: order number in the ``bib`` file (first = 0)
-        :entry_type order: int
-        :return: None
-        :rtype: None
+    def load_note(self):
         """
-        if file_note is None:
-            file_note = self.file_note # use local
-        # todo loading note method
-        return None
+        # todo docstring
+        """
+        self.note = Note(name=self.name, alias=self.alias)
+        self.note.file_note = self.file_note
+        self.note.load()
 
-    def standardize(self, conflict_list=None):
+    def standardize(self):
         """Standardize citation key, author formatting
 
-        :param conflict_list: list of potential conflict names for the citation key
-        :type conflict_list: list
         :return: None
         :rtype: None
         """
+        conflict_list = None
+        if self.lib_folder:
+            if os.path.isdir(self.lib_folder):
+                conflict_list = Ref.get_citation_keys(lib_folder=self.lib_folder)
+
         # set standard author
         self.author = Ref.standard_author(bib_dict=self.bib_dict)
         self.bib_dict[self.author_field] = self.author
 
         # set standard citation key
         self.citation_key = Ref.standard_key(
-            bib_dict=self.bib_dict,
-            conflict_list=conflict_list
+            bib_dict=self.bib_dict, conflict_list=conflict_list
         )
         self.bib_dict[self.citation_key_field] = self.citation_key
 
         # Name and Alias
-        self.name = Ref.cite_intext(
-            bib_dict=self.bib_dict,
-            text_format="plain"
-        )
+        self.name = Ref.cite_intext(bib_dict=self.bib_dict, text_format="plain")
         self.alias = self.citation_key
 
     def export(self, output_dir, create_note=True):
@@ -360,82 +360,35 @@ class Ref(MbaE):
         export_name = self.citation_key
 
         # bib file
-        Ref.to_bib(
-            bib_dict=self.bib_dict,
+        self.to_bib(
             output_dir=output_dir,
             filename=export_name
         )
 
         # note file
         if create_note:
-            from datetime import datetime
-            # Get the current timestamp
-            now = datetime.now()
-            # Format the timestamp
-            timestamp_str = now.strftime("%Y-%m-%d %H:%M")
-            self.create_note(output_dir=output_dir)
-
+            self.to_note(
+                output_dir=output_dir,
+                filename=export_name,
+                comments=self.note_comments,
+                tags=self.note_tags,
+                related=self.note_related,
+                references=self.references_list
+            )
         else:
-            if self.file_note:
-                # todo save note changes function
-                shutil.copy(
-                    src=os.path.abspath(self.file_note),
-                    dst=os.path.join(output_dir, export_name + ".md")
-                )
+            shutil.copy(
+                src=os.path.abspath(self.file_note),
+                dst=os.path.join(output_dir, export_name + ".md"),
+            )
 
         # pdf file
         if self.file_doc:
             shutil.copy(
                 src=os.path.abspath(self.file_doc),
-                dst=os.path.join(output_dir, export_name + ".pdf")
+                dst=os.path.join(output_dir, export_name + ".pdf"),
             )
 
         return None
-
-    def create_note(self, output_dir):
-        """Creates a markdown file for a BibTeX entry with a custom title, 
-        comments section, and bibliometric information.
-
-        :param output_dir: Directory where the markdown file will be saved.
-        """
-        # todo refactor here
-
-
-
-
-
-        bib_dict = self.bib_dict
-        citation_in = Ref.cite_intext(bib_dict=self.bib_dict)
-        title = f"{self.bib_dict[self.title_field]} --  by {citation_in}"
-        comments = "Start here"
-        # Extract citation key and create filename
-        citation_key = self.bib_dict[self.citation_key_field]
-        filename = f"{citation_key}.md"
-        filepath = os.path.join(output_dir, filename)
-
-        # Create the bibliometric information section
-        bibtex_fields = [f"{key} = {{{value}}}" for key, value in bib_dict.items() if
-                         key not in [self.type_field, self.citation_key_field]]
-        bibtex_code = f"@{bib_dict[self.type_field]}{{{citation_key},\n  " + ",\n  ".join(bibtex_fields) + "\n}}"
-
-        citation_full_plain = Ref.cite_full(self.bib_dict, text_format="plain")
-        citation_full_md = Ref.cite_full(self.bib_dict, text_format="md")
-        # Create the markdown content
-        markdown_content = (
-            f"# {title}\n\n"
-            f"\n{self.entry_type.upper()}\n"
-            f"\n{citation_full_md}\n"
-            f"\n## Comments"
-            f"\n\n{comments}\n"
-            f"\n## Bibliometric information\n"
-            f"\nBibTeX entry:\n```\n{bibtex_code}\n```"
-        )
-
-        # Write the content to the markdown file
-        with open(filepath, "w", encoding="utf-8") as file:
-            file.write(markdown_content)
-
-        self.file_note = filepath
 
     def save_bib(self, output_dir=None, filename=None):
         """Save bibliography to bib file (default to bib_file attribute).
@@ -452,15 +405,119 @@ class Ref(MbaE):
         if output_dir is None:
             output_dir = os.path.dirname(os.path.abspath(self.file_bib))
         if filename is None:
-            filename = os.path.splitext(os.path.basename(os.path.abspath(self.file_bib)))[0]
+            filename = os.path.splitext(
+                os.path.basename(os.path.abspath(self.file_bib))
+            )[0]
         # Export
         file_path = Ref.to_bib(
-            bib_dict=self.bib_dict,
-            output_dir=output_dir,
-            filename=filename
+            bib_dict=self.bib_dict, output_dir=output_dir, filename=filename
         )
         self.file_bib = file_path
         return None
+
+    def to_note(self, output_dir, filename, comments=None, tags=None, related=None, references=None):
+        """
+        # todo docstring
+        """
+        from datetime import datetime
+
+        # Function to replace placeholders in a string using a dictionary
+        # todo evaluate move to editor class
+        def replace_placeholders(string, replacements):
+            for placeholder, replacement in replacements.items():
+                string = string.replace(placeholder, replacement)
+            return string
+
+        # Get the current timestamp
+        now = datetime.now()
+        # Format the timestamp
+        timestamp_str = now.strftime("%Y-%m-%d %H:%M")
+
+        # setup
+        citation_in = Ref.cite_intext(bib_dict=self.bib_dict, text_format="plain")
+        citation_in_md = Ref.cite_intext(bib_dict=self.bib_dict, text_format="md")
+        citation_full_plain = Ref.cite_full(self.bib_dict, text_format="plain")
+        title = f"**{self.bib_dict[self.title_field]}** by {citation_in}"
+
+        # handle DOI
+        doi_link = "{{doi}}"
+        if "doi" in self.bib_dict:
+            doi_link = self.bib_dict["doi"]
+
+        # handle keywords
+        keywords_str = "{{keywords}}"
+        if "keywords" in self.bib_dict:
+            keywords_str = self.bib_dict["keywords"]
+
+        # Handle Abstract
+        abstract_str = "{{abstract}}"
+        if "abstract" in self.bib_dict:
+            abstract_str = self.bib_dict["abstract"]
+
+        # Note
+        nt_dict = Note.get_template(kind="bib", head_name=citation_in_md)
+
+        # handle comments
+        if comments:
+            nt_dict["Comments"]["Content"] = comments[:] + ["\n---"]
+        # handle tags
+        if tags is None:
+            tags = ""
+        if related is None:
+            related = ""
+
+        # handle references
+        references_str = ""
+        if references:
+            lst_refs = [f" - {ref}" for ref in references]
+            references_str = "\n".join(lst_refs)
+
+
+        # edit contents
+        replacements = {
+            "{{LIBRARY ITEM}}": self.bib_dict[self.type_field].upper(),
+            "{{Title}}": f"**{self.bib_dict[self.title_field]}** by {citation_in_md}",
+            "{{tags}}": " ".join([tag for tag in tags]),
+            "{{related}}": " ".join([rel for rel in related]),
+            "{{timestamp}}": timestamp_str,
+            "{{abstract}}": abstract_str,
+            "{{doi}}": doi_link,
+            "{{keywords}}": keywords_str,
+            "{{In-text citation}}": citation_in,
+            "{{Full citation}}": citation_full_plain,
+            "{{BibTeX}}": Ref.bib_to_str(bib_dict=self.bib_dict),
+            "{{references}}": references_str
+        }
+
+        for sec in nt_dict:
+            template_strings = nt_dict[sec]["Content"][:]
+            # Update the list of strings
+            updated_strings = [
+                replace_placeholders(string, replacements)
+                for string in template_strings
+            ]
+            nt_dict[sec]["Content"] = updated_strings[:]
+
+        # export note
+        output_file = Note.to_md(
+            md_dict=nt_dict, output_dir=output_dir, filename=filename
+        )
+        return output_file
+
+    def to_bib(self, output_dir, filename):
+        """
+        # todo docstring
+        """
+        bibtex_content = f"@{self.bib_dict[self.type_field]}{{{self.bib_dict[self.citation_key_field]},\n"
+        for key, value in self.bib_dict.items():
+            if key not in [self.type_field, self.citation_key_field]:
+                bibtex_content += f"  {key} = {{{value}}},\n"
+        bibtex_content = bibtex_content.rstrip(",\n") + "\n}\n"
+        # write file
+        file_path = os.path.join(output_dir, f"{filename}.bib")
+        with open(file_path, "w", encoding="utf-8") as bib_file:
+            bib_file.write(bibtex_content)
+        return file_path
 
     @staticmethod
     def get_citation_keys(lib_folder):
@@ -486,33 +543,6 @@ class Ref(MbaE):
         return filtered_files
 
     @staticmethod
-    def to_bib(bib_dict, output_dir, filename):
-        """Export a BibTeX entry to a ``bib`` file.
-
-        :param bib_dict: dict containing the BibTeX entry. Must include keys "entry_type" and "citation_key".
-        :entry_type bib_dict: dict
-        :param output_dir: the directory where the ``bib`` file will be saved.
-        :entry_type output_dir: str
-        :param filename: the name of the .bib file (without extension).
-        :entry_type filename: str
-        :return: exported file path
-        :rtype: str
-        """
-        if not os.path.exists(output_dir):
-            os.makedirs(output_dir)
-
-        bibtex_content = f"@{bib_dict['entry_type']}{{{bib_dict['citation_key']},\n"
-        for key, value in bib_dict.items():
-            if key not in ["entry_type", "citation_key"]:
-                bibtex_content += f"  {key} = {{{value}}},\n"
-        bibtex_content = bibtex_content.rstrip(",\n") + "\n}\n"
-
-        file_path = os.path.join(output_dir, f"{filename}.bib")
-        with open(file_path, "w", encoding="utf-8") as bib_file:
-            bib_file.write(bibtex_content)
-        return file_path
-
-    @staticmethod
     def parse_bibtex(file_bib):
         """Parse a ``bib`` file and return a list of references as dictionaries.
 
@@ -523,32 +553,32 @@ class Ref(MbaE):
         entry = None
         key = None
 
-        with open(file_bib, 'r', encoding="utf-8") as file:
+        with open(file_bib, "r", encoding="utf-8") as file:
             for line in file:
                 line = line.strip()
 
                 # Ignore empty lines and comments
-                if not line or line.startswith('%'):
+                if not line or line.startswith("%"):
                     continue
 
                 # New bib_dict starts
-                if line.startswith('@'):
+                if line.startswith("@"):
                     if entry is not None:
                         entries.append(entry)
                     entry = {}
                     # Extracting the entry_type and citation key
-                    entry_type, citation_key = line.lstrip('@').split('{', 1)
-                    entry['entry_type'] = entry_type
-                    entry['citation_key'] = citation_key.rstrip(',').strip()
-                elif '=' in line and entry is not None:
+                    entry_type, citation_key = line.lstrip("@").split("{", 1)
+                    entry["entry_type"] = entry_type
+                    entry["citation_key"] = citation_key.rstrip(",").strip()
+                elif "=" in line and entry is not None:
                     # Extracting the field key and value
-                    key, value = line.split('=', 1)
+                    key, value = line.split("=", 1)
                     key = key.strip().lower()
-                    value = value.strip().strip('{').strip(',').strip('}')
+                    value = value.strip().strip("{").strip(",").strip("}")
                     entry[key] = value
                 elif entry is not None and key:
                     # Continuation of a field value in a new line
-                    entry[key] += ' ' + line.strip().strip('{').strip('}').strip(',')
+                    entry[key] += " " + line.strip().strip("{").strip("}").strip(",")
 
         # Add the last bib_dict if it exists
         if entry is not None:
@@ -559,15 +589,13 @@ class Ref(MbaE):
             entries.append(entry_new)
 
         stripped_data = [
-            {key: value.strip() for key, value in item.items()}
-            for item in entries
+            {key: value.strip() for key, value in item.items()} for item in entries
         ]
 
         return stripped_data
 
-
     @staticmethod
-    def cite_intext(bib_dict, text_format='plain', embed_link=False):
+    def cite_intext(bib_dict, text_format="plain", embed_link=False):
         """Format a dictionary of bibliometric parameters into an in-text citation string with optional DOI or URL links.
 
         :param bib_dict: dict
@@ -583,41 +611,48 @@ class Ref(MbaE):
         # Normalize authors first
         bib_dict["author"] = Ref.standard_author(bib_dict)
 
-        author = bib_dict.get('author', 'Unknown Author').strip()
-        year = bib_dict.get('year', 'n.d.').strip()
-        doi = bib_dict.get('doi', '').strip()
-        url = bib_dict.get('url', '').strip()
+        author = bib_dict.get("author", "Unknown Author").strip()
+        year = bib_dict.get("year", "n.d.").strip()
+        doi = bib_dict.get("doi", "").strip()
+        url = bib_dict.get("url", "").strip()
 
         # Split and prepare author names for in-text citation
-        author_list = author.split(' and ')
+        author_list = author.split(" and ")
         first_author_lastname = author_list[0].split(",")[0].strip()
-        if len(author_list) > 1:
+        if len(author_list) > 2:
             formatted_authors = f"{first_author_lastname} et al."
+        elif len(author_list) == 2:
+            second_author_lastname = author_list[1].split(",")[0].strip()
+            formatted_authors = f"{first_author_lastname} & {second_author_lastname}"
         else:
             formatted_authors = first_author_lastname
 
         # Apply text formatting
         def apply_format(text, text_format):
-            if text_format == 'plain':
-                return text
-            elif text_format == 'html':
-                return f"<i>{text}</i>"
-            elif text_format == 'md':
-                return f"*{text}*"
-            elif text_format == 'tex':
-                return f"\\textit{{{text}}}"
-            return text
+            # todo evaluate move this to an editor class
+            formatted = text[:]
+            if text_format == "plain":
+                pass
+            elif text_format == "html":
+                formatted = text.replace("et al.", "<i>et al.</i>")
+            elif text_format == "md":
+                formatted = text.replace("et al.", "*et al.*")
+            elif text_format == "tex":
+                formatted = text.replace("et al.", r"\textit{et al.}")
+                formatted = formatted.replace("&", r"\&")
+            return formatted
 
         formatted_authors = apply_format(formatted_authors, text_format)
 
         # Embed link if applicable
         def embed_link_func(text, text_format, link):
-            if text_format == 'html':
+            # todo evaluate move this to an editor class
+            if text_format == "html":
                 return f'<a href="{link}">{text}</a>'
-            elif text_format == 'md':
-                return f'[{text}]({link})'
-            elif text_format == 'tex':
-                return f'\\href{{{link}}}{{{text}}}'
+            elif text_format == "md":
+                return f"[{text}]({link})"
+            elif text_format == "tex":
+                return f"\\href{{{link}}}{{{text}}}"
             return text
 
         # Format the in-text citation
@@ -628,13 +663,13 @@ class Ref(MbaE):
                 link = f"https://doi.org/{doi}"
             else:
                 link = url
-            if link and text_format in ['html', 'md', 'tex']:
+            if link and text_format in ["html", "md", "tex"]:
                 in_text_citation = embed_link_func(in_text_citation, text_format, link)
 
         return in_text_citation
 
     @staticmethod
-    def cite_full(bib_dict, style='apa', text_format='plain', entry_type='article'):
+    def cite_full(bib_dict, style="apa", text_format="plain", entry_type="article"):
         """Format a dictionary of bibliometric parameters into a specified citation text_format string and text format.
 
         :param bib_dict: dict
@@ -649,186 +684,209 @@ class Ref(MbaE):
         :return: str
             The formatted citation string.
         """
-        author = bib_dict.get('author', 'Unknown Author').strip()
-        year = bib_dict.get('year', 'n.d.').strip()
-        title = bib_dict.get('title', 'Untitled').strip()
-        journal = bib_dict.get('journal', '').strip()
-        volume = bib_dict.get('volume', '').strip()
-        issue = bib_dict.get('issue', '').strip()
-        pages = bib_dict.get('pages', '').strip()
-        doi = bib_dict.get('doi', '').strip()
-        booktitle = bib_dict.get('booktitle', '').strip()
-        publisher = bib_dict.get('publisher', '').strip()
-        address = bib_dict.get('address', '').strip()
-        school = bib_dict.get('school', '').strip()
-        institution = bib_dict.get('institution', '').strip()
-        note = bib_dict.get('note', '').strip()
+        author = bib_dict.get("author", "Unknown Author").strip()
+        year = bib_dict.get("year", "n.d.").strip()
+        title = bib_dict.get("title", "Untitled").strip()
+        journal = bib_dict.get("journal", "").strip()
+        volume = bib_dict.get("volume", "").strip()
+        issue = bib_dict.get("issue", "").strip()
+        pages = bib_dict.get("pages", "").strip()
+        doi = bib_dict.get("doi", "").strip()
+        booktitle = bib_dict.get("booktitle", "").strip()
+        publisher = bib_dict.get("publisher", "").strip()
+        address = bib_dict.get("address", "").strip()
+        school = bib_dict.get("school", "").strip()
+        institution = bib_dict.get("institution", "").strip()
+        note = bib_dict.get("note", "").strip()
 
         # Formatting authors for different styles
-        author_list = author.split(' and ')
-        formatted_authors = ', '.join(author_list[:-1]) + ', and ' + author_list[-1] if len(author_list) > 1 else \
-        author_list[0]
+        author_list = author.split(" and ")
+        formatted_authors = (
+            ", ".join(author_list[:-1]) + ", and " + author_list[-1]
+            if len(author_list) > 1
+            else author_list[0]
+        )
 
         # Apply text formatting
         def apply_format(text, format_type):
-            if text_format == 'plain':
+            if text_format == "plain":
                 return text
-            elif text_format == 'html':
-                if format_type == 'title':
+            elif text_format == "html":
+                if format_type == "title":
                     return f"<i>{text}</i>"
-                elif format_type == 'journal':
+                elif format_type == "journal":
                     return f"<b>{text}</b>"
-            elif text_format == 'md':
-                if format_type == 'title':
+            elif text_format == "md":
+                if format_type == "title":
                     return f"*{text}*"
-                elif format_type == 'journal':
+                elif format_type == "journal":
                     return f"**{text}**"
-            elif text_format == 'tex':
-                if format_type == 'title':
+            elif text_format == "tex":
+                if format_type == "title":
                     return f"\\textit{{{text}}}"
-                elif format_type == 'journal':
+                elif format_type == "journal":
                     return f"\\textbf{{{text}}}"
             return text
 
-        title = apply_format(title, 'title')
-        journal = apply_format(journal, 'journal')
+        title = apply_format(title, "title")
+        journal = apply_format(journal, "journal")
 
         # Determine citation format based on bib_dict entry_type and text_format
-        if entry_type == 'article':
+        if entry_type == "article":
             volume_issue = f"{volume}({issue})" if issue else volume
             pages_str = f", {pages}" if pages else ""
             doi_str = f" https://doi.org/{doi}" if doi else ""
-            if style == 'apa':
+            if style == "apa":
                 citation = f"{formatted_authors} ({year}). {title}. {journal}, {volume_issue}{pages_str}.{doi_str}"
-            elif style == 'mla':
-                citation = f"{formatted_authors}. \"{title}.\" {journal} {volume}.{issue} ({year}): {pages}. {doi_str}"
-            elif style == 'chicago':
-                citation = f"{formatted_authors}. \"{title}.\" {journal} {volume}, no. {issue} ({year}): {pages}.{doi_str}"
-            elif style == 'harvard':
+            elif style == "mla":
+                citation = f'{formatted_authors}. "{title}." {journal} {volume}.{issue} ({year}): {pages}. {doi_str}'
+            elif style == "chicago":
+                citation = f'{formatted_authors}. "{title}." {journal} {volume}, no. {issue} ({year}): {pages}.{doi_str}'
+            elif style == "harvard":
                 citation = f"{formatted_authors} ({year}) '{title}', {journal}, vol. {volume}, no. {issue}, pp. {pages}.{doi_str}"
-            elif style == 'vancouver':
+            elif style == "vancouver":
                 citation = f"{formatted_authors}. {title}. {journal}. {year};{volume}({issue}):{pages}.{doi_str}"
-            elif style == 'abnt':
+            elif style == "abnt":
                 citation = f"{formatted_authors}. {title}. {journal}, {volume}.({issue}), p. {pages}, {year}.{doi_str}"
             else:
                 citation = f"{formatted_authors} ({year}). {title}. {journal}, {volume_issue}{pages_str}.{doi_str}"
-        elif entry_type == 'book':
-            if style == 'apa':
+        elif entry_type == "book":
+            if style == "apa":
                 citation = f"{formatted_authors} ({year}). {title}. {publisher}."
-            elif style == 'mla':
+            elif style == "mla":
                 citation = f"{formatted_authors}. {title}. {publisher}, {year}."
-            elif style == 'chicago':
-                citation = f"{formatted_authors}. {title}. {address}: {publisher}, {year}."
-            elif style == 'harvard':
+            elif style == "chicago":
+                citation = (
+                    f"{formatted_authors}. {title}. {address}: {publisher}, {year}."
+                )
+            elif style == "harvard":
                 citation = f"{formatted_authors} ({year}) {title}, {publisher}."
-            elif style == 'vancouver':
+            elif style == "vancouver":
                 citation = f"{formatted_authors}. {title}. {publisher}; {year}."
-            elif style == 'abnt':
+            elif style == "abnt":
                 citation = f"{formatted_authors}. {title}. {publisher}, {year}."
             else:
                 citation = f"{formatted_authors} ({year}). {title}. {publisher}."
-        elif entry_type == 'inbook' or entry_type == 'incollection':
-            if style == 'apa':
+        elif entry_type == "inbook" or entry_type == "incollection":
+            if style == "apa":
                 citation = f"{formatted_authors} ({year}). {title}. In {editor} (Ed.), {booktitle} (pp. {pages}). {publisher}."
-            elif style == 'mla':
-                citation = f"{formatted_authors}. \"{title}.\" {booktitle}, edited by {editor}, {publisher}, {year}, pp. {pages}."
-            elif style == 'chicago':
-                citation = f"{formatted_authors}. \"{title}.\" In {booktitle}, edited by {editor}, {pages}. {address}: {publisher}, {year}."
-            elif style == 'harvard':
+            elif style == "mla":
+                citation = f'{formatted_authors}. "{title}." {booktitle}, edited by {editor}, {publisher}, {year}, pp. {pages}.'
+            elif style == "chicago":
+                citation = f'{formatted_authors}. "{title}." In {booktitle}, edited by {editor}, {pages}. {address}: {publisher}, {year}.'
+            elif style == "harvard":
                 citation = f"{formatted_authors} ({year}) '{title}', in {editor} (ed.), {booktitle}, {publisher}, pp. {pages}."
-            elif style == 'vancouver':
+            elif style == "vancouver":
                 citation = f"{formatted_authors}. {title}. In: {editor}, editor. {booktitle}. {publisher}; {year}. p. {pages}."
-            elif style == 'abnt':
+            elif style == "abnt":
                 citation = f"{formatted_authors}. {title}. In: {editor} (Ed.). {booktitle}. {publisher}, {year}. p. {pages}."
             else:
                 citation = f"{formatted_authors} ({year}). {title}. In {editor} (Ed.), {booktitle} (pp. {pages}). {publisher}."
-        elif entry_type == 'proceedings' or entry_type == 'inproceedings' or entry_type == 'conference':
-            if style == 'apa':
+        elif (
+            entry_type == "proceedings"
+            or entry_type == "inproceedings"
+            or entry_type == "conference"
+        ):
+            if style == "apa":
                 citation = f"{formatted_authors} ({year}). {title}. In {editor} (Ed.), {booktitle} (pp. {pages}). {publisher}."
-            elif style == 'mla':
-                citation = f"{formatted_authors}. \"{title}.\" {booktitle}, {publisher}, {year}, pp. {pages}."
-            elif style == 'chicago':
-                citation = f"{formatted_authors}. \"{title}.\" In {booktitle}, edited by {editor}, {pages}. {address}: {publisher}, {year}."
-            elif style == 'harvard':
+            elif style == "mla":
+                citation = f'{formatted_authors}. "{title}." {booktitle}, {publisher}, {year}, pp. {pages}.'
+            elif style == "chicago":
+                citation = f'{formatted_authors}. "{title}." In {booktitle}, edited by {editor}, {pages}. {address}: {publisher}, {year}.'
+            elif style == "harvard":
                 citation = f"{formatted_authors} ({year}) '{title}', in {editor} (ed.), {booktitle}, {publisher}, pp. {pages}."
-            elif style == 'vancouver':
+            elif style == "vancouver":
                 citation = f"{formatted_authors}. {title}. In: {editor}, editor. {booktitle}. {publisher}; {year}. p. {pages}."
-            elif style == 'abnt':
+            elif style == "abnt":
                 citation = f"{formatted_authors}. {title}. In: {editor} (Ed.). {booktitle}. {publisher}, {year}. p. {pages}."
             else:
                 citation = f"{formatted_authors} ({year}). {title}. In {editor} (Ed.), {booktitle} (pp. {pages}). {publisher}."
-        elif entry_type == 'phdthesis' or entry_type == 'mastersthesis':
-            if style == 'apa':
+        elif entry_type == "phdthesis" or entry_type == "mastersthesis":
+            if style == "apa":
                 citation = f"{formatted_authors} ({year}). {title} (Unpublished {entry_type.replace('thesis', 'thesis')}). {school}."
-            elif style == 'mla':
+            elif style == "mla":
                 citation = f"{formatted_authors}. {title}. {entry_type.replace('thesis', 'thesis')}, {school}, {year}."
-            elif style == 'chicago':
+            elif style == "chicago":
                 citation = f"{formatted_authors}. {title}. {entry_type.replace('thesis', 'thesis')}, {school}, {year}."
-            elif style == 'harvard':
+            elif style == "harvard":
                 citation = f"{formatted_authors} ({year}) {title}, {entry_type.replace('thesis', 'thesis')}, {school}."
-            elif style == 'vancouver':
+            elif style == "vancouver":
                 citation = f"{formatted_authors}. {title}. {entry_type.replace('thesis', 'thesis')}. {school}; {year}."
-            elif style == 'abnt':
+            elif style == "abnt":
                 citation = f"{formatted_authors}. {title}. {school}, {year}."
             else:
                 citation = f"{formatted_authors} ({year}). {title} (Unpublished {entry_type.replace('thesis', 'thesis')}). {school}."
-        elif entry_type == 'techreport':
-            if style == 'apa':
+        elif entry_type == "techreport":
+            if style == "apa":
                 citation = f"{formatted_authors} ({year}). {title} (Technical Report No. {number}). {institution}."
-            elif style == 'mla':
+            elif style == "mla":
                 citation = f"{formatted_authors}. {title}. {institution}, {year}."
-            elif style == 'chicago':
+            elif style == "chicago":
                 citation = f"{formatted_authors}. {title}. {institution} Technical Report no. {number}, {year}."
-            elif style == 'harvard':
+            elif style == "harvard":
                 citation = f"{formatted_authors} ({year}) {title}, {institution}, Technical Report no. {number}."
-            elif style == 'vancouver':
+            elif style == "vancouver":
                 citation = f"{formatted_authors}. {title}. {institution} Technical Report no. {number}; {year}."
-            elif style == 'abnt':
+            elif style == "abnt":
                 citation = f"{formatted_authors}. {title}. {institution}, {year}."
             else:
                 citation = f"{formatted_authors} ({year}). {title} (Technical Report No. {number}). {institution}."
-        elif entry_type == 'manual':
-            if style == 'apa':
+        elif entry_type == "manual":
+            if style == "apa":
                 citation = f"{formatted_authors} ({year}). {title}. {organization}."
-            elif style == 'mla':
+            elif style == "mla":
                 citation = f"{formatted_authors}. {title}. {organization}, {year}."
-            elif style == 'chicago':
+            elif style == "chicago":
                 citation = f"{formatted_authors}. {title}. {organization}, {year}."
-            elif style == 'harvard':
+            elif style == "harvard":
                 citation = f"{formatted_authors} ({year}) {title}, {organization}."
-            elif style == 'vancouver':
+            elif style == "vancouver":
                 citation = f"{formatted_authors}. {title}. {organization}; {year}."
-            elif style == 'abnt':
+            elif style == "abnt":
                 citation = f"{formatted_authors}. {title}. {organization}, {year}."
             else:
                 citation = f"{formatted_authors} ({year}). {title}. {organization}."
-        elif entry_type == 'unpublished':
-            if style == 'apa':
-                citation = f"{formatted_authors} ({year}). {title}. Unpublished manuscript."
-            elif style == 'mla':
-                citation = f"{formatted_authors}. {title}. Unpublished manuscript, {year}."
-            elif style == 'chicago':
-                citation = f"{formatted_authors}. {title}. Unpublished manuscript, {year}."
-            elif style == 'harvard':
-                citation = f"{formatted_authors} ({year}) {title}, Unpublished manuscript."
-            elif style == 'vancouver':
-                citation = f"{formatted_authors}. {title}. Unpublished manuscript; {year}."
-            elif style == 'abnt':
-                citation = f"{formatted_authors}. {title}. Unpublished manuscript, {year}."
+        elif entry_type == "unpublished":
+            if style == "apa":
+                citation = (
+                    f"{formatted_authors} ({year}). {title}. Unpublished manuscript."
+                )
+            elif style == "mla":
+                citation = (
+                    f"{formatted_authors}. {title}. Unpublished manuscript, {year}."
+                )
+            elif style == "chicago":
+                citation = (
+                    f"{formatted_authors}. {title}. Unpublished manuscript, {year}."
+                )
+            elif style == "harvard":
+                citation = (
+                    f"{formatted_authors} ({year}) {title}, Unpublished manuscript."
+                )
+            elif style == "vancouver":
+                citation = (
+                    f"{formatted_authors}. {title}. Unpublished manuscript; {year}."
+                )
+            elif style == "abnt":
+                citation = (
+                    f"{formatted_authors}. {title}. Unpublished manuscript, {year}."
+                )
             else:
-                citation = f"{formatted_authors} ({year}). {title}. Unpublished manuscript."
-        elif entry_type == 'misc':
-            if style == 'apa':
+                citation = (
+                    f"{formatted_authors} ({year}). {title}. Unpublished manuscript."
+                )
+        elif entry_type == "misc":
+            if style == "apa":
                 citation = f"{formatted_authors} ({year}). {title}. {note}."
-            elif style == 'mla':
+            elif style == "mla":
                 citation = f"{formatted_authors}. {title}. {note}, {year}."
-            elif style == 'chicago':
+            elif style == "chicago":
                 citation = f"{formatted_authors}. {title}. {note}, {year}."
-            elif style == 'harvard':
+            elif style == "harvard":
                 citation = f"{formatted_authors} ({year}) {title}, {note}."
-            elif style == 'vancouver':
+            elif style == "vancouver":
                 citation = f"{formatted_authors}. {title}. {note}; {year}."
-            elif style == 'abnt':
+            elif style == "abnt":
                 citation = f"{formatted_authors}. {title}. {note}, {year}."
             else:
                 citation = f"{formatted_authors} ({year}). {title}. {note}."
@@ -836,6 +894,24 @@ class Ref(MbaE):
             citation = f"{formatted_authors} ({year}). {title}. {journal}, {volume_issue}{pages_str}.{doi_str}"
 
         return citation
+
+    @staticmethod
+    def bib_to_str(bib_dict, entry_field="entry_type", citation_field="citation_key"):
+        # todo docstring
+        citation_key = bib_dict[citation_field]
+        # list available fields
+        bibtex_fields = [
+            f"{key} = {{{value}}}"
+            for key, value in bib_dict.items()
+            if key not in [entry_field, citation_field]
+        ]
+        # build the string
+        bibtex_str = (
+            f"@{bib_dict[entry_field]}{{{citation_key},\n  "
+            + ",\n  ".join(bibtex_fields)
+            + "\n}}"
+        )
+        return bibtex_str
 
     @staticmethod
     def standard_author(bib_dict):
@@ -849,7 +925,7 @@ class Ref(MbaE):
         """
 
         def normalize_author_name(author_name):
-            if ',' in author_name:
+            if "," in author_name:
                 return author_name.strip()
             else:
                 parts = author_name.split()
@@ -860,9 +936,13 @@ class Ref(MbaE):
                 else:
                     return f"{parts[-1]}, {' '.join(parts[:-1])}"
 
-        if 'author' in bib_dict:
-            author_list = [normalize_author_name(a.strip()) for a in bib_dict['author'].split(' and ')]
-            standard_authors = ' and '.join(author_list)
+        if "author" in bib_dict:
+            author_list = [
+                normalize_author_name(a.strip())
+                for a in bib_dict["author"].split(" and ")
+            ]
+
+            standard_authors = " and ".join(author_list)
 
         return standard_authors
 
@@ -879,7 +959,7 @@ class Ref(MbaE):
 
         def next_available_name(base_name, conflict_names):
             # Initialize the suffix as 'a'
-            suffix = 'a'
+            suffix = "a"
 
             # Generate the name with the current suffix and check for conflicts
             while base_name + suffix in conflict_names:
@@ -893,93 +973,95 @@ class Ref(MbaE):
         first_author = author.split(" and ")[0].strip()
         first_name = first_author.split(",")[0].strip().capitalize()
         # by default set suffix as 'a'
-        suf = 'a'
+        suf = "a"
         year = bib_dict["year"]
         standard_key = f"{first_name}{year}{suf}"
 
         # Check out for conflicting keys
         if conflict_list:
             standard_key = next_available_name(
-                base_name=standard_key[:-1],
-                conflict_names=conflict_list
+                base_name=standard_key[:-1], conflict_names=conflict_list
             )
-        print(standard_key)
         return standard_key
 
     @staticmethod
-    def query_info():
-        # todo generic tool for cross ref API
-        print("hi")
+    def query_xref(search_query):
+        def format_unstruct(citation, known_doi=None):
+            # first remove doi
+            has_doi = False
+            lst_uns = citation.split(",")
+            lst_no_doi = []
+            for e in lst_uns:
+                if "https://doi.org/" in e:
+                    has_doi = True
+                    citation_doi = e[len('https://doi.org/'):]
+                    pass
+                else:
+                    lst_no_doi.append(e)
+            citation_no_doi = ", ".join(lst_no_doi)
+            if has_doi:
+                citation_no_doi = citation_no_doi + f" https://doi.org/{citation_doi}"
+            elif known_doi:
+                citation_no_doi = citation_no_doi + f" https://doi.org/{known_doi}"
+            return citation_no_doi
+        def extract_bibtex_entry(data):
+            #print(data.keys())
+            #print(data["published"])
+            bibtex_entry = {
+                "entry_type": data.get("type", "article"),  # Default to "article" if not specified
+                "author": " and ".join([f"{author['family']}, {author['given']}" for author in data.get("author", [])]),
+                "title": data.get("title", [None])[0],
+                "journal": data.get("container-title", [None])[0],
+                "year": data.get("published", {}).get("date-parts", [[None]])[0][0],
+                "volume": data.get("volume"),
+                "number": data.get("issue"),
+                "pages": data.get("page"),
+                "doi": data.get("DOI"),
+                "url": data.get("URL"),
+                "publisher": data.get("publisher"),
+                "note": data.get("note"),
+                "abstract": data.get("abstract"),
+                "keywords": data.get("subject", [])
+            }
+            # Remove None values
+            #print(bibtex_entry["year"])
+            bibtex_entry = {k: v for k, v in bibtex_entry.items() if v is not None}
 
-    @staticmethod
-    def search_info(bib_dict, update=False, fields=None, search_query=None):
-        """Update or enrich a BibTeX entry based on a search in the CrossRef API.
+            # set citation key and author
+            bibtex_entry["author"] = Ref.standard_author(bibtex_entry)
+            bibtex_entry["citation_key"] = Ref.standard_key(bibtex_entry)
 
-        :param bib_dict: A dictionary containing bibliometric parameters from a reference.
-        :type bib_dict: dict
-        :param update: if True, update all attributes; if False, only fill in missing attributes
-        :type update: bool
-        :param fields: specific fields to update; if None, operate on all fields
-        :type fields: list
-        :return: updated BibTeX entry
-        :rtype: dict
-        """
+            return bibtex_entry
+
+        # Generic tool for cross ref API
         import requests
-
-        if search_query is None:
-            search_query = bib_dict["title"]
-
         # CrossRef API search URL
         search_url = f'https://api.crossref.org/works?query.bibliographic="{search_query}"&rows=2'
-
+        output_data = None
         response = requests.get(search_url)
+
         if response.status_code == 200:
             data = response.json().get("message", {})
-            normalized_data = {k.lower(): v for k, v in data["items"][0].items()}
-            # Fields mapping from CrossRef response to BibTeX fields
-            crossref_fields = {
-                "title": normalized_data.get("title", [""])[0],
-                "author": " and ".join([f"{author.get('family', '')}, {author.get('given', '')}" for author in
-                                     normalized_data.get("author", [])]),
-                "year": normalized_data.get("issued", {}).get("date-parts", [[None]])[0][0],
-                "journal": normalized_data.get("container-title", [""])[0],
-                "volume": normalized_data.get("volume", ""),
-                "issue": normalized_data.get("issue", ""),
-                "pages": normalized_data.get("page", ""),
-                "doi": normalized_data.get("doi", ""),
-                "url": normalized_data.get("url", ""),
+            # handle main bibtex:
+            main_bib = extract_bibtex_entry(data=data["items"][0])
+            # handle references
+            lst_references = []
+            for i in range(len(data["items"][0]["reference"])):
+                citation = data["items"][0]["reference"][i]["unstructured"]
+                if "DOI" in data["items"][0]["reference"][i]:
+                    known_doi = data["items"][0]["reference"][i]["DOI"]
+                else:
+                    known_doi = None
+                citation_formatted = format_unstruct(citation, known_doi=known_doi)
+                lst_references.append(citation_formatted)
+            lst_references.sort()
+            output_data = {
+                "Main": main_bib,
+                "References": lst_references
             }
-            # Handle the abstract field separately as it might not be present
-            if "abstract" in normalized_data:
-                crossref_fields["abstract"] = normalized_data["abstract"]
+        return output_data
 
-            # Iterate over keys in dict_b
-            for key in crossref_fields:
-                # If the key is not in dict_a, add it with an empty string as the value
-                if key not in bib_dict:
-                    bib_dict[key] = ""
 
-            # Update only specified fields if fields is provided
-            keys_to_update = fields if fields else bib_dict.keys()
-
-            for key in keys_to_update:
-                if key in ["citation_key", "entry_type"]:
-                    continue
-                if update or not bib_dict.get(key):
-                    bib_dict[key] = crossref_fields.get(key, bib_dict.get(key))
-
-        else:
-            print(f"Failed to fetch data for citation key {search_query}. Status code: {response.status_code}")
-
-        # Cleanup
-        new_dict = {}
-        for k in bib_dict:
-            item = bib_dict[k]
-            if item is not None:
-                if item != "":
-                    new_dict[k] = item.strip()
-
-        return new_dict
 
 class Note(MbaE):
 
@@ -1039,9 +1121,9 @@ class Note(MbaE):
             self.summary_field: self.summary,
             self.timestamp_field: self.timestamp,
             self.tags_head_field: self.tags_head,
-            self.tags_etc_field : self.tags_etc,
-            self.related_head_field : self.related_head,
-            self.related_etc_field : self.related_etc,
+            self.tags_etc_field: self.tags_etc,
+            self.related_head_field: self.related_head,
+            self.related_etc_field: self.related_etc,
             self.file_note_field: self.file_note,
         }
         # update
@@ -1049,18 +1131,14 @@ class Note(MbaE):
         return dict_meta
 
     def load(self):
-        self.note_dict = Note.parse_note(
-            file_path=self.file_note
-        )
+        self.note_dict = Note.parse_note(file_path=self.file_note)
         self.update()
 
     def update(self):
-        def get_first_section(md_dict):
-            fs = next((s for s, details in md_dict.items() if details["Parent Section"] is None), None)
-            return fs
 
         # get first section name
-        self.title = get_first_section(md_dict=self.note_dict)
+        # Warning: assume it is the first item
+        self.title = next(iter(self.note_dict))
 
         # patterns
 
@@ -1071,36 +1149,26 @@ class Note(MbaE):
 
         # head tags
         self.tags_head = Note.list_by_pattern(
-            md_dict={self.title: self.note_dict[self.title]},
-            patt_type="tag"
+            md_dict={self.title: self.note_dict[self.title]}, patt_type="tag"
         )
         # head related:
         self.related_head = Note.list_by_pattern(
-            md_dict={self.title: self.note_dict[self.title]},
-            patt_type="related"
+            md_dict={self.title: self.note_dict[self.title]}, patt_type="related"
         )
         # etc tags:
-        self.tags_etc = Note.list_by_pattern(
-            md_dict=new_dict,
-            patt_type="tag"
-        )
+        self.tags_etc = Note.list_by_pattern(md_dict=new_dict, patt_type="tag")
 
-        self.related_etc = Note.list_by_pattern(
-            md_dict=new_dict,
-            patt_type="related"
-        )
+        self.related_etc = Note.list_by_pattern(md_dict=new_dict, patt_type="related")
 
         # summary
         lst_summaries = Note.list_by_intro(
-            md_dict={self.title: self.note_dict[self.title]},
-            intro_type="summary"
+            md_dict={self.title: self.note_dict[self.title]}, intro_type="summary"
         )
         self.summary = lst_summaries[0]
 
         # datetime
         lst_datetimes = Note.list_by_intro(
-            md_dict={self.title: self.note_dict[self.title]},
-            intro_type="timestamp"
+            md_dict={self.title: self.note_dict[self.title]}, intro_type="timestamp"
         )
         self.timestamp = lst_datetimes[0]
 
@@ -1117,11 +1185,11 @@ class Note(MbaE):
         """
 
         if patt_type == "tag":
-            pattern = re.compile(r'#\w+')
+            pattern = re.compile(r"#\w+")
         elif patt_type == "related":
-            pattern = re.compile(r'\[\[.*?\]\]')
+            pattern = re.compile(r"\[\[.*?\]\]")
         else:
-            pattern = re.compile(r'#\w+')
+            pattern = re.compile(r"#\w+")
 
         patts = []
         # run over all sections
@@ -1147,7 +1215,7 @@ class Note(MbaE):
         :rtype: list or None
         """
         if intro_type == "summary":
-            pattern =  r"\*\*Summary:\*\*\s*(.*)"
+            pattern = r"\*\*Summary:\*\*\s*(.*)"
         elif intro_type == "timestamp":
             pattern = r"created in:\s*(.*)"
         # develop more options
@@ -1174,7 +1242,7 @@ class Note(MbaE):
         :rtype: dict
         """
 
-        with open(file_path, 'r') as file:
+        with open(file_path, "r") as file:
             lines = file.readlines()
 
         markdown_dict = {}
@@ -1182,7 +1250,7 @@ class Note(MbaE):
         parent_section = None
         section_stack = []
 
-        section_pattern = re.compile(r'^(#+)\s+(.*)')
+        section_pattern = re.compile(r"^(#+)\s+(.*)")
 
         for line in lines:
             match = section_pattern.match(line)
@@ -1201,7 +1269,7 @@ class Note(MbaE):
                 section_stack.append((current_section, level))
                 markdown_dict[current_section] = {
                     "Parent Section": parent_section,
-                    "Content": []
+                    "Content": [],
                 }
                 section_content = []
             else:
@@ -1214,8 +1282,7 @@ class Note(MbaE):
 
     @staticmethod
     def to_md(md_dict, output_dir, filename):
-        """
-        Convert a note dictionary to a Markdown file and save it to the specified directory.
+        """Convert a note dictionary to a Markdown file and save it to the specified directory.
 
         :param md_dict: Dictionary containing note sections.
         :type md_dict: dict
@@ -1233,43 +1300,86 @@ class Note(MbaE):
 
             # Write the section content
             for line in md_dict[section]["Content"]:
-                file.write(line + '\n')
+                file.write(line + "\n")
 
             # Find and write subsections
-            subsections = [key for key in md_dict if md_dict[key]["Parent Section"] == section]
+            subsections = [
+                key for key in md_dict if md_dict[key]["Parent Section"] == section
+            ]
             for subsection in subsections:
                 write_section(file, subsection, level + 1)
 
         # Find top-level sections (sections with no parent)
-        top_sections = [key for key in md_dict if md_dict[key]["Parent Section"] is None]
+        top_sections = [
+            key for key in md_dict if md_dict[key]["Parent Section"] is None
+        ]
 
         if not os.path.exists(output_dir):
             os.makedirs(output_dir)
 
         output_file = os.path.join(output_dir, f"{filename}.md")
 
-        with open(output_file, 'w') as file:
+        with open(output_file, "w", encoding="utf-8") as file:
             for section in top_sections:
                 write_section(file, section)
+        return output_file
 
     @staticmethod
-    def get_template(kind="library"):
+    def get_template(kind="bib", head_name=None):
         # todo continue here
+        if head_name is None:
+            head_name = "Header"
         templates = {
-            "libray":{
-                "Title": {
+            "bib": {
+                head_name: {
                     "Parent Section": None,
                     "Content": [
-                        "# Title\n\n",
-                        "LIBRARY ITEM\n",
-                        "Full Citation\n",
-                        "tags:\n"
-                        "related: "
-                    ]
-                }
+                        "{{LIBRARY ITEM}}\n",
+                        "{{Title}}\n",
+                        "**Summary:** Insert a paragraph comment here\n",
+                        "tags: {{tags}}",
+                        "related: {{related}}",
+                        "created in: {{timestamp}}",
+                        "\n---",
+                    ],
+                },
+                "Comments": {
+                    "Parent Section": None,
+                    "Content": [
+                        "*Start typing here*\n\n",
+                        "\n---",
+                    ],
+                },
+                "Bibliographic information": {
+                    "Parent Section": None,
+                    "Content": [
+                        "## Abstract",
+                        "**Author abstract:** {{abstract}}\n",
+                        "**AI-based abstract:** {{ai_abstract}}",
+                        "\n## Metadata",
+                        "doi: {{doi}}",
+                        "keywords: {{keywords}}",
+                        "\n## Citation",
+                        "In-text citation:",
+                        "```",
+                        "{{In-text citation}}",
+                        "```",
+                        "Full citation:",
+                        "```",
+                        "{{Full citation}}",
+                        "```",
+                        "BibTeX entry:",
+                        "```",
+                        "{{BibTeX}}",
+                        "```",
+                        "\n## References",
+                        "{{references}}"
+                    ],
+                },
             }
         }
 
+        return templates[kind]
 
 
 class RefColl(Collection):  # todo docstring
@@ -1286,11 +1396,7 @@ class RefColl(Collection):  # todo docstring
                 title=bib_dict["title"],
                 author=bib_dict["author"],
                 year=bib_dict["year"],
-                citation_key=bib_dict["citation_key"]
+                citation_key=bib_dict["citation_key"],
             )
             rf.bib_dict = bib_dict.copy()
             self.append(new_object=rf)
-
-
-
-
