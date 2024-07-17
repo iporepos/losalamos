@@ -46,6 +46,7 @@ eu eros euismod sodales. Cras pulvinar tincidunt enim nec semper.
 
 """
 import os
+import re
 import shutil
 from losalamos.root import MbaE, Collection
 
@@ -137,7 +138,6 @@ class Ref(MbaE):
             fields=["doi", "journal", "url", "publisher"],  # Selected fields
             search_query="Beven 1989 changing ideas" # Default is the full-citation
         )
-
 
     """
 
@@ -322,9 +322,11 @@ class Ref(MbaE):
         # todo loading note method
         return None
 
-    def standardize(self):
+    def standardize(self, conflict_list=None):
         """Standardize citation key, author formatting
 
+        :param conflict_list: list of potential conflict names for the citation key
+        :type conflict_list: list
         :return: None
         :rtype: None
         """
@@ -333,7 +335,10 @@ class Ref(MbaE):
         self.bib_dict[self.author_field] = self.author
 
         # set standard citation key
-        self.citation_key = Ref.standard_key(bib_dict=self.bib_dict)
+        self.citation_key = Ref.standard_key(
+            bib_dict=self.bib_dict,
+            conflict_list=conflict_list
+        )
         self.bib_dict[self.citation_key_field] = self.citation_key
 
         # Name and Alias
@@ -355,7 +360,7 @@ class Ref(MbaE):
         export_name = self.citation_key
 
         # bib file
-        Ref.export_bibtex(
+        Ref.to_bib(
             bib_dict=self.bib_dict,
             output_dir=output_dir,
             filename=export_name
@@ -363,7 +368,13 @@ class Ref(MbaE):
 
         # note file
         if create_note:
+            from datetime import datetime
+            # Get the current timestamp
+            now = datetime.now()
+            # Format the timestamp
+            timestamp_str = now.strftime("%Y-%m-%d %H:%M")
             self.create_note(output_dir=output_dir)
+
         else:
             if self.file_note:
                 # todo save note changes function
@@ -387,6 +398,12 @@ class Ref(MbaE):
 
         :param output_dir: Directory where the markdown file will be saved.
         """
+        # todo refactor here
+
+
+
+
+
         bib_dict = self.bib_dict
         citation_in = Ref.cite_intext(bib_dict=self.bib_dict)
         title = f"{self.bib_dict[self.title_field]} --  by {citation_in}"
@@ -437,7 +454,7 @@ class Ref(MbaE):
         if filename is None:
             filename = os.path.splitext(os.path.basename(os.path.abspath(self.file_bib)))[0]
         # Export
-        file_path = Ref.export_bibtex(
+        file_path = Ref.to_bib(
             bib_dict=self.bib_dict,
             output_dir=output_dir,
             filename=filename
@@ -446,7 +463,30 @@ class Ref(MbaE):
         return None
 
     @staticmethod
-    def export_bibtex(bib_dict, output_dir, filename):
+    def get_citation_keys(lib_folder):
+        """Get the list of citations key from a library folder.
+        The folder is expected to hold references in bib files named by
+        the respective citations keys.
+        The "_" is considered a flag for bib files not related to the reference.
+
+        :param lib_folder: path to library directory
+        :type lib_folder: str
+        :return: list of names of citation keys
+        :rtype: list
+        """
+        # List to hold the filtered filenames
+        filtered_files = []
+
+        # Iterate through all files in the directory
+        for filename in os.listdir(lib_folder):
+            # Check if the file has a ".bib" extension and does not contain the "_" character
+            if filename.endswith(".bib") and "_" not in filename:
+                filtered_files.append(filename[:-4])
+
+        return filtered_files
+
+    @staticmethod
+    def to_bib(bib_dict, output_dir, filename):
         """Export a BibTeX entry to a ``bib`` file.
 
         :param bib_dict: dict containing the BibTeX entry. Must include keys "entry_type" and "citation_key".
@@ -525,38 +565,6 @@ class Ref(MbaE):
 
         return stripped_data
 
-    @staticmethod
-    def parse_note(file_note=None, bibsec="Bibliographic information"):
-        """Parse a structured Markdown `md` file into a dictionary.
-
-        The `md` file is expected to have the bibliometric section as follows:
-
-        .. code-block:: text
-
-                # <bibsec>
-
-                tags: #tag1 #tag2
-
-                BibTeX:
-                ```
-                bibtex citation
-                ```
-
-
-        :param file_note: path to `md` note
-        :entry_type file_note: str
-        :param bibsec: title of bibliographic section
-        :entry_type bibsec: str
-        :return:
-        :rtype:
-        """
-        if file_note is None:
-            # use internal attribute
-            file_note = self.file_note
-
-
-        # todo method
-        return None
 
     @staticmethod
     def cite_intext(bib_dict, text_format='plain', embed_link=False):
@@ -859,7 +867,7 @@ class Ref(MbaE):
         return standard_authors
 
     @staticmethod
-    def standard_key(bib_dict):
+    def standard_key(bib_dict, conflict_list=None):
         """Get the standard Citation Key in a BibTeX bib_dict dictionary to LastnameFirstAuthor + Year + x (or a, b, c ...)
 
         :param bib_dict: dict
@@ -868,14 +876,40 @@ class Ref(MbaE):
         :return: str
             The string with normalized citation key.
         """
+
+        def next_available_name(base_name, conflict_names):
+            # Initialize the suffix as 'a'
+            suffix = 'a'
+
+            # Generate the name with the current suffix and check for conflicts
+            while base_name + suffix in conflict_names:
+                # Move to the next letter in the alphabet
+                suffix = chr(ord(suffix) + 1)
+
+            # Return the first available name
+            return base_name + suffix
+
         author = Ref.standard_author(bib_dict=bib_dict)
         first_author = author.split(" and ")[0].strip()
         first_name = first_author.split(",")[0].strip().capitalize()
-        # by default set suffix as x
-        suf = 'x'
+        # by default set suffix as 'a'
+        suf = 'a'
         year = bib_dict["year"]
         standard_key = f"{first_name}{year}{suf}"
+
+        # Check out for conflicting keys
+        if conflict_list:
+            standard_key = next_available_name(
+                base_name=standard_key[:-1],
+                conflict_names=conflict_list
+            )
+        print(standard_key)
         return standard_key
+
+    @staticmethod
+    def query_info():
+        # todo generic tool for cross ref API
+        print("hi")
 
     @staticmethod
     def search_info(bib_dict, update=False, fields=None, search_query=None):
@@ -938,8 +972,304 @@ class Ref(MbaE):
             print(f"Failed to fetch data for citation key {search_query}. Status code: {response.status_code}")
 
         # Cleanup
-        bib_dict = {key: value.strip() for key, value in bib_dict.items() if value != ""}
-        return bib_dict
+        new_dict = {}
+        for k in bib_dict:
+            item = bib_dict[k]
+            if item is not None:
+                if item != "":
+                    new_dict[k] = item.strip()
+
+        return new_dict
+
+class Note(MbaE):
+
+    def __init__(self, name="MyNote", alias="Nt1"):
+
+        # attributes
+        self.title = None
+        self.tags_head = None
+        self.tags_etc = None
+        self.related_head = None
+        self.related_etc = None
+        self.summary = None
+        self.timestamp = None
+
+        # file paths
+        self.file_note = None
+        # note dict
+        self.note_dict = None
+
+        super().__init__(name=name, alias=alias)
+        # ... continues in downstream objects ... #
+
+    def _set_fields(self):
+        """Set fields names"""
+        super()._set_fields()
+        # Attribute fields
+        self.title_field = "title"
+        self.tags_head_field = "tags_head"
+        self.tags_etc_field = "tags_etc"
+        self.related_head_field = "related_head"
+        self.related_etc_field = "related_etc"
+        self.summary_field = "summary"
+        self.timestamp_field = "timestamp"
+        self.file_note_field = "file_note"
+
+        # Metadata fields
+
+        # ... continues in downstream objects ... #
+
+    def get_metadata(self):
+        """Get a dictionary with object metadata.
+        Expected to increment superior methods.
+
+        .. note::
+
+            Metadata does **not** necessarily inclue all object attributes.
+
+        :return: dictionary with all metadata
+        :rtype: dict
+        """
+        # ------------ call super ----------- #
+        dict_meta = super().get_metadata()
+
+        # customize local metadata:
+        dict_meta_local = {
+            self.title_field: self.title,
+            self.summary_field: self.summary,
+            self.timestamp_field: self.timestamp,
+            self.tags_head_field: self.tags_head,
+            self.tags_etc_field : self.tags_etc,
+            self.related_head_field : self.related_head,
+            self.related_etc_field : self.related_etc,
+            self.file_note_field: self.file_note,
+        }
+        # update
+        dict_meta.update(dict_meta_local)
+        return dict_meta
+
+    def load(self):
+        self.note_dict = Note.parse_note(
+            file_path=self.file_note
+        )
+        self.update()
+
+    def update(self):
+        def get_first_section(md_dict):
+            fs = next((s for s, details in md_dict.items() if details["Parent Section"] is None), None)
+            return fs
+
+        # get first section name
+        self.title = get_first_section(md_dict=self.note_dict)
+
+        # patterns
+
+        # Create a copy of the original dictionary
+        new_dict = self.note_dict.copy()
+        # Remove the specified key from the new dictionary
+        del new_dict[self.title]
+
+        # head tags
+        self.tags_head = Note.list_by_pattern(
+            md_dict={self.title: self.note_dict[self.title]},
+            patt_type="tag"
+        )
+        # head related:
+        self.related_head = Note.list_by_pattern(
+            md_dict={self.title: self.note_dict[self.title]},
+            patt_type="related"
+        )
+        # etc tags:
+        self.tags_etc = Note.list_by_pattern(
+            md_dict=new_dict,
+            patt_type="tag"
+        )
+
+        self.related_etc = Note.list_by_pattern(
+            md_dict=new_dict,
+            patt_type="related"
+        )
+
+        # summary
+        lst_summaries = Note.list_by_intro(
+            md_dict={self.title: self.note_dict[self.title]},
+            intro_type="summary"
+        )
+        self.summary = lst_summaries[0]
+
+        # datetime
+        lst_datetimes = Note.list_by_intro(
+            md_dict={self.title: self.note_dict[self.title]},
+            intro_type="timestamp"
+        )
+        self.timestamp = lst_datetimes[0]
+
+    @staticmethod
+    def list_by_pattern(md_dict, patt_type="tag"):
+        """Retrieve a list of patterns from the note dictionary.
+
+        :param md_dict: Dictionary containing note sections.
+        :type md_dict: dict
+        :param patt_type: Type of pattern to search for, either "tag" or "related". Defaults to "tag".
+        :type patt_type: str
+        :return: List of found patterns or None if no patterns are found.
+        :rtype: list or None
+        """
+
+        if patt_type == "tag":
+            pattern = re.compile(r'#\w+')
+        elif patt_type == "related":
+            pattern = re.compile(r'\[\[.*?\]\]')
+        else:
+            pattern = re.compile(r'#\w+')
+
+        patts = []
+        # run over all sections
+        for s in md_dict:
+            content = md_dict[s]["Content"]
+            for line in content:
+                patts.extend(pattern.findall(line))
+
+        if len(patts) == 0:
+            patts = None
+
+        return patts
+
+    @staticmethod
+    def list_by_intro(md_dict, intro_type="summary"):
+        """List introduction contents based on the specified type.
+
+        :param md_dict: Dictionary containing note sections.
+        :type md_dict: dict
+        :param intro_type: Type of introduction to search for, currently supports "summary". Defaults to "summary".
+        :type intro_type: str
+        :return: List of found introductions or None if no introductions are found.
+        :rtype: list or None
+        """
+        if intro_type == "summary":
+            pattern =  r"\*\*Summary:\*\*\s*(.*)"
+        elif intro_type == "timestamp":
+            pattern = r"created in:\s*(.*)"
+        # develop more options
+
+        summaries = []
+        # run over all sections
+        for s in md_dict:
+            content = md_dict[s]["Content"]
+            for line in content:
+                match = re.search(pattern, line)
+                if match:
+                    summaries.append(match.group(1))
+        if len(summaries) == 0:
+            summaries = None
+        return summaries
+
+    @staticmethod
+    def parse_note(file_path):
+        """Parse a Markdown file into a dictionary structure.
+
+        :param file_path: Path to the Markdown file.
+        :type file_path: str
+        :return: Dictionary representing the note structure.
+        :rtype: dict
+        """
+
+        with open(file_path, 'r') as file:
+            lines = file.readlines()
+
+        markdown_dict = {}
+        current_section = None
+        parent_section = None
+        section_stack = []
+
+        section_pattern = re.compile(r'^(#+)\s+(.*)')
+
+        for line in lines:
+            match = section_pattern.match(line)
+            if match:
+                level = len(match.group(1))
+                section_title = match.group(2).strip()
+
+                if current_section is not None:
+                    markdown_dict[current_section]["Content"] = section_content
+
+                while section_stack and section_stack[-1][1] >= level:
+                    section_stack.pop()
+
+                parent_section = section_stack[-1][0] if section_stack else None
+                current_section = section_title
+                section_stack.append((current_section, level))
+                markdown_dict[current_section] = {
+                    "Parent Section": parent_section,
+                    "Content": []
+                }
+                section_content = []
+            else:
+                section_content.append(line.strip())
+
+        if current_section is not None:
+            markdown_dict[current_section]["Content"] = section_content
+
+        return markdown_dict
+
+    @staticmethod
+    def to_md(md_dict, output_dir, filename):
+        """
+        Convert a note dictionary to a Markdown file and save it to the specified directory.
+
+        :param md_dict: Dictionary containing note sections.
+        :type md_dict: dict
+        :param output_dir: Directory where the output Markdown file will be saved.
+        :type output_dir: str
+        :param filename: Name of the output Markdown file (without extension).
+        :type filename: str
+        :return: None
+        :rtype: None
+        """
+
+        def write_section(file, section, level=1):
+            # Write the section header
+            file.write(f"{'#' * level} {section}\n")
+
+            # Write the section content
+            for line in md_dict[section]["Content"]:
+                file.write(line + '\n')
+
+            # Find and write subsections
+            subsections = [key for key in md_dict if md_dict[key]["Parent Section"] == section]
+            for subsection in subsections:
+                write_section(file, subsection, level + 1)
+
+        # Find top-level sections (sections with no parent)
+        top_sections = [key for key in md_dict if md_dict[key]["Parent Section"] is None]
+
+        if not os.path.exists(output_dir):
+            os.makedirs(output_dir)
+
+        output_file = os.path.join(output_dir, f"{filename}.md")
+
+        with open(output_file, 'w') as file:
+            for section in top_sections:
+                write_section(file, section)
+
+    @staticmethod
+    def get_template(kind="library"):
+        # todo continue here
+        templates = {
+            "libray":{
+                "Title": {
+                    "Parent Section": None,
+                    "Content": [
+                        "# Title\n\n",
+                        "LIBRARY ITEM\n",
+                        "Full Citation\n",
+                        "tags:\n"
+                        "related: "
+                    ]
+                }
+            }
+        }
+
 
 
 class RefColl(Collection):  # todo docstring
@@ -960,5 +1290,7 @@ class RefColl(Collection):  # todo docstring
             )
             rf.bib_dict = bib_dict.copy()
             self.append(new_object=rf)
+
+
 
 
