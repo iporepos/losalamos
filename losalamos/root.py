@@ -1280,6 +1280,25 @@ class Note(MbaE):
 
         return templates[kind]
 
+    @staticmethod
+    def find_and_replace(note_file, old, new, line_n=None):
+        # Load the Markdown file
+        with open(note_file, 'r', encoding="utf-8") as file:
+            lines = file.readlines()
+
+        # Find and replace old by new strings
+        if line_n is None:
+            # Replace in all lines
+            lines = [line.replace(old, new) for line in lines]
+        else:
+            # Replace only in the specified line number
+            if 0 <= line_n < len(lines):
+                lines[line_n] = lines[line_n].replace(old, new)
+
+        # Overwrite the file
+        with open(note_file, 'w', encoding="utf-8") as file:
+            file.writelines(lines)
+
 
 
 class RecordTable(DataSet):

@@ -45,9 +45,185 @@ conubia nostra, per inceptos himenaeos. Nulla facilisi. Mauris eget nisl
 eu eros euismod sodales. Cras pulvinar tincidunt enim nec semper.
 
 """
+
 import os, re, shutil
 import requests
 from losalamos.root import MbaE, Collection, Note
+import tkinter as tk
+from tkinter import filedialog, messagebox
+
+
+class RefForm(tk.Tk):
+    # todo evaluate move or rebase
+
+    def __init__(self, lib_folder, inp_folder, title="Add References"):
+        super().__init__()
+        self.title(title)
+        self.geometry("550x450")
+        self.folder_lib_def = lib_folder
+        self.folder_inp_def = inp_folder
+        self.form_data = {}
+        self.create_widgets()
+
+    def create_widgets(self):
+        # Output folder
+        tk.Label(self, text="Library Folder:").grid(
+            row=0, column=0, padx=4, pady=4, sticky="w"
+        )
+        self.folder_lib = tk.Entry(self, width=50)
+        self.folder_lib.grid(row=0, column=1, padx=10, pady=4)
+        self.folder_lib.insert(0, self.folder_lib_def)
+        tk.Button(self, text="Browse", command=self.browse_folder_lib).grid(
+            row=0, column=2, padx=4, pady=4
+        )
+
+        # Input folder
+        tk.Label(self, text="Input Folder:").grid(
+            row=1, column=0, padx=4, pady=4, sticky="w"
+        )
+        self.folder_inp = tk.Entry(self, width=50)
+        self.folder_inp.grid(row=1, column=1, padx=10, pady=4)
+        self.folder_inp.insert(0, self.folder_inp_def)
+        tk.Button(self, text="Browse", command=self.browse_folder_inp).grid(
+            row=1, column=2, padx=4, pady=4
+        )
+
+        # Kind of input
+        tk.Label(self, text="Entry type:").grid(
+            row=2, column=0, padx=4, pady=4, sticky="w"
+        )
+        self.kind_var = tk.StringVar(self)
+        self.kind_var.set("paper")  # default value
+        kind_options = ["paper", "book", "law", "report"]
+        self.kind_menu = tk.OptionMenu(self, self.kind_var, *kind_options)
+        self.kind_menu.grid(row=2, column=1, padx=10, pady=4, sticky="w")
+
+        # Tags
+        tk.Label(self, text="Tags:").grid(row=4, column=0, padx=4, pady=4, sticky="w")
+        self.tags_listbox = tk.Listbox(self, selectmode=tk.SINGLE, width=50, height=6)
+        self.tags_listbox.grid(row=3, column=1, padx=10, pady=4)
+        self.tags_entry = tk.Entry(self, width=40)
+        self.tags_entry.grid(row=4, column=1, padx=10, pady=5, sticky="w")
+        tk.Button(self, text="Add", width=6, command=self.add_tag).grid(
+            row=4, column=2, padx=2, pady=5, sticky="w"
+        )
+        tk.Button(self, text="Remove", width=6, command=self.remove_tag).grid(
+            row=4, column=3, padx=4, pady=5, sticky="w"
+        )
+
+        # Related notes
+        tk.Label(self, text="Related:").grid(
+            row=6, column=0, padx=4, pady=4, sticky="w"
+        )
+        self.related_listbox = tk.Listbox(
+            self, selectmode=tk.SINGLE, width=50, height=3
+        )
+        self.related_listbox.grid(row=5, column=1, padx=10, pady=4)
+        self.related_entry = tk.Entry(self, width=40)
+        self.related_entry.grid(row=6, column=1, padx=10, pady=5, sticky="w")
+        tk.Button(self, text="Add", width=6, command=self.add_related).grid(
+            row=6, column=2, padx=2, pady=5, sticky="w"
+        )
+        tk.Button(self, text="Remove", width=6, command=self.remove_related).grid(
+            row=6, column=3, padx=4, pady=5, sticky="w"
+        )
+
+        # Include BIB file
+        tk.Label(self, text="Include BibTeX:").grid(
+            row=7, column=0, padx=4, pady=4, sticky="w"
+        )
+        self.include_bib = tk.BooleanVar()
+        tk.Checkbutton(self, variable=self.include_bib).grid(
+            row=7, column=1, padx=10, pady=4, sticky="w"
+        )
+
+        # Submit button
+        tk.Button(self, text="Submit", command=self.submit_form).grid(
+            row=8, column=0, columnspan=3, pady=20
+        )
+        tk.Button(self, text="Cancel", command=self.cancel_form).grid(
+            row=8, column=1, columnspan=3, padx=10, pady=20
+        )
+
+    def browse_folder_lib(self):
+        folder = filedialog.askdirectory()
+        if folder:
+            self.folder_lib.delete(0, tk.END)
+            self.folder_lib.insert(0, folder)
+
+    def browse_folder_inp(self):
+        folder = filedialog.askdirectory()
+        if folder:
+            self.folder_inp.delete(0, tk.END)
+            self.folder_inp.insert(0, folder)
+
+    @staticmethod
+    def covert_entry_to_list(entry_str):
+        # todo evaluate move
+        # replace commas
+        entry_str = entry_str.replace(", ", ";")
+        entry_str = entry_str.replace(",", ";")
+        # drop hashs
+        entry_str = entry_str.replace("#", "")
+        # get list
+        entry_ls = entry_str.split(";")
+        entry_ls = [e.strip() for e in entry_ls]
+        # remove duplicates
+        entry_ls = list(set(entry_ls))
+        return entry_ls
+
+    def add_tag(self):
+        tag = self.tags_entry.get()
+        if tag:
+            tag_ls = RefForm.covert_entry_to_list(entry_str=tag)
+            tag_ls = [tag.replace(" ", "-").lower() for tag in tag_ls]
+            for tag in tag_ls:
+                self.tags_listbox.insert(tk.END, f"#{tag}")
+            self.tags_entry.delete(0, tk.END)
+
+    def remove_tag(self):
+        selected_tag_index = self.tags_listbox.curselection()
+        if selected_tag_index:
+            self.tags_listbox.delete(selected_tag_index)
+
+    def add_related(self):
+        related_note = self.related_entry.get()
+        if related_note:
+            rel_ls = RefForm.covert_entry_to_list(entry_str=related_note)
+            rel_ls = [related_note.strip() for related_note in rel_ls]
+            for related_note in rel_ls:
+                self.related_listbox.insert(tk.END, f"[[{related_note}]]")
+            self.related_entry.delete(0, tk.END)
+
+    def remove_related(self):
+        selected_related_index = self.related_listbox.curselection()
+        if selected_related_index:
+            self.related_listbox.delete(selected_related_index)
+
+    def submit_form(self):
+        folder_lib = self.folder_lib.get()
+        folder_inp = self.folder_inp.get()
+        kind = self.kind_var.get()
+        tags = list(self.tags_listbox.get(0, tk.END))
+        related = list(self.related_listbox.get(0, tk.END))
+        include_bib = self.include_bib.get()
+
+        self.form_data = {
+            "folder_lib": folder_lib,
+            "folder_inp": folder_inp,
+            "kind": kind,
+            "tags": tags,
+            "related": related,
+            "include_bib": include_bib,
+        }
+        self.quit()  # Close the Tkinter window
+
+    def cancel_form(self):
+        self.form_data = None
+        self.quit()
+
+    def get_form_data(self):
+        return self.form_data
 
 
 class Ref(MbaE):
@@ -548,8 +724,8 @@ class Ref(MbaE):
     @staticmethod
     def bibstr_to_dict(bibtex_str):
         # Regular expression patterns
-        entry_pattern = re.compile(r'@\w+\{')
-        key_pattern = re.compile(r'@\w+\{(.+?),')
+        entry_pattern = re.compile(r"@\w+\{")
+        key_pattern = re.compile(r"@\w+\{(.+?),")
         field_pattern = re.compile(r'(\w+)\s*=\s*[{"](.*?)[}"],?', re.DOTALL)
 
         # Extract entry type and citation key
@@ -563,10 +739,7 @@ class Ref(MbaE):
         citation_key = key_match.group(1)
 
         # Create the dictionary with initial keys
-        bib_dict = {
-            "entry_type": entry_type,
-            "citation_key": citation_key
-        }
+        bib_dict = {"entry_type": entry_type, "citation_key": citation_key}
 
         # Extract fields
         fields = field_pattern.findall(bibtex_str)
@@ -1019,19 +1192,26 @@ class Ref(MbaE):
 
     @staticmethod
     def query_doi(doi):
+        print(f">>> searching doi {doi}")
         # Construct the URL to retrieve the citation
         url = f"https://doi.org/{doi}"
+        try:
+            # get the citation
+            bibtex_response = requests.get(
+                url, headers={"Accept": "application/x-bibtex"}
+            )
 
-        # get the citation
-        bibtex_response = requests.get(url, headers={"Accept": "application/x-bibtex"})
-
-        # Check if the request was successful
-        if bibtex_response.status_code == 200:
-            bibtex_citation = bibtex_response.text
-            bib_dict = Ref.bibstr_to_dict(bibtex_citation)
-            bib_dict["doi"] = doi
-            return bib_dict
-        else:
+            # Check if the request was successful
+            if bibtex_response.status_code == 200:
+                print(">>> got doi response")
+                bibtex_citation = bibtex_response.text
+                bib_dict = Ref.bibstr_to_dict(bibtex_citation)
+                bib_dict["doi"] = doi
+                return bib_dict
+            else:
+                return None
+        except requests.Timeout:
+            print("The request timed out")
             return None
 
     @staticmethod
@@ -1087,10 +1267,9 @@ class Ref(MbaE):
                 for e in lst_uns:
                     if "https://doi.org/" in e:
                         has_doi = True
-                        citation_doi = e[len("https://doi.org/"):]
+                        citation_doi = e[len("https://doi.org/") :]
                         break
                 return citation_doi
-
 
             lst_references = []
             for i in range(len(data["items"][0]["reference"])):
@@ -1108,21 +1287,22 @@ class Ref(MbaE):
 
                 # Handle text
                 if known_doi:
-                    #print(f">>>> DOI is known: {known_doi}")
+                    # print(f">>>> DOI is known: {known_doi}")
                     ref_bib_dict = Ref.query_doi(doi=known_doi)
                     # get citation
                     citation_formatted = Ref.cite_full(
-                        bib_dict=ref_bib_dict,
-                        text_format="md"
+                        bib_dict=ref_bib_dict, text_format="md"
                     )
 
-                    #print(f">>>> {citation_formatted}")
+                    # print(f">>>> {citation_formatted}")
                     lst_references.append(citation_formatted)
                 elif "unstructured" in data["items"][0]["reference"][i]:
-                    citation_formatted = data["items"][0]["reference"][i]["unstructured"]
+                    citation_formatted = data["items"][0]["reference"][i][
+                        "unstructured"
+                    ]
                     lst_references.append(citation_formatted)
 
-                    #print(f">>>> {citation_formatted}")
+                    # print(f">>>> {citation_formatted}")
                 else:
                     pass
             # sort by name
@@ -1131,25 +1311,32 @@ class Ref(MbaE):
 
         # Generic tool for cross ref API
 
-
         # CrossRef API search URL
         search_url = f'https://api.crossref.org/works?query.bibliographic="{search_query}"&rows=2'
         output_data = None
-        response = requests.get(search_url)
-        # Handle response
-        if response.status_code == 200:  # json code
-            data = response.json().get("message", {})
-            # handle main bibtex:
-            main_bib = extract_bibtex_entry(data=data["items"][0])
-            # handle references
-            lst_references = None
-            if include_refs:
-                if "reference" in data["items"][0]:
-                    lst_references = get_refs(data=data)
-                else:
-                    lst_references = None
 
-            output_data = {"Main": main_bib, "References": lst_references}
+        try:
+            response = requests.get(search_url, timeout=2)
+
+            # Handle response
+            if response.status_code == 200:  # json code
+                print(">>> got response")
+                data = response.json().get("message", {})
+                print(">>> got data")
+                # handle main bibtex:
+                main_bib = extract_bibtex_entry(data=data["items"][0])
+                # handle references
+                lst_references = None
+                if include_refs:
+                    if "reference" in data["items"][0]:
+                        lst_references = get_refs(data=data)
+                    else:
+                        lst_references = None
+
+                output_data = {"Main": main_bib, "References": lst_references}
+        except requests.Timeout:
+            print("The request timed out")
+
         return output_data
 
 
