@@ -45,11 +45,9 @@ conubia nostra, per inceptos himenaeos. Nulla facilisi. Mauris eget nisl
 eu eros euismod sodales. Cras pulvinar tincidunt enim nec semper.
 
 """
-
-import os
-import re
-import shutil
-from losalamos.root import MbaE, Collection
+import os, re, shutil
+import requests
+from losalamos.root import MbaE, Collection, Note
 
 
 class Ref(MbaE):
@@ -348,7 +346,7 @@ class Ref(MbaE):
         self.name = Ref.cite_intext(bib_dict=self.bib_dict, text_format="plain")
         self.alias = self.citation_key
 
-    def export(self, output_dir, create_note=True):
+    def export(self, output_dir, create_note=True, include_bib=False):
         """Export all files to a directory with the same name (citation key)
 
         :param output_dir: path to output directory
@@ -360,10 +358,8 @@ class Ref(MbaE):
         export_name = self.citation_key
 
         # bib file
-        self.to_bib(
-            output_dir=output_dir,
-            filename=export_name
-        )
+        if include_bib:
+            self.to_bib(output_dir=output_dir, filename=export_name)
 
         # note file
         if create_note:
@@ -373,7 +369,7 @@ class Ref(MbaE):
                 comments=self.note_comments,
                 tags=self.note_tags,
                 related=self.note_related,
-                references=self.references_list
+                references=self.references_list,
             )
         else:
             shutil.copy(
@@ -415,7 +411,15 @@ class Ref(MbaE):
         self.file_bib = file_path
         return None
 
-    def to_note(self, output_dir, filename, comments=None, tags=None, related=None, references=None):
+    def to_note(
+        self,
+        output_dir,
+        filename,
+        comments=None,
+        tags=None,
+        related=None,
+        references=None,
+    ):
         """
         # todo docstring
         """
@@ -472,7 +476,6 @@ class Ref(MbaE):
             lst_refs = [f" - {ref}" for ref in references]
             references_str = "\n".join(lst_refs)
 
-
         # edit contents
         replacements = {
             "{{LIBRARY ITEM}}": self.bib_dict[self.type_field].upper(),
@@ -486,7 +489,7 @@ class Ref(MbaE):
             "{{In-text citation}}": citation_in,
             "{{Full citation}}": citation_full_plain,
             "{{BibTeX}}": Ref.bib_to_str(bib_dict=self.bib_dict),
-            "{{references}}": references_str
+            "{{references}}": references_str,
         }
 
         for sec in nt_dict:
@@ -541,6 +544,37 @@ class Ref(MbaE):
                 filtered_files.append(filename[:-4])
 
         return filtered_files
+
+    @staticmethod
+    def bibstr_to_dict(bibtex_str):
+        # Regular expression patterns
+        entry_pattern = re.compile(r'@\w+\{')
+        key_pattern = re.compile(r'@\w+\{(.+?),')
+        field_pattern = re.compile(r'(\w+)\s*=\s*[{"](.*?)[}"],?', re.DOTALL)
+
+        # Extract entry type and citation key
+        entry_type_match = entry_pattern.search(bibtex_str)
+        key_match = key_pattern.search(bibtex_str)
+
+        if not entry_type_match or not key_match:
+            raise ValueError("Invalid BibTeX entry format")
+
+        entry_type = entry_type_match.group()[1:-1]
+        citation_key = key_match.group(1)
+
+        # Create the dictionary with initial keys
+        bib_dict = {
+            "entry_type": entry_type,
+            "citation_key": citation_key
+        }
+
+        # Extract fields
+        fields = field_pattern.findall(bibtex_str)
+        for field in fields:
+            key, value = field
+            bib_dict[key.strip()] = value.strip()
+
+        return bib_dict
 
     @staticmethod
     def parse_bibtex(file_bib):
@@ -612,7 +646,7 @@ class Ref(MbaE):
         bib_dict["author"] = Ref.standard_author(bib_dict)
 
         author = bib_dict.get("author", "Unknown Author").strip()
-        year = bib_dict.get("year", "n.d.").strip()
+        year = str(bib_dict.get("year", "n.d.")).strip()
         doi = bib_dict.get("doi", "").strip()
         url = bib_dict.get("url", "").strip()
 
@@ -685,7 +719,7 @@ class Ref(MbaE):
             The formatted citation string.
         """
         author = bib_dict.get("author", "Unknown Author").strip()
-        year = bib_dict.get("year", "n.d.").strip()
+        year = str(bib_dict.get("year", "n.d.")).strip()
         title = bib_dict.get("title", "Untitled").strip()
         journal = bib_dict.get("journal", "").strip()
         volume = bib_dict.get("volume", "").strip()
@@ -941,7 +975,6 @@ class Ref(MbaE):
                 normalize_author_name(a.strip())
                 for a in bib_dict["author"].split(" and ")
             ]
-
             standard_authors = " and ".join(author_list)
 
         return standard_authors
@@ -985,31 +1018,41 @@ class Ref(MbaE):
         return standard_key
 
     @staticmethod
-    def query_xref(search_query):
-        def format_unstruct(citation, known_doi=None):
-            # first remove doi
-            has_doi = False
-            lst_uns = citation.split(",")
-            lst_no_doi = []
-            for e in lst_uns:
-                if "https://doi.org/" in e:
-                    has_doi = True
-                    citation_doi = e[len('https://doi.org/'):]
-                    pass
-                else:
-                    lst_no_doi.append(e)
-            citation_no_doi = ", ".join(lst_no_doi)
-            if has_doi:
-                citation_no_doi = citation_no_doi + f" https://doi.org/{citation_doi}"
-            elif known_doi:
-                citation_no_doi = citation_no_doi + f" https://doi.org/{known_doi}"
-            return citation_no_doi
+    def query_doi(doi):
+        # Construct the URL to retrieve the citation
+        url = f"https://doi.org/{doi}"
+
+        # get the citation
+        bibtex_response = requests.get(url, headers={"Accept": "application/x-bibtex"})
+
+        # Check if the request was successful
+        if bibtex_response.status_code == 200:
+            bibtex_citation = bibtex_response.text
+            bib_dict = Ref.bibstr_to_dict(bibtex_citation)
+            bib_dict["doi"] = doi
+            return bib_dict
+        else:
+            return None
+
+    @staticmethod
+    def query_xref(search_query, include_refs=True):
+
         def extract_bibtex_entry(data):
-            #print(data.keys())
-            #print(data["published"])
+            # Handle authors
+            if "author" in data:
+                lst_authors = [
+                    f"{author['family']}, {author['given']}"
+                    for author in data["author"]
+                ]
+                authors = " and ".join(lst_authors)
+            else:
+                authors = None
+
             bibtex_entry = {
-                "entry_type": data.get("type", "article"),  # Default to "article" if not specified
-                "author": " and ".join([f"{author['family']}, {author['given']}" for author in data.get("author", [])]),
+                "entry_type": data.get(
+                    "type", "article"
+                ),  # Default to "article" if not specified
+                "author": authors,
                 "title": data.get("title", [None])[0],
                 "journal": data.get("container-title", [None])[0],
                 "year": data.get("published", {}).get("date-parts", [[None]])[0][0],
@@ -1021,365 +1064,93 @@ class Ref(MbaE):
                 "publisher": data.get("publisher"),
                 "note": data.get("note"),
                 "abstract": data.get("abstract"),
-                "keywords": data.get("subject", [])
+                "keywords": data.get("subject", []),
             }
             # Remove None values
-            #print(bibtex_entry["year"])
             bibtex_entry = {k: v for k, v in bibtex_entry.items() if v is not None}
 
             # set citation key and author
-            bibtex_entry["author"] = Ref.standard_author(bibtex_entry)
-            bibtex_entry["citation_key"] = Ref.standard_key(bibtex_entry)
+            if "author" in bibtex_entry:
+                bibtex_entry["author"] = Ref.standard_author(bibtex_entry)
+                bibtex_entry["citation_key"] = Ref.standard_key(bibtex_entry)
+            else:
+                bibtex_entry["author"] = "Unknow"
+                bibtex_entry["citation_key"] = str(bibtex_entry["doi"])
 
             return bibtex_entry
 
+        def get_refs(data):
+
+            def find_doi(citation):
+                citation_doi = None
+                lst_uns = citation.split(",")
+                for e in lst_uns:
+                    if "https://doi.org/" in e:
+                        has_doi = True
+                        citation_doi = e[len("https://doi.org/"):]
+                        break
+                return citation_doi
+
+
+            lst_references = []
+            for i in range(len(data["items"][0]["reference"])):
+
+                # handle DOI
+                if "DOI" in data["items"][0]["reference"][i]:
+                    known_doi = data["items"][0]["reference"][i]["DOI"]
+
+                elif "unstructured" in data["items"][0]["reference"][i]:
+                    # try to find in the text
+                    citation = data["items"][0]["reference"][i]["unstructured"]
+                    known_doi = find_doi(citation)
+                else:
+                    known_doi = None
+
+                # Handle text
+                if known_doi:
+                    #print(f">>>> DOI is known: {known_doi}")
+                    ref_bib_dict = Ref.query_doi(doi=known_doi)
+                    # get citation
+                    citation_formatted = Ref.cite_full(
+                        bib_dict=ref_bib_dict,
+                        text_format="md"
+                    )
+
+                    #print(f">>>> {citation_formatted}")
+                    lst_references.append(citation_formatted)
+                elif "unstructured" in data["items"][0]["reference"][i]:
+                    citation_formatted = data["items"][0]["reference"][i]["unstructured"]
+                    lst_references.append(citation_formatted)
+
+                    #print(f">>>> {citation_formatted}")
+                else:
+                    pass
+            # sort by name
+            lst_references.sort()
+            return lst_references
+
         # Generic tool for cross ref API
-        import requests
+
+
         # CrossRef API search URL
         search_url = f'https://api.crossref.org/works?query.bibliographic="{search_query}"&rows=2'
         output_data = None
         response = requests.get(search_url)
-
-        if response.status_code == 200:
+        # Handle response
+        if response.status_code == 200:  # json code
             data = response.json().get("message", {})
             # handle main bibtex:
             main_bib = extract_bibtex_entry(data=data["items"][0])
             # handle references
-            lst_references = []
-            for i in range(len(data["items"][0]["reference"])):
-                citation = data["items"][0]["reference"][i]["unstructured"]
-                if "DOI" in data["items"][0]["reference"][i]:
-                    known_doi = data["items"][0]["reference"][i]["DOI"]
+            lst_references = None
+            if include_refs:
+                if "reference" in data["items"][0]:
+                    lst_references = get_refs(data=data)
                 else:
-                    known_doi = None
-                citation_formatted = format_unstruct(citation, known_doi=known_doi)
-                lst_references.append(citation_formatted)
-            lst_references.sort()
-            output_data = {
-                "Main": main_bib,
-                "References": lst_references
-            }
+                    lst_references = None
+
+            output_data = {"Main": main_bib, "References": lst_references}
         return output_data
-
-
-
-class Note(MbaE):
-
-    def __init__(self, name="MyNote", alias="Nt1"):
-
-        # attributes
-        self.title = None
-        self.tags_head = None
-        self.tags_etc = None
-        self.related_head = None
-        self.related_etc = None
-        self.summary = None
-        self.timestamp = None
-
-        # file paths
-        self.file_note = None
-        # note dict
-        self.note_dict = None
-
-        super().__init__(name=name, alias=alias)
-        # ... continues in downstream objects ... #
-
-    def _set_fields(self):
-        """Set fields names"""
-        super()._set_fields()
-        # Attribute fields
-        self.title_field = "title"
-        self.tags_head_field = "tags_head"
-        self.tags_etc_field = "tags_etc"
-        self.related_head_field = "related_head"
-        self.related_etc_field = "related_etc"
-        self.summary_field = "summary"
-        self.timestamp_field = "timestamp"
-        self.file_note_field = "file_note"
-
-        # Metadata fields
-
-        # ... continues in downstream objects ... #
-
-    def get_metadata(self):
-        """Get a dictionary with object metadata.
-        Expected to increment superior methods.
-
-        .. note::
-
-            Metadata does **not** necessarily inclue all object attributes.
-
-        :return: dictionary with all metadata
-        :rtype: dict
-        """
-        # ------------ call super ----------- #
-        dict_meta = super().get_metadata()
-
-        # customize local metadata:
-        dict_meta_local = {
-            self.title_field: self.title,
-            self.summary_field: self.summary,
-            self.timestamp_field: self.timestamp,
-            self.tags_head_field: self.tags_head,
-            self.tags_etc_field: self.tags_etc,
-            self.related_head_field: self.related_head,
-            self.related_etc_field: self.related_etc,
-            self.file_note_field: self.file_note,
-        }
-        # update
-        dict_meta.update(dict_meta_local)
-        return dict_meta
-
-    def load(self):
-        self.note_dict = Note.parse_note(file_path=self.file_note)
-        self.update()
-
-    def update(self):
-
-        # get first section name
-        # Warning: assume it is the first item
-        self.title = next(iter(self.note_dict))
-
-        # patterns
-
-        # Create a copy of the original dictionary
-        new_dict = self.note_dict.copy()
-        # Remove the specified key from the new dictionary
-        del new_dict[self.title]
-
-        # head tags
-        self.tags_head = Note.list_by_pattern(
-            md_dict={self.title: self.note_dict[self.title]}, patt_type="tag"
-        )
-        # head related:
-        self.related_head = Note.list_by_pattern(
-            md_dict={self.title: self.note_dict[self.title]}, patt_type="related"
-        )
-        # etc tags:
-        self.tags_etc = Note.list_by_pattern(md_dict=new_dict, patt_type="tag")
-
-        self.related_etc = Note.list_by_pattern(md_dict=new_dict, patt_type="related")
-
-        # summary
-        lst_summaries = Note.list_by_intro(
-            md_dict={self.title: self.note_dict[self.title]}, intro_type="summary"
-        )
-        self.summary = lst_summaries[0]
-
-        # datetime
-        lst_datetimes = Note.list_by_intro(
-            md_dict={self.title: self.note_dict[self.title]}, intro_type="timestamp"
-        )
-        self.timestamp = lst_datetimes[0]
-
-    @staticmethod
-    def list_by_pattern(md_dict, patt_type="tag"):
-        """Retrieve a list of patterns from the note dictionary.
-
-        :param md_dict: Dictionary containing note sections.
-        :type md_dict: dict
-        :param patt_type: Type of pattern to search for, either "tag" or "related". Defaults to "tag".
-        :type patt_type: str
-        :return: List of found patterns or None if no patterns are found.
-        :rtype: list or None
-        """
-
-        if patt_type == "tag":
-            pattern = re.compile(r"#\w+")
-        elif patt_type == "related":
-            pattern = re.compile(r"\[\[.*?\]\]")
-        else:
-            pattern = re.compile(r"#\w+")
-
-        patts = []
-        # run over all sections
-        for s in md_dict:
-            content = md_dict[s]["Content"]
-            for line in content:
-                patts.extend(pattern.findall(line))
-
-        if len(patts) == 0:
-            patts = None
-
-        return patts
-
-    @staticmethod
-    def list_by_intro(md_dict, intro_type="summary"):
-        """List introduction contents based on the specified type.
-
-        :param md_dict: Dictionary containing note sections.
-        :type md_dict: dict
-        :param intro_type: Type of introduction to search for, currently supports "summary". Defaults to "summary".
-        :type intro_type: str
-        :return: List of found introductions or None if no introductions are found.
-        :rtype: list or None
-        """
-        if intro_type == "summary":
-            pattern = r"\*\*Summary:\*\*\s*(.*)"
-        elif intro_type == "timestamp":
-            pattern = r"created in:\s*(.*)"
-        # develop more options
-
-        summaries = []
-        # run over all sections
-        for s in md_dict:
-            content = md_dict[s]["Content"]
-            for line in content:
-                match = re.search(pattern, line)
-                if match:
-                    summaries.append(match.group(1))
-        if len(summaries) == 0:
-            summaries = None
-        return summaries
-
-    @staticmethod
-    def parse_note(file_path):
-        """Parse a Markdown file into a dictionary structure.
-
-        :param file_path: Path to the Markdown file.
-        :type file_path: str
-        :return: Dictionary representing the note structure.
-        :rtype: dict
-        """
-
-        with open(file_path, "r") as file:
-            lines = file.readlines()
-
-        markdown_dict = {}
-        current_section = None
-        parent_section = None
-        section_stack = []
-
-        section_pattern = re.compile(r"^(#+)\s+(.*)")
-
-        for line in lines:
-            match = section_pattern.match(line)
-            if match:
-                level = len(match.group(1))
-                section_title = match.group(2).strip()
-
-                if current_section is not None:
-                    markdown_dict[current_section]["Content"] = section_content
-
-                while section_stack and section_stack[-1][1] >= level:
-                    section_stack.pop()
-
-                parent_section = section_stack[-1][0] if section_stack else None
-                current_section = section_title
-                section_stack.append((current_section, level))
-                markdown_dict[current_section] = {
-                    "Parent Section": parent_section,
-                    "Content": [],
-                }
-                section_content = []
-            else:
-                section_content.append(line.strip())
-
-        if current_section is not None:
-            markdown_dict[current_section]["Content"] = section_content
-
-        return markdown_dict
-
-    @staticmethod
-    def to_md(md_dict, output_dir, filename):
-        """Convert a note dictionary to a Markdown file and save it to the specified directory.
-
-        :param md_dict: Dictionary containing note sections.
-        :type md_dict: dict
-        :param output_dir: Directory where the output Markdown file will be saved.
-        :type output_dir: str
-        :param filename: Name of the output Markdown file (without extension).
-        :type filename: str
-        :return: None
-        :rtype: None
-        """
-
-        def write_section(file, section, level=1):
-            # Write the section header
-            file.write(f"{'#' * level} {section}\n")
-
-            # Write the section content
-            for line in md_dict[section]["Content"]:
-                file.write(line + "\n")
-
-            # Find and write subsections
-            subsections = [
-                key for key in md_dict if md_dict[key]["Parent Section"] == section
-            ]
-            for subsection in subsections:
-                write_section(file, subsection, level + 1)
-
-        # Find top-level sections (sections with no parent)
-        top_sections = [
-            key for key in md_dict if md_dict[key]["Parent Section"] is None
-        ]
-
-        if not os.path.exists(output_dir):
-            os.makedirs(output_dir)
-
-        output_file = os.path.join(output_dir, f"{filename}.md")
-
-        with open(output_file, "w", encoding="utf-8") as file:
-            for section in top_sections:
-                write_section(file, section)
-        return output_file
-
-    @staticmethod
-    def get_template(kind="bib", head_name=None):
-        # todo continue here
-        if head_name is None:
-            head_name = "Header"
-        templates = {
-            "bib": {
-                head_name: {
-                    "Parent Section": None,
-                    "Content": [
-                        "{{LIBRARY ITEM}}\n",
-                        "{{Title}}\n",
-                        "**Summary:** Insert a paragraph comment here\n",
-                        "tags: {{tags}}",
-                        "related: {{related}}",
-                        "created in: {{timestamp}}",
-                        "\n---",
-                    ],
-                },
-                "Comments": {
-                    "Parent Section": None,
-                    "Content": [
-                        "*Start typing here*\n\n",
-                        "\n---",
-                    ],
-                },
-                "Bibliographic information": {
-                    "Parent Section": None,
-                    "Content": [
-                        "## Abstract",
-                        "**Author abstract:** {{abstract}}\n",
-                        "**AI-based abstract:** {{ai_abstract}}",
-                        "\n## Metadata",
-                        "doi: {{doi}}",
-                        "keywords: {{keywords}}",
-                        "\n## Citation",
-                        "In-text citation:",
-                        "```",
-                        "{{In-text citation}}",
-                        "```",
-                        "Full citation:",
-                        "```",
-                        "{{Full citation}}",
-                        "```",
-                        "BibTeX entry:",
-                        "```",
-                        "{{BibTeX}}",
-                        "```",
-                        "\n## References",
-                        "{{references}}"
-                    ],
-                },
-            }
-        }
-
-        return templates[kind]
 
 
 class RefColl(Collection):  # todo docstring

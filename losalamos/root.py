@@ -76,7 +76,7 @@ class MbaE:
     .. code-block:: python
 
         # MbaE instantiation
-        m = MbaE(filename="Algo", alias="al")
+        m = MbaE(name="Algo", alias="al")
 
     Retrieve metadata (not all attributes)
 
@@ -115,12 +115,12 @@ class MbaE:
     def __init__(self, name="MyMbaE", alias=None):
         """Initialize the ``MbaE`` object.
 
-        :param name: unique object filename
-        :entry_type name: str
+        :param name: unique object name
+        :type name: str
 
         :param alias: unique object alias.
-            If None, it takes the first and last characters from ``filename``
-        :entry_type alias: str
+            If None, it takes the first and last characters from ``name``
+        :type alias: str
 
         """
         # ------------ pseudo-static ----------- #
@@ -129,7 +129,7 @@ class MbaE:
         self.object_name = self.__class__.__name__
         self.object_alias = "mbae"
 
-        # filename
+        # name
         self.name = name
 
         # alias
@@ -163,7 +163,7 @@ class MbaE:
         return str_out
 
     def _create_alias(self):
-        """If ``alias`` is ``None``, it takes the first and last characters from ``filename``"""
+        """If ``alias`` is ``None``, it takes the first and last characters from ``name``"""
         if len(self.name) >= 2:
             self.alias = self.name[0] + self.name[len(self.name) - 1]
         else:
@@ -216,7 +216,7 @@ class MbaE:
         """Set selected attributes based on an incoming dictionary
 
         :param dict_setter: incoming dictionary with attribute values
-        :entry_type dict_setter: dict
+        :type dict_setter: dict
         """
         # ---------- set basic attributes --------- #
         self.name = dict_setter[self.name_field]
@@ -236,7 +236,7 @@ class MbaE:
                 Name;ResTia
                 Alias;Ra
 
-        :entry_type bootfile: str
+        :type bootfile: str
 
         :return:
         :rtype: str
@@ -275,16 +275,16 @@ class Collection(MbaE):
 
     - ``catalog`` (:class:`pandas.DataFrame`): A catalog containing metadata of the objects in the test_collection.
     - ``collection`` (dict): A dictionary containing the objects in the ``Collection``.
-    - filename (str): The filename of the ``Collection``.
-    - alias (str): The filename of the ``Collection``.
+    - name (str): The name of the ``Collection``.
+    - alias (str): The name of the ``Collection``.
     - baseobject: The class of the base object used to initialize the ``Collection``.
 
     **Main Methods:**
 
-    - __init__(self, base_object, filename="myCatalog"): Initializes a new ``Collection`` with a base object.
+    - __init__(self, base_object, name="myCatalog"): Initializes a new ``Collection`` with a base object.
     - update(self, details=False): Updates the ``Collection`` catalog.
     - append(self, new_object): Appends a new object to the ``Collection``.
-    - remove(self, filename): Removes an object from the ``Collection``.
+    - remove(self, name): Removes an object from the ``Collection``.
 
     **Examples:**
 
@@ -305,14 +305,14 @@ class Collection(MbaE):
     .. code-block:: python
 
         # instantiate Collection object
-        c = Collection(base_object=MbaE, filename="Collection")
+        c = Collection(base_object=MbaE, name="Collection")
 
     Append a new object to the ``Collection``:
 
     .. code-block:: python
 
         # append a new object
-        m1 = MbaE(filename="Thing1", alias="al1")
+        m1 = MbaE(name="Thing1", alias="al1")
         c.append(m1)  # use .append()
 
     Append extra objects:
@@ -320,9 +320,9 @@ class Collection(MbaE):
     .. code-block:: python
 
         # append extra objects
-        m2 = MbaE(filename="Thing2", alias="al2")
+        m2 = MbaE(name="Thing2", alias="al2")
         c.append(m2)  # use .append()
-        m3 = MbaE(filename="Res", alias="r")
+        m3 = MbaE(name="Res", alias="r")
         c.append(m3)  # use .append()
 
     Print the catalog `pandas.DataFrame`:
@@ -339,12 +339,12 @@ class Collection(MbaE):
         # print collection dict
         print(c.collection)
 
-    Remove an object by using object filename:
+    Remove an object by using object name:
 
     .. code-block:: python
 
-        # remove object by object filename
-        c.remove(filename="Thing1")
+        # remove object by object name
+        c.remove(name="Thing1")
 
     Apply MbaE-based methods for Collection
 
@@ -365,21 +365,21 @@ class Collection(MbaE):
         """Initialize the ``Collection`` object.
 
         :param base_object: ``MbaE``-based object for collection
-        :entry_type base_object: :class:`MbaE`
+        :type base_object: :class:`MbaE`
 
-        :param name: unique object filename
-        :entry_type name: str
+        :param name: unique object name
+        :type name: str
 
         :param alias: unique object alias.
-            If None, it takes the first and last characters from filename
-        :entry_type alias: str
+            If None, it takes the first and last characters from name
+        :type alias: str
 
         """
         # ------------ call super ----------- #
         super().__init__(name=name, alias=alias)
         # ------------ set pseudo-static ----------- #
         self.object_alias = "COL"
-        # Set the filename and baseobject attributes
+        # Set the name and baseobject attributes
         self.baseobject = base_object
         self.baseobject_name = base_object.__name__
 
@@ -452,7 +452,7 @@ class Collection(MbaE):
         """Update the ``Collection`` catalog.
 
         :param details: Option to update catalog details, defaults to False.
-        :entry_type details: bool
+        :type details: bool
         :return: None
         :rtype: None
         """
@@ -479,7 +479,7 @@ class Collection(MbaE):
                 # Append to the new catalog
                 df_new_catalog = pd.concat([df_new_catalog, df_aux], ignore_index=True)
 
-            # consider if the filename itself has changed in the
+            # consider if the name itself has changed in the
             old_key_names = list(self.collection.keys())[:]
             new_key_names = list(df_new_catalog[self.catalog.columns[0]].values)
 
@@ -487,7 +487,7 @@ class Collection(MbaE):
             for i in range(len(old_key_names)):
                 old_key = old_key_names[i]
                 new_key = new_key_names[i]
-                # filename change condition
+                # name change condition
                 if old_key != new_key:
                     # rename key in the collection dictionary
                     self.collection[new_key] = self.collection.pop(old_key)
@@ -498,7 +498,7 @@ class Collection(MbaE):
             del df_new_catalog
 
         # Basic updates
-        # --- the first row is expected to be the Unique filename
+        # --- the first row is expected to be the Unique name
         str_unique_name = self.catalog.columns[0]
         self.catalog = self.catalog.drop_duplicates(subset=str_unique_name, keep="last")
         self.catalog = self.catalog.sort_values(by=str_unique_name).reset_index(
@@ -515,7 +515,7 @@ class Collection(MbaE):
         returns a dictionary with metadata keys and values
 
         :param new_object: Object to append.
-        :entry_type new_object: object
+        :type new_object: object
 
         :return: None
         :rtype: None
@@ -536,20 +536,20 @@ class Collection(MbaE):
         return None
 
     def remove(self, name):
-        """Remove an object from the ``Collection`` by the filename.
+        """Remove an object from the ``Collection`` by the name.
 
         :param name: Name attribute of the object to remove.
-        :entry_type name: str
+        :type name: str
 
         :return: None
         :rtype: None
         """
         # Delete the object from the ``Collection``
         del self.collection[name]
-        # Delete the object's bib_dict from the catalog
+        # Delete the object's entry from the catalog
         str_unique_name = self.catalog.columns[
             0
-        ]  # assuming the first column is the unique filename
+        ]  # assuming the first column is the unique name
         self.catalog = self.catalog.drop(
             self.catalog[self.catalog[str_unique_name] == name].index
         ).reset_index(drop=True)
@@ -580,7 +580,7 @@ class DataSet(MbaE):
     .. code-block:: python
 
         # instantiate DataSet object
-        ds = DataSet(filename="DataSet_1", alias="DS1")
+        ds = DataSet(name="DataSet_1", alias="DS1")
 
     Set Object and Load Data
 
@@ -647,12 +647,12 @@ class DataSet(MbaE):
         """Initialize the ``DataSet`` object.
         Expected to increment superior methods.
 
-        :param name: unique object filename
-        :entry_type name: str
+        :param name: unique object name
+        :type name: str
 
         :param alias: unique object alias.
-            If None, it takes the first and last characters from filename
-        :entry_type alias: str
+            If None, it takes the first and last characters from name
+        :type alias: str
 
         """
         # ------------ call super ----------- #
@@ -802,10 +802,10 @@ class DataSet(MbaE):
         Expected to increment superior methods.
 
         :param dict_setter: incoming dictionary with attribute values
-        :entry_type dict_setter: dict
+        :type dict_setter: dict
 
         :param load_data: option for loading data from incoming file. Default is True.
-        :entry_type load_data: bool
+        :type load_data: bool
 
         """
         super().set(dict_setter=dict_setter)
@@ -839,7 +839,7 @@ class DataSet(MbaE):
         """Load data from file. Expected to overwrite superior methods.
 
         :param file_data: file path to data.
-        :entry_type file_data: str
+        :type file_data: str
         :return: None
         :rtype: None
         """
@@ -878,7 +878,7 @@ class DataSet(MbaE):
         Expected to overwrite superior methods.
 
         :param show: option for showing instead of saving.
-        :entry_type show: bool
+        :type show: bool
 
         :return: None or file path to figure
         :rtype: None or str
@@ -957,9 +957,333 @@ class DataSet(MbaE):
             return file_path
 
 
-class RecordTable(DataSet):
+
+class Note(MbaE):
     """
-    The core object for Record Tables. A Record is expected to keep adding stamped records
+    todo docstring
+    """
+
+    def __init__(self, name="MyNote", alias="Nt1"):
+
+        # attributes
+        self.title = None
+        self.tags_head = None
+        self.tags_etc = None
+        self.related_head = None
+        self.related_etc = None
+        self.summary = None
+        self.timestamp = None
+
+        # file paths
+        self.file_note = None
+        # note dict
+        self.note_dict = None
+
+        super().__init__(name=name, alias=alias)
+        # ... continues in downstream objects ... #
+
+    def _set_fields(self):
+        """Set fields names"""
+        super()._set_fields()
+        # Attribute fields
+        self.title_field = "title"
+        self.tags_head_field = "tags_head"
+        self.tags_etc_field = "tags_etc"
+        self.related_head_field = "related_head"
+        self.related_etc_field = "related_etc"
+        self.summary_field = "summary"
+        self.timestamp_field = "timestamp"
+        self.file_note_field = "file_note"
+
+        # Metadata fields
+
+        # ... continues in downstream objects ... #
+
+    def get_metadata(self):
+        """Get a dictionary with object metadata.
+        Expected to increment superior methods.
+
+        .. note::
+
+            Metadata does **not** necessarily inclue all object attributes.
+
+        :return: dictionary with all metadata
+        :rtype: dict
+        """
+        # ------------ call super ----------- #
+        dict_meta = super().get_metadata()
+
+        # customize local metadata:
+        dict_meta_local = {
+            self.title_field: self.title,
+            self.summary_field: self.summary,
+            self.timestamp_field: self.timestamp,
+            self.tags_head_field: self.tags_head,
+            self.tags_etc_field: self.tags_etc,
+            self.related_head_field: self.related_head,
+            self.related_etc_field: self.related_etc,
+            self.file_note_field: self.file_note,
+        }
+        # update
+        dict_meta.update(dict_meta_local)
+        return dict_meta
+
+    def load(self):
+        self.note_dict = Note.parse_note(file_path=self.file_note)
+        self.update()
+
+    def update(self):
+
+        # get first section name
+        # Warning: assume it is the first item
+        self.title = next(iter(self.note_dict))
+
+        # patterns
+
+        # Create a copy of the original dictionary
+        new_dict = self.note_dict.copy()
+        # Remove the specified key from the new dictionary
+        del new_dict[self.title]
+
+        # head tags
+        self.tags_head = Note.list_by_pattern(
+            md_dict={self.title: self.note_dict[self.title]}, patt_type="tag"
+        )
+        # head related:
+        self.related_head = Note.list_by_pattern(
+            md_dict={self.title: self.note_dict[self.title]}, patt_type="related"
+        )
+        # etc tags:
+        self.tags_etc = Note.list_by_pattern(md_dict=new_dict, patt_type="tag")
+
+        self.related_etc = Note.list_by_pattern(md_dict=new_dict, patt_type="related")
+
+        # summary
+        lst_summaries = Note.list_by_intro(
+            md_dict={self.title: self.note_dict[self.title]}, intro_type="summary"
+        )
+        self.summary = lst_summaries[0]
+
+        # datetime
+        lst_datetimes = Note.list_by_intro(
+            md_dict={self.title: self.note_dict[self.title]}, intro_type="timestamp"
+        )
+        self.timestamp = lst_datetimes[0]
+
+    @staticmethod
+    def list_by_pattern(md_dict, patt_type="tag"):
+        """Retrieve a list of patterns from the note dictionary.
+
+        :param md_dict: Dictionary containing note sections.
+        :type md_dict: dict
+        :param patt_type: Type of pattern to search for, either "tag" or "related". Defaults to "tag".
+        :type patt_type: str
+        :return: List of found patterns or None if no patterns are found.
+        :rtype: list or None
+        """
+
+        if patt_type == "tag":
+            pattern = re.compile(r"#\w+")
+        elif patt_type == "related":
+            pattern = re.compile(r"\[\[.*?\]\]")
+        else:
+            pattern = re.compile(r"#\w+")
+
+        patts = []
+        # run over all sections
+        for s in md_dict:
+            content = md_dict[s]["Content"]
+            for line in content:
+                patts.extend(pattern.findall(line))
+
+        if len(patts) == 0:
+            patts = None
+
+        return patts
+
+    @staticmethod
+    def list_by_intro(md_dict, intro_type="summary"):
+        """List introduction contents based on the specified type.
+
+        :param md_dict: Dictionary containing note sections.
+        :type md_dict: dict
+        :param intro_type: Type of introduction to search for, currently supports "summary". Defaults to "summary".
+        :type intro_type: str
+        :return: List of found introductions or None if no introductions are found.
+        :rtype: list or None
+        """
+        if intro_type == "summary":
+            pattern = r"\*\*Summary:\*\*\s*(.*)"
+        elif intro_type == "timestamp":
+            pattern = r"created in:\s*(.*)"
+        # develop more options
+
+        summaries = []
+        # run over all sections
+        for s in md_dict:
+            content = md_dict[s]["Content"]
+            for line in content:
+                match = re.search(pattern, line)
+                if match:
+                    summaries.append(match.group(1))
+        if len(summaries) == 0:
+            summaries = None
+        return summaries
+
+    @staticmethod
+    def parse_note(file_path):
+        """Parse a Markdown file into a dictionary structure.
+
+        :param file_path: Path to the Markdown file.
+        :type file_path: str
+        :return: Dictionary representing the note structure.
+        :rtype: dict
+        """
+
+        with open(file_path, "r") as file:
+            lines = file.readlines()
+
+        markdown_dict = {}
+        current_section = None
+        parent_section = None
+        section_stack = []
+
+        section_pattern = re.compile(r"^(#+)\s+(.*)")
+
+        for line in lines:
+            match = section_pattern.match(line)
+            if match:
+                level = len(match.group(1))
+                section_title = match.group(2).strip()
+
+                if current_section is not None:
+                    markdown_dict[current_section]["Content"] = section_content
+
+                while section_stack and section_stack[-1][1] >= level:
+                    section_stack.pop()
+
+                parent_section = section_stack[-1][0] if section_stack else None
+                current_section = section_title
+                section_stack.append((current_section, level))
+                markdown_dict[current_section] = {
+                    "Parent Section": parent_section,
+                    "Content": [],
+                }
+                section_content = []
+            else:
+                section_content.append(line.strip())
+
+        if current_section is not None:
+            markdown_dict[current_section]["Content"] = section_content
+
+        return markdown_dict
+
+    @staticmethod
+    def to_md(md_dict, output_dir, filename):
+        """Convert a note dictionary to a Markdown file and save it to the specified directory.
+
+        :param md_dict: Dictionary containing note sections.
+        :type md_dict: dict
+        :param output_dir: Directory where the output Markdown file will be saved.
+        :type output_dir: str
+        :param filename: Name of the output Markdown file (without extension).
+        :type filename: str
+        :return: None
+        :rtype: None
+        """
+
+        def write_section(file, section, level=1):
+            # Write the section header
+            file.write(f"{'#' * level} {section}\n")
+
+            # Write the section content
+            for line in md_dict[section]["Content"]:
+                file.write(line + "\n")
+
+            # Find and write subsections
+            subsections = [
+                key for key in md_dict if md_dict[key]["Parent Section"] == section
+            ]
+            for subsection in subsections:
+                # recursive step:
+                write_section(file, subsection, level + 1)
+
+        # Find top-level sections (sections with no parent)
+        top_sections = [
+            key for key in md_dict if md_dict[key]["Parent Section"] is None
+        ]
+
+        if not os.path.exists(output_dir):
+            os.makedirs(output_dir)
+
+        output_file = os.path.join(output_dir, f"{filename}.md")
+
+        with open(output_file, "w", encoding="utf-8") as file:
+            for section in top_sections:
+                write_section(file, section)
+        return output_file
+
+    @staticmethod
+    def get_template(kind="bib", head_name=None):
+        # todo continue here
+        if head_name is None:
+            head_name = "Header"
+        templates = {
+            "bib": {
+                head_name: {
+                    "Parent Section": None,
+                    "Content": [
+                        "{{LIBRARY ITEM}}\n",
+                        "{{Title}}\n",
+                        "**Summary:** Insert a paragraph comment here\n",
+                        "tags: {{tags}}\n",
+                        "related: {{related}}\n",
+                        "created in: {{timestamp}}",
+                        "\n---",
+                    ],
+                },
+                "Comments": {
+                    "Parent Section": None,
+                    "Content": [
+                        "*Start typing here*\n\n",
+                        "\n---",
+                    ],
+                },
+                "Bibliographic information": {
+                    "Parent Section": None,
+                    "Content": [
+                        "## Abstract",
+                        "**Author abstract:** {{abstract}}\n",
+                        "**AI-based abstract:** {{ai_abstract}}",
+                        "\n## Metadata",
+                        "doi: {{doi}}",
+                        "keywords: {{keywords}}",
+                        "\n## Citation",
+                        "In-text citation:",
+                        "```",
+                        "{{In-text citation}}",
+                        "```",
+                        "Full citation:",
+                        "```",
+                        "{{Full citation}}",
+                        "```",
+                        "BibTeX entry:",
+                        "```",
+                        "{{BibTeX}}",
+                        "```",
+                        "\n## References",
+                        "{{references}}",
+                    ],
+                },
+            }
+        }
+
+        return templates[kind]
+
+
+
+class RecordTable(DataSet):
+    """The core object for Record Tables. A Record is expected to keep adding stamped records
     in order to keep track of large inventories, catalogs, etc.
     All records are expected to have a unique Id. It is considered to be a relational table.
 
@@ -976,7 +1300,7 @@ class RecordTable(DataSet):
     .. code-block:: python
 
         # Instantiate RecordTable object
-        rt = RecordTable(filename="RecTable_1", alias="RT1")
+        rt = RecordTable(name="RecTable_1", alias="RT1")
 
     Setup custom columns for the data
 
@@ -1027,7 +1351,7 @@ class RecordTable(DataSet):
 
         # Insert new record from incoming dict
         d2 = {
-            "Name": "bib_dict",
+            "Name": "k",
             "Size": 177,
             "Type": 'input',
             "File_P": "/filee.pdf",
@@ -1239,7 +1563,7 @@ class RecordTable(DataSet):
         """Filter input record dictionary based on the expected table data columns.
 
         :param input_dict: input record dictionary
-        :entry_type input_dict: dict
+        :type input_dict: dict
         :return: filtered record dictionary
         :rtype: dict
         """
@@ -1283,11 +1607,11 @@ class RecordTable(DataSet):
         """Export the ``RecordTable`` data.
 
         :param folder_export: folder to export
-        :entry_type folder_export: str
-        :param filename: file filename (filename alone, without file extension)
-        :entry_type filename: str
+        :type folder_export: str
+        :param filename: file name (name alone, without file extension)
+        :type filename: str
         :param filter_archive: option for exporting only records with ``RecStatus`` = ``On``
-        :entry_type filter_archive: bool
+        :type filter_archive: bool
         :return: file path is export is successfull (1 otherwise)
         :rtype: str or int
         """
@@ -1320,10 +1644,10 @@ class RecordTable(DataSet):
         Expected to increment superior methods.
 
         :param dict_setter: incoming dictionary with attribute values
-        :entry_type dict_setter: dict
+        :type dict_setter: dict
 
         :param load_data: option for loading data from incoming file. Default is True.
-        :entry_type load_data: bool
+        :type load_data: bool
 
         """
         # ignore color
@@ -1360,7 +1684,7 @@ class RecordTable(DataSet):
         Expected to overwrite superior methods.
 
         :param file_data: file path to data.
-        :entry_type file_data: str
+        :type file_data: str
         :return: None
         :rtype: None
         """
@@ -1385,13 +1709,13 @@ class RecordTable(DataSet):
         Base Method. Expected to be incremented downstream.
 
         :param input_df: incoming dataframe
-        :entry_type input_df: dataframe
+        :type input_df: dataframe
 
         :param append: option for appending the dataframe to existing data. Default True
-        :entry_type append: bool
+        :type append: bool
 
         :param inplace: option for overwrite data. Else return dataframe. Default True
-        :entry_type inplace: bool
+        :type inplace: bool
 
         :return: None
         :rtype: None
@@ -1442,7 +1766,7 @@ class RecordTable(DataSet):
         """Insert a record in the RT
 
         :param dict_rec: input record dictionary
-        :entry_type dict_rec: dict
+        :type dict_rec: dict
         :return: None
         :rtype: None
         """
@@ -1473,11 +1797,11 @@ class RecordTable(DataSet):
         """Edit RT record
 
         :param rec_id: record id
-        :entry_type rec_id: str
+        :type rec_id: str
         :param dict_rec: incoming record dictionary
-        :entry_type dict_rec: dict
+        :type dict_rec: dict
         :param filter_dict: option for filtering incoming record
-        :entry_type filter_dict: bool
+        :type filter_dict: bool
         :return: None
         :rtype: None
         """
@@ -1512,7 +1836,7 @@ class RecordTable(DataSet):
         """Archive a record in the RT, that is ``RecStatus`` = ``Off``
 
         :param rec_id: record id
-        :entry_type rec_id: str
+        :type rec_id: str
         :return: None
         :rtype: None
         """
@@ -1527,7 +1851,7 @@ class RecordTable(DataSet):
         """Get a record dict by id
 
         :param rec_id: record id
-        :entry_type rec_id: str
+        :type rec_id: str
         :return: record dictionary
         :rtype: dict
         """
@@ -1543,7 +1867,7 @@ class RecordTable(DataSet):
         """Get a record dataframe by id
 
         :param rec_id: record id
-        :entry_type rec_id: str
+        :type rec_id: str
         :return: record dictionary
         :rtype: dict
         """
@@ -1565,11 +1889,11 @@ class RecordTable(DataSet):
 
 
         :param file_record_data: file path to ``csv`` file.
-        :entry_type file_record_data: str
+        :type file_record_data: str
         :param input_field: Name of ``Field`` column in the file.
-        :entry_type input_field:
+        :type input_field:
         :param input_value: Name of ``Value`` column in the file.
-        :entry_type input_value:
+        :type input_value:
         :return: record dictionary
         :rtype: dict
         """
@@ -1594,11 +1918,11 @@ class RecordTable(DataSet):
         """Export a record from the table to a ``csv`` file.
 
         :param rec_id: record id
-        :entry_type rec_id: str
-        :param filename: file filename (filename alone, without file extension)
-        :entry_type filename: str
+        :type rec_id: str
+        :param filename: file name (name alone, without file extension)
+        :type filename: str
         :param folder_export: folder to export
-        :entry_type folder_export: str
+        :type folder_export: str
         :return: path to exported file
         :rtype: str
         """
@@ -1620,7 +1944,7 @@ class RecordTable(DataSet):
         """Util static method for dissaggregation of time delta
 
         :param timedelta: TimeDelta object from pandas
-        :entry_type timedelta: :class:`pandas.TimeDelta`
+        :type timedelta: :class:`pandas.TimeDelta`
         :return: dictionary of time delta
         :rtype: dict
         """
@@ -1643,9 +1967,9 @@ class RecordTable(DataSet):
         """Util static method for string conversion of timedelta
 
         :param timedelta: TimeDelta object from pandas
-        :entry_type timedelta: :class:`pandas.TimeDelta`
+        :type timedelta: :class:`pandas.TimeDelta`
         :param dct_struct: Dictionary of string strucuture. Ex: {'Expected days': 'Days'}
-        :entry_type dct_struct: dict
+        :type dct_struct: dict
         :return: text of time delta
         :rtype: str
         """
@@ -1660,9 +1984,9 @@ class RecordTable(DataSet):
         """Util static method for computing the runnning time for a list of starting dates
 
         :param start_datetimes: List of starting dates
-        :entry_type start_datetimes: list
+        :type start_datetimes: list
         :param kind: mode for output format ('raw', 'human' or 'age')
-        :entry_type kind: str
+        :type kind: str
         :return: list of running time
         :rtype: list
         """
@@ -1817,7 +2141,7 @@ class Budget(RecordTable):
         Expected to be incremented downstream.
 
         :param input_df: incoming dataframe
-        :entry_type input_df: dataframe
+        :type input_df: dataframe
         :return: None
         :rtype: None
         """
@@ -1892,14 +2216,14 @@ class FileSys(DataSet):
         Expected to increment superior methods.
 
         :param folder_base: path to File System folder location
-        :entry_type folder_base: str
+        :type folder_base: str
 
-        :param name: unique object filename
-        :entry_type name: str
+        :param name: unique object name
+        :type name: str
 
         :param alias: unique object alias.
-            If None, it takes the first and last characters from filename
-        :entry_type alias: str
+            If None, it takes the first and last characters from name
+        :type alias: str
 
         """
         # prior attributes
@@ -2026,7 +2350,7 @@ class FileSys(DataSet):
             dict_status["Files"] = {}
             dict_files = {}
             for i in range(len(df)):
-                # get file filename
+                # get file name
                 lcl_file_name = df["File"].values[i]
                 dict_files[lcl_file_name] = {}
                 # get file format
@@ -2063,10 +2387,10 @@ class FileSys(DataSet):
         Expected to increment superior methods.
 
         :param dict_setter: incoming dictionary with attribute values
-        :entry_type dict_setter: dict
+        :type dict_setter: dict
 
         :param load_data: option for loading data from incoming file. Default is True.
-        :entry_type load_data: bool
+        :type load_data: bool
 
         """
         # ignore color
@@ -2094,7 +2418,7 @@ class FileSys(DataSet):
         """Load data from file. Expected to overwrite superior methods.
 
         :param file_data: file path to data.
-        :entry_type file_data: str
+        :type file_data: str
         :return: None
         :rtype: None
         """
@@ -2141,7 +2465,7 @@ class FileSys(DataSet):
         Expected to overwrite superior methods.
 
         :param show: option for showing instead of saving.
-        :entry_type show: bool
+        :type show: bool
 
         :return: None or file path to figure
         :rtype: None or str
@@ -2201,7 +2525,7 @@ class FileSys(DataSet):
     # ----------------- STATIC METHODS ----------------- #
     @staticmethod
     def archive(src_dir, dst_dir):
-        # Create a zip archive from the output_dir
+        # Create a zip archive from the directory
         shutil.make_archive(dst_dir, 'zip', src_dir)
         return None
 
@@ -2239,7 +2563,7 @@ class FileSys(DataSet):
         """Static method for file existing checkup
 
         :param files: iterable with file paths
-        :entry_type files: list
+        :type files: list
         :return: list status ('ok' or 'missing')
         :rtype: list
         """
@@ -2256,7 +2580,7 @@ class FileSys(DataSet):
         """Util function for making a diretory
 
         :param str_path: path to dir
-        :entry_type str_path: str
+        :type str_path: str
         :return: None
         :rtype: None
         """
@@ -2275,14 +2599,14 @@ class FileSys(DataSet):
             Pattern is expected to be a prefix prior to ``*`` suffix.
 
         :param dst_pattern: destination path with file pattern. Example: path/to/dst_file_*.csv
-        :entry_type dst_pattern: str
+        :type dst_pattern: str
         :param src_pattern: source path with file pattern. Example: path/to/src_file_*.csv
-        :entry_type src_pattern: str
+        :type src_pattern: str
         :return: None
         :rtype: None
         """
         # handle destination variables
-        dst_basename = os.path.basename(dst_pattern).split(".")[0].replace("*", "")  # bib_dict
+        dst_basename = os.path.basename(dst_pattern).split(".")[0].replace("*", "")  # k
         dst_folder = os.path.dirname(dst_pattern)  # folder
 
         # handle sourced variables
@@ -2306,11 +2630,11 @@ class FileSys(DataSet):
     def fill(dict_struct, folder, handle_files=True):
         """Recursive function for filling the ``FileSys`` structure
 
-        :param dict_struct: dicitonary of output_dir structure
-        :entry_type dict_struct: dict
+        :param dict_struct: dicitonary of directory structure
+        :type dict_struct: dict
 
         :param folder: path to local folder
-        :entry_type folder: str
+        :type folder: str
 
         :return: None
         :rtype: None
@@ -2320,11 +2644,11 @@ class FileSys(DataSet):
             """Sub routine for handling expected files in the FileSys structure.
 
             :param dst_name: destination filename
-            :entry_type dst_name: str
+            :type dst_name: str
             :param lst_specs: list for expected file specifications
-            :entry_type lst_specs: list
+            :type lst_specs: list
             :param dst_folder: destination folder
-            :entry_type dst_folder: str
+            :type dst_folder: str
             :return: None
             :rtype: None
             """
@@ -2333,7 +2657,7 @@ class FileSys(DataSet):
             src_name = lst_specs[1]
             src_dir = lst_specs[2]
 
-            # there is a sourcing output_dir
+            # there is a sourcing directory
             if os.path.isdir(src_dir):
                 # extension loop:
                 for extension in lst_exts:
@@ -2375,6 +2699,7 @@ class FileSys(DataSet):
                     handle_file(dst_name=k, lst_specs=dict_struct[k], dst_folder=folder)
 
         return None
+
 
 
 if __name__ == "__main__":
