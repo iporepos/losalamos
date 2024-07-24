@@ -11,7 +11,7 @@ from losalamos.refs import Ref, Note, RefForm
 
 
 def add_ref(
-    file_bib, file_pdf, lib_folder, tags=None, related=None, search_online=True
+    file_bib, file_pdf, lib_folder, tags=None, related=None, search_online=False
 ):
     """Add a reference to the library.
 
@@ -40,7 +40,9 @@ def add_ref(
     r.load_bib()
     # standardize bib
     r.standardize()
-
+    
+    r.file_doc = file_pdf
+    
     # tags and related
     if tags:
         r.note_tags = tags
@@ -71,6 +73,7 @@ def add_ref(
 
     # EXPORT FILES
     print(">>> exporting files ...")
+    print(r.file_doc)
     r.export(
         output_dir=r.lib_folder,
         create_note=True,
@@ -105,6 +108,9 @@ def set_and_run(form_data, run=True):
 
     # 9 max TAGS
     tags = form_data["tags"]
+    if kind == "paper - hydrology":
+        add_ls = ["#science", "#paper", "#hydrology", "#water"]
+        tags = tags + add_ls[:]
 
     # RELATED NOTES
     related = form_data["related"]
@@ -148,8 +154,8 @@ def set_and_run(form_data, run=True):
                 r.citation_key = lst_bibs_dicts[i]["citation_key"]
                 new_file = os.path.join(os.path.dirname(f), r.citation_key + ".bib")
                 r.to_bib(output_dir=os.path.dirname(f), filename=r.citation_key)
-                lst_bibs_actual.append(new_file)
-                lst_bibs_to_clean.append(new_file)
+                lst_bibs_actual.append(new_file[:])
+                lst_bibs_to_clean.append(new_file[:])
         else:
             lst_bibs_actual.append(f)
 
@@ -171,12 +177,6 @@ def set_and_run(form_data, run=True):
     print(f">> Importing the following references to {folder_lib}")
     print(df.to_string(index=False))
 
-    # criteria for searching online
-    if kind == "paper":
-        search_online = True
-    else:
-        search_online = False
-
     # *********************************************************
     # ADDING LOOP
     for i in range(len(df)):  # range(len(df)):
@@ -191,22 +191,27 @@ def set_and_run(form_data, run=True):
                 lib_folder=folder_lib,
                 tags=tags,
                 related=related,
-                search_online=search_online,
+                search_online=False,
             )
 
     # *********************************************************
     # clean created bib files
+    # print(lst_bibs_to_clean)
     for f in lst_bibs_to_clean:
         os.remove(f)
 
 
-if __name__ == "__main__":
-
+if __name__ == "__main__":    
+    
+    # todo fixbug -- pdfs not exporting
+    
     # Get the form data after the Tkinter window is closed
-    while True:
+    while True:  
+        
         app = RefForm(
-            lib_folder="",
-            inp_folder="",
+            lib_folder="C:/Users/Ipo/My Drive/athens/alexandria",
+            inp_folder="C:/Users/Ipo/Desktop/refs",
+            kind_opts=["paper - hydrology", "paper", "book", "law", "report"],
         )
         app.mainloop()
         form_data = app.get_form_data()

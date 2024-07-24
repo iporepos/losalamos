@@ -45,7 +45,7 @@ conubia nostra, per inceptos himenaeos. Nulla facilisi. Mauris eget nisl
 eu eros euismod sodales. Cras pulvinar tincidunt enim nec semper.
 
 """
-import glob
+import glob, re
 import os, copy, shutil, datetime
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -1140,7 +1140,7 @@ class Note(MbaE):
         :rtype: dict
         """
 
-        with open(file_path, "r") as file:
+        with open(file_path, "r", encoding="utf-8") as file:
             lines = file.readlines()
 
         markdown_dict = {}
@@ -1222,63 +1222,6 @@ class Note(MbaE):
             for section in top_sections:
                 write_section(file, section)
         return output_file
-
-    @staticmethod
-    def get_template(kind="bib", head_name=None):
-        # todo continue here
-        if head_name is None:
-            head_name = "Header"
-        templates = {
-            "bib": {
-                head_name: {
-                    "Parent Section": None,
-                    "Content": [
-                        "{{LIBRARY ITEM}}\n",
-                        "{{Title}}\n",
-                        "**Summary:** Insert a paragraph comment here\n",
-                        "tags: {{tags}}\n",
-                        "related: {{related}}\n",
-                        "created in: {{timestamp}}",
-                        "\n---",
-                    ],
-                },
-                "Comments": {
-                    "Parent Section": None,
-                    "Content": [
-                        "*Start typing here*\n\n",
-                        "\n---",
-                    ],
-                },
-                "Bibliographic information": {
-                    "Parent Section": None,
-                    "Content": [
-                        "## Abstract",
-                        "**Author abstract:** {{abstract}}\n",
-                        "**AI-based abstract:** {{ai_abstract}}",
-                        "\n## Metadata",
-                        "doi: {{doi}}",
-                        "keywords: {{keywords}}",
-                        "\n## Citation",
-                        "In-text citation:",
-                        "```",
-                        "{{In-text citation}}",
-                        "```",
-                        "Full citation:",
-                        "```",
-                        "{{Full citation}}",
-                        "```",
-                        "BibTeX entry:",
-                        "```",
-                        "{{BibTeX}}",
-                        "```",
-                        "\n## References",
-                        "{{references}}",
-                    ],
-                },
-            }
-        }
-
-        return templates[kind]
 
     @staticmethod
     def find_and_replace(note_file, old, new, line_n=None):
