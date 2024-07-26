@@ -959,26 +959,12 @@ class DataSet(MbaE):
 
 
 class Note(MbaE):
-    """
-    todo docstring
-    """
 
     def __init__(self, name="MyNote", alias="Nt1"):
-
-        # attributes
-        self.title = None
-        self.tags_head = None
-        self.tags_etc = None
-        self.related_head = None
-        self.related_etc = None
-        self.summary = None
-        self.timestamp = None
-
-        # file paths
+        # set attributes
         self.file_note = None
-        # note dict
-        self.note_dict = None
-
+        self.metadata = None
+        self.data = None
         super().__init__(name=name, alias=alias)
         # ... continues in downstream objects ... #
 
@@ -986,13 +972,6 @@ class Note(MbaE):
         """Set fields names"""
         super()._set_fields()
         # Attribute fields
-        self.title_field = "title"
-        self.tags_head_field = "tags_head"
-        self.tags_etc_field = "tags_etc"
-        self.related_head_field = "related_head"
-        self.related_etc_field = "related_etc"
-        self.summary_field = "summary"
-        self.timestamp_field = "timestamp"
         self.file_note_field = "file_note"
 
         # Metadata fields
@@ -1015,60 +994,189 @@ class Note(MbaE):
 
         # customize local metadata:
         dict_meta_local = {
-            self.title_field: self.title,
-            self.summary_field: self.summary,
-            self.timestamp_field: self.timestamp,
-            self.tags_head_field: self.tags_head,
-            self.tags_etc_field: self.tags_etc,
-            self.related_head_field: self.related_head,
-            self.related_etc_field: self.related_etc,
             self.file_note_field: self.file_note,
         }
         # update
         dict_meta.update(dict_meta_local)
         return dict_meta
 
+    def load_metadata(self):
+        self.metadata = Note.parse_metadata(self.file_note)
+
+    def load_data(self):
+        self.data = Note.parse_note(self.file_note)
+
     def load(self):
-        self.note_dict = Note.parse_note(file_path=self.file_note)
-        self.update()
+        self.load_metadata()
+        self.load_data()
 
-    def update(self):
+    def save(self):
+        self.to_file(file_path=self.file_note)
 
-        # get first section name
-        # Warning: assume it is the first item
-        self.title = next(iter(self.note_dict))
+    def to_file(self, file_path):
+        '''Export Note to markdown
 
-        # patterns
+        :param file_path: path to file
+        :type file_path: str
+        :return:
+        :rtype:
+        '''
+        ls_metadata = Note.metadata_to_list(self.metadata)
+        # clear "None" values
+        for i in range(len(ls_metadata)):
+            ls_metadata[i] = ls_metadata[i].replace("None", "")
 
-        # Create a copy of the original dictionary
-        new_dict = self.note_dict.copy()
-        # Remove the specified key from the new dictionary
-        del new_dict[self.title]
+        ls_data = Note.data_to_list(self.data)
+        for l in ls_data:
+            ls_metadata.append(l[:])
+        ls_all = [line + "\n" for line in ls_metadata]
+        with open(file_path, 'w', encoding='utf-8') as file:
+            file.writelines(ls_all)
 
-        # head tags
-        self.tags_head = Note.list_by_pattern(
-            md_dict={self.title: self.note_dict[self.title]}, patt_type="tag"
-        )
-        # head related:
-        self.related_head = Note.list_by_pattern(
-            md_dict={self.title: self.note_dict[self.title]}, patt_type="related"
-        )
-        # etc tags:
-        self.tags_etc = Note.list_by_pattern(md_dict=new_dict, patt_type="tag")
+    @staticmethod
+    def parse_metadata(note_file):
+        """Extracts YAML metadata from the header of a Markdown file.
 
-        self.related_etc = Note.list_by_pattern(md_dict=new_dict, patt_type="related")
+        :param note_file: str, path to the Markdown file
+        :return: dict, extracted YAML metadata
+        """
+        with open(note_file, 'r', encoding="utf-8") as file:
+            content = file.read()
 
-        # summary
-        lst_summaries = Note.list_by_intro(
-            md_dict={self.title: self.note_dict[self.title]}, intro_type="summary"
-        )
-        self.summary = lst_summaries[0]
+        # Regular expression to match the YAML header
+        yaml_header_regex = r"^---\s*\n(.*?)\n---\s*\n"
 
-        # datetime
-        lst_datetimes = Note.list_by_intro(
-            md_dict={self.title: self.note_dict[self.title]}, intro_type="timestamp"
-        )
-        self.timestamp = lst_datetimes[0]
+        # Search for the YAML header in the content
+        match = re.search(yaml_header_regex, content, re.DOTALL)
+
+        if match:
+            yaml_content = match.group(1)
+            return Note.parse_yaml(yaml_content)
+        else:
+            return None
+
+    @staticmethod
+    def parse_yaml(yaml_content):
+        """Parses YAML content into a dictionary.
+
+        :param yaml_content: str, YAML content as string
+        :return: dict, parsed YAML content
+        """
+        metadata = {}
+        lines = yaml_content.split('\n')
+        current_key = None
+        current_list = None
+
+        for line in lines:
+            if line.strip() == '':
+                continue
+            if ':' in line:
+                key, value = line.split(':', 1)
+                key = key.strip()
+                value = value.strip()
+                if value == '':  # start of a list
+                    current_key = key
+                    current_list = []
+                    metadata[current_key] = current_list
+                else:
+                    if key == 'tags':
+                        metadata[key] = [v.strip() for v in value.split('-') if v.strip()]
+                    else:
+                        metadata[key] = value
+            elif current_list is not None and line.strip().startswith('-'):
+                current_list.append(line.strip()[1:].strip())
+
+        # fix empty lists
+        for e in metadata:
+            if len(metadata[e]) == 0:
+                metadata[e] = None
+
+        # fix text fields
+        for e in metadata:
+            if metadata[e]:
+                size = len(metadata[e]) - 1
+                if metadata[e][0] == '"' and metadata[e][size] == '"':
+                    # slice it
+                    metadata[e] = metadata[e][1: size]
+
+        return metadata
+
+    @staticmethod
+    def metadata_to_list(metadata_dict):
+        ls_metadata = []
+        ls_metadata.append("---")
+        for e in metadata_dict:
+            if isinstance(metadata_dict[e], list):
+                ls_metadata.append("{}:".format(e))
+                for i in metadata_dict[e]:
+                    ls_metadata.append(" - {}".format(i))
+            else:
+                aux0 = metadata_dict[e]
+                if aux0 is None:
+                    aux0 = ""
+                aux1 = "{}: {}".format(e,aux0)
+                ls_metadata.append(aux1)
+        ls_metadata.append("---")
+
+        return ls_metadata
+
+    @staticmethod
+    def data_to_list(data_dict):
+        ls_out = []
+        for h in data_dict:
+            level = data_dict[h]["Level"]
+            # section header
+            ls_out.append("\n{} {}\n".format("#"*level, h))
+            # content
+            for line in data_dict[h]["Content"]:
+                ls_out.append(line)
+        return ls_out
+
+    @staticmethod
+    def parse_note(file_path):
+        """Parse a Markdown file into a dictionary structure, skipping any YAML header.
+
+        :param file_path: Path to the Markdown file.
+        :type file_path: str
+        :return: Dictionary representing the note structure.
+        :rtype: dict
+        """
+        with open(file_path, 'r', encoding='utf-8') as file:
+            lines = file.readlines()
+
+        # Skip YAML header if present
+        if lines[0].strip() == '---':
+            yaml_end_index = lines.index('---\n', 1) + 1
+            lines = lines[yaml_end_index:]
+
+        sections = {}
+        current_section = None
+        parent_section = None
+
+        for line in lines:
+            header_match = re.match(r'^(#{1,6})\s+(.*)', line)
+            if header_match:
+                level = len(header_match.group(1))
+                section_name = header_match.group(2).strip()
+
+                # Determine parent section
+                parent_section = None
+                for section in reversed(sections.keys()):
+                    if sections[section]['Level'] < level:
+                        parent_section = section
+                        break
+
+                sections[section_name] = {
+                    'Parent': parent_section,
+                    'Content': [],
+                    'Level': level
+                }
+                current_section = section_name
+            elif current_section:
+                sections[current_section]['Content'].append(line.strip())
+
+        # Remove the 'Level' key from the final output
+        return sections
 
     @staticmethod
     def list_by_pattern(md_dict, patt_type="tag"):
@@ -1100,149 +1208,6 @@ class Note(MbaE):
             patts = None
 
         return patts
-
-    @staticmethod
-    def list_by_intro(md_dict, intro_type="summary"):
-        """List introduction contents based on the specified type.
-
-        :param md_dict: Dictionary containing note sections.
-        :type md_dict: dict
-        :param intro_type: Type of introduction to search for, currently supports "summary". Defaults to "summary".
-        :type intro_type: str
-        :return: List of found introductions or None if no introductions are found.
-        :rtype: list or None
-        """
-        if intro_type == "summary":
-            pattern = r"\*\*Summary:\*\*\s*(.*)"
-        elif intro_type == "timestamp":
-            pattern = r"created in:\s*(.*)"
-        # develop more options
-
-        summaries = []
-        # run over all sections
-        for s in md_dict:
-            content = md_dict[s]["Content"]
-            for line in content:
-                match = re.search(pattern, line)
-                if match:
-                    summaries.append(match.group(1))
-        if len(summaries) == 0:
-            summaries = None
-        return summaries
-
-    @staticmethod
-    def parse_note(file_path):
-        """Parse a Markdown file into a dictionary structure.
-
-        :param file_path: Path to the Markdown file.
-        :type file_path: str
-        :return: Dictionary representing the note structure.
-        :rtype: dict
-        """
-
-        with open(file_path, "r", encoding="utf-8") as file:
-            lines = file.readlines()
-
-        markdown_dict = {}
-        current_section = None
-        parent_section = None
-        section_stack = []
-
-        section_pattern = re.compile(r"^(#+)\s+(.*)")
-
-        for line in lines:
-            match = section_pattern.match(line)
-            if match:
-                level = len(match.group(1))
-                section_title = match.group(2).strip()
-
-                if current_section is not None:
-                    markdown_dict[current_section]["Content"] = section_content
-
-                while section_stack and section_stack[-1][1] >= level:
-                    section_stack.pop()
-
-                parent_section = section_stack[-1][0] if section_stack else None
-                current_section = section_title
-                section_stack.append((current_section, level))
-                markdown_dict[current_section] = {
-                    "Parent Section": parent_section,
-                    "Content": [],
-                }
-                section_content = []
-            else:
-                section_content.append(line.strip())
-
-        if current_section is not None:
-            markdown_dict[current_section]["Content"] = section_content
-
-        return markdown_dict
-
-    @staticmethod
-    def to_md(md_dict, output_dir, filename):
-        """Convert a note dictionary to a Markdown file and save it to the specified directory.
-
-        :param md_dict: Dictionary containing note sections.
-        :type md_dict: dict
-        :param output_dir: Directory where the output Markdown file will be saved.
-        :type output_dir: str
-        :param filename: Name of the output Markdown file (without extension).
-        :type filename: str
-        :return: None
-        :rtype: None
-        """
-
-        def write_section(file, section, level=1):
-            # Write the section header
-            file.write(f"{'#' * level} {section}\n")
-
-            # Write the section content
-            for line in md_dict[section]["Content"]:
-                file.write(line + "\n")
-
-            # Find and write subsections
-            subsections = [
-                key for key in md_dict if md_dict[key]["Parent Section"] == section
-            ]
-            for subsection in subsections:
-                # recursive step:
-                write_section(file, subsection, level + 1)
-
-        # Find top-level sections (sections with no parent)
-        top_sections = [
-            key for key in md_dict if md_dict[key]["Parent Section"] is None
-        ]
-
-        if not os.path.exists(output_dir):
-            os.makedirs(output_dir)
-
-        output_file = os.path.join(output_dir, f"{filename}.md")
-
-        with open(output_file, "w", encoding="utf-8") as file:
-            for section in top_sections:
-                write_section(file, section)
-        return output_file
-
-    @staticmethod
-    def find_and_replace(note_file, old, new, line_n=None):
-        # Load the Markdown file
-        with open(note_file, 'r', encoding="utf-8") as file:
-            lines = file.readlines()
-
-        # Find and replace old by new strings
-        if line_n is None:
-            # Replace in all lines
-            lines = [line.replace(old, new) for line in lines]
-        else:
-            # Replace only in the specified line number
-            if 0 <= line_n < len(lines):
-                lines[line_n] = lines[line_n].replace(old, new)
-
-        # Overwrite the file
-        with open(note_file, 'w', encoding="utf-8") as file:
-            file.writelines(lines)
-
-
 
 class RecordTable(DataSet):
     """The core object for Record Tables. A Record is expected to keep adding stamped records
@@ -2162,7 +2127,6 @@ class Budget(RecordTable):
         return tags_summary, separate_tags_summary
 
 
-
 class FileSys(DataSet):
     """
     The core ``FileSys`` base/demo object. File System object.
@@ -2663,20 +2627,292 @@ class FileSys(DataSet):
         return None
 
 
+class _Note(MbaE):
+    """
+    DEPRECATED CLASS
+    """
+
+    def __init__(self, name="MyNote", alias="Nt1"):
+
+        # attributes
+        self.title = None
+        self.tags_head = None
+        self.tags_etc = None
+        self.related_head = None
+        self.related_etc = None
+        self.summary = None
+        self.timestamp = None
+
+        # file paths
+        self.file_note = None
+        # note dict
+        self.note_dict = None
+
+        super().__init__(name=name, alias=alias)
+        # ... continues in downstream objects ... #
+
+    def _set_fields(self):
+        """Set fields names"""
+        super()._set_fields()
+        # Attribute fields
+        self.title_field = "title"
+        self.tags_head_field = "tags_head"
+        self.tags_etc_field = "tags_etc"
+        self.related_head_field = "related_head"
+        self.related_etc_field = "related_etc"
+        self.summary_field = "summary"
+        self.timestamp_field = "timestamp"
+        self.file_note_field = "file_note"
+
+        # Metadata fields
+
+        # ... continues in downstream objects ... #
+
+    def get_metadata(self):
+        """Get a dictionary with object metadata.
+        Expected to increment superior methods.
+
+        .. note::
+
+            Metadata does **not** necessarily inclue all object attributes.
+
+        :return: dictionary with all metadata
+        :rtype: dict
+        """
+        # ------------ call super ----------- #
+        dict_meta = super().get_metadata()
+
+        # customize local metadata:
+        dict_meta_local = {
+            self.title_field: self.title,
+            self.summary_field: self.summary,
+            self.timestamp_field: self.timestamp,
+            self.tags_head_field: self.tags_head,
+            self.tags_etc_field: self.tags_etc,
+            self.related_head_field: self.related_head,
+            self.related_etc_field: self.related_etc,
+            self.file_note_field: self.file_note,
+        }
+        # update
+        dict_meta.update(dict_meta_local)
+        return dict_meta
+
+    def load(self):
+        self.note_dict = Note.parse_note(file_path=self.file_note)
+        self.update()
+
+    def update(self):
+
+        # get first section name
+        # Warning: assume it is the first item
+        self.title = next(iter(self.note_dict))
+
+        # patterns
+
+        # Create a copy of the original dictionary
+        new_dict = self.note_dict.copy()
+        # Remove the specified key from the new dictionary
+        del new_dict[self.title]
+
+        # head tags
+        self.tags_head = Note.list_by_pattern(
+            md_dict={self.title: self.note_dict[self.title]}, patt_type="tag"
+        )
+        # head related:
+        self.related_head = Note.list_by_pattern(
+            md_dict={self.title: self.note_dict[self.title]}, patt_type="related"
+        )
+        # etc tags:
+        self.tags_etc = Note.list_by_pattern(md_dict=new_dict, patt_type="tag")
+
+        self.related_etc = Note.list_by_pattern(md_dict=new_dict, patt_type="related")
+
+        # summary
+        lst_summaries = Note.list_by_intro(
+            md_dict={self.title: self.note_dict[self.title]}, intro_type="summary"
+        )
+        self.summary = lst_summaries[0]
+
+        # datetime
+        lst_datetimes = Note.list_by_intro(
+            md_dict={self.title: self.note_dict[self.title]}, intro_type="timestamp"
+        )
+        self.timestamp = lst_datetimes[0]
+
+    @staticmethod
+    def list_by_pattern(md_dict, patt_type="tag"):
+        """Retrieve a list of patterns from the note dictionary.
+
+        :param md_dict: Dictionary containing note sections.
+        :type md_dict: dict
+        :param patt_type: Type of pattern to search for, either "tag" or "related". Defaults to "tag".
+        :type patt_type: str
+        :return: List of found patterns or None if no patterns are found.
+        :rtype: list or None
+        """
+
+        if patt_type == "tag":
+            pattern = re.compile(r"#\w+")
+        elif patt_type == "related":
+            pattern = re.compile(r"\[\[.*?\]\]")
+        else:
+            pattern = re.compile(r"#\w+")
+
+        patts = []
+        # run over all sections
+        for s in md_dict:
+            content = md_dict[s]["Content"]
+            for line in content:
+                patts.extend(pattern.findall(line))
+
+        if len(patts) == 0:
+            patts = None
+
+        return patts
+
+    @staticmethod
+    def list_by_intro(md_dict, intro_type="summary"):
+        """List introduction contents based on the specified type.
+
+        :param md_dict: Dictionary containing note sections.
+        :type md_dict: dict
+        :param intro_type: Type of introduction to search for, currently supports "summary". Defaults to "summary".
+        :type intro_type: str
+        :return: List of found introductions or None if no introductions are found.
+        :rtype: list or None
+        """
+        if intro_type == "summary":
+            pattern = r"\*\*Summary:\*\*\s*(.*)"
+        elif intro_type == "timestamp":
+            pattern = r"created in:\s*(.*)"
+        # develop more options
+
+        summaries = []
+        # run over all sections
+        for s in md_dict:
+            content = md_dict[s]["Content"]
+            for line in content:
+                match = re.search(pattern, line)
+                if match:
+                    summaries.append(match.group(1))
+        if len(summaries) == 0:
+            summaries = None
+        return summaries
+
+    @staticmethod
+    def parse_note(file_path):
+        """Parse a Markdown file into a dictionary structure.
+
+        :param file_path: Path to the Markdown file.
+        :type file_path: str
+        :return: Dictionary representing the note structure.
+        :rtype: dict
+        """
+
+        with open(file_path, "r", encoding="utf-8") as file:
+            lines = file.readlines()
+
+        markdown_dict = {}
+        current_section = None
+        parent_section = None
+        section_stack = []
+
+        section_pattern = re.compile(r"^(#+)\s+(.*)")
+
+        for line in lines:
+            match = section_pattern.match(line)
+            if match:
+                level = len(match.group(1))
+                section_title = match.group(2).strip()
+
+                if current_section is not None:
+                    markdown_dict[current_section]["Content"] = section_content
+
+                while section_stack and section_stack[-1][1] >= level:
+                    section_stack.pop()
+
+                parent_section = section_stack[-1][0] if section_stack else None
+                current_section = section_title
+                section_stack.append((current_section, level))
+                markdown_dict[current_section] = {
+                    "Parent Section": parent_section,
+                    "Content": [],
+                }
+                section_content = []
+            else:
+                section_content.append(line.strip())
+
+        if current_section is not None:
+            markdown_dict[current_section]["Content"] = section_content
+
+        return markdown_dict
+
+
+    @staticmethod
+    def to_md(md_dict, output_dir, filename):
+        """Convert a note dictionary to a Markdown file and save it to the specified directory.
+
+        :param md_dict: Dictionary containing note sections.
+        :type md_dict: dict
+        :param output_dir: Directory where the output Markdown file will be saved.
+        :type output_dir: str
+        :param filename: Name of the output Markdown file (without extension).
+        :type filename: str
+        :return: None
+        :rtype: None
+        """
+
+        def write_section(file, section, level=1):
+            # Write the section header
+            file.write(f"{'#' * level} {section}\n")
+
+            # Write the section content
+            for line in md_dict[section]["Content"]:
+                file.write(line + "\n")
+
+            # Find and write subsections
+            subsections = [
+                key for key in md_dict if md_dict[key]["Parent Section"] == section
+            ]
+            for subsection in subsections:
+                # recursive step:
+                write_section(file, subsection, level + 1)
+
+        # Find top-level sections (sections with no parent)
+        top_sections = [
+            key for key in md_dict if md_dict[key]["Parent Section"] is None
+        ]
+
+        if not os.path.exists(output_dir):
+            os.makedirs(output_dir)
+
+        output_file = os.path.join(output_dir, f"{filename}.md")
+
+        with open(output_file, "w", encoding="utf-8") as file:
+            for section in top_sections:
+                write_section(file, section)
+        return output_file
+
+    @staticmethod
+    def find_and_replace(note_file, old, new, line_n=None):
+        # Load the Markdown file
+        with open(note_file, 'r', encoding="utf-8") as file:
+            lines = file.readlines()
+
+        # Find and replace old by new strings
+        if line_n is None:
+            # Replace in all lines
+            lines = [line.replace(old, new) for line in lines]
+        else:
+            # Replace only in the specified line number
+            if 0 <= line_n < len(lines):
+                lines[line_n] = lines[line_n].replace(old, new)
+
+        # Overwrite the file
+        with open(note_file, 'w', encoding="utf-8") as file:
+            file.writelines(lines)
+
+
 
 if __name__ == "__main__":
-    fs = FileSys(folder_base="C:/data", name="MyPlans", alias="MPlans")
-    fs.load_data(file_data="./iofiles.csv")
-    print(fs.folder_main)
-    fs.data  = fs.data[["Folder", "File", "Format", "Description", "File_Source", "Folder_Source"]].copy()
-    #fs.setup()
-
-    d = fs.get_status(folder_name=r"datasets\\topo")
-    if d is None:
-        print("Not found expected files")
-    else:
-        print(d["Folder"][["Folder", "File", "Format", "Description"]].to_string(index=False))
-        for f in d["Files"]:
-            print("*"*40)
-            print(f)
-            print(d["Files"][f].to_string(index=False))
+    print("hello world!")

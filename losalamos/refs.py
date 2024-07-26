@@ -53,6 +53,26 @@ import tkinter as tk
 from tkinter import filedialog, messagebox
 
 
+ls_meta_article = [
+    "doi",
+    "entry_type",
+    "citation_key",
+    "author",
+    "year",
+    "title",
+    "journal",
+    "volume",
+    "number",
+    "pages",
+    "issn",
+    "url",
+    "abstract",
+    "tags",
+    "timestamp",
+    "file",
+]
+
+
 class RefForm(tk.Tk):
     # todo evaluate move or rebase
 
@@ -456,15 +476,15 @@ class Ref(MbaE):
         # file_note
         if self.file_bib_field not in list_dict_keys:
             # set as none
-            dict_setter[self.file_bib_field] = None
+            dict_setter[self.file_bib_field] = self.file_bib
         # file_note
         if self.file_note_field not in list_dict_keys:
             # set as none
-            dict_setter[self.file_note_field] = None
+            dict_setter[self.file_note_field] = self.file_note
         # file_doc
         if self.file_doc_field not in list_dict_keys:
             # set as none
-            dict_setter[self.file_doc_field] = None
+            dict_setter[self.file_doc_field] = self.file_doc
 
         # ---------- set basic attributes --------- #
         super().set(dict_setter=dict_setter)
@@ -479,7 +499,7 @@ class Ref(MbaE):
 
         # ... continues in downstream objects ... #
 
-    def load_bib(self, order=0, search_doi=True):
+    def load_bib(self, order=0):
         """Load reference from ``bib`` file.
 
         :param order: order number in the ``bib`` file (first = 0)
@@ -525,48 +545,6 @@ class Ref(MbaE):
         self.name = Ref.cite_intext(bib_dict=self.bib_dict, text_format="plain")
         self.alias = self.citation_key
 
-    def export(self, output_dir, create_note=True, include_bib=False):
-        """Export all files to a directory with the same name (citation key)
-
-        :param output_dir: path to output directory
-        :entry_type output_dir: str
-        :return: None
-        :rtype: None
-        """
-        # export all files with the citation key name
-        export_name = self.citation_key
-
-        # bib file
-        if include_bib:
-            self.to_bib(output_dir=output_dir, filename=export_name)
-
-        # note file
-        if create_note:
-            self.to_note(
-                output_dir=output_dir,
-                filename=export_name,
-                comments=self.note_comments,
-                tags=self.note_tags,
-                related=self.note_related,
-                references=self.references_list,
-            )
-        else:
-            shutil.copy(
-                src=os.path.abspath(self.file_note),
-                dst=os.path.join(output_dir, export_name + ".md"),
-            )
-
-        # pdf file
-        print(">>debug --- pdf")
-        print()
-        if self.file_doc:
-            print(">>debug --- pdf2")
-            shutil.copy(
-                src=os.path.abspath(self.file_doc),
-                dst=os.path.join(output_dir, export_name + ".pdf"),
-            )
-
-        return None
 
     def save_bib(self, output_dir=None, filename=None):
         """Save bibliography to bib file (default to bib_file attribute).
@@ -614,10 +592,27 @@ class Ref(MbaE):
                 string = string.replace(placeholder, replacement)
             return string
 
-        # Get the current timestamp
-        now = datetime.now()
-        # Format the timestamp
-        timestamp_str = now.strftime("%Y-%m-%d %H:%M")
+        # basic
+
+        # get note
+        n = RefNote()
+        n.metadata = self.bib_dict.copy()
+        n.data = n.get_template(kind="bib")
+
+        # standard metadata
+        n.standardize_metatada()
+
+        # handle tags
+        if tags:
+            n.metadata["tags"] = tags
+
+        # compute timestamp
+        _now = datetime.now()
+        n.metadata["timestamp"] = _now.strftime("%Y-%m-%d %H:%M")
+        # set file
+        n.metadata["file"] = '"[[{}.pdf]]"'.format(n.metadata["citation_key"])
+
+        # HANDLE CONTENTs
 
         # setup
         citation_in = Ref.cite_intext(bib_dict=self.bib_dict, text_format="plain")
@@ -625,57 +620,28 @@ class Ref(MbaE):
         citation_full_plain = Ref.cite_full(self.bib_dict, text_format="plain")
         title = f"**{self.bib_dict[self.title_field]}** by {citation_in}"
 
-        # handle DOI
-        doi_link = "{{doi}}"
-        if "doi" in self.bib_dict:
-            doi_link = self.bib_dict["doi"]
-
-        # handle keywords
-        keywords_str = "{{keywords}}"
-        if "keywords" in self.bib_dict:
-            keywords_str = self.bib_dict["keywords"]
-
-        # Handle Abstract
-        abstract_str = "{{abstract}}"
-        if "abstract" in self.bib_dict:
-            abstract_str = self.bib_dict["abstract"]
-
         # Note
         nt_dict = RefNote.get_template(
             kind="bib",
             head_name=citation_in_md
         )
 
-        # handle comments
-        if comments:
-            nt_dict["Comments"]["Content"] = comments[:] + ["\n---"]
-        # handle tags
-        if tags is None:
-            tags = ""
-        if related is None:
-            related = ""
+        if related:
+            related_str = " ".join([f"[[{rel}]]" for rel in related])
+        else:
+            related_str  =""
 
-        # handle references
-        references_str = ""
-        if references:
-            lst_refs = [f" - {ref}" for ref in references]
-            references_str = "\n".join(lst_refs)
-
-        # edit contents
+            # edit contents
         replacements = {
             "{{LIBRARY ITEM}}": self.bib_dict[self.type_field].upper(),
             "{{Title}}": f"**{self.bib_dict[self.title_field]}** by {citation_in_md}",
-            "{{tags}}": " ".join([tag for tag in tags]),
-            "{{related}}": " ".join([rel for rel in related]),
-            "{{timestamp}}": timestamp_str,
-            "{{file_link}}": self.citation_key + ".pdf",
-            "{{abstract}}": abstract_str,
-            "{{doi}}": doi_link,
-            "{{keywords}}": keywords_str,
+            "{{related}}": related_str,
+            "{{file_link}}": n.metadata["citation_key"] + ".pdf",
+            "{{abstract}}": n.metadata["abstract"],
             "{{In-text citation}}": citation_in,
             "{{Full citation}}": citation_full_plain,
             "{{BibTeX}}": Ref.bib_to_str(bib_dict=self.bib_dict),
-            "{{references}}": references_str,
+            "{{references}}": "", # this is missing
         }
 
         for sec in nt_dict:
@@ -687,11 +653,37 @@ class Ref(MbaE):
             ]
             nt_dict[sec]["Content"] = updated_strings[:]
 
-        # export note
-        output_file = RefNote.to_md(
-            md_dict=nt_dict, output_dir=output_dir, filename=filename
+        n.data = nt_dict.copy()
+
+        # export note to file
+        output_file = "{}/{}.md".format(self.lib_folder, n.metadata["citation_key"])
+        n.to_file(
+            file_path=output_file
         )
         return output_file
+
+
+    def add_to_lib(self, lib_folder, tags=None, related=None, comments=None):
+        # update lib folder
+        self.lib_folder = lib_folder
+        self.standardize()
+
+        # export pdf
+        if self.file_doc:
+            shutil.copy(
+                src=self.file_doc,
+                dst="{}/{}.pdf".format(self.lib_folder, self.bib_dict["citation_key"])
+            )
+
+        # get note now
+        self.to_note(
+            output_dir=self.lib_folder,
+            filename=self.bib_dict["citation_key"],
+            tags=tags,
+            related=related,
+            comments=comments
+        )
+
 
     def to_bib(self, output_dir, filename):
         """
@@ -727,7 +719,7 @@ class Ref(MbaE):
         for filename in os.listdir(lib_folder):
             # Check if the file has a ".md" extension and does not contain the "_" character
             if filename.endswith(".md") and "_" not in filename:
-                filtered_files.append(filename[:-4])
+                filtered_files.append(filename[:-3])
 
         return filtered_files
 
@@ -1126,7 +1118,7 @@ class Ref(MbaE):
         bibtex_str = (
             f"@{bib_dict[entry_field]}{{{citation_key},\n  "
             + ",\n  ".join(bibtex_fields)
-            + "\n}}"
+            + "\n}"
         )
         return bibtex_str
 
@@ -1356,6 +1348,63 @@ class Ref(MbaE):
 
         return output_data
 
+    @staticmethod
+    def add(lib_folder, file_bib, file_pdf=None, tags=None, related=None):
+        r = Ref()
+        # set parameters
+        r.file_bib = file_bib
+        r.file_doc = file_pdf
+        # load bib
+        r.load_bib(order=0)
+
+        if r.bib_dict["entry_type"] == "article":
+            new_tags = ["science", "paper"]
+            if tags:
+                tags = list(set(tags + new_tags))
+            else:
+                tags = new_tags[:]
+        # run
+        r.add_to_lib(
+            lib_folder=lib_folder,
+            tags=tags,
+            related=related
+        )
+
+    @staticmethod
+    def add_bat(lib_folder, input_folder, tags=None, related=None):
+        # get list of bib files
+        ls_bib_files = glob.glob("{}/*.bib".format(input_folder))
+
+        # load all bibs
+        ls_bibs = []
+        for f in ls_bib_files:
+            print(f)
+            # parse the list of refs
+            lst_lcl_bibs = Ref.parse_bibtex(f)
+            ls_bibs = ls_bibs + lst_lcl_bibs[:]
+
+        for b in ls_bibs:
+            r = Ref()
+            r.bib_dict = b.copy()
+            expected_pdf = "{}/{}.pdf".format(input_folder, r.bib_dict["citation_key"])
+            if os.path.isfile(expected_pdf):
+                r.file_doc = expected_pdf
+
+            if r.bib_dict["entry_type"] == "article":
+                new_tags = ["science", "paper"]
+                if tags:
+                    tags = list(set(tags + new_tags))
+                else:
+                    tags = new_tags[:]
+
+            r.add_to_lib(
+                lib_folder=lib_folder,
+                tags=tags,
+                related=related
+            )
+
+
+
 
 class RefNote(Note):
 
@@ -1369,36 +1418,33 @@ class RefNote(Note):
             head_name = "Header"
         templates = {
             "bib": {
-                head_name: {
+                f"# {head_name}": {
                     "Parent Section": None,
+                    "Level": 0,
                     "Content": [
                         "{{LIBRARY ITEM}}\n",
                         "{{Title}}\n",
                         "**Summary:** Insert a paragraph comment here\n",
-                        "tags: {{tags}}\n",
                         "related: {{related}}\n",
-                        "created in: {{timestamp}}\n",
                         "file: [[{{file_link}}]]\n",
+                        "## Abstract\n",
+                        " > {{abstract}}\n"
                         "\n---",
                     ],
                 },
-                "Comments": {
+                "# Comments": {
                     "Parent Section": None,
+                    "Level": 0,
                     "Content": [
                         "*Start typing here*\n\n",
                         "\n---",
                     ],
                 },
-                "Bibliographic information": {
+                "# Bibliographic information": {
                     "Parent Section": None,
+                    "Level": 0,
                     "Content": [
-                        "## Abstract",
-                        " > **Author abstract:** {{abstract}}\n",
-                        " > **AI-based abstract:** {{ai_abstract}}",
-                        "\n## Metadata",
-                        "doi: {{doi}}",
-                        "keywords: {{keywords}}",
-                        "\n## Citation",
+                        "## Citation",
                         "In-text citation:",
                         "```",
                         "{{In-text citation}}",
@@ -1420,8 +1466,37 @@ class RefNote(Note):
 
         return templates[kind]
 
+    def standardize_metatada(self):
+        new_meta = {}
+        if self.metadata["entry_type"] == "article":
+            # pass
+            for e in ls_meta_article:
+                new_meta[e] = self.metadata.get(e, None)
+
+            # handle text fields
+            ls_fields = [
+                "title",
+                "abstract",
+                "issn",
+                "journal"
+            ]
+            for e in ls_fields:
+                if new_meta[e]:
+                    new_meta[e] = '"{}"'.format(new_meta[e])
+
+            self.metadata = new_meta.copy()
+
+
     @staticmethod
     def get_bib(file_path):
+        """Get a bib dictionaty from a Ref Note file.
+        The BibTex snippet is expected to exist in the note content
+
+        :param file_path:
+        :type file_path:
+        :return:
+        :rtype:
+        """
         with open(file_path, 'r', encoding="utf-8") as file:
             lines = file.readlines()
 

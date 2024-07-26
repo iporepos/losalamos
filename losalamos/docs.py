@@ -3,10 +3,11 @@ Classes for parsing, handling and managing documents
 
 """
 import os
+import shutil
+
 import pandas as pd
 import re
 from losalamos.root import DataSet, MbaE
-
 
 class TexDoc(MbaE):
 
@@ -16,29 +17,83 @@ class TexDoc(MbaE):
         # ... continues in downstream objects ... #
 
     @staticmethod
-    def format_gls(gls_name, gls_alias, gls_descr):
+    def gls_format(gls_name, gls_alias, gls_descr=None):
+        '''Format a glossary entry
+
+        :param gls_name: entry name
+        :type gls_name: str
+        :param gls_alias: entry alias (key)
+        :type gls_alias: str
+        :param gls_descr: entry description (if None, a blind text is iserted)
+        :type gls_descr: str
+        :return: list of lines to append to main file
+        :rtype: list
+        '''
         line_0 = ""
         line_1 = r"\newglossaryentry{" + gls_alias +"}"
         line_2 = "{"
         line_3 = f"\tname={gls_name},"
-        line_4 = f"\tdescription={gls_descr}"
+        if gls_descr is None:
+            gls_descr = TexDoc().red_blind
+        line_4 = "\tdescription={"+ gls_descr + "}"
         line_5 = "}"
         return [line_0, line_1, line_2, line_3, line_4, line_5]
 
     @staticmethod
-    def insert_newgls(tex_file, gls_name, gls_alias, gls_descr):
-        new_lines = TexDoc.format_gls(gls_name, gls_alias, gls_descr)
+    def gls_newentry(gls_file, gls_name, gls_alias, gls_descr=None):
+        '''Insert new glossary entry into a glossary file
+
+        :param gls_file: path to glossary file
+        :type gls_file: str
+        :param gls_name: entry name
+        :type gls_name: str
+        :param gls_alias: entry alias (key)
+        :type gls_alias: str
+        :param gls_descr: entry description (if None, a blind text is iserted)
+        :type gls_descr: str
+        :return: None
+        :rtype: None
+        '''
+        # get formatted entry in list
+        new_lines = TexDoc.gls_format(gls_name, gls_alias, gls_descr)
         # Open the file in append mode
-        with open(tex_file, 'a',  encoding="utf-8") as file:
+        with open(gls_file, 'a',  encoding="utf-8") as file:
             # Iterate through the list and write each line
             for line in new_lines:
                 file.write(line + '\n')
         return None
 
     @staticmethod
-    def gls_to_df(tex_file):
+    def gls_to_df(gls_dct):
+        '''convert a glossary dict in a dataframe
+
+        :param gls_dct: glossary dict
+        :type gls_dct: dict
+        :return: dataframe of glossary
+        :rtype: `pandas.DataFrame`
+        '''
+        alias_ls = []
+        name_ls = []
+        descr_ls = []
+        for e in gls_dct:
+            alias_ls.append(e)
+            name_ls.append(gls_dct[e]["name"])
+            descr_ls.append(gls_dct[e]["description"])
+
+        # Create a DataFrame from the matches
+        df = pd.DataFrame(
+            {
+                "Alias": alias_ls,
+                "Name": name_ls,
+                "Description": descr_ls
+            }
+        )
+        return df
+
+    @staticmethod
+    def gls_parse(gls_file):
         # Read the file content
-        with open(tex_file, 'r', encoding='utf-8') as file:
+        with open(gls_file, 'r', encoding='utf-8') as file:
             file_content = file.read()
 
         # Define a regex pattern to extract glossary entries
@@ -46,13 +101,60 @@ class TexDoc(MbaE):
 
         # Find all matches
         matches = pattern.findall(file_content)
-
-        # Create a DataFrame from the matches
-        df = pd.DataFrame(matches, columns=['Alias', 'Name', 'Description'])
-        return df
+        # create dict
+        gls_dct = {}
+        for e in matches:
+            gls_dct[e[0]] = {
+                "name": e[1],
+                "description": e[2]
+            }
+        return gls_dct
 
     @staticmethod
-    def process_glossaries(src_file, gls_file, inplace=False):
+    def gls_to_file(gls_dct, filename, output_dir):
+        '''Export glossary to new tex file
+
+        :param gls_dct: glossary dict
+        :type gls_dct: dict
+        :param filename: name of file (without extension)
+        :type filename: str
+        :param output_dir: path to output folder
+        :type output_dir: str
+        :return: file path
+        :rtype: str
+        '''
+        # set the output file
+        gls_file = os.path.join(output_dir, filename + ".tex")
+
+        # create a new glossary file
+        header_ls = ["\makeglossaries", "\n"]
+        with open(gls_file, 'w', encoding='utf-8') as file:
+            file.writelines(header_ls)
+
+        for alias in gls_dct:
+            TexDoc.gls_newentry(
+                gls_file=gls_file,
+                gls_alias=alias,
+                gls_name=gls_dct[alias]["name"],
+                gls_descr=gls_dct[alias]["description"]
+            )
+
+        return gls_file
+
+    @staticmethod
+    def gls_consolidate(src_file, gls_file, inplace=True):
+        '''Process a source tex file to consolidate the glossaries file (append new entries).
+        Expected pattern in source file: [todo:gls >> \textbf{gls_name} >> gls_alias]
+
+        :param src_file: path to source tex file
+        :type src_file: str
+        :param gls_file: path to glossary tex file
+        :type gls_file: str
+        :param inplace: option for overwrite the source file
+        :type inplace: bool
+        :return:
+        :rtype:
+        '''
         # Read the file content
         with open(src_file, 'r', encoding='utf-8') as file:
             file_content = file.read()
@@ -63,23 +165,23 @@ class TexDoc(MbaE):
         # Find all matches
         matches = pattern.findall(file_content)
 
-        # Display extracted name and alias
+        # append entries
         for name, alias in matches:
-            print(f'Name: {name}')
-            print(f'Alias: {alias}')
-            TexDoc.insert_newgls(
-                tex_file=gls_file,
+            TexDoc.gls_newentry(
+                gls_file=gls_file,
                 gls_name=name,
                 gls_alias=alias,
-                gls_descr=TexDoc().red_blind
+                gls_descr=TexDoc().red_blind  # defaults to blind text
             )
 
         # Replace the full expression with \gls{alias}
-        replaced_content = pattern.sub(r'\\gls{\2}', file_content)
+        replaced_content = pattern.sub(r'\\textbf{\\gls{\2}}', file_content)
 
+        # handle file
         if inplace:
             pass
         else:
+            # re set the source file path
             d = os.path.dirname(src_file)
             fm = os.path.basename(src_file).split(".")[0] + "_2.tex"
             src_file = os.path.join(d, fm)
@@ -89,6 +191,89 @@ class TexDoc(MbaE):
             file.write(replaced_content)
 
         return None
+
+    @staticmethod
+    def gls_expand(src_file, gls_file, inplace=True):
+        # parse file
+        gls_dct = TexDoc.gls_parse(gls_file=gls_file)
+        # get df
+        gls_df = TexDoc.gls_to_df(gls_dct=gls_dct)
+        # get helper column
+        gls_df["LenName"] = [len(s) for s in gls_df["Name"].values]
+        # sort
+        gls_df = gls_df.sort_values(by="LenName", ascending=False).reset_index(drop=True)
+        # inset helper column
+        gls_df["NewExp"] = ["\gls{"+ s +"}" for s in gls_df["Alias"]]
+
+        # handle new files
+        if not inplace:
+            # make copy and rename
+            _d = os.path.dirname(src_file)
+            _f = os.path.basename(src_file)
+            _f = _f.split(".")[0] + "_2." + _f.split(".")[1]
+            shutil.copy(
+                src=src_file,
+                dst=os.path.join(_d, _f)
+            )
+            src_file = os.path.join(_d, _f)
+
+        # replace all items
+        for i in range(len(gls_df)):
+            # ensure not re-replace
+            # suffix list
+            suffs_ls = [" ", ",", ";", ".", ":", "!", "?"]
+            old_ls = [gls_df["Name"].values[i] + s for s in suffs_ls]
+            new_ls = [gls_df["NewExp"].values[i] + s for s in suffs_ls]
+            # run for all suffixes
+            for j in range(len(old_ls)):
+                TexDoc.replace_infile(
+                    src_file=src_file,
+                    old_expression=old_ls[j],
+                    new_expression=new_ls[j],
+                    inplace=True
+                )
+
+        return src_file
+
+
+
+
+
+    @staticmethod
+    def replace_infile(src_file, old_expression, new_expression, inplace=True):
+        '''Replace expression directly in file
+        todo evaluate move this upstream
+
+        :param src_file: path to file (tex, md, etc)
+        :type src_file: str
+        :param old_expression: text of expression to be replaced
+        :type old_expression: str
+        :param new_expression: new expression
+        :type new_expression: str
+        :return: None
+        :rtype: None
+        '''
+        with open(src_file, 'r', encoding='utf-8') as file:
+            content = file.read()
+
+        new_content = content.replace(old_expression, new_expression)
+
+        if inplace:
+            pass
+        else:
+            # re set the source file path
+            d = os.path.dirname(src_file)
+            bse_ls = os.path.basename(src_file).split(".")
+            fm = bse_ls[0] + "_2." + bse_ls[1]
+            src_file = os.path.join(d, fm)
+
+        with open(src_file, 'w', encoding='utf-8') as file:
+            file.write(new_content)
+
+        if not inplace:
+            return src_file
+        else:
+            return None
 
 class DocTable(DataSet):
 
@@ -198,26 +383,9 @@ class DocTable(DataSet):
         return None
 
 
-
-
 if __name__ == "__main__":
 
-    f = "C:/Users/Ipo/Downloads/glossary_pt.tex"
+    print("hello world!")
 
-    t = TexDoc()
-    t.insert_newgls(
-        tex_file=f,
-        gls_name="Teste",
-        gls_alias="test-t",
-        gls_descr=r"\textcolor{red}{Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ac bibendum orci. Cras erat elit, consequat vel erat ac, tincidunt pulvinar lacus. Pellentesque vitae consectetur quam. Interdum et malesuada fames ac ante ipsum primis in faucibus}"
-    )
-
-    df = TexDoc.gls_to_df(f)
-    print(df.head())
-
-    f = "C:/Users/Ipo/Downloads/glossary_teste.tex"
-
-    f2 = "C:/Users/Ipo/Downloads/chap_hydrology.tex"
-    TexDoc.process_glossaries(src_file=f2, gls_file=f, inplace=False)
 
 
