@@ -45,10 +45,12 @@ conubia nostra, per inceptos himenaeos. Nulla facilisi. Mauris eget nisl
 eu eros euismod sodales. Cras pulvinar tincidunt enim nec semper.
 
 """
+
 import glob, re
 import os, copy, shutil, datetime
 import pandas as pd
 import matplotlib.pyplot as plt
+
 
 class MbaE:
     """
@@ -847,7 +849,6 @@ class DataSet(MbaE):
         # -------------- overwrite relative path input -------------- #
         self.file_data = os.path.abspath(file_data)
 
-
         # -------------- implement loading logic -------------- #
         default_columns = {
             #'DateTime': 'datetime64[1s]',
@@ -957,7 +958,6 @@ class DataSet(MbaE):
             return file_path
 
 
-
 class Note(MbaE):
 
     def __init__(self, name="MyNote", alias="Nt1"):
@@ -1014,13 +1014,13 @@ class Note(MbaE):
         self.to_file(file_path=self.file_note)
 
     def to_file(self, file_path, cleanup=True):
-        '''Export Note to markdown
+        """Export Note to markdown
 
         :param file_path: path to file
         :type file_path: str
         :return:
         :rtype:
-        '''
+        """
         ls_metadata = Note.metadata_to_list(self.metadata)
         # clear "None" values
         for i in range(len(ls_metadata)):
@@ -1030,24 +1030,23 @@ class Note(MbaE):
         for l in ls_data:
             ls_metadata.append(l[:])
         ls_all = [line + "\n" for line in ls_metadata]
-        with open(file_path, 'w', encoding='utf-8') as file:
+        with open(file_path, "w", encoding="utf-8") as file:
             file.writelines(ls_all)
 
         # clean up excessive lines
         if cleanup:
             Note.remove_excessive_blank_lines(file_path)
 
-
     @staticmethod
     def remove_excessive_blank_lines(file_path):
-        with open(file_path, 'r', encoding='utf-8') as file:
+        with open(file_path, "r", encoding="utf-8") as file:
             lines = file.readlines()
 
         cleaned_lines = []
         previous_line_blank = False
 
         for line in lines:
-            if line.strip() == '':
+            if line.strip() == "":
                 if not previous_line_blank:
                     cleaned_lines.append(line)
                     previous_line_blank = True
@@ -1055,7 +1054,7 @@ class Note(MbaE):
                 cleaned_lines.append(line)
                 previous_line_blank = False
 
-        with open(file_path, 'w', encoding='utf-8') as file:
+        with open(file_path, "w", encoding="utf-8") as file:
             file.writelines(cleaned_lines)
 
     @staticmethod
@@ -1065,7 +1064,7 @@ class Note(MbaE):
         :param note_file: str, path to the Markdown file
         :return: dict, extracted YAML metadata
         """
-        with open(note_file, 'r', encoding="utf-8") as file:
+        with open(note_file, "r", encoding="utf-8") as file:
             content = file.read()
 
         # Regular expression to match the YAML header
@@ -1088,27 +1087,29 @@ class Note(MbaE):
         :return: dict, parsed YAML content
         """
         metadata = {}
-        lines = yaml_content.split('\n')
+        lines = yaml_content.split("\n")
         current_key = None
         current_list = None
 
         for line in lines:
-            if line.strip() == '':
+            if line.strip() == "":
                 continue
-            if ':' in line:
-                key, value = line.split(':', 1)
+            if ":" in line:
+                key, value = line.split(":", 1)
                 key = key.strip()
                 value = value.strip()
-                if value == '':  # start of a list
+                if value == "":  # start of a list
                     current_key = key
                     current_list = []
                     metadata[current_key] = current_list
                 else:
-                    if key == 'tags':
-                        metadata[key] = [v.strip() for v in value.split('-') if v.strip()]
+                    if key == "tags":
+                        metadata[key] = [
+                            v.strip() for v in value.split("-") if v.strip()
+                        ]
                     else:
                         metadata[key] = value
-            elif current_list is not None and line.strip().startswith('-'):
+            elif current_list is not None and line.strip().startswith("-"):
                 current_list.append(line.strip()[1:].strip())
 
         # fix empty lists
@@ -1122,7 +1123,7 @@ class Note(MbaE):
                 size = len(metadata[e]) - 1
                 if metadata[e][0] == '"' and metadata[e][size] == '"':
                     # slice it
-                    metadata[e] = metadata[e][1: size]
+                    metadata[e] = metadata[e][1:size]
 
         return metadata
 
@@ -1139,7 +1140,7 @@ class Note(MbaE):
                 aux0 = metadata_dict[e]
                 if aux0 is None:
                     aux0 = ""
-                aux1 = "{}: {}".format(e,aux0)
+                aux1 = "{}: {}".format(e, aux0)
                 ls_metadata.append(aux1)
         ls_metadata.append("---")
 
@@ -1151,7 +1152,7 @@ class Note(MbaE):
         for h in data_dict:
             level = data_dict[h]["Level"]
             # section header
-            ls_out.append("\n{} {}\n".format("#"*level, h))
+            ls_out.append("\n{} {}\n".format("#" * level, h))
             # content
             for line in data_dict[h]["Content"]:
                 ls_out.append(line)
@@ -1166,12 +1167,12 @@ class Note(MbaE):
         :return: Dictionary representing the note structure.
         :rtype: dict
         """
-        with open(file_path, 'r', encoding='utf-8') as file:
+        with open(file_path, "r", encoding="utf-8") as file:
             lines = file.readlines()
 
         # Skip YAML header if present
-        if lines[0].strip() == '---':
-            yaml_end_index = lines.index('---\n', 1) + 1
+        if lines[0].strip() == "---":
+            yaml_end_index = lines.index("---\n", 1) + 1
             lines = lines[yaml_end_index:]
 
         sections = {}
@@ -1179,7 +1180,7 @@ class Note(MbaE):
         parent_section = None
 
         for line in lines:
-            header_match = re.match(r'^(#{1,6})\s+(.*)', line)
+            header_match = re.match(r"^(#{1,6})\s+(.*)", line)
             if header_match:
                 level = len(header_match.group(1))
                 section_name = header_match.group(2).strip()
@@ -1187,18 +1188,18 @@ class Note(MbaE):
                 # Determine parent section
                 parent_section = None
                 for section in reversed(sections.keys()):
-                    if sections[section]['Level'] < level:
+                    if sections[section]["Level"] < level:
                         parent_section = section
                         break
 
                 sections[section_name] = {
-                    'Parent': parent_section,
-                    'Content': [],
-                    'Level': level
+                    "Parent": parent_section,
+                    "Content": [],
+                    "Level": level,
                 }
                 current_section = section_name
             elif current_section:
-                sections[current_section]['Content'].append(line.strip())
+                sections[current_section]["Content"].append(line.strip())
 
         # Remove the 'Level' key from the final output
         return sections
@@ -1233,6 +1234,7 @@ class Note(MbaE):
             patts = None
 
         return patts
+
 
 class RecordTable(DataSet):
     """The core object for Record Tables. A Record is expected to keep adding stamped records
@@ -1376,7 +1378,7 @@ class RecordTable(DataSet):
         self.object_alias = "FS"
 
         # --------- defaults --------- #
-        self.id_size = 4 # for zfill
+        self.id_size = 4  # for zfill
 
         # --------- customizations --------- #
         self._set_base_columns()
@@ -1385,7 +1387,6 @@ class RecordTable(DataSet):
 
         # UPDATE
         self.update()
-
 
     def _set_fields(self):
         """Set fields names.
@@ -1410,7 +1411,7 @@ class RecordTable(DataSet):
             self.recid_field,
             self.rectable_field,
             self.rectimest_field,
-            self.recstatus_field
+            self.recstatus_field,
         ]
         # ... continues in downstream objects ... #
 
@@ -1429,14 +1430,12 @@ class RecordTable(DataSet):
             "Category",
         ]
         # File-related columns
-        self.columns_data_files = [
-            "File_NF",
-            "File_Invoice"
-        ]
+        self.columns_data_files = ["File_NF", "File_Invoice"]
         # concat all lists
-        self.columns_data = self.columns_data_main + self.columns_data_extra + self.columns_data_files
+        self.columns_data = (
+            self.columns_data_main + self.columns_data_extra + self.columns_data_files
+        )
         # ... continues in downstream objects ... #
-
 
     def _set_operator(self):
         """Set the builtin operator for automatic column calculations.
@@ -1456,20 +1455,18 @@ class RecordTable(DataSet):
 
         def func_age():
             return RecordTable.running_time(
-                start_datetimes=self.data["Date_Birth"],
-                kind="human"
+                start_datetimes=self.data["Date_Birth"], kind="human"
             )
 
         # ---------------- the operator ---------------- #
         self.operator = {
             "Sum": func_sum,
             "Age": func_age,
-            "File_Status": func_file_status
+            "File_Status": func_file_status,
         }
         # remove here for downstream objects!
         self.operator = None
         return None
-
 
     def _get_organized_columns(self):
         """Return the organized columns (base + data columns)
@@ -1548,8 +1545,7 @@ class RecordTable(DataSet):
             filename = os.path.basename(self.file_data).split(".")[0]
             # handle folder
             self.export(
-                folder_export=os.path.dirname(self.file_data),
-                filename=filename
+                folder_export=os.path.dirname(self.file_data), filename=filename
             )
             return 0
         else:
@@ -1584,9 +1580,7 @@ class RecordTable(DataSet):
                 df = self.data.copy()
             # filter default columns:
             df = df[self._get_organized_columns()]
-            df.to_csv(
-                filepath, sep=self.file_data_sep, index=False
-            )
+            df.to_csv(filepath, sep=self.file_data_sep, index=False)
             return filepath
         else:
             return 1
@@ -1645,10 +1639,7 @@ class RecordTable(DataSet):
         # -------------- implement loading logic -------------- #
 
         # -------------- call loading function -------------- #
-        df = pd.read_csv(
-            self.file_data,
-            sep=self.file_data_sep
-        )
+        df = pd.read_csv(self.file_data, sep=self.file_data_sep)
 
         # -------------- post-loading logic -------------- #
         self.set_data(input_df=df)
@@ -1682,7 +1673,9 @@ class RecordTable(DataSet):
             # enforce Id based on index
             n_last_id = self._last_id_int()
             n_incr = n_last_id + 1
-            input_df[self.recid_field] = ["Rec" + str(_ + n_incr).zfill(self.id_size) for _ in input_df.index]
+            input_df[self.recid_field] = [
+                "Rec" + str(_ + n_incr).zfill(self.id_size) for _ in input_df.index
+            ]
         else:
             # remove incoming duplicates
             input_df.drop_duplicates(subset=self.recid_field, inplace=True)
@@ -1712,7 +1705,6 @@ class RecordTable(DataSet):
             return None
         else:
             return df_merged
-
 
     def insert_record(self, dict_rec):
         """Insert a record in the RT
@@ -1792,12 +1784,9 @@ class RecordTable(DataSet):
         :return: None
         :rtype: None
         """
-        dict_rec = {
-            self.recstatus_field: "Off"
-        }
+        dict_rec = {self.recstatus_field: "Off"}
         self.edit_record(rec_id=rec_id, dict_rec=dict_rec, filter_dict=False)
         return None
-
 
     def get_record(self, rec_id):
         """Get a record dict by id
@@ -1832,7 +1821,9 @@ class RecordTable(DataSet):
         }
         return pd.DataFrame(dict_df)
 
-    def load_record_data(self, file_record_data, input_field="Field", input_value="Value"):
+    def load_record_data(
+        self, file_record_data, input_field="Field", input_value="Value"
+    ):
         """Load record data from a ``csv`` file to a dict
 
         .. note::
@@ -1851,12 +1842,12 @@ class RecordTable(DataSet):
         """
         # load record from file
         df = pd.read_csv(
-            file_record_data,
-            sep=self.file_data_sep,
-            usecols=[input_field, input_value]
+            file_record_data, sep=self.file_data_sep, usecols=[input_field, input_value]
         )
         # convert into a dict
-        dict_rec_raw = {df[input_field].values[i]: df[input_value].values[i] for i in range(len(df))}
+        dict_rec_raw = {
+            df[input_field].values[i]: df[input_value].values[i] for i in range(len(df))
+        }
 
         # filter for expected data columns
         dict_rec = {}
@@ -1911,7 +1902,7 @@ class RecordTable(DataSet):
             "Days": days,
             "Hours": hours,
             "Minutes": minutes,
-            "Seconds": seconds
+            "Seconds": seconds,
         }
 
     @staticmethod
@@ -1945,17 +1936,16 @@ class RecordTable(DataSet):
         # Convert 'start_datetimes' to datetime format
         start_datetimes = pd.to_datetime(start_datetimes)
         # Calculate the running time as a timedelta
-        current_datetime = pd.to_datetime('now')
+        current_datetime = pd.to_datetime("now")
         running_time = current_datetime - start_datetimes
         # Apply the custom function to create a new column
         if kind == "raw":
             running_time = running_time.tolist()
         elif kind == "human":
-            dct_str = {
-                "Years": "yr",
-                "Months": "mth"
-            }
-            running_time = running_time.apply(RecordTable.timedelta_to_str, args=(dct_str,))
+            dct_str = {"Years": "yr", "Months": "mth"}
+            running_time = running_time.apply(
+                RecordTable.timedelta_to_str, args=(dct_str,)
+            )
         elif kind == "age":
             running_time = [int(e.days / 365) for e in running_time]
 
@@ -2003,11 +1993,9 @@ class Budget(RecordTable):
             # Status extra
             "Date_Due",
             "Date_Exe",
-
             # Name extra
             # tags
             "Tags",
-
             # Values extra
             # Payment details
             "Method",
@@ -2015,10 +2003,14 @@ class Budget(RecordTable):
         ]
         # File columns
         self.columns_data_files = [
-            "File_Receipt", "File_Invoice", "File_NF",
+            "File_Receipt",
+            "File_Invoice",
+            "File_NF",
         ]
         # concat all lists
-        self.columns_data = self.columns_data_main + self.columns_data_extra + self.columns_data_files
+        self.columns_data = (
+            self.columns_data_main + self.columns_data_extra + self.columns_data_files
+        )
 
         # variations
         self.columns_data_status = self.columns_data_main + [
@@ -2043,13 +2035,17 @@ class Budget(RecordTable):
             # filter relevante data
             df = self.data[["Status", "Method", "Date_Due"]].copy()
             # Convert 'Date_Due' to datetime format
-            df['Date_Due'] = pd.to_datetime(self.data['Date_Due'])
+            df["Date_Due"] = pd.to_datetime(self.data["Date_Due"])
             # Get the current date
             current_dt = datetime.datetime.now()
 
             # Update 'Status' for records with 'Automatic' method and 'Expected' status based on the condition
-            condition = (df['Method'] == 'Automatic') & (df['Status'] == 'Expected') & (df['Date_Due'] <= current_dt)
-            df.loc[condition, 'Status'] = 'Executed'
+            condition = (
+                (df["Method"] == "Automatic")
+                & (df["Status"] == "Expected")
+                & (df["Date_Due"] <= current_dt)
+            )
+            df.loc[condition, "Status"] = "Executed"
 
             # return values
             return df["Status"].values
@@ -2072,7 +2068,9 @@ class Budget(RecordTable):
         return round(_n, 3)
 
     def _filter_prospected_cancelled(self):
-        return self.data[(self.data['Status'] != 'Prospected') & (self.data['Status'] != 'Cancelled')]
+        return self.data[
+            (self.data["Status"] != "Prospected") & (self.data["Status"] != "Cancelled")
+        ]
 
     def update(self):
         super().update()
@@ -2103,7 +2101,9 @@ class Budget(RecordTable):
         # compute temporary field
 
         # sign and value_signed
-        self.data["Sign"] = self.data["Type"].apply(lambda x: 1 if x == "Revenue" else -1)
+        self.data["Sign"] = self.data["Type"].apply(
+            lambda x: 1 if x == "Revenue" else -1
+        )
         self.data["Value_Signed"] = self.data["Sign"] * self.data["Value"]
 
     @staticmethod
@@ -2115,39 +2115,61 @@ class Budget(RecordTable):
 
         for _, row in budget_df.iterrows():
             # Generate date range based on frequency
-            dates = pd.date_range(start=start_date, end=end_date, freq=row['Freq'])
+            dates = pd.date_range(start=start_date, end=end_date, freq=row["Freq"])
 
             # Replicate the row for each date
-            replicated_data = pd.DataFrame({col: [row[col]] * len(dates) for col in df.columns})
-            replicated_data['Date'] = dates
+            replicated_data = pd.DataFrame(
+                {col: [row[col]] * len(dates) for col in df.columns}
+            )
+            replicated_data["Date"] = dates
 
             # Append to the expanded budget
-            annual_budget = pd.concat([annual_budget, replicated_data], ignore_index=True)
+            annual_budget = pd.concat(
+                [annual_budget, replicated_data], ignore_index=True
+            )
 
         return annual_budget
 
     def get_summary_by_type(self):
-        summary = pd.DataFrame({
-            "Total_Expenses": [self.total_expenses],
-            "Total_Revenue": [self.total_revenue],
-            "Total_Net": [self.total_net]
-        })
-        summary = summary.apply(lambda x: x.sort_values(ascending=self.summary_ascend), axis=1)
+        summary = pd.DataFrame(
+            {
+                "Total_Expenses": [self.total_expenses],
+                "Total_Revenue": [self.total_revenue],
+                "Total_Net": [self.total_net],
+            }
+        )
+        summary = summary.apply(
+            lambda x: x.sort_values(ascending=self.summary_ascend), axis=1
+        )
         return summary
 
     def get_summary_by_status(self, filter=True):
         filtered_df = self._filter_prospected_cancelled() if filter else self.data
-        return filtered_df.groupby("Status")["Value_Signed"].sum().sort_values(ascending=self.summary_ascend)
+        return (
+            filtered_df.groupby("Status")["Value_Signed"]
+            .sum()
+            .sort_values(ascending=self.summary_ascend)
+        )
 
     def get_summary_by_contract(self, filter=True):
         filtered_df = self._filter_prospected_cancelled() if filter else self.data
-        return filtered_df.groupby("Contract")["Value_Signed"].sum().sort_values(ascending=self.summary_ascend)
+        return (
+            filtered_df.groupby("Contract")["Value_Signed"]
+            .sum()
+            .sort_values(ascending=self.summary_ascend)
+        )
 
     def get_summary_by_tags(self, filter=True):
         filtered_df = self._filter_prospected_cancelled() if filter else self.data
-        tags_summary = filtered_df.groupby("Tags")["Value_Signed"].sum().sort_values(ascending=self.summary_ascend)
+        tags_summary = (
+            filtered_df.groupby("Tags")["Value_Signed"]
+            .sum()
+            .sort_values(ascending=self.summary_ascend)
+        )
         tags_summary = tags_summary.sort()
-        separate_tags_summary = filtered_df["Tags"].str.split(expand=True).stack().value_counts()
+        separate_tags_summary = (
+            filtered_df["Tags"].str.split(expand=True).stack().value_counts()
+        )
         print(type(separate_tags_summary))
         return tags_summary, separate_tags_summary
 
@@ -2286,7 +2308,7 @@ class FileSys(DataSet):
                 ]
         return dict_structure
 
-    def get_status(self, folder_name): # todo dosctring
+    def get_status(self, folder_name):  # todo dosctring
         dict_status = {}
         # get full folder path
         folder = self.folder_main + "/" + folder_name
@@ -2310,7 +2332,7 @@ class FileSys(DataSet):
                 dict_extensions = self.get_extensions()
                 #
                 list_lcl_extensions = dict_extensions[lcl_file_format]
-                #print(list_lcl_extensions)
+                # print(list_lcl_extensions)
                 for ext in list_lcl_extensions:
                     lcl_path = os.path.join(folder, lcl_file_name + "." + ext)
                     list_files = glob.glob(lcl_path)
@@ -2318,7 +2340,9 @@ class FileSys(DataSet):
                     dict_files[lcl_file_name][ext] = lst_filenames_found
             for k in dict_files:
                 # Convert each list in the dictionary to a pandas Series and then create a DataFrame
-                _df = pd.DataFrame({key: pd.Series(value) for key, value in dict_files[k].items()})
+                _df = pd.DataFrame(
+                    {key: pd.Series(value) for key, value in dict_files[k].items()}
+                )
                 if len(_df) == 0:
                     for c in _df.columns:
                         _df[c] = [None]
@@ -2354,11 +2378,9 @@ class FileSys(DataSet):
         # set base folder
         self.folder_base = dict_setter[self.folder_base_field]
 
-
         # -------------- set data logic here -------------- #
         if load_data:
             self.load_data(file_data=self.file_data)
-
 
         # -------------- update other mutables -------------- #
         self.update()
@@ -2379,10 +2401,7 @@ class FileSys(DataSet):
         # -------------- implement loading logic -------------- #
 
         # -------------- call loading function -------------- #
-        self.data = pd.read_csv(
-            file_data,
-            sep=self.file_data_sep
-        )
+        self.data = pd.read_csv(file_data, sep=self.file_data_sep)
 
         # -------------- post-loading logic -------------- #
 
@@ -2406,12 +2425,16 @@ class FileSys(DataSet):
         # fill structure
         FileSys.fill(dict_struct=self.structure, folder=self.folder_main)
 
-    def backup(self, location_dir,  version_id="v-0-0",):  # todo docstring
+    def backup(
+        self,
+        location_dir,
+        version_id="v-0-0",
+    ):  # todo docstring
         dst_dir = os.path.join(location_dir, self.name + "_" + version_id)
         FileSys.archive(src_dir=self.folder_main, dst_dir=dst_dir)
         return None
 
-    def view(self, show=True): # todo implement
+    def view(self, show=True):  # todo implement
         """Get a basic visualization.
         Expected to overwrite superior methods.
 
@@ -2477,7 +2500,7 @@ class FileSys(DataSet):
     @staticmethod
     def archive(src_dir, dst_dir):
         # Create a zip archive from the directory
-        shutil.make_archive(dst_dir, 'zip', src_dir)
+        shutil.make_archive(dst_dir, "zip", src_dir)
         return None
 
     @staticmethod
@@ -2570,7 +2593,7 @@ class FileSys(DataSet):
         if len(list_files) != 0:
             for _f in list_files:
                 _full = os.path.basename(_f).split(".")[0]
-                _suffix = _full[len(src_prefix):]
+                _suffix = _full[len(src_prefix) :]
                 _dst = os.path.join(
                     dst_folder, dst_basename + _suffix + "." + src_extension
                 )
@@ -2872,7 +2895,6 @@ class _Note(MbaE):
 
         return markdown_dict
 
-
     @staticmethod
     def to_md(md_dict, output_dir, filename):
         """Convert a note dictionary to a Markdown file and save it to the specified directory.
@@ -2921,7 +2943,7 @@ class _Note(MbaE):
     @staticmethod
     def find_and_replace(note_file, old, new, line_n=None):
         # Load the Markdown file
-        with open(note_file, 'r', encoding="utf-8") as file:
+        with open(note_file, "r", encoding="utf-8") as file:
             lines = file.readlines()
 
         # Find and replace old by new strings
@@ -2934,9 +2956,8 @@ class _Note(MbaE):
                 lines[line_n] = lines[line_n].replace(old, new)
 
         # Overwrite the file
-        with open(note_file, 'w', encoding="utf-8") as file:
+        with open(note_file, "w", encoding="utf-8") as file:
             file.writelines(lines)
-
 
 
 if __name__ == "__main__":

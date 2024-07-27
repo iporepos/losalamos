@@ -496,7 +496,6 @@ class Ref(MbaE):
         self.file_note = dict_setter[self.file_note_field]
         self.file_doc = dict_setter.get(self.file_doc_field, None)
 
-
         # ... continues in downstream objects ... #
 
     def load_bib(self, order=0):
@@ -513,8 +512,10 @@ class Ref(MbaE):
         return None
 
     def load_note(self):
-        """
-        # todo docstring
+        """Loads a note and assigns it to the instance variable.
+
+        This method initializes a RefNote object with the instance's name and alias,
+        sets its file_note attribute, and then calls the load method on the RefNote object.
         """
         self.note = RefNote(name=self.name, alias=self.alias)
         self.note.file_note = self.file_note
@@ -544,7 +545,6 @@ class Ref(MbaE):
         # Name and Alias
         self.name = Ref.cite_intext(bib_dict=self.bib_dict, text_format="plain")
         self.alias = self.citation_key
-
 
     def save_bib(self, output_dir=None, filename=None):
         """Save bibliography to bib file (default to bib_file attribute).
@@ -580,8 +580,22 @@ class Ref(MbaE):
         related=None,
         references=None,
     ):
-        """
-        # todo docstring
+        """Converts the current reference to a note and saves it to a file.
+
+        :param output_dir: The directory where the note file will be saved.
+        :type output_dir: str
+        :param filename: The name of the note file to be created.
+        :type filename: str
+        :param comments: Optional comments to include in the note.
+        :type comments: str or None
+        :param tags: Optional tags associated with the note.
+        :type tags: list or None
+        :param related: Optional related references.
+        :type related: list or None
+        :param references: Optional references to include in the note.
+        :type references: list or None
+        :return: The path to the saved note file.
+        :rtype: str
         """
         from datetime import datetime
 
@@ -623,17 +637,13 @@ class Ref(MbaE):
         # citation parameter:
         n.metadata["citation_in"] = citation_in[:]
 
-
         # Note
-        nt_dict = RefNote.get_template(
-            kind="bib",
-            head_name=citation_in_md
-        )
+        nt_dict = RefNote.get_template(kind="bib", head_name=citation_in_md)
 
         if related:
             related_str = " ".join([f"[[{rel}]]" for rel in related])
         else:
-            related_str  =""
+            related_str = ""
 
         if "abstract" in n.metadata:
             if n.metadata["abstract"]:
@@ -653,7 +663,7 @@ class Ref(MbaE):
             "{{In-text citation}}": citation_in,
             "{{Full citation}}": citation_full_plain,
             "{{BibTeX}}": Ref.bib_to_str(bib_dict=self.bib_dict),
-            "{{references}}": "", # this is missing
+            "{{references}}": "",  # this is missing
         }
 
         for sec in nt_dict:
@@ -669,13 +679,23 @@ class Ref(MbaE):
 
         # export note to file
         output_file = "{}/{}.md".format(self.lib_folder, n.metadata["citation_key"])
-        n.to_file(
-            file_path=output_file
-        )
+        n.to_file(file_path=output_file)
         return output_file
 
-
     def add_to_lib(self, lib_folder, tags=None, related=None, comments=None):
+        """Adds the current item to the specified library folder.
+
+        :param lib_folder: The path to the library folder where the item will be added.
+        :type lib_folder: str
+        :param tags: Optional tags associated with the item.
+        :type tags: list or None
+        :param related: Optional related items.
+        :type related: list or None
+        :param comments: Optional comments about the item.
+        :type comments: str or None
+        :return: None
+        :rtype: None
+        """
         # update lib folder
         self.lib_folder = lib_folder
         self.standardize()
@@ -684,7 +704,7 @@ class Ref(MbaE):
         if self.file_doc:
             shutil.copy(
                 src=self.file_doc,
-                dst="{}/{}.pdf".format(self.lib_folder, self.bib_dict["citation_key"])
+                dst="{}/{}.pdf".format(self.lib_folder, self.bib_dict["citation_key"]),
             )
 
         # get note now
@@ -693,13 +713,18 @@ class Ref(MbaE):
             filename=self.bib_dict["citation_key"],
             tags=tags,
             related=related,
-            comments=comments
+            comments=comments,
         )
 
-
     def to_bib(self, output_dir, filename):
-        """
-        # todo docstring
+        """Generates a .bib file from the current item's data and saves it to the specified directory.
+
+        :param output_dir: The directory where the .bib file will be saved.
+        :type output_dir: str
+        :param filename: The name of the .bib file to be created.
+        :type filename: str
+        :return: The path to the saved .bib file.
+        :rtype: str
         """
         bibtex_content = f"@{self.bib_dict[self.type_field]}{{{self.bib_dict[self.citation_key_field]},\n"
         for key, value in self.bib_dict.items():
@@ -737,6 +762,13 @@ class Ref(MbaE):
 
     @staticmethod
     def bibstr_to_dict(bibtex_str):
+        """Converts a BibTeX string into a dictionary representation.
+
+        :param bibtex_str: The BibTeX string to convert.
+        :type bibtex_str: str
+        :return: A dictionary with the BibTeX entry's type, citation key, and fields.
+        :rtype: dict
+        """
         # Regular expression patterns
         entry_pattern = re.compile(r"@\w+\{")
         key_pattern = re.compile(r"@\w+\{(.+?),")
@@ -1118,7 +1150,18 @@ class Ref(MbaE):
 
     @staticmethod
     def bib_to_str(bib_dict, entry_field="entry_type", citation_field="citation_key"):
-        # todo docstring
+        """Converts a dictionary representation of a BibTeX entry into a string.
+
+        :param bib_dict: The dictionary containing the BibTeX entry data.
+        :type bib_dict: dict
+        :param entry_field: The key for the entry type in the dictionary.
+        :type entry_field: str
+        :param citation_field: The key for the citation key in the dictionary.
+        :type citation_field: str
+        :return: The BibTeX entry as a formatted string.
+        :rtype: str
+        """
+        #
         citation_key = bib_dict[citation_field]
         # list available fields
         bibtex_fields = [
@@ -1136,13 +1179,16 @@ class Ref(MbaE):
 
     @staticmethod
     def standard_author(bib_dict):
-        """Get the standard author names in a BibTeX bib_dict dictionary to "Last, First" format if necessary.
+        """Converts a dictionary representation of a BibTeX entry into a string.
 
-        :param bib_dict: dict
-            A dictionary containing bibliometric parameters from a reference.
-            Expected key is 'author'.
-        :return: str
-            The string with normalized author names.
+        :param bib_dict: The dictionary containing the BibTeX entry data.
+        :type bib_dict: dict
+        :param entry_field: The key for the entry type in the dictionary.
+        :type entry_field: str
+        :param citation_field: The key for the citation key in the dictionary.
+        :type citation_field: str
+        :return: The BibTeX entry as a formatted string.
+        :rtype: str
         """
 
         def normalize_author_name(author_name):
@@ -1237,6 +1283,15 @@ class Ref(MbaE):
 
     @staticmethod
     def query_xref(search_query, include_refs=True):
+        """Queries a cross-reference service and extracts BibTeX entries from the search results.
+
+        :param search_query: The query string to search for.
+        :type search_query: str
+        :param include_refs: Whether to include references in the search results.
+        :type include_refs: bool
+        :return: A list of dictionaries containing BibTeX entries.
+        :rtype: list
+        """
 
         def extract_bibtex_entry(data):
             # Handle authors
@@ -1362,6 +1417,21 @@ class Ref(MbaE):
 
     @staticmethod
     def add(lib_folder, file_bib, file_pdf=None, tags=None, related=None):
+        """Adds a reference to the specified library folder.
+
+        :param lib_folder: The path to the library folder where the reference will be added.
+        :type lib_folder: str
+        :param file_bib: The path to the BibTeX file.
+        :type file_bib: str
+        :param file_pdf: The path to the PDF file, if any.
+        :type file_pdf: str or None
+        :param tags: Optional tags associated with the reference.
+        :type tags: list or None
+        :param related: Optional related references.
+        :type related: list or None
+        :return: None
+        :rtype: None
+        """
         r = Ref()
         # set parameters
         r.file_bib = file_bib
@@ -1376,14 +1446,23 @@ class Ref(MbaE):
             else:
                 tags = new_tags[:]
         # run
-        r.add_to_lib(
-            lib_folder=lib_folder,
-            tags=tags,
-            related=related
-        )
+        r.add_to_lib(lib_folder=lib_folder, tags=tags, related=related)
 
     @staticmethod
     def add_bat(lib_folder, input_folder, tags=None, related=None):
+        """Adds multiple references from an input folder to the specified library folder.
+
+        :param lib_folder: The path to the library folder where the references will be added.
+        :type lib_folder: str
+        :param input_folder: The folder containing the BibTeX files to add.
+        :type input_folder: str
+        :param tags: Optional tags associated with the references.
+        :type tags: list or None
+        :param related: Optional related references.
+        :type related: list or None
+        :return: None
+        :rtype: None
+        """
         # get list of bib files
         ls_bib_files = glob.glob("{}/*.bib".format(input_folder))
 
@@ -1409,14 +1488,9 @@ class Ref(MbaE):
                 else:
                     tags = new_tags[:]
 
-            r.add_to_lib(
-                lib_folder=lib_folder,
-                tags=tags,
-                related=related
-            )
+            r.add_to_lib(lib_folder=lib_folder, tags=tags, related=related)
 
-
-
+        return None
 
 class RefNote(Note):
 
@@ -1425,6 +1499,11 @@ class RefNote(Note):
         # ---
 
     def standardize_metatada(self):
+        """Standardizes the metadata for the current reference.
+
+        :return: None
+        :rtype: None
+        """
         new_meta = {}
         if self.metadata["entry_type"] == "article":
             # pass
@@ -1432,13 +1511,7 @@ class RefNote(Note):
                 new_meta[e] = self.metadata.get(e, None)
 
             # handle text fields
-            ls_fields = [
-                "title",
-                "abstract",
-                "issn",
-                "journal",
-                "file"
-            ]
+            ls_fields = ["title", "abstract", "issn", "journal", "file"]
             for e in ls_fields:
                 if new_meta[e]:
                     new_meta[e] = '"{}"'.format(new_meta[e])
@@ -1447,6 +1520,15 @@ class RefNote(Note):
 
     @staticmethod
     def get_template(kind="bib", head_name=None):
+        """"Returns a template dictionary for a given kind of entry.
+
+        :param kind: The type of template to retrieve (default is "bib").
+        :type kind: str
+        :param head_name: The header name to use in the template (default is "Header").
+        :type head_name: str
+        :return: A dictionary containing the template structure.
+        :rtype: dict
+        """
         if head_name is None:
             head_name = "Header"
         templates = {
@@ -1461,8 +1543,7 @@ class RefNote(Note):
                         "related: {{related}}\n",
                         "file: [[{{file_link}}]]\n",
                         "## Abstract\n",
-                        " > {{abstract}}\n"
-                        "\n---",
+                        " > {{abstract}}\n" "\n---",
                     ],
                 },
                 "Comments": {
@@ -1509,7 +1590,7 @@ class RefNote(Note):
         :return:
         :rtype:
         """
-        with open(file_path, 'r', encoding="utf-8") as file:
+        with open(file_path, "r", encoding="utf-8") as file:
             lines = file.readlines()
 
         bibtex_dict = {}
@@ -1519,24 +1600,24 @@ class RefNote(Note):
         bibtex_lines = []
 
         for line in lines:
-            if line.strip().startswith('@'):
+            if line.strip().startswith("@"):
                 in_bibtex = True
-                entry_type, rest = line.strip()[1:].split('{', 1)
-                citation_key, rest = rest.split(',', 1)
+                entry_type, rest = line.strip()[1:].split("{", 1)
+                citation_key, rest = rest.split(",", 1)
                 bibtex_lines.append(rest.strip())
             elif in_bibtex:
                 bibtex_lines.append(line.strip())
-                if line.strip().endswith('}}'):
+                if line.strip().endswith("}}"):
                     break
 
         if not in_bibtex:
             return None
 
-        fields_raw = ' '.join(bibtex_lines).rstrip('}}').strip()
-        fields_raw = re.sub(r',\s*}', '}', fields_raw)
-        fields_raw += ','
+        fields_raw = " ".join(bibtex_lines).rstrip("}}").strip()
+        fields_raw = re.sub(r",\s*}", "}", fields_raw)
+        fields_raw += ","
 
-        fields_pattern = re.compile(r'(\w+)\s*=\s*\{(.*?)\},', re.DOTALL)
+        fields_pattern = re.compile(r"(\w+)\s*=\s*\{(.*?)\},", re.DOTALL)
         fields = fields_pattern.findall(fields_raw)
 
         bibtex_dict = {
@@ -1552,21 +1633,36 @@ class RefNote(Note):
 
     @staticmethod
     def get_intext_citation(file_path):
-        with open(file_path, 'r', encoding="utf-8") as file:
+        """Extracts the in-text citation from a given file.
+
+        :param file_path: The path to the file containing the in-text citation.
+        :type file_path: str
+        :return: The extracted in-text citation.
+        :rtype: str
+        """
+        with open(file_path, "r", encoding="utf-8") as file:
             content = file.read()
 
         # Regex to find in-text citations and the following code blocks
-        pattern = re.compile(r'In-text citation:\n```\n(.*?)\n```', re.DOTALL)
+        pattern = re.compile(r"In-text citation:\n```\n(.*?)\n```", re.DOTALL)
         matches = pattern.findall(content)
 
         return matches[0]
 
+
 class RefColl(Collection):  # todo docstring
 
-    def __init__(self, name="MyRefCollection", alias="myRefCol"):  # todo docstring
+    def __init__(self, name="MyRefCollection", alias="myRefCol"):
         super().__init__(base_object=Ref, name=name, alias=alias)
 
-    def load(self, file_path):  # todo docstring
+    def load(self, file_path):
+        """Loads references from a BibTeX file and appends them to the instance.
+
+        :param file_path: The path to the BibTeX file.
+        :type file_path: str
+        :return: None
+        :rtype: None
+        """
         list_refs = Ref.parse_bibtex(file_path)
         for i in range(len(list_refs)):
             bib_dict = list_refs[i]
@@ -1581,8 +1677,17 @@ class RefColl(Collection):  # todo docstring
             self.append(new_object=rf)
 
     def load_library(self, lib_folder, by="notes"):
+        """"Loads references from a library folder and appends them to the instance.
+
+        :param lib_folder: The path to the library folder.
+        :type lib_folder: str
+        :param by: The method to load references by (default is "notes").
+        :type by: str
+        :return: None
+        :rtype: None
+        """
         if by == "notes":
-            ls_files = glob.glob(f'{lib_folder}/*.md')
+            ls_files = glob.glob(f"{lib_folder}/*.md")
             # loop in files
             for f in ls_files:
                 # Extract BibTeX entry into a dictionary
@@ -1593,12 +1698,14 @@ class RefColl(Collection):  # todo docstring
                     r.year_field: bibtex_dict["year"],
                     r.type_field: bibtex_dict["entry_type"],
                     r.citation_key_field: bibtex_dict["citation_key"],
-                    r.title_field: bibtex_dict["title"]
+                    r.title_field: bibtex_dict["title"],
                 }
                 r.set(dict_setter=setter)
                 r.bib_dict = bibtex_dict.copy()
                 r.file_note = f
-                pdf = os.path.join(os.path.dirname(f), os.path.basename(f)[:-3] + ".pdf")
+                pdf = os.path.join(
+                    os.path.dirname(f), os.path.basename(f)[:-3] + ".pdf"
+                )
                 if os.path.isfile(pdf):
                     r.file_doc = pdf
                 r.load_note()
