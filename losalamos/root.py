@@ -1013,7 +1013,7 @@ class Note(MbaE):
     def save(self):
         self.to_file(file_path=self.file_note)
 
-    def to_file(self, file_path):
+    def to_file(self, file_path, cleanup=True):
         '''Export Note to markdown
 
         :param file_path: path to file
@@ -1032,6 +1032,31 @@ class Note(MbaE):
         ls_all = [line + "\n" for line in ls_metadata]
         with open(file_path, 'w', encoding='utf-8') as file:
             file.writelines(ls_all)
+
+        # clean up excessive lines
+        if cleanup:
+            Note.remove_excessive_blank_lines(file_path)
+
+
+    @staticmethod
+    def remove_excessive_blank_lines(file_path):
+        with open(file_path, 'r', encoding='utf-8') as file:
+            lines = file.readlines()
+
+        cleaned_lines = []
+        previous_line_blank = False
+
+        for line in lines:
+            if line.strip() == '':
+                if not previous_line_blank:
+                    cleaned_lines.append(line)
+                    previous_line_blank = True
+            else:
+                cleaned_lines.append(line)
+                previous_line_blank = False
+
+        with open(file_path, 'w', encoding='utf-8') as file:
+            file.writelines(cleaned_lines)
 
     @staticmethod
     def parse_metadata(note_file):

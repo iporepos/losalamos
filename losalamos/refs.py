@@ -620,6 +620,10 @@ class Ref(MbaE):
         citation_full_plain = Ref.cite_full(self.bib_dict, text_format="plain")
         title = f"**{self.bib_dict[self.title_field]}** by {citation_in}"
 
+        # citation parameter:
+        n.metadata["citation_in"] = citation_in[:]
+
+
         # Note
         nt_dict = RefNote.get_template(
             kind="bib",
@@ -631,13 +635,21 @@ class Ref(MbaE):
         else:
             related_str  =""
 
+        if "abstract" in n.metadata:
+            if n.metadata["abstract"]:
+                abs_str = n.metadata["abstract"]
+            else:
+                abs_str = ""
+        else:
+            abs_str = ""
+
             # edit contents
         replacements = {
             "{{LIBRARY ITEM}}": self.bib_dict[self.type_field].upper(),
             "{{Title}}": f"**{self.bib_dict[self.title_field]}** by {citation_in_md}",
             "{{related}}": related_str,
             "{{file_link}}": n.metadata["citation_key"] + ".pdf",
-            "{{abstract}}": n.metadata["abstract"],
+            "{{abstract}}": abs_str,
             "{{In-text citation}}": citation_in,
             "{{Full citation}}": citation_full_plain,
             "{{BibTeX}}": Ref.bib_to_str(bib_dict=self.bib_dict),
@@ -1412,15 +1424,36 @@ class RefNote(Note):
         super().__init__(name=name, alias=alias)
         # ---
 
+    def standardize_metatada(self):
+        new_meta = {}
+        if self.metadata["entry_type"] == "article":
+            # pass
+            for e in ls_meta_article:
+                new_meta[e] = self.metadata.get(e, None)
+
+            # handle text fields
+            ls_fields = [
+                "title",
+                "abstract",
+                "issn",
+                "journal",
+                "file"
+            ]
+            for e in ls_fields:
+                if new_meta[e]:
+                    new_meta[e] = '"{}"'.format(new_meta[e])
+
+            self.metadata = new_meta.copy()
+
     @staticmethod
     def get_template(kind="bib", head_name=None):
         if head_name is None:
             head_name = "Header"
         templates = {
             "bib": {
-                f"# {head_name}": {
+                head_name: {
                     "Parent Section": None,
-                    "Level": 0,
+                    "Level": 1,
                     "Content": [
                         "{{LIBRARY ITEM}}\n",
                         "{{Title}}\n",
@@ -1432,17 +1465,17 @@ class RefNote(Note):
                         "\n---",
                     ],
                 },
-                "# Comments": {
+                "Comments": {
                     "Parent Section": None,
-                    "Level": 0,
+                    "Level": 1,
                     "Content": [
                         "*Start typing here*\n\n",
                         "\n---",
                     ],
                 },
-                "# Bibliographic information": {
+                "Bibliographic information": {
                     "Parent Section": None,
-                    "Level": 0,
+                    "Level": 1,
                     "Content": [
                         "## Citation",
                         "In-text citation:",
@@ -1465,27 +1498,6 @@ class RefNote(Note):
         }
 
         return templates[kind]
-
-    def standardize_metatada(self):
-        new_meta = {}
-        if self.metadata["entry_type"] == "article":
-            # pass
-            for e in ls_meta_article:
-                new_meta[e] = self.metadata.get(e, None)
-
-            # handle text fields
-            ls_fields = [
-                "title",
-                "abstract",
-                "issn",
-                "journal"
-            ]
-            for e in ls_fields:
-                if new_meta[e]:
-                    new_meta[e] = '"{}"'.format(new_meta[e])
-
-            self.metadata = new_meta.copy()
-
 
     @staticmethod
     def get_bib(file_path):
@@ -1538,6 +1550,16 @@ class RefNote(Note):
 
         return bibtex_dict
 
+    @staticmethod
+    def get_intext_citation(file_path):
+        with open(file_path, 'r', encoding="utf-8") as file:
+            content = file.read()
+
+        # Regex to find in-text citations and the following code blocks
+        pattern = re.compile(r'In-text citation:\n```\n(.*?)\n```', re.DOTALL)
+        matches = pattern.findall(content)
+
+        return matches[0]
 
 class RefColl(Collection):  # todo docstring
 
