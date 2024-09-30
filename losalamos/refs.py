@@ -574,11 +574,12 @@ class Ref(MbaE):
     def to_note(
         self,
         output_dir,
-        filename,
+        filename=None,
         comments=None,
         tags=None,
         related=None,
         references=None,
+        pdf_name=None
     ):
         """Converts the current reference to a note and saves it to a file.
 
@@ -594,6 +595,8 @@ class Ref(MbaE):
         :type related: list or None
         :param references: Optional references to include in the note.
         :type references: list or None
+        :param pdf_name: Optional PDF file name
+        :type pdf_name: str or None
         :return: The path to the saved note file.
         :rtype: str
         """
@@ -623,8 +626,12 @@ class Ref(MbaE):
         # compute timestamp
         _now = datetime.now()
         n.metadata["timestamp"] = _now.strftime("%Y-%m-%d %H:%M")
+
         # set file
-        n.metadata["file"] = '"[[{}.pdf]]"'.format(n.metadata["citation_key"])
+        if pdf_name is None:
+            # use citation key
+            pdf_name = n.metadata["citation_key"]
+        n.metadata["file"] = '"[[{}.pdf]]"'.format(pdf_name)
 
         # HANDLE CONTENTs
 
@@ -658,7 +665,7 @@ class Ref(MbaE):
             "{{LIBRARY ITEM}}": self.bib_dict[self.type_field].upper(),
             "{{Title}}": f"**{self.bib_dict[self.title_field]}** by {citation_in_md}",
             "{{related}}": related_str,
-            "{{file_link}}": n.metadata["citation_key"] + ".pdf",
+            "{{file_link}}": pdf_name + ".pdf",
             "{{abstract}}": abs_str,
             "{{In-text citation}}": citation_in,
             "{{Full citation}}": citation_full_plain,
@@ -678,11 +685,14 @@ class Ref(MbaE):
         n.data = nt_dict.copy()
 
         # export note to file
-        output_file = "{}/{}.md".format(self.lib_folder, n.metadata["citation_key"])
+        if filename is None:
+            filename = n.metadata["citation_key"]
+
+        output_file = "{}/{}.md".format(output_dir, filename)
         n.to_file(file_path=output_file)
         return output_file
 
-    def add_to_lib(self, lib_folder, tags=None, related=None, comments=None):
+    def add_to_lib(self, lib_folder, tags=None, related=None, comments=None, pdf_name=None, note_name=None):
         """Adds the current item to the specified library folder.
 
         :param lib_folder: The path to the library folder where the item will be added.
@@ -693,6 +703,10 @@ class Ref(MbaE):
         :type related: list or None
         :param comments: Optional comments about the item.
         :type comments: str or None
+        :param pdf_name: Optional PDF file name
+        :type pdf_name: str or None
+        :param note_name: Optional note file name
+        :type note_name: str or None
         :return: None
         :rtype: None
         """
@@ -702,18 +716,24 @@ class Ref(MbaE):
 
         # export pdf
         if self.file_doc:
+            if pdf_name is None:
+                pdf_name = self.bib_dict["citation_key"]
             shutil.copy(
                 src=self.file_doc,
-                dst="{}/{}.pdf".format(self.lib_folder, self.bib_dict["citation_key"]),
+                dst="{}/{}.pdf".format(self.lib_folder, pdf_name),
             )
+
+        if note_name is None:
+            note_name = self.bib_dict["citation_key"]
 
         # get note now
         self.to_note(
             output_dir=self.lib_folder,
-            filename=self.bib_dict["citation_key"],
+            filename=note_name,
             tags=tags,
             related=related,
             comments=comments,
+            pdf_name=pdf_name
         )
 
     def to_bib(self, output_dir, filename):
@@ -1477,7 +1497,9 @@ class Ref(MbaE):
         for b in ls_bibs:
             r = Ref()
             r.bib_dict = b.copy()
+            # expected pdfs with citation key names
             expected_pdf = "{}/{}.pdf".format(input_folder, r.bib_dict["citation_key"])
+
             if os.path.isfile(expected_pdf):
                 r.file_doc = expected_pdf
 
@@ -1488,7 +1510,11 @@ class Ref(MbaE):
                 else:
                     tags = new_tags[:]
 
-            r.add_to_lib(lib_folder=lib_folder, tags=tags, related=related)
+            r.add_to_lib(
+                lib_folder=lib_folder,
+                tags=tags,
+                related=related
+            )
 
         return None
 
