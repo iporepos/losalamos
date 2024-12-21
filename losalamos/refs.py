@@ -53,25 +53,6 @@ import tkinter as tk
 from tkinter import filedialog, messagebox
 
 
-ls_meta_article = [
-    "doi",
-    "entry_type",
-    "citation_key",
-    "author",
-    "year",
-    "title",
-    "journal",
-    "volume",
-    "number",
-    "pages",
-    "issn",
-    "url",
-    "abstract",
-    "tags",
-    "timestamp",
-    "file",
-]
-
 
 class RefForm(tk.Tk):
     # todo evaluate move or rebase
@@ -576,7 +557,7 @@ class Ref(MbaE):
         output_dir,
         note_template,
         filename=None,
-        comments=None,
+        body=None,
         tags=None,
         related=None,
         references=None,
@@ -588,8 +569,8 @@ class Ref(MbaE):
         :type output_dir: str
         :param filename: The name of the note file to be created.
         :type filename: str
-        :param comments: Optional comments to include in the note.
-        :type comments: str or None
+        :param body: Optional body of the note to include in the note.
+        :type body: list or None
         :param tags: Optional tags associated with the note.
         :type tags: list or None
         :param related: Optional related references.
@@ -609,7 +590,9 @@ class Ref(MbaE):
 
         # load template data
         n.load()
-
+        # set incoming data for the body
+        if body:
+            n.data["Body"] = body[:]
         # update metadata with bib
         n.metadata.update(self.bib_dict.copy())
         n._standardize_metatada()
@@ -622,6 +605,10 @@ class Ref(MbaE):
         _now = datetime.now()
         n.metadata["timestamp"] = _now.strftime("%Y-%m-%d %H:%M")
 
+        # set citation in
+        citation_in = Ref.cite_intext(bib_dict=self.bib_dict.copy(), text_format="plain")
+        n.metadata["citation_in"] = citation_in
+
         # set PDF file field
         if pdf_name is None:
             # use citation key
@@ -630,6 +617,7 @@ class Ref(MbaE):
 
         # handle data
         n.update_data(related_list=related)
+
 
         output_file = "{}/{}.md".format(output_dir, filename)
         n.file_note = output_file
@@ -653,7 +641,7 @@ class Ref(MbaE):
         :type output_dir: str
         :param filename: The name of the note file to be created.
         :type filename: str
-        :param comments: Optional comments to include in the note.
+        :param comments: Optional body to include in the note.
         :type comments: str or None
         :param tags: Optional tags associated with the note.
         :type tags: list or None
@@ -767,7 +755,7 @@ class Ref(MbaE):
         :type tags: list or None
         :param related: Optional related items.
         :type related: list or None
-        :param comments: Optional comments about the item.
+        :param comments: Optional body about the item.
         :type comments: str or None
         :param pdf_name: Optional PDF file name
         :type pdf_name: str or None
@@ -783,14 +771,20 @@ class Ref(MbaE):
         # export pdf
         if self.file_doc:
             if pdf_name is None:
-                pdf_name = self.bib_dict["citation_key"]
+                if self.bib_dict["entry_type"] == "article":
+                    pdf_name = self.bib_dict["citation_key"]
+                elif self.bib_dict["entry_type"] == "book":
+                    pdf_name = self.bib_dict["title"]
             shutil.copy(
                 src=self.file_doc,
                 dst="{}/{}.pdf".format(self.lib_folder, pdf_name),
             )
 
         if note_name is None:
-            note_name = self.bib_dict["citation_key"]
+            if self.bib_dict["entry_type"] == "article":
+                note_name = self.bib_dict["citation_key"]
+            elif self.bib_dict["entry_type"] == "book":
+                note_name = self.bib_dict["title"]
 
         # get note now
         o = self.to_note(
@@ -799,7 +793,7 @@ class Ref(MbaE):
             filename=note_name,
             tags=tags,
             related=related,
-            comments=comments,
+            body=comments,
             pdf_name=pdf_name
         )
         print(f"--- Added: {o}")
@@ -823,6 +817,7 @@ class Ref(MbaE):
         file_path = os.path.join(output_dir, f"{filename}.bib")
         with open(file_path, "w", encoding="utf-8") as bib_file:
             bib_file.write(bibtex_content)
+        print(file_path)
         return file_path
 
     @staticmethod
@@ -898,7 +893,7 @@ class Ref(MbaE):
             for line in file:
                 line = line.strip()
 
-                # Ignore empty lines and comments
+                # Ignore empty lines and body
                 if not line or line.startswith("%"):
                     continue
 
@@ -1575,12 +1570,17 @@ class Ref(MbaE):
             # parse the list of refs
             lst_lcl_bibs = Ref.parse_bibtex(f)
             ls_bibs = ls_bibs + lst_lcl_bibs[:]
+            # delete file
+            os.remove(f)
 
         for b in ls_bibs:
             r = Ref()
             r.bib_dict = b.copy()
             # expected pdfs with citation key names
-            expected_pdf = "{}/{}.pdf".format(input_folder, r.bib_dict["citation_key"])
+            if r.bib_dict["entry_type"] == "article":
+                expected_pdf = "{}/{}.pdf".format(input_folder, r.bib_dict["citation_key"])
+            if r.bib_dict["entry_type"] == "book":
+                expected_pdf = "{}/{}.pdf".format(input_folder, r.bib_dict["title"])
 
             if os.path.isfile(expected_pdf):
                 r.file_doc = expected_pdf
@@ -1592,12 +1592,21 @@ class Ref(MbaE):
                 else:
                     tags = new_tags[:]
 
+            if r.bib_dict["entry_type"] == "book":
+                new_tags = ["book"]
+                if tags:
+                    tags = list(set(tags + new_tags))
+                else:
+                    tags = new_tags[:]
+
             r.add_to_lib(
                 lib_folder=lib_folder,
                 note_template=note_template,
                 tags=tags,
                 related=related
             )
+            if os.path.isfile(expected_pdf):
+                os.remove(expected_pdf)
 
         return None
 
@@ -1606,8 +1615,48 @@ class RefNote(Note):
     def __init__(self, name="MyRefNote", alias="RNt1"):
         super().__init__(name=name, alias=alias)
         # ---
+
+        # TEXT FIELD TO AVOID CORRUPTED HEADING BY : OR "
         self.text_fields = {
-            "article": ["title", "abstract", "issn", "journal", "file"]
+            "article": ["title", "abstract", "issn", "journal", "file"],
+            "book": ["title", "isbn", "file", "abstract"]
+        }
+
+        self.metadata_entries = {
+            "article": [
+                "doi",
+                "entry_type",
+                "citation_key",
+                "author",
+                "year",
+                "title",
+                "journal",
+                "volume",
+                "number",
+                "pages",
+                "issn",
+                "url",
+                "abstract",
+                "tags",
+                "timestamp",
+                "file",
+                "citation_in"
+            ],
+            "book": [
+                "isbn",
+                "entry_type",
+                "citation_key",
+                "author",
+                "year",
+                "title",
+                "publisher",
+                "url",
+                "abstract",
+                "tags",
+                "timestamp",
+                "file",
+                "citation_in"
+            ]
         }
 
     def load_metadata(self):
@@ -1621,18 +1670,19 @@ class RefNote(Note):
         :rtype: None
         """
         new_meta = {}
+        # pass
+        for e in self.metadata_entries[self.metadata["entry_type"]]:
+            new_meta[e] = self.metadata.get(e, None)
+
+        # handle text fields
+        ls_fields = self.text_fields[self.metadata["entry_type"]][:]
+        for e in ls_fields:
+            if new_meta[e]:
+                new_meta[e] = '"{}"'.format(new_meta[e])
+
+        # special procedures
         if self.metadata["entry_type"] == "article":
-            # pass
-            for e in ls_meta_article:
-                new_meta[e] = self.metadata.get(e, None)
-
-            # handle text fields
-            ls_fields = self.text_fields["article"][:]
-            for e in ls_fields:
-                if new_meta[e]:
-                    new_meta[e] = '"{}"'.format(new_meta[e])
-
-            # hand doi url
+            # handle doi url
             if self.metadata["doi"]:
                 doi = self.metadata["doi"]
                 if doi.startswith("https://doi.org/"):
@@ -1640,7 +1690,8 @@ class RefNote(Note):
                 else:
                     new_meta["doi"] = "https://doi.org/" + doi
 
-            self.metadata = new_meta.copy()
+        self.metadata = new_meta.copy()
+
 
     def update_data(self, related_list=None):
         """Updates the data structure with the head, body, and tail sections.
@@ -1675,6 +1726,24 @@ class RefNote(Note):
                 "file: [[{}.pdf]]".format(self.metadata["citation_key"]), "",
                 "> [!Info]- Abstract", "> {}".format(abs_str)
             ]
+
+        if entry_type == "book":
+            bib_dict = self.metadata.copy()
+            citation_in = Ref.cite_intext(bib_dict=bib_dict, text_format="md")
+            title_str = self.metadata["title"][1:-1]
+            if self.metadata["abstract"]:
+                abs_str = self.metadata["abstract"][1:-1]
+            else:
+                abs_str = ""
+            self.data["Head"] = [
+                "", f"# {title_str}", "",
+                "{}".format(self.metadata["entry_type"]).upper(), "",
+                "**{}**".format(self.metadata["title"][1:-1]), "",
+                "by {}".format(citation_in), "",
+                "file: [[{}.pdf]]".format(title_str), "",
+                "> [!Info]- Abstract", "> {}".format(abs_str)
+            ]
+
         return None
 
 
@@ -1731,7 +1800,7 @@ class RefNote(Note):
         :return: None
         """
         entry_type = self.metadata["entry_type"]
-        if entry_type == "article":
+        if entry_type == "article" or entry_type == "book":
             bib_dict = self.metadata.copy()
             citation_in = Ref.cite_intext(bib_dict=bib_dict, text_format="plain")
             citation_fu = Ref.cite_full(
@@ -1819,7 +1888,7 @@ class RefNote(Note):
 
 
     def get_bib_dict(self):
-        keys_to_remove = ['tags', 'timestamp', 'file']
+        keys_to_remove = ['tags', 'timestamp', 'file', 'citation_in']
         new_dict = {k: v for k, v in self.metadata.items() if k not in keys_to_remove}
         # Using dictionary comprehension
         new_dict = {key: (value if value is not None else "") for key, value in new_dict.items()}
@@ -1827,14 +1896,12 @@ class RefNote(Note):
         for k in lst_text_fields:
             if k not in keys_to_remove:
                 new_dict[k] = new_dict[k][1:-1]
-
-
         return new_dict
 
 
     @staticmethod
     def get_bib(file_path):
-        """Get a bib dictionaty from a Ref Note file.
+        """Get a bib dictionaty from the content of a RefNote file.
         The BibTex snippet is expected to exist in the note content
 
         :param file_path:

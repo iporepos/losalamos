@@ -44,6 +44,27 @@ def add_papers(src_folder, lib_folder, template):
         print("OK.")
     return None
 
+
+def add_books(src_folder, lib_folder, template):
+    lst_bibs = glob.glob(f"{src_folder}/*.bib")
+    if len(lst_bibs) == 0:
+        pass
+    else:
+        lst_related = get_relatead(src_folder=src_folder)
+        lst_tags = get_tags(src_folder=src_folder)
+        print("batching new refs...")
+        # Add batch
+        Ref.add_bat(
+            lib_folder=lib_folder,
+            input_folder=src_folder,
+            note_template=template,
+            tags=lst_tags,
+            related=lst_related
+        )
+        print("OK.")
+    return None
+
+
 def main(src_folder, lib_folder, template):
     lst_dirs = [
         d for d in os.listdir(src_folder)
@@ -52,7 +73,7 @@ def main(src_folder, lib_folder, template):
     for d in lst_dirs:
         add_papers(
             src_folder=f"{src_folder}/{d}",
-            lib_folder=lib_folder,
+            lib_folder=f"{lib_folder}/{d}",
             template=template,
         )
     return None
@@ -65,13 +86,13 @@ if __name__ == '__main__':
         '--src_folder',
         type=str,
         required=True,
-        help="Path to the source folder containing papers."
+        help="Path to the source folder containing books."
     )
     parser.add_argument(
         '--lib_folder',
         type=str,
         required=True,
-        help="Path to the library folder where papers will be added."
+        help="Path to the library folder where books will be added."
     )
     parser.add_argument(
         '--template',
