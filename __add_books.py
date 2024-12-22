@@ -25,27 +25,7 @@ def get_tags(src_folder):
         ls_tags = ls_tags + lst_2
     return ls_tags
 
-def add_papers(src_folder, lib_folder, template):
-    lst_bibs = glob.glob(f"{src_folder}/*.bib")
-    if len(lst_bibs) == 0:
-        pass
-    else:
-        lst_related = get_relatead(src_folder=src_folder)
-        lst_tags = get_tags(src_folder=src_folder)
-        print("batching new refs...")
-        # Add batch
-        Ref.add_bat(
-            lib_folder=lib_folder,
-            input_folder=src_folder,
-            note_template=template,
-            tags=lst_tags,
-            related=lst_related
-        )
-        print("OK.")
-    return None
-
-
-def add_books(src_folder, lib_folder, template):
+def add(src_folder, lib_folder, template):
     lst_bibs = glob.glob(f"{src_folder}/*.bib")
     if len(lst_bibs) == 0:
         pass
@@ -71,7 +51,7 @@ def main(src_folder, lib_folder, template):
         if os.path.isdir(os.path.join(src_folder, d)) and not d.startswith("_")
     ]
     for d in lst_dirs:
-        add_papers(
+        add(
             src_folder=f"{src_folder}/{d}",
             lib_folder=f"{lib_folder}/{d}",
             template=template,

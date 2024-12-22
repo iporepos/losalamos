@@ -587,7 +587,6 @@ class Ref(MbaE):
         # get note
         n = RefNote()
         n.file_note = note_template
-
         # load template data
         n.load()
         # set incoming data for the body
@@ -617,7 +616,6 @@ class Ref(MbaE):
 
         # handle data
         n.update_data(related_list=related)
-
 
         output_file = "{}/{}.md".format(output_dir, filename)
         n.file_note = output_file
@@ -773,7 +771,7 @@ class Ref(MbaE):
             if pdf_name is None:
                 if self.bib_dict["entry_type"] == "article":
                     pdf_name = self.bib_dict["citation_key"]
-                elif self.bib_dict["entry_type"] == "book":
+                else:
                     pdf_name = self.bib_dict["title"]
             shutil.copy(
                 src=self.file_doc,
@@ -783,7 +781,7 @@ class Ref(MbaE):
         if note_name is None:
             if self.bib_dict["entry_type"] == "article":
                 note_name = self.bib_dict["citation_key"]
-            elif self.bib_dict["entry_type"] == "book":
+            else:
                 note_name = self.bib_dict["title"]
 
         # get note now
@@ -944,8 +942,8 @@ class Ref(MbaE):
         :return: str
             The formatted in-text citation string.
         """
-        # Normalize authors first
-        bib_dict["author"] = Ref.standard_author(bib_dict)
+        # Assume it is normalized
+        #bib_dict["author"] = Ref.standard_author(bib_dict)
 
         # Using dictionary comprehension
         bib_dict = {key: (value if value is not None else "") for key, value in bib_dict.items()}
@@ -1047,6 +1045,7 @@ class Ref(MbaE):
         address = bib_dict.get("address", "").strip()
         school = bib_dict.get("school", "").strip()
         institution = bib_dict.get("institution", "").strip()
+        number = bib_dict.get("number", "").strip()
         note = bib_dict.get("note", "").strip()
 
         # Formatting authors for different styles
@@ -1168,17 +1167,17 @@ class Ref(MbaE):
                 citation = f"{formatted_authors} ({year}). {title} (Unpublished {entry_type.replace('thesis', 'thesis')}). {school}."
         elif entry_type == "techreport":
             if style == "apa":
-                citation = f"{formatted_authors} ({year}). {title} (Technical Report No. {number}). {institution}."
+                citation = f"{formatted_authors} ({year}). {title} ({number}). {institution}. {address}."
             elif style == "mla":
-                citation = f"{formatted_authors}. {title}. {institution}, {year}."
+                citation = f"{formatted_authors}. {title}. {institution}, {year}. {address}."
             elif style == "chicago":
-                citation = f"{formatted_authors}. {title}. {institution} Technical Report no. {number}, {year}."
+                citation = f"{formatted_authors}. {title}. {institution} {number}, {year}.  {address}."
             elif style == "harvard":
-                citation = f"{formatted_authors} ({year}) {title}, {institution}, Technical Report no. {number}."
+                citation = f"{formatted_authors} ({year}) {title}, {institution}, {number}.  {address}."
             elif style == "vancouver":
-                citation = f"{formatted_authors}. {title}. {institution} Technical Report no. {number}; {year}."
+                citation = f"{formatted_authors}. {title}. {institution} ({number}); {address}, {year}."
             elif style == "abnt":
-                citation = f"{formatted_authors}. {title}. {institution}, {year}."
+                citation = f"{formatted_authors}. {title}. {institution}. {address}, {year}."
             else:
                 citation = f"{formatted_authors} ({year}). {title} (Technical Report No. {number}). {institution}."
         elif entry_type == "manual":
@@ -1276,15 +1275,11 @@ class Ref(MbaE):
 
     @staticmethod
     def standard_author(bib_dict):
-        """Converts a dictionary representation of a BibTeX entry into a string.
+        """Formats and standardizes the author names in a BibTeX entry.
 
-        :param bib_dict: The dictionary containing the BibTeX entry data.
+        :param bib_dict: The dictionary containing the BibTeX entry data, expected to have an 'author' field.
         :type bib_dict: dict
-        :param entry_field: The key for the entry type in the dictionary.
-        :type entry_field: str
-        :param citation_field: The key for the citation key in the dictionary.
-        :type citation_field: str
-        :return: The BibTeX entry as a formatted string.
+        :return: A formatted string of standardized author names.
         :rtype: str
         """
 
@@ -1300,12 +1295,17 @@ class Ref(MbaE):
                 else:
                     return f"{parts[-1]}, {' '.join(parts[:-1])}"
 
+        standard_authors = ""
+
         if "author" in bib_dict:
-            author_list = [
-                normalize_author_name(a.strip())
-                for a in bib_dict["author"].split(" and ")
-            ]
-            standard_authors = " and ".join(author_list)
+            if "," in bib_dict["author"] or " and " in bib_dict["author"]:
+                author_list = [
+                    normalize_author_name(a.strip())
+                    for a in bib_dict["author"].split(" and ")
+                ]
+                standard_authors = " and ".join(author_list)
+            else:
+                standard_authors = bib_dict["author"]
 
         return standard_authors
 
@@ -1332,9 +1332,15 @@ class Ref(MbaE):
             # Return the first available name
             return base_name + suffix
 
-        author = Ref.standard_author(bib_dict=bib_dict)
-        first_author = author.split(" and ")[0].strip()
-        first_name = first_author.split(",")[0].strip().capitalize()
+        author = bib_dict["author"]
+
+        # human authors
+        if " and " in author:
+            first_author = author.split(" and ")[0].strip()
+            first_name = first_author.split(",")[0].strip().capitalize()
+        else:
+            first_name = author[:].replace(" ", "-")
+
         # by default set suffix as 'a'
         suf = "a"
         year = bib_dict["year"]
@@ -1546,7 +1552,7 @@ class Ref(MbaE):
         r.add_to_lib(lib_folder=lib_folder, tags=tags, related=related)
 
     @staticmethod
-    def add_bat(lib_folder, input_folder, note_template, tags=None, related=None):
+    def add_bat(lib_folder, input_folder, note_template, tags=None, related=None, clean=True):
         """Adds multiple references from an input folder to the specified library folder.
 
         :param lib_folder: The path to the library folder where the references will be added.
@@ -1571,17 +1577,20 @@ class Ref(MbaE):
             lst_lcl_bibs = Ref.parse_bibtex(f)
             ls_bibs = ls_bibs + lst_lcl_bibs[:]
             # delete file
-            os.remove(f)
+            if clean:
+                os.remove(f)
 
         for b in ls_bibs:
+            # Create Ref object from bib tex
             r = Ref()
             r.bib_dict = b.copy()
+
             # expected pdfs with citation key names
             if r.bib_dict["entry_type"] == "article":
                 expected_pdf = "{}/{}.pdf".format(input_folder, r.bib_dict["citation_key"])
-            if r.bib_dict["entry_type"] == "book":
+            else:
                 expected_pdf = "{}/{}.pdf".format(input_folder, r.bib_dict["title"])
-
+            print(expected_pdf)
             if os.path.isfile(expected_pdf):
                 r.file_doc = expected_pdf
 
@@ -1599,14 +1608,22 @@ class Ref(MbaE):
                 else:
                     tags = new_tags[:]
 
+            if r.bib_dict["entry_type"] == "techreport":
+                new_tags = ["techreport"]
+                if tags:
+                    tags = list(set(tags + new_tags))
+                else:
+                    tags = new_tags[:]
+
             r.add_to_lib(
                 lib_folder=lib_folder,
                 note_template=note_template,
                 tags=tags,
                 related=related
             )
-            if os.path.isfile(expected_pdf):
-                os.remove(expected_pdf)
+            if clean:
+                if os.path.isfile(expected_pdf):
+                    os.remove(expected_pdf)
 
         return None
 
@@ -1618,8 +1635,9 @@ class RefNote(Note):
 
         # TEXT FIELD TO AVOID CORRUPTED HEADING BY : OR "
         self.text_fields = {
-            "article": ["title", "abstract", "issn", "journal", "file"],
-            "book": ["title", "isbn", "file", "abstract"]
+            "article": ["title", "abstract", "issn", "file"],
+            "book": ["title", "isbn", "file", "abstract"],
+            "techreport": ["title", "number", "file", "abstract"]
         }
 
         self.metadata_entries = {
@@ -1656,7 +1674,23 @@ class RefNote(Note):
                 "timestamp",
                 "file",
                 "citation_in"
-            ]
+            ],
+            "techreport": [
+                "entry_type",
+                "citation_key",
+                "author",
+                "year",
+                "title",
+                "institution",
+                "address",
+                "number",
+                "url",
+                "abstract",
+                "tags",
+                "timestamp",
+                "file",
+                "citation_in"
+            ],
         }
 
     def load_metadata(self):
@@ -1710,33 +1744,117 @@ class RefNote(Note):
 
         :return: None
         """
+
+        def generate_head(image_name, title_str, subtitle, entry_type, abstract, file_name):
+            return [
+                "",
+                f"![[{image_name}.jpg|200]]",
+                "",
+                f"# {title_str}",
+                "",
+                entry_type.upper(),
+                "",
+                f"**{title_str}**",
+                "",
+                f"{subtitle}",
+                "",
+                f"file: [[{file_name}.pdf]]",
+                "",
+                "> [!Info]- Abstract",
+                f"> {abstract}"
+            ]
+
+        bib_dict = self.metadata.copy()
+        citation_key = bib_dict["citation_key"]
+        entry_type = bib_dict.get("entry_type", "")
+        title_str = bib_dict["title"][1:-1]
+        print(title_str)
+        citation_in = Ref.cite_intext(bib_dict=bib_dict, text_format="md")
+        abs_str = bib_dict["abstract"][1:-1] if bib_dict.get("abstract") else ""
+
+        if entry_type == "article":
+            image_name = bib_dict.get("journal", "")
+            journal = bib_dict.get("journal", "")
+            subtitle = f"by {citation_in} in [[{journal}]]"
+            self.data["Head"] = generate_head(image_name, title_str, subtitle, entry_type, abs_str, citation_key)
+
+        elif entry_type == "book":
+            image_name = title_str
+            subtitle = f"by {citation_in}"
+            self.data["Head"] = generate_head(image_name, title_str, subtitle, entry_type, abs_str, title_str)
+
+        elif entry_type == "techreport":
+            image_name = bib_dict.get("institution", "")
+            institution = bib_dict.get("institution", "")
+            subtitle = f"by {citation_in} from [[{institution}]]"
+            self.data["Head"] = generate_head(image_name, title_str, subtitle, entry_type, abs_str, title_str)
+
+        return None
+
+    def _update_head(self):
+        """[Deprecated] Updates the head section of the data structure based on the metadata.
+
+        :return: None
+        """
         entry_type = self.metadata["entry_type"]
         if entry_type == "article":
             bib_dict = self.metadata.copy()
+            journal_str = bib_dict["journal"]
             citation_in = Ref.cite_intext(bib_dict=bib_dict, text_format="md")
             if self.metadata["abstract"]:
                 abs_str = self.metadata["abstract"][1:-1]
             else:
                 abs_str = ""
+
+            # setup head
             self.data["Head"] = [
-                "", f"# {citation_in}", "",
+                "",
+                f"![[{journal_str}.jpg|150]]", "",
+                f"# {citation_in}", "",
                 "{}".format(self.metadata["entry_type"]).upper(), "",
                 "**{}**".format(self.metadata["title"][1:-1]), "",
-                "by {}".format(citation_in), "",
+                "by {} in [[{}]]".format(citation_in, journal_str), "",
                 "file: [[{}.pdf]]".format(self.metadata["citation_key"]), "",
                 "> [!Info]- Abstract", "> {}".format(abs_str)
             ]
-
-        if entry_type == "book":
+        elif entry_type == "book":
             bib_dict = self.metadata.copy()
+            title = bib_dict["title"]
             citation_in = Ref.cite_intext(bib_dict=bib_dict, text_format="md")
             title_str = self.metadata["title"][1:-1]
             if self.metadata["abstract"]:
                 abs_str = self.metadata["abstract"][1:-1]
             else:
                 abs_str = ""
+
+            # setup
             self.data["Head"] = [
-                "", f"# {title_str}", "",
+                "",
+                f"![[{title}.jpg|200]]", "",
+                f"# {title_str}", "",
+                "{}".format(self.metadata["entry_type"]).upper(), "",
+                "**{}**".format(self.metadata["title"][1:-1]), "",
+                "by {}".format(citation_in), "",
+                "file: [[{}.pdf]]".format(title_str), "",
+                "> [!Info]- Abstract", "> {}".format(abs_str)
+            ]
+
+        elif entry_type == "techreport":
+            bib_dict = self.metadata.copy()
+            title = bib_dict["title"]
+            institution = bib_dict["institution"]
+            citation_in = Ref.cite_intext(bib_dict=bib_dict, text_format="md")
+            title_str = self.metadata["title"][1:-1]
+            if self.metadata["abstract"]:
+                abs_str = self.metadata["abstract"][1:-1]
+            else:
+                abs_str = ""
+
+            # setup
+            self.data["Head"] = [
+                "",
+                f"![[{title}.jpg|200]]", "",
+                f"# {title_str}", "",
                 "{}".format(self.metadata["entry_type"]).upper(), "",
                 "**{}**".format(self.metadata["title"][1:-1]), "",
                 "by {}".format(citation_in), "",
@@ -1745,7 +1863,6 @@ class RefNote(Note):
             ]
 
         return None
-
 
 
     def update_body(self, related_list=None):
@@ -1800,7 +1917,8 @@ class RefNote(Note):
         :return: None
         """
         entry_type = self.metadata["entry_type"]
-        if entry_type == "article" or entry_type == "book":
+        entry_ls_basic = ["article", "book", "techreport"]
+        if entry_type in entry_ls_basic:
             bib_dict = self.metadata.copy()
             citation_in = Ref.cite_intext(bib_dict=bib_dict, text_format="plain")
             citation_fu = Ref.cite_full(
