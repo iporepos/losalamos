@@ -28,18 +28,20 @@ def get_tags(src_folder):
 def add(src_folder, lib_folder, template):
     lst_bibs = glob.glob(f"{src_folder}/*.bib")
     if len(lst_bibs) == 0:
+        print(f"--- no refs found in {src_folder}\n")
         pass
     else:
         lst_related = get_relatead(src_folder=src_folder)
         lst_tags = get_tags(src_folder=src_folder)
-        print("batching new refs...")
+        print("--- batching {} new refs from {}...".format(len(lst_bibs), src_folder))
         # Add batch
         Ref.add_bat(
             lib_folder=lib_folder,
             input_folder=src_folder,
             note_template=template,
             tags=lst_tags,
-            related=lst_related
+            related=lst_related,
+            clean=True,
         )
         print("OK.")
     return None
