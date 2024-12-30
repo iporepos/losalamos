@@ -916,6 +916,7 @@ class Ref(MbaE):
         # Using dictionary comprehension
         bib_dict = {key: (value if value is not None else "") for key, value in bib_dict.items()}
 
+        # setup variables
         author = bib_dict.get("author", "Unknown Author").strip()
         year = str(bib_dict.get("year", "n.d.")).strip()
         title = bib_dict.get("title", "Untitled").strip()
@@ -940,6 +941,7 @@ class Ref(MbaE):
         institution = bib_dict.get("institution", "").strip()
         number = bib_dict.get("number", "").strip()
         note = bib_dict.get("note", "").strip()
+        url = bib_dict.get("url", "").strip()
 
         # Formatting authors for different styles
         author_list = author.split(" and ")
@@ -948,6 +950,12 @@ class Ref(MbaE):
             if len(author_list) > 1
             else author_list[0]
         )
+
+        # handle special entries
+        if entry_type == "dataset":
+            entry_type = "misc"
+            note = "Dataset"
+
 
         # Apply text formatting
         def apply_format(text, format_type):
@@ -1119,7 +1127,7 @@ class Ref(MbaE):
                 )
         elif entry_type == "misc":
             if style == "apa":
-                citation = f"{formatted_authors} ({year}). {title}. {note}."
+                citation = f"{formatted_authors} ({year}). {title}. {note}. {url}."
             elif style == "mla":
                 citation = f"{formatted_authors}. {title}. {note}, {year}."
             elif style == "chicago":
@@ -1152,6 +1160,11 @@ class Ref(MbaE):
         """
         #
         citation_key = bib_dict[citation_field]
+
+        # handle special entries
+        if bib_dict[entry_field] == "dataset":
+            bib_dict[entry_field] = "misc"
+
         # list available fields
         bibtex_fields = [
             f"{key} = {{{value}}}"
@@ -1526,6 +1539,8 @@ class RefNote(Note):
             "book": ["title", "isbn", "file", "abstract"],
             "techreport": ["title", "number", "file", "abstract"],
             "thesis": ["title", "file", "abstract"],
+            "dataset": ["title", "abstract"],
+            "misc": ["title", "abstract"],
         }
 
         # Expected entries in each kind of reference
@@ -1598,6 +1613,28 @@ class RefNote(Note):
                 "file",
                 "citation_in"
             ],
+            "dataset": [
+                "entry_type",
+                "citation_key",
+                "author",
+                "year",
+                "title",
+                "acronym",
+                "howpublished",
+                "url",
+                "abstract",
+                "website",
+                "x_resolution",
+                "t_resolution",
+                "x_extension",
+                "t_extension",
+                "dataformat",
+                "datacode",
+                "licence",
+                "tags",
+                "timestamp",
+                "citation_in"
+            ],
         }
 
         # Expected filename for each template:
@@ -1606,9 +1643,26 @@ class RefNote(Note):
             "book": "_book.md",
             "techreport": "_techreport.md",
             "misc": "_misc.md",
-            "thesis": "_thesis.md"
+            "thesis": "_thesis.md",
+            "dataset": "_dataset.md"
         }
 
+        self.nonbib_fields = {
+            "article": ['tags', 'timestamp', 'file', 'citation_in'],
+            "book": ['tags', 'timestamp', 'file', 'citation_in'],
+            "thesis": ['tags', 'timestamp', 'file', 'citation_in'],
+            "techreport": ['tags', 'timestamp', 'file', 'citation_in'],
+            "dataset": ['tags', 'timestamp', 'file', 'citation_in', "acronym",
+                "website",
+                "x_resolution",
+                "t_resolution",
+                "x_extension",
+                "t_extension",
+                "dataformat",
+                "datacode",
+                "licence",
+                ],
+        }
 
     def load_metadata(self):
         super().load_metadata()
@@ -1631,7 +1685,10 @@ class RefNote(Note):
             if new_meta[e]:
                 new_meta[e] = '"{}"'.format(new_meta[e])
 
-        # special procedures
+        # set up citation in field
+        new_meta["citation_in"] = Ref.cite_intext(bib_dict=new_meta)
+
+        # special procedures for each datatype
         if self.metadata["entry_type"] == "article":
             # handle doi url
             if self.metadata["doi"]:
@@ -1662,7 +1719,11 @@ class RefNote(Note):
         :return: None
         """
 
-        def generate_head(image_name, title_str, subtitle, entry_type, abstract, file_name):
+        def generate_head(image_name, title_str, subtitle, entry_type, abstract, resource, resource_type='file'):
+            if resource_type == "file":
+                rcr = f"file: [[{resource}.pdf]]"
+            else:
+                rcr = f"URL: {resource}"
             return [
                 "",
                 f"![[{image_name}.jpg|200]]",
@@ -1675,35 +1736,56 @@ class RefNote(Note):
                 "",
                 f"{subtitle}",
                 "",
-                f"file: [[{file_name}.pdf]]",
+                rcr,
                 "",
-                "> [!Info]- Abstract",
+                "> [!Info]+ Abstract",
                 f"> {abstract}"
             ]
 
-        bib_dict = self.metadata.copy()
+        bib_dict = self.get_bib_dict()
         citation_key = bib_dict["citation_key"]
         entry_type = bib_dict.get("entry_type", "")
-        title_str = bib_dict["title"][1:-1]
+        title_str = bib_dict["title"]
         citation_in = Ref.cite_intext(bib_dict=bib_dict, text_format="md")
-        abs_str = bib_dict["abstract"][1:-1] if bib_dict.get("abstract") else ""
+        abs_str = bib_dict["abstract"] if bib_dict.get("abstract") else ""
 
         if entry_type == "article":
             image_name = bib_dict.get("journal", "")
             journal = bib_dict.get("journal", "")
             subtitle = f"by {citation_in} in [[{journal}]]"
-            self.data["Head"] = generate_head(image_name, title_str, subtitle, entry_type, abs_str, citation_key)
+            self.data["Head"] = generate_head(
+                image_name=image_name,
+                title_str=title_str,
+                subtitle=subtitle,
+                entry_type=entry_type,
+                abstract=abs_str,
+                resource=citation_key
+            )
 
         elif entry_type == "book":
             image_name = title_str
             subtitle = f"by {citation_in}"
-            self.data["Head"] = generate_head(image_name, title_str, subtitle, entry_type, abs_str, title_str)
+            self.data["Head"] = generate_head(
+                image_name=image_name,
+                title_str=title_str,
+                subtitle=subtitle,
+                entry_type=entry_type,
+                abstract=abs_str,
+                resource=title_str
+            )
 
         elif entry_type == "techreport":
             image_name = bib_dict.get("institution", "")
             institution = bib_dict.get("institution", "")
             subtitle = f"by {citation_in} from [[{institution}]]"
-            self.data["Head"] = generate_head(image_name, title_str, subtitle, entry_type, abs_str, title_str)
+            self.data["Head"] = generate_head(
+                image_name=image_name,
+                title_str=title_str,
+                subtitle=subtitle,
+                entry_type=entry_type,
+                abstract=abs_str,
+                resource=title_str
+            )
 
         elif entry_type == "thesis":
             image_name = bib_dict.get("school", "")
@@ -1712,7 +1794,26 @@ class RefNote(Note):
             year_str = bib_dict["year"]
             subtitle = f"by [[{author_full}]] ({year_str}) from [[{institution}]]"
             file_str = f"{author_full} ({year_str})"
-            self.data["Head"] = generate_head(image_name, title_str, subtitle, entry_type, abs_str, file_str)
+            self.data["Head"] =  generate_head(
+                image_name=title_str,
+                title_str=title_str,
+                subtitle=subtitle,
+                entry_type=entry_type,
+                abstract=abs_str,
+                resource=file_str
+            )
+
+        elif entry_type == "dataset":
+            subtitle = f"by {citation_in}"
+            self.data["Head"] =  generate_head(
+                image_name=title_str,
+                title_str=title_str,
+                subtitle=subtitle,
+                entry_type=entry_type,
+                abstract=abs_str,
+                resource=bib_dict["url"],
+                resource_type="url"
+            )
 
         return None
 
@@ -1768,9 +1869,9 @@ class RefNote(Note):
         :return: None
         """
         entry_type = self.metadata["entry_type"]
-        entry_ls_basic = ["article", "book", "techreport", "thesis"]
+        entry_ls_basic = ["article", "book", "techreport", "thesis", "dataset", "misc"]
         if entry_type in entry_ls_basic:
-            bib_dict = self.metadata.copy()
+            bib_dict = self.get_bib_dict()
             citation_in = Ref.cite_intext(bib_dict=bib_dict, text_format="plain")
             citation_fu = Ref.cite_full(
                 bib_dict=bib_dict, text_format="plain", entry_type=entry_type)
@@ -1857,10 +1958,16 @@ class RefNote(Note):
 
 
     def get_bib_dict(self):
-        keys_to_remove = ['tags', 'timestamp', 'file', 'citation_in']
+        """Get a bibdict from the note metadata
+
+        :return:
+        :rtype: dict
+        """
+        keys_to_remove = self.nonbib_fields[self.metadata["entry_type"]]
         new_dict = {k: v for k, v in self.metadata.items() if k not in keys_to_remove}
         # Using dictionary comprehension
         new_dict = {key: (value if value is not None else "") for key, value in new_dict.items()}
+        # handle text fields
         lst_text_fields = self.text_fields[self.metadata["entry_type"]][:]
         for k in lst_text_fields:
             if k not in keys_to_remove:
