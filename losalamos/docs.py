@@ -235,10 +235,6 @@ class TexDoc(MbaE):
 
         return src_file
 
-
-
-
-
     @staticmethod
     def replace_infile(src_file, old_expression, new_expression, inplace=True):
         '''Replace expression directly in file
@@ -274,6 +270,61 @@ class TexDoc(MbaE):
             return src_file
         else:
             return None
+
+
+    @staticmethod
+    def get_authors(src_table, dst_folder=None):
+        df = pd.read_csv(src_table, sep=";")
+        df = df.sort_values(by="Order")
+
+        # Handle affiliations
+        lst_institutes = df["Affiliation"].unique()
+        d_inst = {}
+        lst_affs = []
+        for i in range(len(lst_institutes)):
+            _code = str(chr(96 + i + 1))
+            d_inst[lst_institutes[i]] = _code
+            s = r"$^\text{" + _code + "}$\;" + lst_institutes[i]
+            lst_affs.append(s)
+        authors_affs = r" \newline ".join(lst_affs)
+
+        # Handle list
+        lst_authors = []
+        for i in range(len(df)):
+            _nm = df["Name"].values[i]
+            _af = df["Affiliation"].values[i]
+            _oi = df["OrcID"].values[i]
+            _ex = d_inst[_af]
+            s = "\href{" + _oi + "}{" + _nm + r"}\,$^\text{"+ _ex + "}$"
+            lst_authors.append(s)
+        authors_list = ",\;".join(lst_authors)
+
+        # Handle corresponding
+        df_corr = df.query("Corresponding == 'yes'").copy()
+        print(df_corr.to_string())
+        _nm = df_corr["Name"].values[0]
+        _em = df_corr["Email"].values[0]
+        authors_corr = "Corresponding author: {" + _nm + r"} (\href{mailto:" + _em + r"}{"+ _em + "})"
+
+        # Handle credits
+        lst_credits = []
+        for i in range(len(df)):
+            _nm = df["Name"].values[i]
+            _cr = df["Credit"].values[i]
+            s = r"\textbf{" + _nm + "}: " + _cr + ". "
+            lst_credits.append(s)
+        authors_credit = "".join(lst_credits)
+
+        # export
+        if dst_folder:
+            with open(f"{dst_folder}/authors_list.tex", 'w', encoding="utf-8") as file:
+                file.write(authors_list + "\n")
+            with open(f"{dst_folder}/authors_affs.tex", 'w', encoding="utf-8") as file:
+                file.write(authors_affs + "\n")
+            with open(f"{dst_folder}/authors_corr.tex", 'w', encoding="utf-8") as file:
+                file.write(authors_corr + "\n")
+            with open(f"{dst_folder}/authors_credit.tex", 'w', encoding="utf-8") as file:
+                file.write(authors_credit + "\n")
 
 class DocTable(DataSet):
 

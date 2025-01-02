@@ -1,0 +1,45 @@
+\documentclass[./main.tex]{subfiles}
+\graphicspath{{\subfix{./figs}}}
+
+% ------------ main document ------------ 
+\begin{document}
+
+\thispagestyle{empty}
+
+% Set the line width to 1mm
+\setlength{\arrayrulewidth}{0.5mm}
+
+\begin{table}[t!]
+    \centering
+    \small
+    %\renewcommand{\arraystretch}{1.2} % Adjust row spacing
+    \begin{tabular}{ 
+ >{\raggedright\raggedbottom\arraybackslash}m{1.4cm} 
+ >{\raggedright\raggedbottom\arraybackslash}m{9.3cm}  
+ >{\raggedright\arraybackslash}m{3cm}} % preset number of columns and aligment
+         &  \DocCredential & \textbf{\DocId} \\
+        \hline 
+        & & \\
+        \includegraphics[width=0.09\textwidth]{logo.png} & \vspace{2.5mm} \Large \textbf{\DocField} & \\         
+        & \footnotesize \sf \MakeUppercase \DocType & \\ [4mm]
+        & \large \textbf{\DocTitle}  & \textbf{Versão \DocVersion}  \\ [8mm]
+        & \DocSubtitle &  Porto Alegre,\newline \DocDate\\ [10mm]
+        \multicolumn{3}{p{13.2cm}}{\DocComment} \\
+        \hline
+    \end{tabular}
+\end{table}
+
+\normalsize
+
+\begin{center}
+    \large
+    \textbf{Resumo}
+\end{center}
+
+
+\noindent \DocAbs
+
+
+\clearpage
+
+\end{document}

@@ -1,0 +1,43 @@
+% ------------ page and margins ------------
+\usepackage{geometry}
+% setup page and margins
+\geometry{
+ a4paper,
+ left=45mm,
+ right=20mm,
+ top=20mm,
+ bottom=25mm
+}
+
+% ------------ page details ------------
+% line spacing
+\usepackage{setspace}
+% adjust margins
+\usepackage{changepage}
+% number lines
+\usepackage{lineno}
+
+% page color
+\pagecolor{white}
+% text color
+\color{black}
+
+
+% ------------ spacings ------------
+% indent 
+\setlength{\parindent}{10mm}
+
+% paragraph spacing
+\setlength{\parskip}{3mm} 
+
+% ------------ section style setup ------------
+% sections
+\usepackage{titlesec}
+\titleformat*{\section}{\bfseries\fontfamily{phv}\selectfont\Large}
+\titleformat*{\subsection}{\fontfamily{phv}\selectfont\large}
+\titleformat*{\subsubsection}{\fontfamily{phv}\selectfont\normalsize}
+
+% ------------ header and footers ------------
+% headers and footers
+\usepackage{fancyhdr}
+\usepackage{lastpage}

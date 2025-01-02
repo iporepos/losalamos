@@ -1,0 +1,77 @@
+% ------------ non-text items ------------
+
+% caption package - settings
+\usepackage[font={scriptsize,sf}, labelfont=bf]{caption}
+
+% ------------ figures ------------
+% insert graphics
+\usepackage{graphicx}
+% wrapp figures in text
+\usepackage{wrapfig}
+% for lateral caption
+\usepackage{rotating}
+
+% ------------ figure setup ------------
+% set the figure folder
+\graphicspath{{./figs}}
+\captionsetup[figure]{
+labelformat=simple,
+labelsep=space,
+width=\textwidth
+}
+
+% ------------ tables ------------
+\usepackage{array}
+\usepackage{booktabs}
+
+% ------------ boxes ------------
+\usepackage{tcolorbox}
+
+% ------------ listing (code blocks) ------------
+\usepackage{listings}
+
+% ------------ box setup ------------ 
+% simple box
+\newtcolorbox[auto counter, number within=section]{simplebox}[2][]{
+    arc=1mm,
+    coltitle=black,
+    coltext=black,
+    colback=verylightgray,
+    colframe=lightgray,
+    fontupper=\sffamily,
+    fonttitle=\sffamily\bfseries,
+    title=\sffamily Destaque~\thetcbcounter\;--- #2,#1
+}
+
+% code box
+\newtcolorbox[auto counter,number within=section]{algbox}[2][]{
+arc=0mm,
+%coltitle=white,
+%coltext=black,
+colback=lightgray,
+%colframe=darkgray,
+fontupper=\sffamily,
+fonttitle=\sffamily\bfseries,
+title=\sffamily Algorithm~\thetcbcounter -- #2,#1
+}
+
+% ------------ listing setup ------------
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{lightgray},   
+    commentstyle=\color{darkgray},
+    keywordstyle=\color{purple},
+    numberstyle=\tiny\color{darkgray},
+    stringstyle=\color{teal},
+    basicstyle=\color{black}\ttfamily\footnotesize\linespread{2.5},
+    breakatwhitespace=false,         
+    breaklines=false,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=2pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=3
+}
+\lstset{style=mystyle}

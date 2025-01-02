@@ -1,0 +1,109 @@
+% --------- SPECS ---------
+\input{specs}
+
+% --------- PREAMBLE ---------
+% set document class
+\documentclass[11pt]{article}
+
+% --------- colors ---------
+\input{_setup_colors}
+
+% --------- layout ---------
+\input{_setup_layout}
+
+% --------- language ---------
+\input{_setup_language}
+
+% --------- fonts ---------
+\input{_setup_fonts}
+
+% --------- links ---------
+\input{_setup_links}
+
+% --------- sections ---------
+\input{_setup_sections}
+
+% --------- citations ---------
+\input{_setup_citations}
+
+% --------- misc ---------
+\input{_setup_misc}
+
+% --------- items ---------
+\input{_setup_items}
+
+% --------- items ---------
+\input{_setup_toc}
+
+% --------- nomenclature ---------
+\input{acronyms}
+\input{_setup_glossaries}
+
+% --------- use subfiles ---------
+\usepackage{subfiles} 
+
+% --------- DOCUMENT --------- 
+% create the document environment
+\begin{document}
+
+\input{_setup_hf}
+
+% ---------------- First Pages ---------------- 
+
+% cover
+\subfile{cover}	
+
+% ---------------- Document map ---------------- 
+
+% table of contents
+\tableofcontents
+\thispagestyle{fancy}
+\clearpage	
+	
+% list of figures
+\listoffigures
+\thispagestyle{fancy} 
+\clearpage
+
+% list of tables
+\listoftables
+\thispagestyle{fancy} 
+\clearpage
+
+% list of acron
+\printglossary[type=\acronymtype]
+\clearpage
+
+% list of symbols
+\input{symbols}
+\printnomenclature
+\normalsize
+\clearpage
+
+% ---------------- Sections ---------------- 
+\linenumbers % start line numeration
+%\subfile{_section_i}
+
+\subfile{intro}
+
+\subfile{methods}
+
+\subfile{discussion}
+
+\subfile{conclusions}
+
+\nolinenumbers % stop line numeration
+
+% ---------------- Miscellaneous ---------------- 
+% remove for submission
+\subfile{misc}
+
+% ---------------- References ---------------- 
+\clearpage
+\printbibliography[heading=bibintoc]
+
+% ---------------- Appendix ---------------- 
+%\clearpage
+%\subfile{_section_i}
+
+\end{document}

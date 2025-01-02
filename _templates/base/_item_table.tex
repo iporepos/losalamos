@@ -1,0 +1,25 @@
+% start the table
+\begin{table}[t!] % placed on top of page
+\centering   
+\scriptsize % table font size
+\sffamily % table font style
+\caption[Caption for the LOT.]{
+Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+}
+\label{tbl:simple}
+% set alternating colors
+\rowcolors{2}{white}{rowgray}
+% start the tabular enviroment
+\begin{tabular}{ 
+>{\raggedright\arraybackslash}m{2.3cm}>{\raggedright\arraybackslash}m{2.3cm} >{\raggedright\arraybackslash}m{2.3cm} >{\raggedright\arraybackslash}m{2.3cm} >{\raggedright\arraybackslash}m{2.3cm}} 
+    \toprule 
+    \textbf{Column} & \textbf{Column} & \textbf{Column} & \textbf{Column} & \textbf{Column} \\
+    \midrule
+    Content of row & Content of row & Content of row & Content of row & Content of row \\
+    Content of row & Content of row & Content of row & Content of row & Content of row \\
+    Content of row & Content of row & Content of row & Content of row & Content of row \\
+    Content of row & Content of row & Content of row & Content of row & Content of row \\
+    Content of row & Content of row & Content of row & Content of row & Content of row \\
+    \bottomrule
+    \end{tabular}
+\end{table}

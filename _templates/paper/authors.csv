@@ -1,0 +1,4 @@
+Order;Name;Affiliation;OrcID;Email;Corresponding;Credit
+1;Albert Einstein;Cornell University;https://orcid.org/0000-0000-0000-0000;einstein@princeton.net;yes;Project administration, Funding acquisition, Conceptualization, Supervision, Methodology, Writing– review and editing
+2;Isaac Newton;Oxford University;https://orcid.org/0000-0000-0000-0000;newton@oxford.net;no;Conceptualization, Investigation, Visualization, Data Curation, Software, Formal analysis, Writing– original draft
+3;Richard Feynman;Cornell University;https://orcid.org/0000-0000-0000-0000;thefeynman@crn.net;no;Investigation, Formal analysis
