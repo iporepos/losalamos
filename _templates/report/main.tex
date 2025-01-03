@@ -1,0 +1,353 @@
+\documentclass[11pt, a4paper]{report}
+
+% ------------ PACKAGES ------------  
+\usepackage[utf8]{inputenc}
+% language set up
+\usepackage[english, main=portuguese]{babel}
+
+% ------------ margins ------------  
+\usepackage{geometry}
+\geometry{
+ a4paper,
+ total={170mm,257mm},
+ left=45mm,
+ right=25mm,
+ top=40mm,
+ bottom=25mm,
+ headheight=15mm, % Header height
+ headsep=10mm,    % Separation between header and text
+ }
+% ------------ fonts ------------ 
+\usepackage[T1]{fontenc}
+\usepackage{helvet}
+% Set the default font to sans-serif
+\renewcommand{\familydefault}{\sfdefault}
+% colors
+\usepackage[dvipsnames, table]{xcolor}
+\definecolor{rowgray}{gray}{0.9}
+\definecolor{darkgrey}{gray}{0.2}
+
+% ------------ citations ------------ 
+% epigraph
+\usepackage{epigraph}
+% quoting
+\usepackage{csquotes}
+% quotes
+\usepackage{dirtytalk}
+% referencing
+\usepackage{nameref}
+% BibLaTeX
+\usepackage[backend=biber, style=ieee]{biblatex} % bwl-FU
+
+% ------------ page ------------
+% numbering
+\usepackage[utf8]{inputenc}
+% line spacing
+\usepackage{setspace}
+% adjust margins
+\usepackage{changepage}
+% number lines
+\usepackage{lineno}
+% headers and footers
+\usepackage{fancyhdr}
+
+% ------------ non-text items ------------
+% insert graphics
+\usepackage{graphicx}
+% wrapp figures in text
+\usepackage{wrapfig}
+% frames
+\usepackage{tcolorbox}
+% listing
+\usepackage{listings}
+% caption package - settings
+\usepackage[font={scriptsize,sf,color=darkgrey}, labelfont=bf]{caption}
+%\captionsetup{font={color=darkgrey}}
+
+% ------------ tables ------------
+\usepackage{array}
+\usepackage{booktabs}
+
+% ------------ extra sections ------------
+% appendix
+\usepackage[title]{appendix}
+% glossaries
+\usepackage[toc, acronym]{glossaries}
+\makeglossaries
+% nomenclature
+\usepackage[intoc, portuguese]{nomencl}
+
+% ------------ misc ------------
+% titles
+\usepackage{titlesec}
+% sorted lists package
+\usepackage{enumerate}
+% math package
+\usepackage{amsmath}
+% math symbols
+\usepackage{amssymb}
+\usepackage{blindtext}
+
+% ----------------- SETUPS ----------------- 
+
+% ------------ section setup ------------
+%setcounter{chapter}{-1}  % set to start at zero
+
+% ------------ links setup ------------
+\usepackage{hyperref}
+\hypersetup{
+	colorlinks=true,
+	linkcolor=blue,
+	citecolor=blue,
+	filecolor=magenta,      
+	urlcolor=cyan,
+	pdftitle={Overleaf Example},
+	pdfpagemode=FullScreen,
+}
+
+% ------------ box setup ------------ 
+% simple box
+\newtcolorbox[auto counter,number within=section]{simplebox}[2][]{
+arc=0mm,
+%breakable=true,
+%coltitle=white,
+%coltext=black,
+%colback=lightgray,
+%colframe=darkgray,
+fontupper=\sffamily,
+fonttitle=\sffamily\bfseries,
+title=\sffamily Destaque~\thetcbcounter -- #2,#1
+}
+
+% code box
+\newtcolorbox[auto counter,number within=section]{algbox}[2][]{
+arc=0mm,
+%coltitle=white,
+%coltext=black,
+colback=lightgray,
+%colframe=darkgray,
+fontupper=\sffamily,
+fonttitle=\sffamily\bfseries,
+title=\sffamily Algorithm~\thetcbcounter -- #2,#1
+}
+
+% ------------ page formatting ------------ 
+% Set space before paragraphs
+\setlength{\parskip}{1em}  % '1em' is typically about the width of a capital 'M' in the current font
+%\pagecolor{black}
+%\color{white}
+% Set formats for each heading level
+\titleformat{\chapter}[display]
+  {\fontfamily{phv}\selectfont\huge}
+  {\chaptertitlename\ \thechapter}{20pt}{\LARGE}
+%\titleformat*{\section}{\fontfamily{phv}\selectfont\Large}
+%\titleformat*{\subsection}{\fontfamily{phv}\selectfont\large}
+%\titleformat*{\subsubsection}{\fontfamily{phv}\selectfont\normalsize}
+\begin{comment}
+    \titleformat{\chapter}[display]
+  {\fontfamily{phv}\selectfont\huge}
+  {\chaptertitlename\ \thechapter}{20pt}{\LARGE}
+\titleformat*{\section}{\fontfamily{phv}\selectfont\Large}
+\titleformat*{\subsection}{\fontfamily{phv}\selectfont\large}
+\titleformat*{\subsubsection}{\fontfamily{phv}\selectfont\normalsize}
+\end{comment}
+
+
+% ------------ heading setup ------------
+\pagestyle{fancy}
+\fancyhf{} % clear all header and footer fields
+\fancyhead[C]{\includegraphics[height=1.5cm]{./figs/ufrgs3.jpg}} % Logo in the left of the header
+\fancyhead[R]{\small{\texttt{GESPLA}}} % Add text or leave blank
+\fancyfoot[C]{\thepage} % Page number in the footer
+\renewcommand{\headrulewidth}{0.4pt} % Optional: line under the header
+\renewcommand{\footrulewidth}{0pt}   % Optional: line above the footer
+
+% ------------ listing setup ------------
+\lstdefinestyle{mystyle}{
+	backgroundcolor=\color{lightgray},   
+	commentstyle=\color{darkgray},
+	keywordstyle=\color{purple},
+	numberstyle=\tiny\color{darkgray},
+	stringstyle=\color{teal},
+	basicstyle=\color{black}\ttfamily\footnotesize\linespread{2.5},
+	breakatwhitespace=false,         
+	breaklines=false,                 
+	captionpos=b,                    
+	keepspaces=true,                 
+	numbers=left,                    
+	numbersep=2pt,                  
+	showspaces=false,                
+	showstringspaces=false,
+	showtabs=false,                  
+	tabsize=3
+}
+\lstset{style=mystyle}
+
+% ------ set metadata ------ 
+\hypersetup{
+pdftitle={mytitle},
+pdfsubject={mysubject},
+pdfauthor={myname},
+pdfkeywords={keywords},
+}
+
+% ------------ figure setup ------------
+% set the figure folder
+\graphicspath{{./figs}}
+\captionsetup[figure]{labelformat=simple, labelsep=quad}
+
+% ------------ references setup ------------
+\addbibresource{refs.bib}
+
+% ------------ names setup ------------
+\newcommand{\bodytab}{12mm}
+
+\newcommand{\nameChap}{Capítulo}
+\newcommand{\nameSec}{Seção}
+\newcommand{\nameAppendix}{Apêndice}
+\newcommand{\nameTable}{Tabela}
+\newcommand{\nameFigure}{Figura}
+\newcommand{\nameEq}{Equação}
+\newcommand{\nameBox}{Quadro}
+\newcommand{\nameCode}{Algoritmo}
+
+% ------------ glossary setup ------------
+%\input{glossary_pt}
+
+
+% ---------------- define acronyms ------------------------
+\newacronym{ana}{\texttt{ANA}}{Agência Nacional de Águas}
+
+
+% ------------ nomenclature setup ------------
+\begin{comment}
+% This code creates the groups
+\usepackage{etoolbox}
+\renewcommand\nomgroup[1]{%
+  \item[\bfseries
+  \ifstrequal{#1}{E}{Capítulo 1}{%
+  \ifstrequal{#1}{H}{Hidrologia}{%
+  \ifstrequal{#1}{O}{Outros símbolos}{}}}%
+]}
+\makenomenclature
+\end{comment}
+
+\title{The Title}
+\author{Iporã Possantti}
+\date{\today}
+
+\usepackage{subfiles} % Best loaded last in the preamble
+% ------------ MAIN DOCUMENT ------------ 
+\begin{document}
+%\maketitle
+% Apply fancy style to the first page
+\thispagestyle{fancy}
+
+\pagenumbering{roman}
+
+% ---------------- First Pages ---------------- 
+% cover
+\subfile{cover_a}	
+
+% contra capa
+%\subfile{cover_b}
+
+% ficha catalografica
+%\subfile{cover_b}
+
+% assinaturas da banca
+%\subfile{cover_b}
+
+% agradecimentos
+%\subfile{cover_b}
+
+% ---------------- Document map ---------------- 
+
+% table of contents
+\tableofcontents
+\thispagestyle{fancy}
+\clearpage	
+	
+% list of figures
+\listoffigures
+\thispagestyle{fancy}
+\clearpage
+
+% list of tables
+\listoftables
+\thispagestyle{fancy}
+\clearpage
+
+% list of acron
+\printglossary[type=\acronymtype]
+\thispagestyle{fancy}
+\clearpage
+
+% ---------------- Symbols ---------------- 
+\begin{comment}
+% ------  Epistemology Chapter
+\nomenclature[E]{\(S\)}{Enunciado}
+\nomenclature[E]{\(\Omega\)}{Espaço de possibilidades}
+\nomenclature[E]{\(H\)}{Hipótese}
+\nomenclature[E]{\(E\)}{Evidência}
+\nomenclature[E]{\(P\)}{Probabilidade}
+\nomenclature[E]{\(M\)}{Modelo}
+\nomenclature[E]{\(O\)}{Observação}
+\nomenclature[E]{\(\Theta\)}{Vetor de parâmetros}
+\nomenclature[E]{\(\Upsilon\)}{Vetor de dados de entrada}
+\nomenclature[E]{\(\varepsilon\)}{Erro}
+\nomenclature[E]{\(\mu\)}{Média}
+\nomenclature[E]{\(\sigma^2\)}{Variância}
+\nomenclature[E]{\(s^2\)}{Variância amostral}
+\nomenclature[E]{\(n\)}{Tamanho amostral}
+% ------  Hydrology
+\nomenclature[H]{\(Q\)}{Vazão}
+
+\printnomenclature
+\clearpage
+\end{comment}
+
+
+% ---------------- Chapters setup ---------------- 
+%\doublespacing % line spacing	
+\pagenumbering{arabic} % start arabic numeration
+
+% ---------------- Chapters ---------------- 
+%\subfile{chap_fancy}
+
+\subfile{chap_simple}
+\thispagestyle{fancy}
+
+\subfile{chap_fancy}
+\thispagestyle{fancy}
+
+%%%% \singlespacing
+
+% ---------------- Glossary ---------------- 
+\clearpage
+\printglossary[title=Glossário, toctitle=Glossário]
+\thispagestyle{fancy}
+
+
+% ---------------- References ---------------- 
+\clearpage
+\printbibliography
+\thispagestyle{fancy}
+
+% ---------------- Appendix ---------------- 
+% uncomment this
+\begin{comment}
+\begin{appendices}
+
+\subfile{chap_simple}
+
+\clearpage
+
+\end{appendices}
+\end{comment}
+
+
+\end{document}
+
+
+

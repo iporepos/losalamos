@@ -1,0 +1,126 @@
+\documentclass[./main.tex]{subfiles}
+\graphicspath{{\subfix{./figs}}}
+
+% ------------ main document ------------ 
+\begin{document}
+\chapter{Um capítulo simples} \label{chap:1}
+\thispagestyle{fancy}
+
+\section{Uma seção básica} \label{chp1:sec1}
+
+\begin{adjustwidth}{\bodytab}{0mm}
+\par Podemos estabelecer uma sigla \gls{ana}, e citar ela na forma curta \acrshort{ana} ou longa \acrlong{ana} consectetur adipiscing elit. Podemos citar uma referência \cite{descartes2008discurso}. A citação em linha pode ser customizada com vários estilos\footnote{Também é possível implementar notas de rodapé, como esta. Sed ac bibendum orci. Cras erat elit, consequat vel erat ac, tincidunt pulvinar. Curabitur at mollis eros. Integer ornare erat neque, id finibus velit ultrices in. Suspendisse dapibus tortor eget lorem pretium venenatis.}. Sed ac bibendum orci. Cras erat elit, consequat vel erat ac, tincidunt pulvinar\footnote{Quantas notas de rodapé forem necessárias, incluindo referências a outras seções como a Seção \ref{chp1:sec1:sub2}.}.. Curabitur at mollis eros. Integer ornare erat neque, id finibus velit ultrices in. Suspendisse dapibus tortor eget lorem pretium venenatis. Luctus accumsan tortor posuere ac ut consequat semper viverra. Mauris commodo quis imperdiet massa tincidunt nunc. Arcu odio ut sem nulla. Iaculis eu non diam phasellus vestibulum lorem sed. Vitae tortor condimentum lacinia quis vel eros donec ac odio. 
+
+\subsection{Esta é uma subseção} \label{chp1:sec1:sub1}
+
+\par Est sit amet facilisis magna etiam tempor. Luctus accumsan tortor posuere ac ut consequat semper viverra. Mauris commodo quis imperdiet massa tincidunt nunc. Arcu odio ut sem nulla. Iaculis eu non diam phasellus vestibulum lorem sed. Vitae tortor condimentum lacinia quis vel eros donec ac odio. Ornare arcu dui vivamus arcu. Nibh tellus molestie nunc non. Et netus et malesuada fames ac turpis egestas sed tempus. Eleifend donec pretium vulputate sapien nec. Sed lectus vestibulum mattis ullamcorper. Tincidunt dui ut ornare lectus sit. Donec adipiscing tristique risus nec feugiat in fermentum posuere urna. Ultricies lacus sed turpis tincidunt id aliquet risus feugiat. Ac placerat vestibulum lectus mauris ultrices eros in. Consectetur a erat nam at lectus urna. Enim neque volutpat ac tincidunt vitae semper quis lectus nulla. Feugiat sed lectus vestibulum mattis ullamcorper.
+
+\par Est sit amet facilisis magna etiam tempor. Luctus accumsan tortor posuere ac ut consequat semper viverra. Mauris commodo quis imperdiet massa tincidunt nunc. Arcu odio ut sem nulla. Iaculis eu non diam phasellus vestibulum lorem sed. Vitae tortor condimentum lacinia quis vel eros donec ac odio. Ornare arcu dui vivamus arcu. Nibh tellus molestie nunc non. Et netus et malesuada fames ac turpis egestas sed tempus. Eleifend donec pretium vulputate sapien nec. Sed lectus vestibulum mattis ullamcorper. Tincidunt dui ut ornare lectus sit. Donec adipiscing tristique risus nec feugiat in fermentum posuere urna. Ultricies lacus sed turpis tincidunt id aliquet risus feugiat. Ac placerat vestibulum lectus mauris ultrices eros in. Consectetur a erat nam at lectus urna. Enim neque volutpat ac tincidunt vitae semper quis lectus nulla. Feugiat sed lectus vestibulum mattis ullamcorper.
+
+\subsection{Esta é outra subseção}  \label{chp1:sec1:sub2}
+
+\par Est sit amet facilisis magna etiam tempor. Luctus accumsan tortor posuere ac ut consequat semper viverra. Mauris commodo quis imperdiet massa tincidunt nunc. Arcu odio ut sem nulla. Iaculis eu non diam phasellus vestibulum lorem sed. Vitae tortor condimentum lacinia quis vel eros donec ac odio. Ornare arcu dui vivamus arcu. Nibh tellus molestie nunc non. Et netus et malesuada fames ac turpis egestas sed tempus. Eleifend donec pretium vulputate sapien nec. Sed lectus vestibulum mattis ullamcorper. Tincidunt dui ut ornare lectus sit. Donec adipiscing tristique risus nec feugiat in fermentum posuere urna. Ultricies lacus sed turpis tincidunt id aliquet risus feugiat. Ac placerat vestibulum lectus mauris ultrices eros in. Consectetur a erat nam at lectus urna. Enim neque volutpat ac tincidunt vitae semper quis lectus nulla. Feugiat sed lectus vestibulum mattis ullamcorper.
+
+\subsection{Aqui temos uma figura}  \label{chp1:sec1:sub3}
+
+\begin{figure}[t!] % place figure in the page
+	\centering                                       
+	\includegraphics[width=0.98\linewidth]{figs/fig_method.jpg}    
+	\caption[Et netus et malesuada]
+	{\textbf{---\;Et netus et malesuada fames ac turpis egestas sed tempus}.
+		\textbf{a}\,--\,Curabitur at mollis eros. Integer ornare erat neque, id finibus velit ultrices in. Suspendisse dapibus tortor eget lorem pretium venenatis (detail \textrm{\textit{i}}); Cras erat elit, consequat vel erat ac, tincidunt pulvinar. Curabitur at mollis eros. Integer ornare erat neque, id finibus velit ultrices in (detail \textrm{\textit{ii}}).
+		\textbf{b}\,--\,Cras erat elit, consequat vel erat ac, tincidunt pulvinar. Curabitur at mollis eros. Integer ornare erat neque, id finibus velit ultrices in (detail \textrm{\textit{i}}); Cras erat elit, consequat vel erat ac, tincidunt pulvinar. Curabitur at mollis eros. Integer ornare erat neque, id finibus velit ultrices in (detail \textrm{\textit{ii}}).
+          \textbf{c}\,--\,Suspendisse dapibus tortor eget lorem pretium venenatis (detail \textrm{\textit{i}}); Cras erat elit, consequat vel erat ac, tincidunt pulvinar. Curabitur at mollis eros. Integer ornare erat neque, id finibus velit ultrices in (detail \textrm{\textit{ii}}).
+	}
+	\label{fig:fig_normal}  % use qualitative label                      
+\end{figure}
+
+\par A Figura \ref{fig:fig_normal} pode ser citada em qualquer parte do texto. Est sit amet facilisis magna etiam tempor. Luctus accumsan tortor posuere ac ut consequat semper viverra. Mauris commodo quis imperdiet massa tincidunt nunc. Arcu odio ut sem nulla. Iaculis eu non diam phasellus vestibulum lorem sed. Vitae tortor condimentum lacinia quis vel eros donec ac odio. Ornare arcu dui vivamus arcu. Nibh tellus molestie nunc non. Et netus et malesuada fames ac turpis egestas sed tempus. Eleifend donec pretium vulputate sapien nec. Sed lectus vestibulum mattis ullamcorper. Tincidunt dui ut ornare lectus sit. Donec adipiscing tristique risus nec feugiat in fermentum posuere urna. Ultricies lacus sed turpis tincidunt id aliquet risus feugiat. Ac placerat vestibulum lectus mauris ultrices eros in. Consectetur a erat nam at lectus urna. Enim neque volutpat ac tincidunt vitae semper quis lectus nulla. Feugiat sed lectus vestibulum mattis ullamcorper.
+
+\par Est sit amet facilisis magna etiam tempor. Luctus accumsan tortor posuere ac ut consequat semper viverra. Mauris commodo quis imperdiet massa tincidunt nunc. Arcu odio ut sem nulla. Iaculis eu non diam phasellus vestibulum lorem sed. Vitae tortor condimentum lacinia quis vel eros donec ac odio. Ornare arcu dui vivamus arcu. Nibh tellus molestie nunc non. Et netus et malesuada fames ac turpis egestas sed tempus. Eleifend donec pretium vulputate sapien nec. Sed lectus vestibulum mattis ullamcorper. Tincidunt dui ut ornare lectus sit. Donec adipiscing tristique risus nec feugiat in fermentum posuere urna. Ultricies lacus sed turpis tincidunt id aliquet risus feugiat. Ac placerat vestibulum lectus mauris ultrices eros in. Consectetur a erat nam at lectus urna. Enim neque volutpat ac tincidunt vitae semper quis lectus nulla. Feugiat sed lectus vestibulum mattis ullamcorper. Nibh tellus molestie nunc non. Et netus et malesuada fames ac turpis egestas sed tempus. Eleifend donec pretium vulputate sapien nec. Sed lectus vestibulum mattis ullamcorper. Tincidunt dui ut ornare lectus sit. Donec adipiscing tristique risus nec feugiat in fermentum posuere urna. Ultricies lacus sed turpis tincidunt id aliquet risus feugiat. Ac placerat vestibulum lectus mauris ultrices eros in. Consectetur a erat nam at lectus urna. Enim neque volutpat ac tincidunt vitae semper quis lectus nulla. Feugiat sed lectus vestibulum mattis ullamcorper.
+\end{adjustwidth}
+
+
+\section{Uma nova seção} \label{chp1:sec2}
+
+\begin{adjustwidth}{\bodytab}{0mm}
+
+\par Est sit amet facilisis magna etiam tempor. Luctus accumsan tortor posuere ac ut consequat semper viverra. Mauris commodo quis imperdiet massa tincidunt nunc. Arcu odio ut sem nulla. Iaculis eu non diam phasellus vestibulum lorem sed. Vitae tortor condimentum lacinia quis vel eros donec ac odio. Ornare arcu dui vivamus arcu. Nibh tellus molestie nunc non. Et netus et malesuada fames ac turpis egestas sed tempus. Eleifend donec pretium vulputate sapien nec. Sed lectus vestibulum mattis ullamcorper. Tincidunt dui ut ornare lectus sit.
+
+\subsection{Outra subseção} \label{chp1:sec2:sub1}
+
+\blindtext[3]
+
+\subsection{Aqui temos uma tabela}  \label{chp1:sec2:sub2}
+
+\par A Tabela \ref{tbl:simple} pode ser citada em qualquer parte. st sit amet facilisis magna etiam tempor. Luctus accumsan tortor posuere ac ut consequat semper viverra. Mauris commodo quis imperdiet massa tincidunt nunc. Arcu odio ut sem nulla. Iaculis eu non diam phasellus vestibulum lorem sed. Vitae tortor condimentum lacinia quis vel eros donec ac odio. Ornare arcu dui vivamus arcu. Nibh tellus molestie nunc non. Et netus et malesuada fames ac turpis egestas sed tempus. Eleifend donec pretium vulputate sapien nec. Sed lectus vestibulum mattis ullamcorper. Tincidunt dui ut ornare lectus sit. Donec adipiscing tristique risus nec feugiat in fermentum posuere urna. Ultricies lacus sed turpis tincidunt id aliquet risus feugiat. Ac placerat vestibulum lectus mauris ultrices eros in. Consectetur a erat nam at lectus urna. Enim neque volutpat ac tincidunt vitae semper quis lectus nulla. Feugiat sed lectus vestibulum mattis ullamcorper.
+
+\begin{table}[t]
+	% placed on top of page
+	\centering   
+	\scriptsize
+        \rowcolors{2}{white}{rowgray}
+	\begin{tabular}{ 
+ >{\raggedright\arraybackslash}m{1.5cm}  
+ >{\raggedright\arraybackslash}m{1.5cm}  
+ >{\raggedright\arraybackslash}m{2.5cm}  
+ >{\raggedright\arraybackslash}m{2.5cm}  
+ >{\raggedright\arraybackslash}m{2.5cm}} % preset number of columns and aligment
+        \hline
+        \textbf{Financing Scenario} & \textbf{Basic fee $F_b$ ($\text{USD}/\text{yr}$)$^*$} & \textbf{Flood protection fee $F_f$ ($\text{USD}/\text{yr}$)$^*$} & \textbf{Externality fee $f_h$ ($\text{USD}/\text{yr} \cdot \text{m}^2$)$^{**}$} & \textbf{Annual revenue $R_t$ ($\text{USD}/\text{yr}$)$^{***}$} \\
+        \hline
+        Scenario A & 6.03 & 15.30 & 0.10 & 2.5 million \\
+        Scenario B & 6.03 & 15.30 & 0.20 & 3.9 million \\
+        Scenario C & 6.03 & 15.30 & 1.00 & 15.4 million \\
+        Scenario D & 6.03 & 15.30 & 2.00 & 29.7 million \\
+        \hline
+	\end{tabular}
+        \smallskip
+        \parbox[t]{12cm}{\tiny
+          \textit{$^*$ Eleifend donec pretium vulputate sapien nec. Sed lectus vestibulum mattis ullamcorper. Tincidunt dui ut ornare lectus sit. \\
+          $^{**}$ Ornare arcu dui vivamus arcu. Nibh tellus molestie nunc non. Et netus et malesuada fames ac turpis egestas sed tempus.\\
+          $^{***}$ Enim neque volutpat ac tincidunt vitae semper quis lectus nulla. Feugiat sed lectus vestibulum mattis ullamcorper}
+        }
+	\caption[Ac placerat vestibulum lectus]{Ac placerat vestibulum lectus mauris ultrices eros in. Consectetur a erat nam at lectus urna. Enim neque volutpat ac tincidunt vitae semper quis lectus nulla. Feugiat sed lectus vestibulum mattis ullamcorper. Eleifend donec pretium vulputate sapien nec. Sed lectus vestibulum mattis ullamcorper. Tincidunt dui ut ornare lectus sit. Donec adipiscing tristique risus nec feugiat in fermentum posuere urna. Ultricies lacus sed turpis tincidunt id aliquet risus feugiat.}
+	\label{tbl:simple}
+\end{table}
+
+\par Est sit amet facilisis magna etiam tempor. Luctus accumsan tortor posuere ac ut consequat semper viverra. Mauris commodo quis imperdiet massa tincidunt nunc. Arcu odio ut sem nulla. Iaculis eu non diam phasellus vestibulum lorem sed. Vitae tortor condimentum lacinia quis vel eros donec ac odio. Ornare arcu dui vivamus arcu. Nibh tellus molestie nunc non. Et netus et malesuada fames ac turpis egestas sed tempus. Eleifend donec pretium vulputate sapien nec. Sed lectus vestibulum mattis ullamcorper. Tincidunt dui ut ornare lectus sit. Donec adipiscing tristique risus nec feugiat in fermentum posuere urna. Ultricies lacus sed turpis tincidunt id aliquet risus feugiat. Ac placerat vestibulum lectus mauris ultrices eros in. Consectetur a erat nam at lectus urna. Enim neque volutpat ac tincidunt vitae semper quis lectus nulla. Feugiat sed lectus vestibulum mattis ullamcorper.
+    
+\end{adjustwidth}
+
+
+\section{A última seção} \label{chp1:sec3}
+
+\begin{adjustwidth}{\bodytab}{0mm}
+
+\par Est sit amet facilisis magna etiam tempor. Luctus accumsan tortor posuere ac ut consequat semper viverra. Mauris commodo quis imperdiet massa tincidunt nunc. Arcu odio ut sem nulla. Iaculis eu non diam phasellus vestibulum lorem sed. Vitae tortor condimentum lacinia quis vel eros donec ac odio.
+
+\subsection{Aqui temos uma equação} \label{chp1:sec3:sub1}
+
+\par A Equação \eqref{eq:atvalue} pode ser citada em qualquer parte. Est sit amet facilisis magna etiam tempor. Luctus accumsan tortor posuere ac ut consequat semper viverra. Mauris commodo quis imperdiet massa tincidunt nunc. Arcu odio ut sem nulla. Iaculis eu non diam phasellus vestibulum lorem sed. Vitae tortor condimentum lacinia quis vel eros donec ac odio. Ornare arcu dui vivamus arcu. Nibh tellus molestie nunc non. Et netus et malesuada fames ac turpis egestas sed tempus. Eleifend donec pretium vulputate sapien nec. Sed lectus vestibulum mattis ullamcorper. Tincidunt dui ut ornare lectus sit. Donec adipiscing tristique risus nec feugiat in fermentum posuere urna. Ultricies lacus sed turpis tincidunt id aliquet risus feugiat. Ac placerat vestibulum lectus mauris ultrices eros in. Consectetur a erat nam at lectus urna. Enim neque volutpat ac tincidunt vitae semper quis lectus nulla. Feugiat sed lectus vestibulum mattis ullamcorper:
+\begin{equation}
+\label{eq:atvalue}
+A_{t}= \sum_{k=1}^{K} A_{k, t} \quad \forall t
+\end{equation}
+Est sit amet facilisis magna etiam tempor. Luctus accumsan tortor posuere ac ut consequat semper viverra. Mauris commodo quis imperdiet massa tincidunt nunc. Arcu odio ut sem nulla. Iaculis eu non diam phasellus vestibulum lorem sed. Vitae tortor condimentum lacinia quis vel eros donec ac odio. Ornare arcu dui vivamus arcu. Nibh tellus molestie nunc non.
+
+\blindtext[2]
+\end{adjustwidth}
+
+\section{Recomendações} \label{chp1:summary}
+
+\begin{adjustwidth}{\bodytab}{0mm}
+\par Geralmente é legal terminar um capítulo com recomendações. Est sit amet facilisis magna etiam tempor. Luctus accumsan tortor posuere ac ut consequat semper viverra. Mauris commodo quis imperdiet massa tincidunt nunc. Arcu odio ut sem nulla. Iaculis eu non diam phasellus vestibulum lorem sed. Vitae tortor condimentum lacinia quis vel eros donec ac odio. Ornare arcu dui vivamus arcu. Nibh tellus molestie nunc non.
+
+\begin{itemize}
+    \item[$\blacksquare$] \textbf{Primeira recomendação}. Est sit amet facilisis magna etiam tempor. Luctus accumsan tortor posuere ac ut consequat semper viverra. Mauris commodo quis imperdiet massa tincidunt nunc. Arcu odio ut sem nulla. Iaculis eu non diam phasellus vestibulum lorem sed. Vitae tortor condimentum lacinia quis vel eros donec ac odio. Ornare arcu dui vivamus arcu. Nibh tellus molestie nunc non.
+    \item  [$\blacksquare$] \textbf{Segunda recomendação}. Est sit amet facilisis magna etiam tempor. Luctus accumsan tortor posuere ac ut consequat semper viverra. Mauris commodo quis imperdiet massa tincidunt nunc. Arcu odio ut sem nulla. Iaculis eu non diam phasellus vestibulum lorem sed. Vitae tortor condimentum lacinia quis vel eros donec ac odio. Ornare arcu dui vivamus arcu. Nibh tellus molestie nunc non.
+    \item[$\blacksquare$] \textbf{Terceira recomendação}.Est sit amet facilisis magna etiam tempor. Luctus accumsan tortor posuere ac ut consequat semper viverra. Mauris commodo quis imperdiet massa tincidunt nunc. Arcu odio ut sem nulla. Iaculis eu non diam phasellus vestibulum lorem sed. Vitae tortor condimentum lacinia quis vel eros donec ac odio. Ornare arcu dui vivamus arcu. Nibh tellus molestie nunc non. 
+\end{itemize}
+
+\end{adjustwidth}
+
+
+\end{document}
+ 

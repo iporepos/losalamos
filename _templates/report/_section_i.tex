@@ -1,0 +1,19 @@
+\documentclass[./main.tex]{subfiles}
+\graphicspath{{\subfix{./figs}}}
+
+% ------------ main document ------------
+\begin{document}
+
+\section*{Uma seção fantasma}
+\phantomsection
+\addcontentsline{toc}{section}{Uma seção fantasma}
+\label{sec_i}
+
+\begin{adjustwidth}{\bodytab}{0mm}
+
+\par Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor \gls{prag-realism} incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis \gls{rationalism} aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum \cite{Pearce2002a}.
+
+\end{adjustwidth}
+
+\clearpage
+\end{document}

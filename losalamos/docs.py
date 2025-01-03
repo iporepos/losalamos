@@ -301,7 +301,6 @@ class TexDoc(MbaE):
 
         # Handle corresponding
         df_corr = df.query("Corresponding == 'yes'").copy()
-        print(df_corr.to_string())
         _nm = df_corr["Name"].values[0]
         _em = df_corr["Email"].values[0]
         authors_corr = "Corresponding author: {" + _nm + r"} (\href{mailto:" + _em + r"}{"+ _em + "})"
@@ -325,6 +324,55 @@ class TexDoc(MbaE):
                 file.write(authors_corr + "\n")
             with open(f"{dst_folder}/authors_credit.tex", 'w', encoding="utf-8") as file:
                 file.write(authors_credit + "\n")
+
+        return None
+
+    @staticmethod
+    def get_team(src_table, dst_folder=None):
+        df = pd.read_csv(src_table, sep=";")
+        df = df.sort_values(by="Order")
+
+        ls_std = [
+            r"\noindent \sffamily \large{\textbf{@name}} \rmfamily\\ [3mm]",
+            r"\small{",
+            r"\href{mailto:@email}{@email} | @phone \\",
+            r"@profession | @education \\",
+            r"@jobtitle \\",
+            r"\href{@cv}{@cv} \\ [3mm]",
+            r"}",
+            r"@credit \\",
+            "\n\n"
+        ]
+
+        team_list = []
+
+        for i in range(len(df)):
+            # get the dict
+            d = {
+                "@name": df["Name"].values[i],
+                "@phone": df["Phone"].values[i],
+                "@email": df["Email"].values[i],
+                "@profession": df["Profession"].values[i],
+                "@education": df["Education"].values[i],
+                "@jobtitle": df["Jobtitle"].values[i],
+                "@credit": df["Credit"].values[i],
+                "@cv": df["CV"].values[i],
+            }
+            print(d)
+            lst_new = ls_std.copy()
+            for j in range(len(lst_new)):
+                for k in d:
+                    lst_new[j] = lst_new[j].replace(k, d[k])
+            team_list = team_list + lst_new[:]
+
+        # export
+        if dst_folder:
+            with open(f"{dst_folder}/team_list.tex", 'w', encoding="utf-8") as file:
+                file.writelines(team_list)
+
+
+        return None
+
 
 class DocTable(DataSet):
 
