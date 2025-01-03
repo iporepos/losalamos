@@ -409,46 +409,74 @@ class DocTable(DataSet):
         return None
 
     @staticmethod
-    def to_latex(df, filename, folder, caption=None, label=None):
+    def to_latex(df, filename, folder, caption=None, caption_lot=None, label=None):
+        """Convert a DataFrame to a LaTeX table and save it as a .tex file in the specified folder.
+
+        :param df: DataFrame to be converted to LaTeX format.
+        :type df: pandas.DataFrame
+        :param filename: The name of the file to save the LaTeX table as (without the extension).
+        :type filename: str
+        :param folder: The path to the folder where the .tex file will be saved.
+        :type folder: str
+        :param caption: The caption for the table. Defaults to a placeholder caption if None.
+        :type caption: Optional[str]
+        :param caption_lot: The List of Tables caption. Defaults to a placeholder caption if None.
+        :type caption_lot: Optional[str]
+        :param label: The LaTeX label to be used for referencing the table. Defaults to 'tab:label' if None.
+        :type label: Optional[str]
+        :return: None
+        :rtype: None
+        """
+
+        # handle width
+        w_len = len(df.columns)
+        _f = str(round(1/w_len, 1))
+
         list_bulk = list()
         # preable
-        list_bulk.append(r"% Insert Table")
-        list_bulk.append(r"\begin{table}[t]")
+        list_bulk.append(r"\begin{table}[h!]")
         list_bulk.append(r"\centering")
-        list_bulk.append(r"\tiny")
-        list_bulk.append(r"\rowcolors{2}{white}{rowgray}")
+        list_bulk.append(r"\scriptsize")
+        list_bulk.append(r"\sffamily")
+        # caption
+        if caption is None:
+            caption = "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip."
+        if caption_lot is None:
+            caption_lot = "Duis aute irure dolor"
+        list_bulk.append(r"\caption["+ caption_lot + "]{" + caption + "}")
+
+        if label is None:
+            label = "tab:label"
+
+        list_bulk.append(r"\label{" + label + "}")
+
+
         # heading
-        str_aux = "p{1cm}" * len(df.columns)
+        list_bulk.append(r"\rowcolors{2}{white}{rowgray}")
+        str_aux2 = r">{\raggedright\arraybackslash}m{"+ _f +r"\textwidth}"
+        str_aux = str_aux2 * len(df.columns)
         list_bulk.append(r"\begin{tabular}{" + str_aux + "}")
         list_bulk.append(r"\toprule")
-        list_bulk.append(r"\midrule")
         list_heading = [r"\textbf{" + c + "}" for c in df.columns]
         str_heading = " & ".join(list_heading) + r"\\"
         list_bulk.append(str_heading)
+        list_bulk.append(r"\midrule")
+
         # data
         df.fillna(value="", inplace=True)
         for i in range(len(df)):
             row = df.values[i]
-            print(row)
             str_row = " & ".join(list(row)) + r"\\"
             list_bulk.append(str_row[:])
         list_bulk.append(r"\bottomrule")
         list_bulk.append(r"\end{tabular}")
-        if caption is None:
-            list_bulk.append(r"\caption{Table Caption}")
-        else:
-            list_bulk.append(r"\caption{" + caption + "}")
-        if label is None:
-            list_bulk.append(r"\label{tab:label}")
-        else:
-            list_bulk.append(r"\label{" + label + "}")
         list_bulk.append(r"\end{table}")
 
         # include new line
         list_bulk = [line + "\n" for line in list_bulk]
 
-        filepath = os.path.join(folder, filename + ".txt")
-        f = open(filepath, mode="w")
+        filepath = os.path.join(folder, filename + ".tex")
+        f = open(filepath, mode="w", encoding="utf-8")
         f.writelines(list_bulk)
         f.close()
         return None

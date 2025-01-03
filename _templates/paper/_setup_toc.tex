@@ -1,11 +1,27 @@
 % ------------ table of contents ------------
 \usepackage{tocloft}
+
+% setup names
+\setlocalecaption{portuguese}{contents}{Sumário}
+
+% Ensure dots are shown for sections
+\renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}}
+
+% Remove dots for subsections
+\renewcommand{\cftsubsecleader}{\hfill}
+
+% Remove dots for subsubsections if needed
+\renewcommand{\cftsubsubsecleader}{\hfill}
+
 % set to sans
 \renewcommand{\cfttoctitlefont}{\Large \bfseries\sffamily}
+
 % Para a lista de figuras
-\renewcommand{\cftloftitlefont}{\Large \bfseries\sffamily}  
+\renewcommand{\cftloftitlefont}{\Large \bfseries\sffamily}
+
 % Para a lista de tabelas
-\renewcommand{\cftlottitlefont}{\Large \bfseries\sffamily}  
+\renewcommand{\cftlottitlefont}{\Large \bfseries\sffamily}
+
 % Compact spacing in table of contents
 \setlength{\cftbeforesecskip}{1ex}
 \setlength{\cftbeforesubsecskip}{0.5ex}
