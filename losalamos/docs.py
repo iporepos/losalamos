@@ -9,6 +9,41 @@ import pandas as pd
 import re
 from losalamos.root import DataSet, MbaE
 
+
+def fig_to_latex(caption, caption_lof, label, figfile, folder=None, filename=None):
+    list_bulk = list()
+    # preable
+    list_bulk.append(r"\begin{figure}[h!]")
+    list_bulk.append(r"\centering")
+    list_bulk.append(r"\scriptsize")
+    list_bulk.append(r"\sffamily")
+    # image
+    list_bulk.append(r"\includegraphics[width=0.95\textwidth]{"+ figfile + "}")
+    # caption
+    if caption is None:
+        caption = "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip."
+    if caption_lof is None:
+        caption_lof = "Duis aute irure dolor"
+    list_bulk.append(r"\caption[" + caption_lof + "]{" + caption + "}")
+
+    if label is None:
+        label = "fig:label"
+
+    list_bulk.append(r"\label{" + label + "}")
+
+    list_bulk.append(r"\end{figure}")
+
+    # include new line
+    list_bulk = [line + "\n" for line in list_bulk]
+
+    if folder and filename:
+        filepath = os.path.join(folder, filename + ".tex")
+        f = open(filepath, mode="w", encoding="utf-8")
+        f.writelines(list_bulk)
+        f.close()
+    return list_bulk
+
+
 class TexDoc(MbaE):
 
     def __init__(self, name="MyTex", alias="Tex"):
@@ -381,7 +416,7 @@ class DocTable(DataSet):
         # ... continues in downstream objects ... #
 
     def load_data(self, file_data):
-        """Load data from file_doc. Expected to overwrite superior methods.
+        """Load data from file. Expected to overwrite superior methods.
 
         :param file_data: file_doc path to data.
         :entry_type file_data: str
@@ -409,7 +444,7 @@ class DocTable(DataSet):
         return None
 
     @staticmethod
-    def to_latex(df, filename, folder, caption=None, caption_lot=None, label=None):
+    def to_latex(df, caption=None, caption_lot=None, label=None, filename=None, folder=None):
         """Convert a DataFrame to a LaTeX table and save it as a .tex file in the specified folder.
 
         :param df: DataFrame to be converted to LaTeX format.
@@ -436,7 +471,7 @@ class DocTable(DataSet):
         # preable
         list_bulk.append(r"\begin{table}[h!]")
         list_bulk.append(r"\centering")
-        list_bulk.append(r"\scriptsize")
+        list_bulk.append(r"\tiny")
         list_bulk.append(r"\sffamily")
         # caption
         if caption is None:
@@ -466,7 +501,11 @@ class DocTable(DataSet):
         df.fillna(value="", inplace=True)
         for i in range(len(df)):
             row = df.values[i]
+
             str_row = " & ".join(list(row)) + r"\\"
+            # handle underscores
+            str_row = str_row.replace("_", "\_")
+
             list_bulk.append(str_row[:])
         list_bulk.append(r"\bottomrule")
         list_bulk.append(r"\end{tabular}")
@@ -475,11 +514,12 @@ class DocTable(DataSet):
         # include new line
         list_bulk = [line + "\n" for line in list_bulk]
 
-        filepath = os.path.join(folder, filename + ".tex")
-        f = open(filepath, mode="w", encoding="utf-8")
-        f.writelines(list_bulk)
-        f.close()
-        return None
+        if folder and filename:
+            filepath = os.path.join(folder, filename + ".tex")
+            f = open(filepath, mode="w", encoding="utf-8")
+            f.writelines(list_bulk)
+            f.close()
+        return list_bulk
 
     @staticmethod
     def to_rst(df, filename, folder):
@@ -512,7 +552,11 @@ class DocTable(DataSet):
 
 if __name__ == "__main__":
 
-    print("hello world!")
+    d = "C:/Users/Ipo/My Drive/athens/losalamos/B000/B008_paper-dma/inputs"
+    TexDoc.get_authors(
+        src_table=f"{d}/authors.csv",
+        dst_folder=d
+    )
 
 
 
