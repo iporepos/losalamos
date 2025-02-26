@@ -269,8 +269,7 @@ class MbaE:
 
 
 class Collection(MbaE):
-    """
-    A collection of primitive ``MbaE`` objects with associated metadata.
+    """A collection of primitive ``MbaE`` objects with associated metadata.
     Useful for large scale manipulations in ``MbaE``-based objects.
     Expected to have custom methods and attributes downstream.
 
@@ -1006,6 +1005,10 @@ class Note(MbaE):
         }
         # update
         dict_meta.update(dict_meta_local)
+
+        # direct update from note metadata
+        dict_meta.update(self.metadata)
+
         return dict_meta
 
     def load_metadata(self):
