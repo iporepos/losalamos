@@ -667,11 +667,14 @@ class Ref(MbaE):
 
         # export note
         if note_name is None:
+            # paper is the ckey
             if self.bib_dict["entry_type"] == "article":
                 note_name = self.bib_dict["citation_key"]
+            # thesis is the author (year) name
             elif self.bib_dict["entry_type"] == "thesis":
                 author_full = self.author.split(",")[1].strip() + " " + self.author.split(",")[0].strip()
                 note_name = "{} ({})".format(author_full, self.year)
+            # else
             else:
                 note_name = self.bib_dict["title"]
 
@@ -685,7 +688,12 @@ class Ref(MbaE):
             body=comments,
             pdf_name=pdf_name
         )
-        print(f"--- Added MD note: {o}")
+        print(f"--- Added Markdown note: {o}")
+
+        # Handle cover
+        if self.bib_dict["entry_type"] in ["book", "techreport"]:
+            im = RefNote.get_cover_image(file_path=dst_pdf)
+            print(f"--- Added cover file: {im}")
 
 
     def to_bib(self, output_dir, filename):
@@ -1242,9 +1250,13 @@ class Ref(MbaE):
         author = bib_dict["author"]
 
         # list of human authors
-        if entrytype == "article" or entrytype == "thesis":
-            first_author = author.split(" and ")[0].strip()
+        if entrytype == "article" or entrytype == "thesis" or entrytype == "book":
+            if "and" in author:
+                first_author = author.split(" and ")[0].strip()
+            else:
+                first_author = author[:]
             first_name = first_author.split(",")[0].strip().capitalize()
+        #
         elif " and " in author:
             first_author = author.split(" and ")[0].strip()
             first_name = first_author.split(",")[0].strip().capitalize()
@@ -1549,73 +1561,75 @@ class RefNote(Note):
                 "doi",
                 "entry_type",
                 "citation_key",
+                "citation_in",
                 "author",
                 "year",
                 "title",
+                "abstract",
                 "journal",
                 "volume",
                 "number",
                 "pages",
                 "issn",
                 "url",
-                "abstract",
-                "tags",
-                "timestamp",
                 "file",
-                "citation_in"
+                "tags",
+                "timestamp"
             ],
             "book": [
                 "isbn",
                 "entry_type",
                 "citation_key",
+                "citation_in",
                 "author",
                 "year",
                 "title",
+                "abstract",
                 "publisher",
                 "url",
-                "abstract",
-                "tags",
-                "timestamp",
                 "file",
-                "citation_in"
+                "tags",
+                "timestamp"
             ],
             "techreport": [
                 "entry_type",
                 "citation_key",
+                "citation_in",
                 "author",
                 "year",
                 "title",
+                "abstract",
                 "institution",
                 "address",
                 "number",
                 "isbn",
                 "issn",
                 "url",
-                "abstract",
+                "file",
                 "tags",
                 "timestamp",
-                "file",
-                "citation_in"
+
             ],
             "thesis": [
                 "entry_type",
                 "citation_key",
+                "citation_in",
                 "author",
                 "year",
                 "title",
+                "abstract",
                 "school",
                 "address",
                 "type",
                 "url",
-                "abstract",
+                "file",
                 "tags",
                 "timestamp",
-                "file",
-                "citation_in"
             ],
             "dataset": [
                 "entry_type",
                 "citation_key",
+                "citation_in",
                 "author",
                 "year",
                 "title",
@@ -1633,8 +1647,8 @@ class RefNote(Note):
                 "licence",
                 "tags",
                 "timestamp",
-                "citation_in"
-            ],
+            ]
+
         }
 
         # Expected filename for each template:
@@ -1775,7 +1789,7 @@ class RefNote(Note):
             )
 
         elif entry_type == "techreport":
-            image_name = bib_dict.get("institution", "")
+            image_name = title_str
             institution = bib_dict.get("institution", "")
             subtitle = f"by {citation_in} from [[{institution}]]"
             self.data["Head"] = generate_head(
@@ -1795,7 +1809,7 @@ class RefNote(Note):
             subtitle = f"by [[{author_full}]] ({year_str}) from [[{institution}]]"
             file_str = f"{author_full} ({year_str})"
             self.data["Head"] =  generate_head(
-                image_name=title_str,
+                image_name=image_name,
                 title_str=title_str,
                 subtitle=subtitle,
                 entry_type=entry_type,
@@ -2043,6 +2057,36 @@ class RefNote(Note):
         matches = pattern.findall(content)
 
         return matches[0]
+
+    @staticmethod
+    def get_cover_image(file_path, size=500, quality=300):
+        import fitz  # PyMuPDF
+        from PIL import Image
+
+        d = os.path.dirname(file_path)
+        nm = os.path.basename(file_path).split(".")[0]
+
+        # Open the PDF
+        pdf_path = file_path[:]
+        doc = fitz.open(pdf_path)
+
+        # Render the first page as an image
+        page = doc[0]  # Get the first page
+        pix = page.get_pixmap(dpi=100)  # Lower DPI for smaller size
+
+        # Convert to PIL image
+        image = Image.frombytes("RGB", [pix.width, pix.height], pix.samples)
+
+        # Resize for a smaller image
+        image.thumbnail((size, size))
+
+        # Save as a small-sized JPG
+        image_file = f"{d}/{nm}.jpg"
+        image.save(image_file, "JPEG", quality=quality)
+
+        return image_file
+
+
 
 
 class RefColl(Collection):  # todo docstring

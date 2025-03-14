@@ -37,9 +37,11 @@ class Sapiens(Note):
         }
         self.text_fields = [
             "place",
+            "abstract",
             "edu_background",
             "affiliation_pro",
             "affiliation_edu",
+            "address"
             #"abstract"
         ]
         self.photo = False
@@ -57,6 +59,48 @@ class Sapiens(Note):
         for tf in self.text_fields:
             self.metadata[tf] = '"{}"'.format(self.metadata[tf])
 
+
+    def update_data(self):
+        """Updates all standard sections of the data structure based on the metadata.
+
+        :return: None
+        """
+        # update head of data
+        self.update_head()
+        return None
+
+    def update_head(self):
+        """Updates the head section of the data structure based on the metadata.
+
+        :return: None
+        """
+
+        image_name = self.metadata["name"]
+        title_str = self.metadata["name"]
+        entry_type = "sapiens"
+        abstract = self.metadata.get("abstract", "{abstract}") or "{abstract}"
+        if abstract == '""':
+            abstract = "{abstract}"
+        head_lst = [
+            "",
+            f"![[{image_name}.jpg|200]]",
+            "",
+            entry_type.upper(),
+            "",
+            f"# {title_str}",
+            "{}".format(
+                self.metadata.get("email", "{email}") or "{email}"
+            ),
+            "",
+            "> [!Info]+ Abstract",
+            f"> {abstract}"
+        ]
+
+        # overwrite head
+        self.data["Head"] = head_lst[:]
+
+
+        return None
 
 if __name__ == "__main__":
 

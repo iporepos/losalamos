@@ -8,7 +8,7 @@ def update(note_file):
     n.file_note = note_file
     n.load()
 
-    # update head and tail
+    # update only head and tail
     n.update_head()
     n.update_tail()
 
@@ -21,12 +21,15 @@ def update(note_file):
 
 def main(lib_folder):
     print(f"\n--- Updating refs from: {lib_folder}")
+
     # get list of files
     ls_files = glob.glob(f"{lib_folder}/*.md")
+
     # run all
     for f in ls_files:
         update(note_file=f)
-    print("\n OK.")
+
+    print("\n ok.")
     return None
 
 
