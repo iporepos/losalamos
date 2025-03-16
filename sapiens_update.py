@@ -1,28 +1,28 @@
-import os, glob
-from losalamos.refs import Ref, RefNote
+import glob
+from losalamos.zion import Sapiens
 import argparse
 
 
 def update(note_file):
     # load note
-    n = RefNote()
+    n = Sapiens()
     n.file_note = note_file
     n.load()
 
-    # update only head and tail
+    # update only head
     n.update_head()
-    n.update_tail()
 
     # save
     n.save()
-    file_name = os.path.basename(note_file)
+
+    file_name = n.metadata["name"]
     print(f"--- updated: {file_name}")
 
     return None
 
 
 def main(lib_folder):
-    print(f"\n--- Updating refs from: {lib_folder}")
+    print(f"\n--- Updating sapiens from: {lib_folder}")
 
     # get list of files
     ls_files = glob.glob(f"{lib_folder}/*.md")
@@ -36,12 +36,12 @@ def main(lib_folder):
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Update reference notes")
+    parser = argparse.ArgumentParser(description="Update sapiens notes")
     parser.add_argument(
         "--lib_folder",
         type=str,
         required=True,
-        help="Path to the library folder where reference notes are expected.",
+        help="Path to the folder where sapiens notes are expected.",
     )
     args = parser.parse_args()
     main(lib_folder=args.lib_folder)

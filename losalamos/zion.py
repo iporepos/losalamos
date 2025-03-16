@@ -1,5 +1,6 @@
 from losalamos.root import Note
 
+
 class Sapiens(Note):
 
     def __init__(self, name="MyNote", alias="Nt1"):
@@ -41,11 +42,10 @@ class Sapiens(Note):
             "edu_background",
             "affiliation_pro",
             "affiliation_edu",
-            "address"
-            #"abstract"
+            "address",
+            # "abstract"
         ]
         self.photo = False
-
 
     def load_metadata(self):
         incoming_metadata = Note.parse_metadata(self.file_note)
@@ -55,10 +55,9 @@ class Sapiens(Note):
             if k in expected_fields:
                 filtered_metadata[k] = incoming_metadata[k]
         self.metadata.update(filtered_metadata)
-        #print(self.metadata)
+        # print(self.metadata)
         for tf in self.text_fields:
             self.metadata[tf] = '"{}"'.format(self.metadata[tf])
-
 
     def update_data(self):
         """Updates all standard sections of the data structure based on the metadata.
@@ -88,19 +87,17 @@ class Sapiens(Note):
             entry_type.upper(),
             "",
             f"# {title_str}",
-            "{}".format(
-                self.metadata.get("email", "{email}") or "{email}"
-            ),
+            "{}".format(self.metadata.get("email", "{email}") or "{email}"),
             "",
             "> [!Info]+ Abstract",
-            f"> {abstract}"
+            f"> {abstract}",
         ]
 
         # overwrite head
         self.data["Head"] = head_lst[:]
 
-
         return None
+
 
 if __name__ == "__main__":
 

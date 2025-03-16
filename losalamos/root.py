@@ -1192,30 +1192,25 @@ class Note(MbaE):
             body = lines
         elif len(separator_indices) == 1:
             # One separator: Head is before, Body is between, Tail is after
-            head = lines[:separator_indices[0]]
-            body = lines[separator_indices[0] + 1:]
+            head = lines[: separator_indices[0]]
+            body = lines[separator_indices[0] + 1 :]
         elif len(separator_indices) == 2:
             # Two separators: Head, Body, and Tail
-            head = lines[:separator_indices[0]]
-            body = lines[separator_indices[0] + 1:separator_indices[1]]
-            tail = lines[separator_indices[1] + 1:]
+            head = lines[: separator_indices[0]]
+            body = lines[separator_indices[0] + 1 : separator_indices[1]]
+            tail = lines[separator_indices[1] + 1 :]
         else:
             # More than two separators: Head is before the first, Body is between the first and last, Tail is after the last
-            head = lines[:separator_indices[0]]
-            body = lines[separator_indices[0] + 1:separator_indices[-1]]
-            tail = lines[separator_indices[-1] + 1:]
+            head = lines[: separator_indices[0]]
+            body = lines[separator_indices[0] + 1 : separator_indices[-1]]
+            tail = lines[separator_indices[-1] + 1 :]
 
         # Clean up any extra newlines from the content
         head = [line.strip() for line in head]
         body = [line.strip() for line in body]
         tail = [line.strip() for line in tail]
 
-        return {
-            "Head": head,
-            "Body": body,
-            "Tail": tail
-        }
-
+        return {"Head": head, "Body": body, "Tail": tail}
 
     @staticmethod
     def list_by_pattern(md_dict, patt_type="tag"):
@@ -2530,6 +2525,7 @@ class FileSys(DataSet):
         # Create a zip archive from the directory
         shutil.make_archive(dst_dir, "zip", src_dir)
         return None
+
     @staticmethod
     def merge_pdfs(lst_pdfs, dst_dir, output_filename):
         """Merge PDF files to a single PDF
@@ -2549,13 +2545,13 @@ class FileSys(DataSet):
             output_pdf = f"{dst_dir}/{output_filename}.pdf"
             pdf_writer = PyPDF2.PdfWriter()
             for pdf in lst_pdfs:
-                with open(pdf, 'rb') as pdf_file:
+                with open(pdf, "rb") as pdf_file:
                     pdf_reader = PyPDF2.PdfReader(pdf_file)
                     for page_num in range(len(pdf_reader.pages)):
                         page = pdf_reader.pages[page_num]
                         pdf_writer.add_page(page)
 
-            with open(output_pdf, 'wb') as output_file:
+            with open(output_pdf, "wb") as output_file:
                 pdf_writer.write(output_file)
 
             return output_pdf
