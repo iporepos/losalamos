@@ -3,49 +3,222 @@ Classes for parsing, handling and managing documents
 
 """
 
-import os
-import shutil
-
+import os, shutil, re
 import pandas as pd
-import re
-from losalamos.root import DataSet, MbaE
+from losalamos.root import DataSet, MbaE, Collection
+
+def blind_text():
+    return "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ac bibendum orci. Cras erat elit, consequat vel erat ac, tincidunt pulvinar lacus. Pellentesque vitae consectetur quam."
 
 
-def fig_to_latex(caption, caption_lof, label, figfile, folder=None, filename=None):
-    list_bulk = list()
-    # preable
-    list_bulk.append(r"\begin{figure}[h!]")
-    list_bulk.append(r"\centering")
-    list_bulk.append(r"\scriptsize")
-    list_bulk.append(r"\sffamily")
-    # image
-    list_bulk.append(r"\includegraphics[width=0.95\textwidth]{" + figfile + "}")
-    # caption
-    if caption is None:
-        caption = "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip."
-    if caption_lof is None:
-        caption_lof = "Duis aute irure dolor"
-    list_bulk.append(r"\caption[" + caption_lof + "]{" + caption + "}")
+class DocFig(MbaE):
+    def __init__(self, name="MyFig", alias="Fig"):
+        super().__init__(name=name, alias=alias)
+        # setup attributes
+        self.fig_id = self.name # use name by default
+        self.caption = blind_text()
+        self.caption_lof = blind_text()
+        self.label = self.alias
+        self.status_t1 = "Expected"
+        self.status_t2 = "Expected"
+        self.part = "Main text"
+        self.figsize = "Large"
+        self.playout = "Columns 1 Rows 1"
+        self.descr = blind_text()
+        self.fig_file = None
+        self.svg_file = None
+        self.thumbnail_file = None
+        self.thumbnail_t1_file = None
+        self.thumbnail_t2_file = None
+        self.pannels_dct = None
 
-    if label is None:
-        label = "fig:label"
+    def _set_fields(self):
+        """Set fields names"""
+        super()._set_fields()
+        # Attribute fields
+        self.fig_id_field = "Id"
+        self.caption_field = "Caption"
+        self.caption_lof_field = "Caption LOF"
+        self.status_t1_field = "Status Tier 1"
+        self.status_t2_field = "Status Tier 2"
+        self.descr_field = "Description"
+        self.part_field = "Part"
+        self.label_field = "Label"
+        self.figsize_field = "Figure Size"
+        self.playout_field = "Pannels Layout"
+        self.thumbnail_t1_file_field = "Thumbnail Tier 1"
+        self.thumbnail_t2_file_field = "Thumbnail Tier 2"
+        # ... continues in downstream objects ... #
 
-    list_bulk.append(r"\label{" + label + "}")
+    def get_metadata(self):
+        """Get a dictionary with object metadata.
 
-    list_bulk.append(r"\end{figure}")
+        .. note::
 
-    # include new line
-    list_bulk = [line + "\n" for line in list_bulk]
+            Metadata does **not** necessarily inclue all object attributes.
 
-    if folder and filename:
-        filepath = os.path.join(folder, filename + ".tex")
-        f = open(filepath, mode="w", encoding="utf-8")
-        f.writelines(list_bulk)
-        f.close()
-    return list_bulk
+        :return: dictionary with all metadata
+        :rtype: dict
+        """
+        dict_meta = super().get_metadata()
+
+        # add new fields
+        dict_meta[self.fig_id_field] = self.fig_id
+        dict_meta[self.label_field] = self.label
+        dict_meta[self.caption_field] = self.caption
+        dict_meta[self.caption_lof_field] = self.caption_lof
+        dict_meta[self.status_t1_field] = self.status_t1
+        dict_meta[self.status_t2_field] = self.status_t2
+        dict_meta[self.descr_field] = self.descr
+        dict_meta[self.part_field] = self.part
+        dict_meta[self.figsize_field] = self.figsize
+        dict_meta[self.playout_field] = self.playout
+        dict_meta[self.thumbnail_t1_file_field] = self.thumbnail_t1_file
+        dict_meta[self.thumbnail_t2_file_field] = self.thumbnail_t2_file
+
+        return dict_meta
+
+    def to_latex(self, folder=None, filename=None, position="h!", fontsize="scriptsize", fontfamily="sffamily", wfactor=0.95):
+        """Generates a LaTeX figure environment containing an image and its corresponding caption,
+        and saves it as a `.tex` file if folder and filename is provided.
+
+        :param folder: The directory where the LaTeX file will be saved.
+        :type folder: str, optional
+        :param filename: The name of the LaTeX file (without extension).
+        :type filename: str, optional
+        :param position: The positioning argument for the LaTeX figure environment (e.g., "h!", "t", "b").
+        :type position: str, optional
+        :param fontsize: The font size command to be used (e.g., "scriptsize", "footnotesize").
+        :type fontsize: str, optional
+        :param fontfamily: The font family command to be used (e.g., "sffamily", "rmfamily").
+        :type fontfamily: str, optional
+        :param wfactor: The width factor for scaling the included image relative to text width.
+        :type wfactor: float, optional
+        :return: A list of strings representing the lines of the generated LaTeX figure environment.
+        :rtype: list[str]
+        """
+        list_bulk = list()
+        # preable
+        list_bulk.append(r"\begin{figure}["+ position + "]")
+        list_bulk.append(r"\centering")
+        list_bulk.append(r"\{}".format(fontsize) )
+        list_bulk.append(r"\{}".format(fontfamily))
+
+        # image
+        list_bulk.append(r"\includegraphics[width={}\textwidth]".format(wfactor) + "{" + os.path.basename(self.fig_file) + "}")
+        list_bulk.append(r"\caption[" + self.caption_lof + "]{" + self.caption + "}")
+        list_bulk.append(r"\label{" + self.label + "}")
+        list_bulk.append(r"\end{figure}")
+
+        # include new line
+        list_bulk = [line + "\n" for line in list_bulk]
+
+        # export
+        if folder and filename:
+            filepath = os.path.join(folder, filename + ".tex")
+            f = open(filepath, mode="w", encoding="utf-8")
+            f.writelines(list_bulk)
+            f.close()
+
+        return list_bulk
+
+    def to_latex_report(self, template_file, folder=None, filename=None):
+        """Generates a LaTeX report based on a template file, replacing placeholders with
+        instance attributes and optionally saving the output to a `.tex` file.
+
+        :param template_file: Path to the LaTeX template file containing placeholders.
+        :type template_file: str
+        :param folder: Directory where the output LaTeX file should be saved (optional).
+        :type folder: str, optional
+        :param filename: Name of the output LaTeX file (without extension) (optional).
+        :type filename: str, optional
+        :return: A list of strings representing the lines of the generated LaTeX report.
+        :rtype: list[str]
+        """
+
+        # open the template
+        fle = open(file=template_file, encoding="utf-8", mode="r")
+        list_bulk = fle.readlines()
+        fle.close()
+
+        # handle colors
+        dct_status = {
+            "Expected": r"\textcolor{red}{Expected}",
+            "Concluded": r"\textcolor{YellowOrange}{In progress}",
+            "Concluded": r"\textcolor{OliveGreen}{Concluded}",
+        }
+
+        # set replacer object
+        dct_replacer = {
+            "[{}]".format(self.label_field): self.label,
+            "[{}]".format(self.name_field): self.name,
+            "[{}]".format(self.part_field): self.part,
+            "[{}]".format(self.descr_field): self.descr,
+            "[{}]".format(self.caption_field): self.caption,
+            "[figt1sts]": dct_status[self.status_t1],
+            "[figt2sts]": dct_status[self.status_t2],
+            "[{}]".format(self.thumbnail_t1_file_field): self.thumbnail_t1_file if self.thumbnail_t1_file is not None else "example-image",
+            "[{}]".format(self.thumbnail_t2_file_field): self.thumbnail_t2_file if self.thumbnail_t1_file is not None else "example-image",
+        }
+
+        # loop for replace itens in placeholders
+        for k in dct_replacer:
+            for i in range(len(list_bulk)):
+                list_bulk[i] = list_bulk[i].replace(k, dct_replacer[k])[:]
+
+        # handle pannel list
+        if self.pannels_dct is not None:
+            list_bulk.append("\n\n")
+            list_bulk.append(r"\noindent \textbf{Pannels}" + "\n")
+            list_bulk.append(r"\begin{itemize}" + "\n")
+            for k in self.pannels_dct:
+                s_aux = r"    \item Pannel \textbf{" + k + "}: " + self.pannels_dct[k] + ";" + "\n"
+                list_bulk.append(s_aux)
+            list_bulk.append(r"\end{itemize}" + "\n")
+
+        # new page
+        list_bulk.append("\n")
+        list_bulk.append(r"\clearpage" + "\n")
+        list_bulk.append("\n")
+
+        # export
+        if folder and filename:
+            filepath = os.path.join(folder, filename + ".tex")
+            f = open(filepath, mode="w", encoding="utf-8")
+            f.writelines(list_bulk)
+            f.close()
+
+        return list_bulk
 
 
-class TexDoc(MbaE):
+class DocFigColl(Collection):
+
+    def __init__(self):
+        super().__init__(base_object=DocFig, name="MyFigColl", alias="FigCol0")
+
+    def load_catalog(self, df_file):
+        df = pd.read_csv(df_file, sep=";")
+        for i in range(len(df)):
+            _NewFig= DocFig()
+            _NewFig.name = df[_NewFig.name_field].values[i]
+            _NewFig.alias = df[_NewFig.alias_field].values[i]
+            _NewFig.fig_id = df[_NewFig.fig_id_field].values[i]
+            _NewFig.caption = df[_NewFig.caption_field].values[i]
+            _NewFig.caption_lof = df[_NewFig.caption_lof_field].values[i]
+            _NewFig.status_t1 = df[_NewFig.status_t1_field].values[i]
+            _NewFig.status_t2 = df[_NewFig.status_t2_field].values[i]
+            _NewFig.descr = df[_NewFig.descr_field].values[i]
+            _NewFig.part = df[_NewFig.part_field].values[i]
+            _NewFig.figsize = df[_NewFig.figsize_field].values[i]
+            _NewFig.playout = df[_NewFig.playout_field].values[i]
+            _NewFig.label = df[_NewFig.label_field].values[i]
+            _NewFig.thumbnail_t1_file = df[_NewFig.thumbnail_t1_file_field].values[i]
+            _NewFig.thumbnail_t2_file = df[_NewFig.thumbnail_t2_file_field].values[i]
+
+            self.append(new_object=_NewFig)
+
+
+class DocTex(MbaE):
 
     def __init__(self, name="MyTex", alias="Tex"):
         super().__init__(name=name, alias=alias)
@@ -70,7 +243,7 @@ class TexDoc(MbaE):
         line_2 = "{"
         line_3 = f"\tname={gls_name},"
         if gls_descr is None:
-            gls_descr = TexDoc().red_blind
+            gls_descr = DocTex().red_blind
         line_4 = "\tdescription={" + gls_descr + "}"
         line_5 = "}"
         return [line_0, line_1, line_2, line_3, line_4, line_5]
@@ -91,7 +264,7 @@ class TexDoc(MbaE):
         :rtype: None
         """
         # get formatted entry in list
-        new_lines = TexDoc.gls_format(gls_name, gls_alias, gls_descr)
+        new_lines = DocTex.gls_format(gls_name, gls_alias, gls_descr)
         # Open the file in append mode
         with open(gls_file, "a", encoding="utf-8") as file:
             # Iterate through the list and write each line
@@ -162,7 +335,7 @@ class TexDoc(MbaE):
             file.writelines(header_ls)
 
         for alias in gls_dct:
-            TexDoc.gls_newentry(
+            DocTex.gls_newentry(
                 gls_file=gls_file,
                 gls_alias=alias,
                 gls_name=gls_dct[alias]["name"],
@@ -199,11 +372,11 @@ class TexDoc(MbaE):
 
         # append entries
         for name, alias in matches:
-            TexDoc.gls_newentry(
+            DocTex.gls_newentry(
                 gls_file=gls_file,
                 gls_name=name,
                 gls_alias=alias,
-                gls_descr=TexDoc().red_blind,  # defaults to blind text
+                gls_descr=DocTex().red_blind,  # defaults to blind text
             )
 
         # Replace the full expression with \gls{alias}
@@ -227,9 +400,9 @@ class TexDoc(MbaE):
     @staticmethod
     def gls_expand(src_file, gls_file, inplace=True):
         # parse file
-        gls_dct = TexDoc.gls_parse(gls_file=gls_file)
+        gls_dct = DocTex.gls_parse(gls_file=gls_file)
         # get df
-        gls_df = TexDoc.gls_to_df(gls_dct=gls_dct)
+        gls_df = DocTex.gls_to_df(gls_dct=gls_dct)
         # get helper column
         gls_df["LenName"] = [len(s) for s in gls_df["Name"].values]
         # sort
@@ -257,7 +430,7 @@ class TexDoc(MbaE):
             new_ls = [gls_df["NewExp"].values[i] + s for s in suffs_ls]
             # run for all suffixes
             for j in range(len(old_ls)):
-                TexDoc.replace_infile(
+                DocTex.replace_infile(
                     src_file=src_file,
                     old_expression=old_ls[j],
                     new_expression=new_ls[j],
@@ -412,7 +585,6 @@ class TexDoc(MbaE):
 
         return None
 
-
 class DocTable(DataSet):
 
     def __init__(self, name, alias):
@@ -559,4 +731,4 @@ class DocTable(DataSet):
 if __name__ == "__main__":
 
     d = "C:/Users/Ipo/My Drive/athens/losalamos/B000/B008_paper-dma/inputs"
-    TexDoc.get_authors(src_table=f"{d}/authors.csv", dst_folder=d)
+    DocTex.get_authors(src_table=f"{d}/authors.csv", dst_folder=d)

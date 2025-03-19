@@ -2053,7 +2053,7 @@ class Budget(RecordTable):
             # Get the current date
             current_dt = datetime.datetime.now()
 
-            # Update 'Status' for records with 'Automatic' method and 'Expected' status based on the condition
+            # Update 'Status' for records with 'Automatic' method and 'Expected' status_t1 based on the condition
             condition = (
                 (df["Method"] == "Automatic")
                 & (df["Status"] == "Expected")
@@ -2191,7 +2191,7 @@ class Budget(RecordTable):
 class FileSys(DataSet):
     """
     The core ``FileSys`` base/demo object. File System object.
-    Useful for complex folder structure setups and controlling the status
+    Useful for complex folder structure setups and controlling the status_t1
     of expected file.
     This is a Base and Dummy object. Expected to be implemented downstream for
     custom applications.
@@ -2591,7 +2591,7 @@ class FileSys(DataSet):
 
         :param files: iterable with file paths
         :type files: list
-        :return: list status ('ok' or 'missing')
+        :return: list status_t1 ('ok' or 'missing')
         :rtype: list
         """
         list_status = []
