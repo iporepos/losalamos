@@ -190,6 +190,39 @@ class DocFig(MbaE):
 
         return list_bulk
 
+    @staticmethod
+    def reset_image(input_path, output_path, scale_factor, dpi):
+        """Scale an image by a given factor while preserving its aspect ratio and setting the DPI to 300.
+
+        :param input_path: Path to the input JPG image.
+        :type input_path: str
+        :param output_path: Path to save the output JPG image.
+        :type output_path: str
+        :param scale_factor: Scaling factor (e.g., 2.0 doubles the size, 0.5 reduces by half).
+        :type scale_factor: float
+        :return: None
+        :rtype: None
+        """
+
+        try:
+            img = Image.open(input_path)
+
+            # Compute new dimensions while maintaining aspect ratio
+            new_width = int(img.width * scale_factor)
+            new_height = int(img.height * scale_factor)
+
+            # Resize image using high-quality resampling
+            img = img.resize((new_width, new_height), Image.LANCZOS)
+
+            # Save the image with 300 DPI
+            img.save(output_path, dpi=(dpi, dpi), quality=95)
+
+            print(f"Saved {output_path} with 300 DPI. New size: {img.size} pixels (Scaled by {scale_factor:.2f}x)")
+
+        except Exception as e:
+            print(f"Error processing {input_path}: {e}")
+
+
 
 class DocFigColl(Collection):
 
