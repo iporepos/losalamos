@@ -3,15 +3,259 @@ Classes for parsing, handling and managing documents
 
 """
 
-import os, shutil, re
+import os, shutil, re, subprocess
 import pandas as pd
 from losalamos.root import DataSet, MbaE, Collection
+from PIL import Image
+#import xml.etree.ElementTree as ET
+#import xml.dom.minidom
+from lxml import etree
 
 def blind_text():
     return "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ac bibendum orci. Cras erat elit, consequat vel erat ac, tincidunt pulvinar lacus. Pellentesque vitae consectetur quam."
 
+class Drawing(DataSet):
 
-class DocFig(MbaE):
+    def __init__(self, name="MyDraw", alias="Drw"):
+        super().__init__(name=name, alias=alias)
+        # overwriters
+        self.object_alias = "DRW"
+
+        # ------------ set mutables ----------- #
+        self.tree = None
+
+        # ------------ set defaults ----------- #
+        self.inkscape_src = "C:/Program Files/Inkscape/bin"
+        self.name_spaces = {
+            "svg": "http://www.w3.org/2000/svg",
+            "inkscape": "http://www.inkscape.org/namespaces/inkscape"
+        }
+
+
+    def update(self):
+        """(Overwriting super method) Refresh all mutable attributes based on data (includins paths).
+        Base method. Expected to be incremented downstrem.
+
+        :return: None
+        :rtype: None
+        """
+        # refresh all mutable attributes
+
+        # set fields
+        self._set_fields()
+
+        if self.data is not None:
+            # data size
+            # todo handle size in SVG
+            self.size = None
+
+        # update data folder
+        if self.file_data is not None:
+            # set folder
+            self.folder_data = os.path.abspath(os.path.dirname(self.file_data))
+        else:
+            self.folder_data = None
+
+        # view specs at the end
+        self._set_view_specs()
+
+        # ... continues in downstream objects ... #
+        return None
+
+    def load_data(self, file_data):
+        """Load data from file. Expected to overwrite superior methods.
+
+        :param file_data: file path to data.
+        :type file_data: str
+        :return: None
+        :rtype: None
+        """
+
+        # -------------- overwrite relative path input -------------- #
+        self.file_data = os.path.abspath(file_data)
+
+        # -------------- implement loading logic -------------- #
+
+        # load tree
+        self.tree = etree.parse(self.file_data)
+
+        # get the root
+        self.data = self.tree.getroot()
+
+        # -------------- call loading function -------------- #
+
+
+        # -------------- post-loading logic -------------- #
+
+
+        # -------------- update other mutables -------------- #
+        self.update()
+
+        # ... continues in downstream objects ... #
+
+        return None
+
+    def save(self):
+        xml_str = etree.tostring(self.tree, encoding="utf-8", xml_declaration=True, pretty_print=True)
+
+        with open(self.file_data, "wb") as f:
+            f.write(xml_str)
+
+        return None
+
+    def export(self, output_file):
+        original_file = self.file_data[:]
+        self.file_data = output_file
+        self.save()
+        self.file_data = original_file[:]
+        return None
+
+    def _find_layer(self, label="frames"):
+        key = "{" + self.name_spaces["inkscape"] + "}"
+        # Find the <g> group with the specific Inkscape label
+        layer = self.data.find(f".//svg:g[@inkscape:label='{label}']", namespaces=self.name_spaces)
+        #print(layer)
+        groupmode = layer.get(key + "groupmode")
+        return layer
+
+    def hide_layer(self, label="frames"):
+        layer = self.data.find(f".//svg:g[@inkscape:label='{label}']", namespaces=self.name_spaces)
+        layer.set("style", "display:none")  # Hide the layer
+
+    def show_layer(self, label="frames"):
+        layer = self.data.find(f".//svg:g[@inkscape:label='{label}']", namespaces=self.name_spaces)
+        layer.set("style", "display:inline")  # Show the layer
+
+    def _set_view_specs(self):
+        """Set view specifications.
+        Expected to overwrite superior methods.
+
+        :return: None
+        :rtype: None
+        """
+        self.view_specs = {
+            "folder": self.folder_data,
+            "filename": self.name,
+            "fig_format": "jpg",
+            "dpi": 300,
+            "title": self.name,
+            "width": 5 * 1.618,
+            "height": 5 * 1.618,
+            "xvar": "RM",
+            "yvar": "TempDB",
+            "xlabel": "RM",
+            "ylabel": "TempDB",
+            "color": self.color,
+            "xmin": None,
+            "xmax": None,
+            "ymin": None,
+            "ymax": None,
+        }
+        return None
+
+    def view(self, show=True):
+        """Get a basic visualization. Expected to overwrite superior methods.
+
+        :param show: option for showing instead of saving.
+        :type show: bool
+
+        :return: None or file path to figure
+        :rtype: None or str
+
+        **Notes:**
+
+        - Uses values in the ``view_specs()`` attribute for plotting
+
+
+        """
+        # todo implement
+
+        return None
+
+
+    def export_image(self, output_file=None, dpi=300, drawing_id=None, to_jpg=False, layers2hide=None, layers2show=None):
+        """Export the current drawing as an image file, optionally adjusting layers and format.
+
+        :param output_file: Path to save the exported image. Defaults to None, using Inkscape's default output.
+        :type output_file: str, optional
+        :param dpi: Resolution of the exported image in dots per inch (DPI). Defaults to 300.
+        :type dpi: int, optional
+        :param drawing_id: Specific drawing ID to export. Defaults to None, exporting the full drawing.
+        :type drawing_id: str, optional
+        :param to_jpg: Whether to convert the exported PNG to JPG format. Defaults to False.
+        :type to_jpg: bool, optional
+        :param layers2hide: List of layer labels to hide before export. Defaults to None.
+        :type layers2hide: list[str], optional
+        :param layers2show: List of layer labels to show before export. Defaults to None.
+        :type layers2show: list[str], optional
+        :return: Path to the exported image file.
+        :rtype: str
+        """
+
+        # handle first the layers to hide
+        if layers2hide is not None:
+            for lbl in layers2hide:
+                self.hide_layer(label=lbl)
+                self.save()
+
+        # handle then the layers to show
+        if layers2show is not None:
+            for lbl in layers2show:
+                self.show_layer(label=lbl)
+                self.save()
+
+        # set return file
+        return_file = output_file[:]
+
+        # move to inkscape source
+        current_directory = os.getcwd()
+        os.chdir(self.inkscape_src)
+
+        # handle command
+        if output_file is None:
+            s_command = 'inkscape --export-dpi={} --export-type="png" '.format(dpi) + self.file_data
+        else:
+            s_command = 'inkscape --export-dpi={} --export-type="png" '.format(dpi)
+            s_command = s_command + '--export-filename="{}" '.format(output_file) + self.file_data
+
+        if drawing_id:
+            s_aux = "inkscape --export-id=" + drawing_id
+            s_command = s_command.replace("inkscape", s_aux)
+
+        # call inkscape process
+        subprocess.run(s_command)
+
+        # go back
+        os.chdir(current_directory)
+
+        # handle jpg conversion
+        if to_jpg:
+            new_file = output_file.replace(".png", ".jpg")
+            Drawing.convert_png_to_jpg(
+                input_file=output_file,
+                output_file=new_file,
+                dpi=dpi
+            )
+            os.remove(output_file)
+            # reset return file
+            return_file = new_file[:]
+
+        return return_file
+
+    @staticmethod
+    def convert_png_to_jpg(input_file, output_file, quality=95, dpi=None):
+        with Image.open(input_file) as img:
+            # Convert to RGB if the image has an alpha channel
+            if img.mode != 'RGB':
+                img = img.convert('RGB')
+            # Save with specified quality and DPI
+            save_params = {"format": "JPEG", "quality": quality}
+            if dpi:
+                save_params["dpi"] = (dpi, dpi)
+            img.save(output_file, **save_params)
+
+
+class Figure(MbaE):
     def __init__(self, name="MyFig", alias="Fig"):
         super().__init__(name=name, alias=alias)
         # setup attributes
@@ -23,8 +267,9 @@ class DocFig(MbaE):
         self.status_t2 = "Expected"
         self.part = "Main text"
         self.figsize = "Large"
-        self.playout = "Columns 1 Rows 1"
-        self.descr = blind_text()
+        self.layout = "Columns 1 Rows 1"
+        self.description = blind_text()
+        self.comments = blind_text()
         self.fig_file = None
         self.svg_file = None
         self.thumbnail_file = None
@@ -42,10 +287,11 @@ class DocFig(MbaE):
         self.status_t1_field = "Status Tier 1"
         self.status_t2_field = "Status Tier 2"
         self.descr_field = "Description"
+        self.comms_field = "Comments"
         self.part_field = "Part"
         self.label_field = "Label"
-        self.figsize_field = "Figure Size"
-        self.playout_field = "Pannels Layout"
+        self.figsize_field = "Size"
+        self.playout_field = "Layout"
         self.thumbnail_t1_file_field = "Thumbnail Tier 1"
         self.thumbnail_t2_file_field = "Thumbnail Tier 2"
         # ... continues in downstream objects ... #
@@ -69,10 +315,10 @@ class DocFig(MbaE):
         dict_meta[self.caption_lof_field] = self.caption_lof
         dict_meta[self.status_t1_field] = self.status_t1
         dict_meta[self.status_t2_field] = self.status_t2
-        dict_meta[self.descr_field] = self.descr
+        dict_meta[self.descr_field] = self.description
         dict_meta[self.part_field] = self.part
         dict_meta[self.figsize_field] = self.figsize
-        dict_meta[self.playout_field] = self.playout
+        dict_meta[self.playout_field] = self.layout
         dict_meta[self.thumbnail_t1_file_field] = self.thumbnail_t1_file
         dict_meta[self.thumbnail_t2_file_field] = self.thumbnail_t2_file
 
@@ -144,25 +390,27 @@ class DocFig(MbaE):
         # handle colors
         dct_status = {
             "Expected": r"\textcolor{red}{Expected}",
-            "Concluded": r"\textcolor{YellowOrange}{In progress}",
+            "In progress": r"\textcolor{YellowOrange}{In progress}",
             "Concluded": r"\textcolor{OliveGreen}{Concluded}",
         }
 
         # set replacer object
         dct_replacer = {
             "[{}]".format(self.label_field): self.label,
-            "[{}]".format(self.name_field): self.name,
+            "[{}]".format(self.fig_id_field): self.fig_id,
             "[{}]".format(self.part_field): self.part,
-            "[{}]".format(self.descr_field): self.descr,
+            "[{}]".format(self.descr_field): self.description,
             "[{}]".format(self.caption_field): self.caption,
+            "[{}]".format(self.comms_field): self.comments,
             "[figt1sts]": dct_status[self.status_t1],
             "[figt2sts]": dct_status[self.status_t2],
             "[{}]".format(self.thumbnail_t1_file_field): self.thumbnail_t1_file if self.thumbnail_t1_file is not None else "example-image",
-            "[{}]".format(self.thumbnail_t2_file_field): self.thumbnail_t2_file if self.thumbnail_t1_file is not None else "example-image",
+            "[{}]".format(self.thumbnail_t2_file_field): self.thumbnail_t2_file if self.thumbnail_t2_file is not None else "example-image",
         }
 
         # loop for replace itens in placeholders
         for k in dct_replacer:
+            print(k)
             for i in range(len(list_bulk)):
                 list_bulk[i] = list_bulk[i].replace(k, dct_replacer[k])[:]
 
@@ -192,7 +440,7 @@ class DocFig(MbaE):
 
     @staticmethod
     def reset_image(input_path, output_path, scale_factor, dpi):
-        """Scale an image by a given factor while preserving its aspect ratio and setting the DPI to 300.
+        """Scale an image by a given factor while preserving its aspect ratio and setting the DPI.
 
         :param input_path: Path to the input JPG image.
         :type input_path: str
@@ -203,36 +451,28 @@ class DocFig(MbaE):
         :return: None
         :rtype: None
         """
+        img = Image.open(input_path)
 
-        try:
-            img = Image.open(input_path)
+        # Compute new dimensions while maintaining aspect ratio
+        new_width = int(img.width * scale_factor)
+        new_height = int(img.height * scale_factor)
 
-            # Compute new dimensions while maintaining aspect ratio
-            new_width = int(img.width * scale_factor)
-            new_height = int(img.height * scale_factor)
+        # Resize image using high-quality resampling
+        img = img.resize((new_width, new_height), Image.LANCZOS)
 
-            # Resize image using high-quality resampling
-            img = img.resize((new_width, new_height), Image.LANCZOS)
+        # Save the image with 300 DPI
+        img.save(output_path, dpi=(dpi, dpi), quality=95)
+        return None
 
-            # Save the image with 300 DPI
-            img.save(output_path, dpi=(dpi, dpi), quality=95)
-
-            print(f"Saved {output_path} with 300 DPI. New size: {img.size} pixels (Scaled by {scale_factor:.2f}x)")
-
-        except Exception as e:
-            print(f"Error processing {input_path}: {e}")
-
-
-
-class DocFigColl(Collection):
+class FigureColl(Collection):
 
     def __init__(self):
-        super().__init__(base_object=DocFig, name="MyFigColl", alias="FigCol0")
+        super().__init__(base_object=Figure, name="MyFigColl", alias="FigCol0")
 
     def load_catalog(self, df_file):
         df = pd.read_csv(df_file, sep=";")
         for i in range(len(df)):
-            _NewFig= DocFig()
+            _NewFig= Figure()
             _NewFig.name = df[_NewFig.name_field].values[i]
             _NewFig.alias = df[_NewFig.alias_field].values[i]
             _NewFig.fig_id = df[_NewFig.fig_id_field].values[i]
@@ -240,20 +480,19 @@ class DocFigColl(Collection):
             _NewFig.caption_lof = df[_NewFig.caption_lof_field].values[i]
             _NewFig.status_t1 = df[_NewFig.status_t1_field].values[i]
             _NewFig.status_t2 = df[_NewFig.status_t2_field].values[i]
-            _NewFig.descr = df[_NewFig.descr_field].values[i]
+            _NewFig.description = df[_NewFig.descr_field].values[i]
+            _NewFig.comments = df[_NewFig.comms_field].values[i]
             _NewFig.part = df[_NewFig.part_field].values[i]
             _NewFig.figsize = df[_NewFig.figsize_field].values[i]
-            _NewFig.playout = df[_NewFig.playout_field].values[i]
+            _NewFig.layout = df[_NewFig.playout_field].values[i]
             _NewFig.label = df[_NewFig.label_field].values[i]
             _NewFig.thumbnail_t1_file = df[_NewFig.thumbnail_t1_file_field].values[i]
             _NewFig.thumbnail_t2_file = df[_NewFig.thumbnail_t2_file_field].values[i]
-
             self.append(new_object=_NewFig)
 
+class TeX(MbaE):
 
-class DocTex(MbaE):
-
-    def __init__(self, name="MyTex", alias="Tex"):
+    def __init__(self, name="MyTeX", alias="TeX"):
         super().__init__(name=name, alias=alias)
         self.red_blind = r"\textcolor{red}{Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ac bibendum orci. Cras erat elit, consequat vel erat ac, tincidunt pulvinar lacus. Pellentesque vitae consectetur quam. Interdum et malesuada fames ac ante ipsum primis in faucibus}"
         # ... continues in downstream objects ... #
@@ -276,7 +515,7 @@ class DocTex(MbaE):
         line_2 = "{"
         line_3 = f"\tname={gls_name},"
         if gls_descr is None:
-            gls_descr = DocTex().red_blind
+            gls_descr = TeX().red_blind
         line_4 = "\tdescription={" + gls_descr + "}"
         line_5 = "}"
         return [line_0, line_1, line_2, line_3, line_4, line_5]
@@ -297,7 +536,7 @@ class DocTex(MbaE):
         :rtype: None
         """
         # get formatted entry in list
-        new_lines = DocTex.gls_format(gls_name, gls_alias, gls_descr)
+        new_lines = TeX.gls_format(gls_name, gls_alias, gls_descr)
         # Open the file in append mode
         with open(gls_file, "a", encoding="utf-8") as file:
             # Iterate through the list and write each line
@@ -368,7 +607,7 @@ class DocTex(MbaE):
             file.writelines(header_ls)
 
         for alias in gls_dct:
-            DocTex.gls_newentry(
+            TeX.gls_newentry(
                 gls_file=gls_file,
                 gls_alias=alias,
                 gls_name=gls_dct[alias]["name"],
@@ -405,11 +644,11 @@ class DocTex(MbaE):
 
         # append entries
         for name, alias in matches:
-            DocTex.gls_newentry(
+            TeX.gls_newentry(
                 gls_file=gls_file,
                 gls_name=name,
                 gls_alias=alias,
-                gls_descr=DocTex().red_blind,  # defaults to blind text
+                gls_descr=TeX().red_blind,  # defaults to blind text
             )
 
         # Replace the full expression with \gls{alias}
@@ -433,9 +672,9 @@ class DocTex(MbaE):
     @staticmethod
     def gls_expand(src_file, gls_file, inplace=True):
         # parse file
-        gls_dct = DocTex.gls_parse(gls_file=gls_file)
+        gls_dct = TeX.gls_parse(gls_file=gls_file)
         # get df
-        gls_df = DocTex.gls_to_df(gls_dct=gls_dct)
+        gls_df = TeX.gls_to_df(gls_dct=gls_dct)
         # get helper column
         gls_df["LenName"] = [len(s) for s in gls_df["Name"].values]
         # sort
@@ -463,7 +702,7 @@ class DocTex(MbaE):
             new_ls = [gls_df["NewExp"].values[i] + s for s in suffs_ls]
             # run for all suffixes
             for j in range(len(old_ls)):
-                DocTex.replace_infile(
+                TeX.replace_infile(
                     src_file=src_file,
                     old_expression=old_ls[j],
                     new_expression=new_ls[j],
@@ -618,7 +857,7 @@ class DocTex(MbaE):
 
         return None
 
-class DocTable(DataSet):
+class Table(DataSet):
 
     def __init__(self, name, alias):
         super().__init__(name=name, alias=alias)
@@ -764,4 +1003,4 @@ class DocTable(DataSet):
 if __name__ == "__main__":
 
     d = "C:/Users/Ipo/My Drive/athens/losalamos/B000/B008_paper-dma/inputs"
-    DocTex.get_authors(src_table=f"{d}/authors.csv", dst_folder=d)
+    TeX.get_authors(src_table=f"{d}/authors.csv", dst_folder=d)
