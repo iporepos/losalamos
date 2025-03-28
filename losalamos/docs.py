@@ -213,10 +213,10 @@ class Drawing(DataSet):
 
         # handle command
         if output_file is None:
-            s_command = 'inkscape --export-dpi={} --export-type="png" '.format(dpi) + self.file_data
+            s_command = 'inkscape --export-dpi={} --export-type="png" "{}"'.format(dpi, self.file_data)
         else:
             s_command = 'inkscape --export-dpi={} --export-type="png" '.format(dpi)
-            s_command = s_command + '--export-filename="{}" '.format(output_file) + self.file_data
+            s_command = s_command + '--export-filename="{}" "{}"'.format(output_file, self.file_data)
 
         if drawing_id:
             s_aux = "inkscape --export-id=" + drawing_id
@@ -241,6 +241,40 @@ class Drawing(DataSet):
             return_file = new_file[:]
 
         return return_file
+
+    @staticmethod
+    def export_image_bat(folder, specs=None):
+
+        # Handle no specs
+        if specs is None:
+            specs = {
+                "dpi": 300,
+                "drawing_id": "frame_a",
+                "to_jpg": True,
+                "layers2hide": ["frames"],
+                "layers2show": None,
+            }
+
+        # loop over files
+        lst_files = glob.glob(f"{folder}/*.svg")
+        for f in lst_files[:]:
+            print(f)
+            nm = os.path.basename(f).split(".")[0]
+            drw = Drawing()
+            drw.file_data = f
+            drw.load_data(file_data=drw.file_data)
+            # call the export method
+            f0 = drw.export_image(
+                output_file=f"{folder}/{nm}.png",
+                dpi=specs["dpi"],
+                to_jpg=specs["to_jpg"],
+                drawing_id=specs["drawing_id"],
+                layers2hide=specs["layers2hide"],
+                layers2show=specs["layers2show"],
+            )
+            print(f0)
+
+        return None
 
     @staticmethod
     def convert_png_to_jpg(input_file, output_file, quality=95, dpi=None):
