@@ -1,6 +1,10 @@
-\section{Figure [Label]} \label{sec_[Label]}
+\clearpage
+
+\section{Figure [Figure Label]} \label{sec_[Figure Label]}
 
 \small
+
+\subsection{Whole Figure}
 
 % start the table
 \begin{table}[h!] % placed on top of page
@@ -9,35 +13,21 @@
 \sffamily % table font style
 \begin{tabular}{| m{4cm} | m{10cm} |}
     \hline
-    \textbf{Chapter Part} & [Part] \\
+    \textbf{In-text label} & [Figure Label] \\
     \hline
-    \textbf{Unique ID} & [Id] \\
+    \textbf{Unique ID} & [Unique ID] \\
     \hline
-    \textbf{In-text label} & [Label] \\
+    \textbf{Chapter Part} & [Chapter Part] \\
     \hline
     \textbf{Size} & [Size] \\
     \hline
     \textbf{Layout} & [Layout] \\
     \hline
-    \textbf{Caption} & \scriptsize{[Caption]} \\
+    \textbf{Caption} & [Caption] \\
     \hline
-    \textbf{Description} & \scriptsize{[Description]} \\
+    \textbf{Description} & [Description] \\
     \hline
-    \textbf{Comments} & \scriptsize{[Comments]} \\
-    \hline
-    \end{tabular}
-\end{table}
-
-% start the table
-\begin{table}[h!] % placed on top of page
-\centering
-\small % table font size
-\sffamily % table font style
-\begin{tabular}{| m{14.5cm} |}
-    \hline
-    \textbf{Tier 0 -- Draft -- [figt1sts]}   \\
-    \hline
-    \includegraphics[height=5cm]{[Thumbnail Tier 1]} \\
+    \textbf{Comments} & [Comments] \\
     \hline
     \end{tabular}
 \end{table}
@@ -49,9 +39,23 @@
 \sffamily % table font style
 \begin{tabular}{| m{14.5cm} |}
     \hline
-    \textbf{Tier 1 -- MVP -- [figt2sts]} \\
+    \textbf{Tier 0 -- Draft -- [Draft Status]}   \\
     \hline
-    \includegraphics[height=5cm]{[Thumbnail Tier 2]} \\
+    \hspace{5pt} \includegraphics[width=11cm]{example-image} \\
+    \hline
+    \end{tabular}
+\end{table}
+
+% start the table
+\begin{table}[h!] % placed on top of page
+\centering
+\small % table font size
+\sffamily % table font style
+\begin{tabular}{| m{14.5cm} |}
+    \hline
+    \textbf{Tier 1 -- MVP -- [MVP Status]} \\
+    \hline
+    \hspace{5pt} \includegraphics[width=11cm]{example-image} \\
     \hline
     \end{tabular}
 \end{table}

@@ -7,12 +7,15 @@ import os, shutil, re, subprocess
 import pandas as pd
 from losalamos.root import DataSet, MbaE, Collection
 from PIL import Image
-#import xml.etree.ElementTree as ET
-#import xml.dom.minidom
+
+# import xml.etree.ElementTree as ET
+# import xml.dom.minidom
 from lxml import etree
+
 
 def blind_text():
     return "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ac bibendum orci. Cras erat elit, consequat vel erat ac, tincidunt pulvinar lacus. Pellentesque vitae consectetur quam."
+
 
 class Drawing(DataSet):
 
@@ -28,9 +31,8 @@ class Drawing(DataSet):
         self.inkscape_src = "C:/Program Files/Inkscape/bin"
         self.name_spaces = {
             "svg": "http://www.w3.org/2000/svg",
-            "inkscape": "http://www.inkscape.org/namespaces/inkscape"
+            "inkscape": "http://www.inkscape.org/namespaces/inkscape",
         }
-
 
     def update(self):
         """(Overwriting super method) Refresh all mutable attributes based on data (includins paths).
@@ -84,9 +86,7 @@ class Drawing(DataSet):
 
         # -------------- call loading function -------------- #
 
-
         # -------------- post-loading logic -------------- #
-
 
         # -------------- update other mutables -------------- #
         self.update()
@@ -96,7 +96,9 @@ class Drawing(DataSet):
         return None
 
     def save(self):
-        xml_str = etree.tostring(self.tree, encoding="utf-8", xml_declaration=True, pretty_print=True)
+        xml_str = etree.tostring(
+            self.tree, encoding="utf-8", xml_declaration=True, pretty_print=True
+        )
 
         with open(self.file_data, "wb") as f:
             f.write(xml_str)
@@ -113,17 +115,23 @@ class Drawing(DataSet):
     def _find_layer(self, label="frames"):
         key = "{" + self.name_spaces["inkscape"] + "}"
         # Find the <g> group with the specific Inkscape label
-        layer = self.data.find(f".//svg:g[@inkscape:label='{label}']", namespaces=self.name_spaces)
-        #print(layer)
+        layer = self.data.find(
+            f".//svg:g[@inkscape:label='{label}']", namespaces=self.name_spaces
+        )
+        # print(layer)
         groupmode = layer.get(key + "groupmode")
         return layer
 
     def hide_layer(self, label="frames"):
-        layer = self.data.find(f".//svg:g[@inkscape:label='{label}']", namespaces=self.name_spaces)
+        layer = self.data.find(
+            f".//svg:g[@inkscape:label='{label}']", namespaces=self.name_spaces
+        )
         layer.set("style", "display:none")  # Hide the layer
 
     def show_layer(self, label="frames"):
-        layer = self.data.find(f".//svg:g[@inkscape:label='{label}']", namespaces=self.name_spaces)
+        layer = self.data.find(
+            f".//svg:g[@inkscape:label='{label}']", namespaces=self.name_spaces
+        )
         layer.set("style", "display:inline")  # Show the layer
 
     def _set_view_specs(self):
@@ -172,8 +180,15 @@ class Drawing(DataSet):
 
         return None
 
-
-    def export_image(self, output_file=None, dpi=300, drawing_id=None, to_jpg=False, layers2hide=None, layers2show=None):
+    def export_image(
+        self,
+        output_file=None,
+        dpi=300,
+        drawing_id=None,
+        to_jpg=False,
+        layers2hide=None,
+        layers2show=None,
+    ):
         """Export the current drawing as an image file, optionally adjusting layers and format.
 
         :param output_file: Path to save the exported image. Defaults to None, using Inkscape's default output.
@@ -213,10 +228,14 @@ class Drawing(DataSet):
 
         # handle command
         if output_file is None:
-            s_command = 'inkscape --export-dpi={} --export-type="png" "{}"'.format(dpi, self.file_data)
+            s_command = 'inkscape --export-dpi={} --export-type="png" "{}"'.format(
+                dpi, self.file_data
+            )
         else:
             s_command = 'inkscape --export-dpi={} --export-type="png" '.format(dpi)
-            s_command = s_command + '--export-filename="{}" "{}"'.format(output_file, self.file_data)
+            s_command = s_command + '--export-filename="{}" "{}"'.format(
+                output_file, self.file_data
+            )
 
         if drawing_id:
             s_aux = "inkscape --export-id=" + drawing_id
@@ -232,9 +251,7 @@ class Drawing(DataSet):
         if to_jpg:
             new_file = output_file.replace(".png", ".jpg")
             Drawing.convert_png_to_jpg(
-                input_file=output_file,
-                output_file=new_file,
-                dpi=dpi
+                input_file=output_file, output_file=new_file, dpi=dpi
             )
             os.remove(output_file)
             # reset return file
@@ -280,8 +297,8 @@ class Drawing(DataSet):
     def convert_png_to_jpg(input_file, output_file, quality=95, dpi=None):
         with Image.open(input_file) as img:
             # Convert to RGB if the image has an alpha channel
-            if img.mode != 'RGB':
-                img = img.convert('RGB')
+            if img.mode != "RGB":
+                img = img.convert("RGB")
             # Save with specified quality and DPI
             save_params = {"format": "JPEG", "quality": quality}
             if dpi:
@@ -293,7 +310,7 @@ class Figure(MbaE):
     def __init__(self, name="MyFig", alias="Fig"):
         super().__init__(name=name, alias=alias)
         # setup attributes
-        self.fig_id = self.name # use name by default
+        self.fig_id = self.name  # use name by default
         self.caption = blind_text()
         self.caption_lof = blind_text()
         self.label = self.alias
@@ -358,7 +375,15 @@ class Figure(MbaE):
 
         return dict_meta
 
-    def to_latex(self, folder=None, filename=None, position="h!", fontsize="scriptsize", fontfamily="sffamily", wfactor=0.95):
+    def to_latex(
+        self,
+        folder=None,
+        filename=None,
+        position="h!",
+        fontsize="scriptsize",
+        fontfamily="sffamily",
+        wfactor=0.95,
+    ):
         """Generates a LaTeX figure environment containing an image and its corresponding caption,
         and saves it as a `.tex` file if folder and filename is provided.
 
@@ -379,13 +404,18 @@ class Figure(MbaE):
         """
         list_bulk = list()
         # preable
-        list_bulk.append(r"\begin{figure}["+ position + "]")
+        list_bulk.append(r"\begin{figure}[" + position + "]")
         list_bulk.append(r"\centering")
-        list_bulk.append(r"\{}".format(fontsize) )
+        list_bulk.append(r"\{}".format(fontsize))
         list_bulk.append(r"\{}".format(fontfamily))
 
         # image
-        list_bulk.append(r"\includegraphics[width={}\textwidth]".format(wfactor) + "{" + os.path.basename(self.fig_file) + "}")
+        list_bulk.append(
+            r"\includegraphics[width={}\textwidth]".format(wfactor)
+            + "{"
+            + os.path.basename(self.fig_file)
+            + "}"
+        )
         list_bulk.append(r"\caption[" + self.caption_lof + "]{" + self.caption + "}")
         list_bulk.append(r"\label{" + self.label + "}")
         list_bulk.append(r"\end{figure}")
@@ -438,8 +468,16 @@ class Figure(MbaE):
             "[{}]".format(self.comms_field): self.comments,
             "[figt1sts]": dct_status[self.status_t1],
             "[figt2sts]": dct_status[self.status_t2],
-            "[{}]".format(self.thumbnail_t1_file_field): self.thumbnail_t1_file if self.thumbnail_t1_file is not None else "example-image",
-            "[{}]".format(self.thumbnail_t2_file_field): self.thumbnail_t2_file if self.thumbnail_t2_file is not None else "example-image",
+            "[{}]".format(self.thumbnail_t1_file_field): (
+                self.thumbnail_t1_file
+                if self.thumbnail_t1_file is not None
+                else "example-image"
+            ),
+            "[{}]".format(self.thumbnail_t2_file_field): (
+                self.thumbnail_t2_file
+                if self.thumbnail_t2_file is not None
+                else "example-image"
+            ),
         }
 
         # loop for replace itens in placeholders
@@ -454,7 +492,14 @@ class Figure(MbaE):
             list_bulk.append(r"\noindent \textbf{Pannels}" + "\n")
             list_bulk.append(r"\begin{itemize}" + "\n")
             for k in self.pannels_dct:
-                s_aux = r"    \item Pannel \textbf{" + k + "}: " + self.pannels_dct[k] + ";" + "\n"
+                s_aux = (
+                    r"    \item Pannel \textbf{"
+                    + k
+                    + "}: "
+                    + self.pannels_dct[k]
+                    + ";"
+                    + "\n"
+                )
                 list_bulk.append(s_aux)
             list_bulk.append(r"\end{itemize}" + "\n")
 
@@ -498,6 +543,7 @@ class Figure(MbaE):
         img.save(output_path, dpi=(dpi, dpi), quality=95)
         return None
 
+
 class FigureColl(Collection):
 
     def __init__(self):
@@ -506,7 +552,7 @@ class FigureColl(Collection):
     def load_catalog(self, df_file):
         df = pd.read_csv(df_file, sep=";")
         for i in range(len(df)):
-            _NewFig= Figure()
+            _NewFig = Figure()
             _NewFig.name = df[_NewFig.name_field].values[i]
             _NewFig.alias = df[_NewFig.alias_field].values[i]
             _NewFig.fig_id = df[_NewFig.fig_id_field].values[i]
@@ -523,6 +569,7 @@ class FigureColl(Collection):
             _NewFig.thumbnail_t1_file = df[_NewFig.thumbnail_t1_file_field].values[i]
             _NewFig.thumbnail_t2_file = df[_NewFig.thumbnail_t2_file_field].values[i]
             self.append(new_object=_NewFig)
+
 
 class TeX(MbaE):
 
@@ -890,6 +937,7 @@ class TeX(MbaE):
                 file.writelines(team_list)
 
         return None
+
 
 class Table(DataSet):
 
