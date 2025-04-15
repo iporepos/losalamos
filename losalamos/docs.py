@@ -18,8 +18,8 @@ def blind_text():
 
 
 class Drawing(DataSet):
-    # todo there is a big problem of offsetting text-based items.
-    #  Some how the saving method inserts white spaces in the text boxes
+    # todo There is a big problem of offsetting text-based items.
+    #  Somehow the saving method inserts white spaces in the text boxes
     #  The result is a form of "offset" in the labels. Bad.
     #  For now, not use hide or show labels :(
 
@@ -190,6 +190,7 @@ class Drawing(DataSet):
         dpi=300,
         drawing_id=None,
         to_jpg=False,
+        remove_png=True,
         layers2hide=None,
         layers2show=None,
     ):
@@ -221,9 +222,6 @@ class Drawing(DataSet):
             for lbl in layers2show:
                 self.show_layer(label=lbl)
                 self.save()
-
-        # Only save once after all changes
-
 
         # set return file
         return_file = output_file[:]
@@ -259,21 +257,24 @@ class Drawing(DataSet):
             Drawing.convert_png_to_jpg(
                 input_file=output_file, output_file=new_file, dpi=dpi
             )
-            os.remove(output_file)
+            if remove_png:
+                os.remove(output_file)
             # reset return file
             return_file = new_file[:]
 
         return return_file
 
     @staticmethod
-    def export_image_bat(folder, specs=None, display=False):
+    def export_image_bat(folder, specs=None, display=False, prefix="", suffix=""):
 
         # Handle no specs
         if specs is None:
+            # set default specs
             specs = {
                 "dpi": 300,
                 "drawing_id": "frame_a",
                 "to_jpg": True,
+                "remove_png": True,
                 "layers2hide": ["frames"],
                 "layers2show": None,
             }
@@ -283,15 +284,16 @@ class Drawing(DataSet):
         for f in lst_files[:]:
             if display:
                 print("Exporting {}".format(os.path.basename(f)))
-            nm = os.path.basename(f).split(".")[0]
+            nm = os.path.basename(f).replace(".svg", "")
             drw = Drawing()
             drw.file_data = f
             drw.load_data(file_data=drw.file_data)
             # call the export method
             f0 = drw.export_image(
-                output_file=f"{folder}/{nm}.png",
+                output_file=f"{folder}/{prefix}{nm}{suffix}.png",
                 dpi=specs["dpi"],
                 to_jpg=specs["to_jpg"],
+                remove_png=specs["remove_png"],
                 drawing_id=specs["drawing_id"],
                 layers2hide=specs["layers2hide"],
                 layers2show=specs["layers2show"],
@@ -1092,5 +1094,4 @@ class Table(DataSet):
 
 if __name__ == "__main__":
 
-    d = "C:/Users/Ipo/My Drive/athens/losalamos/B000/B008_paper-dma/inputs"
-    TeX.get_authors(src_table=f"{d}/authors.csv", dst_folder=d)
+    print("Hello world")

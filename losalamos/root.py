@@ -1490,7 +1490,8 @@ class RecordTable(DataSet):
         """
         return self.columns_base + self.columns_data
 
-    def _get_timestamp(self):
+    @staticmethod
+    def get_timestamp():
         """Return a string timestamp
 
         :return: full timestamp text %Y-%m-%d %H:%M:%S
