@@ -3,7 +3,7 @@ Classes for parsing, handling and managing documents
 
 """
 
-import os, shutil, re, subprocess
+import os, glob, shutil, re, subprocess
 import pandas as pd
 from losalamos.root import DataSet, MbaE, Collection
 from PIL import Image
@@ -18,6 +18,10 @@ def blind_text():
 
 
 class Drawing(DataSet):
+    # todo there is a big problem of offsetting text-based items.
+    #  Some how the saving method inserts white spaces in the text boxes
+    #  The result is a form of "offset" in the labels. Bad.
+    #  For now, not use hide or show labels :(
 
     def __init__(self, name="MyDraw", alias="Drw"):
         super().__init__(name=name, alias=alias)
@@ -207,17 +211,19 @@ class Drawing(DataSet):
         :rtype: str
         """
 
-        # handle first the layers to hide
+        # handle visibility of layers
         if layers2hide is not None:
             for lbl in layers2hide:
                 self.hide_layer(label=lbl)
                 self.save()
 
-        # handle then the layers to show
         if layers2show is not None:
             for lbl in layers2show:
                 self.show_layer(label=lbl)
                 self.save()
+
+        # Only save once after all changes
+
 
         # set return file
         return_file = output_file[:]
@@ -260,7 +266,7 @@ class Drawing(DataSet):
         return return_file
 
     @staticmethod
-    def export_image_bat(folder, specs=None):
+    def export_image_bat(folder, specs=None, display=False):
 
         # Handle no specs
         if specs is None:
@@ -275,7 +281,8 @@ class Drawing(DataSet):
         # loop over files
         lst_files = glob.glob(f"{folder}/*.svg")
         for f in lst_files[:]:
-            print(f)
+            if display:
+                print("Exporting {}".format(os.path.basename(f)))
             nm = os.path.basename(f).split(".")[0]
             drw = Drawing()
             drw.file_data = f
@@ -289,7 +296,8 @@ class Drawing(DataSet):
                 layers2hide=specs["layers2hide"],
                 layers2show=specs["layers2show"],
             )
-            print(f0)
+            if display:
+                print("Exported {}".format(os.path.basename(f0)))
 
         return None
 
