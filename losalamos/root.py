@@ -46,8 +46,12 @@ eu eros euismod sodales. Cras pulvinar tincidunt enim nec semper.
 
 """
 
-import glob, re
-import os, copy, shutil, datetime
+import glob
+import re
+import os
+import copy
+import shutil
+import datetime
 import pandas as pd
 import matplotlib.pyplot as plt
 import PyPDF2

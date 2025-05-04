@@ -124,3 +124,6 @@ dmypy.json
 ## Below the repo-specific ones
 # Repo-specific
 data
+
+# Ruff-stuff
+.ruff_cache

@@ -1,4 +1,4 @@
-import os, glob
+import os
 from losalamos.refs import Ref
 import argparse
 
@@ -16,7 +16,7 @@ def get_subdirs(src_folder):
 def add(src_folder, lib_folder, template_folder, tags):
     lst_files = Ref.catalog_files(src_folder)
     if len(lst_files) == 0:
-        print(f"--- no refs found\n")
+        print("--- no refs found\n")
         pass
     else:
         print(

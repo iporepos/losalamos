@@ -3,7 +3,11 @@ Classes for parsing, handling and managing documents
 
 """
 
-import os, glob, shutil, re, subprocess
+import os
+import glob
+import shutil
+import re
+import subprocess
 import pandas as pd
 from losalamos.root import DataSet, MbaE, Collection
 from PIL import Image

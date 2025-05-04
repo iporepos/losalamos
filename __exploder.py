@@ -1,4 +1,5 @@
-import argparse, os
+import argparse
+import os
 from losalamos.refs import Ref
 
 def process_bibtex(src_folder):

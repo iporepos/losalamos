@@ -1,5 +1,6 @@
-import os, glob
-from losalamos.refs import Ref, RefNote
+import os
+import glob
+from losalamos.refs import RefNote
 import argparse
 
 
