@@ -46,14 +46,16 @@ eu eros euismod sodales. Cras pulvinar tincidunt enim nec semper.
 
 """
 
+import glob
 import os
 import re
 import shutil
-import glob
-import requests
-from losalamos.root import MbaE, Collection, Note
 import tkinter as tk
 from tkinter import filedialog
+
+import requests
+
+from losalamos.root import Collection, MbaE, Note
 
 
 class RefForm(tk.Tk):

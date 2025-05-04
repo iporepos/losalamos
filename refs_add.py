@@ -1,6 +1,7 @@
-import os
-from losalamos.refs import Ref
 import argparse
+import os
+
+from losalamos.refs import Ref
 
 
 def get_subdirs(src_folder):

@@ -1,7 +1,7 @@
 import shutil
-from losalamos.docs import Drawing
 from pathlib import Path
 
+from losalamos.docs import Drawing
 
 if __name__ == "__main__":
 

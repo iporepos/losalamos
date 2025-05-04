@@ -3,18 +3,20 @@ Classes for parsing, handling and managing documents
 
 """
 
-import os
 import glob
-import shutil
+import os
 import re
+import shutil
 import subprocess
+
 import pandas as pd
-from losalamos.root import DataSet, MbaE, Collection
-from PIL import Image
 
 # import xml.etree.ElementTree as ET
 # import xml.dom.minidom
 from lxml import etree
+from PIL import Image
+
+from losalamos.root import Collection, DataSet, MbaE
 
 
 def blind_text():
