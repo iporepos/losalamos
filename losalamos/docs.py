@@ -8,8 +8,10 @@ import os
 import re
 import shutil
 import subprocess
+from pathlib import Path
 
 import pandas as pd
+from dotenv import load_dotenv
 
 # import xml.etree.ElementTree as ET
 # import xml.dom.minidom
@@ -17,6 +19,8 @@ from lxml import etree
 from PIL import Image
 
 from losalamos.root import Collection, DataSet, MbaE
+
+load_dotenv()
 
 
 def blind_text():
@@ -107,7 +111,7 @@ class Drawing(DataSet):
 
     def save(self):
         xml_str = etree.tostring(
-            self.tree, encoding="utf-8", xml_declaration=True, pretty_print=True
+            self.tree, encoding="utf-8", xml_declaration=True, pretty_print=False
         )
 
         with open(self.file_data, "wb") as f:
@@ -217,6 +221,8 @@ class Drawing(DataSet):
         :return: Path to the exported image file.
         :rtype: str
         """
+        # Get abspath
+        output_file = Path(output_file).resolve()
 
         # handle visibility of layers
         if layers2hide is not None:
@@ -230,7 +236,7 @@ class Drawing(DataSet):
                 self.save()
 
         # set return file
-        return_file = output_file[:]
+        return_file = output_file
 
         # move to inkscape source
         current_directory = os.getcwd()

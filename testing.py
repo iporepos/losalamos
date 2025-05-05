@@ -25,9 +25,6 @@ if __name__ == "__main__":
     output_folder = Path("data")
     output_folder.mkdir(parents=True, exist_ok=True)
 
-    # set inkscape source
-    inkscape_src = "C:/Program Files/Inkscape/bin"
-
     # set up multiple testing
     dc_figs = {
         "fig_a": {
@@ -54,9 +51,6 @@ if __name__ == "__main__":
 
         # instatiate the object
         dw = Drawing()
-
-        # Ensure the right path to Inkscape
-        dw.inkscape_src = inkscape_src
 
         # load data to object
         dw.load_data(file_data=input_file)
