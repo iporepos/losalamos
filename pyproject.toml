@@ -1,0 +1,28 @@
+[project]
+name = "losalamos"
+version = "0.1.0"
+description = "Research tools with python"
+authors = [
+    # TODO: Iporã, get your GitHub noreply email here
+    {name = "Iporã Possantti",email = "???+ipo+exe@users.noreply.github.com."},
+    {name = "Juliano Santos Finck",email = "59181757+julianofinck@users.noreply.github.com."}
+]
+license = {text = "GPL-3.0"}
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "pandas (>=2.2.3,<3.0.0)",
+    "matplotlib (>=3.10.1,<4.0.0)",
+    "pypdf2 (>=3.0.1,<4.0.0)",
+    "lxml (>=5.4.0,<6.0.0)",
+    "python-dotenv (>=1.1.0,<2.0.0)",
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.11.8"
+

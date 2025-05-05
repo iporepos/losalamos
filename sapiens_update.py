@@ -1,6 +1,7 @@
-import glob
-from losalamos.zion import Sapiens
 import argparse
+import glob
+
+from losalamos.zion import Sapiens
 
 
 def update(note_file):

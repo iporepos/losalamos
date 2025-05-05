@@ -1,6 +1,8 @@
-import os, glob
-from losalamos.refs import Ref, RefNote
 import argparse
+import glob
+import os
+
+from losalamos.refs import RefNote
 
 
 def update(note_file):

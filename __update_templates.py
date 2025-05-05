@@ -1,5 +1,6 @@
-import glob, shutil
+import glob
 import os
+import shutil
 
 root_folder = "./_templates"
 

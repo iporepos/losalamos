@@ -1,4 +1,6 @@
 import shutil
+from pathlib import Path
+
 from losalamos.docs import Drawing
 
 if __name__ == "__main__":
@@ -20,10 +22,8 @@ if __name__ == "__main__":
     # ****** SETUP ******
 
     # set output folder:
-    output_folder = "C:/data"
-
-    # set inkscape source
-    inkscape_src = "C:/Program Files/Inkscape/bin"
+    output_folder = Path("data")
+    output_folder.mkdir(parents=True, exist_ok=True)
 
     # set up multiple testing
     dc_figs = {
@@ -41,7 +41,7 @@ if __name__ == "__main__":
     for fig in dc_figs:
         print(f">> testing {fig}")
         # set source SVG file (it is in the repo '_templates' folder)
-        source_file = f"./_templates/{fig}.svg"
+        source_file = Path(f"_templates/{fig}.svg")
 
         # make a copy of source file to ensure testing reproducibility
         input_file = f"{output_folder}/{fig}_copy.svg"
@@ -51,9 +51,6 @@ if __name__ == "__main__":
 
         # instatiate the object
         dw = Drawing()
-
-        # Ensure the right path to Inkscape
-        dw.inkscape_src = inkscape_src
 
         # load data to object
         dw.load_data(file_data=input_file)
