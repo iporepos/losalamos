@@ -8,7 +8,6 @@ import os
 import re
 import shutil
 import subprocess
-from pathlib import Path
 
 import pandas as pd
 # import xml.etree.ElementTree as ET
@@ -21,7 +20,6 @@ from losalamos.root import Collection, DataSet, MbaE
 # from dotenv import load_dotenv
 
 
-
 # load_dotenv() # comment this out
 
 
@@ -30,11 +28,6 @@ def blind_text():
 
 
 class Drawing(DataSet):
-    # todo There is a big problem of offsetting text-based items.
-    #  Somehow the saving method inserts white spaces in the text boxes
-    #  The result is a form of "offset" in the labels. Bad.
-    #  For now, not use hide or show labels :(
-
     def __init__(self, name="MyDraw", alias="Drw"):
         super().__init__(name=name, alias=alias)
         # overwriters
@@ -224,7 +217,7 @@ class Drawing(DataSet):
         :rtype: str
         """
         # Get abspath
-        output_file = Path(output_file).resolve()
+        output_file = os.path.abspath(output_file)
 
         # handle visibility of layers
         if layers2hide is not None:
