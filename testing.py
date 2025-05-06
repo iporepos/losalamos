@@ -1,6 +1,5 @@
 import shutil
 from pathlib import Path
-
 from losalamos.docs import Drawing
 
 if __name__ == "__main__":
@@ -41,7 +40,7 @@ if __name__ == "__main__":
     for fig in dc_figs:
         print(f">> testing {fig}")
         # set source SVG file (it is in the repo '_templates' folder)
-        source_file = Path(f"_templates/{fig}.svg")
+        source_file = f"_templates/{fig}.svg"
 
         # make a copy of source file to ensure testing reproducibility
         input_file = f"{output_folder}/{fig}_copy.svg"
