@@ -1,3 +1,7 @@
+# local scripts
+losalamos/_*.py
+losalamos/bench*.py
+
 # IDE
 .vscode/
 .idea/
