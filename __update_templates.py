@@ -20,10 +20,7 @@ for f in lst_src_files:
     for d in lst_dst_folders:
         print(f"--- copied to {d}")
         dst_f = f"{d}/{fnm}"
-        shutil.copy(
-            src=f,
-            dst=dst_f
-        )
+        shutil.copy(src=f, dst=dst_f)
 # fig files
 for f in lst_fig_files:
     fnm = os.path.basename(f)
@@ -31,7 +28,4 @@ for f in lst_fig_files:
     for d in lst_dst_folders:
         print(f"--- copied to {d}")
         dst_f = f"{d}/figs/{fnm}"
-        shutil.copy(
-            src=f,
-            dst=dst_f
-        )
+        shutil.copy(src=f, dst=dst_f)

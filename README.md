@@ -1,5 +1,5 @@
-# losalamos
-Research tools with python
+# losalamos 🏜️⚛️🤫
+_Research tools with python_
 
 Python objects for handling tasks such:
 - Managing references;
@@ -7,41 +7,43 @@ Python objects for handling tasks such:
 - Drawing figures;
 - Plotting data.
 
-Required dependencies:
-- pandas
-- numpy
-- matplotlib
-- PIL
-
 Outputs formats include:
 - Bib
 - Csv
-- Pdf
-- Svg
-- Jpg
-- Png
-- Tex
 - Html
+- Jpg
 - Md
+- Pdf
+- Png
 - rST
+- Svg
+- Tex
 
-## Install on Windows OS
-Get [Poetry](https://python-poetry.org/docs/)
+## 🍞🧈 Install the ol' bread & butter way
 ```bash
-python -m pip install pipx
-python -m pipx ensurepath
-# Add pipx to PATH -> "%USERPROFILE%\AppData\Roaming\Python\Python312\Scripts"
-# Restart terminal
+# Create a virtual environment 
+#   (some OSs use "python3" instead of "python")
+python -m venv .venv
 
-# Add packages with
-poetry add <package_name>
+# Activate it
+.venv/Scripts/activate     # Windows
+source .venv/bin/activate  # Linux
 
-# Install packages
-poetry install
+# --- Package manager (pip) ---
+# [Un-]install dependencies
+pip [un]install package_name
+pip [un]install -r requirements.txt
 
-# Activate poetry terminal (type "deactivate" to exit)
-poetry shell
+# Print dependencies & pipe them to "requirements.txt"
+pip freeze > requirements.txt
+```
 
-# Set the interpreter in your IDE
-poetry env info --path
+## Development
+- Formatting
+```bash
+# Follow PEP8 and more
+black .
+
+# Imports
+isort .
 ```

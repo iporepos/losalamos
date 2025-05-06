@@ -3,20 +3,16 @@ from pathlib import Path
 
 from losalamos.docs import Drawing
 
-if __name__ == "__main__":
 
-    '''
+def test_offset() -> None:
+    """
     TESTING FOR THE OFFSET PROBLEM
-    
-    Description: somehow the text items get whitespaces while in the .save() method of the Drawing() object.
-    
-    Weird: the issue seems to depend on the input file! May be is something in the source file, not the code.
-    
-    For now the offsetting problem is showing up only in the fig_b.svg. fig_a.svg goes just fine.
-    
-    '''
+        Description: somehow the text items get whitespaces while in the .save() method of the Drawing() object.
+        Weird: the issue seems to depend on the input file! May be is something in the source file, not the code.
 
-    print("Hello world")
+    For now the offsetting problem is showing up only in the fig_b.svg. fig_a.svg goes just fine.
+    """
+
     print("Testing the Drawing method")
 
     # ****** SETUP ******
@@ -34,7 +30,7 @@ if __name__ == "__main__":
         "fig_b": {
             "layers2hide": ["frame", "leaderlines"],
             "layers2show": ["main", "labels_details"],
-        }
+        },
     }
 
     # run tests
@@ -62,8 +58,8 @@ if __name__ == "__main__":
             dpi=300,
             drawing_id="mainframe",
             to_jpg=False,
-            layers2hide=None, # here is the catch
-            layers2show=None, # here is the catch
+            layers2hide=None,  # here is the catch -- yes, due to Drawing.save() formatting the XML
+            layers2show=None,  # here is the catch
         )
 
         # Test 2 -- hide and show layers
@@ -73,6 +69,12 @@ if __name__ == "__main__":
             dpi=300,
             drawing_id="mainframe",
             to_jpg=False,
-            layers2hide=dc_figs[fig]["layers2hide"],  # here is the catch
+            layers2hide=dc_figs[fig][
+                "layers2hide"
+            ],  # here is the catch -- yes, due to Drawing.save() formatting the XML
             layers2show=dc_figs[fig]["layers2show"],  # here is the catch
         )
+
+
+if __name__ == "__main__":
+    test_offset()
