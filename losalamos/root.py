@@ -971,7 +971,6 @@ class DataSet(MbaE):
 
 
 class Note(MbaE):
-
     def __init__(self, name="MyNote", alias="Nt1"):
         # set attributes
         self.file_note = None
@@ -1973,7 +1972,6 @@ class RecordTable(DataSet):
 
 
 class Budget(RecordTable):
-
     def __init__(self, name="MyBudget", alias="Bud"):
         super().__init__(name=name, alias=alias)
 

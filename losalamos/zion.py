@@ -2,7 +2,6 @@ from losalamos.root import Note
 
 
 class Sapiens(Note):
-
     def __init__(self, name="MyNote", alias="Nt1"):
         super().__init__(name, alias)
         self.metadata = {
@@ -100,5 +99,4 @@ class Sapiens(Note):
 
 
 if __name__ == "__main__":
-
     print("hello world!")

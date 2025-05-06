@@ -10,6 +10,7 @@ import shutil
 import subprocess
 
 import pandas as pd
+
 # import xml.etree.ElementTree as ET
 # import xml.dom.minidom
 from lxml import etree
@@ -274,7 +275,6 @@ class Drawing(DataSet):
 
     @staticmethod
     def export_image_bat(folder, specs=None, display=False, prefix="", suffix=""):
-
         # Handle no specs
         if specs is None:
             # set default specs
@@ -563,7 +563,6 @@ class Figure(MbaE):
 
 
 class FigureColl(Collection):
-
     def __init__(self):
         super().__init__(base_object=Figure, name="MyFigColl", alias="FigCol0")
 
@@ -590,7 +589,6 @@ class FigureColl(Collection):
 
 
 class TeX(MbaE):
-
     def __init__(self, name="MyTeX", alias="TeX"):
         super().__init__(name=name, alias=alias)
         self.red_blind = r"\textcolor{red}{Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ac bibendum orci. Cras erat elit, consequat vel erat ac, tincidunt pulvinar lacus. Pellentesque vitae consectetur quam. Interdum et malesuada fames ac ante ipsum primis in faucibus}"
@@ -958,7 +956,6 @@ class TeX(MbaE):
 
 
 class Table(DataSet):
-
     def __init__(self, name, alias):
         super().__init__(name=name, alias=alias)
         # ... continues in downstream objects ... #
@@ -1101,5 +1098,4 @@ class Table(DataSet):
 
 
 if __name__ == "__main__":
-
     print("Hello world")

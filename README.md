@@ -19,31 +19,31 @@ Outputs formats include:
 - Svg
 - Tex
 
-## 🍞🧈 Install the ol' bread & butter way
+## 🍞🧈 Install via uv
+Get [uv](https://docs.astral.sh/uv/getting-started/installation/#standalone-installer) package manager
 ```bash
+# Install uv system-wise via pipx (if it is not installed)
+pip install pipx
+pipx install uv
+
 # Create a virtual environment 
-#   (some OSs use "python3" instead of "python")
-python -m venv .venv
+uv venv
 
 # Activate it
 .venv/Scripts/activate     # Windows
 source .venv/bin/activate  # Linux
 
-# --- Package manager (pip) ---
+# --- Package manager (uv) ---
 # [Un-]install dependencies
-pip [un]install package_name
-pip [un]install -r requirements.txt
-
-# Print dependencies & pipe them to "requirements.txt"
-pip freeze > requirements.txt
+uv add/remove --dev black numpy<2
 ```
 
 ## Development
 - Formatting
 ```bash
-# Follow PEP8 and more
-black .
+# Follow PEP8 and more (like black)
+uv run ruff format .
 
 # Imports
-isort .
+uv run ruff check . --select I --fix
 ```

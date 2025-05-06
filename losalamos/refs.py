@@ -1386,7 +1386,6 @@ class Ref(MbaE):
             return bibtex_entry
 
         def get_refs(data):
-
             def find_doi(citation):
                 citation_doi = None
                 lst_uns = citation.split(",")
@@ -1399,7 +1398,6 @@ class Ref(MbaE):
 
             lst_references = []
             for i in range(len(data["items"][0]["reference"])):
-
                 # handle DOI
                 if "DOI" in data["items"][0]["reference"][i]:
                     known_doi = data["items"][0]["reference"][i]["DOI"]
@@ -1502,7 +1500,6 @@ class Ref(MbaE):
     def add_bat(
         src_folder, lib_folder, template_folder, tags=None, related=None, clean=False
     ):
-
         # 1) list the pairs of pdfs and bib files
         lst_files = Ref.catalog_files(folder_path=src_folder)
 
@@ -1566,7 +1563,6 @@ class Ref(MbaE):
 
 
 class RefNote(Note):
-
     def __init__(self, name="MyRefNote", alias="RNt1"):
         super().__init__(name=name, alias=alias)
         # ---
@@ -1984,7 +1980,7 @@ class RefNote(Note):
                         "related: {{related}}\n",
                         "file: [[{{file_link}}]]\n",
                         "## Abstract\n",
-                        " > {{abstract}}\n" "\n---",
+                        " > {{abstract}}\n\n---",
                     ],
                 },
                 "Comments": {
@@ -2139,7 +2135,6 @@ class RefNote(Note):
 
 
 class RefColl(Collection):  # todo docstring
-
     def __init__(self, name="MyRefCollection", alias="myRefCol"):
         super().__init__(base_object=Ref, name=name, alias=alias)
 
