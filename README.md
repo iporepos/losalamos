@@ -29,6 +29,9 @@ pipx install uv
 # Create a virtual environment 
 uv venv
 
+# Update the project's environment (get libs)
+uv sync
+
 # Activate it
 .venv/Scripts/activate     # Windows
 source .venv/bin/activate  # Linux
