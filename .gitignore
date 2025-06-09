@@ -129,4 +129,6 @@ data
 # Ruff-stuff
 .ruff_cache
 
-losalamos/_*.py
+# qodo
+.qodo
+

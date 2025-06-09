@@ -18,6 +18,11 @@ Outputs formats include:
 - rST
 - Svg
 - Tex
+## Branches
+|Branch name|Description|
+|---|---|
+|latest|rolling releases|
+|dev|developing and testing|
 
 ## 🍞🧈 Install via uv
 Get [uv](https://docs.astral.sh/uv/getting-started/installation/#standalone-installer) package manager
@@ -38,10 +43,21 @@ source .venv/bin/activate  # Linux
 uv add/remove --dev black numpy<2
 ```
 
+✅ Add dependency in your project-repository
+```bash
+uv add "losalamos@git+https://github.com/ipo-exe/losalamos.git@latest"
+```
+🔄 Upgrade later
+```bash
+uv lock --upgrade-package losalamos
+uv sync
+```
+
+
 ## Development
 - Formatting
 ```bash
-# Follow PEP8 and more (like black)
+# Follow PEP8 and more (like black + isort)
 uv run ruff format .
 
 # Imports
