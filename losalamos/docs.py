@@ -11,7 +11,8 @@ import subprocess
 from pathlib import Path
 
 import pandas as pd
-#from dotenv import load_dotenv
+
+# from dotenv import load_dotenv
 
 # import xml.etree.ElementTree as ET
 # import xml.dom.minidom
@@ -20,7 +21,7 @@ from PIL import Image
 
 from losalamos.root import Collection, DataSet, MbaE
 
-#load_dotenv() # comment this out
+# load_dotenv() # comment this out
 
 
 def blind_text():
@@ -258,6 +259,7 @@ class Drawing(DataSet):
             s_command = s_command.replace("inkscape", s_aux)
 
         # call inkscape process
+        # print(s_command)
         subprocess.run(s_command)
 
         # go back
@@ -265,7 +267,7 @@ class Drawing(DataSet):
 
         # handle jpg conversion
         if to_jpg:
-            #print(str(output_file))
+            # print(str(output_file))
             new_file = str(output_file).replace(".png", ".jpg")
             Drawing.convert_png_to_jpg(
                 input_file=output_file, output_file=new_file, dpi=dpi

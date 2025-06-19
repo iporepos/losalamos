@@ -24,7 +24,9 @@ class Sapiens(Note):
             "orcid": None,
             "website": None,
             "cpf": None,
+            "rg": None,
             "nit": None,
+            "chn": None,
             "father": None,
             "mother": None,
             "date_birth": None,
@@ -49,9 +51,10 @@ class Sapiens(Note):
 
     def load_metadata(self):
         incoming_metadata = Note.parse_metadata(self.file_note)
+        # print(type(incoming_metadata))
         expected_fields = list(self.metadata.keys())
         filtered_metadata = {}
-        for k in self.metadata:
+        for k in incoming_metadata:
             if k in expected_fields:
                 filtered_metadata[k] = incoming_metadata[k]
         self.metadata.update(filtered_metadata)

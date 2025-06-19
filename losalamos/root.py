@@ -52,7 +52,6 @@ import glob
 import os
 import re
 import shutil
-
 import matplotlib.pyplot as plt
 import pandas as pd
 import PyPDF2
@@ -121,15 +120,13 @@ class MbaE:
     """
 
     def __init__(self, name="MyMbaE", alias=None):
-        """Initialize the ``MbaE`` object.
+        """
+        Initialize the ``MbaE`` object.
 
         :param name: unique object name
         :type name: str
-
-        :param alias: unique object alias.
-            If None, it takes the first and last characters from ``name``
+        :param alias: unique object alias. If None, it takes the first and last characters from ``name``
         :type alias: str
-
         """
         # ------------ pseudo-static ----------- #
 
@@ -587,7 +584,7 @@ class DataSet(MbaE):
     .. code-block:: python
 
         # import Dataset
-        from plans.src_root import DataSet
+        from losalamos.root import DataSet
 
     Instantiate DataSet Object
 
@@ -892,7 +889,6 @@ class DataSet(MbaE):
 
         :param show: option for showing instead of saving.
         :type show: bool
-
         :return: None or file path to figure
         :rtype: None or str
 
@@ -1266,7 +1262,7 @@ class RecordTable(DataSet):
     .. code-block:: python
 
         # Import RecordTable
-        from plans.src_root import RecordTable
+        from plans.root import RecordTable
 
     Instantiate RecordTable Object
 
@@ -1450,6 +1446,7 @@ class RecordTable(DataSet):
         ]
         # File-related columns
         self.columns_data_files = ["File_NF", "File_Invoice"]
+
         # concat all lists
         self.columns_data = (
             self.columns_data_main + self.columns_data_extra + self.columns_data_files
@@ -1546,6 +1543,7 @@ class RecordTable(DataSet):
 
     def update(self):
         super().update()
+
         # ... continues in downstream objects ... #
         return None
 
@@ -1702,9 +1700,9 @@ class RecordTable(DataSet):
 
         # handle timestamp
         if self.rectimest_field not in list_input_cols:
-            input_df[self.rectimest_field] = self._get_timestamp()
+            input_df[self.rectimest_field] = self.get_timestamp()
 
-        # handle timestamp
+        # handle status
         if self.recstatus_field not in list_input_cols:
             input_df[self.recstatus_field] = "On"
 

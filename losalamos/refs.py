@@ -1571,6 +1571,24 @@ class RefNote(Note):
         super().__init__(name=name, alias=alias)
         # ---
 
+        self.basic_fields_head = [
+            "entry_type",
+            "citation_key",
+            "citation_in",
+            "author",
+            "year",
+            "title",
+            "abstract",
+        ]
+
+        self.basic_fields_tail = [
+            "url",
+            "credit",
+            "file",  # todo change and update to "file_pdf"
+            "tags",
+            "timestamp",
+        ]
+
         # TEXT FIELD TO AVOID CORRUPTED HEADING BY : OR "
         self.text_fields = {
             "article": ["title", "abstract", "issn", "file", "credit"],
@@ -1581,6 +1599,7 @@ class RefNote(Note):
             "misc": ["title", "abstract", "credit"],
         }
 
+        # todo optimize fields using DRY
         # Expected entries in each kind of reference
         self.metadata_entries = {
             "article": [
@@ -1655,6 +1674,7 @@ class RefNote(Note):
                 "tags",
                 "timestamp",
             ],
+            # todo remove dataset entry
             "dataset": [
                 "entry_type",
                 "citation_key",
