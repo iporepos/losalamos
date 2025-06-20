@@ -1,6 +1,9 @@
-# local scripts
-losalamos/_*.py
-losalamos/bench*.py
+# Ignore all files and folders starting with "_"
+_*
+bench*.py
+
+# EXCEPT __init__.py files
+!__init__.py
 
 # IDE
 .vscode/
@@ -131,3 +134,5 @@ data
 
 # Ruff-stuff
 .ruff_cache
+
+losalamos/_*.py

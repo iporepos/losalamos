@@ -16,8 +16,12 @@ def process_bibtex(src_folder):
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Process .bib files in the specified directory.")
-    parser.add_argument('src_folder', type=str, help='The source folder containing the src.bib file')
+    parser = argparse.ArgumentParser(
+        description="Process .bib files in the specified directory."
+    )
+    parser.add_argument(
+        "src_folder", type=str, help="The source folder containing the src.bib file"
+    )
 
     args = parser.parse_args()
 
