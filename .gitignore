@@ -1,9 +1,11 @@
 # Ignore all files and folders starting with "_"
-_*
+_*.py
 bench*.py
 
 # EXCEPT __init__.py files
 !__init__.py
+!docs
+
 
 # IDE
 .vscode/
@@ -134,5 +136,3 @@ data
 
 # Ruff-stuff
 .ruff_cache
-
-losalamos/_*.py
