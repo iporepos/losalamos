@@ -6,6 +6,7 @@ bench*.py
 !__init__.py
 !docs
 
+_templates
 
 # IDE
 .vscode/

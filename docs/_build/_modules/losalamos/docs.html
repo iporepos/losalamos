@@ -1,0 +1,1321 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>losalamos.docs &#8212; losalamos v.0.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/classic.css?v=2bf1fcf8" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    
+    <script src="../../_static/documentation_options.js?v=fb9c8d0f"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=f281be69"></script>
+    
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">losalamos v.0.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">losalamos.docs</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for losalamos.docs</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Classes for parsing, handling and managing documents</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">glob</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">shutil</span>
+<span class="kn">import</span> <span class="nn">subprocess</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="c1">#from dotenv import load_dotenv</span>
+
+<span class="c1"># import xml.etree.ElementTree as ET</span>
+<span class="c1"># import xml.dom.minidom</span>
+<span class="kn">from</span> <span class="nn">lxml</span> <span class="kn">import</span> <span class="n">etree</span>
+<span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
+
+<span class="kn">from</span> <span class="nn">losalamos.root</span> <span class="kn">import</span> <span class="n">Collection</span><span class="p">,</span> <span class="n">DataSet</span><span class="p">,</span> <span class="n">MbaE</span>
+
+<span class="c1">#load_dotenv() # comment this out</span>
+
+
+<div class="viewcode-block" id="blind_text">
+<a class="viewcode-back" href="../../generated/losalamos.docs.html#losalamos.docs.blind_text">[docs]</a>
+<span class="k">def</span> <span class="nf">blind_text</span><span class="p">():</span>
+    <span class="k">return</span> <span class="s2">&quot;Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ac bibendum orci. Cras erat elit, consequat vel erat ac, tincidunt pulvinar lacus. Pellentesque vitae consectetur quam.&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="Drawing">
+<a class="viewcode-back" href="../../generated/losalamos.docs.html#losalamos.docs.Drawing">[docs]</a>
+<span class="k">class</span> <span class="nc">Drawing</span><span class="p">(</span><span class="n">DataSet</span><span class="p">):</span>
+    <span class="c1"># todo There is a big problem of offsetting text-based items.</span>
+    <span class="c1">#  Somehow the saving method inserts white spaces in the text boxes</span>
+    <span class="c1">#  The result is a form of &quot;offset&quot; in the labels. Bad.</span>
+    <span class="c1">#  For now, not use hide or show labels :(</span>
+
+<div class="viewcode-block" id="Drawing.__init__">
+<a class="viewcode-back" href="../../generated/losalamos.docs.html#losalamos.docs.Drawing.__init__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;MyDraw&quot;</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s2">&quot;Drw&quot;</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="n">alias</span><span class="p">)</span>
+        <span class="c1"># overwriters</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">object_alias</span> <span class="o">=</span> <span class="s2">&quot;DRW&quot;</span>
+
+        <span class="c1"># ------------ set mutables ----------- #</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tree</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># ------------ set defaults ----------- #</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">inkscape_src</span> <span class="o">=</span> <span class="s2">&quot;C:/Program Files/Inkscape/bin&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name_spaces</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;svg&quot;</span><span class="p">:</span> <span class="s2">&quot;http://www.w3.org/2000/svg&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;inkscape&quot;</span><span class="p">:</span> <span class="s2">&quot;http://www.inkscape.org/namespaces/inkscape&quot;</span><span class="p">,</span>
+        <span class="p">}</span></div>
+
+
+<div class="viewcode-block" id="Drawing.update">
+<a class="viewcode-back" href="../../generated/losalamos.docs.html#losalamos.docs.Drawing.update">[docs]</a>
+    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;(Overwriting super method) Refresh all mutable attributes based on data (includins paths).</span>
+<span class="sd">        Base method. Expected to be incremented downstrem.</span>
+
+<span class="sd">        :return: None</span>
+<span class="sd">        :rtype: None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># refresh all mutable attributes</span>
+
+        <span class="c1"># set fields</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_fields</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># data size</span>
+            <span class="c1"># todo handle size in SVG</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">size</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># update data folder</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_data</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># set folder</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">folder_data</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">file_data</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">folder_data</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># view specs at the end</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_view_specs</span><span class="p">()</span>
+
+        <span class="c1"># ... continues in downstream objects ... #</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="Drawing.load_data">
+<a class="viewcode-back" href="../../generated/losalamos.docs.html#losalamos.docs.Drawing.load_data">[docs]</a>
+    <span class="k">def</span> <span class="nf">load_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_data</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Load data from file. Expected to overwrite superior methods.</span>
+
+<span class="sd">        :param file_data: file path to data.</span>
+<span class="sd">        :type file_data: str</span>
+<span class="sd">        :return: None</span>
+<span class="sd">        :rtype: None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># -------------- overwrite relative path input -------------- #</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">file_data</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">file_data</span><span class="p">)</span>
+
+        <span class="c1"># -------------- implement loading logic -------------- #</span>
+
+        <span class="c1"># load tree</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tree</span> <span class="o">=</span> <span class="n">etree</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">file_data</span><span class="p">)</span>
+
+        <span class="c1"># get the root</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">getroot</span><span class="p">()</span>
+
+        <span class="c1"># -------------- call loading function -------------- #</span>
+
+        <span class="c1"># -------------- post-loading logic -------------- #</span>
+
+        <span class="c1"># -------------- update other mutables -------------- #</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+
+        <span class="c1"># ... continues in downstream objects ... #</span>
+
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="Drawing.save">
+<a class="viewcode-back" href="../../generated/losalamos.docs.html#losalamos.docs.Drawing.save">[docs]</a>
+    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">xml_str</span> <span class="o">=</span> <span class="n">etree</span><span class="o">.</span><span class="n">tostring</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tree</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">,</span> <span class="n">xml_declaration</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">pretty_print</span><span class="o">=</span><span class="kc">False</span>
+        <span class="p">)</span>
+
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">file_data</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">xml_str</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="Drawing.export">
+<a class="viewcode-back" href="../../generated/losalamos.docs.html#losalamos.docs.Drawing.export">[docs]</a>
+    <span class="k">def</span> <span class="nf">export</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output_file</span><span class="p">):</span>
+        <span class="n">original_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_data</span><span class="p">[:]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">file_data</span> <span class="o">=</span> <span class="n">output_file</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">file_data</span> <span class="o">=</span> <span class="n">original_file</span><span class="p">[:]</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="Drawing._find_layer">
+<a class="viewcode-back" href="../../generated/losalamos.docs.html#losalamos.docs.Drawing._find_layer">[docs]</a>
+    <span class="k">def</span> <span class="nf">_find_layer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;frames&quot;</span><span class="p">):</span>
+        <span class="n">key</span> <span class="o">=</span> <span class="s2">&quot;{&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">name_spaces</span><span class="p">[</span><span class="s2">&quot;inkscape&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;}&quot;</span>
+        <span class="c1"># Find the &lt;g&gt; group with the specific Inkscape label</span>
+        <span class="n">layer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">find</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;.//svg:g[@inkscape:label=&#39;</span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2">&#39;]&quot;</span><span class="p">,</span> <span class="n">namespaces</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">name_spaces</span>
+        <span class="p">)</span>
+        <span class="c1"># print(layer)</span>
+        <span class="n">groupmode</span> <span class="o">=</span> <span class="n">layer</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span> <span class="o">+</span> <span class="s2">&quot;groupmode&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">layer</span></div>
+
+
+<div class="viewcode-block" id="Drawing.hide_layer">
+<a class="viewcode-back" href="../../generated/losalamos.docs.html#losalamos.docs.Drawing.hide_layer">[docs]</a>
+    <span class="k">def</span> <span class="nf">hide_layer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;frames&quot;</span><span class="p">):</span>
+        <span class="n">layer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">find</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;.//svg:g[@inkscape:label=&#39;</span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2">&#39;]&quot;</span><span class="p">,</span> <span class="n">namespaces</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">name_spaces</span>
+        <span class="p">)</span>
+        <span class="n">layer</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;style&quot;</span><span class="p">,</span> <span class="s2">&quot;display:none&quot;</span><span class="p">)</span>  <span class="c1"># Hide the layer</span></div>
+
+
+<div class="viewcode-block" id="Drawing.show_layer">
+<a class="viewcode-back" href="../../generated/losalamos.docs.html#losalamos.docs.Drawing.show_layer">[docs]</a>
+    <span class="k">def</span> <span class="nf">show_layer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;frames&quot;</span><span class="p">):</span>
+        <span class="n">layer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">find</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;.//svg:g[@inkscape:label=&#39;</span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2">&#39;]&quot;</span><span class="p">,</span> <span class="n">namespaces</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">name_spaces</span>
+        <span class="p">)</span>
+        <span class="n">layer</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;style&quot;</span><span class="p">,</span> <span class="s2">&quot;display:inline&quot;</span><span class="p">)</span>  <span class="c1"># Show the layer</span></div>
+
+
+<div class="viewcode-block" id="Drawing._set_view_specs">
+<a class="viewcode-back" href="../../generated/losalamos.docs.html#losalamos.docs.Drawing._set_view_specs">[docs]</a>
+    <span class="k">def</span> <span class="nf">_set_view_specs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set view specifications.</span>
+<span class="sd">        Expected to overwrite superior methods.</span>
+
+<span class="sd">        :return: None</span>
+<span class="sd">        :rtype: None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">view_specs</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;folder&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">folder_data</span><span class="p">,</span>
+            <span class="s2">&quot;filename&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+            <span class="s2">&quot;fig_format&quot;</span><span class="p">:</span> <span class="s2">&quot;jpg&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;dpi&quot;</span><span class="p">:</span> <span class="mi">300</span><span class="p">,</span>
+            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+            <span class="s2">&quot;width&quot;</span><span class="p">:</span> <span class="mi">5</span> <span class="o">*</span> <span class="mf">1.618</span><span class="p">,</span>
+            <span class="s2">&quot;height&quot;</span><span class="p">:</span> <span class="mi">5</span> <span class="o">*</span> <span class="mf">1.618</span><span class="p">,</span>
+            <span class="s2">&quot;xvar&quot;</span><span class="p">:</span> <span class="s2">&quot;RM&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;yvar&quot;</span><span class="p">:</span> <span class="s2">&quot;TempDB&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;xlabel&quot;</span><span class="p">:</span> <span class="s2">&quot;RM&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;ylabel&quot;</span><span class="p">:</span> <span class="s2">&quot;TempDB&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;color&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">color</span><span class="p">,</span>
+            <span class="s2">&quot;xmin&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="s2">&quot;xmax&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="s2">&quot;ymin&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="s2">&quot;ymax&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="Drawing.view">
+<a class="viewcode-back" href="../../generated/losalamos.docs.html#losalamos.docs.Drawing.view">[docs]</a>
+    <span class="k">def</span> <span class="nf">view</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get a basic visualization. Expected to overwrite superior methods.</span>
+
+<span class="sd">        :param show: option for showing instead of saving.</span>
+<span class="sd">        :type show: bool</span>
+
+<span class="sd">        :return: None or file path to figure</span>
+<span class="sd">        :rtype: None or str</span>
+
+<span class="sd">        **Notes:**</span>
+
+<span class="sd">        - Uses values in the ``view_specs()`` attribute for plotting</span>
+
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># todo implement</span>
+
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="Drawing.export_image">
+<a class="viewcode-back" href="../../generated/losalamos.docs.html#losalamos.docs.Drawing.export_image">[docs]</a>
+    <span class="k">def</span> <span class="nf">export_image</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">output_file</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span>
+        <span class="n">drawing_id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">to_jpg</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">remove_png</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">layers2hide</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">layers2show</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Export the current drawing as an image file, optionally adjusting layers and format.</span>
+
+<span class="sd">        :param output_file: Path to save the exported image. Defaults to None, using Inkscape&#39;s default output.</span>
+<span class="sd">        :type output_file: str, optional</span>
+<span class="sd">        :param dpi: Resolution of the exported image in dots per inch (DPI). Defaults to 300.</span>
+<span class="sd">        :type dpi: int, optional</span>
+<span class="sd">        :param drawing_id: Specific drawing ID to export. Defaults to None, exporting the full drawing.</span>
+<span class="sd">        :type drawing_id: str, optional</span>
+<span class="sd">        :param to_jpg: Whether to convert the exported PNG to JPG format. Defaults to False.</span>
+<span class="sd">        :type to_jpg: bool, optional</span>
+<span class="sd">        :param layers2hide: List of layer labels to hide before export. Defaults to None.</span>
+<span class="sd">        :type layers2hide: list[str], optional</span>
+<span class="sd">        :param layers2show: List of layer labels to show before export. Defaults to None.</span>
+<span class="sd">        :type layers2show: list[str], optional</span>
+<span class="sd">        :return: Path to the exported image file.</span>
+<span class="sd">        :rtype: str</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Get abspath</span>
+        <span class="n">output_file</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">output_file</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
+
+        <span class="c1"># handle visibility of layers</span>
+        <span class="k">if</span> <span class="n">layers2hide</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">lbl</span> <span class="ow">in</span> <span class="n">layers2hide</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">hide_layer</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="n">lbl</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">layers2show</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">lbl</span> <span class="ow">in</span> <span class="n">layers2show</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">show_layer</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="n">lbl</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+
+        <span class="c1"># set return file</span>
+        <span class="n">return_file</span> <span class="o">=</span> <span class="n">output_file</span>
+
+        <span class="c1"># move to inkscape source</span>
+        <span class="n">current_directory</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">inkscape_src</span><span class="p">)</span>
+
+        <span class="c1"># handle command</span>
+        <span class="k">if</span> <span class="n">output_file</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">s_command</span> <span class="o">=</span> <span class="s1">&#39;inkscape --export-dpi=</span><span class="si">{}</span><span class="s1"> --export-type=&quot;png&quot; &quot;</span><span class="si">{}</span><span class="s1">&quot;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">dpi</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_data</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">s_command</span> <span class="o">=</span> <span class="s1">&#39;inkscape --export-dpi=</span><span class="si">{}</span><span class="s1"> --export-type=&quot;png&quot; &#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">dpi</span><span class="p">)</span>
+            <span class="n">s_command</span> <span class="o">=</span> <span class="n">s_command</span> <span class="o">+</span> <span class="s1">&#39;--export-filename=&quot;</span><span class="si">{}</span><span class="s1">&quot; &quot;</span><span class="si">{}</span><span class="s1">&quot;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">output_file</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_data</span>
+            <span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">drawing_id</span><span class="p">:</span>
+            <span class="n">s_aux</span> <span class="o">=</span> <span class="s2">&quot;inkscape --export-id=&quot;</span> <span class="o">+</span> <span class="n">drawing_id</span>
+            <span class="n">s_command</span> <span class="o">=</span> <span class="n">s_command</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;inkscape&quot;</span><span class="p">,</span> <span class="n">s_aux</span><span class="p">)</span>
+
+        <span class="c1"># call inkscape process</span>
+        <span class="c1">#print(s_command)</span>
+        <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">s_command</span><span class="p">)</span>
+
+        <span class="c1"># go back</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">current_directory</span><span class="p">)</span>
+
+        <span class="c1"># handle jpg conversion</span>
+        <span class="k">if</span> <span class="n">to_jpg</span><span class="p">:</span>
+            <span class="c1">#print(str(output_file))</span>
+            <span class="n">new_file</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">output_file</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;.png&quot;</span><span class="p">,</span> <span class="s2">&quot;.jpg&quot;</span><span class="p">)</span>
+            <span class="n">Drawing</span><span class="o">.</span><span class="n">convert_png_to_jpg</span><span class="p">(</span>
+                <span class="n">input_file</span><span class="o">=</span><span class="n">output_file</span><span class="p">,</span> <span class="n">output_file</span><span class="o">=</span><span class="n">new_file</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span>
+            <span class="p">)</span>
+            <span class="k">if</span> <span class="n">remove_png</span><span class="p">:</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">output_file</span><span class="p">)</span>
+            <span class="c1"># reset return file</span>
+            <span class="n">return_file</span> <span class="o">=</span> <span class="n">new_file</span><span class="p">[:]</span>
+
+        <span class="k">return</span> <span class="n">return_file</span></div>
+
+
+<div class="viewcode-block" id="Drawing.export_image_bat">
+<a class="viewcode-back" href="../../generated/losalamos.docs.html#losalamos.docs.Drawing.export_image_bat">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">export_image_bat</span><span class="p">(</span><span class="n">folder</span><span class="p">,</span> <span class="n">specs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+
+        <span class="c1"># Handle no specs</span>
+        <span class="k">if</span> <span class="n">specs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># set default specs</span>
+            <span class="n">specs</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s2">&quot;dpi&quot;</span><span class="p">:</span> <span class="mi">300</span><span class="p">,</span>
+                <span class="s2">&quot;drawing_id&quot;</span><span class="p">:</span> <span class="s2">&quot;frame_a&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;to_jpg&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                <span class="s2">&quot;remove_png&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                <span class="s2">&quot;layers2hide&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;frames&quot;</span><span class="p">],</span>
+                <span class="s2">&quot;layers2show&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="p">}</span>
+
+        <span class="c1"># loop over files</span>
+        <span class="n">lst_files</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">folder</span><span class="si">}</span><span class="s2">/*.svg&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">lst_files</span><span class="p">[:]:</span>
+            <span class="k">if</span> <span class="n">display</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Exporting </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">f</span><span class="p">)))</span>
+            <span class="n">nm</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">f</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;.svg&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+            <span class="n">drw</span> <span class="o">=</span> <span class="n">Drawing</span><span class="p">()</span>
+            <span class="n">drw</span><span class="o">.</span><span class="n">file_data</span> <span class="o">=</span> <span class="n">f</span>
+            <span class="n">drw</span><span class="o">.</span><span class="n">load_data</span><span class="p">(</span><span class="n">file_data</span><span class="o">=</span><span class="n">drw</span><span class="o">.</span><span class="n">file_data</span><span class="p">)</span>
+            <span class="c1"># call the export method</span>
+            <span class="n">f0</span> <span class="o">=</span> <span class="n">drw</span><span class="o">.</span><span class="n">export_image</span><span class="p">(</span>
+                <span class="n">output_file</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">folder</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">prefix</span><span class="si">}{</span><span class="n">nm</span><span class="si">}{</span><span class="n">suffix</span><span class="si">}</span><span class="s2">.png&quot;</span><span class="p">,</span>
+                <span class="n">dpi</span><span class="o">=</span><span class="n">specs</span><span class="p">[</span><span class="s2">&quot;dpi&quot;</span><span class="p">],</span>
+                <span class="n">to_jpg</span><span class="o">=</span><span class="n">specs</span><span class="p">[</span><span class="s2">&quot;to_jpg&quot;</span><span class="p">],</span>
+                <span class="n">remove_png</span><span class="o">=</span><span class="n">specs</span><span class="p">[</span><span class="s2">&quot;remove_png&quot;</span><span class="p">],</span>
+                <span class="n">drawing_id</span><span class="o">=</span><span class="n">specs</span><span class="p">[</span><span class="s2">&quot;drawing_id&quot;</span><span class="p">],</span>
+                <span class="n">layers2hide</span><span class="o">=</span><span class="n">specs</span><span class="p">[</span><span class="s2">&quot;layers2hide&quot;</span><span class="p">],</span>
+                <span class="n">layers2show</span><span class="o">=</span><span class="n">specs</span><span class="p">[</span><span class="s2">&quot;layers2show&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+            <span class="k">if</span> <span class="n">display</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Exported </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">f0</span><span class="p">)))</span>
+
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="Drawing.convert_png_to_jpg">
+<a class="viewcode-back" href="../../generated/losalamos.docs.html#losalamos.docs.Drawing.convert_png_to_jpg">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">convert_png_to_jpg</span><span class="p">(</span><span class="n">input_file</span><span class="p">,</span> <span class="n">output_file</span><span class="p">,</span> <span class="n">quality</span><span class="o">=</span><span class="mi">95</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">with</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">input_file</span><span class="p">)</span> <span class="k">as</span> <span class="n">img</span><span class="p">:</span>
+            <span class="c1"># Convert to RGB if the image has an alpha channel</span>
+            <span class="k">if</span> <span class="n">img</span><span class="o">.</span><span class="n">mode</span> <span class="o">!=</span> <span class="s2">&quot;RGB&quot;</span><span class="p">:</span>
+                <span class="n">img</span> <span class="o">=</span> <span class="n">img</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="s2">&quot;RGB&quot;</span><span class="p">)</span>
+            <span class="c1"># Save with specified quality and DPI</span>
+            <span class="n">save_params</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;format&quot;</span><span class="p">:</span> <span class="s2">&quot;JPEG&quot;</span><span class="p">,</span> <span class="s2">&quot;quality&quot;</span><span class="p">:</span> <span class="n">quality</span><span class="p">}</span>
+            <span class="k">if</span> <span class="n">dpi</span><span class="p">:</span>
+                <span class="n">save_params</span><span class="p">[</span><span class="s2">&quot;dpi&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">dpi</span><span class="p">,</span> <span class="n">dpi</span><span class="p">)</span>
+            <span class="n">img</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">output_file</span><span class="p">,</span> <span class="o">**</span><span class="n">save_params</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="Figure">
+<a class="viewcode-back" href="../../generated/losalamos.docs.html#losalamos.docs.Figure">[docs]</a>
+<span class="k">class</span> <span class="nc">Figure</span><span class="p">(</span><span class="n">MbaE</span><span class="p">):</span>
+<div class="viewcode-block" id="Figure.__init__">
+<a class="viewcode-back" href="../../generated/losalamos.docs.html#losalamos.docs.Figure.__init__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;MyFig&quot;</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s2">&quot;Fig&quot;</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="n">alias</span><span class="p">)</span>
+        <span class="c1"># setup attributes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fig_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>  <span class="c1"># use name by default</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">caption</span> <span class="o">=</span> <span class="n">blind_text</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">caption_lof</span> <span class="o">=</span> <span class="n">blind_text</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">label</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">alias</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">status_t1</span> <span class="o">=</span> <span class="s2">&quot;Expected&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">status_t2</span> <span class="o">=</span> <span class="s2">&quot;Expected&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">part</span> <span class="o">=</span> <span class="s2">&quot;Main text&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">figsize</span> <span class="o">=</span> <span class="s2">&quot;Large&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">layout</span> <span class="o">=</span> <span class="s2">&quot;Columns 1 Rows 1&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">description</span> <span class="o">=</span> <span class="n">blind_text</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">comments</span> <span class="o">=</span> <span class="n">blind_text</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fig_file</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">svg_file</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">thumbnail_file</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">thumbnail_t1_file</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">thumbnail_t2_file</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pannels_dct</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="Figure._set_fields">
+<a class="viewcode-back" href="../../generated/losalamos.docs.html#losalamos.docs.Figure._set_fields">[docs]</a>
+    <span class="k">def</span> <span class="nf">_set_fields</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set fields names&quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">_set_fields</span><span class="p">()</span>
+        <span class="c1"># Attribute fields</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fig_id_field</span> <span class="o">=</span> <span class="s2">&quot;Id&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">caption_field</span> <span class="o">=</span> <span class="s2">&quot;Caption&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">caption_lof_field</span> <span class="o">=</span> <span class="s2">&quot;Caption LOF&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">status_t1_field</span> <span class="o">=</span> <span class="s2">&quot;Status Tier 1&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">status_t2_field</span> <span class="o">=</span> <span class="s2">&quot;Status Tier 2&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">descr_field</span> <span class="o">=</span> <span class="s2">&quot;Description&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">comms_field</span> <span class="o">=</span> <span class="s2">&quot;Comments&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">part_field</span> <span class="o">=</span> <span class="s2">&quot;Part&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">label_field</span> <span class="o">=</span> <span class="s2">&quot;Label&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">figsize_field</span> <span class="o">=</span> <span class="s2">&quot;Size&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">playout_field</span> <span class="o">=</span> <span class="s2">&quot;Layout&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">thumbnail_t1_file_field</span> <span class="o">=</span> <span class="s2">&quot;Thumbnail Tier 1&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">thumbnail_t2_file_field</span> <span class="o">=</span> <span class="s2">&quot;Thumbnail Tier 2&quot;</span></div>
+
+        <span class="c1"># ... continues in downstream objects ... #</span>
+
+<div class="viewcode-block" id="Figure.get_metadata">
+<a class="viewcode-back" href="../../generated/losalamos.docs.html#losalamos.docs.Figure.get_metadata">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get a dictionary with object metadata.</span>
+
+<span class="sd">        .. note::</span>
+
+<span class="sd">            Metadata does **not** necessarily inclue all object attributes.</span>
+
+<span class="sd">        :return: dictionary with all metadata</span>
+<span class="sd">        :rtype: dict</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">dict_meta</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">get_metadata</span><span class="p">()</span>
+
+        <span class="c1"># add new fields</span>
+        <span class="n">dict_meta</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">fig_id_field</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fig_id</span>
+        <span class="n">dict_meta</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">label_field</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">label</span>
+        <span class="n">dict_meta</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">caption_field</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">caption</span>
+        <span class="n">dict_meta</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">caption_lof_field</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">caption_lof</span>
+        <span class="n">dict_meta</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">status_t1_field</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">status_t1</span>
+        <span class="n">dict_meta</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">status_t2_field</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">status_t2</span>
+        <span class="n">dict_meta</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">descr_field</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">description</span>
+        <span class="n">dict_meta</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">part_field</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">part</span>
+        <span class="n">dict_meta</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">figsize_field</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">figsize</span>
+        <span class="n">dict_meta</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">playout_field</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">layout</span>
+        <span class="n">dict_meta</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">thumbnail_t1_file_field</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">thumbnail_t1_file</span>
+        <span class="n">dict_meta</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">thumbnail_t2_file_field</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">thumbnail_t2_file</span>
+
+        <span class="k">return</span> <span class="n">dict_meta</span></div>
+
+
+<div class="viewcode-block" id="Figure.to_latex">
+<a class="viewcode-back" href="../../generated/losalamos.docs.html#losalamos.docs.Figure.to_latex">[docs]</a>
+    <span class="k">def</span> <span class="nf">to_latex</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">folder</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">filename</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">position</span><span class="o">=</span><span class="s2">&quot;h!&quot;</span><span class="p">,</span>
+        <span class="n">fontsize</span><span class="o">=</span><span class="s2">&quot;scriptsize&quot;</span><span class="p">,</span>
+        <span class="n">fontfamily</span><span class="o">=</span><span class="s2">&quot;sffamily&quot;</span><span class="p">,</span>
+        <span class="n">wfactor</span><span class="o">=</span><span class="mf">0.95</span><span class="p">,</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Generates a LaTeX figure environment containing an image and its corresponding caption,</span>
+<span class="sd">        and saves it as a `.tex` file if folder and filename is provided.</span>
+
+<span class="sd">        :param folder: The directory where the LaTeX file will be saved.</span>
+<span class="sd">        :type folder: str, optional</span>
+<span class="sd">        :param filename: The name of the LaTeX file (without extension).</span>
+<span class="sd">        :type filename: str, optional</span>
+<span class="sd">        :param position: The positioning argument for the LaTeX figure environment (e.g., &quot;h!&quot;, &quot;t&quot;, &quot;b&quot;).</span>
+<span class="sd">        :type position: str, optional</span>
+<span class="sd">        :param fontsize: The font size command to be used (e.g., &quot;scriptsize&quot;, &quot;footnotesize&quot;).</span>
+<span class="sd">        :type fontsize: str, optional</span>
+<span class="sd">        :param fontfamily: The font family command to be used (e.g., &quot;sffamily&quot;, &quot;rmfamily&quot;).</span>
+<span class="sd">        :type fontfamily: str, optional</span>
+<span class="sd">        :param wfactor: The width factor for scaling the included image relative to text width.</span>
+<span class="sd">        :type wfactor: float, optional</span>
+<span class="sd">        :return: A list of strings representing the lines of the generated LaTeX figure environment.</span>
+<span class="sd">        :rtype: list[str]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">list_bulk</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="c1"># preable</span>
+        <span class="n">list_bulk</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\begin</span><span class="si">{figure}</span><span class="s2">[&quot;</span> <span class="o">+</span> <span class="n">position</span> <span class="o">+</span> <span class="s2">&quot;]&quot;</span><span class="p">)</span>
+        <span class="n">list_bulk</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\centering&quot;</span><span class="p">)</span>
+        <span class="n">list_bulk</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">fontsize</span><span class="p">))</span>
+        <span class="n">list_bulk</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">fontfamily</span><span class="p">))</span>
+
+        <span class="c1"># image</span>
+        <span class="n">list_bulk</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="sa">r</span><span class="s2">&quot;\includegraphics[width=</span><span class="si">{}</span><span class="s2">\textwidth]&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">wfactor</span><span class="p">)</span>
+            <span class="o">+</span> <span class="s2">&quot;{&quot;</span>
+            <span class="o">+</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fig_file</span><span class="p">)</span>
+            <span class="o">+</span> <span class="s2">&quot;}&quot;</span>
+        <span class="p">)</span>
+        <span class="n">list_bulk</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\caption[&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">caption_lof</span> <span class="o">+</span> <span class="s2">&quot;]{&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">caption</span> <span class="o">+</span> <span class="s2">&quot;}&quot;</span><span class="p">)</span>
+        <span class="n">list_bulk</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\label{&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">label</span> <span class="o">+</span> <span class="s2">&quot;}&quot;</span><span class="p">)</span>
+        <span class="n">list_bulk</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\end</span><span class="si">{figure}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="c1"># include new line</span>
+        <span class="n">list_bulk</span> <span class="o">=</span> <span class="p">[</span><span class="n">line</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">list_bulk</span><span class="p">]</span>
+
+        <span class="c1"># export</span>
+        <span class="k">if</span> <span class="n">folder</span> <span class="ow">and</span> <span class="n">filename</span><span class="p">:</span>
+            <span class="n">filepath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">folder</span><span class="p">,</span> <span class="n">filename</span> <span class="o">+</span> <span class="s2">&quot;.tex&quot;</span><span class="p">)</span>
+            <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">writelines</span><span class="p">(</span><span class="n">list_bulk</span><span class="p">)</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="n">list_bulk</span></div>
+
+
+<div class="viewcode-block" id="Figure.to_latex_report">
+<a class="viewcode-back" href="../../generated/losalamos.docs.html#losalamos.docs.Figure.to_latex_report">[docs]</a>
+    <span class="k">def</span> <span class="nf">to_latex_report</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">template_file</span><span class="p">,</span> <span class="n">folder</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Generates a LaTeX report based on a template file, replacing placeholders with</span>
+<span class="sd">        instance attributes and optionally saving the output to a `.tex` file.</span>
+
+<span class="sd">        :param template_file: Path to the LaTeX template file containing placeholders.</span>
+<span class="sd">        :type template_file: str</span>
+<span class="sd">        :param folder: Directory where the output LaTeX file should be saved (optional).</span>
+<span class="sd">        :type folder: str, optional</span>
+<span class="sd">        :param filename: Name of the output LaTeX file (without extension) (optional).</span>
+<span class="sd">        :type filename: str, optional</span>
+<span class="sd">        :return: A list of strings representing the lines of the generated LaTeX report.</span>
+<span class="sd">        :rtype: list[str]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># open the template</span>
+        <span class="n">fle</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">file</span><span class="o">=</span><span class="n">template_file</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">)</span>
+        <span class="n">list_bulk</span> <span class="o">=</span> <span class="n">fle</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+        <span class="n">fle</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+        <span class="c1"># handle colors</span>
+        <span class="n">dct_status</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;Expected&quot;</span><span class="p">:</span> <span class="sa">r</span><span class="s2">&quot;\textcolor</span><span class="si">{red}{Expected}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;In progress&quot;</span><span class="p">:</span> <span class="sa">r</span><span class="s2">&quot;\textcolor</span><span class="si">{YellowOrange}</span><span class="s2">{In progress}&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Concluded&quot;</span><span class="p">:</span> <span class="sa">r</span><span class="s2">&quot;\textcolor</span><span class="si">{OliveGreen}{Concluded}</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="p">}</span>
+
+        <span class="c1"># set replacer object</span>
+        <span class="n">dct_replacer</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;[</span><span class="si">{}</span><span class="s2">]&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">label_field</span><span class="p">):</span> <span class="bp">self</span><span class="o">.</span><span class="n">label</span><span class="p">,</span>
+            <span class="s2">&quot;[</span><span class="si">{}</span><span class="s2">]&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fig_id_field</span><span class="p">):</span> <span class="bp">self</span><span class="o">.</span><span class="n">fig_id</span><span class="p">,</span>
+            <span class="s2">&quot;[</span><span class="si">{}</span><span class="s2">]&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">part_field</span><span class="p">):</span> <span class="bp">self</span><span class="o">.</span><span class="n">part</span><span class="p">,</span>
+            <span class="s2">&quot;[</span><span class="si">{}</span><span class="s2">]&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">descr_field</span><span class="p">):</span> <span class="bp">self</span><span class="o">.</span><span class="n">description</span><span class="p">,</span>
+            <span class="s2">&quot;[</span><span class="si">{}</span><span class="s2">]&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">caption_field</span><span class="p">):</span> <span class="bp">self</span><span class="o">.</span><span class="n">caption</span><span class="p">,</span>
+            <span class="s2">&quot;[</span><span class="si">{}</span><span class="s2">]&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">comms_field</span><span class="p">):</span> <span class="bp">self</span><span class="o">.</span><span class="n">comments</span><span class="p">,</span>
+            <span class="s2">&quot;[figt1sts]&quot;</span><span class="p">:</span> <span class="n">dct_status</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">status_t1</span><span class="p">],</span>
+            <span class="s2">&quot;[figt2sts]&quot;</span><span class="p">:</span> <span class="n">dct_status</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">status_t2</span><span class="p">],</span>
+            <span class="s2">&quot;[</span><span class="si">{}</span><span class="s2">]&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">thumbnail_t1_file_field</span><span class="p">):</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">thumbnail_t1_file</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">thumbnail_t1_file</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+                <span class="k">else</span> <span class="s2">&quot;example-image&quot;</span>
+            <span class="p">),</span>
+            <span class="s2">&quot;[</span><span class="si">{}</span><span class="s2">]&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">thumbnail_t2_file_field</span><span class="p">):</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">thumbnail_t2_file</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">thumbnail_t2_file</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+                <span class="k">else</span> <span class="s2">&quot;example-image&quot;</span>
+            <span class="p">),</span>
+        <span class="p">}</span>
+
+        <span class="c1"># loop for replace itens in placeholders</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">dct_replacer</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">list_bulk</span><span class="p">)):</span>
+                <span class="n">list_bulk</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">list_bulk</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">dct_replacer</span><span class="p">[</span><span class="n">k</span><span class="p">])[:]</span>
+
+        <span class="c1"># handle pannel list</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pannels_dct</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">list_bulk</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">list_bulk</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\noindent \textbf</span><span class="si">{Pannels}</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">list_bulk</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\begin</span><span class="si">{itemize}</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">pannels_dct</span><span class="p">:</span>
+                <span class="n">s_aux</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="sa">r</span><span class="s2">&quot;    \item Pannel \textbf{&quot;</span>
+                    <span class="o">+</span> <span class="n">k</span>
+                    <span class="o">+</span> <span class="s2">&quot;}: &quot;</span>
+                    <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">pannels_dct</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+                    <span class="o">+</span> <span class="s2">&quot;;&quot;</span>
+                    <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="p">)</span>
+                <span class="n">list_bulk</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">s_aux</span><span class="p">)</span>
+            <span class="n">list_bulk</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\end</span><span class="si">{itemize}</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="c1"># new page</span>
+        <span class="n">list_bulk</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">list_bulk</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\clearpage&quot;</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">list_bulk</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="c1"># export</span>
+        <span class="k">if</span> <span class="n">folder</span> <span class="ow">and</span> <span class="n">filename</span><span class="p">:</span>
+            <span class="n">filepath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">folder</span><span class="p">,</span> <span class="n">filename</span> <span class="o">+</span> <span class="s2">&quot;.tex&quot;</span><span class="p">)</span>
+            <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">writelines</span><span class="p">(</span><span class="n">list_bulk</span><span class="p">)</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="n">list_bulk</span></div>
+
+
+<div class="viewcode-block" id="Figure.reset_image">
+<a class="viewcode-back" href="../../generated/losalamos.docs.html#losalamos.docs.Figure.reset_image">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">reset_image</span><span class="p">(</span><span class="n">input_path</span><span class="p">,</span> <span class="n">output_path</span><span class="p">,</span> <span class="n">scale_factor</span><span class="p">,</span> <span class="n">dpi</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Scale an image by a given factor while preserving its aspect ratio and setting the DPI.</span>
+
+<span class="sd">        :param input_path: Path to the input JPG image.</span>
+<span class="sd">        :type input_path: str</span>
+<span class="sd">        :param output_path: Path to save the output JPG image.</span>
+<span class="sd">        :type output_path: str</span>
+<span class="sd">        :param scale_factor: Scaling factor (e.g., 2.0 doubles the size, 0.5 reduces by half).</span>
+<span class="sd">        :type scale_factor: float</span>
+<span class="sd">        :return: None</span>
+<span class="sd">        :rtype: None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">img</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">input_path</span><span class="p">)</span>
+
+        <span class="c1"># Compute new dimensions while maintaining aspect ratio</span>
+        <span class="n">new_width</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">img</span><span class="o">.</span><span class="n">width</span> <span class="o">*</span> <span class="n">scale_factor</span><span class="p">)</span>
+        <span class="n">new_height</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">img</span><span class="o">.</span><span class="n">height</span> <span class="o">*</span> <span class="n">scale_factor</span><span class="p">)</span>
+
+        <span class="c1"># Resize image using high-quality resampling</span>
+        <span class="n">img</span> <span class="o">=</span> <span class="n">img</span><span class="o">.</span><span class="n">resize</span><span class="p">((</span><span class="n">new_width</span><span class="p">,</span> <span class="n">new_height</span><span class="p">),</span> <span class="n">Image</span><span class="o">.</span><span class="n">LANCZOS</span><span class="p">)</span>
+
+        <span class="c1"># Save the image with 300 DPI</span>
+        <span class="n">img</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">output_path</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="p">(</span><span class="n">dpi</span><span class="p">,</span> <span class="n">dpi</span><span class="p">),</span> <span class="n">quality</span><span class="o">=</span><span class="mi">95</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="FigureColl">
+<a class="viewcode-back" href="../../generated/losalamos.docs.html#losalamos.docs.FigureColl">[docs]</a>
+<span class="k">class</span> <span class="nc">FigureColl</span><span class="p">(</span><span class="n">Collection</span><span class="p">):</span>
+
+<div class="viewcode-block" id="FigureColl.__init__">
+<a class="viewcode-back" href="../../generated/losalamos.docs.html#losalamos.docs.FigureColl.__init__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">base_object</span><span class="o">=</span><span class="n">Figure</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;MyFigColl&quot;</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s2">&quot;FigCol0&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="FigureColl.load_catalog">
+<a class="viewcode-back" href="../../generated/losalamos.docs.html#losalamos.docs.FigureColl.load_catalog">[docs]</a>
+    <span class="k">def</span> <span class="nf">load_catalog</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df_file</span><span class="p">):</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">df_file</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s2">&quot;;&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">)):</span>
+            <span class="n">_NewFig</span> <span class="o">=</span> <span class="n">Figure</span><span class="p">()</span>
+            <span class="n">_NewFig</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">_NewFig</span><span class="o">.</span><span class="n">name_field</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">_NewFig</span><span class="o">.</span><span class="n">alias</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">_NewFig</span><span class="o">.</span><span class="n">alias_field</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">_NewFig</span><span class="o">.</span><span class="n">fig_id</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">_NewFig</span><span class="o">.</span><span class="n">fig_id_field</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">_NewFig</span><span class="o">.</span><span class="n">caption</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">_NewFig</span><span class="o">.</span><span class="n">caption_field</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">_NewFig</span><span class="o">.</span><span class="n">caption_lof</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">_NewFig</span><span class="o">.</span><span class="n">caption_lof_field</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">_NewFig</span><span class="o">.</span><span class="n">status_t1</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">_NewFig</span><span class="o">.</span><span class="n">status_t1_field</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">_NewFig</span><span class="o">.</span><span class="n">status_t2</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">_NewFig</span><span class="o">.</span><span class="n">status_t2_field</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">_NewFig</span><span class="o">.</span><span class="n">description</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">_NewFig</span><span class="o">.</span><span class="n">descr_field</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">_NewFig</span><span class="o">.</span><span class="n">comments</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">_NewFig</span><span class="o">.</span><span class="n">comms_field</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">_NewFig</span><span class="o">.</span><span class="n">part</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">_NewFig</span><span class="o">.</span><span class="n">part_field</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">_NewFig</span><span class="o">.</span><span class="n">figsize</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">_NewFig</span><span class="o">.</span><span class="n">figsize_field</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">_NewFig</span><span class="o">.</span><span class="n">layout</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">_NewFig</span><span class="o">.</span><span class="n">playout_field</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">_NewFig</span><span class="o">.</span><span class="n">label</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">_NewFig</span><span class="o">.</span><span class="n">label_field</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">_NewFig</span><span class="o">.</span><span class="n">thumbnail_t1_file</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">_NewFig</span><span class="o">.</span><span class="n">thumbnail_t1_file_field</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">_NewFig</span><span class="o">.</span><span class="n">thumbnail_t2_file</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">_NewFig</span><span class="o">.</span><span class="n">thumbnail_t2_file_field</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_object</span><span class="o">=</span><span class="n">_NewFig</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="TeX">
+<a class="viewcode-back" href="../../generated/losalamos.docs.html#losalamos.docs.TeX">[docs]</a>
+<span class="k">class</span> <span class="nc">TeX</span><span class="p">(</span><span class="n">MbaE</span><span class="p">):</span>
+
+<div class="viewcode-block" id="TeX.__init__">
+<a class="viewcode-back" href="../../generated/losalamos.docs.html#losalamos.docs.TeX.__init__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;MyTeX&quot;</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s2">&quot;TeX&quot;</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="n">alias</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">red_blind</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;\textcolor</span><span class="si">{red}</span><span class="s2">{Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ac bibendum orci. Cras erat elit, consequat vel erat ac, tincidunt pulvinar lacus. Pellentesque vitae consectetur quam. Interdum et malesuada fames ac ante ipsum primis in faucibus}&quot;</span></div>
+
+        <span class="c1"># ... continues in downstream objects ... #</span>
+
+<div class="viewcode-block" id="TeX.gls_format">
+<a class="viewcode-back" href="../../generated/losalamos.docs.html#losalamos.docs.TeX.gls_format">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">gls_format</span><span class="p">(</span><span class="n">gls_name</span><span class="p">,</span> <span class="n">gls_alias</span><span class="p">,</span> <span class="n">gls_descr</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Format a glossary entry</span>
+
+<span class="sd">        :param gls_name: entry name</span>
+<span class="sd">        :type gls_name: str</span>
+<span class="sd">        :param gls_alias: entry alias (key)</span>
+<span class="sd">        :type gls_alias: str</span>
+<span class="sd">        :param gls_descr: entry description (if None, a blind text is iserted)</span>
+<span class="sd">        :type gls_descr: str</span>
+<span class="sd">        :return: list of lines to append to main file</span>
+<span class="sd">        :rtype: list</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">line_0</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">line_1</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;\newglossaryentry{&quot;</span> <span class="o">+</span> <span class="n">gls_alias</span> <span class="o">+</span> <span class="s2">&quot;}&quot;</span>
+        <span class="n">line_2</span> <span class="o">=</span> <span class="s2">&quot;{&quot;</span>
+        <span class="n">line_3</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">name=</span><span class="si">{</span><span class="n">gls_name</span><span class="si">}</span><span class="s2">,&quot;</span>
+        <span class="k">if</span> <span class="n">gls_descr</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">gls_descr</span> <span class="o">=</span> <span class="n">TeX</span><span class="p">()</span><span class="o">.</span><span class="n">red_blind</span>
+        <span class="n">line_4</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\t</span><span class="s2">description={&quot;</span> <span class="o">+</span> <span class="n">gls_descr</span> <span class="o">+</span> <span class="s2">&quot;}&quot;</span>
+        <span class="n">line_5</span> <span class="o">=</span> <span class="s2">&quot;}&quot;</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">line_0</span><span class="p">,</span> <span class="n">line_1</span><span class="p">,</span> <span class="n">line_2</span><span class="p">,</span> <span class="n">line_3</span><span class="p">,</span> <span class="n">line_4</span><span class="p">,</span> <span class="n">line_5</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="TeX.gls_newentry">
+<a class="viewcode-back" href="../../generated/losalamos.docs.html#losalamos.docs.TeX.gls_newentry">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">gls_newentry</span><span class="p">(</span><span class="n">gls_file</span><span class="p">,</span> <span class="n">gls_name</span><span class="p">,</span> <span class="n">gls_alias</span><span class="p">,</span> <span class="n">gls_descr</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Insert new glossary entry into a glossary file</span>
+
+<span class="sd">        :param gls_file: path to glossary file</span>
+<span class="sd">        :type gls_file: str</span>
+<span class="sd">        :param gls_name: entry name</span>
+<span class="sd">        :type gls_name: str</span>
+<span class="sd">        :param gls_alias: entry alias (key)</span>
+<span class="sd">        :type gls_alias: str</span>
+<span class="sd">        :param gls_descr: entry description (if None, a blind text is iserted)</span>
+<span class="sd">        :type gls_descr: str</span>
+<span class="sd">        :return: None</span>
+<span class="sd">        :rtype: None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># get formatted entry in list</span>
+        <span class="n">new_lines</span> <span class="o">=</span> <span class="n">TeX</span><span class="o">.</span><span class="n">gls_format</span><span class="p">(</span><span class="n">gls_name</span><span class="p">,</span> <span class="n">gls_alias</span><span class="p">,</span> <span class="n">gls_descr</span><span class="p">)</span>
+        <span class="c1"># Open the file in append mode</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">gls_file</span><span class="p">,</span> <span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+            <span class="c1"># Iterate through the list and write each line</span>
+            <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">new_lines</span><span class="p">:</span>
+                <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">line</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="TeX.gls_to_df">
+<a class="viewcode-back" href="../../generated/losalamos.docs.html#losalamos.docs.TeX.gls_to_df">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">gls_to_df</span><span class="p">(</span><span class="n">gls_dct</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;convert a glossary dict in a dataframe</span>
+
+<span class="sd">        :param gls_dct: glossary dict</span>
+<span class="sd">        :type gls_dct: dict</span>
+<span class="sd">        :return: dataframe of glossary</span>
+<span class="sd">        :rtype: `pandas.DataFrame`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">alias_ls</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">name_ls</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">descr_ls</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">gls_dct</span><span class="p">:</span>
+            <span class="n">alias_ls</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+            <span class="n">name_ls</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">gls_dct</span><span class="p">[</span><span class="n">e</span><span class="p">][</span><span class="s2">&quot;name&quot;</span><span class="p">])</span>
+            <span class="n">descr_ls</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">gls_dct</span><span class="p">[</span><span class="n">e</span><span class="p">][</span><span class="s2">&quot;description&quot;</span><span class="p">])</span>
+
+        <span class="c1"># Create a DataFrame from the matches</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;Alias&quot;</span><span class="p">:</span> <span class="n">alias_ls</span><span class="p">,</span> <span class="s2">&quot;Name&quot;</span><span class="p">:</span> <span class="n">name_ls</span><span class="p">,</span> <span class="s2">&quot;Description&quot;</span><span class="p">:</span> <span class="n">descr_ls</span><span class="p">})</span>
+        <span class="k">return</span> <span class="n">df</span></div>
+
+
+<div class="viewcode-block" id="TeX.gls_parse">
+<a class="viewcode-back" href="../../generated/losalamos.docs.html#losalamos.docs.TeX.gls_parse">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">gls_parse</span><span class="p">(</span><span class="n">gls_file</span><span class="p">):</span>
+        <span class="c1"># Read the file content</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">gls_file</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+            <span class="n">file_content</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+
+        <span class="c1"># Define a regex pattern to extract glossary entries</span>
+        <span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
+            <span class="sa">r</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">newglossaryentry\{(.*?)\}\s*{\s*name=(.*?),\s*description=\{(.*?)\}\s*}&quot;</span><span class="p">,</span>
+            <span class="n">re</span><span class="o">.</span><span class="n">DOTALL</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Find all matches</span>
+        <span class="n">matches</span> <span class="o">=</span> <span class="n">pattern</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">file_content</span><span class="p">)</span>
+        <span class="c1"># create dict</span>
+        <span class="n">gls_dct</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">matches</span><span class="p">:</span>
+            <span class="n">gls_dct</span><span class="p">[</span><span class="n">e</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">e</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="n">e</span><span class="p">[</span><span class="mi">2</span><span class="p">]}</span>
+        <span class="k">return</span> <span class="n">gls_dct</span></div>
+
+
+<div class="viewcode-block" id="TeX.gls_to_file">
+<a class="viewcode-back" href="../../generated/losalamos.docs.html#losalamos.docs.TeX.gls_to_file">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">gls_to_file</span><span class="p">(</span><span class="n">gls_dct</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">output_dir</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Export glossary to new tex file</span>
+
+<span class="sd">        :param gls_dct: glossary dict</span>
+<span class="sd">        :type gls_dct: dict</span>
+<span class="sd">        :param filename: name of file (without extension)</span>
+<span class="sd">        :type filename: str</span>
+<span class="sd">        :param output_dir: path to output folder</span>
+<span class="sd">        :type output_dir: str</span>
+<span class="sd">        :return: file path</span>
+<span class="sd">        :rtype: str</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># set the output file</span>
+        <span class="n">gls_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_dir</span><span class="p">,</span> <span class="n">filename</span> <span class="o">+</span> <span class="s2">&quot;.tex&quot;</span><span class="p">)</span>
+
+        <span class="c1"># create a new glossary file</span>
+        <span class="n">header_ls</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;\makeglossaries&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">]</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">gls_file</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+            <span class="n">file</span><span class="o">.</span><span class="n">writelines</span><span class="p">(</span><span class="n">header_ls</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">alias</span> <span class="ow">in</span> <span class="n">gls_dct</span><span class="p">:</span>
+            <span class="n">TeX</span><span class="o">.</span><span class="n">gls_newentry</span><span class="p">(</span>
+                <span class="n">gls_file</span><span class="o">=</span><span class="n">gls_file</span><span class="p">,</span>
+                <span class="n">gls_alias</span><span class="o">=</span><span class="n">alias</span><span class="p">,</span>
+                <span class="n">gls_name</span><span class="o">=</span><span class="n">gls_dct</span><span class="p">[</span><span class="n">alias</span><span class="p">][</span><span class="s2">&quot;name&quot;</span><span class="p">],</span>
+                <span class="n">gls_descr</span><span class="o">=</span><span class="n">gls_dct</span><span class="p">[</span><span class="n">alias</span><span class="p">][</span><span class="s2">&quot;description&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">gls_file</span></div>
+
+
+<div class="viewcode-block" id="TeX.gls_consolidate">
+<a class="viewcode-back" href="../../generated/losalamos.docs.html#losalamos.docs.TeX.gls_consolidate">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">gls_consolidate</span><span class="p">(</span><span class="n">src_file</span><span class="p">,</span> <span class="n">gls_file</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Process a source tex file to consolidate the glossaries file (append new entries).</span>
+<span class="sd">        Expected pattern in source file: [todo:gls &gt;&gt; \textbf{gls_name} &gt;&gt; gls_alias]</span>
+
+<span class="sd">        :param src_file: path to source tex file</span>
+<span class="sd">        :type src_file: str</span>
+<span class="sd">        :param gls_file: path to glossary tex file</span>
+<span class="sd">        :type gls_file: str</span>
+<span class="sd">        :param inplace: option for overwrite the source file</span>
+<span class="sd">        :type inplace: bool</span>
+<span class="sd">        :return:</span>
+<span class="sd">        :rtype:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Read the file content</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">src_file</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+            <span class="n">file_content</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+
+        <span class="c1"># Define a regex pattern to match [to do:gls &gt;&gt; name &gt;&gt; alias] and capture name and alias</span>
+        <span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
+            <span class="sa">r</span><span class="s2">&quot;\[todo:gls\s*&gt;&gt;\s*</span><span class="se">\\</span><span class="s2">textbf\{(.*?)\}\s*&gt;&gt;\s*(.*?)\]&quot;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">DOTALL</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Find all matches</span>
+        <span class="n">matches</span> <span class="o">=</span> <span class="n">pattern</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">file_content</span><span class="p">)</span>
+
+        <span class="c1"># append entries</span>
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">alias</span> <span class="ow">in</span> <span class="n">matches</span><span class="p">:</span>
+            <span class="n">TeX</span><span class="o">.</span><span class="n">gls_newentry</span><span class="p">(</span>
+                <span class="n">gls_file</span><span class="o">=</span><span class="n">gls_file</span><span class="p">,</span>
+                <span class="n">gls_name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
+                <span class="n">gls_alias</span><span class="o">=</span><span class="n">alias</span><span class="p">,</span>
+                <span class="n">gls_descr</span><span class="o">=</span><span class="n">TeX</span><span class="p">()</span><span class="o">.</span><span class="n">red_blind</span><span class="p">,</span>  <span class="c1"># defaults to blind text</span>
+            <span class="p">)</span>
+
+        <span class="c1"># Replace the full expression with \gls{alias}</span>
+        <span class="n">replaced_content</span> <span class="o">=</span> <span class="n">pattern</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">textbf{</span><span class="se">\\</span><span class="s2">gls{\2}}&quot;</span><span class="p">,</span> <span class="n">file_content</span><span class="p">)</span>
+
+        <span class="c1"># handle file</span>
+        <span class="k">if</span> <span class="n">inplace</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># re set the source file path</span>
+            <span class="n">d</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">src_file</span><span class="p">)</span>
+            <span class="n">fm</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">src_file</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;_2.tex&quot;</span>
+            <span class="n">src_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">fm</span><span class="p">)</span>
+
+        <span class="c1"># Save the modified content back to the file</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">src_file</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+            <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">replaced_content</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="TeX.gls_expand">
+<a class="viewcode-back" href="../../generated/losalamos.docs.html#losalamos.docs.TeX.gls_expand">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">gls_expand</span><span class="p">(</span><span class="n">src_file</span><span class="p">,</span> <span class="n">gls_file</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="c1"># parse file</span>
+        <span class="n">gls_dct</span> <span class="o">=</span> <span class="n">TeX</span><span class="o">.</span><span class="n">gls_parse</span><span class="p">(</span><span class="n">gls_file</span><span class="o">=</span><span class="n">gls_file</span><span class="p">)</span>
+        <span class="c1"># get df</span>
+        <span class="n">gls_df</span> <span class="o">=</span> <span class="n">TeX</span><span class="o">.</span><span class="n">gls_to_df</span><span class="p">(</span><span class="n">gls_dct</span><span class="o">=</span><span class="n">gls_dct</span><span class="p">)</span>
+        <span class="c1"># get helper column</span>
+        <span class="n">gls_df</span><span class="p">[</span><span class="s2">&quot;LenName&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">gls_df</span><span class="p">[</span><span class="s2">&quot;Name&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">]</span>
+        <span class="c1"># sort</span>
+        <span class="n">gls_df</span> <span class="o">=</span> <span class="n">gls_df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s2">&quot;LenName&quot;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span>
+            <span class="n">drop</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span>
+        <span class="c1"># inset helper column</span>
+        <span class="n">gls_df</span><span class="p">[</span><span class="s2">&quot;NewExp&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;\gls{&quot;</span> <span class="o">+</span> <span class="n">s</span> <span class="o">+</span> <span class="s2">&quot;}&quot;</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">gls_df</span><span class="p">[</span><span class="s2">&quot;Alias&quot;</span><span class="p">]]</span>
+
+        <span class="c1"># handle new files</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">inplace</span><span class="p">:</span>
+            <span class="c1"># make copy and rename</span>
+            <span class="n">_d</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">src_file</span><span class="p">)</span>
+            <span class="n">_f</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">src_file</span><span class="p">)</span>
+            <span class="n">_f</span> <span class="o">=</span> <span class="n">_f</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;_2.&quot;</span> <span class="o">+</span> <span class="n">_f</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">shutil</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">src</span><span class="o">=</span><span class="n">src_file</span><span class="p">,</span> <span class="n">dst</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">_d</span><span class="p">,</span> <span class="n">_f</span><span class="p">))</span>
+            <span class="n">src_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">_d</span><span class="p">,</span> <span class="n">_f</span><span class="p">)</span>
+
+        <span class="c1"># replace all items</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">gls_df</span><span class="p">)):</span>
+            <span class="c1"># ensure not re-replace</span>
+            <span class="c1"># suffix list</span>
+            <span class="n">suffs_ls</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="s2">&quot;,&quot;</span><span class="p">,</span> <span class="s2">&quot;;&quot;</span><span class="p">,</span> <span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="s2">&quot;:&quot;</span><span class="p">,</span> <span class="s2">&quot;!&quot;</span><span class="p">,</span> <span class="s2">&quot;?&quot;</span><span class="p">]</span>
+            <span class="n">old_ls</span> <span class="o">=</span> <span class="p">[</span><span class="n">gls_df</span><span class="p">[</span><span class="s2">&quot;Name&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">s</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">suffs_ls</span><span class="p">]</span>
+            <span class="n">new_ls</span> <span class="o">=</span> <span class="p">[</span><span class="n">gls_df</span><span class="p">[</span><span class="s2">&quot;NewExp&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">s</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">suffs_ls</span><span class="p">]</span>
+            <span class="c1"># run for all suffixes</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">old_ls</span><span class="p">)):</span>
+                <span class="n">TeX</span><span class="o">.</span><span class="n">replace_infile</span><span class="p">(</span>
+                    <span class="n">src_file</span><span class="o">=</span><span class="n">src_file</span><span class="p">,</span>
+                    <span class="n">old_expression</span><span class="o">=</span><span class="n">old_ls</span><span class="p">[</span><span class="n">j</span><span class="p">],</span>
+                    <span class="n">new_expression</span><span class="o">=</span><span class="n">new_ls</span><span class="p">[</span><span class="n">j</span><span class="p">],</span>
+                    <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">src_file</span></div>
+
+
+<div class="viewcode-block" id="TeX.replace_infile">
+<a class="viewcode-back" href="../../generated/losalamos.docs.html#losalamos.docs.TeX.replace_infile">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">replace_infile</span><span class="p">(</span><span class="n">src_file</span><span class="p">,</span> <span class="n">old_expression</span><span class="p">,</span> <span class="n">new_expression</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Replace expression directly in file</span>
+<span class="sd">        todo evaluate move this upstream</span>
+
+<span class="sd">        :param src_file: path to file (tex, md, etc)</span>
+<span class="sd">        :type src_file: str</span>
+<span class="sd">        :param old_expression: text of expression to be replaced</span>
+<span class="sd">        :type old_expression: str</span>
+<span class="sd">        :param new_expression: new expression</span>
+<span class="sd">        :type new_expression: str</span>
+<span class="sd">        :return: None</span>
+<span class="sd">        :rtype: None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">src_file</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+            <span class="n">content</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+
+        <span class="n">new_content</span> <span class="o">=</span> <span class="n">content</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">old_expression</span><span class="p">,</span> <span class="n">new_expression</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">inplace</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># re set the source file path</span>
+            <span class="n">d</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">src_file</span><span class="p">)</span>
+            <span class="n">bse_ls</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">src_file</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)</span>
+            <span class="n">fm</span> <span class="o">=</span> <span class="n">bse_ls</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;_2.&quot;</span> <span class="o">+</span> <span class="n">bse_ls</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">src_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">fm</span><span class="p">)</span>
+
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">src_file</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+            <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">new_content</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">inplace</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">src_file</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="TeX.get_authors">
+<a class="viewcode-back" href="../../generated/losalamos.docs.html#losalamos.docs.TeX.get_authors">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_authors</span><span class="p">(</span><span class="n">src_table</span><span class="p">,</span> <span class="n">dst_folder</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">src_table</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s2">&quot;;&quot;</span><span class="p">)</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s2">&quot;Order&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Handle affiliations</span>
+        <span class="n">lst_institutes</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;Affiliation&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span>
+        <span class="n">d_inst</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">lst_affs</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">lst_institutes</span><span class="p">)):</span>
+            <span class="n">_code</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="nb">chr</span><span class="p">(</span><span class="mi">96</span> <span class="o">+</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+            <span class="n">d_inst</span><span class="p">[</span><span class="n">lst_institutes</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">=</span> <span class="n">_code</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;$^\text{&quot;</span> <span class="o">+</span> <span class="n">_code</span> <span class="o">+</span> <span class="s2">&quot;}$\;&quot;</span> <span class="o">+</span> <span class="n">lst_institutes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">lst_affs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+        <span class="n">authors_affs</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot; \newline &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lst_affs</span><span class="p">)</span>
+
+        <span class="c1"># Handle list</span>
+        <span class="n">lst_authors</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">)):</span>
+            <span class="n">_nm</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;Name&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">_af</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;Affiliation&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">_oi</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;OrcID&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">_ex</span> <span class="o">=</span> <span class="n">d_inst</span><span class="p">[</span><span class="n">_af</span><span class="p">]</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="s2">&quot;\href{&quot;</span> <span class="o">+</span> <span class="n">_oi</span> <span class="o">+</span> <span class="s2">&quot;}{&quot;</span> <span class="o">+</span> <span class="n">_nm</span> <span class="o">+</span> <span class="sa">r</span><span class="s2">&quot;}\,$^\text{&quot;</span> <span class="o">+</span> <span class="n">_ex</span> <span class="o">+</span> <span class="s2">&quot;}$&quot;</span>
+            <span class="n">lst_authors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+        <span class="n">authors_list</span> <span class="o">=</span> <span class="s2">&quot;,\;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lst_authors</span><span class="p">)</span>
+
+        <span class="c1"># Handle corresponding</span>
+        <span class="n">df_corr</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">&quot;Corresponding == &#39;yes&#39;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">_nm</span> <span class="o">=</span> <span class="n">df_corr</span><span class="p">[</span><span class="s2">&quot;Name&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">_em</span> <span class="o">=</span> <span class="n">df_corr</span><span class="p">[</span><span class="s2">&quot;Email&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">authors_corr</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Corresponding author: {&quot;</span>
+            <span class="o">+</span> <span class="n">_nm</span>
+            <span class="o">+</span> <span class="sa">r</span><span class="s2">&quot;} (\href{mailto:&quot;</span>
+            <span class="o">+</span> <span class="n">_em</span>
+            <span class="o">+</span> <span class="sa">r</span><span class="s2">&quot;}{&quot;</span>
+            <span class="o">+</span> <span class="n">_em</span>
+            <span class="o">+</span> <span class="s2">&quot;})&quot;</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Handle credits</span>
+        <span class="n">lst_credits</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">)):</span>
+            <span class="n">_nm</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;Name&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">_cr</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;Credit&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;\textbf{&quot;</span> <span class="o">+</span> <span class="n">_nm</span> <span class="o">+</span> <span class="s2">&quot;}: &quot;</span> <span class="o">+</span> <span class="n">_cr</span> <span class="o">+</span> <span class="s2">&quot;. &quot;</span>
+            <span class="n">lst_credits</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+        <span class="n">authors_credit</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lst_credits</span><span class="p">)</span>
+
+        <span class="c1"># export</span>
+        <span class="k">if</span> <span class="n">dst_folder</span><span class="p">:</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">dst_folder</span><span class="si">}</span><span class="s2">/authors_list.tex&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+                <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">authors_list</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">dst_folder</span><span class="si">}</span><span class="s2">/authors_affs.tex&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+                <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">authors_affs</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">dst_folder</span><span class="si">}</span><span class="s2">/authors_corr.tex&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+                <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">authors_corr</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">dst_folder</span><span class="si">}</span><span class="s2">/authors_credit.tex&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span>
+            <span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+                <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">authors_credit</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="TeX.get_team">
+<a class="viewcode-back" href="../../generated/losalamos.docs.html#losalamos.docs.TeX.get_team">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_team</span><span class="p">(</span><span class="n">src_table</span><span class="p">,</span> <span class="n">dst_folder</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">src_table</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s2">&quot;;&quot;</span><span class="p">)</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s2">&quot;Order&quot;</span><span class="p">)</span>
+
+        <span class="n">ls_std</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="sa">r</span><span class="s2">&quot;\noindent \sffamily \large{\textbf{@name}} \rmfamily</span><span class="se">\\</span><span class="s2"> [3mm]&quot;</span><span class="p">,</span>
+            <span class="sa">r</span><span class="s2">&quot;\small{&quot;</span><span class="p">,</span>
+            <span class="sa">r</span><span class="s2">&quot;\href{mailto:@email}{@email} | @phone </span><span class="se">\\</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="sa">r</span><span class="s2">&quot;@profession | @education </span><span class="se">\\</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="sa">r</span><span class="s2">&quot;@jobtitle </span><span class="se">\\</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="sa">r</span><span class="s2">&quot;\href{@cv}{@cv} </span><span class="se">\\</span><span class="s2"> [3mm]&quot;</span><span class="p">,</span>
+            <span class="sa">r</span><span class="s2">&quot;}&quot;</span><span class="p">,</span>
+            <span class="sa">r</span><span class="s2">&quot;@credit </span><span class="se">\\</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="p">]</span>
+
+        <span class="n">team_list</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">)):</span>
+            <span class="c1"># get the dict</span>
+            <span class="n">d</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s2">&quot;@name&quot;</span><span class="p">:</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;Name&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+                <span class="s2">&quot;@phone&quot;</span><span class="p">:</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;Phone&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+                <span class="s2">&quot;@email&quot;</span><span class="p">:</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;Email&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+                <span class="s2">&quot;@profession&quot;</span><span class="p">:</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;Profession&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+                <span class="s2">&quot;@education&quot;</span><span class="p">:</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;Education&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+                <span class="s2">&quot;@jobtitle&quot;</span><span class="p">:</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;Jobtitle&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+                <span class="s2">&quot;@credit&quot;</span><span class="p">:</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;Credit&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+                <span class="s2">&quot;@cv&quot;</span><span class="p">:</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;CV&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+            <span class="p">}</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+            <span class="n">lst_new</span> <span class="o">=</span> <span class="n">ls_std</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">lst_new</span><span class="p">)):</span>
+                <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">d</span><span class="p">:</span>
+                    <span class="n">lst_new</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">lst_new</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">d</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
+            <span class="n">team_list</span> <span class="o">=</span> <span class="n">team_list</span> <span class="o">+</span> <span class="n">lst_new</span><span class="p">[:]</span>
+
+        <span class="c1"># export</span>
+        <span class="k">if</span> <span class="n">dst_folder</span><span class="p">:</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">dst_folder</span><span class="si">}</span><span class="s2">/team_list.tex&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+                <span class="n">file</span><span class="o">.</span><span class="n">writelines</span><span class="p">(</span><span class="n">team_list</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="kc">None</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="Table">
+<a class="viewcode-back" href="../../generated/losalamos.docs.html#losalamos.docs.Table">[docs]</a>
+<span class="k">class</span> <span class="nc">Table</span><span class="p">(</span><span class="n">DataSet</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Table.__init__">
+<a class="viewcode-back" href="../../generated/losalamos.docs.html#losalamos.docs.Table.__init__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">alias</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="n">alias</span><span class="p">)</span></div>
+
+        <span class="c1"># ... continues in downstream objects ... #</span>
+
+<div class="viewcode-block" id="Table.load_data">
+<a class="viewcode-back" href="../../generated/losalamos.docs.html#losalamos.docs.Table.load_data">[docs]</a>
+    <span class="k">def</span> <span class="nf">load_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_data</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Load data from file. Expected to overwrite superior methods.</span>
+
+<span class="sd">        :param file_data: file_doc path to data.</span>
+<span class="sd">        :entry_type file_data: str</span>
+<span class="sd">        :return: None</span>
+<span class="sd">        :rtype: None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># -------------- overwrite relative path input -------------- #</span>
+        <span class="n">file_data</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">file_data</span><span class="p">)</span>
+
+        <span class="c1"># -------------- implement loading logic -------------- #</span>
+
+        <span class="c1"># -------------- call loading function -------------- #</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">file_data</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">file_data_sep</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">str</span><span class="p">)</span>
+
+        <span class="c1"># -------------- post-loading logic -------------- #</span>
+        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">c</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="Table.to_latex">
+<a class="viewcode-back" href="../../generated/losalamos.docs.html#losalamos.docs.Table.to_latex">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">to_latex</span><span class="p">(</span>
+        <span class="n">df</span><span class="p">,</span> <span class="n">caption</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">caption_lot</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">folder</span><span class="o">=</span><span class="kc">None</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert a DataFrame to a LaTeX table and save it as a .tex file in the specified folder.</span>
+
+<span class="sd">        :param df: DataFrame to be converted to LaTeX format.</span>
+<span class="sd">        :type df: pandas.DataFrame</span>
+<span class="sd">        :param filename: The name of the file to save the LaTeX table as (without the extension).</span>
+<span class="sd">        :type filename: str</span>
+<span class="sd">        :param folder: The path to the folder where the .tex file will be saved.</span>
+<span class="sd">        :type folder: str</span>
+<span class="sd">        :param caption: The caption for the table. Defaults to a placeholder caption if None.</span>
+<span class="sd">        :type caption: Optional[str]</span>
+<span class="sd">        :param caption_lot: The List of Tables caption. Defaults to a placeholder caption if None.</span>
+<span class="sd">        :type caption_lot: Optional[str]</span>
+<span class="sd">        :param label: The LaTeX label to be used for referencing the table. Defaults to &#39;tab:label&#39; if None.</span>
+<span class="sd">        :type label: Optional[str]</span>
+<span class="sd">        :return: None</span>
+<span class="sd">        :rtype: None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># handle width</span>
+        <span class="n">w_len</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
+        <span class="n">_f</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">w_len</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+
+        <span class="n">list_bulk</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="c1"># preable</span>
+        <span class="n">list_bulk</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\begin</span><span class="si">{table}</span><span class="s2">[h!]&quot;</span><span class="p">)</span>
+        <span class="n">list_bulk</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\centering&quot;</span><span class="p">)</span>
+        <span class="n">list_bulk</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\tiny&quot;</span><span class="p">)</span>
+        <span class="n">list_bulk</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\sffamily&quot;</span><span class="p">)</span>
+        <span class="c1"># caption</span>
+        <span class="k">if</span> <span class="n">caption</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">caption</span> <span class="o">=</span> <span class="s2">&quot;Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip.&quot;</span>
+        <span class="k">if</span> <span class="n">caption_lot</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">caption_lot</span> <span class="o">=</span> <span class="s2">&quot;Duis aute irure dolor&quot;</span>
+        <span class="n">list_bulk</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\caption[&quot;</span> <span class="o">+</span> <span class="n">caption_lot</span> <span class="o">+</span> <span class="s2">&quot;]{&quot;</span> <span class="o">+</span> <span class="n">caption</span> <span class="o">+</span> <span class="s2">&quot;}&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">label</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;tab:label&quot;</span>
+
+        <span class="n">list_bulk</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\label{&quot;</span> <span class="o">+</span> <span class="n">label</span> <span class="o">+</span> <span class="s2">&quot;}&quot;</span><span class="p">)</span>
+
+        <span class="c1"># heading</span>
+        <span class="n">list_bulk</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\rowcolors</span><span class="si">{2}{white}{rowgray}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">str_aux2</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;&gt;{\raggedright\arraybackslash}m{&quot;</span> <span class="o">+</span> <span class="n">_f</span> <span class="o">+</span> <span class="sa">r</span><span class="s2">&quot;\textwidth}&quot;</span>
+        <span class="n">str_aux</span> <span class="o">=</span> <span class="n">str_aux2</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
+        <span class="n">list_bulk</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\begin</span><span class="si">{tabular}</span><span class="s2">{&quot;</span> <span class="o">+</span> <span class="n">str_aux</span> <span class="o">+</span> <span class="s2">&quot;}&quot;</span><span class="p">)</span>
+        <span class="n">list_bulk</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\toprule&quot;</span><span class="p">)</span>
+        <span class="n">list_heading</span> <span class="o">=</span> <span class="p">[</span><span class="sa">r</span><span class="s2">&quot;\textbf{&quot;</span> <span class="o">+</span> <span class="n">c</span> <span class="o">+</span> <span class="s2">&quot;}&quot;</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">]</span>
+        <span class="n">str_heading</span> <span class="o">=</span> <span class="s2">&quot; &amp; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">list_heading</span><span class="p">)</span> <span class="o">+</span> <span class="sa">r</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">&quot;</span>
+        <span class="n">list_bulk</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">str_heading</span><span class="p">)</span>
+        <span class="n">list_bulk</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\midrule&quot;</span><span class="p">)</span>
+
+        <span class="c1"># data</span>
+        <span class="n">df</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">)):</span>
+            <span class="n">row</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+
+            <span class="n">str_row</span> <span class="o">=</span> <span class="s2">&quot; &amp; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">row</span><span class="p">))</span> <span class="o">+</span> <span class="sa">r</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">&quot;</span>
+            <span class="c1"># handle underscores</span>
+            <span class="n">str_row</span> <span class="o">=</span> <span class="n">str_row</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">,</span> <span class="s2">&quot;\_&quot;</span><span class="p">)</span>
+
+            <span class="n">list_bulk</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">str_row</span><span class="p">[:])</span>
+        <span class="n">list_bulk</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\bottomrule&quot;</span><span class="p">)</span>
+        <span class="n">list_bulk</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\end</span><span class="si">{tabular}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">list_bulk</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\end</span><span class="si">{table}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="c1"># include new line</span>
+        <span class="n">list_bulk</span> <span class="o">=</span> <span class="p">[</span><span class="n">line</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">list_bulk</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">folder</span> <span class="ow">and</span> <span class="n">filename</span><span class="p">:</span>
+            <span class="n">filepath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">folder</span><span class="p">,</span> <span class="n">filename</span> <span class="o">+</span> <span class="s2">&quot;.tex&quot;</span><span class="p">)</span>
+            <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">writelines</span><span class="p">(</span><span class="n">list_bulk</span><span class="p">)</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">list_bulk</span></div>
+
+
+<div class="viewcode-block" id="Table.to_rst">
+<a class="viewcode-back" href="../../generated/losalamos.docs.html#losalamos.docs.Table.to_rst">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">to_rst</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">folder</span><span class="p">):</span>
+        <span class="k">def</span> <span class="nf">format_row</span><span class="p">(</span><span class="n">row</span><span class="p">):</span>
+            <span class="k">return</span> <span class="p">(</span>
+                <span class="s2">&quot;| &quot;</span>
+                <span class="o">+</span> <span class="s2">&quot; | &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">x</span><span class="si">:</span><span class="s2">&lt;</span><span class="si">{</span><span class="n">max_widths</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">row</span><span class="p">))</span>
+                <span class="o">+</span> <span class="s2">&quot; |&quot;</span>
+            <span class="p">)</span>
+
+        <span class="n">list_bulk</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+
+        <span class="c1"># header setup</span>
+        <span class="n">header</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+        <span class="n">max_widths</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="nb">max</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="nb">len</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span> <span class="nb">len</span><span class="p">(</span><span class="n">col</span><span class="p">))</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">header</span>
+        <span class="p">]</span>
+
+        <span class="n">list_bulk</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;+&quot;</span> <span class="o">+</span> <span class="s2">&quot;+&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s2">&quot;-&quot;</span> <span class="o">*</span> <span class="p">(</span><span class="n">w</span> <span class="o">+</span> <span class="mi">2</span><span class="p">)</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">max_widths</span><span class="p">]))</span>
+        <span class="n">list_bulk</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">format_row</span><span class="p">(</span><span class="n">header</span><span class="p">))</span>
+        <span class="n">list_bulk</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;+&quot;</span> <span class="o">+</span> <span class="s2">&quot;+&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s2">&quot;=&quot;</span> <span class="o">*</span> <span class="p">(</span><span class="n">w</span> <span class="o">+</span> <span class="mi">2</span><span class="p">)</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">max_widths</span><span class="p">]))</span>
+
+        <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+            <span class="n">list_bulk</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">format_row</span><span class="p">(</span><span class="n">row</span><span class="p">))</span>
+            <span class="n">list_bulk</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;+&quot;</span> <span class="o">+</span> <span class="s2">&quot;+&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s2">&quot;-&quot;</span> <span class="o">*</span> <span class="p">(</span><span class="n">w</span> <span class="o">+</span> <span class="mi">2</span><span class="p">)</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">max_widths</span><span class="p">]))</span>
+
+        <span class="c1"># include new line</span>
+        <span class="n">list_bulk</span> <span class="o">=</span> <span class="p">[</span><span class="n">line</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">list_bulk</span><span class="p">]</span>
+
+        <span class="n">filepath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">folder</span><span class="p">,</span> <span class="n">filename</span> <span class="o">+</span> <span class="s2">&quot;.txt&quot;</span><span class="p">)</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;w&quot;</span><span class="p">)</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">writelines</span><span class="p">(</span><span class="n">list_bulk</span><span class="p">)</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+</div>
+
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Hello world&quot;</span><span class="p">)</span>
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">losalamos v.0.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">losalamos.docs</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2024, ipo.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    </div>
+  </body>
+</html>

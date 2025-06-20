@@ -1,0 +1,1020 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>losalamos.refs &mdash; losalamos v.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=fb9c8d0f"></script>
+        <script src="../_static/doctools.js?v=9bcbadda"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+        <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="losalamos.docs" href="losalamos.docs.html" />
+    <link rel="prev" title="losalamos.root" href="losalamos.root.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            losalamos
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Home</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../about.html">About</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../usage.html">Usage</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../api.html">API Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../api.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#examples">Examples</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../api.html#modules">Modules</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="losalamos.html">losalamos</a></li>
+<li class="toctree-l3"><a class="reference internal" href="losalamos.root.html">losalamos.root</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">losalamos.refs</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#examples">Examples</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#losalamos.refs.RefForm"><code class="docutils literal notranslate"><span class="pre">RefForm</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#losalamos.refs.Ref"><code class="docutils literal notranslate"><span class="pre">Ref</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#losalamos.refs.RefNote"><code class="docutils literal notranslate"><span class="pre">RefNote</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#losalamos.refs.RefColl"><code class="docutils literal notranslate"><span class="pre">RefColl</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="losalamos.docs.html">losalamos.docs</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">losalamos</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../api.html">API Reference</a></li>
+      <li class="breadcrumb-item active">losalamos.refs</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/generated/losalamos.refs.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-losalamos.refs">
+<span id="losalamos-refs"></span><h1>losalamos.refs<a class="headerlink" href="#module-losalamos.refs" title="Link to this heading"></a></h1>
+<p>Classes for parsing, handling and managing references</p>
+<dl class="simple">
+<dt>Description:</dt><dd><p>The <code class="docutils literal notranslate"><span class="pre">refs</span></code> module provides classes for parsing, handling and managing references</p>
+</dd>
+<dt>License:</dt><dd><p>This software is released under the GNU General Public License v3.0 (GPL-3.0).
+For details, see: <a class="reference external" href="https://www.gnu.org/licenses/gpl-3.0.html">https://www.gnu.org/licenses/gpl-3.0.html</a></p>
+</dd>
+<dt>Author:</dt><dd><p>Iporã Possantti</p>
+</dd>
+<dt>Contact:</dt><dd><p><a class="reference external" href="mailto:possantti&#37;&#52;&#48;gmail&#46;com">possantti<span>&#64;</span>gmail<span>&#46;</span>com</a></p>
+</dd>
+</dl>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
+<p>todo
+Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+Nulla mollis tincidunt erat eget iaculis.
+Mauris gravida ex quam, in porttitor lacus lobortis vitae.
+In a lacinia nisl. Pellentesque habitant morbi tristique senectus
+et netus et malesuada fames ac turpis egestas.</p>
+<p>Class aptent taciti sociosqu ad litora torquent per
+conubia nostra, per inceptos himenaeos. Nulla facilisi. Mauris eget nisl
+eu eros euismod sodales. Cras pulvinar tincidunt enim nec semper.</p>
+</section>
+<section id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Link to this heading"></a></h2>
+<p>todo
+Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+Nulla mollis tincidunt erat eget iaculis.
+Mauris gravida ex quam, in porttitor lacus lobortis vitae.
+In a lacinia nisl. Pellentesque habitant morbi tristique senectus
+et netus et malesuada fames ac turpis egestas.</p>
+<p>Class aptent taciti sociosqu ad litora torquent per
+conubia nostra, per inceptos himenaeos. Nulla facilisi. Mauris eget nisl
+eu eros euismod sodales. Cras pulvinar tincidunt enim nec semper.</p>
+</section>
+<p class="rubric">Classes</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#losalamos.refs.Ref" title="losalamos.refs.Ref"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Ref</span></code></a>([entry_type, title, author, year, ...])</p></td>
+<td><p>The core reference object for managing documents and citations.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#losalamos.refs.RefColl" title="losalamos.refs.RefColl"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RefColl</span></code></a>([name, alias])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#losalamos.refs.RefForm" title="losalamos.refs.RefForm"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RefForm</span></code></a>(lib_folder, inp_folder, kind_opts[, ...])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#losalamos.refs.RefNote" title="losalamos.refs.RefNote"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RefNote</span></code></a>([name, alias])</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py class">
+<dt class="sig sig-object py" id="losalamos.refs.RefForm">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">losalamos.refs.</span></span><span class="sig-name descname"><span class="pre">RefForm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lib_folder</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inp_folder</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kind_opts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Add</span> <span class="pre">References'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/refs.html#RefForm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.refs.RefForm" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/tkinter.html#tkinter.Tk" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tk</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.refs.RefForm.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lib_folder</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inp_folder</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kind_opts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Add</span> <span class="pre">References'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/refs.html#RefForm.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.refs.RefForm.__init__" title="Link to this definition"></a></dt>
+<dd><p>Return a new top level widget on screen SCREENNAME. A new Tcl interpreter will
+be created. BASENAME will be used for the identification of the profile file (see
+readprofile).
+It is constructed from sys.argv[0] without extensions if None is given. CLASSNAME
+is the name of the widget class.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.refs.RefForm.create_widgets">
+<span class="sig-name descname"><span class="pre">create_widgets</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/refs.html#RefForm.create_widgets"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.refs.RefForm.create_widgets" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.refs.RefForm.browse_folder_lib">
+<span class="sig-name descname"><span class="pre">browse_folder_lib</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/refs.html#RefForm.browse_folder_lib"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.refs.RefForm.browse_folder_lib" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.refs.RefForm.browse_folder_inp">
+<span class="sig-name descname"><span class="pre">browse_folder_inp</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/refs.html#RefForm.browse_folder_inp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.refs.RefForm.browse_folder_inp" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.refs.RefForm.covert_entry_to_list">
+<em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">covert_entry_to_list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">entry_str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/refs.html#RefForm.covert_entry_to_list"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.refs.RefForm.covert_entry_to_list" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.refs.RefForm.add_tag">
+<span class="sig-name descname"><span class="pre">add_tag</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/refs.html#RefForm.add_tag"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.refs.RefForm.add_tag" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.refs.RefForm.remove_tag">
+<span class="sig-name descname"><span class="pre">remove_tag</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/refs.html#RefForm.remove_tag"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.refs.RefForm.remove_tag" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.refs.RefForm.add_related">
+<span class="sig-name descname"><span class="pre">add_related</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/refs.html#RefForm.add_related"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.refs.RefForm.add_related" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.refs.RefForm.remove_related">
+<span class="sig-name descname"><span class="pre">remove_related</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/refs.html#RefForm.remove_related"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.refs.RefForm.remove_related" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.refs.RefForm.submit_form">
+<span class="sig-name descname"><span class="pre">submit_form</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/refs.html#RefForm.submit_form"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.refs.RefForm.submit_form" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.refs.RefForm.cancel_form">
+<span class="sig-name descname"><span class="pre">cancel_form</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/refs.html#RefForm.cancel_form"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.refs.RefForm.cancel_form" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.refs.RefForm.get_form_data">
+<span class="sig-name descname"><span class="pre">get_form_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/refs.html#RefForm.get_form_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.refs.RefForm.get_form_data" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="losalamos.refs.Ref">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">losalamos.refs.</span></span><span class="sig-name descname"><span class="pre">Ref</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">entry_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'book'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'The</span> <span class="pre">Origin</span> <span class="pre">of</span> <span class="pre">Species'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">author</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Darwin,</span> <span class="pre">C'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">year</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'1859'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">citation_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/refs.html#Ref"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.refs.Ref" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="losalamos.root.html#losalamos.root.MbaE" title="losalamos.root.MbaE"><code class="xref py py-class docutils literal notranslate"><span class="pre">MbaE</span></code></a></p>
+<p>The core reference object for managing documents and citations.</p>
+<p><strong>Examples:</strong></p>
+<p>Here’s how to use the <code class="docutils literal notranslate"><span class="pre">Ref</span></code> class:</p>
+<p>Import Ref</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Import Ref</span>
+<span class="kn">from</span> <span class="nn">losalamos.refs</span> <span class="kn">import</span> <span class="n">Ref</span>
+</pre></div>
+</div>
+<p>Parse Bib Files</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Use built-in static method for parsing `bib` files:</span>
+<span class="n">lst_bibs</span> <span class="o">=</span> <span class="n">Ref</span><span class="o">.</span><span class="n">parse_bibtex</span><span class="p">(</span><span class="n">file_note</span><span class="o">=</span><span class="s2">&quot;./refs.bib&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">bib_dict</span> <span class="ow">in</span> <span class="n">lst_bibs</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;-------&quot;</span><span class="p">)</span>
+    <span class="c1"># use method for standardize authors</span>
+    <span class="n">bib_dict</span><span class="p">[</span><span class="s2">&quot;author&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Ref</span><span class="o">.</span><span class="n">standard_author</span><span class="p">(</span><span class="n">bib_dict</span><span class="o">=</span><span class="n">bib_dict</span><span class="p">)</span>
+
+    <span class="c1"># built-in static method for getting in-text citation</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="n">Ref</span><span class="o">.</span><span class="n">cite_intext</span><span class="p">(</span>
+        <span class="n">bib_dict</span><span class="o">=</span><span class="n">bib_dict</span><span class="p">,</span>
+        <span class="n">text_format</span><span class="o">=</span><span class="s1">&#39;md&#39;</span> <span class="c1"># markup format</span>
+    <span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+    <span class="c1"># built-in static method for getting full citations</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="n">Ref</span><span class="o">.</span><span class="n">cite_full</span><span class="p">(</span>
+        <span class="n">bib_dict</span><span class="o">=</span><span class="n">bib_dict</span><span class="p">,</span>
+        <span class="n">style</span><span class="o">=</span><span class="s2">&quot;apa&quot;</span><span class="p">,</span> <span class="c1"># APA format</span>
+        <span class="n">text_format</span><span class="o">=</span><span class="s1">&#39;tex&#39;</span><span class="p">,</span>  <span class="c1"># markup format</span>
+        <span class="n">entry_type</span><span class="o">=</span><span class="n">bib_dict</span><span class="p">[</span><span class="s2">&quot;entry_type&quot;</span><span class="p">]</span>
+    <span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Instantiate a Reference</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Instantiante a reference</span>
+<span class="n">r</span> <span class="o">=</span> <span class="n">Ref</span><span class="p">(</span>
+    <span class="n">entry_type</span><span class="o">=</span><span class="s2">&quot;book&quot;</span><span class="p">,</span>
+    <span class="n">title</span><span class="o">=</span><span class="s2">&quot;The Origin of Species&quot;</span><span class="p">,</span>
+    <span class="n">author</span><span class="o">=</span><span class="s2">&quot;Charles Darwin&quot;</span><span class="p">,</span>
+    <span class="n">year</span><span class="o">=</span><span class="s2">&quot;1859&quot;</span><span class="p">,</span>
+    <span class="n">citation_key</span><span class="o">=</span><span class="s2">&quot;darwin1859&quot;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Set Reference by Incoming Dict</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># (Re)Set reference by incoming dict:</span>
+<span class="n">r</span><span class="o">.</span><span class="n">set</span><span class="p">(</span>
+    <span class="n">dict_setter</span><span class="o">=</span><span class="p">{</span>
+        <span class="s2">&quot;entry_type&quot;</span><span class="p">:</span> <span class="s2">&quot;article&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Views of Nature&quot;</span>
+        <span class="s2">&quot;author&quot;</span><span class="p">:</span> <span class="s2">&quot;Alexander von Humboldt&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;year&quot;</span><span class="p">:</span> <span class="s2">&quot;1794&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;citation_key&quot;</span><span class="p">:</span> <span class="s2">&quot;humboldt1793&quot;</span><span class="p">,</span>
+    <span class="p">}</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Load Reference from BibTeX File</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Load reference from `bib` file:</span>
+<span class="c1"># set order=0 for the first reference</span>
+<span class="n">r</span><span class="o">.</span><span class="n">load_bib</span><span class="p">(</span><span class="n">file_note</span><span class="o">=</span><span class="s2">&quot;./beven1989.bib&quot;</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Search/Update bib info via CrossRef API</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">r</span><span class="o">.</span><span class="n">bib_dict</span> <span class="o">=</span> <span class="n">Ref</span><span class="o">.</span><span class="n">search_info</span><span class="p">(</span>
+    <span class="n">bib_dict</span><span class="o">=</span><span class="n">r</span><span class="o">.</span><span class="n">bib_dict</span><span class="p">,</span> <span class="c1"># bib entry</span>
+    <span class="n">update</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="c1"># default False</span>
+    <span class="n">fields</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;doi&quot;</span><span class="p">,</span> <span class="s2">&quot;journal&quot;</span><span class="p">,</span> <span class="s2">&quot;url&quot;</span><span class="p">,</span> <span class="s2">&quot;publisher&quot;</span><span class="p">],</span>  <span class="c1"># Selected fields</span>
+    <span class="n">search_query</span><span class="o">=</span><span class="s2">&quot;Beven 1989 changing ideas&quot;</span> <span class="c1"># Default is the full-citation</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.refs.Ref.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">entry_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'book'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'The</span> <span class="pre">Origin</span> <span class="pre">of</span> <span class="pre">Species'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">author</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Darwin,</span> <span class="pre">C'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">year</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'1859'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">citation_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/refs.html#Ref.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.refs.Ref.__init__" title="Link to this definition"></a></dt>
+<dd><p>Initialize the <cite>Ref</cite> object</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>entry_type</strong> – reference entry_type in BibTeX convetion (e.g., article, book, etc)</p></li>
+<li><p><strong>title</strong> – main title of the reference</p></li>
+<li><p><strong>author</strong> – author(s) filename(s)</p></li>
+<li><p><strong>year</strong> – year of publication</p></li>
+<li><p><strong>citation_key</strong> – citation key of the reference</p></li>
+<li><p><strong>file_note</strong> – path to BibTeX file</p></li>
+<li><p><strong>file_note</strong> – path to markdown note</p></li>
+<li><p><strong>file_doc</strong> – path to pdf document</p></li>
+</ul>
+</dd>
+<dt class="field-even">Entry_type entry_type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str</p>
+</dd>
+<dt class="field-odd">Entry_type title<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+<dt class="field-even">Entry_type author<span class="colon">:</span></dt>
+<dd class="field-even"><p>str</p>
+</dd>
+<dt class="field-odd">Entry_type year<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+<dt class="field-even">Entry_type citation_key<span class="colon">:</span></dt>
+<dd class="field-even"><p>str</p>
+</dd>
+<dt class="field-odd">Entry_type file_note<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+<dt class="field-even">Entry_type file_note<span class="colon">:</span></dt>
+<dd class="field-even"><p>str</p>
+</dd>
+<dt class="field-odd">Entry_type file_doc<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.refs.Ref._set_fields">
+<span class="sig-name descname"><span class="pre">_set_fields</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/refs.html#Ref._set_fields"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.refs.Ref._set_fields" title="Link to this definition"></a></dt>
+<dd><p>Set fields names</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.refs.Ref.get_metadata">
+<span class="sig-name descname"><span class="pre">get_metadata</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/refs.html#Ref.get_metadata"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.refs.Ref.get_metadata" title="Link to this definition"></a></dt>
+<dd><p>Get a dictionary with object metadata.
+Expected to increment superior methods.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Metadata does <strong>not</strong> necessarily inclue all object attributes.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dictionary with all metadata</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)">dict</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.refs.Ref.set">
+<span class="sig-name descname"><span class="pre">set</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dict_setter</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/refs.html#Ref.set"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.refs.Ref.set" title="Link to this definition"></a></dt>
+<dd><p>Set selected attributes based on an incoming dictionary</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>dict_setter</strong> – incoming dictionary with attribute values</p>
+</dd>
+<dt class="field-even">Entry_type dict_setter<span class="colon">:</span></dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.refs.Ref.load_bib">
+<span class="sig-name descname"><span class="pre">load_bib</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">order</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/refs.html#Ref.load_bib"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.refs.Ref.load_bib" title="Link to this definition"></a></dt>
+<dd><p>Load reference from <code class="docutils literal notranslate"><span class="pre">bib</span></code> file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>order</strong> – order number in the <code class="docutils literal notranslate"><span class="pre">bib</span></code> file (first = 0)</p>
+</dd>
+<dt class="field-even">Entry_type order<span class="colon">:</span></dt>
+<dd class="field-even"><p>int</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.refs.Ref.load_note">
+<span class="sig-name descname"><span class="pre">load_note</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/refs.html#Ref.load_note"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.refs.Ref.load_note" title="Link to this definition"></a></dt>
+<dd><p>Loads a note and assigns it to the instance variable.</p>
+<p>This method initializes a RefNote object with the instance’s name and alias,
+sets its file_note attribute, and then calls the load method on the RefNote object.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.refs.Ref.standardize">
+<span class="sig-name descname"><span class="pre">standardize</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/refs.html#Ref.standardize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.refs.Ref.standardize" title="Link to this definition"></a></dt>
+<dd><p>Standardize citation key, author formatting</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.refs.Ref.save_bib">
+<span class="sig-name descname"><span class="pre">save_bib</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/refs.html#Ref.save_bib"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.refs.Ref.save_bib" title="Link to this definition"></a></dt>
+<dd><p>Save bibliography to bib file (default to bib_file attribute).
+Ref is expected to hold the bib_dict</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>output_dir</strong> – the directory where the <code class="docutils literal notranslate"><span class="pre">bib</span></code> file will be saved.</p></li>
+<li><p><strong>filename</strong> – the name of the .bib file (without extension).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Entry_type output_dir<span class="colon">:</span></dt>
+<dd class="field-even"><p>str</p>
+</dd>
+<dt class="field-odd">Entry_type filename<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.refs.Ref.to_note">
+<span class="sig-name descname"><span class="pre">to_note</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output_dir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">note_template</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">body</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">related</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">references</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pdf_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/refs.html#Ref.to_note"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.refs.Ref.to_note" title="Link to this definition"></a></dt>
+<dd><p>Converts the current reference to a note and saves it to a file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>output_dir</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – The directory where the note file will be saved.</p></li>
+<li><p><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – The name of the note file to be created.</p></li>
+<li><p><strong>body</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><em>list</em></a><em> or </em><em>None</em>) – Optional body of the note to include in the note.</p></li>
+<li><p><strong>tags</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><em>list</em></a><em> or </em><em>None</em>) – Optional tags associated with the note.</p></li>
+<li><p><strong>related</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><em>list</em></a><em> or </em><em>None</em>) – Optional related references.</p></li>
+<li><p><strong>references</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><em>list</em></a><em> or </em><em>None</em>) – Optional references to include in the note.</p></li>
+<li><p><strong>pdf_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em> or </em><em>None</em>) – Optional PDF file name</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The path to the saved note file.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.refs.Ref.add_to_lib">
+<span class="sig-name descname"><span class="pre">add_to_lib</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lib_folder</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">note_template</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">related</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">comments</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pdf_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">note_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/refs.html#Ref.add_to_lib"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.refs.Ref.add_to_lib" title="Link to this definition"></a></dt>
+<dd><p>Adds the current item to the specified library folder.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lib_folder</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – The path to the library folder where the item will be added.</p></li>
+<li><p><strong>tags</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><em>list</em></a><em> or </em><em>None</em>) – Optional tags associated with the item.</p></li>
+<li><p><strong>related</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><em>list</em></a><em> or </em><em>None</em>) – Optional related items.</p></li>
+<li><p><strong>comments</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em> or </em><em>None</em>) – Optional body about the item.</p></li>
+<li><p><strong>pdf_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em> or </em><em>None</em>) – Optional PDF file name</p></li>
+<li><p><strong>note_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em> or </em><em>None</em>) – Optional note file name</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.refs.Ref.to_bib">
+<span class="sig-name descname"><span class="pre">to_bib</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output_dir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/refs.html#Ref.to_bib"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.refs.Ref.to_bib" title="Link to this definition"></a></dt>
+<dd><p>Generates a .bib file from the current item’s data and saves it to the specified directory.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>output_dir</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – The directory where the .bib file will be saved.</p></li>
+<li><p><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – The name of the .bib file to be created.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The path to the saved .bib file.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.refs.Ref.get_citation_keys">
+<em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_citation_keys</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lib_folder</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/refs.html#Ref.get_citation_keys"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.refs.Ref.get_citation_keys" title="Link to this definition"></a></dt>
+<dd><p>Get the list of citations key from a library folder.
+The folder is expected to hold references in md files named by
+the respective citations keys.
+The “_” is considered a flag for md files not related to the reference.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>lib_folder</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – path to library directory</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>list of names of citation keys</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)">list</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.refs.Ref.bibstr_to_dict">
+<em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">bibstr_to_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bibtex_str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/refs.html#Ref.bibstr_to_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.refs.Ref.bibstr_to_dict" title="Link to this definition"></a></dt>
+<dd><p>Converts a BibTeX string into a dictionary representation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>bibtex_str</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – The BibTeX string to convert.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A dictionary with the BibTeX entry’s type, citation key, and fields.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)">dict</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.refs.Ref.parse_bibtex">
+<em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">parse_bibtex</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_bib</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/refs.html#Ref.parse_bibtex"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.refs.Ref.parse_bibtex" title="Link to this definition"></a></dt>
+<dd><p>Parse a <code class="docutils literal notranslate"><span class="pre">bib</span></code> file and return a list of references as dictionaries.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>file_bib</strong> – Path to the <code class="docutils literal notranslate"><span class="pre">bib</span></code> file.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A list of dictionaries, each representing a BibTeX bib_dict.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.refs.Ref.cite_intext">
+<em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">cite_intext</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bib_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text_format</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'plain'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">embed_link</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/refs.html#Ref.cite_intext"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.refs.Ref.cite_intext" title="Link to this definition"></a></dt>
+<dd><p>Format a dictionary of bibliometric parameters into an in-text citation string with optional DOI or URL links.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>bib_dict</strong> – dict
+A dictionary containing bibliometric parameters from a reference.
+Expected keys include ‘author’, ‘year’, ‘doi’, and ‘url’.</p></li>
+<li><p><strong>text_format</strong> – str
+The text format for styling (e.g., ‘plain’, ‘html’, ‘md’, ‘tex’).</p></li>
+<li><p><strong>embed_link</strong> – bool
+Whether to embed a DOI or URL link in the citation (default is False).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>str
+The formatted in-text citation string.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.refs.Ref.cite_full">
+<em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">cite_full</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bib_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">style</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'apa'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text_format</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'plain'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">entry_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'article'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/refs.html#Ref.cite_full"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.refs.Ref.cite_full" title="Link to this definition"></a></dt>
+<dd><p>Format a dictionary of bibliometric parameters into a specified citation text_format string and text format.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>bib_dict</strong> – dict
+A dictionary containing bibliometric parameters from a reference.
+Expected keys vary depending on the bib_dict entry_type.</p></li>
+<li><p><strong>style</strong> – str
+The citation text_format to format (e.g., ‘apa’, ‘mla’, ‘chicago’, ‘harvard’, ‘vancouver’, ‘abnt’).</p></li>
+<li><p><strong>text_format</strong> – str
+The text format for styling (e.g., ‘plain’, ‘html’, ‘md’, ‘tex’).</p></li>
+<li><p><strong>entry_type</strong> – str
+The entry_type of the BibTeX bib_dict (e.g., ‘article’, ‘book’, ‘inbook’, ‘incollection’, ‘proceedings’, ‘inproceedings’, ‘conference’, ‘phdthesis’, ‘mastersthesis’, ‘techreport’, ‘manual’, ‘unpublished’, ‘misc’).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>str
+The formatted citation string.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.refs.Ref.bib_to_str">
+<em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">bib_to_str</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bib_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">entry_field</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'entry_type'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">citation_field</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'citation_key'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/refs.html#Ref.bib_to_str"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.refs.Ref.bib_to_str" title="Link to this definition"></a></dt>
+<dd><p>Converts a dictionary representation of a BibTeX entry into a string.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>bib_dict</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a>) – The dictionary containing the BibTeX entry data.</p></li>
+<li><p><strong>entry_field</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – The key for the entry type in the dictionary.</p></li>
+<li><p><strong>citation_field</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – The key for the citation key in the dictionary.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The BibTeX entry as a formatted string.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.refs.Ref.standard_author">
+<em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">standard_author</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bib_dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/refs.html#Ref.standard_author"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.refs.Ref.standard_author" title="Link to this definition"></a></dt>
+<dd><p>Formats and standardizes the author names in a BibTeX entry.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>bib_dict</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a>) – The dictionary containing the BibTeX entry data, expected to have an ‘author’ field.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A formatted string of standardized author names.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.refs.Ref.standard_key">
+<em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">standard_key</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bib_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conflict_list</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/refs.html#Ref.standard_key"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.refs.Ref.standard_key" title="Link to this definition"></a></dt>
+<dd><p>Get the standard Citation Key in a BibTeX bib_dict dictionary to LastnameFirstAuthor + Year + x (or a, b, c …)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>bib_dict</strong> – dict
+A dictionary containing bibliometric parameters from a reference.
+Expected key is ‘author’, ‘year’ and ‘title’.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>str
+The string with normalized citation key.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.refs.Ref.query_doi">
+<em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">query_doi</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">doi</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/refs.html#Ref.query_doi"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.refs.Ref.query_doi" title="Link to this definition"></a></dt>
+<dd><p>Web query for doi</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>doi</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – reference doi</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>bibtex dict</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)">dict</a> or None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.refs.Ref.query_xref">
+<em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">query_xref</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">search_query</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_refs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/refs.html#Ref.query_xref"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.refs.Ref.query_xref" title="Link to this definition"></a></dt>
+<dd><p>Queries a cross-reference service and extracts BibTeX entries from the search results.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>search_query</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – The query string to search for.</p></li>
+<li><p><strong>include_refs</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a>) – Whether to include references in the search results.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A list of dictionaries containing BibTeX entries.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)">list</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.refs.Ref.add">
+<em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">add</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lib_folder</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_bib</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_pdf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">related</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/refs.html#Ref.add"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.refs.Ref.add" title="Link to this definition"></a></dt>
+<dd><p>Adds a reference to the specified library folder.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lib_folder</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – The path to the library folder where the reference will be added.</p></li>
+<li><p><strong>file_bib</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – The path to the BibTeX file.</p></li>
+<li><p><strong>file_pdf</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em> or </em><em>None</em>) – The path to the PDF file, if any.</p></li>
+<li><p><strong>tags</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><em>list</em></a><em> or </em><em>None</em>) – Optional tags associated with the reference.</p></li>
+<li><p><strong>related</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><em>list</em></a><em> or </em><em>None</em>) – Optional related references.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.refs.Ref.add_bat">
+<em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">add_bat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">src_folder</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lib_folder</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">template_folder</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">related</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clean</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/refs.html#Ref.add_bat"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.refs.Ref.add_bat" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.refs.Ref.catalog_files">
+<em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">catalog_files</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">folder_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/refs.html#Ref.catalog_files"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.refs.Ref.catalog_files" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="losalamos.refs.Ref.__annotations__">
+<span class="sig-name descname"><span class="pre">__annotations__</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#losalamos.refs.Ref.__annotations__" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="losalamos.refs.RefNote">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">losalamos.refs.</span></span><span class="sig-name descname"><span class="pre">RefNote</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'MyRefNote'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alias</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'RNt1'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/refs.html#RefNote"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.refs.RefNote" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="losalamos.root.html#losalamos.root.Note" title="losalamos.root.Note"><code class="xref py py-class docutils literal notranslate"><span class="pre">Note</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.refs.RefNote.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'MyRefNote'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alias</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'RNt1'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/refs.html#RefNote.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.refs.RefNote.__init__" title="Link to this definition"></a></dt>
+<dd><p>Initialize the <code class="docutils literal notranslate"><span class="pre">MbaE</span></code> object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – unique object name</p></li>
+<li><p><strong>alias</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – unique object alias. If None, it takes the first and last characters from <code class="docutils literal notranslate"><span class="pre">name</span></code></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.refs.RefNote.load_metadata">
+<span class="sig-name descname"><span class="pre">load_metadata</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/refs.html#RefNote.load_metadata"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.refs.RefNote.load_metadata" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.refs.RefNote._standardize_metatada">
+<span class="sig-name descname"><span class="pre">_standardize_metatada</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/refs.html#RefNote._standardize_metatada"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.refs.RefNote._standardize_metatada" title="Link to this definition"></a></dt>
+<dd><p>Standardizes the metadata for the current reference.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.refs.RefNote.update_data">
+<span class="sig-name descname"><span class="pre">update_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">related_list</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/refs.html#RefNote.update_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.refs.RefNote.update_data" title="Link to this definition"></a></dt>
+<dd><p>Updates the data structure with the head, body, and tail sections.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>related_list</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><em>list</em></a><em>, </em><em>optional</em>) – A list of related entries to include in the body (default is None).</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.refs.RefNote.update_head">
+<span class="sig-name descname"><span class="pre">update_head</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/refs.html#RefNote.update_head"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.refs.RefNote.update_head" title="Link to this definition"></a></dt>
+<dd><p>Updates the head section of the data structure based on the metadata.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.refs.RefNote.update_body">
+<span class="sig-name descname"><span class="pre">update_body</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">related_list</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/refs.html#RefNote.update_body"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.refs.RefNote.update_body" title="Link to this definition"></a></dt>
+<dd><p>Updates the body section of the data structure, including highlights, related entries, and references.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>related_list</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><em>list</em></a><em>, </em><em>optional</em>) – A list of related entries to include in the body (default is None).</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.refs.RefNote.update_tail">
+<span class="sig-name descname"><span class="pre">update_tail</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/refs.html#RefNote.update_tail"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.refs.RefNote.update_tail" title="Link to this definition"></a></dt>
+<dd><p>Updates the tail section of the data structure with bibliographic information.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.refs.RefNote.get_template">
+<em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_template</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">kind</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'bib'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">head_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/refs.html#RefNote.get_template"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.refs.RefNote.get_template" title="Link to this definition"></a></dt>
+<dd><p>“Returns a template dictionary for a given kind of entry.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>kind</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – The type of template to retrieve (default is “bib”).</p></li>
+<li><p><strong>head_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – The header name to use in the template (default is “Header”).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A dictionary containing the template structure.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)">dict</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.refs.RefNote.get_bib_dict">
+<span class="sig-name descname"><span class="pre">get_bib_dict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/refs.html#RefNote.get_bib_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.refs.RefNote.get_bib_dict" title="Link to this definition"></a></dt>
+<dd><p>Get a bibdict from the note metadata</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)">dict</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.refs.RefNote.get_bib">
+<em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_bib</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/refs.html#RefNote.get_bib"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.refs.RefNote.get_bib" title="Link to this definition"></a></dt>
+<dd><p>Get a bib dictionaty from the content of a RefNote file.
+The BibTex snippet is expected to exist in the note content</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>file_path</strong></p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.refs.RefNote.get_intext_citation">
+<em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_intext_citation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/refs.html#RefNote.get_intext_citation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.refs.RefNote.get_intext_citation" title="Link to this definition"></a></dt>
+<dd><p>Extracts the in-text citation from a given file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>file_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – The path to the file containing the in-text citation.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The extracted in-text citation.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.refs.RefNote.get_cover_image">
+<em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_cover_image</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">500</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">quality</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">300</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/refs.html#RefNote.get_cover_image"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.refs.RefNote.get_cover_image" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="losalamos.refs.RefNote.__annotations__">
+<span class="sig-name descname"><span class="pre">__annotations__</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#losalamos.refs.RefNote.__annotations__" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="losalamos.refs.RefColl">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">losalamos.refs.</span></span><span class="sig-name descname"><span class="pre">RefColl</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'MyRefCollection'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alias</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'myRefCol'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/refs.html#RefColl"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.refs.RefColl" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="losalamos.root.html#losalamos.root.Collection" title="losalamos.root.Collection"><code class="xref py py-class docutils literal notranslate"><span class="pre">Collection</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.refs.RefColl.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'MyRefCollection'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alias</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'myRefCol'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/refs.html#RefColl.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.refs.RefColl.__init__" title="Link to this definition"></a></dt>
+<dd><p>Initialize the <code class="docutils literal notranslate"><span class="pre">Collection</span></code> object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>base_object</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">MbaE</span></code>) – <code class="docutils literal notranslate"><span class="pre">MbaE</span></code>-based object for collection</p></li>
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – unique object name</p></li>
+<li><p><strong>alias</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – unique object alias.
+If None, it takes the first and last characters from name</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.refs.RefColl.load">
+<span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/refs.html#RefColl.load"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.refs.RefColl.load" title="Link to this definition"></a></dt>
+<dd><p>Loads references from a BibTeX file and appends them to the instance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>file_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – The path to the BibTeX file.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.refs.RefColl.load_library">
+<span class="sig-name descname"><span class="pre">load_library</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lib_folder</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">by</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'notes'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/refs.html#RefColl.load_library"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.refs.RefColl.load_library" title="Link to this definition"></a></dt>
+<dd><p>“Loads references from a library folder and appends them to the instance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lib_folder</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – The path to the library folder.</p></li>
+<li><p><strong>by</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – The method to load references by (default is “notes”).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="losalamos.refs.RefColl.__annotations__">
+<span class="sig-name descname"><span class="pre">__annotations__</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#losalamos.refs.RefColl.__annotations__" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="losalamos.root.html" class="btn btn-neutral float-left" title="losalamos.root" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="losalamos.docs.html" class="btn btn-neutral float-right" title="losalamos.docs" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, ipo.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
