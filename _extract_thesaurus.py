@@ -19,6 +19,6 @@ def extract_code_from_markdown(markdown_file, output_file):
 
 if __name__ == "__main__":
     # Usage
-    markdown_file = "thesaurus_en.md"
-    output_file = "thesaurus_en.txt"
+    markdown_file = "_misc/thesaurus_en.md"
+    output_file = "_misc/thesaurus_en.txt"
     extract_code_from_markdown(markdown_file, output_file)

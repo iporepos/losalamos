@@ -2532,7 +2532,8 @@ class FileSys(DataSet):
 
     @staticmethod
     def merge_pdfs(lst_pdfs, dst_dir, output_filename):
-        """Merge PDF files to a single PDF
+        """
+        Merge PDF files to a single PDF
 
         :param lst_pdfs: list of PDFs file paths
         :type lst_pdfs: list

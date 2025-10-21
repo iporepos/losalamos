@@ -9,23 +9,45 @@ import re
 import shutil
 import subprocess
 from pathlib import Path
-
 import pandas as pd
-
-# from dotenv import load_dotenv
-
-# import xml.etree.ElementTree as ET
-# import xml.dom.minidom
 from lxml import etree
 from PIL import Image
-
+import PyPDF2
 from losalamos.root import Collection, DataSet, MbaE
-
-# load_dotenv() # comment this out
 
 
 def blind_text():
     return "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ac bibendum orci. Cras erat elit, consequat vel erat ac, tincidunt pulvinar lacus. Pellentesque vitae consectetur quam."
+
+
+def merge_pdfs(lst_pdfs, dst_dir, output_filename):
+    """Merge PDF files to a single PDF
+
+    :param lst_pdfs: list of PDFs file paths
+    :type lst_pdfs: list
+    :param dst_dir: path to destination folder
+    :type dst_dir: str
+    :param output_filename: name of output file (without extension)
+    :type output_filename: str
+    :return: path to output file
+    :rtype: str
+    """
+    if len(lst_pdfs) == 0:
+        return None
+    else:
+        output_pdf = f"{dst_dir}/{output_filename}.pdf"
+        pdf_writer = PyPDF2.PdfWriter()
+        for pdf in lst_pdfs:
+            with open(pdf, "rb") as pdf_file:
+                pdf_reader = PyPDF2.PdfReader(pdf_file)
+                for page_num in range(len(pdf_reader.pages)):
+                    page = pdf_reader.pages[page_num]
+                    pdf_writer.add_page(page)
+
+        with open(output_pdf, "wb") as output_file:
+            pdf_writer.write(output_file)
+
+        return output_pdf
 
 
 class Drawing(DataSet):
@@ -281,7 +303,6 @@ class Drawing(DataSet):
 
     @staticmethod
     def export_image_bat(folder, specs=None, display=False, prefix="", suffix=""):
-
         # Handle no specs
         if specs is None:
             # set default specs
@@ -354,7 +375,9 @@ class Figure(MbaE):
         self.pannels_dct = None
 
     def _set_fields(self):
-        """Set fields names"""
+        """
+        Set fields names
+        """
         super()._set_fields()
         # Attribute fields
         self.fig_id_field = "Id"
@@ -373,7 +396,8 @@ class Figure(MbaE):
         # ... continues in downstream objects ... #
 
     def get_metadata(self):
-        """Get a dictionary with object metadata.
+        """
+        Get a dictionary with object metadata.
 
         .. note::
 
@@ -409,7 +433,8 @@ class Figure(MbaE):
         fontfamily="sffamily",
         wfactor=0.95,
     ):
-        """Generates a LaTeX figure environment containing an image and its corresponding caption,
+        """
+        Generates a LaTeX figure environment containing an image and its corresponding caption,
         and saves it as a `.tex` file if folder and filename is provided.
 
         :param folder: The directory where the LaTeX file will be saved.
@@ -458,7 +483,8 @@ class Figure(MbaE):
         return list_bulk
 
     def to_latex_report(self, template_file, folder=None, filename=None):
-        """Generates a LaTeX report based on a template file, replacing placeholders with
+        """
+        Generates a LaTeX report based on a template file, replacing placeholders with
         instance attributes and optionally saving the output to a `.tex` file.
 
         :param template_file: Path to the LaTeX template file containing placeholders.
@@ -544,7 +570,8 @@ class Figure(MbaE):
 
     @staticmethod
     def reset_image(input_path, output_path, scale_factor, dpi):
-        """Scale an image by a given factor while preserving its aspect ratio and setting the DPI.
+        """
+        Scale an image by a given factor while preserving its aspect ratio and setting the DPI.
 
         :param input_path: Path to the input JPG image.
         :type input_path: str
@@ -605,7 +632,8 @@ class TeX(MbaE):
 
     @staticmethod
     def gls_format(gls_name, gls_alias, gls_descr=None):
-        """Format a glossary entry
+        """
+        Format a glossary entry
 
         :param gls_name: entry name
         :type gls_name: str
@@ -628,7 +656,8 @@ class TeX(MbaE):
 
     @staticmethod
     def gls_newentry(gls_file, gls_name, gls_alias, gls_descr=None):
-        """Insert new glossary entry into a glossary file
+        """
+        Insert new glossary entry into a glossary file
 
         :param gls_file: path to glossary file
         :type gls_file: str
@@ -652,7 +681,8 @@ class TeX(MbaE):
 
     @staticmethod
     def gls_to_df(gls_dct):
-        """convert a glossary dict in a dataframe
+        """
+        Convert a glossary dict in a dataframe
 
         :param gls_dct: glossary dict
         :type gls_dct: dict
@@ -708,7 +738,7 @@ class TeX(MbaE):
         gls_file = os.path.join(output_dir, filename + ".tex")
 
         # create a new glossary file
-        header_ls = ["\makeglossaries", "\n"]
+        header_ls = [r"\makeglossaries", "\n"]
         with open(gls_file, "w", encoding="utf-8") as file:
             file.writelines(header_ls)
 
@@ -788,7 +818,7 @@ class TeX(MbaE):
             drop=True
         )
         # inset helper column
-        gls_df["NewExp"] = ["\gls{" + s + "}" for s in gls_df["Alias"]]
+        gls_df["NewExp"] = [r"\gls{" + s + "}" for s in gls_df["Alias"]]
 
         # handle new files
         if not inplace:
@@ -865,7 +895,7 @@ class TeX(MbaE):
         for i in range(len(lst_institutes)):
             _code = str(chr(96 + i + 1))
             d_inst[lst_institutes[i]] = _code
-            s = r"$^\text{" + _code + "}$\;" + lst_institutes[i]
+            s = r"$^\text{" + _code + r"}$\;" + lst_institutes[i]
             lst_affs.append(s)
         authors_affs = r" \newline ".join(lst_affs)
 
@@ -876,9 +906,9 @@ class TeX(MbaE):
             _af = df["Affiliation"].values[i]
             _oi = df["OrcID"].values[i]
             _ex = d_inst[_af]
-            s = "\href{" + _oi + "}{" + _nm + r"}\,$^\text{" + _ex + "}$"
+            s = r"\href{" + _oi + "}{" + _nm + r"}\,$^\text{" + _ex + "}$"
             lst_authors.append(s)
-        authors_list = ",\;".join(lst_authors)
+        authors_list = r",\;".join(lst_authors)
 
         # Handle corresponding
         df_corr = df.query("Corresponding == 'yes'").copy()
@@ -1055,7 +1085,7 @@ class Table(DataSet):
 
             str_row = " & ".join(list(row)) + r"\\"
             # handle underscores
-            str_row = str_row.replace("_", "\_")
+            str_row = str_row.replace("_", r"\_")
 
             list_bulk.append(str_row[:])
         list_bulk.append(r"\bottomrule")

@@ -1,10 +1,13 @@
 # Ignore all files and folders starting with "_"
+_*
 _*.py
 bench*.py
+/_scripts
+/scripts
+
 
 # EXCEPT __init__.py files
 !__init__.py
-!docs
 
 _templates
 
@@ -86,7 +89,9 @@ instance/
 .scrapy
 
 # Sphinx documentation
-
+docs/_build
+docs/_static
+docs/generated
 
 # PyBuilder
 target/

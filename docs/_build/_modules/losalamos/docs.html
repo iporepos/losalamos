@@ -1,80 +1,141 @@
-<!DOCTYPE html>
 
-<html lang="en" data-content_root="../../">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>losalamos.docs &#8212; losalamos v.0.0 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
-    <link rel="stylesheet" type="text/css" href="../../_static/classic.css?v=2bf1fcf8" />
-    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
-    
-    <script src="../../_static/documentation_options.js?v=fb9c8d0f"></script>
-    <script src="../../_static/doctools.js?v=9bcbadda"></script>
-    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
-    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
-    <script src="../../_static/copybutton.js?v=f281be69"></script>
-    
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>losalamos.docs &mdash; losalamos v.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=fb9c8d0f"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/js/theme.js"></script>
     <link rel="author" title="About these documents" href="../../about.html" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" /> 
-  </head><body>
-    <div class="related" role="navigation" aria-label="Related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="../../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">losalamos v.0.0 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">losalamos.docs</a></li> 
-      </ul>
-    </div>  
+</head>
 
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          <div class="body" role="main">
-            
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            losalamos
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../index.html">Home</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../about.html">About</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../usage.html">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">losalamos</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">losalamos.docs</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
   <h1>Source code for losalamos.docs</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Classes for parsing, handling and managing documents</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">glob</span>
-<span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">re</span>
-<span class="kn">import</span> <span class="nn">shutil</span>
-<span class="kn">import</span> <span class="nn">subprocess</span>
-<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
-
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="c1">#from dotenv import load_dotenv</span>
-
-<span class="c1"># import xml.etree.ElementTree as ET</span>
-<span class="c1"># import xml.dom.minidom</span>
-<span class="kn">from</span> <span class="nn">lxml</span> <span class="kn">import</span> <span class="n">etree</span>
-<span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
-
-<span class="kn">from</span> <span class="nn">losalamos.root</span> <span class="kn">import</span> <span class="n">Collection</span><span class="p">,</span> <span class="n">DataSet</span><span class="p">,</span> <span class="n">MbaE</span>
-
-<span class="c1">#load_dotenv() # comment this out</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">glob</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">shutil</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">subprocess</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">lxml</span><span class="w"> </span><span class="kn">import</span> <span class="n">etree</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">PIL</span><span class="w"> </span><span class="kn">import</span> <span class="n">Image</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">PyPDF2</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">losalamos.root</span><span class="w"> </span><span class="kn">import</span> <span class="n">Collection</span><span class="p">,</span> <span class="n">DataSet</span><span class="p">,</span> <span class="n">MbaE</span>
 
 
 <div class="viewcode-block" id="blind_text">
 <a class="viewcode-back" href="../../generated/losalamos.docs.html#losalamos.docs.blind_text">[docs]</a>
-<span class="k">def</span> <span class="nf">blind_text</span><span class="p">():</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">blind_text</span><span class="p">():</span>
     <span class="k">return</span> <span class="s2">&quot;Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ac bibendum orci. Cras erat elit, consequat vel erat ac, tincidunt pulvinar lacus. Pellentesque vitae consectetur quam.&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="merge_pdfs">
+<a class="viewcode-back" href="../../generated/losalamos.docs.html#losalamos.docs.merge_pdfs">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">merge_pdfs</span><span class="p">(</span><span class="n">lst_pdfs</span><span class="p">,</span> <span class="n">dst_dir</span><span class="p">,</span> <span class="n">output_filename</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Merge PDF files to a single PDF</span>
+
+<span class="sd">    :param lst_pdfs: list of PDFs file paths</span>
+<span class="sd">    :type lst_pdfs: list</span>
+<span class="sd">    :param dst_dir: path to destination folder</span>
+<span class="sd">    :type dst_dir: str</span>
+<span class="sd">    :param output_filename: name of output file (without extension)</span>
+<span class="sd">    :type output_filename: str</span>
+<span class="sd">    :return: path to output file</span>
+<span class="sd">    :rtype: str</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">lst_pdfs</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">output_pdf</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">dst_dir</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">output_filename</span><span class="si">}</span><span class="s2">.pdf&quot;</span>
+        <span class="n">pdf_writer</span> <span class="o">=</span> <span class="n">PyPDF2</span><span class="o">.</span><span class="n">PdfWriter</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">pdf</span> <span class="ow">in</span> <span class="n">lst_pdfs</span><span class="p">:</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">pdf</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">pdf_file</span><span class="p">:</span>
+                <span class="n">pdf_reader</span> <span class="o">=</span> <span class="n">PyPDF2</span><span class="o">.</span><span class="n">PdfReader</span><span class="p">(</span><span class="n">pdf_file</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">page_num</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">pdf_reader</span><span class="o">.</span><span class="n">pages</span><span class="p">)):</span>
+                    <span class="n">page</span> <span class="o">=</span> <span class="n">pdf_reader</span><span class="o">.</span><span class="n">pages</span><span class="p">[</span><span class="n">page_num</span><span class="p">]</span>
+                    <span class="n">pdf_writer</span><span class="o">.</span><span class="n">add_page</span><span class="p">(</span><span class="n">page</span><span class="p">)</span>
+
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">output_pdf</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">output_file</span><span class="p">:</span>
+            <span class="n">pdf_writer</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">output_file</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">output_pdf</span></div>
 
 
 
 <div class="viewcode-block" id="Drawing">
 <a class="viewcode-back" href="../../generated/losalamos.docs.html#losalamos.docs.Drawing">[docs]</a>
-<span class="k">class</span> <span class="nc">Drawing</span><span class="p">(</span><span class="n">DataSet</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Drawing</span><span class="p">(</span><span class="n">DataSet</span><span class="p">):</span>
     <span class="c1"># todo There is a big problem of offsetting text-based items.</span>
     <span class="c1">#  Somehow the saving method inserts white spaces in the text boxes</span>
     <span class="c1">#  The result is a form of &quot;offset&quot; in the labels. Bad.</span>
@@ -82,7 +143,7 @@
 
 <div class="viewcode-block" id="Drawing.__init__">
 <a class="viewcode-back" href="../../generated/losalamos.docs.html#losalamos.docs.Drawing.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;MyDraw&quot;</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s2">&quot;Drw&quot;</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;MyDraw&quot;</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s2">&quot;Drw&quot;</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="n">alias</span><span class="p">)</span>
         <span class="c1"># overwriters</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">object_alias</span> <span class="o">=</span> <span class="s2">&quot;DRW&quot;</span>
@@ -100,7 +161,7 @@
 
 <div class="viewcode-block" id="Drawing.update">
 <a class="viewcode-back" href="../../generated/losalamos.docs.html#losalamos.docs.Drawing.update">[docs]</a>
-    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;(Overwriting super method) Refresh all mutable attributes based on data (includins paths).</span>
 <span class="sd">        Base method. Expected to be incremented downstrem.</span>
 
@@ -133,7 +194,7 @@
 
 <div class="viewcode-block" id="Drawing.load_data">
 <a class="viewcode-back" href="../../generated/losalamos.docs.html#losalamos.docs.Drawing.load_data">[docs]</a>
-    <span class="k">def</span> <span class="nf">load_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_data</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">load_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_data</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Load data from file. Expected to overwrite superior methods.</span>
 
 <span class="sd">        :param file_data: file path to data.</span>
@@ -167,7 +228,7 @@
 
 <div class="viewcode-block" id="Drawing.save">
 <a class="viewcode-back" href="../../generated/losalamos.docs.html#losalamos.docs.Drawing.save">[docs]</a>
-    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">xml_str</span> <span class="o">=</span> <span class="n">etree</span><span class="o">.</span><span class="n">tostring</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">tree</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">,</span> <span class="n">xml_declaration</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">pretty_print</span><span class="o">=</span><span class="kc">False</span>
         <span class="p">)</span>
@@ -180,7 +241,7 @@
 
 <div class="viewcode-block" id="Drawing.export">
 <a class="viewcode-back" href="../../generated/losalamos.docs.html#losalamos.docs.Drawing.export">[docs]</a>
-    <span class="k">def</span> <span class="nf">export</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output_file</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">export</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output_file</span><span class="p">):</span>
         <span class="n">original_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_data</span><span class="p">[:]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">file_data</span> <span class="o">=</span> <span class="n">output_file</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
@@ -190,7 +251,7 @@
 
 <div class="viewcode-block" id="Drawing._find_layer">
 <a class="viewcode-back" href="../../generated/losalamos.docs.html#losalamos.docs.Drawing._find_layer">[docs]</a>
-    <span class="k">def</span> <span class="nf">_find_layer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;frames&quot;</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_find_layer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;frames&quot;</span><span class="p">):</span>
         <span class="n">key</span> <span class="o">=</span> <span class="s2">&quot;{&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">name_spaces</span><span class="p">[</span><span class="s2">&quot;inkscape&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;}&quot;</span>
         <span class="c1"># Find the &lt;g&gt; group with the specific Inkscape label</span>
         <span class="n">layer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">find</span><span class="p">(</span>
@@ -203,7 +264,7 @@
 
 <div class="viewcode-block" id="Drawing.hide_layer">
 <a class="viewcode-back" href="../../generated/losalamos.docs.html#losalamos.docs.Drawing.hide_layer">[docs]</a>
-    <span class="k">def</span> <span class="nf">hide_layer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;frames&quot;</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">hide_layer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;frames&quot;</span><span class="p">):</span>
         <span class="n">layer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">find</span><span class="p">(</span>
             <span class="sa">f</span><span class="s2">&quot;.//svg:g[@inkscape:label=&#39;</span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2">&#39;]&quot;</span><span class="p">,</span> <span class="n">namespaces</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">name_spaces</span>
         <span class="p">)</span>
@@ -212,7 +273,7 @@
 
 <div class="viewcode-block" id="Drawing.show_layer">
 <a class="viewcode-back" href="../../generated/losalamos.docs.html#losalamos.docs.Drawing.show_layer">[docs]</a>
-    <span class="k">def</span> <span class="nf">show_layer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;frames&quot;</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">show_layer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;frames&quot;</span><span class="p">):</span>
         <span class="n">layer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">find</span><span class="p">(</span>
             <span class="sa">f</span><span class="s2">&quot;.//svg:g[@inkscape:label=&#39;</span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2">&#39;]&quot;</span><span class="p">,</span> <span class="n">namespaces</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">name_spaces</span>
         <span class="p">)</span>
@@ -221,7 +282,7 @@
 
 <div class="viewcode-block" id="Drawing._set_view_specs">
 <a class="viewcode-back" href="../../generated/losalamos.docs.html#losalamos.docs.Drawing._set_view_specs">[docs]</a>
-    <span class="k">def</span> <span class="nf">_set_view_specs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_set_view_specs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Set view specifications.</span>
 <span class="sd">        Expected to overwrite superior methods.</span>
 
@@ -251,7 +312,7 @@
 
 <div class="viewcode-block" id="Drawing.view">
 <a class="viewcode-back" href="../../generated/losalamos.docs.html#losalamos.docs.Drawing.view">[docs]</a>
-    <span class="k">def</span> <span class="nf">view</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">view</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Get a basic visualization. Expected to overwrite superior methods.</span>
 
 <span class="sd">        :param show: option for showing instead of saving.</span>
@@ -273,7 +334,7 @@
 
 <div class="viewcode-block" id="Drawing.export_image">
 <a class="viewcode-back" href="../../generated/losalamos.docs.html#losalamos.docs.Drawing.export_image">[docs]</a>
-    <span class="k">def</span> <span class="nf">export_image</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">export_image</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">output_file</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span>
@@ -337,7 +398,7 @@
             <span class="n">s_command</span> <span class="o">=</span> <span class="n">s_command</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;inkscape&quot;</span><span class="p">,</span> <span class="n">s_aux</span><span class="p">)</span>
 
         <span class="c1"># call inkscape process</span>
-        <span class="c1">#print(s_command)</span>
+        <span class="c1"># print(s_command)</span>
         <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">s_command</span><span class="p">)</span>
 
         <span class="c1"># go back</span>
@@ -345,7 +406,7 @@
 
         <span class="c1"># handle jpg conversion</span>
         <span class="k">if</span> <span class="n">to_jpg</span><span class="p">:</span>
-            <span class="c1">#print(str(output_file))</span>
+            <span class="c1"># print(str(output_file))</span>
             <span class="n">new_file</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">output_file</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;.png&quot;</span><span class="p">,</span> <span class="s2">&quot;.jpg&quot;</span><span class="p">)</span>
             <span class="n">Drawing</span><span class="o">.</span><span class="n">convert_png_to_jpg</span><span class="p">(</span>
                 <span class="n">input_file</span><span class="o">=</span><span class="n">output_file</span><span class="p">,</span> <span class="n">output_file</span><span class="o">=</span><span class="n">new_file</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span>
@@ -361,8 +422,7 @@
 <div class="viewcode-block" id="Drawing.export_image_bat">
 <a class="viewcode-back" href="../../generated/losalamos.docs.html#losalamos.docs.Drawing.export_image_bat">[docs]</a>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">export_image_bat</span><span class="p">(</span><span class="n">folder</span><span class="p">,</span> <span class="n">specs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
-
+    <span class="k">def</span><span class="w"> </span><span class="nf">export_image_bat</span><span class="p">(</span><span class="n">folder</span><span class="p">,</span> <span class="n">specs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
         <span class="c1"># Handle no specs</span>
         <span class="k">if</span> <span class="n">specs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="c1"># set default specs</span>
@@ -403,7 +463,7 @@
 <div class="viewcode-block" id="Drawing.convert_png_to_jpg">
 <a class="viewcode-back" href="../../generated/losalamos.docs.html#losalamos.docs.Drawing.convert_png_to_jpg">[docs]</a>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">convert_png_to_jpg</span><span class="p">(</span><span class="n">input_file</span><span class="p">,</span> <span class="n">output_file</span><span class="p">,</span> <span class="n">quality</span><span class="o">=</span><span class="mi">95</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">convert_png_to_jpg</span><span class="p">(</span><span class="n">input_file</span><span class="p">,</span> <span class="n">output_file</span><span class="p">,</span> <span class="n">quality</span><span class="o">=</span><span class="mi">95</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="k">with</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">input_file</span><span class="p">)</span> <span class="k">as</span> <span class="n">img</span><span class="p">:</span>
             <span class="c1"># Convert to RGB if the image has an alpha channel</span>
             <span class="k">if</span> <span class="n">img</span><span class="o">.</span><span class="n">mode</span> <span class="o">!=</span> <span class="s2">&quot;RGB&quot;</span><span class="p">:</span>
@@ -419,10 +479,10 @@
 
 <div class="viewcode-block" id="Figure">
 <a class="viewcode-back" href="../../generated/losalamos.docs.html#losalamos.docs.Figure">[docs]</a>
-<span class="k">class</span> <span class="nc">Figure</span><span class="p">(</span><span class="n">MbaE</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Figure</span><span class="p">(</span><span class="n">MbaE</span><span class="p">):</span>
 <div class="viewcode-block" id="Figure.__init__">
 <a class="viewcode-back" href="../../generated/losalamos.docs.html#losalamos.docs.Figure.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;MyFig&quot;</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s2">&quot;Fig&quot;</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;MyFig&quot;</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s2">&quot;Fig&quot;</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="n">alias</span><span class="p">)</span>
         <span class="c1"># setup attributes</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fig_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>  <span class="c1"># use name by default</span>
@@ -446,8 +506,10 @@
 
 <div class="viewcode-block" id="Figure._set_fields">
 <a class="viewcode-back" href="../../generated/losalamos.docs.html#losalamos.docs.Figure._set_fields">[docs]</a>
-    <span class="k">def</span> <span class="nf">_set_fields</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set fields names&quot;&quot;&quot;</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_set_fields</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set fields names</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">_set_fields</span><span class="p">()</span>
         <span class="c1"># Attribute fields</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fig_id_field</span> <span class="o">=</span> <span class="s2">&quot;Id&quot;</span>
@@ -468,8 +530,9 @@
 
 <div class="viewcode-block" id="Figure.get_metadata">
 <a class="viewcode-back" href="../../generated/losalamos.docs.html#losalamos.docs.Figure.get_metadata">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get a dictionary with object metadata.</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get a dictionary with object metadata.</span>
 
 <span class="sd">        .. note::</span>
 
@@ -499,7 +562,7 @@
 
 <div class="viewcode-block" id="Figure.to_latex">
 <a class="viewcode-back" href="../../generated/losalamos.docs.html#losalamos.docs.Figure.to_latex">[docs]</a>
-    <span class="k">def</span> <span class="nf">to_latex</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">to_latex</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">folder</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">filename</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -508,7 +571,8 @@
         <span class="n">fontfamily</span><span class="o">=</span><span class="s2">&quot;sffamily&quot;</span><span class="p">,</span>
         <span class="n">wfactor</span><span class="o">=</span><span class="mf">0.95</span><span class="p">,</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Generates a LaTeX figure environment containing an image and its corresponding caption,</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generates a LaTeX figure environment containing an image and its corresponding caption,</span>
 <span class="sd">        and saves it as a `.tex` file if folder and filename is provided.</span>
 
 <span class="sd">        :param folder: The directory where the LaTeX file will be saved.</span>
@@ -559,8 +623,9 @@
 
 <div class="viewcode-block" id="Figure.to_latex_report">
 <a class="viewcode-back" href="../../generated/losalamos.docs.html#losalamos.docs.Figure.to_latex_report">[docs]</a>
-    <span class="k">def</span> <span class="nf">to_latex_report</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">template_file</span><span class="p">,</span> <span class="n">folder</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Generates a LaTeX report based on a template file, replacing placeholders with</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">to_latex_report</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">template_file</span><span class="p">,</span> <span class="n">folder</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generates a LaTeX report based on a template file, replacing placeholders with</span>
 <span class="sd">        instance attributes and optionally saving the output to a `.tex` file.</span>
 
 <span class="sd">        :param template_file: Path to the LaTeX template file containing placeholders.</span>
@@ -648,8 +713,9 @@
 <div class="viewcode-block" id="Figure.reset_image">
 <a class="viewcode-back" href="../../generated/losalamos.docs.html#losalamos.docs.Figure.reset_image">[docs]</a>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">reset_image</span><span class="p">(</span><span class="n">input_path</span><span class="p">,</span> <span class="n">output_path</span><span class="p">,</span> <span class="n">scale_factor</span><span class="p">,</span> <span class="n">dpi</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Scale an image by a given factor while preserving its aspect ratio and setting the DPI.</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">reset_image</span><span class="p">(</span><span class="n">input_path</span><span class="p">,</span> <span class="n">output_path</span><span class="p">,</span> <span class="n">scale_factor</span><span class="p">,</span> <span class="n">dpi</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Scale an image by a given factor while preserving its aspect ratio and setting the DPI.</span>
 
 <span class="sd">        :param input_path: Path to the input JPG image.</span>
 <span class="sd">        :type input_path: str</span>
@@ -678,17 +744,17 @@
 
 <div class="viewcode-block" id="FigureColl">
 <a class="viewcode-back" href="../../generated/losalamos.docs.html#losalamos.docs.FigureColl">[docs]</a>
-<span class="k">class</span> <span class="nc">FigureColl</span><span class="p">(</span><span class="n">Collection</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">FigureColl</span><span class="p">(</span><span class="n">Collection</span><span class="p">):</span>
 
 <div class="viewcode-block" id="FigureColl.__init__">
 <a class="viewcode-back" href="../../generated/losalamos.docs.html#losalamos.docs.FigureColl.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">base_object</span><span class="o">=</span><span class="n">Figure</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;MyFigColl&quot;</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s2">&quot;FigCol0&quot;</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="FigureColl.load_catalog">
 <a class="viewcode-back" href="../../generated/losalamos.docs.html#losalamos.docs.FigureColl.load_catalog">[docs]</a>
-    <span class="k">def</span> <span class="nf">load_catalog</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df_file</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">load_catalog</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df_file</span><span class="p">):</span>
         <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">df_file</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s2">&quot;;&quot;</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">)):</span>
             <span class="n">_NewFig</span> <span class="o">=</span> <span class="n">Figure</span><span class="p">()</span>
@@ -714,11 +780,11 @@
 
 <div class="viewcode-block" id="TeX">
 <a class="viewcode-back" href="../../generated/losalamos.docs.html#losalamos.docs.TeX">[docs]</a>
-<span class="k">class</span> <span class="nc">TeX</span><span class="p">(</span><span class="n">MbaE</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">TeX</span><span class="p">(</span><span class="n">MbaE</span><span class="p">):</span>
 
 <div class="viewcode-block" id="TeX.__init__">
 <a class="viewcode-back" href="../../generated/losalamos.docs.html#losalamos.docs.TeX.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;MyTeX&quot;</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s2">&quot;TeX&quot;</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;MyTeX&quot;</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s2">&quot;TeX&quot;</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="n">alias</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">red_blind</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;\textcolor</span><span class="si">{red}</span><span class="s2">{Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ac bibendum orci. Cras erat elit, consequat vel erat ac, tincidunt pulvinar lacus. Pellentesque vitae consectetur quam. Interdum et malesuada fames ac ante ipsum primis in faucibus}&quot;</span></div>
 
@@ -727,7 +793,7 @@
 <div class="viewcode-block" id="TeX.gls_format">
 <a class="viewcode-back" href="../../generated/losalamos.docs.html#losalamos.docs.TeX.gls_format">[docs]</a>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">gls_format</span><span class="p">(</span><span class="n">gls_name</span><span class="p">,</span> <span class="n">gls_alias</span><span class="p">,</span> <span class="n">gls_descr</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">gls_format</span><span class="p">(</span><span class="n">gls_name</span><span class="p">,</span> <span class="n">gls_alias</span><span class="p">,</span> <span class="n">gls_descr</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Format a glossary entry</span>
 
 <span class="sd">        :param gls_name: entry name</span>
@@ -753,7 +819,7 @@
 <div class="viewcode-block" id="TeX.gls_newentry">
 <a class="viewcode-back" href="../../generated/losalamos.docs.html#losalamos.docs.TeX.gls_newentry">[docs]</a>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">gls_newentry</span><span class="p">(</span><span class="n">gls_file</span><span class="p">,</span> <span class="n">gls_name</span><span class="p">,</span> <span class="n">gls_alias</span><span class="p">,</span> <span class="n">gls_descr</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">gls_newentry</span><span class="p">(</span><span class="n">gls_file</span><span class="p">,</span> <span class="n">gls_name</span><span class="p">,</span> <span class="n">gls_alias</span><span class="p">,</span> <span class="n">gls_descr</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Insert new glossary entry into a glossary file</span>
 
 <span class="sd">        :param gls_file: path to glossary file</span>
@@ -780,7 +846,7 @@
 <div class="viewcode-block" id="TeX.gls_to_df">
 <a class="viewcode-back" href="../../generated/losalamos.docs.html#losalamos.docs.TeX.gls_to_df">[docs]</a>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">gls_to_df</span><span class="p">(</span><span class="n">gls_dct</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">gls_to_df</span><span class="p">(</span><span class="n">gls_dct</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;convert a glossary dict in a dataframe</span>
 
 <span class="sd">        :param gls_dct: glossary dict</span>
@@ -804,7 +870,7 @@
 <div class="viewcode-block" id="TeX.gls_parse">
 <a class="viewcode-back" href="../../generated/losalamos.docs.html#losalamos.docs.TeX.gls_parse">[docs]</a>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">gls_parse</span><span class="p">(</span><span class="n">gls_file</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">gls_parse</span><span class="p">(</span><span class="n">gls_file</span><span class="p">):</span>
         <span class="c1"># Read the file content</span>
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">gls_file</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
             <span class="n">file_content</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
@@ -827,7 +893,7 @@
 <div class="viewcode-block" id="TeX.gls_to_file">
 <a class="viewcode-back" href="../../generated/losalamos.docs.html#losalamos.docs.TeX.gls_to_file">[docs]</a>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">gls_to_file</span><span class="p">(</span><span class="n">gls_dct</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">output_dir</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">gls_to_file</span><span class="p">(</span><span class="n">gls_dct</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">output_dir</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Export glossary to new tex file</span>
 
 <span class="sd">        :param gls_dct: glossary dict</span>
@@ -843,7 +909,7 @@
         <span class="n">gls_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_dir</span><span class="p">,</span> <span class="n">filename</span> <span class="o">+</span> <span class="s2">&quot;.tex&quot;</span><span class="p">)</span>
 
         <span class="c1"># create a new glossary file</span>
-        <span class="n">header_ls</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;\makeglossaries&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">]</span>
+        <span class="n">header_ls</span> <span class="o">=</span> <span class="p">[</span><span class="sa">r</span><span class="s2">&quot;\makeglossaries&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">]</span>
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">gls_file</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
             <span class="n">file</span><span class="o">.</span><span class="n">writelines</span><span class="p">(</span><span class="n">header_ls</span><span class="p">)</span>
 
@@ -861,7 +927,7 @@
 <div class="viewcode-block" id="TeX.gls_consolidate">
 <a class="viewcode-back" href="../../generated/losalamos.docs.html#losalamos.docs.TeX.gls_consolidate">[docs]</a>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">gls_consolidate</span><span class="p">(</span><span class="n">src_file</span><span class="p">,</span> <span class="n">gls_file</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">gls_consolidate</span><span class="p">(</span><span class="n">src_file</span><span class="p">,</span> <span class="n">gls_file</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Process a source tex file to consolidate the glossaries file (append new entries).</span>
 <span class="sd">        Expected pattern in source file: [todo:gls &gt;&gt; \textbf{gls_name} &gt;&gt; gls_alias]</span>
 
@@ -917,7 +983,7 @@
 <div class="viewcode-block" id="TeX.gls_expand">
 <a class="viewcode-back" href="../../generated/losalamos.docs.html#losalamos.docs.TeX.gls_expand">[docs]</a>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">gls_expand</span><span class="p">(</span><span class="n">src_file</span><span class="p">,</span> <span class="n">gls_file</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">gls_expand</span><span class="p">(</span><span class="n">src_file</span><span class="p">,</span> <span class="n">gls_file</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="c1"># parse file</span>
         <span class="n">gls_dct</span> <span class="o">=</span> <span class="n">TeX</span><span class="o">.</span><span class="n">gls_parse</span><span class="p">(</span><span class="n">gls_file</span><span class="o">=</span><span class="n">gls_file</span><span class="p">)</span>
         <span class="c1"># get df</span>
@@ -929,7 +995,7 @@
             <span class="n">drop</span><span class="o">=</span><span class="kc">True</span>
         <span class="p">)</span>
         <span class="c1"># inset helper column</span>
-        <span class="n">gls_df</span><span class="p">[</span><span class="s2">&quot;NewExp&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;\gls{&quot;</span> <span class="o">+</span> <span class="n">s</span> <span class="o">+</span> <span class="s2">&quot;}&quot;</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">gls_df</span><span class="p">[</span><span class="s2">&quot;Alias&quot;</span><span class="p">]]</span>
+        <span class="n">gls_df</span><span class="p">[</span><span class="s2">&quot;NewExp&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="sa">r</span><span class="s2">&quot;\gls{&quot;</span> <span class="o">+</span> <span class="n">s</span> <span class="o">+</span> <span class="s2">&quot;}&quot;</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">gls_df</span><span class="p">[</span><span class="s2">&quot;Alias&quot;</span><span class="p">]]</span>
 
         <span class="c1"># handle new files</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">inplace</span><span class="p">:</span>
@@ -962,7 +1028,7 @@
 <div class="viewcode-block" id="TeX.replace_infile">
 <a class="viewcode-back" href="../../generated/losalamos.docs.html#losalamos.docs.TeX.replace_infile">[docs]</a>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">replace_infile</span><span class="p">(</span><span class="n">src_file</span><span class="p">,</span> <span class="n">old_expression</span><span class="p">,</span> <span class="n">new_expression</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">replace_infile</span><span class="p">(</span><span class="n">src_file</span><span class="p">,</span> <span class="n">old_expression</span><span class="p">,</span> <span class="n">new_expression</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Replace expression directly in file</span>
 <span class="sd">        todo evaluate move this upstream</span>
 
@@ -1001,7 +1067,7 @@
 <div class="viewcode-block" id="TeX.get_authors">
 <a class="viewcode-back" href="../../generated/losalamos.docs.html#losalamos.docs.TeX.get_authors">[docs]</a>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">get_authors</span><span class="p">(</span><span class="n">src_table</span><span class="p">,</span> <span class="n">dst_folder</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_authors</span><span class="p">(</span><span class="n">src_table</span><span class="p">,</span> <span class="n">dst_folder</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">src_table</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s2">&quot;;&quot;</span><span class="p">)</span>
         <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s2">&quot;Order&quot;</span><span class="p">)</span>
 
@@ -1012,7 +1078,7 @@
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">lst_institutes</span><span class="p">)):</span>
             <span class="n">_code</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="nb">chr</span><span class="p">(</span><span class="mi">96</span> <span class="o">+</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
             <span class="n">d_inst</span><span class="p">[</span><span class="n">lst_institutes</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">=</span> <span class="n">_code</span>
-            <span class="n">s</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;$^\text{&quot;</span> <span class="o">+</span> <span class="n">_code</span> <span class="o">+</span> <span class="s2">&quot;}$\;&quot;</span> <span class="o">+</span> <span class="n">lst_institutes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;$^\text{&quot;</span> <span class="o">+</span> <span class="n">_code</span> <span class="o">+</span> <span class="sa">r</span><span class="s2">&quot;}$\;&quot;</span> <span class="o">+</span> <span class="n">lst_institutes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
             <span class="n">lst_affs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
         <span class="n">authors_affs</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot; \newline &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lst_affs</span><span class="p">)</span>
 
@@ -1023,9 +1089,9 @@
             <span class="n">_af</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;Affiliation&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
             <span class="n">_oi</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;OrcID&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
             <span class="n">_ex</span> <span class="o">=</span> <span class="n">d_inst</span><span class="p">[</span><span class="n">_af</span><span class="p">]</span>
-            <span class="n">s</span> <span class="o">=</span> <span class="s2">&quot;\href{&quot;</span> <span class="o">+</span> <span class="n">_oi</span> <span class="o">+</span> <span class="s2">&quot;}{&quot;</span> <span class="o">+</span> <span class="n">_nm</span> <span class="o">+</span> <span class="sa">r</span><span class="s2">&quot;}\,$^\text{&quot;</span> <span class="o">+</span> <span class="n">_ex</span> <span class="o">+</span> <span class="s2">&quot;}$&quot;</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;\href{&quot;</span> <span class="o">+</span> <span class="n">_oi</span> <span class="o">+</span> <span class="s2">&quot;}{&quot;</span> <span class="o">+</span> <span class="n">_nm</span> <span class="o">+</span> <span class="sa">r</span><span class="s2">&quot;}\,$^\text{&quot;</span> <span class="o">+</span> <span class="n">_ex</span> <span class="o">+</span> <span class="s2">&quot;}$&quot;</span>
             <span class="n">lst_authors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
-        <span class="n">authors_list</span> <span class="o">=</span> <span class="s2">&quot;,\;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lst_authors</span><span class="p">)</span>
+        <span class="n">authors_list</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;,\;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lst_authors</span><span class="p">)</span>
 
         <span class="c1"># Handle corresponding</span>
         <span class="n">df_corr</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">&quot;Corresponding == &#39;yes&#39;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
@@ -1069,7 +1135,7 @@
 <div class="viewcode-block" id="TeX.get_team">
 <a class="viewcode-back" href="../../generated/losalamos.docs.html#losalamos.docs.TeX.get_team">[docs]</a>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">get_team</span><span class="p">(</span><span class="n">src_table</span><span class="p">,</span> <span class="n">dst_folder</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_team</span><span class="p">(</span><span class="n">src_table</span><span class="p">,</span> <span class="n">dst_folder</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">src_table</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s2">&quot;;&quot;</span><span class="p">)</span>
         <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s2">&quot;Order&quot;</span><span class="p">)</span>
 
@@ -1118,18 +1184,18 @@
 
 <div class="viewcode-block" id="Table">
 <a class="viewcode-back" href="../../generated/losalamos.docs.html#losalamos.docs.Table">[docs]</a>
-<span class="k">class</span> <span class="nc">Table</span><span class="p">(</span><span class="n">DataSet</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Table</span><span class="p">(</span><span class="n">DataSet</span><span class="p">):</span>
 
 <div class="viewcode-block" id="Table.__init__">
 <a class="viewcode-back" href="../../generated/losalamos.docs.html#losalamos.docs.Table.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">alias</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">alias</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="n">alias</span><span class="p">)</span></div>
 
         <span class="c1"># ... continues in downstream objects ... #</span>
 
 <div class="viewcode-block" id="Table.load_data">
 <a class="viewcode-back" href="../../generated/losalamos.docs.html#losalamos.docs.Table.load_data">[docs]</a>
-    <span class="k">def</span> <span class="nf">load_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_data</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">load_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_data</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Load data from file. Expected to overwrite superior methods.</span>
 
 <span class="sd">        :param file_data: file_doc path to data.</span>
@@ -1156,7 +1222,7 @@
 <div class="viewcode-block" id="Table.to_latex">
 <a class="viewcode-back" href="../../generated/losalamos.docs.html#losalamos.docs.Table.to_latex">[docs]</a>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">to_latex</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">to_latex</span><span class="p">(</span>
         <span class="n">df</span><span class="p">,</span> <span class="n">caption</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">caption_lot</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">folder</span><span class="o">=</span><span class="kc">None</span>
     <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert a DataFrame to a LaTeX table and save it as a .tex file in the specified folder.</span>
@@ -1217,7 +1283,7 @@
 
             <span class="n">str_row</span> <span class="o">=</span> <span class="s2">&quot; &amp; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">row</span><span class="p">))</span> <span class="o">+</span> <span class="sa">r</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">&quot;</span>
             <span class="c1"># handle underscores</span>
-            <span class="n">str_row</span> <span class="o">=</span> <span class="n">str_row</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">,</span> <span class="s2">&quot;\_&quot;</span><span class="p">)</span>
+            <span class="n">str_row</span> <span class="o">=</span> <span class="n">str_row</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;\_&quot;</span><span class="p">)</span>
 
             <span class="n">list_bulk</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">str_row</span><span class="p">[:])</span>
         <span class="n">list_bulk</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\bottomrule&quot;</span><span class="p">)</span>
@@ -1238,8 +1304,8 @@
 <div class="viewcode-block" id="Table.to_rst">
 <a class="viewcode-back" href="../../generated/losalamos.docs.html#losalamos.docs.Table.to_rst">[docs]</a>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">to_rst</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">folder</span><span class="p">):</span>
-        <span class="k">def</span> <span class="nf">format_row</span><span class="p">(</span><span class="n">row</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">to_rst</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">folder</span><span class="p">):</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">format_row</span><span class="p">(</span><span class="n">row</span><span class="p">):</span>
             <span class="k">return</span> <span class="p">(</span>
                 <span class="s2">&quot;| &quot;</span>
                 <span class="o">+</span> <span class="s2">&quot; | &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">x</span><span class="si">:</span><span class="s2">&lt;</span><span class="si">{</span><span class="n">max_widths</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">row</span><span class="p">))</span>
@@ -1279,43 +1345,31 @@
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Hello world&quot;</span><span class="p">)</span>
 </pre></div>
 
-            <div class="clearer"></div>
+           </div>
           </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, ipo.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="Main">
-        <div class="sphinxsidebarwrapper">
-<search id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
-      <input type="submit" value="Go" />
-    </form>
-    </div>
-</search>
-<script>document.getElementById('searchbox').style.display = "block"</script>
-        </div>
-      </div>
-      <div class="clearer"></div>
-    </div>
-    <div class="related" role="navigation" aria-label="Related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="../../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">losalamos v.0.0 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">losalamos.docs</a></li> 
-      </ul>
-    </div>
-    <div class="footer" role="contentinfo">
-    &#169; Copyright 2024, ipo.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
-    </div>
-  </body>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
 </html>

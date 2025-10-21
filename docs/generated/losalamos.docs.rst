@@ -9,6 +9,7 @@
    .. autosummary::
    
       blind_text
+      merge_pdfs
    
    .. rubric:: Classes
 
