@@ -1,4 +1,4 @@
-![Top Language](https://img.shields.io/github/languages/top/iporepos/copyme)
+![Top Language](https://img.shields.io/github/languages/top/iporepos/losalamos)
 ![Status](https://img.shields.io/badge/status-development-yellow.svg)
 [![Code Style](https://img.shields.io/badge/style-black-000000.svg)](https://github.com/psf/black)
 [![Documentation](https://img.shields.io/badge/docs-online-blue)](https://iporepos.github.io/losalamos/)
