@@ -55,7 +55,7 @@ Print a message
 # Project-level imports
 # =======================================================================
 # import {module}
-from copyme.module import HELLO  # import from internal modules
+from losalamos.module import HELLO  # import from internal modules
 
 # ... {develop}
 

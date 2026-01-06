@@ -54,7 +54,7 @@ import unittest
 
 # Project-level imports
 # =======================================================================
-from copyme.module import add, multiply
+from losalamos.module import add, multiply
 from tests import conftest
 from tests.conftest import testprint
 

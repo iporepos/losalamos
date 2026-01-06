@@ -23,7 +23,7 @@ Alternatively, clone via terminal:
 
 ```bash
 # [CHECK THIS] adapt this for branches or other repos
-git clone https://github.com/iporepos/copyme.git
+git clone https://github.com/iporepos/losalamos.git
 ``` 
 
 ## Installing

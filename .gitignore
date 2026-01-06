@@ -146,7 +146,6 @@ instance/
 
 # Sphinx documentation
 docs/_build/
-docs/_static/
 docs/generated
 
 # PyBuilder

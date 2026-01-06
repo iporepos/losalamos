@@ -1,13 +1,11 @@
-.. rename title [CHANGE THIS]:
-
 .. _home:
 
-Copyme
+.. include:: ./includes/warning_development.rst
+
+Los Alamos
 ############################################
 
-.. adapt this welcoming message [CHANGE THIS]:
-
-Welcome to ``copyme`` documentation! A simple template for python development.
+Welcome to ``losalamos`` documentation! A suite of python tools for productivity and research.
 
 Contents
 ********************************************
@@ -22,4 +20,3 @@ Contents
    usage
    api
    development
-   dummy
