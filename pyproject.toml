@@ -48,7 +48,7 @@ name = "losalamos"
 # Version number
 version = "0.0.1"    
 # Short description
-description = "Python toolkit for productivity and research." 
+description = "A comprehensive Python toolkit for productivity and research."
 # Keywords (optional) for search on PyPI
 keywords = [
   "python", 
