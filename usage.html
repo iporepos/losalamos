@@ -168,23 +168,6 @@
   </a>
 </li>
 
-            <li class="nav-item dropdown">
-                <button class="btn dropdown-toggle nav-item" type="button"
-                data-bs-toggle="dropdown" aria-expanded="false"
-                aria-controls="pst-nav-more-links">
-                    More
-                </button>
-                <ul id="pst-nav-more-links" class="dropdown-menu">
-                    
-<li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="dummy.html">
-    Dummy file
-  </a>
-</li>
-
-                </ul>
-            </li>
-            
   </ul>
 </nav></div>
       
@@ -308,13 +291,6 @@
   </a>
 </li>
 
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="dummy.html">
-    Dummy file
-  </a>
-</li>
-
   </ul>
 </nav></div>
           
@@ -414,11 +390,15 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="usage">
-<span id="id1"></span><h1>Usage<a class="headerlink" href="#usage" title="Link to this heading">#</a></h1>
+  <div class="admonition warning" id="usage">
+<p class="admonition-title">Warning</p>
+<p>Documentation website under active development. This is not a stable release.</p>
+</div>
+<section id="id1">
+<h1>Usage<a class="headerlink" href="#id1" title="Link to this heading">#</a></h1>
 <section id="overview">
 <span id="quickview"></span><h2>Overview<a class="headerlink" href="#overview" title="Link to this heading">#</a></h2>
-<p>For casual users, the installation instructions allow quick setup and testing of basic functionality. Additional resources, including example Jupyter notebooks and live interactive versions, are available to explore features and usage patterns in detail.</p>
+<p>For casual users, the installation instructions allow quick setup and testing of basic functionality.</p>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
 <p>For those who want to contribute, see <a class="reference internal" href="development.html#development"><span class="std std-ref">Development</span></a></p>
@@ -426,21 +406,20 @@
 </section>
 <section id="installation">
 <span id="id2"></span><h2>Installation<a class="headerlink" href="#installation" title="Link to this heading">#</a></h2>
-<p>For causal users, install <code class="docutils literal notranslate"><span class="pre">copyme</span></code> to a Python 3 environment via terminal:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">python -m pip install git+https://github.com/iporepos/copyme.git@main</span>
+<p>For causal users, install <code class="docutils literal notranslate"><span class="pre">losalamos</span></code> to a Python 3 environment via terminal:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">python -m pip install git+https://github.com/iporepos/losalamos.git@main</span>
 </pre></div>
 </div>
 </section>
 <section id="guides">
 <span id="id3"></span><h2>Guides<a class="headerlink" href="#guides" title="Link to this heading">#</a></h2>
 <p>For those seeking practical guidance on using the tools available in the repo, relevant resources are provided.</p>
-<p>Example Jupyter notebooks are available in the repository’s examples folder, along with live, interactive versions on platforms such as Google Colab. These resources illustrate the project’s features, demonstrate typical usage patterns, and allow experimentation with the functionality directly.</p>
 <section id="examples">
 <h3>Examples<a class="headerlink" href="#examples" title="Link to this heading">#</a></h3>
 <p>Develop examples here</p>
 <section id="a-basic-script">
 <h4>A basic script<a class="headerlink" href="#a-basic-script" title="Link to this heading">#</a></h4>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">copyme</span><span class="w"> </span><span class="kn">import</span> <span class="n">module</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">losalamos</span><span class="w"> </span><span class="kn">import</span> <span class="n">module</span>
 </pre></div>
 </div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">v</span> <span class="o">=</span> <span class="n">module</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">num1</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">num2</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>

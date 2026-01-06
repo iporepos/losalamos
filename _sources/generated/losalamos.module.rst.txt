@@ -1,7 +1,7 @@
-﻿copyme.module
-=============
+﻿losalamos.module
+================
 
-.. automodule:: copyme.module
+.. automodule:: losalamos.module
 
    
    .. rubric:: Functions

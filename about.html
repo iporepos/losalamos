@@ -51,7 +51,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Usage" href="usage.html" />
-    <link rel="prev" title="Copyme" href="index.html" />
+    <link rel="prev" title="Los Alamos" href="index.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
@@ -168,23 +168,6 @@
   </a>
 </li>
 
-            <li class="nav-item dropdown">
-                <button class="btn dropdown-toggle nav-item" type="button"
-                data-bs-toggle="dropdown" aria-expanded="false"
-                aria-controls="pst-nav-more-links">
-                    More
-                </button>
-                <ul id="pst-nav-more-links" class="dropdown-menu">
-                    
-<li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="dummy.html">
-    Dummy file
-  </a>
-</li>
-
-                </ul>
-            </li>
-            
   </ul>
 </nav></div>
       
@@ -308,13 +291,6 @@
   </a>
 </li>
 
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="dummy.html">
-    Dummy file
-  </a>
-</li>
-
   </ul>
 </nav></div>
           
@@ -414,103 +390,13 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="about">
-<span id="id1"></span><h1>About<a class="headerlink" href="#about" title="Link to this heading">#</a></h1>
-<p>This repository, <code class="docutils literal notranslate"><span class="pre">copyme</span></code>, is designed as a <strong>template for Python projects</strong> following best practices in modern software development.
-It emphasizes:</p>
-<ul class="simple">
-<li><p><strong>Style-consistent formatting</strong> – code style is automatically enforced using tools like <a class="reference external" href="https://black.readthedocs.io/">Black</a>, ensuring consistency across the project.</p></li>
-<li><p><strong>Documentation-oriented practices</strong> – project is documented with <a class="reference external" href="https://www.sphinx-doc.org">Sphinx</a>, including docstrings for API auto-generation.</p></li>
-<li><p><strong>Test-driven development</strong> – all features should be covered by unit and benchmark tests. Avoid bulk data in tests; only include small, useful datasets. Large datasets should be downloaded during development.</p></li>
-<li><p><strong>Continuous Integration (CI)</strong> – Tests, Docs and Style checked online for passing or failing before commiting to main.</p></li>
-</ul>
-<p>This template provides a structured starting point including configuration files, example Python modules, and documentation templates to help you quickly set up a project integrated with GitHub.</p>
-<p><strong>Recommended workflow when using this template:</strong></p>
-<ol class="arabic simple">
-<li><p>Set up your project structure based on the template.</p></li>
-<li><p>Copy or adapt configuration files (<code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code>, testing configs, CI/CD workflows).</p></li>
-<li><p>Copy template files for Python modules, data, and documentation (<code class="docutils literal notranslate"><span class="pre">__init__.py</span></code>, Sphinx docs, etc.).</p></li>
-<li><p>Optionally, download the full development source and rename root folders and source packages to fit your project.</p></li>
-</ol>
-<p>Following this approach ensures your project maintains a standardized structure and behavior.</p>
-<section id="templates">
-<span id="id2"></span><h2>Templates<a class="headerlink" href="#templates" title="Link to this heading">#</a></h2>
-<p>When copying files from this repository, remember that they are <strong>_templates_</strong>:</p>
-<ol class="arabic simple">
-<li><p>Look for <code class="docutils literal notranslate"><span class="pre">[CHANGE</span> <span class="pre">THIS]</span></code> for mandatory modifications.</p></li>
-<li><p>Look for <code class="docutils literal notranslate"><span class="pre">[CHECK</span> <span class="pre">THIS]</span></code> for optional modifications.</p></li>
-<li><p>Look for <code class="docutils literal notranslate"><span class="pre">[EXAMPLE]</span></code> for simple examples (comment or uncomment if needed).</p></li>
-<li><p>Look for <code class="docutils literal notranslate"><span class="pre">[ADD</span> <span class="pre">MORE</span> <span class="pre">IF</span> <span class="pre">NEEDED]</span></code> for possible extra features.</p></li>
-<li><p>Placeholders are designated by curly braces: <code class="docutils literal notranslate"><span class="pre">{replace-this}</span></code>.</p></li>
-</ol>
-</section>
-<section id="configuration-files">
-<span id="config-files"></span><h2>Configuration files<a class="headerlink" href="#configuration-files" title="Link to this heading">#</a></h2>
-<p>This repository relies on several <strong>configuration files</strong> that are essential for the proper functioning of the template. Each file has a specific role, and some of them work together, so they should be edited thoughtfully. Below is an overview of the main configuration files:</p>
-<div class="pst-scrollable-table-container"><table class="table">
-<thead>
-<tr class="row-odd"><th class="head"><p><strong>File</strong></p></th>
-<th class="head"><p><strong>Purpose</strong></p></th>
-<th class="head"><p><strong>Key Notes</strong></p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code></p></td>
-<td><p>Project configuration</p></td>
-<td><p>Manages dependencies, build system, and project settings. Update when adding dependencies or changing project structure.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">.gitignore</span></code></p></td>
-<td><p>Git ignore rules</p></td>
-<td><p>Specifies files/folders Git should ignore (e.g., temp files, datasets, build outputs). Keeps repo clean.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">.github/workflows/style.yml</span></code></p></td>
-<td><p>Style CI configuration</p></td>
-<td><p>Runs code style checks using <a class="reference external" href="https://black.readthedocs.io/">Black</a>. Depends on <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code> dev dependencies.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">docs/conf.py</span></code></p></td>
-<td><p>Docs configuration</p></td>
-<td><p>Configures <a class="reference external" href="https://www.sphinx-doc.org">Sphinx</a> for building documentation. Update if project structure changes.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">.github/workflows/docs.yml</span></code></p></td>
-<td><p>Docs CI configuration</p></td>
-<td><p>Automates online docs build. Relies on <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code> and <cite>docs/conf.py</cite>. Requires extra steps (see file).</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">tests/conftest.py</span></code></p></td>
-<td><p>Testing configuration</p></td>
-<td><p>Provides shared fixtures and settings for tests. Can be customized to fit project needs.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">.github/workflows/tests.yml</span></code></p></td>
-<td><p>Testing CI configuration</p></td>
-<td><p>Runs automated unit tests on CI. Ensures code correctness after changes.</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>All config files are commented with recommended actions and extra steps.</p>
-</div>
-<div class="admonition warning">
+  <div class="admonition warning" id="about">
 <p class="admonition-title">Warning</p>
-<p>Online documentation build may require additional setup — check <code class="docutils literal notranslate"><span class="pre">.github/workflows/docs.yml</span></code>.</p>
+<p>Documentation website under active development. This is not a stable release.</p>
 </div>
-<div class="admonition important">
-<p class="admonition-title">Important</p>
-<p>Continuous Integration (CI) ensures commits pass style, docs, and tests before merging. Always ensure these checks pass to avoid pushing broken code.</p>
-</div>
-</section>
-<section id="resources">
-<span id="id3"></span><h2>Resources<a class="headerlink" href="#resources" title="Link to this heading">#</a></h2>
-<p>Helpful references for configuring and extending your project:</p>
-<ul class="simple">
-<li><p><strong>pyproject.toml specification</strong> – <a class="reference external" href="https://peps.python.org/pep-0621/">https://peps.python.org/pep-0621/</a></p></li>
-<li><p><strong>Sphinx documentation</strong> – <a class="reference external" href="https://www.sphinx-doc.org/">https://www.sphinx-doc.org/</a></p></li>
-<li><p><strong>Python unit testing</strong> – <a class="reference external" href="https://docs.python.org/3/library/unittest.html">https://docs.python.org/3/library/unittest.html</a></p></li>
-<li><p><strong>Black code formatter</strong> – <a class="reference external" href="https://black.readthedocs.io/">https://black.readthedocs.io/</a></p></li>
-<li><p><strong>GitHub Actions</strong> – <a class="reference external" href="https://docs.github.com/en/actions">https://docs.github.com/en/actions</a></p></li>
-<li><p><strong>GitHub Workflows</strong> – <a class="reference external" href="https://docs.github.com/en/actions/using-workflows">https://docs.github.com/en/actions/using-workflows</a></p></li>
-</ul>
-</section>
+<section id="id1">
+<h1>About<a class="headerlink" href="#id1" title="Link to this heading">#</a></h1>
+<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla mollis tincidunt erat eget iaculis. Mauris gravida ex quam, in porttitor lacus lobortis vitae. In a lacinia nisl. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Morbi et tempor sem. Nullam quam dolor, venenatis eget magna ut, accumsan mollis erat.</p>
 </section>
 
 
@@ -529,7 +415,7 @@ It emphasizes:</p>
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Copyme</p>
+        <p class="prev-next-title">Los Alamos</p>
       </div>
     </a>
     <a class="right-next"
@@ -551,20 +437,6 @@ It emphasizes:</p>
                 <dialog id="pst-secondary-sidebar-modal"></dialog>
                 <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
-
-  <div class="sidebar-secondary-item">
-<div
-    id="pst-page-navigation-heading-2"
-    class="page-toc tocsection onthispage">
-    <i class="fa-solid fa-list"></i> On this page
-  </div>
-  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
-    <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#templates">Templates</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#configuration-files">Configuration files</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#resources">Resources</a></li>
-</ul>
-  </nav></div>
 
   <div class="sidebar-secondary-item">
   <div role="note" aria-label="source link">

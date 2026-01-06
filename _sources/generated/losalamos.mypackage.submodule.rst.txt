@@ -1,7 +1,7 @@
-﻿copyme.mypackage.submodule
-==========================
+﻿losalamos.mypackage.submodule
+=============================
 
-.. automodule:: copyme.mypackage.submodule
+.. automodule:: losalamos.mypackage.submodule
 
    
    .. rubric:: Functions
