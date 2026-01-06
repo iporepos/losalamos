@@ -47,9 +47,9 @@ sys.path.insert(0, os.path.abspath("../src"))  # <-- [CHECK THIS] src layout
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 project = "losalamos"
-copyright = "2026, Iporã Possantti" 
-author = "Iporã Possantti" 
-release = "0.0.1" 
+copyright = "2026, Iporã Possantti"
+author = "Iporã Possantti"
+release = "0.0.1"
 
 
 # GENERAL CONFIGS
@@ -147,7 +147,9 @@ html_static_path = ["_static"]
 html_context = {"default_mode": "light"}
 
 # [CHECK THIS] adding the logo to the header
-html_logo = "https://github.com/iporepos/losalamos/blob/main/docs/figs/logo.png?raw=true"
+html_logo = (
+    "https://github.com/iporepos/losalamos/blob/main/docs/figs/logo.png?raw=true"
+)
 
 html_theme_options = {
     "github_url": "https://github.com/iporepos/losalamos",  # <-- [CHANGE THIS] set the actual url for the repo
