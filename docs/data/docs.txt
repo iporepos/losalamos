@@ -1,0 +1,7 @@
+This is a dummy data file for docs.
+
+Why docs need data?
+
+Consider you need to add a large table in docs.
+You may then store the table in this folder in a csv format.
+Then some routine can convert that table to rst or md format.

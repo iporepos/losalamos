@@ -1,0 +1,28 @@
+# INCLUSION CONFIGURATION FILE
+# #######################################################################
+# This is a simple template for the modern inclusion configuration files
+# It sets what to include in the distribution version beyond the source code
+
+# INSTRUCTIONS
+# ***********************************************************************
+# To adjust this to your project, you may want to:
+# 1) look for '[CHANGE THIS]' for mandatory modifications
+# 2) look for '[CHECK THIS]' for possible modifications
+# 3) look for '[EXAMPLE]' for simple examples (comment or uncomment it if needed)
+# 3) look for '[ADD MORE IF NEDDED]' for possible extra features
+
+# ROOT FILES
+# =======================================================================
+# [CHECK THIS] Include README
+include README.md       
+# [CHECK THIS] Include LICENSE
+include LICENSE       
+
+# OTHER RESOURCES
+# =======================================================================
+# [CHECK THIS] Include docs folder
+recursive-include docs * 
+# [CHECK THIS] Include examples folder
+# recursive-include examples *  # Uncomment to include example scripts
+
+# ... [ADD MORE IF NEDDED]

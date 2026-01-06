@@ -1,0 +1,168 @@
+# PROJECT CONFIGURATION FILE
+# #######################################################################
+# This is a simple template for the modern configuration file for python projets.
+
+
+# TEMPLATE INSTRUCTIONS
+# ***********************************************************************
+# 1) look for '[CHANGE THIS]' for mandatory modifications
+# 2) look for '[CHECK THIS]' for possible modifications
+# 3) look for '[EXAMPLE]' for simple examples (comment or uncomment it if needed)
+# 4) look for '[ADD MORE IF NEDDED]' for possible extra features
+# 5) placeholders are designated by curly braces: {replace-this}
+
+
+# BUILT SYSTEM CONFIG
+# ***********************************************************************
+[build-system]
+
+# 'requires' lists the packages that are needed to build your project
+# These are only needed at build time, not when running your package
+# Default values are fine for most projects
+requires = [
+    "setuptools>=65.0",  # Standard Python packaging tool
+    "wheel"              # Required to build wheel distributions (.whl)
+    # ... [ADD MORE IF NEDDED]
+]
+
+# 'build-backend' tells pip or other tools which system to use to build your project
+# setuptools.build_meta is the default and works for almost all projects
+# Other options exist (e.g., flit.buildapi, poetry.core.masonry.api) if you use alternative build tools
+build-backend = "setuptools.build_meta"
+
+# Notes:
+# - This section is mandatory for PEP 518 compliance.
+# - It does not affect runtime dependencies or optional extras.
+# - Safe to leave as-is unless you are using a non-standard build system.
+
+
+# PROJECT METADATA
+# ***********************************************************************
+[project]
+
+
+# BASIC
+# =======================================================================
+# The name of your package/project
+name = "copyme"          # <-- [CHANGE THIS] set with your project name
+# Version number
+version = "0.1.1"        # <-- [CHANGE THIS] Set version
+# Short description
+description = "A simple template for python development."   # <-- [CHANGE THIS]
+# Keywords (optional) for search on PyPI
+keywords = [
+  "python", 
+  # ... [ADD MORE IF NEDDED]
+]
+
+
+# CREDITS AND DOCS
+# =======================================================================
+
+# README file
+# ------------------------------------------------------------------------
+readme = "README.md"  # <-- [CHECK THIS]
+
+# Contacts
+# ------------------------------------------------------------------------
+# Here we use 'url' instead of email to avoid publishing email addresses
+authors = [
+    { name = "Iporã Possantti"}, # <-- [CHANGE THIS]
+    # ... [ADD MORE IF NEDDED]
+    # tip: include email if needed: 
+    # { name = "NAME", email = "myemail@org"} 
+]
+# Maintainers (optional)
+# Can include multiple people responsible for maintaining the project
+maintainers = [
+    { name = "Iporã Possantti"}, # <-- [CHANGE THIS]
+    # ... [ADD MORE IF NEDDED]
+    # tip: include email if needed: 
+    # { name = "NAME", email = "myemail@org"} 
+]
+
+# License information
+# ------------------------------------------------------------------------
+# 'text' is the SPDX license identifier
+license = "GPL-3.0-or-later" # <-- [CHECK THIS]
+# Point to license files in the root of the project
+license-files = ["LICENSE"] # <-- [CHECK THIS] license file in your project root
+
+# SPECS
+# =======================================================================
+# Minimum required Python version
+requires-python = ">=3.10"  # <-- [CHECK THIS] Python 3.10 or higher
+
+# DEPENDENCIES
+# =======================================================================
+# For local installation, Run: 
+# >>> pip install -e ".[dev,docs]"
+
+# Runtime dependencies
+# ------------------------------------------------------------------------
+# These are the packages your project needs to run
+# Installed automatically when someone installs your package
+
+dependencies = [
+    "requests",  # [EXAMPLE] [RECOMMENDED] network operations
+    "numpy",     # [EXAMPLE] [RECOMMENDED] numerical computations
+    "pandas",    # [EXAMPLE] [RECOMMENDED] data manipulation
+    # [EXAMPLE] custom dependency directly from GitHub:
+    # "my-package @ git+https://github.com/username/my-package.git@main",
+    # ... [ADD MORE IF NEDDED]
+]
+
+
+
+# OPTIONAL DEPENDENCIES
+# ***********************************************************************
+
+# These are extra groups you can install manually, for example:
+# - dev: development tools (testing, linting, formatting)
+# - docs: documentation tools
+[project.optional-dependencies]
+
+# Development dependencies
+# =======================================================================
+# install with `pip install -e ".[dev]"`
+
+dev = [
+    "black",           # [EXAMPLE] [RECOMMENDED] Code style lib
+    "notebook",        # [EXAMPLE] [RECOMMENDED] Useful for testing and learning
+    # "pytest>=8.0",   # [EXAMPLE] testing framework
+    # ... [ADD MORE IF NEDDED]
+]
+
+# Documentation dependencies 
+# =======================================================================
+# install with `pip install -e ".[docs]"`
+docs = [
+    "sphinx",                       # [EXAMPLE] Documentation generator
+    "sphinx-autodoc-typehints",     # [EXAMPLE] Include Python type hints in docs
+    "sphinx-rtd-theme",             # [EXAMPLE] Sphinx theme
+    "pydata-sphinx-theme",          # [EXAMPLE] Sphinx theme
+    "sphinx_copybutton",            # [EXAMPLE] Sphinx feature for code blocks
+    "myst-parser",                  # [EXAMPLE] Sphinx feature for markdown files
+    "sphinx_design",                # [EXAMPLE] Sphinx miscellaneous features, like tabs, etc
+    # ... [ADD MORE IF NEDDED]
+]
+# Notes
+# =======================================================================
+# - Runtime dependencies are installed automatically on 'pip install -e .'
+# - Optional dependencies must be installed explicitly via extras
+# - Use version ranges to avoid conflicts (e.g., pandas requires a specific numpy version)
+# - Custom dependencies can be installed from GitHub using the @ git+ URL syntax
+
+
+
+# URLS
+# ***********************************************************************
+[project.urls]
+"Homepage" = "https://github.com/iporepos/copyme" # <-- [CHANGE THIS]
+
+
+
+# SETUPTOOLS
+# ***********************************************************************
+[tool.setuptools.packages.find]
+where = ["src"]  # <-- [CHECK THIS] Tell setuptools to look for packages in /src

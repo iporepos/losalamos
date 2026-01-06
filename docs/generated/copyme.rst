@@ -1,0 +1,6 @@
+﻿copyme
+======
+
+.. automodule:: copyme
+
+   

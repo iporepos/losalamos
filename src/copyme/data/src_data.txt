@@ -1,0 +1,7 @@
+This is a dummy data file for the source doce.
+
+Why source code need data?
+
+Consider you are developing a plotting library.
+You rather save plot style files here instead of
+hardcoding everything in the modules.
