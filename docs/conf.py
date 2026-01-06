@@ -46,10 +46,10 @@ sys.path.insert(0, os.path.abspath("../src"))  # <-- [CHECK THIS] src layout
 # ***********************************************************************
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-project = "copyme"  # <-- [CHANGE HERE]
-copyright = "2025, Iporã Possantti"  # <-- [CHANGE HERE]
-author = "Iporã Possantti"  # <-- [CHANGE HERE]
-release = "0.0.1"  # <-- [CHANGE HERE]
+project = "losalamos"
+copyright = "2026, Iporã Possantti" 
+author = "Iporã Possantti" 
+release = "0.0.1" 
 
 
 # GENERAL CONFIGS
@@ -82,8 +82,11 @@ source_suffix = {
 
 # Ignore external dependencies
 autodoc_mock_imports = [
+    "requests",
     "numpy",
     "pandas",
+    "lxml",
+    "PyPDF2",
     # ... keep adding as new dependencies arise
 ]
 
@@ -144,9 +147,9 @@ html_static_path = ["_static"]
 html_context = {"default_mode": "light"}
 
 # [CHECK THIS] adding the logo to the header
-html_logo = "https://github.com/iporepos/copyme/blob/main/docs/figs/logo.png?raw=true"
+html_logo = "https://github.com/iporepos/losalamos/blob/main/docs/figs/logo.png?raw=true"
 
 html_theme_options = {
-    "github_url": "https://github.com/iporepos/copyme",  # <-- [CHANGE THIS] set the actual url for the repo
+    "github_url": "https://github.com/iporepos/losalamos",  # <-- [CHANGE THIS] set the actual url for the repo
     "navbar_end": ["theme-switcher", "navbar-icon-links"],
 }
