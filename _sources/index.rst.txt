@@ -5,7 +5,7 @@
 Los Alamos
 ############################################
 
-Welcome to ``losalamos`` documentation! A suite of python tools for productivity and research.
+Welcome to ``losalamos`` documentation! A comprehensive Python toolkit for productivity and research.
 
 Contents
 ********************************************
