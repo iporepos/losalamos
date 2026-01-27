@@ -105,8 +105,8 @@ exclude_members = [
 autodoc_default_options = {
     "members": True,
     "undoc-members": False,
-    "private-members": True,  # <-- [CHECK THIS] toggle False for hide
-    "special-members": True,  # <-- [CHECK THIS] toggle False for hide
+    "private-members": False,  # <-- [CHECK THIS] toggle False for hide
+    "special-members": False,  # <-- [CHECK THIS] toggle False for hide
     "show-inheritance": True,  # <-- [CHECK THIS] toggle False for hide
     "exclude-members": ",".join(exclude_members),
 }
