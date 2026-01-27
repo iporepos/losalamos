@@ -31,17 +31,10 @@ guide for integrating and extending the functionality of the project.
 .. autosummary::
    :toctree: generated
 
-   losalamos.module
+   losalamos.root
 
 
 .. autosummary::
    :toctree: generated
 
-   losalamos.mypackage
-
-
-.. autosummary::
-   :toctree: generated
-
-   losalamos.mypackage.submodule
-
+   losalamos.project

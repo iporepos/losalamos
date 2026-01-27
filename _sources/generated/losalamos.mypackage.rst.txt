@@ -1,6 +1,0 @@
-﻿losalamos.mypackage
-===================
-
-.. automodule:: losalamos.mypackage
-
-   
