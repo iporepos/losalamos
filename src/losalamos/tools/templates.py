@@ -69,8 +69,8 @@ def main():
     print(f"  Source folder: {FOLDER_TEMPLATES_NOTES}")
     print(f"  Target folder: {dst_notes}")
 
-    ls = os.listdir(FOLDER_TEMPLATES_NOTES)
-    print(f"LIST from SRC: {ls}")
+    #ls = os.listdir(FOLDER_TEMPLATES_NOTES)
+    #print(f"LIST from SRC: {ls}")
 
     st_pattern = f"{FOLDER_TEMPLATES_NOTES}\_*.md"
     ls_notes = glob.glob(st_pattern)
