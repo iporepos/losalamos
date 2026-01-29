@@ -28,7 +28,8 @@ from pathlib import Path
 
 # Project-level imports
 # =======================================================================
-# import {module}
+from losalamos.paths import FOLDER_TEMPLATES_NOTES
+
 # ... {develop}
 
 
@@ -36,31 +37,9 @@ from pathlib import Path
 # ***********************************************************************
 # define constants in uppercase
 
-# CONSTANTS -- Project-level
-# =======================================================================
-# ... {develop}
-
-# Subsubsection example
-# -----------------------------------------------------------------------
-# ... {develop}
-
-# CONSTANTS -- Module-level
-# =======================================================================
-
-FOLDER_DATA = Path(__file__).parent.parent / "data"
-FOLDER_TEMPLATES = FOLDER_DATA / "templates"
-FOLDER_TEMPLATES_NOTES = FOLDER_TEMPLATES / "notes"
-
 
 # FUNCTIONS
 # ***********************************************************************
-
-# FUNCTIONS -- Project-level
-# =======================================================================
-# ... {develop}
-
-# FUNCTIONS -- Module-level
-# =======================================================================
 
 
 def get_arguments():
@@ -89,8 +68,7 @@ def main():
     print(f"  Source folder: {FOLDER_TEMPLATES_NOTES}")
     print(f"  Target folder: {dst_notes}")
 
-    st_pattern = f"{FOLDER_TEMPLATES_NOTES}/_*.md"
-
+    st_pattern = f"{FOLDER_TEMPLATES_NOTES}\_*.md"
     ls_notes = glob.glob(st_pattern)
 
     if not ls_notes:

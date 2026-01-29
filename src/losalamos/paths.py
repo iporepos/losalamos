@@ -15,8 +15,7 @@ todo docstring
 
 # Native imports
 # =======================================================================
-from pathlib import Path
-
+from importlib.resources import files
 
 # CONSTANTS
 # ***********************************************************************
@@ -28,10 +27,15 @@ from pathlib import Path
 
 # DATA
 # -----------------------------------------------------------------------
-FOLDER_DATA = Path(__file__).parent.parent / "data"
+FOLDER_DATA = files("losalamos") / "data"
 
 
 # TEMPLATES
 # -----------------------------------------------------------------------
 FOLDER_TEMPLATES = FOLDER_DATA / "templates"
 FOLDER_TEMPLATES_NOTES = FOLDER_TEMPLATES / "notes"
+
+
+if __name__ == "__main__":
+
+    print("Hello World!")
