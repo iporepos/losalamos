@@ -400,11 +400,13 @@
 <span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span>
+
 <span class="c1"># ... {develop}</span>
 
 <span class="c1"># External imports</span>
 <span class="c1"># =======================================================================</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+
 <span class="c1"># ... {develop}</span>
 
 <span class="c1"># Project-level imports</span>
@@ -487,7 +489,6 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">field_alias_note</span> <span class="o">=</span> <span class="s2">&quot;note_alias&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">field_file_note</span> <span class="o">=</span> <span class="s2">&quot;note_file&quot;</span>
 
-
         <span class="c1"># Metadata fields</span>
 
         <span class="c1"># ... continues in downstream objects ... #</span>
@@ -511,7 +512,6 @@
             <span class="n">dc_main</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">dc_main</span></div>
-
 
 
 <div class="viewcode-block" id="Note.load_metadata">
@@ -953,6 +953,7 @@
 </div>
 
 
+
 <div class="viewcode-block" id="NoteBasic">
 <a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.NoteBasic">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">NoteBasic</span><span class="p">(</span><span class="n">Note</span><span class="p">):</span>
@@ -1032,17 +1033,18 @@
                 <span class="k">if</span> <span class="s2">&quot;[!Abstract]&quot;</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
                     <span class="k">break</span>
             <span class="k">if</span> <span class="n">n</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;Head&#39;</span><span class="p">][</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&gt; </span><span class="si">{</span><span class="n">current_abstract</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span></div>
-
+                <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;Head&quot;</span><span class="p">][</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&gt; </span><span class="si">{</span><span class="n">current_abstract</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span></div>
 
 
 <div class="viewcode-block" id="NoteBasic.update_timestamp">
 <a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.NoteBasic.update_timestamp">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">update_timestamp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span>
+
         <span class="n">now</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;timestamp&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">now</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M:%S&quot;</span><span class="p">)</span></div>
 </div>
+
 
 
 <div class="viewcode-block" id="NoteProject">
@@ -1050,10 +1052,6 @@
 <span class="k">class</span><span class="w"> </span><span class="nc">NoteProject</span><span class="p">(</span><span class="n">NoteBasic</span><span class="p">):</span>
 
     <span class="n">TEMPLATE_FILE</span> <span class="o">=</span> <span class="n">FOLDER_TEMPLATES_NOTES</span> <span class="o">/</span> <span class="s2">&quot;_project.md&quot;</span></div>
-
-
-
-
 
 
 
