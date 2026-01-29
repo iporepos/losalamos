@@ -18,11 +18,13 @@ todo docstring
 import re
 from pathlib import Path
 from datetime import datetime
+
 # ... {develop}
 
 # External imports
 # =======================================================================
 import pandas as pd
+
 # ... {develop}
 
 # Project-level imports
@@ -103,7 +105,6 @@ class Note(MbaE):
         self.field_alias_note = "note_alias"
         self.field_file_note = "note_file"
 
-
         # Metadata fields
 
         # ... continues in downstream objects ... #
@@ -125,7 +126,6 @@ class Note(MbaE):
             dc_main.update(self.metadata)
 
         return dc_main
-
 
     def load_metadata(self):
         dc = Note.parse_metadata(self.file_note)
@@ -520,6 +520,7 @@ class Note(MbaE):
 
         return patts
 
+
 class NoteBasic(Note):
 
     TEMPLATE_FILE = FOLDER_TEMPLATES_NOTES / "_basic.md"
@@ -577,21 +578,18 @@ class NoteBasic(Note):
                 if "[!Abstract]" in line:
                     break
             if n > 0:
-                self.data['Head'][n] = f"> {current_abstract}\n"
-
+                self.data["Head"][n] = f"> {current_abstract}\n"
 
     def update_timestamp(self):
         from datetime import datetime
+
         now = datetime.now()
         self.metadata["timestamp"] = now.strftime("%Y-%m-%d %H:%M:%S")
+
 
 class NoteProject(NoteBasic):
 
     TEMPLATE_FILE = FOLDER_TEMPLATES_NOTES / "_project.md"
-
-
-
-
 
 
 # ... {develop}

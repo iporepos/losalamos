@@ -18,6 +18,7 @@ import argparse
 import glob
 import shutil
 from pathlib import Path
+
 # ... {develop}
 
 # External imports
@@ -61,12 +62,10 @@ FOLDER_TEMPLATES_NOTES = FOLDER_TEMPLATES / "notes"
 # FUNCTIONS -- Module-level
 # =======================================================================
 
+
 def get_arguments():
     parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "-n", "--notes",
-        help="folder for notes templates."
-    )
+    parser.add_argument("-n", "--notes", help="folder for notes templates.")
     # keep addig if more templates arise
     args = parser.parse_args()
 
@@ -75,18 +74,23 @@ def get_arguments():
 
 def main():
 
-    print("\n=== Templates Installer ===\n")
+    print("\nLos Alamos Templates Installer")
+    print(80 * "=")
+    print("\n")
 
     args = get_arguments()
 
     # NOTES
     # -------------------------------------------------------------------
     print("[Notes]")
+    print(80 * "-")
 
     dst_notes = Path(args.notes)
+    print(f"  Source folder: {FOLDER_TEMPLATES_NOTES}")
     print(f"  Target folder: {dst_notes}")
 
     st_pattern = f"{FOLDER_TEMPLATES_NOTES}/_*.md"
+
     ls_notes = glob.glob(st_pattern)
 
     if not ls_notes:
