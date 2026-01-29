@@ -46,7 +46,7 @@ build-backend = "setuptools.build_meta"
 # The name of your package/project
 name = "losalamos"       
 # Version number
-version = "0.0.1"    
+version = "1.0.0"
 # Short description
 description = "A comprehensive Python toolkit for productivity and research."
 # Keywords (optional) for search on PyPI
