@@ -38,3 +38,9 @@ guide for integrating and extending the functionality of the project.
    :toctree: generated
 
    losalamos.project
+
+
+.. autosummary::
+   :toctree: generated
+
+   losalamos.notes

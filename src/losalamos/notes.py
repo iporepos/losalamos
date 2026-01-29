@@ -7,33 +7,6 @@
 {Short module description (1-3 sentences)}
 todo docstring
 
-Features
---------
-todo docstring
-
-* {feature 1}
-* {feature 2}
-* {feature 3}
-* {etc}
-
-Overview
---------
-todo docstring
-{Overview description}
-
-Examples
---------
-todo docstring
-{Examples in rST}
-
-Print a message
-
-.. code-block:: python
-
-    # print message
-    print("Hello world!")
-    # [Output] >> 'Hello world!'
-
 
 """
 # IMPORTS
@@ -43,17 +16,19 @@ Print a message
 # Native imports
 # =======================================================================
 import re
-
+from pathlib import Path
+from datetime import datetime
 # ... {develop}
 
 # External imports
 # =======================================================================
-# import {module}
+import pandas as pd
 # ... {develop}
 
 # Project-level imports
 # =======================================================================
 from losalamos.root import MbaE
+from losalamos.paths import FOLDER_TEMPLATES_NOTES
 
 # ... {develop}
 
@@ -66,6 +41,23 @@ from losalamos.root import MbaE
 # =======================================================================
 # ... {develop}
 
+
+# list of fields that needs harmonization
+HARMONIZE_TEXT_FIELDS = [
+    "name",
+    "title",
+    "subject",
+    "abstract",
+    "contract",
+    "client",
+]
+HARMONIZE_DATE_FIELDS = [
+    "timestamp",
+    "date",
+    "datetime",
+    "date_start",
+    "date_end",
+]
 # Subsubsection example
 # -----------------------------------------------------------------------
 
@@ -107,26 +99,50 @@ class Note(MbaE):
     def _set_fields(self):
         super()._set_fields()
         # Attribute fields
-        self.field_file_note = "file_note"
+        self.field_name_note = "note_name"
+        self.field_alias_note = "note_alias"
+        self.field_file_note = "note_file"
+
 
         # Metadata fields
 
         # ... continues in downstream objects ... #
 
     def get_metadata(self):
-        # ------------ call super ----------- #
-        dict_meta = super().get_metadata()
-
-        # customize local metadata:
-        dict_meta_local = {
-            self.field_file_note: self.file_note,
+        """
+        This method returns all objects metadata, incluiding selected
+        attributes beyond the metadata of the file
+        """
+        # set object metadata
+        dc_main = {
+            self.field_name_note: self.name,
+            self.field_alias_note: self.alias,
+            self.field_file_note: str(self.file_note),
         }
-        # update
-        dict_meta.update(dict_meta_local)
-        return dict_meta
+
+        # include file metadata
+        if self.metadata is not None:
+            dc_main.update(self.metadata)
+
+        return dc_main
+
 
     def load_metadata(self):
-        self.metadata = Note.parse_metadata(self.file_note)
+        dc = Note.parse_metadata(self.file_note)
+
+        # DATE
+        # ---------------------
+        for k in dc:
+            if k in HARMONIZE_TEXT_FIELDS:
+                dc[k] = Note.harmonize_entry_text(dc[k])
+
+        # DATE
+        # ---------------------
+        for k in dc:
+            if k in HARMONIZE_DATE_FIELDS:
+                dc[k] = Note.harmonize_entry_date(dc[k], key=k)
+
+        self.metadata = dc.copy()
 
     def load_data(self):
         self.data = Note.parse_note(self.file_note)
@@ -138,25 +154,69 @@ class Note(MbaE):
     def save(self):
         self.to_file(file_path=self.file_note)
 
+    def export(self, folder, filename, export_metadata=False):
+        """
+        Export to a markdown file with optional metadata handling.
+
+        :param folder: The directory path where the file will be saved.
+        :type folder: str
+        :param filename: The name of the file without the extension.
+        :type filename: str
+        :param export_metadata: Toggle to trigger the parent class metadata export. Default value = ``False``
+        :type export_metadata: bool
+        :return: Path to the exported file
+        :rtype: Path
+
+        .. note::
+
+            This method constructs a file path using ``pathlib.Path`` and appends the
+            ``.md`` extension. It calls the internal ``to_file`` method with ``cleanup``
+            enabled to finalize the document. If ``export_metadata`` is set to ``True``,
+            it invokes the ``export`` method of the superclass before proceeding.
+
+        """
+        if export_metadata:
+            super().export(folder=folder, filename=filename)
+        fpath = Path(folder) / f"{filename}.md"
+        self.to_file(fpath, cleanup=True)
+        return fpath.absolute()
+
     def to_file(self, file_path, cleanup=True):
         """
-        Export Note to markdown
+        Write the note object's metadata and data content to a specified file.
 
-        :param file_path: path to file
+        :param file_path: The destination path where the note will be written.
         :type file_path: str
-        :return:
-        :rtype:
+        :param cleanup: Toggle to remove excessive blank lines after writing. Default value = ``True``
+        :type cleanup: bool
+        :return: None
+        :rtype: NoneType
+
+        .. note::
+
+            This method aggregates metadata and data by calling ``metadata_to_list`` and
+            ``data_to_list``. It sanitizes the output by replacing ``None`` string
+            occurrences with empty strings and ensures each entry ends with a newline
+            character. If ``cleanup`` is enabled, it post-processes the file using
+            ``remove_excessive_blank_lines`` to maintain consistent formatting.
+
         """
+        # metadata
+        # ------------------------------------
         ls_metadata = Note.metadata_to_list(self.metadata)
-        # clear "None" values
+
         for i in range(len(ls_metadata)):
+            # clear "None" values
             ls_metadata[i] = ls_metadata[i].replace("None", "")
 
+        # data
+        # ------------------------------------
         ls_data = Note.data_to_list(self.data)
         # append to metadata list
         for l in ls_data:
             ls_metadata.append(l[:])
         ls_all = [line + "\n" for line in ls_metadata]
+
         with open(file_path, "w", encoding="utf-8") as file:
             file.writelines(ls_all)
 
@@ -164,9 +224,59 @@ class Note(MbaE):
         if cleanup:
             Note.remove_excessive_blank_lines(file_path)
 
+        return None
+
+    @staticmethod
+    def harmonize_entry_text(entry):
+        if entry is not None:
+            new_entry_bulk = entry[:]
+            new_entry_bulk = new_entry_bulk.replace("'", "`")
+            new_entry_bulk = new_entry_bulk.replace('"', "``")
+
+            new_entry = '"' + new_entry_bulk + '"'
+            s_start = new_entry[:2].replace("`", "")
+            s_end = new_entry[-2:].replace("`", "")
+            s_bulk = new_entry[2:-2]
+
+            return s_start + s_bulk + s_end
+        else:
+            return None
+
+    @staticmethod
+    def harmonize_entry_date(entry, key="date"):
+        if entry is not None:
+
+            format_mask = "%Y-%m-%d"
+            if "datetime" in key:
+                format_mask = "%Y-%m-%d %H:%M:%S"
+            if "timestamp" in key:
+                format_mask = "%Y-%m-%d %H:%M:%S"
+
+            # Convert string back into a Python object
+            dt_object = pd.to_datetime([entry])
+
+            # return string
+            return str(dt_object.strftime(format_mask).values[0])
+        else:
+            return None
+
     @staticmethod
     def remove_excessive_blank_lines(file_path):
-        # todo docstring
+        """
+        Remove consecutive blank lines from a file to ensure only single blank lines remain.
+
+        :param file_path: The path to the target text file to be processed.
+        :type file_path: str
+        :return: None
+        :rtype: NoneType
+
+        .. note::
+
+            This method performs an in-place modification of the file. It iterates through
+            the content and suppresses any sequence of empty lines that exceeds a
+            single occurrence, effectively "squeezing" the vertical whitespace.
+
+        """
         with open(file_path, "r", encoding="utf-8") as file:
             lines = file.readlines()
 
@@ -259,7 +369,22 @@ class Note(MbaE):
 
     @staticmethod
     def metadata_to_list(metadata_dict):
-        # todo docstring
+        """
+        Convert a dictionary of metadata into a formatted list of strings.
+
+        :param metadata_dict: A dictionary containing metadata keys and values to be formatted.
+        :type metadata_dict: dict
+        :return: A list of strings formatted with YAML-like syntax, enclosed by dashed separators.
+        :rtype: list
+
+        .. note::
+
+            The method processes dictionary entries into a human-readable list format. It
+            handles list values by creating indented bullet points and converts ``None``
+            values into empty strings. The resulting list starts and ends with a ``---``
+            delimiter string.
+
+        """
         ls_metadata = []
         ls_metadata.append("---")
         for e in metadata_dict:
@@ -279,18 +404,51 @@ class Note(MbaE):
 
     @staticmethod
     def data_to_list(data_dict):
-        # todo docstring
+        """
+        Flatten a dictionary of lists into a single list separated by blank lines and delimiters.
+
+        :param data_dict: A dictionary where each key maps to a list of strings to be aggregated.
+        :type data_dict: dict
+        :return: A concatenated list of all values with added structural spacing and separators.
+        :rtype: list
+
+        .. note::
+
+            This function iterates through the top-level keys of ``data_dict`` and appends
+            the contents of each list to a master list. After each group of data, it
+            inserts an empty string, a ``---`` separator, and another empty string to
+            visually distinguish different levels or sections.
+
+        """
         ls_out = []
         for level in data_dict:
             ls_out = ls_out + data_dict[level][:]
-            ls_out.append("")
-            ls_out.append("---")
-            ls_out.append("")
+            if level != "Tail":
+                ls_out.append("")
+                ls_out.append("---")
         return ls_out
 
     @staticmethod
     def parse_note(file_path):
-        # todo docstring
+        """
+        Extract and categorize note content into head, body, and tail sections based on separators.
+
+        :param file_path: The path to the note file to be parsed.
+        :type file_path: str
+        :return: A dictionary containing the cleaned lines for ``Head``, ``Body``, and ``Tail``.
+        :rtype: dict
+
+        .. note::
+
+            The function first identifies and skips an initial YAML frontmatter block if it
+            starts with ``---``. It then uses the ``---`` string as a delimiter to
+            segment the remaining text. If multiple separators exist, the first and last
+            act as boundaries for the ``Body``, while everything before the first is
+            ``Head`` and everything after the last is ``Tail``. All extracted lines
+            undergo a ``strip()`` operation to remove leading/trailing whitespace.
+
+
+        """
         with open(file_path, "r", encoding="utf-8") as file:
             lines = file.readlines()
 
@@ -361,6 +519,79 @@ class Note(MbaE):
             patts = None
 
         return patts
+
+class NoteBasic(Note):
+
+    TEMPLATE_FILE = FOLDER_TEMPLATES_NOTES / "_basic.md"
+
+    def __init__(self, name="MyNote", alias="Nt1"):
+        super().__init__(name=name, alias=alias)
+        self.file_note_template = self.get_template_file()
+        self.metadata_standard = self.load_metadata_standard()
+        self.data_standard = self.load_data_standard()
+
+    @classmethod
+    def get_template_file(cls):
+        return Path(cls.TEMPLATE_FILE)
+
+    def load_data_standard(self):
+        dc = Note.parse_note(file_path=self.file_note_template)
+        return dc
+
+    def load_metadata_standard(self):
+        dc = Note.parse_metadata(note_file=self.file_note_template)
+        for k in dc:
+            dc[k] = None
+        return dc
+
+    def load_metadata(self):
+        super().load_metadata()
+        # filter standard entries
+        dc = {}
+        for k in self.metadata_standard:
+            # filter standard entry
+            if k in self.metadata:
+                dc[k] = self.metadata[k]
+            # add standard entry
+            else:
+                dc[k] = None
+
+        self.metadata = dc.copy()
+        return None
+
+    def update(self):
+        self.update_name()
+        self.update_abstract()
+
+    def update_name(self):
+        current_name = Path(self.file_note).stem
+        self.metadata["name"] = current_name
+        self.data["Head"][0] = f"# {current_name}"
+
+    def update_abstract(self):
+        current_abstract = self.metadata["abstract"][1:-1]
+        if current_abstract is not None:
+            n = 0
+            for line in self.data["Head"]:
+                n = n + 1
+                if "[!Abstract]" in line:
+                    break
+            if n > 0:
+                self.data['Head'][n] = f"> {current_abstract}\n"
+
+
+    def update_timestamp(self):
+        from datetime import datetime
+        now = datetime.now()
+        self.metadata["timestamp"] = now.strftime("%Y-%m-%d %H:%M:%S")
+
+class NoteProject(NoteBasic):
+
+    TEMPLATE_FILE = FOLDER_TEMPLATES_NOTES / "_project.md"
+
+
+
+
 
 
 # ... {develop}

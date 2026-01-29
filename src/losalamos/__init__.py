@@ -11,3 +11,4 @@ todo docstring
 # EXPOSE MODULES FROM PACKAGE
 # ***********************************************************************
 from losalamos.project import Project, new_project, load_project
+from losalamos.notes import Note, NoteBasic, NoteProject

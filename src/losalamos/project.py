@@ -4,37 +4,16 @@
 # See pyproject.toml for authors/maintainers.
 # See LICENSE for license details.
 """
-{Short module description (1-3 sentences)}
-todo docstring
+Project management and filesystem initialization utilities.
 
-Features
---------
-todo docstring
+This module provides high-level helpers and abstractions for creating,
+loading, and managing projects organized around a predefined filesystem
+structure. It defines the core :class:`Project` class and convenience
+functions for initializing new projects or restoring existing ones
+from disk.
 
-* {feature 1}
-* {feature 2}
-* {feature 3}
-* {etc}
-
-Overview
---------
-todo docstring
-{Overview description}
-
-Examples
---------
-todo docstring
-{Examples in rST}
-
-Print a message
-
-.. code-block:: python
-
-    # print message
-    print("Hello world!")
-    # [Output] >> 'Hello world!'
-
-
+The module is designed to evolve as a central coordination layer between
+project metadata, filesystem layout, and downstream processing workflows.
 """
 
 # IMPORTS
@@ -90,6 +69,7 @@ SUBFOLDERS = {
         "inputs/data",
         "inputs/scripts",
         "inputs/docs",
+        "inputs/refs",
         "inputs/received",
         "inputs/visuals",
         "inputs/visuals/raw",
@@ -136,15 +116,9 @@ def new_project(specs):
         :icon: code-square
         :open:
 
-        Import ``losalamos``
-
         .. code-block:: python
 
-           import losalamos
-
-        Create a new ``losalamos.Project``. First setup details.
-
-        .. code-block:: python
+            import losalamos
 
             # [CHANGE THIS] setup specs dictionary
             project_specs = {
@@ -155,19 +129,7 @@ def new_project(specs):
                 "description": "Just a test"
             }
 
-        Then call ``new_project()``
-
-        .. code-block:: python
-
-            losalamos.new_project(specs=project_specs)
-
-        Create and get the project instance:
-
-        .. code-block:: python
-
-            prj = losalamos.new_project(specs=project_specs)
-
-
+            pj = losalamos.new_project(specs=project_specs)
 
     """
     # --- Required keys ---
@@ -255,14 +217,33 @@ def load_project(project_folder):
 # =======================================================================
 # ... {develop}
 class Project(FileSys):
-    # todo docstring
+    """
+    Project filesystem abstraction.
+
+    This class represents a project rooted in a filesystem structure and
+    extends :class:`losalamos.root.FileSys`. It initializes and manages
+    project metadata and default folder definitions.
+    """
 
     def __init__(self, name="LosAlamosProject", alias="LAProj"):
+        """
+        Initialize a Project instance.
+
+        :param name: Project name.
+        :type name: str
+        :param alias: Optional short identifier.
+        :type alias: str
+        """
         super().__init__(name=name, alias=alias)
         self.load_data()
 
     def load_data(self):
-        # todo docstring
+        """
+        Initialize internal project data.
+
+        Creates a dataframe describing the default project folder structure
+        based on ``SUBFOLDERS`` and assigns it to ``self.data``.
+        """
         df = pd.DataFrame(SUBFOLDERS)
         df["file"] = ""
         df["file_template"] = ""
