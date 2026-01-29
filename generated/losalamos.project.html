@@ -50,7 +50,7 @@
     <link rel="author" title="About these documents" href="../about.html" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Development" href="../development.html" />
+    <link rel="next" title="losalamos.notes" href="losalamos.notes.html" />
     <link rel="prev" title="losalamos.root" href="losalamos.root.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -343,6 +343,9 @@
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">losalamos.project</a></li>
 </ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="losalamos.notes.html">losalamos.notes</a></li>
+</ul>
 </div>
 </nav></div>
     </div>
@@ -404,33 +407,14 @@
                   
   <section id="module-losalamos.project">
 <span id="losalamos-project"></span><h1>losalamos.project<a class="headerlink" href="#module-losalamos.project" title="Link to this heading">#</a></h1>
-<p>{Short module description (1-3 sentences)}
-todo docstring</p>
-<section id="features">
-<h2>Features<a class="headerlink" href="#features" title="Link to this heading">#</a></h2>
-<p>todo docstring</p>
-<ul class="simple">
-<li><p>{feature 1}</p></li>
-<li><p>{feature 2}</p></li>
-<li><p>{feature 3}</p></li>
-<li><p>{etc}</p></li>
-</ul>
-</section>
-<section id="overview">
-<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading">#</a></h2>
-<p>todo docstring
-{Overview description}</p>
-</section>
-<section id="examples">
-<h2>Examples<a class="headerlink" href="#examples" title="Link to this heading">#</a></h2>
-<p>todo docstring
-{Examples in rST}</p>
-<p>Print a message</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># print message</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Hello world!&quot;</span><span class="p">)</span>
-<span class="c1"># [Output] &gt;&gt; &#39;Hello world!&#39;</span>
-</pre></div>
-</div>
+<p>Project management and filesystem initialization utilities.</p>
+<p>This module provides high-level helpers and abstractions for creating,
+loading, and managing projects organized around a predefined filesystem
+structure. It defines the core <a class="reference internal" href="#losalamos.project.Project" title="losalamos.project.Project"><code class="xref py py-class docutils literal notranslate"><span class="pre">Project</span></code></a> class and convenience
+functions for initializing new projects or restoring existing ones
+from disk.</p>
+<p>The module is designed to evolve as a central coordination layer between
+project metadata, filesystem layout, and downstream processing workflows.</p>
 <p class="rubric">Functions</p>
 <div class="pst-scrollable-table-container"><table class="autosummary longtable table">
 <tbody>
@@ -447,12 +431,11 @@ todo docstring</p>
 <div class="pst-scrollable-table-container"><table class="autosummary longtable table">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#losalamos.project.Project" title="losalamos.project.Project"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Project</span></code></a>([name, alias])</p></td>
-<td><p></p></td>
+<td><p>Project filesystem abstraction.</p></td>
 </tr>
 </tbody>
 </table>
 </div>
-</section>
 <dl class="py function">
 <dt class="sig sig-object py" id="losalamos.project.new_project">
 <span class="sig-prename descclassname"><span class="pre">losalamos.project.</span></span><span class="sig-name descname"><span class="pre">new_project</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">specs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/project.html#new_project"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.project.new_project" title="Link to this definition">#</a></dt>
@@ -490,12 +473,9 @@ todo docstring</p>
 <details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3" open="open">
 <summary class="sd-summary-title sd-card-header">
 <span class="sd-summary-icon"><svg version="1.1" width="1.0em" height="1.0em" class="sd-octicon sd-octicon-code-square" viewBox="0 0 16 16" aria-hidden="true"><path d="M0 1.75C0 .784.784 0 1.75 0h12.5C15.216 0 16 .784 16 1.75v12.5A1.75 1.75 0 0 1 14.25 16H1.75A1.75 1.75 0 0 1 0 14.25Zm1.75-.25a.25.25 0 0 0-.25.25v12.5c0 .138.112.25.25.25h12.5a.25.25 0 0 0 .25-.25V1.75a.25.25 0 0 0-.25-.25Zm7.47 3.97a.75.75 0 0 1 1.06 0l2 2a.75.75 0 0 1 0 1.06l-2 2a.749.749 0 0 1-1.275-.326.749.749 0 0 1 .215-.734L10.69 8 9.22 6.53a.75.75 0 0 1 0-1.06ZM6.78 6.53 5.31 8l1.47 1.47a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215l-2-2a.75.75 0 0 1 0-1.06l2-2a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042Z"></path></svg></span><span class="sd-summary-text">Script example</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
-<p class="sd-card-text">Import <code class="docutils literal notranslate"><span class="pre">losalamos</span></code></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">losalamos</span>
-</pre></div>
-</div>
-<p class="sd-card-text">Create a new <code class="docutils literal notranslate"><span class="pre">losalamos.Project</span></code>. First setup details.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># [CHANGE THIS] setup specs dictionary</span>
+
+<span class="c1"># [CHANGE THIS] setup specs dictionary</span>
 <span class="n">project_specs</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s2">&quot;folder_base&quot;</span><span class="p">:</span> <span class="s2">&quot;C:/to/losalamos&quot;</span><span class="p">,</span> <span class="c1"># change this path</span>
     <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;newProject&quot;</span><span class="p">,</span>
@@ -503,14 +483,8 @@ todo docstring</p>
     <span class="s2">&quot;source&quot;</span><span class="p">:</span> <span class="s2">&quot;Me&quot;</span><span class="p">,</span>
     <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Just a test&quot;</span>
 <span class="p">}</span>
-</pre></div>
-</div>
-<p class="sd-card-text">Then call <code class="docutils literal notranslate"><span class="pre">new_project()</span></code></p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">losalamos</span><span class="o">.</span><span class="n">new_project</span><span class="p">(</span><span class="n">specs</span><span class="o">=</span><span class="n">project_specs</span><span class="p">)</span>
-</pre></div>
-</div>
-<p class="sd-card-text">Create and get the project instance:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">prj</span> <span class="o">=</span> <span class="n">losalamos</span><span class="o">.</span><span class="n">new_project</span><span class="p">(</span><span class="n">specs</span><span class="o">=</span><span class="n">project_specs</span><span class="p">)</span>
+
+<span class="n">pj</span> <span class="o">=</span> <span class="n">losalamos</span><span class="o">.</span><span class="n">new_project</span><span class="p">(</span><span class="n">specs</span><span class="o">=</span><span class="n">project_specs</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -549,15 +523,16 @@ todo docstring</p>
 <dt class="sig sig-object py" id="losalamos.project.Project">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">losalamos.project.</span></span><span class="sig-name descname"><span class="pre">Project</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'LosAlamosProject'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alias</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'LAProj'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/project.html#Project"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.project.Project" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference internal" href="losalamos.root.html#losalamos.root.FileSys" title="losalamos.root.FileSys"><code class="xref py py-class docutils literal notranslate"><span class="pre">FileSys</span></code></a></p>
+<p>Project filesystem abstraction.</p>
+<p>This class represents a project rooted in a filesystem structure and
+extends <a class="reference internal" href="losalamos.root.html#losalamos.root.FileSys" title="losalamos.root.FileSys"><code class="xref py py-class docutils literal notranslate"><span class="pre">losalamos.root.FileSys</span></code></a>. It initializes and manages
+project metadata and default folder definitions.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="losalamos.project.Project.load_data">
 <span class="sig-name descname"><span class="pre">load_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/project.html#Project.load_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.project.Project.load_data" title="Link to this definition">#</a></dt>
-<dd><p>Load data from file.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>file_data</strong> (<em>str</em>) – file path to data.</p>
-</dd>
-</dl>
+<dd><p>Initialize internal project data.</p>
+<p>Creates a dataframe describing the default project folder structure
+based on <code class="docutils literal notranslate"><span class="pre">SUBFOLDERS</span></code> and assigns it to <code class="docutils literal notranslate"><span class="pre">self.data</span></code>.</p>
 </dd></dl>
 
 </dd></dl>
@@ -584,11 +559,11 @@ todo docstring</p>
       </div>
     </a>
     <a class="right-next"
-       href="../development.html"
+       href="losalamos.notes.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Development</p>
+        <p class="prev-next-title">losalamos.notes</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -611,9 +586,6 @@ todo docstring</p>
   </div>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#features">Features</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#overview">Overview</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#examples">Examples</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.project.new_project"><code class="docutils literal notranslate"><span class="pre">new_project()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.project.load_project"><code class="docutils literal notranslate"><span class="pre">load_project()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.project.Project"><code class="docutils literal notranslate"><span class="pre">Project</span></code></a><ul class="nav section-nav flex-column">

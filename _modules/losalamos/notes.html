@@ -1,0 +1,1152 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" data-theme="light">
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>losalamos.notes &#8212; losalamos 0.0.1 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../../_static/documentation_options.js?v=d45e8c67"></script>
+    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/losalamos/notes';</script>
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="light">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+    
+    
+    
+    <img src="https://github.com/iporepos/losalamos/blob/main/docs/figs/logo.png?raw=true" class="logo__image only-light" alt="losalamos 0.0.1 documentation - Home"/>
+    <img src="https://github.com/iporepos/losalamos/blob/main/docs/figs/logo.png?raw=true" class="logo__image only-dark pst-js-only" alt="losalamos 0.0.1 documentation - Home"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../index.html">
+    Home
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../about.html">
+    About
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../usage.html">
+    Usage
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../api.html">
+    API
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../development.html">
+    Development
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/iporepos/losalamos" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../index.html">
+    Home
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../about.html">
+    About
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../usage.html">
+    Usage
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../api.html">
+    API
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../development.html">
+    Development
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/iporepos/losalamos" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../index.html" class="nav-link">Module code</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">losalamos.notes</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for losalamos.notes</h1><div class="highlight"><pre>
+<span></span><span class="c1"># SPDX-License-Identifier: GPL-3.0-or-later</span>
+<span class="c1">#</span>
+<span class="c1"># Copyright (C) 2025 The Project Authors</span>
+<span class="c1"># See pyproject.toml for authors/maintainers.</span>
+<span class="c1"># See LICENSE for license details.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">{Short module description (1-3 sentences)}</span>
+<span class="sd">todo docstring</span>
+
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="c1"># IMPORTS</span>
+<span class="c1"># ***********************************************************************</span>
+<span class="c1"># import modules from other libs</span>
+
+<span class="c1"># Native imports</span>
+<span class="c1"># =======================================================================</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span>
+<span class="c1"># ... {develop}</span>
+
+<span class="c1"># External imports</span>
+<span class="c1"># =======================================================================</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="c1"># ... {develop}</span>
+
+<span class="c1"># Project-level imports</span>
+<span class="c1"># =======================================================================</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">losalamos.root</span><span class="w"> </span><span class="kn">import</span> <span class="n">MbaE</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">losalamos.paths</span><span class="w"> </span><span class="kn">import</span> <span class="n">FOLDER_TEMPLATES_NOTES</span>
+
+<span class="c1"># ... {develop}</span>
+
+
+<span class="c1"># CONSTANTS</span>
+<span class="c1"># ***********************************************************************</span>
+<span class="c1"># define constants in uppercase</span>
+
+<span class="c1"># CONSTANTS -- Project-level</span>
+<span class="c1"># =======================================================================</span>
+<span class="c1"># ... {develop}</span>
+
+
+<span class="c1"># list of fields that needs harmonization</span>
+<span class="n">HARMONIZE_TEXT_FIELDS</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;name&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;title&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;subject&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;abstract&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;contract&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;client&quot;</span><span class="p">,</span>
+<span class="p">]</span>
+<span class="n">HARMONIZE_DATE_FIELDS</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;timestamp&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;date&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;datetime&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;date_start&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;date_end&quot;</span><span class="p">,</span>
+<span class="p">]</span>
+<span class="c1"># Subsubsection example</span>
+<span class="c1"># -----------------------------------------------------------------------</span>
+
+<span class="c1"># CONSTANTS -- Module-level</span>
+<span class="c1"># =======================================================================</span>
+<span class="c1"># ... {develop}</span>
+
+
+<span class="c1"># FUNCTIONS</span>
+<span class="c1"># ***********************************************************************</span>
+
+<span class="c1"># FUNCTIONS -- Project-level</span>
+<span class="c1"># =======================================================================</span>
+<span class="c1"># ... {develop}</span>
+
+<span class="c1"># FUNCTIONS -- Module-level</span>
+<span class="c1"># =======================================================================</span>
+<span class="c1"># ... {develop}</span>
+
+
+<span class="c1"># CLASSES</span>
+<span class="c1"># ***********************************************************************</span>
+
+<span class="c1"># CLASSES -- Project-level</span>
+<span class="c1"># =======================================================================</span>
+
+
+<div class="viewcode-block" id="Note">
+<a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.Note">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Note</span><span class="p">(</span><span class="n">MbaE</span><span class="p">):</span>
+    <span class="c1"># todo [docstring]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;MyNote&quot;</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s2">&quot;Nt1&quot;</span><span class="p">):</span>
+        <span class="c1"># set attributes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">file_note</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="n">alias</span><span class="p">)</span>
+        <span class="c1"># ... continues in downstream objects ... #</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_set_fields</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">_set_fields</span><span class="p">()</span>
+        <span class="c1"># Attribute fields</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">field_name_note</span> <span class="o">=</span> <span class="s2">&quot;note_name&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">field_alias_note</span> <span class="o">=</span> <span class="s2">&quot;note_alias&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">field_file_note</span> <span class="o">=</span> <span class="s2">&quot;note_file&quot;</span>
+
+
+        <span class="c1"># Metadata fields</span>
+
+        <span class="c1"># ... continues in downstream objects ... #</span>
+
+<div class="viewcode-block" id="Note.get_metadata">
+<a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.Note.get_metadata">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This method returns all objects metadata, incluiding selected</span>
+<span class="sd">        attributes beyond the metadata of the file</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># set object metadata</span>
+        <span class="n">dc_main</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">field_name_note</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">field_alias_note</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">alias</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">field_file_note</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">file_note</span><span class="p">),</span>
+        <span class="p">}</span>
+
+        <span class="c1"># include file metadata</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">dc_main</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">dc_main</span></div>
+
+
+
+<div class="viewcode-block" id="Note.load_metadata">
+<a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.Note.load_metadata">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">load_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">dc</span> <span class="o">=</span> <span class="n">Note</span><span class="o">.</span><span class="n">parse_metadata</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">file_note</span><span class="p">)</span>
+
+        <span class="c1"># DATE</span>
+        <span class="c1"># ---------------------</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">dc</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">HARMONIZE_TEXT_FIELDS</span><span class="p">:</span>
+                <span class="n">dc</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">Note</span><span class="o">.</span><span class="n">harmonize_entry_text</span><span class="p">(</span><span class="n">dc</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
+
+        <span class="c1"># DATE</span>
+        <span class="c1"># ---------------------</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">dc</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">HARMONIZE_DATE_FIELDS</span><span class="p">:</span>
+                <span class="n">dc</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">Note</span><span class="o">.</span><span class="n">harmonize_entry_date</span><span class="p">(</span><span class="n">dc</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="n">key</span><span class="o">=</span><span class="n">k</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span> <span class="o">=</span> <span class="n">dc</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="Note.load_data">
+<a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.Note.load_data">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">load_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">Note</span><span class="o">.</span><span class="n">parse_note</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">file_note</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Note.load">
+<a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.Note.load">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">load_metadata</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">load_data</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="Note.save">
+<a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.Note.save">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">to_file</span><span class="p">(</span><span class="n">file_path</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">file_note</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Note.export">
+<a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.Note.export">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">export</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">folder</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">export_metadata</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Export to a markdown file with optional metadata handling.</span>
+
+<span class="sd">        :param folder: The directory path where the file will be saved.</span>
+<span class="sd">        :type folder: str</span>
+<span class="sd">        :param filename: The name of the file without the extension.</span>
+<span class="sd">        :type filename: str</span>
+<span class="sd">        :param export_metadata: Toggle to trigger the parent class metadata export. Default value = ``False``</span>
+<span class="sd">        :type export_metadata: bool</span>
+<span class="sd">        :return: Path to the exported file</span>
+<span class="sd">        :rtype: Path</span>
+
+<span class="sd">        .. note::</span>
+
+<span class="sd">            This method constructs a file path using ``pathlib.Path`` and appends the</span>
+<span class="sd">            ``.md`` extension. It calls the internal ``to_file`` method with ``cleanup``</span>
+<span class="sd">            enabled to finalize the document. If ``export_metadata`` is set to ``True``,</span>
+<span class="sd">            it invokes the ``export`` method of the superclass before proceeding.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">export_metadata</span><span class="p">:</span>
+            <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">export</span><span class="p">(</span><span class="n">folder</span><span class="o">=</span><span class="n">folder</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="n">filename</span><span class="p">)</span>
+        <span class="n">fpath</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">folder</span><span class="p">)</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">.md&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">to_file</span><span class="p">(</span><span class="n">fpath</span><span class="p">,</span> <span class="n">cleanup</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">fpath</span><span class="o">.</span><span class="n">absolute</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="Note.to_file">
+<a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.Note.to_file">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">to_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_path</span><span class="p">,</span> <span class="n">cleanup</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Write the note object&#39;s metadata and data content to a specified file.</span>
+
+<span class="sd">        :param file_path: The destination path where the note will be written.</span>
+<span class="sd">        :type file_path: str</span>
+<span class="sd">        :param cleanup: Toggle to remove excessive blank lines after writing. Default value = ``True``</span>
+<span class="sd">        :type cleanup: bool</span>
+<span class="sd">        :return: None</span>
+<span class="sd">        :rtype: NoneType</span>
+
+<span class="sd">        .. note::</span>
+
+<span class="sd">            This method aggregates metadata and data by calling ``metadata_to_list`` and</span>
+<span class="sd">            ``data_to_list``. It sanitizes the output by replacing ``None`` string</span>
+<span class="sd">            occurrences with empty strings and ensures each entry ends with a newline</span>
+<span class="sd">            character. If ``cleanup`` is enabled, it post-processes the file using</span>
+<span class="sd">            ``remove_excessive_blank_lines`` to maintain consistent formatting.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># metadata</span>
+        <span class="c1"># ------------------------------------</span>
+        <span class="n">ls_metadata</span> <span class="o">=</span> <span class="n">Note</span><span class="o">.</span><span class="n">metadata_to_list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ls_metadata</span><span class="p">)):</span>
+            <span class="c1"># clear &quot;None&quot; values</span>
+            <span class="n">ls_metadata</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">ls_metadata</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;None&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+
+        <span class="c1"># data</span>
+        <span class="c1"># ------------------------------------</span>
+        <span class="n">ls_data</span> <span class="o">=</span> <span class="n">Note</span><span class="o">.</span><span class="n">data_to_list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+        <span class="c1"># append to metadata list</span>
+        <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">ls_data</span><span class="p">:</span>
+            <span class="n">ls_metadata</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">l</span><span class="p">[:])</span>
+        <span class="n">ls_all</span> <span class="o">=</span> <span class="p">[</span><span class="n">line</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">ls_metadata</span><span class="p">]</span>
+
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+            <span class="n">file</span><span class="o">.</span><span class="n">writelines</span><span class="p">(</span><span class="n">ls_all</span><span class="p">)</span>
+
+        <span class="c1"># clean up excessive lines</span>
+        <span class="k">if</span> <span class="n">cleanup</span><span class="p">:</span>
+            <span class="n">Note</span><span class="o">.</span><span class="n">remove_excessive_blank_lines</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="Note.harmonize_entry_text">
+<a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.Note.harmonize_entry_text">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">harmonize_entry_text</span><span class="p">(</span><span class="n">entry</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">entry</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">new_entry_bulk</span> <span class="o">=</span> <span class="n">entry</span><span class="p">[:]</span>
+            <span class="n">new_entry_bulk</span> <span class="o">=</span> <span class="n">new_entry_bulk</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;&#39;&quot;</span><span class="p">,</span> <span class="s2">&quot;`&quot;</span><span class="p">)</span>
+            <span class="n">new_entry_bulk</span> <span class="o">=</span> <span class="n">new_entry_bulk</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;&quot;&#39;</span><span class="p">,</span> <span class="s2">&quot;``&quot;</span><span class="p">)</span>
+
+            <span class="n">new_entry</span> <span class="o">=</span> <span class="s1">&#39;&quot;&#39;</span> <span class="o">+</span> <span class="n">new_entry_bulk</span> <span class="o">+</span> <span class="s1">&#39;&quot;&#39;</span>
+            <span class="n">s_start</span> <span class="o">=</span> <span class="n">new_entry</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;`&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+            <span class="n">s_end</span> <span class="o">=</span> <span class="n">new_entry</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">:]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;`&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+            <span class="n">s_bulk</span> <span class="o">=</span> <span class="n">new_entry</span><span class="p">[</span><span class="mi">2</span><span class="p">:</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
+
+            <span class="k">return</span> <span class="n">s_start</span> <span class="o">+</span> <span class="n">s_bulk</span> <span class="o">+</span> <span class="n">s_end</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="Note.harmonize_entry_date">
+<a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.Note.harmonize_entry_date">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">harmonize_entry_date</span><span class="p">(</span><span class="n">entry</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="s2">&quot;date&quot;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">entry</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+
+            <span class="n">format_mask</span> <span class="o">=</span> <span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">&quot;</span>
+            <span class="k">if</span> <span class="s2">&quot;datetime&quot;</span> <span class="ow">in</span> <span class="n">key</span><span class="p">:</span>
+                <span class="n">format_mask</span> <span class="o">=</span> <span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M:%S&quot;</span>
+            <span class="k">if</span> <span class="s2">&quot;timestamp&quot;</span> <span class="ow">in</span> <span class="n">key</span><span class="p">:</span>
+                <span class="n">format_mask</span> <span class="o">=</span> <span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M:%S&quot;</span>
+
+            <span class="c1"># Convert string back into a Python object</span>
+            <span class="n">dt_object</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">([</span><span class="n">entry</span><span class="p">])</span>
+
+            <span class="c1"># return string</span>
+            <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">dt_object</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="n">format_mask</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="Note.remove_excessive_blank_lines">
+<a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.Note.remove_excessive_blank_lines">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">remove_excessive_blank_lines</span><span class="p">(</span><span class="n">file_path</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Remove consecutive blank lines from a file to ensure only single blank lines remain.</span>
+
+<span class="sd">        :param file_path: The path to the target text file to be processed.</span>
+<span class="sd">        :type file_path: str</span>
+<span class="sd">        :return: None</span>
+<span class="sd">        :rtype: NoneType</span>
+
+<span class="sd">        .. note::</span>
+
+<span class="sd">            This method performs an in-place modification of the file. It iterates through</span>
+<span class="sd">            the content and suppresses any sequence of empty lines that exceeds a</span>
+<span class="sd">            single occurrence, effectively &quot;squeezing&quot; the vertical whitespace.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+            <span class="n">lines</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+
+        <span class="n">cleaned_lines</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">previous_line_blank</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">previous_line_blank</span><span class="p">:</span>
+                    <span class="n">cleaned_lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+                    <span class="n">previous_line_blank</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">cleaned_lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+                <span class="n">previous_line_blank</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+            <span class="n">file</span><span class="o">.</span><span class="n">writelines</span><span class="p">(</span><span class="n">cleaned_lines</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Note.parse_metadata">
+<a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.Note.parse_metadata">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">parse_metadata</span><span class="p">(</span><span class="n">note_file</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Extracts YAML metadata from the header of a Markdown file.</span>
+
+<span class="sd">        :param note_file: str, path to the Markdown file</span>
+<span class="sd">        :return: dict, extracted YAML metadata</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">note_file</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+            <span class="n">content</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+
+        <span class="c1"># Regular expression to match the YAML header</span>
+        <span class="n">yaml_header_regex</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;^---\s*\n(.*?)\n---\s*\n&quot;</span>
+
+        <span class="c1"># Search for the YAML header in the content</span>
+        <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">yaml_header_regex</span><span class="p">,</span> <span class="n">content</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">DOTALL</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">match</span><span class="p">:</span>
+            <span class="n">yaml_content</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">Note</span><span class="o">.</span><span class="n">parse_yaml</span><span class="p">(</span><span class="n">yaml_content</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="Note.parse_yaml">
+<a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.Note.parse_yaml">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">parse_yaml</span><span class="p">(</span><span class="n">yaml_content</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Parses YAML content into a dictionary.</span>
+
+<span class="sd">        :param yaml_content: str, YAML content as string</span>
+<span class="sd">        :return: dict,  parsed YAML content</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">metadata</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">lines</span> <span class="o">=</span> <span class="n">yaml_content</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">current_key</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">current_list</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="k">if</span> <span class="s2">&quot;:&quot;</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
+                <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+                <span class="n">key</span> <span class="o">=</span> <span class="n">key</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                <span class="n">value</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                <span class="k">if</span> <span class="n">value</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>  <span class="c1"># start of a list</span>
+                    <span class="n">current_key</span> <span class="o">=</span> <span class="n">key</span>
+                    <span class="n">current_list</span> <span class="o">=</span> <span class="p">[]</span>
+                    <span class="n">metadata</span><span class="p">[</span><span class="n">current_key</span><span class="p">]</span> <span class="o">=</span> <span class="n">current_list</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;tags&quot;</span><span class="p">:</span>
+                        <span class="n">metadata</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+                            <span class="n">v</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">value</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="n">v</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                        <span class="p">]</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">metadata</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+            <span class="k">elif</span> <span class="n">current_list</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="p">):</span>
+                <span class="n">current_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()[</span><span class="mi">1</span><span class="p">:]</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+
+        <span class="c1"># fix empty lists</span>
+        <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">metadata</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">metadata</span><span class="p">[</span><span class="n">e</span><span class="p">])</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">metadata</span><span class="p">[</span><span class="n">e</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># fix text fields</span>
+        <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">metadata</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">metadata</span><span class="p">[</span><span class="n">e</span><span class="p">]:</span>
+                <span class="n">size</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">metadata</span><span class="p">[</span><span class="n">e</span><span class="p">])</span> <span class="o">-</span> <span class="mi">1</span>
+                <span class="k">if</span> <span class="n">metadata</span><span class="p">[</span><span class="n">e</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;&quot;&#39;</span> <span class="ow">and</span> <span class="n">metadata</span><span class="p">[</span><span class="n">e</span><span class="p">][</span><span class="n">size</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;&quot;&#39;</span><span class="p">:</span>
+                    <span class="c1"># slice it</span>
+                    <span class="n">metadata</span><span class="p">[</span><span class="n">e</span><span class="p">]</span> <span class="o">=</span> <span class="n">metadata</span><span class="p">[</span><span class="n">e</span><span class="p">][</span><span class="mi">1</span><span class="p">:</span><span class="n">size</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">metadata</span></div>
+
+
+<div class="viewcode-block" id="Note.metadata_to_list">
+<a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.Note.metadata_to_list">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">metadata_to_list</span><span class="p">(</span><span class="n">metadata_dict</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Convert a dictionary of metadata into a formatted list of strings.</span>
+
+<span class="sd">        :param metadata_dict: A dictionary containing metadata keys and values to be formatted.</span>
+<span class="sd">        :type metadata_dict: dict</span>
+<span class="sd">        :return: A list of strings formatted with YAML-like syntax, enclosed by dashed separators.</span>
+<span class="sd">        :rtype: list</span>
+
+<span class="sd">        .. note::</span>
+
+<span class="sd">            The method processes dictionary entries into a human-readable list format. It</span>
+<span class="sd">            handles list values by creating indented bullet points and converts ``None``</span>
+<span class="sd">            values into empty strings. The resulting list starts and ends with a ``---``</span>
+<span class="sd">            delimiter string.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">ls_metadata</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">ls_metadata</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;---&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">metadata_dict</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">metadata_dict</span><span class="p">[</span><span class="n">e</span><span class="p">],</span> <span class="nb">list</span><span class="p">):</span>
+                <span class="n">ls_metadata</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">:&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">metadata_dict</span><span class="p">[</span><span class="n">e</span><span class="p">]:</span>
+                    <span class="n">ls_metadata</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot; - </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">aux0</span> <span class="o">=</span> <span class="n">metadata_dict</span><span class="p">[</span><span class="n">e</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">aux0</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">aux0</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+                <span class="n">aux1</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">aux0</span><span class="p">)</span>
+                <span class="n">ls_metadata</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">aux1</span><span class="p">)</span>
+        <span class="n">ls_metadata</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;---&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">ls_metadata</span></div>
+
+
+<div class="viewcode-block" id="Note.data_to_list">
+<a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.Note.data_to_list">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">data_to_list</span><span class="p">(</span><span class="n">data_dict</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Flatten a dictionary of lists into a single list separated by blank lines and delimiters.</span>
+
+<span class="sd">        :param data_dict: A dictionary where each key maps to a list of strings to be aggregated.</span>
+<span class="sd">        :type data_dict: dict</span>
+<span class="sd">        :return: A concatenated list of all values with added structural spacing and separators.</span>
+<span class="sd">        :rtype: list</span>
+
+<span class="sd">        .. note::</span>
+
+<span class="sd">            This function iterates through the top-level keys of ``data_dict`` and appends</span>
+<span class="sd">            the contents of each list to a master list. After each group of data, it</span>
+<span class="sd">            inserts an empty string, a ``---`` separator, and another empty string to</span>
+<span class="sd">            visually distinguish different levels or sections.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">ls_out</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">level</span> <span class="ow">in</span> <span class="n">data_dict</span><span class="p">:</span>
+            <span class="n">ls_out</span> <span class="o">=</span> <span class="n">ls_out</span> <span class="o">+</span> <span class="n">data_dict</span><span class="p">[</span><span class="n">level</span><span class="p">][:]</span>
+            <span class="k">if</span> <span class="n">level</span> <span class="o">!=</span> <span class="s2">&quot;Tail&quot;</span><span class="p">:</span>
+                <span class="n">ls_out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+                <span class="n">ls_out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;---&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">ls_out</span></div>
+
+
+<div class="viewcode-block" id="Note.parse_note">
+<a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.Note.parse_note">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">parse_note</span><span class="p">(</span><span class="n">file_path</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Extract and categorize note content into head, body, and tail sections based on separators.</span>
+
+<span class="sd">        :param file_path: The path to the note file to be parsed.</span>
+<span class="sd">        :type file_path: str</span>
+<span class="sd">        :return: A dictionary containing the cleaned lines for ``Head``, ``Body``, and ``Tail``.</span>
+<span class="sd">        :rtype: dict</span>
+
+<span class="sd">        .. note::</span>
+
+<span class="sd">            The function first identifies and skips an initial YAML frontmatter block if it</span>
+<span class="sd">            starts with ``---``. It then uses the ``---`` string as a delimiter to</span>
+<span class="sd">            segment the remaining text. If multiple separators exist, the first and last</span>
+<span class="sd">            act as boundaries for the ``Body``, while everything before the first is</span>
+<span class="sd">            ``Head`` and everything after the last is ``Tail``. All extracted lines</span>
+<span class="sd">            undergo a ``strip()`` operation to remove leading/trailing whitespace.</span>
+
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+            <span class="n">lines</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+
+        <span class="c1"># Skip YAML header if present</span>
+        <span class="k">if</span> <span class="n">lines</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;---&quot;</span><span class="p">:</span>
+            <span class="n">yaml_end_index</span> <span class="o">=</span> <span class="n">lines</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s2">&quot;---</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="n">lines</span> <span class="o">=</span> <span class="n">lines</span><span class="p">[</span><span class="n">yaml_end_index</span><span class="p">:]</span>
+
+        <span class="c1"># Find all separator positions (lines with &quot;---&quot;)</span>
+        <span class="n">separator_indices</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span> <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;---&quot;</span><span class="p">]</span>
+
+        <span class="c1"># Default values for Head, Body, and Tail</span>
+        <span class="n">head</span><span class="p">,</span> <span class="n">body</span><span class="p">,</span> <span class="n">tail</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[]</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">separator_indices</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="c1"># No separators, the whole content is the Body</span>
+            <span class="n">body</span> <span class="o">=</span> <span class="n">lines</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">separator_indices</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="c1"># One separator: Head is before, Body is between, Tail is after</span>
+            <span class="n">head</span> <span class="o">=</span> <span class="n">lines</span><span class="p">[:</span> <span class="n">separator_indices</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+            <span class="n">body</span> <span class="o">=</span> <span class="n">lines</span><span class="p">[</span><span class="n">separator_indices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">:]</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">separator_indices</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="c1"># Two separators: Head, Body, and Tail</span>
+            <span class="n">head</span> <span class="o">=</span> <span class="n">lines</span><span class="p">[:</span> <span class="n">separator_indices</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+            <span class="n">body</span> <span class="o">=</span> <span class="n">lines</span><span class="p">[</span><span class="n">separator_indices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">:</span> <span class="n">separator_indices</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+            <span class="n">tail</span> <span class="o">=</span> <span class="n">lines</span><span class="p">[</span><span class="n">separator_indices</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">:]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># More than two separators: Head is before the first, Body is between the first and last, Tail is after the last</span>
+            <span class="n">head</span> <span class="o">=</span> <span class="n">lines</span><span class="p">[:</span> <span class="n">separator_indices</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+            <span class="n">body</span> <span class="o">=</span> <span class="n">lines</span><span class="p">[</span><span class="n">separator_indices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">:</span> <span class="n">separator_indices</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span>
+            <span class="n">tail</span> <span class="o">=</span> <span class="n">lines</span><span class="p">[</span><span class="n">separator_indices</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">:]</span>
+
+        <span class="c1"># Clean up any extra newlines from the content</span>
+        <span class="n">head</span> <span class="o">=</span> <span class="p">[</span><span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">head</span><span class="p">]</span>
+        <span class="n">body</span> <span class="o">=</span> <span class="p">[</span><span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">body</span><span class="p">]</span>
+        <span class="n">tail</span> <span class="o">=</span> <span class="p">[</span><span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">tail</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;Head&quot;</span><span class="p">:</span> <span class="n">head</span><span class="p">,</span> <span class="s2">&quot;Body&quot;</span><span class="p">:</span> <span class="n">body</span><span class="p">,</span> <span class="s2">&quot;Tail&quot;</span><span class="p">:</span> <span class="n">tail</span><span class="p">}</span></div>
+
+
+<div class="viewcode-block" id="Note.list_by_pattern">
+<a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.Note.list_by_pattern">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">list_by_pattern</span><span class="p">(</span><span class="n">md_dict</span><span class="p">,</span> <span class="n">patt_type</span><span class="o">=</span><span class="s2">&quot;tag&quot;</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retrieve a list of patterns from the note dictionary.</span>
+
+<span class="sd">        :param md_dict: Dictionary containing note sections.</span>
+<span class="sd">        :type md_dict: dict</span>
+<span class="sd">        :param patt_type: Type of pattern to search for, either &quot;tag&quot; or &quot;related&quot;. Defaults to &quot;tag&quot;.</span>
+<span class="sd">        :type patt_type: str</span>
+<span class="sd">        :return: List of found patterns or None if no patterns are found.</span>
+<span class="sd">        :rtype: list or None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">patt_type</span> <span class="o">==</span> <span class="s2">&quot;tag&quot;</span><span class="p">:</span>
+            <span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;#\w+&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">patt_type</span> <span class="o">==</span> <span class="s2">&quot;related&quot;</span><span class="p">:</span>
+            <span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\[\[.*?\]\]&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;#\w+&quot;</span><span class="p">)</span>
+
+        <span class="n">patts</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="c1"># run over all sections</span>
+        <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">md_dict</span><span class="p">:</span>
+            <span class="n">content</span> <span class="o">=</span> <span class="n">md_dict</span><span class="p">[</span><span class="n">s</span><span class="p">][</span><span class="s2">&quot;Content&quot;</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">content</span><span class="p">:</span>
+                <span class="n">patts</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">pattern</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">line</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">patts</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">patts</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">return</span> <span class="n">patts</span></div>
+</div>
+
+
+<div class="viewcode-block" id="NoteBasic">
+<a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.NoteBasic">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">NoteBasic</span><span class="p">(</span><span class="n">Note</span><span class="p">):</span>
+
+    <span class="n">TEMPLATE_FILE</span> <span class="o">=</span> <span class="n">FOLDER_TEMPLATES_NOTES</span> <span class="o">/</span> <span class="s2">&quot;_basic.md&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;MyNote&quot;</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s2">&quot;Nt1&quot;</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="n">alias</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">file_note_template</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_template_file</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">metadata_standard</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">load_metadata_standard</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data_standard</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">load_data_standard</span><span class="p">()</span>
+
+<div class="viewcode-block" id="NoteBasic.get_template_file">
+<a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.NoteBasic.get_template_file">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_template_file</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">Path</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">TEMPLATE_FILE</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="NoteBasic.load_data_standard">
+<a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.NoteBasic.load_data_standard">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">load_data_standard</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">dc</span> <span class="o">=</span> <span class="n">Note</span><span class="o">.</span><span class="n">parse_note</span><span class="p">(</span><span class="n">file_path</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">file_note_template</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">dc</span></div>
+
+
+<div class="viewcode-block" id="NoteBasic.load_metadata_standard">
+<a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.NoteBasic.load_metadata_standard">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">load_metadata_standard</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">dc</span> <span class="o">=</span> <span class="n">Note</span><span class="o">.</span><span class="n">parse_metadata</span><span class="p">(</span><span class="n">note_file</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">file_note_template</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">dc</span><span class="p">:</span>
+            <span class="n">dc</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="n">dc</span></div>
+
+
+<div class="viewcode-block" id="NoteBasic.load_metadata">
+<a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.NoteBasic.load_metadata">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">load_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">load_metadata</span><span class="p">()</span>
+        <span class="c1"># filter standard entries</span>
+        <span class="n">dc</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata_standard</span><span class="p">:</span>
+            <span class="c1"># filter standard entry</span>
+            <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">:</span>
+                <span class="n">dc</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+            <span class="c1"># add standard entry</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">dc</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span> <span class="o">=</span> <span class="n">dc</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="NoteBasic.update">
+<a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.NoteBasic.update">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_name</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_abstract</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="NoteBasic.update_name">
+<a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.NoteBasic.update_name">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">update_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">current_name</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">file_note</span><span class="p">)</span><span class="o">.</span><span class="n">stem</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">current_name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;Head&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;# </span><span class="si">{</span><span class="n">current_name</span><span class="si">}</span><span class="s2">&quot;</span></div>
+
+
+<div class="viewcode-block" id="NoteBasic.update_abstract">
+<a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.NoteBasic.update_abstract">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">update_abstract</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">current_abstract</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;abstract&quot;</span><span class="p">][</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">current_abstract</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">n</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;Head&quot;</span><span class="p">]:</span>
+                <span class="n">n</span> <span class="o">=</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span>
+                <span class="k">if</span> <span class="s2">&quot;[!Abstract]&quot;</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
+                    <span class="k">break</span>
+            <span class="k">if</span> <span class="n">n</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;Head&#39;</span><span class="p">][</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&gt; </span><span class="si">{</span><span class="n">current_abstract</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="NoteBasic.update_timestamp">
+<a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.NoteBasic.update_timestamp">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">update_timestamp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span>
+        <span class="n">now</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;timestamp&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">now</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M:%S&quot;</span><span class="p">)</span></div>
+</div>
+
+
+<div class="viewcode-block" id="NoteProject">
+<a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.NoteProject">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">NoteProject</span><span class="p">(</span><span class="n">NoteBasic</span><span class="p">):</span>
+
+    <span class="n">TEMPLATE_FILE</span> <span class="o">=</span> <span class="n">FOLDER_TEMPLATES_NOTES</span> <span class="o">/</span> <span class="s2">&quot;_project.md&quot;</span></div>
+
+
+
+
+
+
+
+<span class="c1"># ... {develop}</span>
+
+<span class="c1"># CLASSES -- Module-level</span>
+<span class="c1"># =======================================================================</span>
+<span class="c1"># ... {develop}</span>
+
+
+<span class="c1"># SCRIPT</span>
+<span class="c1"># ***********************************************************************</span>
+<span class="c1"># standalone behaviour as a script</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="c1"># Script section</span>
+    <span class="c1"># ===================================================================</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Hello world!&quot;</span><span class="p">)</span>
+    <span class="c1"># ... {develop}</span>
+
+    <span class="c1"># Script subsection</span>
+    <span class="c1"># -------------------------------------------------------------------</span>
+    <span class="c1"># ... {develop}</span>
+</pre></div>
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2026, Iporã Possantti.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.0.4.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

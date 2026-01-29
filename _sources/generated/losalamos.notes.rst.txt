@@ -1,0 +1,14 @@
+﻿losalamos.notes
+===============
+
+.. automodule:: losalamos.notes
+
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      Note
+      NoteBasic
+      NoteProject
+   
