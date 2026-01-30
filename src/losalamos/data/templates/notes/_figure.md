@@ -33,7 +33,6 @@ status_data:
 date_start:
 date_end:
 ---
-
 # <% tp.file.title %>
 
 FIGURE
