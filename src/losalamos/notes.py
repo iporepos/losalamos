@@ -15,7 +15,7 @@ todo docstring
 
 # Native imports
 # =======================================================================
-import re
+import glob, re
 from pathlib import Path
 from datetime import datetime
 
@@ -91,23 +91,8 @@ HARMONIZE_DATE_FIELDS = [
 # CLASSES -- Project-level
 # =======================================================================
 
-
-class NoteCollection(Collection):
-
-    def __init__(self, name="MyNoteColl", alias="NtCol0"):
-
-        super().__init__(base_object=Note, name=name, alias=alias)
-
-    def load_list(self, files_list):
-
-        for f in files_list:
-            p = Path(f)
-            name = p.stem
-            n = self.baseobject(name=name, alias=name)
-            n.file_note = p
-            n.load()
-
-            self.append(n)
+# NOTES
+# -----------------------------------------------------------------------
 
 
 class Note(MbaE):
@@ -647,6 +632,86 @@ class NoteFigure(NoteBasic):
     def load_new(self, file_note):
         super().load_new(file_note=file_note)
         self.metadata["subject"] = "'[[Scientific Illustration]]'"
+
+
+# COLLECTIONS
+# -----------------------------------------------------------------------
+
+
+class NoteCollection(Collection):
+
+    # todo docstring
+
+    BASE_OBJECT = Note
+
+    def __init__(self, name="MyNoteColl", alias="NtCol0"):
+
+        super().__init__(base_object=self.BASE_OBJECT, name=name, alias=alias)
+
+    def load_list(self, files):
+        """
+        Iterates through a list of file paths to initialize, load, and append objects to the collection.
+
+        :param files: A list of file paths to be processed.
+        :type files: list
+        :return: None
+        :rtype: None
+        """
+        for f in files:
+
+            p = Path(f)
+            name = p.stem
+
+            n = self.baseobject(name=name, alias=name)
+            n.file_note = p
+            n.load()
+
+            self.append(n)
+        return None
+
+    def load_folder(self, folder):
+        """
+        Identifies all Markdown files within a specific directory and adds them to the collection.
+
+        :param folder: The directory path to scan for ``.md`` files.
+        :type folder: str
+        :return: None
+        :rtype: None
+        """
+        ls = glob.glob(str(Path(folder) / "*.md"))
+
+        self.load_list(files=ls)
+
+        return None
+
+    def load_pattern(self, pattern):
+        """
+        Uses a glob pattern to locate files and load them into the collection.
+
+        :param pattern: The search pattern (e.g., ``path/to/*/*.md``) used to match files.
+        :type pattern: str
+        :return: None
+        :rtype: None
+
+        """
+        ls = glob.glob(pattern)
+        self.load_list(files=ls)
+        return None
+
+
+class NoteCollBasic(NoteCollection):
+
+    BASE_OBJECT = NoteBasic
+
+
+class NoteCollProject(NoteCollection):
+
+    BASE_OBJECT = NoteProject
+
+
+class NoteCollFigure(NoteCollection):
+
+    BASE_OBJECT = NoteFigure
 
 
 # ... {develop}

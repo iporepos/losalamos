@@ -47,58 +47,66 @@ class TestNoteCollection(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        """
-        Runs once before all tests.
-        """
         cls._tmp_root = tempfile.mkdtemp(prefix="losalamos_test_notes_")
+        cls.ls_fields = ["note_name", "note_type", "timestamp", "note_file"]
 
     @classmethod
     def tearDownClass(cls):
-        """
-        Runs once after all tests.
-        """
         shutil.rmtree(cls._tmp_root, ignore_errors=True)
 
     def setUp(self):
-        """
-        Runs before each test.
-        """
         self.base_dir = Path(self._tmp_root)
+        self.nc = NoteCollection(name="Testing", alias="tst")
 
     # -------------------------------------------------------------------
-    # new_project
+    # helpers
+    # -------------------------------------------------------------------
+
+    def _assert_collection_loaded(self):
+        """Shared assertions for a loaded NoteCollection"""
+
+        pprint.pp(self.nc.collection)
+
+        # check collection
+        self.assertGreater(len(self.nc.collection), 0)
+
+        for obj in self.nc.collection.values():
+            self.assertIsInstance(obj, self.nc.baseobject)
+
+        # check catalog
+        self.assertIsInstance(self.nc.catalog, pd.DataFrame)
+
+        self.assertTrue(set(self.ls_fields).issubset(self.nc.catalog.columns))
+
+        print(self.nc.catalog[self.ls_fields].to_string())
+
+    # -------------------------------------------------------------------
+    # loads
     # -------------------------------------------------------------------
 
     def test_init(self):
+        """Ensure NoteCollection initializes with correct metadata."""
+        print(self.nc)
+        assert self.nc.name == "Testing"
+        assert self.nc.alias == "tst"
 
-        nc = NoteCollection(name="Testing", alias="tst")
-
-        print(nc)
-
-        assert nc.name == "Testing"
-        assert nc.alias == "tst"
+    def test_collection(self):
+        """Validate collection and catalog after loading a folder."""
+        self.nc.load_folder(folder=DATA_DIR)
+        self._assert_collection_loaded()
 
     def test_load_list(self):
-
+        """Load notes from an explicit file list."""
         ls = glob.glob(str(DATA_DIR / "*.md"))
-        print("loading files:")
-        pprint.pp(ls)
+        self.assertGreater(len(ls), 0)
 
-        nc = NoteCollection(name="Testing", alias="tst")
+        self.nc.load_list(files=ls)
+        self._assert_collection_loaded()
 
-        nc.load_list(files_list=ls)
-
-        # check collection
-        assert len(nc.collection.keys()) > 0
-        for k in nc.collection:
-            self.assertIsInstance(nc.collection[k], nc.baseobject)
-        pprint.pp(nc.collection)
-
-        # check catalog
-        self.assertIsInstance(nc.catalog, pd.DataFrame)
-        print("\n")
-        ls_fields = ["note_name", "note_type", "timestamp", "note_file"]
-        print(nc.catalog[ls_fields].to_string())
+    def test_load_folder(self):
+        """Load notes from a directory."""
+        self.nc.load_folder(folder=DATA_DIR)
+        self._assert_collection_loaded()
 
 
 # ***********************************************************************
