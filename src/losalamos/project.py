@@ -56,23 +56,31 @@ from losalamos.root import FileSys
 # ... {develop}
 SUBFOLDERS = {
     "folder": [
+        # administrative
+        # --------------------------------
         "admin/contracts",
         "admin/contracts/main",
         "admin/proposals",
-        "admin/docs",
+        "admin/documents",
         "admin/paperwork",
         "admin/meetings",
         "admin/received",
-        "admin/comms",
+        "admin/messages",
+        # Accounting
+        # --------------------------------
         "budget/inflows",
         "budget/outflows",
+        # Inputs
+        # --------------------------------
         "inputs/data",
         "inputs/scripts",
-        "inputs/docs",
-        "inputs/refs",
+        "inputs/documents",
+        "inputs/references",
         "inputs/received",
-        "inputs/visuals",
-        "inputs/visuals/raw",
+        "inputs/figures",
+        "inputs/figures/raw",
+        # Outputs
+        # --------------------------------
         "outputs/public",
         "outputs/history",
         "outputs/latest",

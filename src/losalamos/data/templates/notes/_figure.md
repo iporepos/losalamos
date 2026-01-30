@@ -16,7 +16,7 @@ comment:
 project:
 document:
 collection: main
-size: m
+size:
 category: schematics 3d
 subcategory:
 order: 1
@@ -33,13 +33,16 @@ status_data:
 date_start:
 date_end:
 ---
+
 # <% tp.file.title %>
 
 FIGURE
 
+![[{file}|500]]
+
 **`=this.label`**
 
-`=this.category`  |   `=this.status`   |   R$ `=this.revenue_expected`
+`=this.category`  |   `=this.status`   
 
 > [!Abstract] Summary
 > {a paragraph description of the note}
@@ -49,6 +52,13 @@ FIGURE
 > [!example]+ Related 
 > - {related links}
 
+---
+# Draft
+
+![[{file_draft}|500]]
+
+
+---
 # Team
 
 

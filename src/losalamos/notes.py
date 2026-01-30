@@ -600,6 +600,7 @@ class NoteBasic(Note):
     def update_name(self):
         current_name = Path(self.file_note).stem
         self.metadata["name"] = current_name
+        # always the first item
         self.data["Head"][0] = f"# {current_name}"
 
     def update_abstract(self):
