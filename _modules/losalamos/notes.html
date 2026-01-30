@@ -654,9 +654,30 @@
 <a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.Note.harmonize_entry_date">[docs]</a>
     <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">harmonize_entry_date</span><span class="p">(</span><span class="n">entry</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="s2">&quot;date&quot;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">entry</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="s2">&quot;datetime&quot;</span> <span class="ow">in</span> <span class="n">key</span> <span class="ow">or</span> <span class="s2">&quot;timestamp&quot;</span> <span class="ow">in</span> <span class="n">key</span><span class="p">:</span>
+            <span class="n">format_mask</span> <span class="o">=</span> <span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M:%S&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">format_mask</span> <span class="o">=</span> <span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">&quot;</span>
+
+        <span class="n">dt</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">entry</span><span class="p">,</span> <span class="n">errors</span><span class="o">=</span><span class="s2">&quot;coerce&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">pd</span><span class="o">.</span><span class="n">isna</span><span class="p">(</span><span class="n">dt</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="k">return</span> <span class="n">dt</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="n">format_mask</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Note.harmonize_entry_date_old">
+<a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.Note.harmonize_entry_date_old">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">harmonize_entry_date_old</span><span class="p">(</span><span class="n">entry</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="s2">&quot;date&quot;</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">entry</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
 
             <span class="n">format_mask</span> <span class="o">=</span> <span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">&quot;</span>
+
             <span class="k">if</span> <span class="s2">&quot;datetime&quot;</span> <span class="ow">in</span> <span class="n">key</span><span class="p">:</span>
                 <span class="n">format_mask</span> <span class="o">=</span> <span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M:%S&quot;</span>
             <span class="k">if</span> <span class="s2">&quot;timestamp&quot;</span> <span class="ow">in</span> <span class="n">key</span><span class="p">:</span>
@@ -973,6 +994,14 @@
         <span class="k">return</span> <span class="n">Path</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">TEMPLATE_FILE</span><span class="p">)</span></div>
 
 
+<div class="viewcode-block" id="NoteBasic.load_new">
+<a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.NoteBasic.load_new">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">load_new</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_note</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">file_note</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_note_template</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">file_note</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">file_note</span><span class="p">)</span></div>
+
+
 <div class="viewcode-block" id="NoteBasic.load_data_standard">
 <a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.NoteBasic.load_data_standard">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">load_data_standard</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -1025,8 +1054,8 @@
 <div class="viewcode-block" id="NoteBasic.update_abstract">
 <a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.NoteBasic.update_abstract">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">update_abstract</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">current_abstract</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;abstract&quot;</span><span class="p">][</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-        <span class="k">if</span> <span class="n">current_abstract</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;abstract&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">current_abstract</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;abstract&quot;</span><span class="p">][</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
             <span class="n">n</span> <span class="o">=</span> <span class="mi">0</span>
             <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;Head&quot;</span><span class="p">]:</span>
                 <span class="n">n</span> <span class="o">=</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span>
