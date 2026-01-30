@@ -10,5 +10,7 @@
    
       Note
       NoteBasic
+      NoteCollection
+      NoteFigure
       NoteProject
    

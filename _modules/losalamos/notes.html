@@ -411,7 +411,7 @@
 
 <span class="c1"># Project-level imports</span>
 <span class="c1"># =======================================================================</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">losalamos.root</span><span class="w"> </span><span class="kn">import</span> <span class="n">MbaE</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">losalamos.root</span><span class="w"> </span><span class="kn">import</span> <span class="n">MbaE</span><span class="p">,</span> <span class="n">Collection</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">losalamos.paths</span><span class="w"> </span><span class="kn">import</span> <span class="n">FOLDER_TEMPLATES_NOTES</span>
 
 <span class="c1"># ... {develop}</span>
@@ -434,6 +434,11 @@
     <span class="s2">&quot;abstract&quot;</span><span class="p">,</span>
     <span class="s2">&quot;contract&quot;</span><span class="p">,</span>
     <span class="s2">&quot;client&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;project&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;comment&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;caption&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;alttext&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;source&quot;</span><span class="p">,</span>
 <span class="p">]</span>
 <span class="n">HARMONIZE_DATE_FIELDS</span> <span class="o">=</span> <span class="p">[</span>
     <span class="s2">&quot;timestamp&quot;</span><span class="p">,</span>
@@ -467,6 +472,30 @@
 
 <span class="c1"># CLASSES -- Project-level</span>
 <span class="c1"># =======================================================================</span>
+
+
+<div class="viewcode-block" id="NoteCollection">
+<a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.NoteCollection">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">NoteCollection</span><span class="p">(</span><span class="n">Collection</span><span class="p">):</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;MyNoteColl&quot;</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s2">&quot;NtCol0&quot;</span><span class="p">):</span>
+
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">base_object</span><span class="o">=</span><span class="n">Note</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="n">alias</span><span class="p">)</span>
+
+<div class="viewcode-block" id="NoteCollection.load_list">
+<a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.NoteCollection.load_list">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">load_list</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">files_list</span><span class="p">):</span>
+
+        <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">files_list</span><span class="p">:</span>
+            <span class="n">p</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">stem</span>
+            <span class="n">n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">baseobject</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
+            <span class="n">n</span><span class="o">.</span><span class="n">file_note</span> <span class="o">=</span> <span class="n">p</span>
+            <span class="n">n</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">n</span><span class="p">)</span></div>
+</div>
+
 
 
 <div class="viewcode-block" id="Note">
@@ -999,7 +1028,9 @@
     <span class="k">def</span><span class="w"> </span><span class="nf">load_new</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_note</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">file_note</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_note_template</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">file_note</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">file_note</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">file_note</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">file_note</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_timestamp</span><span class="p">()</span></div>
 
 
 <div class="viewcode-block" id="NoteBasic.load_data_standard">
@@ -1081,6 +1112,21 @@
 <span class="k">class</span><span class="w"> </span><span class="nc">NoteProject</span><span class="p">(</span><span class="n">NoteBasic</span><span class="p">):</span>
 
     <span class="n">TEMPLATE_FILE</span> <span class="o">=</span> <span class="n">FOLDER_TEMPLATES_NOTES</span> <span class="o">/</span> <span class="s2">&quot;_project.md&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="NoteFigure">
+<a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.NoteFigure">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">NoteFigure</span><span class="p">(</span><span class="n">NoteBasic</span><span class="p">):</span>
+
+    <span class="n">TEMPLATE_FILE</span> <span class="o">=</span> <span class="n">FOLDER_TEMPLATES_NOTES</span> <span class="o">/</span> <span class="s2">&quot;_figure.md&quot;</span>
+
+<div class="viewcode-block" id="NoteFigure.load_new">
+<a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.NoteFigure.load_new">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">load_new</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_note</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">load_new</span><span class="p">(</span><span class="n">file_note</span><span class="o">=</span><span class="n">file_note</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;subject&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&#39;[[Scientific Illustration]]&#39;&quot;</span></div>
+</div>
 
 
 
