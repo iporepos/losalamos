@@ -29,7 +29,7 @@ import pandas as pd
 
 # Project-level imports
 # =======================================================================
-from losalamos.root import MbaE
+from losalamos.root import MbaE, Collection
 from losalamos.paths import FOLDER_TEMPLATES_NOTES
 
 # ... {develop}
@@ -52,6 +52,11 @@ HARMONIZE_TEXT_FIELDS = [
     "abstract",
     "contract",
     "client",
+    "project",
+    "comment",
+    "caption",
+    "alttext",
+    "source",
 ]
 HARMONIZE_DATE_FIELDS = [
     "timestamp",
@@ -85,6 +90,24 @@ HARMONIZE_DATE_FIELDS = [
 
 # CLASSES -- Project-level
 # =======================================================================
+
+
+class NoteCollection(Collection):
+
+    def __init__(self, name="MyNoteColl", alias="NtCol0"):
+
+        super().__init__(base_object=Note, name=name, alias=alias)
+
+    def load_list(self, files_list):
+
+        for f in files_list:
+            p = Path(f)
+            name = p.stem
+            n = self.baseobject(name=name, alias=name)
+            n.file_note = p
+            n.load()
+
+            self.append(n)
 
 
 class Note(MbaE):
@@ -557,6 +580,8 @@ class NoteBasic(Note):
         self.file_note = self.file_note_template
         self.load()
         self.file_note = Path(file_note)
+        self.update()
+        self.update_timestamp()
 
     def load_data_standard(self):
         dc = Note.parse_note(file_path=self.file_note_template)
@@ -613,6 +638,15 @@ class NoteBasic(Note):
 class NoteProject(NoteBasic):
 
     TEMPLATE_FILE = FOLDER_TEMPLATES_NOTES / "_project.md"
+
+
+class NoteFigure(NoteBasic):
+
+    TEMPLATE_FILE = FOLDER_TEMPLATES_NOTES / "_figure.md"
+
+    def load_new(self, file_note):
+        super().load_new(file_note=file_note)
+        self.metadata["subject"] = "'[[Scientific Illustration]]'"
 
 
 # ... {develop}
