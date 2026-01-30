@@ -244,9 +244,27 @@ class Note(MbaE):
 
     @staticmethod
     def harmonize_entry_date(entry, key="date"):
+        if entry is None:
+            return None
+
+        if "datetime" in key or "timestamp" in key:
+            format_mask = "%Y-%m-%d %H:%M:%S"
+        else:
+            format_mask = "%Y-%m-%d"
+
+        dt = pd.to_datetime(entry, errors="coerce")
+
+        if pd.isna(dt):
+            return None
+
+        return dt.strftime(format_mask)
+
+    @staticmethod
+    def harmonize_entry_date_old(entry, key="date"):
         if entry is not None:
 
             format_mask = "%Y-%m-%d"
+
             if "datetime" in key:
                 format_mask = "%Y-%m-%d %H:%M:%S"
             if "timestamp" in key:
@@ -535,6 +553,11 @@ class NoteBasic(Note):
     def get_template_file(cls):
         return Path(cls.TEMPLATE_FILE)
 
+    def load_new(self, file_note):
+        self.file_note = self.file_note_template
+        self.load()
+        self.file_note = Path(file_note)
+
     def load_data_standard(self):
         dc = Note.parse_note(file_path=self.file_note_template)
         return dc
@@ -570,8 +593,8 @@ class NoteBasic(Note):
         self.data["Head"][0] = f"# {current_name}"
 
     def update_abstract(self):
-        current_abstract = self.metadata["abstract"][1:-1]
-        if current_abstract is not None:
+        if self.metadata["abstract"] is not None:
+            current_abstract = self.metadata["abstract"][1:-1]
             n = 0
             for line in self.data["Head"]:
                 n = n + 1
