@@ -10,6 +10,9 @@
    
       Note
       NoteBasic
+      NoteCollBasic
+      NoteCollFigure
+      NoteCollProject
       NoteCollection
       NoteFigure
       NoteProject

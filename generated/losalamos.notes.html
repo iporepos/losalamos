@@ -418,29 +418,27 @@ todo docstring</p>
 <tr class="row-even"><td><p><a class="reference internal" href="#losalamos.notes.NoteBasic" title="losalamos.notes.NoteBasic"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NoteBasic</span></code></a>([name, alias])</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#losalamos.notes.NoteCollection" title="losalamos.notes.NoteCollection"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NoteCollection</span></code></a>([name, alias])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#losalamos.notes.NoteCollBasic" title="losalamos.notes.NoteCollBasic"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NoteCollBasic</span></code></a>([name, alias])</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#losalamos.notes.NoteFigure" title="losalamos.notes.NoteFigure"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NoteFigure</span></code></a>([name, alias])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#losalamos.notes.NoteCollFigure" title="losalamos.notes.NoteCollFigure"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NoteCollFigure</span></code></a>([name, alias])</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#losalamos.notes.NoteProject" title="losalamos.notes.NoteProject"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NoteProject</span></code></a>([name, alias])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#losalamos.notes.NoteCollProject" title="losalamos.notes.NoteCollProject"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NoteCollProject</span></code></a>([name, alias])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#losalamos.notes.NoteCollection" title="losalamos.notes.NoteCollection"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NoteCollection</span></code></a>([name, alias])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#losalamos.notes.NoteFigure" title="losalamos.notes.NoteFigure"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NoteFigure</span></code></a>([name, alias])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#losalamos.notes.NoteProject" title="losalamos.notes.NoteProject"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NoteProject</span></code></a>([name, alias])</p></td>
 <td><p></p></td>
 </tr>
 </tbody>
 </table>
 </div>
-<dl class="py class">
-<dt class="sig sig-object py" id="losalamos.notes.NoteCollection">
-<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">losalamos.notes.</span></span><span class="sig-name descname"><span class="pre">NoteCollection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'MyNoteColl'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alias</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'NtCol0'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/notes.html#NoteCollection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.notes.NoteCollection" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <a class="reference internal" href="losalamos.root.html#losalamos.root.Collection" title="losalamos.root.Collection"><code class="xref py py-class docutils literal notranslate"><span class="pre">Collection</span></code></a></p>
-<dl class="py method">
-<dt class="sig sig-object py" id="losalamos.notes.NoteCollection.load_list">
-<span class="sig-name descname"><span class="pre">load_list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">files_list</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/notes.html#NoteCollection.load_list"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.notes.NoteCollection.load_list" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
 <dl class="py class">
 <dt class="sig sig-object py" id="losalamos.notes.Note">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">losalamos.notes.</span></span><span class="sig-name descname"><span class="pre">Note</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'MyNote'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alias</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Nt1'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/notes.html#Note"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.notes.Note" title="Link to this definition">#</a></dt>
@@ -778,6 +776,105 @@ undergo a <code class="docutils literal notranslate"><span class="pre">strip()</
 
 </dd></dl>
 
+<dl class="py class">
+<dt class="sig sig-object py" id="losalamos.notes.NoteCollection">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">losalamos.notes.</span></span><span class="sig-name descname"><span class="pre">NoteCollection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'MyNoteColl'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alias</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'NtCol0'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/notes.html#NoteCollection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.notes.NoteCollection" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference internal" href="losalamos.root.html#losalamos.root.Collection" title="losalamos.root.Collection"><code class="xref py py-class docutils literal notranslate"><span class="pre">Collection</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="losalamos.notes.NoteCollection.BASE_OBJECT">
+<span class="sig-name descname"><span class="pre">BASE_OBJECT</span></span><a class="headerlink" href="#losalamos.notes.NoteCollection.BASE_OBJECT" title="Link to this definition">#</a></dt>
+<dd><p>alias of <a class="reference internal" href="#losalamos.notes.Note" title="losalamos.notes.Note"><code class="xref py py-class docutils literal notranslate"><span class="pre">Note</span></code></a></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.notes.NoteCollection.load_list">
+<span class="sig-name descname"><span class="pre">load_list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">files</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/notes.html#NoteCollection.load_list"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.notes.NoteCollection.load_list" title="Link to this definition">#</a></dt>
+<dd><p>Iterates through a list of file paths to initialize, load, and append objects to the collection.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>files</strong> (<em>list</em>) – A list of file paths to be processed.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.notes.NoteCollection.load_folder">
+<span class="sig-name descname"><span class="pre">load_folder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">folder</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/notes.html#NoteCollection.load_folder"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.notes.NoteCollection.load_folder" title="Link to this definition">#</a></dt>
+<dd><p>Identifies all Markdown files within a specific directory and adds them to the collection.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>folder</strong> (<em>str</em>) – The directory path to scan for <code class="docutils literal notranslate"><span class="pre">.md</span></code> files.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.notes.NoteCollection.load_pattern">
+<span class="sig-name descname"><span class="pre">load_pattern</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pattern</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/notes.html#NoteCollection.load_pattern"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.notes.NoteCollection.load_pattern" title="Link to this definition">#</a></dt>
+<dd><p>Uses a glob pattern to locate files and load them into the collection.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>pattern</strong> (<em>str</em>) – The search pattern (e.g., <code class="docutils literal notranslate"><span class="pre">path/to/*/*.md</span></code>) used to match files.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="losalamos.notes.NoteCollBasic">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">losalamos.notes.</span></span><span class="sig-name descname"><span class="pre">NoteCollBasic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'MyNoteColl'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alias</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'NtCol0'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/notes.html#NoteCollBasic"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.notes.NoteCollBasic" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#losalamos.notes.NoteCollection" title="losalamos.notes.NoteCollection"><code class="xref py py-class docutils literal notranslate"><span class="pre">NoteCollection</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="losalamos.notes.NoteCollBasic.BASE_OBJECT">
+<span class="sig-name descname"><span class="pre">BASE_OBJECT</span></span><a class="headerlink" href="#losalamos.notes.NoteCollBasic.BASE_OBJECT" title="Link to this definition">#</a></dt>
+<dd><p>alias of <a class="reference internal" href="#losalamos.notes.NoteBasic" title="losalamos.notes.NoteBasic"><code class="xref py py-class docutils literal notranslate"><span class="pre">NoteBasic</span></code></a></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="losalamos.notes.NoteCollProject">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">losalamos.notes.</span></span><span class="sig-name descname"><span class="pre">NoteCollProject</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'MyNoteColl'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alias</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'NtCol0'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/notes.html#NoteCollProject"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.notes.NoteCollProject" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#losalamos.notes.NoteCollection" title="losalamos.notes.NoteCollection"><code class="xref py py-class docutils literal notranslate"><span class="pre">NoteCollection</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="losalamos.notes.NoteCollProject.BASE_OBJECT">
+<span class="sig-name descname"><span class="pre">BASE_OBJECT</span></span><a class="headerlink" href="#losalamos.notes.NoteCollProject.BASE_OBJECT" title="Link to this definition">#</a></dt>
+<dd><p>alias of <a class="reference internal" href="#losalamos.notes.NoteProject" title="losalamos.notes.NoteProject"><code class="xref py py-class docutils literal notranslate"><span class="pre">NoteProject</span></code></a></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="losalamos.notes.NoteCollFigure">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">losalamos.notes.</span></span><span class="sig-name descname"><span class="pre">NoteCollFigure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'MyNoteColl'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alias</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'NtCol0'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/notes.html#NoteCollFigure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.notes.NoteCollFigure" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#losalamos.notes.NoteCollection" title="losalamos.notes.NoteCollection"><code class="xref py py-class docutils literal notranslate"><span class="pre">NoteCollection</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="losalamos.notes.NoteCollFigure.BASE_OBJECT">
+<span class="sig-name descname"><span class="pre">BASE_OBJECT</span></span><a class="headerlink" href="#losalamos.notes.NoteCollFigure.BASE_OBJECT" title="Link to this definition">#</a></dt>
+<dd><p>alias of <a class="reference internal" href="#losalamos.notes.NoteFigure" title="losalamos.notes.NoteFigure"><code class="xref py py-class docutils literal notranslate"><span class="pre">NoteFigure</span></code></a></p>
+</dd></dl>
+
+</dd></dl>
+
 </section>
 
 
@@ -827,10 +924,6 @@ undergo a <code class="docutils literal notranslate"><span class="pre">strip()</
   </div>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.notes.NoteCollection"><code class="docutils literal notranslate"><span class="pre">NoteCollection</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.notes.NoteCollection.load_list"><code class="docutils literal notranslate"><span class="pre">NoteCollection.load_list()</span></code></a></li>
-</ul>
-</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.notes.Note"><code class="docutils literal notranslate"><span class="pre">Note</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.notes.Note.get_metadata"><code class="docutils literal notranslate"><span class="pre">Note.get_metadata()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.notes.Note.load_metadata"><code class="docutils literal notranslate"><span class="pre">Note.load_metadata()</span></code></a></li>
@@ -871,6 +964,25 @@ undergo a <code class="docutils literal notranslate"><span class="pre">strip()</
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.notes.NoteFigure"><code class="docutils literal notranslate"><span class="pre">NoteFigure</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.notes.NoteFigure.TEMPLATE_FILE"><code class="docutils literal notranslate"><span class="pre">NoteFigure.TEMPLATE_FILE</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.notes.NoteFigure.load_new"><code class="docutils literal notranslate"><span class="pre">NoteFigure.load_new()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.notes.NoteCollection"><code class="docutils literal notranslate"><span class="pre">NoteCollection</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.notes.NoteCollection.BASE_OBJECT"><code class="docutils literal notranslate"><span class="pre">NoteCollection.BASE_OBJECT</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.notes.NoteCollection.load_list"><code class="docutils literal notranslate"><span class="pre">NoteCollection.load_list()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.notes.NoteCollection.load_folder"><code class="docutils literal notranslate"><span class="pre">NoteCollection.load_folder()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.notes.NoteCollection.load_pattern"><code class="docutils literal notranslate"><span class="pre">NoteCollection.load_pattern()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.notes.NoteCollBasic"><code class="docutils literal notranslate"><span class="pre">NoteCollBasic</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.notes.NoteCollBasic.BASE_OBJECT"><code class="docutils literal notranslate"><span class="pre">NoteCollBasic.BASE_OBJECT</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.notes.NoteCollProject"><code class="docutils literal notranslate"><span class="pre">NoteCollProject</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.notes.NoteCollProject.BASE_OBJECT"><code class="docutils literal notranslate"><span class="pre">NoteCollProject.BASE_OBJECT</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.notes.NoteCollFigure"><code class="docutils literal notranslate"><span class="pre">NoteCollFigure</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.notes.NoteCollFigure.BASE_OBJECT"><code class="docutils literal notranslate"><span class="pre">NoteCollFigure.BASE_OBJECT</span></code></a></li>
 </ul>
 </li>
 </ul>
