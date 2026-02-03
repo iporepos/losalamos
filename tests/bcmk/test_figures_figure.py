@@ -162,7 +162,7 @@ class BCMKTestFigure(unittest.TestCase):
 
     def test_image_to_jpg(self):
         file_input = DATA_DIR / "horton.png"
-        file_output = OUTPUT_DIR / "horton converted.jpg"
+        file_output = self.output_dir / "horton converted.jpg"
 
         Figure.image_to_jpeg(file_input=file_input, file_output=file_output)
 
