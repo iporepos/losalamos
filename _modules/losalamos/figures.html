@@ -397,6 +397,8 @@
 <span class="c1"># Native imports</span>
 <span class="c1"># =======================================================================</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pprint</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">shutil</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
 
 <span class="c1"># ... {develop}</span>
@@ -595,10 +597,10 @@
         <span class="k">return</span> <span class="kc">None</span></div>
 
 
-<div class="viewcode-block" id="Figure.image_to_jpg">
-<a class="viewcode-back" href="../../generated/losalamos.figures.html#losalamos.figures.Figure.image_to_jpg">[docs]</a>
+<div class="viewcode-block" id="Figure.image_to_jpeg">
+<a class="viewcode-back" href="../../generated/losalamos.figures.html#losalamos.figures.Figure.image_to_jpeg">[docs]</a>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">image_to_jpg</span><span class="p">(</span><span class="n">file_input</span><span class="p">,</span> <span class="n">file_output</span><span class="p">,</span> <span class="n">quality</span><span class="o">=</span><span class="mi">95</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">image_to_jpeg</span><span class="p">(</span><span class="n">file_input</span><span class="p">,</span> <span class="n">file_output</span><span class="p">,</span> <span class="n">quality</span><span class="o">=</span><span class="mi">95</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Convert an image file to JPEG format with specified quality and resolution.</span>
 
@@ -639,11 +641,24 @@
 
         <span class="c1"># set defaults</span>
         <span class="c1"># --------------------------------------------------</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">inkscape_src</span> <span class="o">=</span> <span class="s2">&quot;C:/Program Files/Inkscape/bin&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">inkscape_src</span> <span class="o">=</span> <span class="s2">&quot;C:/Program Files/Inkscape/bin&quot;</span>  <span class="c1"># None # inkscape.exe folder in Windows (consider add to PATH).</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name_spaces</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s2">&quot;svg&quot;</span><span class="p">:</span> <span class="s2">&quot;http://www.w3.org/2000/svg&quot;</span><span class="p">,</span>
             <span class="s2">&quot;inkscape&quot;</span><span class="p">:</span> <span class="s2">&quot;http://www.inkscape.org/namespaces/inkscape&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;sodipodi&quot;</span><span class="p">:</span> <span class="s2">&quot;http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd&quot;</span><span class="p">,</span>
         <span class="p">}</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_get_namedview</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">namedview</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;sodipodi:namedview&quot;</span><span class="p">,</span> <span class="n">namespaces</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">name_spaces</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">namedview</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">namedview</span> <span class="o">=</span> <span class="n">etree</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="se">{{</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name_spaces</span><span class="p">[</span><span class="s1">&#39;sodipodi&#39;</span><span class="p">]</span><span class="si">}</span><span class="se">}}</span><span class="s2">namedview&quot;</span><span class="p">,</span>
+                <span class="nb">id</span><span class="o">=</span><span class="s2">&quot;namedview1&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">namedview</span>
 
 <div class="viewcode-block" id="FigureSVG.load_data">
 <a class="viewcode-back" href="../../generated/losalamos.figures.html#losalamos.figures.FigureSVG.load_data">[docs]</a>
@@ -689,9 +704,15 @@
 <div class="viewcode-block" id="FigureSVG.save">
 <a class="viewcode-back" href="../../generated/losalamos.figures.html#losalamos.figures.FigureSVG.save">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="c1"># todo docstring</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Serializes the current XML tree and writes it to the local file system.</span>
+
+<span class="sd">        :return: Always returns ``None``</span>
+<span class="sd">        :rtype: None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">root</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">getroot</span><span class="p">()</span>
         <span class="n">xml_str</span> <span class="o">=</span> <span class="n">etree</span><span class="o">.</span><span class="n">tostring</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">tree</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">,</span> <span class="n">xml_declaration</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">pretty_print</span><span class="o">=</span><span class="kc">False</span>
+            <span class="n">root</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">,</span> <span class="n">xml_declaration</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">pretty_print</span><span class="o">=</span><span class="kc">True</span>
         <span class="p">)</span>
 
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">file_data</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
@@ -703,7 +724,23 @@
 <div class="viewcode-block" id="FigureSVG.export">
 <a class="viewcode-back" href="../../generated/losalamos.figures.html#losalamos.figures.FigureSVG.export">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">export</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">folder</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">data_suffix</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="c1"># todo docstring</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Saves the current SVG data to a specific directory with an optional filename suffix.</span>
+
+<span class="sd">        :param folder: The destination directory path</span>
+<span class="sd">        :type folder: str</span>
+<span class="sd">        :param filename: The base name of the output file</span>
+<span class="sd">        :type filename: str</span>
+<span class="sd">        :param data_suffix: [optional] An additional string appended to the filename</span>
+<span class="sd">        :type data_suffix: str</span>
+<span class="sd">        :return: Always returns ``None``</span>
+<span class="sd">        :rtype: None</span>
+
+<span class="sd">        .. note::</span>
+<span class="sd">             This method temporarily overrides the internal ``file_data`` path to execute the</span>
+<span class="sd">             save operation before restoring the original path.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">data_suffix</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">data_suffix</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
         <span class="n">output_file</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">folder</span><span class="p">)</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">filename</span><span class="si">}{</span><span class="n">data_suffix</span><span class="si">}</span><span class="s2">.svg&quot;</span><span class="p">)</span>
@@ -714,22 +751,17 @@
         <span class="k">return</span> <span class="kc">None</span></div>
 
 
-<div class="viewcode-block" id="FigureSVG.find_layer">
-<a class="viewcode-back" href="../../generated/losalamos.figures.html#losalamos.figures.FigureSVG.find_layer">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">find_layer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;frames&quot;</span><span class="p">):</span>
-        <span class="c1"># todo docstring</span>
-        <span class="n">key</span> <span class="o">=</span> <span class="s2">&quot;{&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">name_spaces</span><span class="p">[</span><span class="s2">&quot;inkscape&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;}&quot;</span>
-        <span class="c1"># Find the &lt;g&gt; group with the specific Inkscape label</span>
-        <span class="n">layer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">find</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;.//svg:g[@inkscape:label=&#39;</span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2">&#39;]&quot;</span><span class="p">,</span> <span class="n">namespaces</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">name_spaces</span>
-        <span class="p">)</span>
-        <span class="k">return</span> <span class="n">layer</span></div>
-
-
 <div class="viewcode-block" id="FigureSVG.hide_layer">
 <a class="viewcode-back" href="../../generated/losalamos.figures.html#losalamos.figures.FigureSVG.hide_layer">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">hide_layer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;frames&quot;</span><span class="p">):</span>
-        <span class="c1"># todo docstring</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Modifies the style attribute of a specific layer to make it invisible.</span>
+
+<span class="sd">        :param label: The Inkscape label of the layer to hide. Default value = ``frames``</span>
+<span class="sd">        :type label: str</span>
+<span class="sd">        :return: Always returns ``None``</span>
+<span class="sd">        :rtype: None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">layer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">find</span><span class="p">(</span>
             <span class="sa">f</span><span class="s2">&quot;.//svg:g[@inkscape:label=&#39;</span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2">&#39;]&quot;</span><span class="p">,</span> <span class="n">namespaces</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">name_spaces</span>
         <span class="p">)</span>
@@ -737,10 +769,33 @@
         <span class="k">return</span> <span class="kc">None</span></div>
 
 
+<div class="viewcode-block" id="FigureSVG.hide_layers">
+<a class="viewcode-back" href="../../generated/losalamos.figures.html#losalamos.figures.FigureSVG.hide_layers">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">hide_layers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">labels</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Hide multiple layers based on a list of provided labels.</span>
+
+<span class="sd">        :param labels: A list of layer labels to be hidden.</span>
+<span class="sd">        :type labels: list</span>
+<span class="sd">        :return: None</span>
+<span class="sd">        :rtype: NoneType</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">lbl</span> <span class="ow">in</span> <span class="n">labels</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">hide_layer</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="n">lbl</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+
 <div class="viewcode-block" id="FigureSVG.show_layer">
 <a class="viewcode-back" href="../../generated/losalamos.figures.html#losalamos.figures.FigureSVG.show_layer">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">show_layer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;frames&quot;</span><span class="p">):</span>
-        <span class="c1"># todo docstring</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Modifies the style attribute of a specific layer to make it visible.</span>
+
+<span class="sd">        :param label: The Inkscape label of the layer to display. Default value = ``frames``</span>
+<span class="sd">        :type label: str</span>
+<span class="sd">        :return: Always returns ``None``</span>
+<span class="sd">        :rtype: None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">layer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">find</span><span class="p">(</span>
             <span class="sa">f</span><span class="s2">&quot;.//svg:g[@inkscape:label=&#39;</span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2">&#39;]&quot;</span><span class="p">,</span> <span class="n">namespaces</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">name_spaces</span>
         <span class="p">)</span>
@@ -748,88 +803,326 @@
         <span class="k">return</span> <span class="kc">None</span></div>
 
 
+<div class="viewcode-block" id="FigureSVG.show_layers">
+<a class="viewcode-back" href="../../generated/losalamos.figures.html#losalamos.figures.FigureSVG.show_layers">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">show_layers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">inclusive</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Show specified layers and optionally hide all others.</span>
+
+<span class="sd">        :param labels: A list of layer labels to be made visible.</span>
+<span class="sd">        :type labels: list</span>
+<span class="sd">        :param inclusive: Determines if other layers stay visible or are hidden. Default value = ``True``</span>
+<span class="sd">        :type inclusive: bool</span>
+<span class="sd">        :return: None</span>
+<span class="sd">        :rtype: NoneType</span>
+
+<span class="sd">        .. note::</span>
+
+<span class="sd">            If ``inclusive`` is set to ``True``, the specified layers are made visible without</span>
+<span class="sd">            affecting others. If ``False``, the method performs a &quot;show only&quot; operation by</span>
+<span class="sd">            hiding any layer not present in the ``labels`` list.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">inclusive</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">lbl</span> <span class="ow">in</span> <span class="n">labels</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">show_layer</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="n">lbl</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">all_layers</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_layers_labels</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">lbl</span> <span class="ow">in</span> <span class="n">all_layers</span> <span class="ow">and</span> <span class="n">lbl</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">labels</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">hide_layer</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="n">lbl</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="FigureSVG.get_layers">
+<a class="viewcode-back" href="../../generated/losalamos.figures.html#losalamos.figures.FigureSVG.get_layers">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_layers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return a dictionary of top-level Inkscape layers indexed by their label.</span>
+
+<span class="sd">        :return: Dictionary mapping layer labels to lxml Elements</span>
+<span class="sd">        :rtype: dict[str, etree.Element]</span>
+
+<span class="sd">        .. note::</span>
+
+<span class="sd">            Only &lt;g&gt; elements that are direct children of the root &lt;svg&gt; element and</span>
+<span class="sd">            have inkscape:groupmode=&quot;layer&quot; are considered.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">{}</span>
+
+        <span class="n">layers</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span>
+            <span class="s2">&quot;svg:g[@inkscape:groupmode=&#39;layer&#39;]&quot;</span><span class="p">,</span>
+            <span class="n">namespaces</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">name_spaces</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="n">label_attr</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="se">{{</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name_spaces</span><span class="p">[</span><span class="s1">&#39;inkscape&#39;</span><span class="p">]</span><span class="si">}</span><span class="se">}}</span><span class="s2">label&quot;</span>
+
+        <span class="n">layer_dc</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="n">layers</span><span class="p">:</span>
+            <span class="n">label</span> <span class="o">=</span> <span class="n">layer</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">label_attr</span><span class="p">)</span>
+
+            <span class="c1"># Skip layers without labels (defensive)</span>
+            <span class="k">if</span> <span class="n">label</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">continue</span>
+
+            <span class="c1"># If duplicate labels exist, last one wins</span>
+            <span class="n">layer_dc</span><span class="p">[</span><span class="n">label</span><span class="p">]</span> <span class="o">=</span> <span class="n">layer</span>
+
+        <span class="k">return</span> <span class="n">layer_dc</span></div>
+
+
+<div class="viewcode-block" id="FigureSVG.get_layers_labels">
+<a class="viewcode-back" href="../../generated/losalamos.figures.html#losalamos.figures.FigureSVG.get_layers_labels">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_layers_labels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the list of layers labels</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">dc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_layers</span><span class="p">()</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">dc</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span></div>
+
+
+<div class="viewcode-block" id="FigureSVG.set_page_opacity">
+<a class="viewcode-back" href="../../generated/losalamos.figures.html#losalamos.figures.FigureSVG.set_page_opacity">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_page_opacity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">opacity</span><span class="o">=</span><span class="mf">1.0</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set the Inkscape page background opacity.</span>
+
+<span class="sd">        :param opacity: Opacity value in range [0.0, 1.0] (1=opaque)</span>
+<span class="sd">        :type opacity: float</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">opacity</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="nb">float</span><span class="p">(</span><span class="n">opacity</span><span class="p">)))</span>
+
+        <span class="n">namedview</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_namedview</span><span class="p">()</span>
+        <span class="n">namedview</span><span class="o">.</span><span class="n">set</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="se">{{</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name_spaces</span><span class="p">[</span><span class="s1">&#39;inkscape&#39;</span><span class="p">]</span><span class="si">}</span><span class="se">}}</span><span class="s2">pageopacity&quot;</span><span class="p">,</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">opacity</span><span class="si">:</span><span class="s2">.6f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="FigureSVG.set_page_color">
+<a class="viewcode-back" href="../../generated/losalamos.figures.html#losalamos.figures.FigureSVG.set_page_color">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_page_color</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#ffffff&quot;</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set the Inkscape page background color.</span>
+
+<span class="sd">        :param color: Hex color string (e.g. &#39;#ffffff&#39;)</span>
+<span class="sd">        :type color: str</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">namedview</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_namedview</span><span class="p">()</span>
+        <span class="n">namedview</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;pagecolor&quot;</span><span class="p">,</span> <span class="n">color</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="FigureSVG.set_element_color">
+<a class="viewcode-back" href="../../generated/losalamos.figures.html#losalamos.figures.FigureSVG.set_element_color">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_element_color</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">stroke</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set fill and/or stroke color of an SVG element.</span>
+
+<span class="sd">        :param element: lxml SVG element</span>
+<span class="sd">        :param fill: Fill color (e.g. &#39;#00ff00&#39;) or None</span>
+<span class="sd">        :param stroke: Stroke color or None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">style</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_style</span><span class="p">(</span><span class="n">element</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;style&quot;</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">fill</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">style</span><span class="p">[</span><span class="s2">&quot;fill&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fill</span>
+
+        <span class="k">if</span> <span class="n">stroke</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">style</span><span class="p">[</span><span class="s2">&quot;stroke&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">stroke</span>
+
+        <span class="n">element</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;style&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_style_to_string</span><span class="p">(</span><span class="n">style</span><span class="p">))</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="FigureSVG.get_layer_elements">
+<a class="viewcode-back" href="../../generated/losalamos.figures.html#losalamos.figures.FigureSVG.get_layer_elements">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_layer_elements</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">drawable_only</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return drawable SVG elements from a layer, indexed by element ID.</span>
+
+<span class="sd">        :param label: Inkscape layer label</span>
+<span class="sd">        :param drawable_only: Exclude non-drawable tags (image, defs, etc.)</span>
+<span class="sd">        :return: dict[str, dict]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">layer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_layers</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">label</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">layer</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Layer &#39;</span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2">&#39; not found&quot;</span><span class="p">)</span>
+
+        <span class="n">drawable_tags</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;rect&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;path&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;circle&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;ellipse&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;line&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;polyline&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;polygon&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;text&quot;</span><span class="p">,</span>
+        <span class="p">}</span>
+
+        <span class="n">out</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="k">for</span> <span class="n">el</span> <span class="ow">in</span> <span class="n">layer</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="s2">&quot;.//*&quot;</span><span class="p">,</span> <span class="n">namespaces</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">name_spaces</span><span class="p">):</span>
+            <span class="n">tag</span> <span class="o">=</span> <span class="n">etree</span><span class="o">.</span><span class="n">QName</span><span class="p">(</span><span class="n">el</span><span class="p">)</span><span class="o">.</span><span class="n">localname</span>
+
+            <span class="k">if</span> <span class="n">drawable_only</span> <span class="ow">and</span> <span class="n">tag</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">drawable_tags</span><span class="p">:</span>
+                <span class="k">continue</span>
+
+            <span class="n">el_id</span> <span class="o">=</span> <span class="n">el</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">el_id</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="c1"># Skip elements without IDs (Inkscape usually assigns one)</span>
+                <span class="k">continue</span>
+
+            <span class="c1"># Defensive: last one wins (should not happen in Inkscape)</span>
+            <span class="n">out</span><span class="p">[</span><span class="n">el_id</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s2">&quot;element&quot;</span><span class="p">:</span> <span class="n">el</span><span class="p">,</span>
+                <span class="s2">&quot;tag&quot;</span><span class="p">:</span> <span class="n">tag</span><span class="p">,</span>
+            <span class="p">}</span>
+
+        <span class="k">return</span> <span class="n">out</span></div>
+
+
 <div class="viewcode-block" id="FigureSVG.to_image">
 <a class="viewcode-back" href="../../generated/losalamos.figures.html#losalamos.figures.FigureSVG.to_image">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">to_image</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
-        <span class="n">output_file</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">file_output</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span>
-        <span class="n">drawing_id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">to_jpg</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-        <span class="n">remove_png</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-        <span class="n">hidden_layers</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">crop_id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">hide_layers</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">show_layers</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">show_inclusive</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">to_jpeg</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">remove_png</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Export the current drawing as an image file, optionally adjusting layers and format.</span>
 
+<span class="sd">        :param file_output: [optional] The destination path for the exported image. If None, it defaults to the source file name.</span>
+<span class="sd">        :type file_output: str or :class:`pathlib.Path`</span>
+<span class="sd">        :param dpi: Dots per inch for the export resolution. Default value = ``300``</span>
+<span class="sd">        :type dpi: int</span>
+<span class="sd">        :param crop_id: [optional] The specific object ID to crop instead of the whole page.</span>
+<span class="sd">        :type crop_id: str</span>
+<span class="sd">        :param hide_layers: [optional] List of layer labels to set to hidden before export.</span>
+<span class="sd">        :type hide_layers: list</span>
+<span class="sd">        :param show_layers: [optional] List of layer labels to set to visible before export.</span>
+<span class="sd">        :type show_layers: list</span>
+<span class="sd">        :param show_inclusive: Whether to show layers inclusively when using ``show_layers``. Default value = ``True``</span>
+<span class="sd">        :type show_inclusive: bool</span>
+<span class="sd">        :param to_jpeg: Convert the final output from PNG to JPEG format. Default value = ``False``</span>
+<span class="sd">        :type to_jpeg: bool</span>
+<span class="sd">        :param remove_png: Delete the intermediate PNG file if ``to_jpeg`` is True. Default value = ``True``</span>
+<span class="sd">        :type remove_png: bool</span>
+<span class="sd">        :return: The path to the generated image file.</span>
+<span class="sd">        :rtype: :class:`pathlib.Path`</span>
+
+<span class="sd">        .. warning::</span>
+
+<span class="sd">            This method requires ``inkscape`` to be installed and available in the system PATH.</span>
+
+
+<span class="sd">        .. note::</span>
+
+<span class="sd">            The method modifies layer visibility before export based on the provided labels.</span>
+<span class="sd">            It saves the current state of the drawing to disk before calling Inkscape</span>
+<span class="sd">            via a subprocess to perform the rendering.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="kn">import</span><span class="w"> </span><span class="nn">subprocess</span>
+        <span class="kn">import</span><span class="w"> </span><span class="nn">tempfile</span>
+
+        <span class="c1"># handle output file</span>
+        <span class="c1"># -----------------------------------------------------------------------</span>
+        <span class="k">if</span> <span class="n">file_output</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">file_output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_data</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">file_data</span><span class="o">.</span><span class="n">stem</span> <span class="o">+</span> <span class="s2">&quot;.png&quot;</span><span class="p">)</span>
+
+        <span class="c1"># handle svg file copy</span>
+        <span class="c1"># -----------------------------------------------------------------------</span>
+        <span class="n">temp_folder</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">mkdtemp</span><span class="p">(</span><span class="n">prefix</span><span class="o">=</span><span class="s2">&quot;losalamos_svg_&quot;</span><span class="p">)</span>
+        <span class="n">dst_file</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">temp_folder</span><span class="p">)</span> <span class="o">/</span> <span class="s2">&quot;losalamos.svg&quot;</span>
+        <span class="n">src_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_data</span>
+        <span class="n">shutil</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">src</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">file_data</span><span class="p">,</span> <span class="n">dst</span><span class="o">=</span><span class="n">dst_file</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">file_data</span> <span class="o">=</span> <span class="n">dst_file</span>
 
         <span class="c1"># Get abspath</span>
-        <span class="n">output_file</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">output_file</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
+        <span class="n">file_output</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">file_output</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
 
         <span class="c1"># handle visibility of layers</span>
-        <span class="k">if</span> <span class="n">hidden_layers</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">for</span> <span class="n">lbl</span> <span class="ow">in</span> <span class="n">hidden_layers</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">hide_layer</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="n">lbl</span><span class="p">)</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+        <span class="c1"># -----------------------------------------------------------------------</span>
+        <span class="k">if</span> <span class="n">hide_layers</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">hide_layers</span><span class="p">(</span><span class="n">labels</span><span class="o">=</span><span class="n">hide_layers</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">show_layers</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">for</span> <span class="n">lbl</span> <span class="ow">in</span> <span class="n">show_layers</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">show_layer</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="n">lbl</span><span class="p">)</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">show_layers</span><span class="p">(</span><span class="n">labels</span><span class="o">=</span><span class="n">hide_layers</span><span class="p">,</span> <span class="n">inclusive</span><span class="o">=</span><span class="n">show_inclusive</span><span class="p">)</span>
+
+        <span class="c1"># save to temporary file</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
 
         <span class="c1"># set return file</span>
-        <span class="n">return_file</span> <span class="o">=</span> <span class="n">output_file</span>
-
-        <span class="c1"># move to inkscape source</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        current_directory = os.getcwd()</span>
-<span class="sd">        os.chdir(self.inkscape_src)</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">return_file</span> <span class="o">=</span> <span class="n">file_output</span>
 
         <span class="c1"># build command</span>
         <span class="c1"># -----------------------------------------------------------------------</span>
-        <span class="k">if</span> <span class="n">output_file</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">s_command</span> <span class="o">=</span> <span class="s1">&#39;inkscape --export-dpi=</span><span class="si">{}</span><span class="s1"> --export-type=&quot;png&quot; &quot;</span><span class="si">{}</span><span class="s1">&quot;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                <span class="n">dpi</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_data</span>
-            <span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">s_command</span> <span class="o">=</span> <span class="s1">&#39;inkscape --export-dpi=</span><span class="si">{}</span><span class="s1"> --export-type=&quot;png&quot; &#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">dpi</span><span class="p">)</span>
-            <span class="n">s_command</span> <span class="o">=</span> <span class="n">s_command</span> <span class="o">+</span> <span class="s1">&#39;--export-filename=&quot;</span><span class="si">{}</span><span class="s1">&quot; &quot;</span><span class="si">{}</span><span class="s1">&quot;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                <span class="n">output_file</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_data</span>
-            <span class="p">)</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s2">&quot;inkscape&quot;</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">file_data</span><span class="p">,</span>
+            <span class="s2">&quot;--export-type=png&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;--export-dpi=</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">dpi</span><span class="p">),</span>
+            <span class="s2">&quot;--export-filename=</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">file_output</span><span class="p">),</span>
+        <span class="p">]</span>
 
-        <span class="k">if</span> <span class="n">drawing_id</span><span class="p">:</span>
-            <span class="n">s_aux</span> <span class="o">=</span> <span class="s2">&quot;inkscape --export-id=&quot;</span> <span class="o">+</span> <span class="n">drawing_id</span>
-            <span class="n">s_command</span> <span class="o">=</span> <span class="n">s_command</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;inkscape&quot;</span><span class="p">,</span> <span class="n">s_aux</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">crop_id</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="n">cmd</span> <span class="o">+</span> <span class="p">[</span><span class="s2">&quot;--export-id=</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">crop_id</span><span class="p">)]</span>
 
         <span class="c1"># call inkscape process</span>
         <span class="c1"># -----------------------------------------------------------------------</span>
-        <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">s_command</span><span class="p">)</span>
-
-        <span class="c1"># go back</span>
-        <span class="c1"># os.chdir(current_directory)</span>
+        <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
 
         <span class="c1"># handle jpg conversion</span>
         <span class="c1"># -----------------------------------------------------------------------</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        if to_jpg:</span>
-<span class="sd">            # print(str(output_file))</span>
-<span class="sd">            new_file = str(output_file).replace(&quot;.png&quot;, &quot;.jpg&quot;)</span>
-<span class="sd">            Drawing.convert_png_to_jpg(</span>
-<span class="sd">                input_file=output_file, output_file=new_file, dpi=dpi</span>
-<span class="sd">            )</span>
-<span class="sd">            if remove_png:</span>
-<span class="sd">                os.remove(output_file)</span>
-<span class="sd">            # reset return file</span>
-<span class="sd">            return_file = new_file[:]</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">to_jpeg</span><span class="p">:</span>
+            <span class="n">new_name</span> <span class="o">=</span> <span class="n">file_output</span><span class="o">.</span><span class="n">stem</span> <span class="o">+</span> <span class="s2">&quot;.jpeg&quot;</span>
+            <span class="n">new_file</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">file_output</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="n">new_name</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">image_to_jpeg</span><span class="p">(</span><span class="n">file_input</span><span class="o">=</span><span class="n">file_output</span><span class="p">,</span> <span class="n">file_output</span><span class="o">=</span><span class="n">new_file</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">remove_png</span><span class="p">:</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">file_output</span><span class="p">)</span>
+
+            <span class="c1"># reset return file</span>
+            <span class="n">return_file</span> <span class="o">=</span> <span class="n">new_file</span>
+
+        <span class="c1"># restore file data and cleanup</span>
+        <span class="c1"># -----------------------------------------------------------------------</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">file_data</span> <span class="o">=</span> <span class="n">src_file</span>
+        <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">temp_folder</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">return_file</span></div>
-</div>
+
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_parse_style</span><span class="p">(</span><span class="n">style_str</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Parse an SVG style string into a dict.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">style_str</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">{}</span>
+
+        <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">style_str</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;;&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="s2">&quot;:&quot;</span> <span class="ow">in</span> <span class="n">item</span><span class="p">)</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_style_to_string</span><span class="p">(</span><span class="n">style_dict</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Serialize a style dict back to a SVG style string.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s2">&quot;;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">v</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">style_dict</span><span class="o">.</span><span class="n">items</span><span class="p">())</span></div>
 
 
 

@@ -1,14 +1,14 @@
 {
-    "about": 0.032,
-    "api": 0.011,
+    "about": 0.015,
+    "api": 0.012,
     "development": 0.023,
     "generated/losalamos": 0.01,
-    "generated/losalamos.figures": 0.248,
-    "generated/losalamos.notes": 0.272,
+    "generated/losalamos.figures": 0.213,
+    "generated/losalamos.notes": 0.284,
     "generated/losalamos.project": 0.03,
-    "generated/losalamos.root": 0.193,
+    "generated/losalamos.root": 0.195,
     "includes/ipsum": 0.001,
     "includes/warning_development": 0.001,
-    "index": 0.003,
-    "usage": 0.008
+    "index": 0.004,
+    "usage": 0.007
 }
