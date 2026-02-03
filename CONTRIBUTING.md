@@ -114,9 +114,6 @@ This project follows Semantic Versioning (`MAJOR.MINOR.PATCH`) with the interpre
 Releases may receive human-readable names. 
 Recommended pattern for `losalamos` is using names of major physicists.
 
-
----
-
 ---
 
 ## Style

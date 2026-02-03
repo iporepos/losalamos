@@ -15,6 +15,8 @@ todo docstring
 # Native imports
 # =======================================================================
 import os
+import pprint
+import shutil
 from pathlib import Path
 
 # ... {develop}
@@ -203,7 +205,7 @@ class Figure(DataSet):
         return None
 
     @staticmethod
-    def image_to_jpg(file_input, file_output, quality=95, dpi=300):
+    def image_to_jpeg(file_input, file_output, quality=95, dpi=300):
         """
         Convert an image file to JPEG format with specified quality and resolution.
 
@@ -240,11 +242,24 @@ class FigureSVG(Figure):
 
         # set defaults
         # --------------------------------------------------
-        self.inkscape_src = "C:/Program Files/Inkscape/bin"
+        self.inkscape_src = "C:/Program Files/Inkscape/bin"  # None # inkscape.exe folder in Windows (consider add to PATH).
         self.name_spaces = {
             "svg": "http://www.w3.org/2000/svg",
             "inkscape": "http://www.inkscape.org/namespaces/inkscape",
+            "sodipodi": "http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd",
         }
+
+    def _get_namedview(self):
+        namedview = self.data.find("sodipodi:namedview", namespaces=self.name_spaces)
+
+        if namedview is None:
+            namedview = etree.SubElement(
+                self.data,
+                f"{{{self.name_spaces['sodipodi']}}}namedview",
+                id="namedview1",
+            )
+
+        return namedview
 
     def load_data(self, file_data):
         """
@@ -285,9 +300,15 @@ class FigureSVG(Figure):
         return None
 
     def save(self):
-        # todo docstring
+        """
+        Serializes the current XML tree and writes it to the local file system.
+
+        :return: Always returns ``None``
+        :rtype: None
+        """
+        root = self.tree.getroot()
         xml_str = etree.tostring(
-            self.tree, encoding="utf-8", xml_declaration=True, pretty_print=False
+            root, encoding="utf-8", xml_declaration=True, pretty_print=True
         )
 
         with open(self.file_data, "wb") as f:
@@ -296,7 +317,23 @@ class FigureSVG(Figure):
         return None
 
     def export(self, folder, filename, data_suffix=None):
-        # todo docstring
+        """
+        Saves the current SVG data to a specific directory with an optional filename suffix.
+
+        :param folder: The destination directory path
+        :type folder: str
+        :param filename: The base name of the output file
+        :type filename: str
+        :param data_suffix: [optional] An additional string appended to the filename
+        :type data_suffix: str
+        :return: Always returns ``None``
+        :rtype: None
+
+        .. note::
+             This method temporarily overrides the internal ``file_data`` path to execute the
+             save operation before restoring the original path.
+
+        """
         if data_suffix is None:
             data_suffix = ""
         output_file = str(Path(folder) / f"{filename}{data_suffix}.svg")
@@ -306,110 +343,345 @@ class FigureSVG(Figure):
         self.file_data = Path(original_file[:])
         return None
 
-    def find_layer(self, label="frames"):
-        # todo docstring
-        key = "{" + self.name_spaces["inkscape"] + "}"
-        # Find the <g> group with the specific Inkscape label
-        layer = self.data.find(
-            f".//svg:g[@inkscape:label='{label}']", namespaces=self.name_spaces
-        )
-        return layer
-
     def hide_layer(self, label="frames"):
-        # todo docstring
+        """
+        Modifies the style attribute of a specific layer to make it invisible.
+
+        :param label: The Inkscape label of the layer to hide. Default value = ``frames``
+        :type label: str
+        :return: Always returns ``None``
+        :rtype: None
+        """
         layer = self.data.find(
             f".//svg:g[@inkscape:label='{label}']", namespaces=self.name_spaces
         )
         layer.set("style", "display:none")  # Hide the layer
         return None
 
+    def hide_layers(self, labels):
+        """
+        Hide multiple layers based on a list of provided labels.
+
+        :param labels: A list of layer labels to be hidden.
+        :type labels: list
+        :return: None
+        :rtype: NoneType
+        """
+        for lbl in labels:
+            self.hide_layer(label=lbl)
+        return None
+
     def show_layer(self, label="frames"):
-        # todo docstring
+        """
+        Modifies the style attribute of a specific layer to make it visible.
+
+        :param label: The Inkscape label of the layer to display. Default value = ``frames``
+        :type label: str
+        :return: Always returns ``None``
+        :rtype: None
+        """
         layer = self.data.find(
             f".//svg:g[@inkscape:label='{label}']", namespaces=self.name_spaces
         )
         layer.set("style", "display:inline")  # Show the layer
         return None
 
+    def show_layers(self, labels, inclusive=True):
+        """
+        Show specified layers and optionally hide all others.
+
+        :param labels: A list of layer labels to be made visible.
+        :type labels: list
+        :param inclusive: Determines if other layers stay visible or are hidden. Default value = ``True``
+        :type inclusive: bool
+        :return: None
+        :rtype: NoneType
+
+        .. note::
+
+            If ``inclusive`` is set to ``True``, the specified layers are made visible without
+            affecting others. If ``False``, the method performs a "show only" operation by
+            hiding any layer not present in the ``labels`` list.
+
+        """
+
+        if inclusive:
+            for lbl in labels:
+                self.show_layer(label=lbl)
+
+        else:
+            all_layers = self.get_layers_labels()
+            for lbl in all_layers and lbl not in labels:
+                self.hide_layer(label=lbl)
+
+        return None
+
+    def get_layers(self):
+        """
+        Return a dictionary of top-level Inkscape layers indexed by their label.
+
+        :return: Dictionary mapping layer labels to lxml Elements
+        :rtype: dict[str, etree.Element]
+
+        .. note::
+
+            Only <g> elements that are direct children of the root <svg> element and
+            have inkscape:groupmode="layer" are considered.
+
+        """
+        if self.data is None:
+            return {}
+
+        layers = self.data.findall(
+            "svg:g[@inkscape:groupmode='layer']",
+            namespaces=self.name_spaces,
+        )
+
+        label_attr = f"{{{self.name_spaces['inkscape']}}}label"
+
+        layer_dc = {}
+        for layer in layers:
+            label = layer.get(label_attr)
+
+            # Skip layers without labels (defensive)
+            if label is None:
+                continue
+
+            # If duplicate labels exist, last one wins
+            layer_dc[label] = layer
+
+        return layer_dc
+
+    def get_layers_labels(self):
+        """
+        Return the list of layers labels
+
+        """
+        dc = self.get_layers()
+        return list(dc.keys())
+
+    def set_page_opacity(self, opacity=1.0):
+        """
+        Set the Inkscape page background opacity.
+
+        :param opacity: Opacity value in range [0.0, 1.0] (1=opaque)
+        :type opacity: float
+        """
+        opacity = max(0.0, min(1.0, float(opacity)))
+
+        namedview = self._get_namedview()
+        namedview.set(
+            f"{{{self.name_spaces['inkscape']}}}pageopacity",
+            f"{opacity:.6f}",
+        )
+        return None
+
+    def set_page_color(self, color="#ffffff"):
+        """
+        Set the Inkscape page background color.
+
+        :param color: Hex color string (e.g. '#ffffff')
+        :type color: str
+        """
+        namedview = self._get_namedview()
+        namedview.set("pagecolor", color)
+        return None
+
+    def set_element_color(self, element, fill=None, stroke=None):
+        """
+        Set fill and/or stroke color of an SVG element.
+
+        :param element: lxml SVG element
+        :param fill: Fill color (e.g. '#00ff00') or None
+        :param stroke: Stroke color or None
+        """
+        style = self._parse_style(element.get("style"))
+
+        if fill is not None:
+            style["fill"] = fill
+
+        if stroke is not None:
+            style["stroke"] = stroke
+
+        element.set("style", self._style_to_string(style))
+        return None
+
+    def get_layer_elements(self, label, drawable_only=True):
+        """
+        Return drawable SVG elements from a layer, indexed by element ID.
+
+        :param label: Inkscape layer label
+        :param drawable_only: Exclude non-drawable tags (image, defs, etc.)
+        :return: dict[str, dict]
+        """
+        layer = self.get_layers().get(label)
+
+        if layer is None:
+            raise ValueError(f"Layer '{label}' not found")
+
+        drawable_tags = {
+            "rect",
+            "path",
+            "circle",
+            "ellipse",
+            "line",
+            "polyline",
+            "polygon",
+            "text",
+        }
+
+        out = {}
+
+        for el in layer.findall(".//*", namespaces=self.name_spaces):
+            tag = etree.QName(el).localname
+
+            if drawable_only and tag not in drawable_tags:
+                continue
+
+            el_id = el.get("id")
+            if el_id is None:
+                # Skip elements without IDs (Inkscape usually assigns one)
+                continue
+
+            # Defensive: last one wins (should not happen in Inkscape)
+            out[el_id] = {
+                "element": el,
+                "tag": tag,
+            }
+
+        return out
+
     def to_image(
         self,
-        output_file=None,
+        file_output=None,
         dpi=300,
-        drawing_id=None,
-        to_jpg=False,
-        remove_png=True,
-        hidden_layers=None,
+        crop_id=None,
+        hide_layers=None,
         show_layers=None,
+        show_inclusive=True,
+        to_jpeg=False,
+        remove_png=True,
     ):
         """
         Export the current drawing as an image file, optionally adjusting layers and format.
 
+        :param file_output: [optional] The destination path for the exported image. If None, it defaults to the source file name.
+        :type file_output: str or :class:`pathlib.Path`
+        :param dpi: Dots per inch for the export resolution. Default value = ``300``
+        :type dpi: int
+        :param crop_id: [optional] The specific object ID to crop instead of the whole page.
+        :type crop_id: str
+        :param hide_layers: [optional] List of layer labels to set to hidden before export.
+        :type hide_layers: list
+        :param show_layers: [optional] List of layer labels to set to visible before export.
+        :type show_layers: list
+        :param show_inclusive: Whether to show layers inclusively when using ``show_layers``. Default value = ``True``
+        :type show_inclusive: bool
+        :param to_jpeg: Convert the final output from PNG to JPEG format. Default value = ``False``
+        :type to_jpeg: bool
+        :param remove_png: Delete the intermediate PNG file if ``to_jpeg`` is True. Default value = ``True``
+        :type remove_png: bool
+        :return: The path to the generated image file.
+        :rtype: :class:`pathlib.Path`
+
+        .. warning::
+
+            This method requires ``inkscape`` to be installed and available in the system PATH.
+
+
+        .. note::
+
+            The method modifies layer visibility before export based on the provided labels.
+            It saves the current state of the drawing to disk before calling Inkscape
+            via a subprocess to perform the rendering.
 
         """
         import subprocess
+        import tempfile
+
+        # handle output file
+        # -----------------------------------------------------------------------
+        if file_output is None:
+            file_output = self.file_data.parent / str(self.file_data.stem + ".png")
+
+        # handle svg file copy
+        # -----------------------------------------------------------------------
+        temp_folder = tempfile.mkdtemp(prefix="losalamos_svg_")
+        dst_file = Path(temp_folder) / "losalamos.svg"
+        src_file = self.file_data
+        shutil.copy(src=self.file_data, dst=dst_file)
+        self.file_data = dst_file
 
         # Get abspath
-        output_file = Path(output_file).resolve()
+        file_output = Path(file_output).resolve()
 
         # handle visibility of layers
-        if hidden_layers is not None:
-            for lbl in hidden_layers:
-                self.hide_layer(label=lbl)
-                self.save()
+        # -----------------------------------------------------------------------
+        if hide_layers is not None:
+            self.hide_layers(labels=hide_layers)
 
         if show_layers is not None:
-            for lbl in show_layers:
-                self.show_layer(label=lbl)
-                self.save()
+            self.show_layers(labels=hide_layers, inclusive=show_inclusive)
+
+        # save to temporary file
+        self.save()
 
         # set return file
-        return_file = output_file
-
-        # move to inkscape source
-        """
-        current_directory = os.getcwd()
-        os.chdir(self.inkscape_src)
-        """
+        return_file = file_output
 
         # build command
         # -----------------------------------------------------------------------
-        if output_file is None:
-            s_command = 'inkscape --export-dpi={} --export-type="png" "{}"'.format(
-                dpi, self.file_data
-            )
-        else:
-            s_command = 'inkscape --export-dpi={} --export-type="png" '.format(dpi)
-            s_command = s_command + '--export-filename="{}" "{}"'.format(
-                output_file, self.file_data
-            )
+        cmd = [
+            "inkscape",
+            self.file_data,
+            "--export-type=png",
+            "--export-dpi={}".format(dpi),
+            "--export-filename={}".format(file_output),
+        ]
 
-        if drawing_id:
-            s_aux = "inkscape --export-id=" + drawing_id
-            s_command = s_command.replace("inkscape", s_aux)
+        if crop_id is not None:
+            cmd = cmd + ["--export-id={}".format(crop_id)]
 
         # call inkscape process
         # -----------------------------------------------------------------------
-        subprocess.run(s_command)
-
-        # go back
-        # os.chdir(current_directory)
+        subprocess.run(cmd)
 
         # handle jpg conversion
         # -----------------------------------------------------------------------
-        """
-        if to_jpg:
-            # print(str(output_file))
-            new_file = str(output_file).replace(".png", ".jpg")
-            Drawing.convert_png_to_jpg(
-                input_file=output_file, output_file=new_file, dpi=dpi
-            )
+        if to_jpeg:
+            new_name = file_output.stem + ".jpeg"
+            new_file = Path(file_output.parent / new_name)
+
+            self.image_to_jpeg(file_input=file_output, file_output=new_file, dpi=dpi)
             if remove_png:
-                os.remove(output_file)
+                os.remove(file_output)
+
             # reset return file
-            return_file = new_file[:]
-        """
+            return_file = new_file
+
+        # restore file data and cleanup
+        # -----------------------------------------------------------------------
+        self.file_data = src_file
+        shutil.rmtree(temp_folder)
 
         return return_file
+
+    @staticmethod
+    def _parse_style(style_str):
+        """
+        Parse an SVG style string into a dict.
+        """
+        if not style_str:
+            return {}
+
+        return dict(item.split(":", 1) for item in style_str.split(";") if ":" in item)
+
+    @staticmethod
+    def _style_to_string(style_dict):
+        """
+        Serialize a style dict back to a SVG style string.
+        """
+        return ";".join(f"{k}:{v}" for k, v in style_dict.items())
 
 
 # ... {develop}
