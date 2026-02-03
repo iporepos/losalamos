@@ -47,6 +47,7 @@ from losalamos.figures import FigureSVG
 # CLASSES
 # ***********************************************************************
 
+
 @unittest.skipUnless(RUN_BENCHMARKS, reason="skipping benchmarks")
 class BCMKTestFigureSVG(unittest.TestCase):
 
