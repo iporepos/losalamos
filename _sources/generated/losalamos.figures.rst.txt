@@ -1,0 +1,13 @@
+﻿losalamos.figures
+=================
+
+.. automodule:: losalamos.figures
+
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      Figure
+      FigureSVG
+   

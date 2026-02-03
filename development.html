@@ -50,7 +50,7 @@
     <link rel="author" title="About these documents" href="about.html" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="prev" title="losalamos.notes" href="generated/losalamos.notes.html" />
+    <link rel="prev" title="losalamos.figures" href="generated/losalamos.figures.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
@@ -450,6 +450,62 @@ dependencies in editable mode <code class="docutils literal notranslate"><span c
 developing and documentation.</p>
 </section>
 <hr class="docutils" />
+<section id="versions">
+<h2>Versions<a class="headerlink" href="#versions" title="Link to this heading">#</a></h2>
+<section id="semantic-versioning-policy">
+<h3>Semantic Versioning Policy<a class="headerlink" href="#semantic-versioning-policy" title="Link to this heading">#</a></h3>
+<p>This project follows Semantic Versioning (<code class="docutils literal notranslate"><span class="pre">MAJOR.MINOR.PATCH</span></code>) with the interpretations below.</p>
+<section id="major-x-y-z-project-maturity-level">
+<h4>Major <code class="docutils literal notranslate"><span class="pre">X.y.z</span></code> — Project Maturity Level<a class="headerlink" href="#major-x-y-z-project-maturity-level" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><strong>0.x.x — Experimental</strong></p>
+<ul>
+<li><p>Playground for exploring architecture and project layout.</p></li>
+<li><p>Breaking changes are expected.</p></li>
+</ul>
+</li>
+<li><p><strong>1.x.x — Stable Foundation</strong></p>
+<ul>
+<li><p>Production-ready core architecture.</p></li>
+<li><p>Actively developed.</p></li>
+<li><p>Backward compatibility is expected.</p></li>
+</ul>
+</li>
+<li><p><strong>2.x.x — Next Generation</strong></p>
+<ul>
+<li><p>May introduce new syntax or paradigms.</p></li>
+<li><p>Can be incompatible with <code class="docutils literal notranslate"><span class="pre">1.x.x</span></code>.</p></li>
+<li><p>More mature, better documented, and more stable.</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="minor-x-y-z-milestones">
+<h4>Minor <code class="docutils literal notranslate"><span class="pre">x.Y.z</span></code> — Milestones<a class="headerlink" href="#minor-x-y-z-milestones" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p>Major feature additions.</p></li>
+<li><p>Large refactors within the same architecture.</p></li>
+<li><p>Treated as logical restore points.</p></li>
+</ul>
+</section>
+<section id="patch-x-y-z-maintenance">
+<h4>Patch <code class="docutils literal notranslate"><span class="pre">x.y.Z</span></code> — Maintenance<a class="headerlink" href="#patch-x-y-z-maintenance" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p>Bug fixes.</p></li>
+<li><p>Small improvements.</p></li>
+<li><p>Documentation corrections.</p></li>
+<li><p>No behavioral changes.</p></li>
+</ul>
+</section>
+</section>
+<section id="version-names">
+<h3>Version Names<a class="headerlink" href="#version-names" title="Link to this heading">#</a></h3>
+<p>Releases may receive human-readable names.
+Recommended pattern for <code class="docutils literal notranslate"><span class="pre">losalamos</span></code> is using names of major physicists.</p>
+<hr class="docutils" />
+</section>
+</section>
+<hr class="docutils" />
 <section id="style">
 <h2>Style<a class="headerlink" href="#style" title="Link to this heading">#</a></h2>
 <p>In this project, we enforce using <a class="reference external" href="https://black.readthedocs.io">Black</a> to ensure a consistent code style.</p>
@@ -498,14 +554,74 @@ consistency.</p>
 <h2>Testing<a class="headerlink" href="#testing" title="Link to this heading">#</a></h2>
 <p>Test-driven development is recommended. Tests are split into the following categories:</p>
 <ul class="simple">
-<li><p><strong>Example tests</strong> - single line tests presented in docstrings.</p></li>
 <li><p><strong>Unit tests</strong> - short and targeting feature behavior.</p></li>
 <li><p><strong>Benchmark tests</strong> - may take longer time, targeting full performance, includes inputs and outputs evaluations.</p></li>
+<li><p><strong>Example tests</strong> - single line tests presented in docstrings.</p></li>
 </ul>
 <div class="admonition important">
 <p class="admonition-title">Important</p>
 <p>Run tests under a virtual environment session.</p>
 </div>
+<section id="unit-tests">
+<h3>Unit tests<a class="headerlink" href="#unit-tests" title="Link to this heading">#</a></h3>
+<p>Run all unit tests in <code class="docutils literal notranslate"><span class="pre">/tests</span></code> via terminal:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>unittest<span class="w"> </span>discover<span class="w"> </span>-s<span class="w"> </span>tests<span class="w"> </span>-p<span class="w"> </span><span class="s2">&quot;test_*.py&quot;</span><span class="w"> </span>-v
+</pre></div>
+</div>
+<p>For a single unit test module:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>tests.unit.test_module
+</pre></div>
+</div>
+<p>Alternatively, consider run the utility available in the repository:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>tests.run<span class="w"> </span>--which<span class="w"> </span><span class="s2">&quot;unit&quot;</span>
+</pre></div>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>See more in <a class="reference external" href="https://docs.python.org/3/library/doctest.html">unittest library</a> for details on unit tests.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Example tests can be included in unit tests with their own testing script.
+A template for this is provided in <code class="docutils literal notranslate"><span class="pre">/tests/test_doctest.py</span></code>.</p>
+</div>
+</section>
+<section id="benchmark-tests">
+<h3>Benchmark tests<a class="headerlink" href="#benchmark-tests" title="Link to this heading">#</a></h3>
+<p>Benchmark tests are unit tests related to full-integration of features,
+sometimes associated with input and output data. Some benchmark tests
+will install heavy datasets from provided URLs.</p>
+<p>For convenience, consider run the utility available in the repository:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>tests.run<span class="w"> </span>--which<span class="w"> </span><span class="s2">&quot;bcmk&quot;</span>
+</pre></div>
+</div>
+<section id="enable-benchmark-tests">
+<h4>Enable benchmark tests<a class="headerlink" href="#enable-benchmark-tests" title="Link to this heading">#</a></h4>
+<p>For running benchmark tests, they must be enabled manually. This is
+because benchmarks may take too long and can deplete resources for CI services.
+Once enabled, just run the unit tests as usual.</p>
+<p>Enabling benchmarks on Unix:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">RUN_BENCHMARKS</span><span class="o">=</span><span class="m">1</span>
+</pre></div>
+</div>
+<p>Enabling benchmarks on Windows:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">$env</span>:RUN_BENCHMARKS<span class="o">=</span><span class="s2">&quot;1&quot;</span>
+</pre></div>
+</div>
+</section>
+<section id="enable-large-benchmark-tests">
+<h4>Enable large benchmark tests<a class="headerlink" href="#enable-large-benchmark-tests" title="Link to this heading">#</a></h4>
+<p>Large benchmark tests are exceptionally large tests. The same logic applies:</p>
+<p>Enabling large benchmark tests on Unix:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">RUN_BENCHMARKS_XXL</span><span class="o">=</span><span class="m">1</span>
+</pre></div>
+</div>
+<p>Enabling large benchmark tests on Windows:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">$env</span>:RUN_BENCHMARKS_XXL<span class="o">=</span><span class="s2">&quot;1&quot;</span>
+</pre></div>
+</div>
+</section>
+</section>
 <section id="example-tests">
 <h3>Example tests<a class="headerlink" href="#example-tests" title="Link to this heading">#</a></h3>
 <p>Create single-line example tests in docstring:</p>
@@ -536,54 +652,6 @@ consistency.</p>
 <p>See more in <a class="reference external" href="https://docs.python.org/3/library/doctest.html">doctest library</a> for details on example tests.</p>
 </div>
 </section>
-<section id="unit-tests">
-<h3>Unit tests<a class="headerlink" href="#unit-tests" title="Link to this heading">#</a></h3>
-<p>Run all unit tests in <code class="docutils literal notranslate"><span class="pre">/tests</span></code> via terminal:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>unittest<span class="w"> </span>discover<span class="w"> </span>-s<span class="w"> </span>tests<span class="w"> </span>-p<span class="w"> </span><span class="s2">&quot;test_*.py&quot;</span><span class="w"> </span>-v
-</pre></div>
-</div>
-<p>For a single unit test module:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>tests.unit.test_module
-</pre></div>
-</div>
-<div class="admonition seealso">
-<p class="admonition-title">See also</p>
-<p>See more in <a class="reference external" href="https://docs.python.org/3/library/doctest.html">unittest library</a> for details on unit tests.</p>
-</div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Example tests can be included in unit tests with their own testing script.
-A template for this is provided in <code class="docutils literal notranslate"><span class="pre">/tests/test_doctest.py</span></code>.</p>
-</div>
-</section>
-<section id="benchmark-tests">
-<h3>Benchmark tests<a class="headerlink" href="#benchmark-tests" title="Link to this heading">#</a></h3>
-<p>Benchmark tests are unit tests related to full-integration of features, sometimes associated with input and output data. Some benchmark tests will install heavy datasets from provided URLs.</p>
-<section id="enable-benchmark-tests">
-<h4>Enable benchmark tests<a class="headerlink" href="#enable-benchmark-tests" title="Link to this heading">#</a></h4>
-<p>For running benchmark tests, they must be enabled manually. This is because benchmarks may take too long and can deplete resources for CI services. Once enabled, just run the unit tests as usual.</p>
-<p>Enabling benchmarks on Unix:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">RUN_BENCHMARKS</span><span class="o">=</span><span class="m">1</span>
-</pre></div>
-</div>
-<p>Enabling benchmarks on Windows:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">$env</span>:RUN_BENCHMARKS<span class="o">=</span><span class="s2">&quot;1&quot;</span>
-</pre></div>
-</div>
-</section>
-<section id="enable-large-benchmark-tests">
-<h4>Enable large benchmark tests<a class="headerlink" href="#enable-large-benchmark-tests" title="Link to this heading">#</a></h4>
-<p>Large benchmark tests are exceptionally large tests. The same logic applies:</p>
-<p>Enabling large benchmark tests on Unix:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">RUN_BENCHMARKS_XXL</span><span class="o">=</span><span class="m">1</span>
-</pre></div>
-</div>
-<p>Enabling large benchmark tests on Windows:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">$env</span>:RUN_BENCHMARKS_XXL<span class="o">=</span><span class="s2">&quot;1&quot;</span>
-</pre></div>
-</div>
-</section>
-</section>
 </section>
 </section>
 
@@ -598,12 +666,12 @@ A template for this is provided in <code class="docutils literal notranslate"><s
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="generated/losalamos.notes.html"
+       href="generated/losalamos.figures.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">losalamos.notes</p>
+        <p class="prev-next-title">losalamos.figures</p>
       </div>
     </a>
 </div>
@@ -627,19 +695,29 @@ A template for this is provided in <code class="docutils literal notranslate"><s
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#cloning">Cloning</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#installing">Installing</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#versions">Versions</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#semantic-versioning-policy">Semantic Versioning Policy</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#major-x-y-z-project-maturity-level">Major <code class="docutils literal notranslate"><span class="pre">X.y.z</span></code> — Project Maturity Level</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#minor-x-y-z-milestones">Minor <code class="docutils literal notranslate"><span class="pre">x.Y.z</span></code> — Milestones</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#patch-x-y-z-maintenance">Patch <code class="docutils literal notranslate"><span class="pre">x.y.Z</span></code> — Maintenance</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#version-names">Version Names</a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#style">Style</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#documentation">Documentation</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#build-locally">Build locally</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#testing">Testing</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example-tests">Example tests</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#unit-tests">Unit tests</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#benchmark-tests">Benchmark tests</a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#enable-benchmark-tests">Enable benchmark tests</a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#enable-large-benchmark-tests">Enable large benchmark tests</a></li>
 </ul>
 </li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example-tests">Example tests</a></li>
 </ul>
 </li>
 </ul>
