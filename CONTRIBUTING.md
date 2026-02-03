@@ -74,6 +74,51 @@ developing and documentation.
 
 ---
 
+## Versions
+
+### Semantic Versioning Policy
+
+This project follows Semantic Versioning (`MAJOR.MINOR.PATCH`) with the interpretations below.
+
+#### Major `X.y.z` — Project Maturity Level
+
+- **0.x.x — Experimental**
+  - Playground for exploring architecture and project layout.
+  - Breaking changes are expected.
+
+- **1.x.x — Stable Foundation**
+  - Production-ready core architecture.
+  - Actively developed.
+  - Backward compatibility is expected.
+
+- **2.x.x — Next Generation**
+  - May introduce new syntax or paradigms.
+  - Can be incompatible with `1.x.x`.
+  - More mature, better documented, and more stable.
+
+#### Minor `x.Y.z` — Milestones
+
+- Major feature additions.
+- Large refactors within the same architecture.
+- Treated as logical restore points.
+
+#### Patch `x.y.Z` — Maintenance
+
+- Bug fixes.
+- Small improvements.
+- Documentation corrections.
+- No behavioral changes.
+
+### Version Names
+
+Releases may receive human-readable names. 
+Recommended pattern for `losalamos` is using names of major physicists.
+
+
+---
+
+---
+
 ## Style
 
 In this project, we enforce using [Black](https://black.readthedocs.io) to ensure a consistent code style. 
@@ -127,12 +172,87 @@ The docs website is generated under ``docs/_build``
 
 Test-driven development is recommended. Tests are split into the following categories:
 
-  * **Example tests** - single line tests presented in docstrings.
   * **Unit tests** - short and targeting feature behavior.
   * **Benchmark tests** - may take longer time, targeting full performance, includes inputs and outputs evaluations.
+  * **Example tests** - single line tests presented in docstrings.
 
 ```{important}
 Run tests under a virtual environment session.
+```
+
+### Unit tests
+
+Run all unit tests in ``/tests`` via terminal:
+
+```bash
+python -m unittest discover -s tests -p "test_*.py" -v
+```
+
+For a single unit test module:
+
+```bash
+python -m tests.unit.test_module
+```
+
+Alternatively, consider run the utility available in the repository:
+
+```bash
+python -m tests.run --which "unit"
+```
+
+```{seealso}
+See more in [unittest library](https://docs.python.org/3/library/doctest.html) for details on unit tests.
+```
+
+```{note}
+Example tests can be included in unit tests with their own testing script.
+A template for this is provided in ``/tests/test_doctest.py``.
+```
+
+### Benchmark tests
+
+Benchmark tests are unit tests related to full-integration of features, 
+sometimes associated with input and output data. Some benchmark tests 
+will install heavy datasets from provided URLs.
+
+For convenience, consider run the utility available in the repository:
+
+```bash
+python -m tests.run --which "bcmk"
+```
+
+#### Enable benchmark tests
+
+For running benchmark tests, they must be enabled manually. This is 
+because benchmarks may take too long and can deplete resources for CI services. 
+Once enabled, just run the unit tests as usual.
+
+Enabling benchmarks on Unix:
+
+```bash
+RUN_BENCHMARKS=1
+```
+
+Enabling benchmarks on Windows:
+
+```bash
+$env:RUN_BENCHMARKS="1"
+```
+
+#### Enable large benchmark tests
+
+Large benchmark tests are exceptionally large tests. The same logic applies:
+
+Enabling large benchmark tests on Unix:
+
+```bash
+RUN_BENCHMARKS_XXL=1
+```
+
+Enabling large benchmark tests on Windows:
+
+```bash
+$env:RUN_BENCHMARKS_XXL="1"
 ```
 
 ### Example tests
@@ -167,63 +287,3 @@ if __name__ == "__main__":
 ```{seealso}
 See more in [doctest library](https://docs.python.org/3/library/doctest.html) for details on example tests.
 ```
-
-### Unit tests
-
-Run all unit tests in ``/tests`` via terminal:
-
-```bash
-python -m unittest discover -s tests -p "test_*.py" -v
-```
-
-For a single unit test module:
-
-```bash
-python -m tests.unit.test_module
-```
-
-```{seealso}
-See more in [unittest library](https://docs.python.org/3/library/doctest.html) for details on unit tests.
-```
-
-```{note}
-Example tests can be included in unit tests with their own testing script.
-A template for this is provided in ``/tests/test_doctest.py``.
-```
-
-### Benchmark tests
-
-Benchmark tests are unit tests related to full-integration of features, sometimes associated with input and output data. Some benchmark tests will install heavy datasets from provided URLs.
-
-#### Enable benchmark tests
-
-For running benchmark tests, they must be enabled manually. This is because benchmarks may take too long and can deplete resources for CI services. Once enabled, just run the unit tests as usual.
-
-Enabling benchmarks on Unix:
-
-```bash
-RUN_BENCHMARKS=1
-```
-
-Enabling benchmarks on Windows:
-
-```bash
-$env:RUN_BENCHMARKS="1"
-```
-
-#### Enable large benchmark tests
-
-Large benchmark tests are exceptionally large tests. The same logic applies:
-
-Enabling large benchmark tests on Unix:
-
-```bash
-RUN_BENCHMARKS_XXL=1
-```
-
-Enabling large benchmark tests on Windows:
-
-```bash
-$env:RUN_BENCHMARKS_XXL="1"
-```
-

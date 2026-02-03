@@ -1,33 +1,10 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+#
+# Copyright (C) 2025 The Project Authors
+# See pyproject.toml for authors/maintainers.
+# See LICENSE for license details.
 """
-{Short module description (1-3 sentences)}
-todo docstring
-
-Features
---------
-todo docstring
-
- - {feature 1}
- - {feature 2}
- - {feature 3}
- - {etc}
-
-Overview
---------
-todo docstring
-{Overview description}
-
-Examples
---------
-todo docstring
-
-Print a message
-
-.. code-block:: python
-
-    # print message
-    print("Hello world!")
-    # [Output] >> 'Hello world!'
-
+Setup constants and other utilities for testing
 
 """
 
@@ -94,8 +71,10 @@ REPO_NAME = os.path.basename(Path(BASE_DIR).parent)
 
 # Benchmark tests
 # -----------------------------------------------------------------------
+
 # benchmark tests disabled -- default to "0" (false)
 RUN_BENCHMARKS = os.getenv("RUN_BENCHMARKS", "0") == "1"
+
 # large benchmark tests disabled -- default to "0" (false)
 RUN_BENCHMARKS_XXL = os.getenv("RUN_BENCHMARKS_XXL", "0") == "1"
 # ... {develop}
@@ -115,26 +94,59 @@ RUN_BENCHMARKS_XXL = os.getenv("RUN_BENCHMARKS_XXL", "0") == "1"
 
 
 def testmsg(s):
-    # todo docstring
+    """
+    Formats a string into a standardized lowercase test message prefixing the repository name.
+
+    :param s: The message content to be formatted.
+    :type s: str
+    :return: The formatted string in lowercase.
+    :rtype: str
+    """
     s2 = f"{REPO_NAME} -- tests >>> {s}".lower()
     return s2
 
 
 def testprint(s):
+    """
+    Formats a message and prints it to the console with an immediate flush.
+
+    :param s: The message content to be printed.
+    :type s: str
+    :return: The formatted string that was printed.
+    :rtype: str
+    """
     s2 = testmsg(s)
     print(s2, flush=True)
     return s2
 
 
 def make_output():
-    # todo docstring
+    """
+    Ensures the existence of the global output directory.
+
+    :return: None.
+    :rtype: None
+    """
     testprint("making output dir")
     os.makedirs(OUTPUT_DIR, exist_ok=True)
     return None
 
 
 def make_data(size=100):
-    # todo docstring
+    """
+    Generates a synthetic CSV dataset if the data file does not already exist.
+
+    .. note::
+
+        The function creates a :class:`pandas.DataFrame` with three columns:
+        ``v1`` and ``v2`` containing random integers, and ``v3`` representing
+        the ratio of the two.
+
+    :param size: The number of rows to generate for the dataset. Default value = 100
+    :type size: int
+    :return: None.
+    :rtype: None
+    """
     testprint("making data")
     if not os.path.isfile(DATA_FILE):
         v = np.random.randint(low=10, high=100, size=size)
@@ -149,7 +161,6 @@ def make_data(size=100):
 
 
 def load_data():
-    # todo docstring
     testprint("loading numbers data")
     df = pd.read_csv(DATA_FILE, sep=";")
     return df
@@ -162,7 +173,20 @@ def load_data():
 
 
 def retrieve_dataset(name):
-    # todo docstring
+    """
+    Validates and prepares the directory paths for a specific dataset.
+
+    .. note::
+
+        This function checks for dataset existence in the local configuration,
+        triggers an installation if the data is missing, and ensures a
+        corresponding output directory is created.
+
+    :param name: The unique identifier of the dataset to retrieve.
+    :type name: str
+    :return: A tuple containing the dataset source directory and the output directory, or ``False`` if not found.
+    :rtype: tuple or bool
+    """
     ls_datasets = DATASETS_DF["name"].unique()
     if name not in set(ls_datasets):
         testprint(f"dataset {name} not found")
@@ -181,7 +205,14 @@ def retrieve_dataset(name):
 
 
 def install_dataset(name):
-    # todo docstring
+    """
+    Downloads and extracts a dataset into the local data directory.
+
+    :param name: The name of the dataset to be installed.
+    :type name: str
+    :return: The path to the directory where the dataset was installed.
+    :rtype: :class:`pathlib.Path` or str
+    """
     dataset_dir = DATA_DIR / name
     os.makedirs(dataset_dir, exist_ok=True)
     dataset_url = DATASETS_DF.loc[DATASETS_DF["name"] == name, "url"].values[0]
@@ -197,7 +228,16 @@ def install_dataset(name):
 
 
 def download_file(url, dst):
-    # todo docstring
+    """
+    Streams and saves a file from a specified URL to a local destination.
+
+    :param url: The remote URL of the file to download.
+    :type url: str
+    :param dst: The local file path where the content should be saved.
+    :type dst: str
+    :return: None.
+    :rtype: None
+    """
     response = requests.get(url, stream=True)
     response.raise_for_status()
     with open(dst, "wb") as f:
@@ -207,7 +247,16 @@ def download_file(url, dst):
 
 
 def extract_zip(file_path, extract_to):
-    # todo docstring
+    """
+    Extracts all contents of a ZIP archive to a specified directory.
+
+    :param file_path: The local path to the ZIP archive file.
+    :type file_path: str
+    :param extract_to: The directory path where files should be extracted.
+    :type extract_to: str
+    :return: None.
+    :rtype: None
+    """
     with zipfile.ZipFile(file_path, "r") as zip_ref:
         zip_ref.extractall(extract_to)
 

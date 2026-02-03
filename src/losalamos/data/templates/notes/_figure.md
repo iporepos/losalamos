@@ -76,10 +76,5 @@ FIGURE
 ---
 # Other resources
 
-Useful free and open-source software
-
-- [[Inkscape]]
-- [[GIMP]]
-- [[QGIS]]
-- [[Python]]
+Write here useful links and other notes
 
