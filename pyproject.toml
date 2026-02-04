@@ -110,6 +110,7 @@ dependencies = [
     "pillow",    # image manipulation
     "lxml",      # XML manipulation
     "PyPDF2",    # PDF handler
+    "tdqm",      # UX progress bars
     # [EXAMPLE] custom dependency directly from GitHub:
     # "my-package @ git+https://github.com/username/my-package.git@main",
     # ... [ADD MORE IF NEDDED]

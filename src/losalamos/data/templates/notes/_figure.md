@@ -19,9 +19,11 @@ collection: main
 size:
 category: schematics 3d
 subcategory:
+complexity:
 order: 1
 panels: 1
 title:
+subtitle:
 caption:
 alttext:
 source:
@@ -71,6 +73,10 @@ FIGURE
 
 ---
 # Resources
+
+
+---
+# Credits
 
 
 ---

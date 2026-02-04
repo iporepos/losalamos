@@ -23,6 +23,11 @@ project metadata, filesystem layout, and downstream processing workflows.
 # Native imports
 # =======================================================================
 import os
+import datetime
+import pprint
+import tempfile
+import shutil
+import zipfile
 from pathlib import Path
 
 # ... {develop}
@@ -30,6 +35,7 @@ from pathlib import Path
 # External imports
 # =======================================================================
 import pandas as pd
+from tqdm import tqdm
 
 # ... {develop}
 
@@ -82,8 +88,8 @@ SUBFOLDERS = {
         # Outputs
         # --------------------------------
         "outputs/public",
-        "outputs/history",
-        "outputs/latest",
+        "outputs/public/history",
+        "outputs/public/latest",
     ],
 }
 
@@ -245,6 +251,9 @@ class Project(FileSys):
         super().__init__(name=name, alias=alias)
         self.load_data()
 
+        self.publish_force = False
+        self.publish_delta = 1  # hour
+
     def load_data(self):
         """
         Initialize internal project data.
@@ -257,6 +266,204 @@ class Project(FileSys):
         df["file_template"] = ""
         self.data = df.copy()
         return None
+
+    def publish(
+        self,
+        targets,
+        prefix,
+        output_folder=None,
+    ):
+        """
+        Publish a versioned snapshot of selected directories to a managed output location.
+
+        :param targets: A list of directory paths to be included in the snapshot.
+        :type targets: list
+        :param prefix: The string prefix used for naming the generated archive file.
+        :type prefix: str
+        :param output_folder: [optional] The destination directory for the published archives.
+        :type output_folder: :class:`pathlib.Path`
+        :return: A dictionary containing the publication status, the resulting path, and metadata.
+        :rtype: dict
+
+        .. note::
+
+             The function performs directory validation, checks for publish frequency constraints
+             based on ``self.publish_delta``, and handles the rotation of the previous 'latest'
+             archive into a history folder before promoting the new build.
+
+        """
+
+        delta = datetime.timedelta(hours=self.publish_delta)
+
+        # Validation
+        # ----------------------------------------------------------------
+        if not targets:
+            raise ValueError("publish(): 'targets' must be a non-empty list")
+
+        if output_folder is None:
+            output_folder = Path(f"{self.folder_root}/outputs").resolve()
+
+        os.makedirs(output_folder, exist_ok=True)
+
+        targets = [Path(t).resolve() for t in targets]
+        for t in targets:
+            if not t.exists():
+                raise FileNotFoundError(f"Target does not exist: {t}")
+            if not t.is_dir():
+                raise NotADirectoryError(f"Target is not a directory: {t}")
+
+        # setup folders
+        # ----------------------------------------------------------------
+        latest_dir, history_dir = self._ensure_publish_dirs(output_folder)
+
+        # check latest
+        # ----------------------------------------------------------------
+        latest_file = self._find_latest(latest_dir, prefix)
+
+        now = datetime.datetime.now()
+
+        if latest_file and not self.publish_force:
+            last_ts = self._parse_timestamp_from_name(latest_file.name, prefix)
+            age = now - last_ts
+
+            if age < delta:
+                return {
+                    "published": False,
+                    "reason": "delta_not_elapsed",
+                    "age": age,
+                    "latest": latest_file,
+                }
+
+        # build archive
+        # ----------------------------------------------------------------
+        version_id = self._format_timestamp(now)
+        filename = f"{prefix}_V{version_id}.zip"
+
+        with tempfile.TemporaryDirectory() as tmpdir:
+            tmpdir = Path(tmpdir)
+
+            staging_root = tmpdir / "payload"
+            staging_root.mkdir()
+
+            self._stage_targets(targets, staging_root)
+
+            staging_zip = tmpdir / filename
+
+            self._zip_with_tqdm(
+                staging_root,
+                staging_zip,
+            )
+
+            # rotate latest
+            # ----------------------------------------------------------------
+            if latest_file:
+                shutil.move(
+                    str(latest_file),
+                    history_dir / latest_file.name,
+                )
+
+            # promote
+            # ----------------------------------------------------------------
+            final_path = latest_dir / filename
+            shutil.move(staging_zip, final_path)
+
+        return {
+            "published": True,
+            "archive": final_path,
+            "timestamp": now,
+            "rotated": latest_file.name if latest_file else None,
+        }
+
+    def _iter_files(self, root: Path):
+        for path in root.rglob("*"):
+            if path.is_file():
+                yield path
+
+    def _zip_with_tqdm(self, src_root: Path, dst_zip: Path):
+        files = list(self._iter_files(src_root))
+        total_bytes = sum(f.stat().st_size for f in files)
+
+        with tqdm(total=total_bytes, unit="B", unit_scale=True) as bar:
+            with zipfile.ZipFile(dst_zip, "w", zipfile.ZIP_DEFLATED) as zf:
+                for f in files:
+                    zf.write(f, f.relative_to(src_root))
+                    bar.update(f.stat().st_size)
+
+    def _ensure_publish_dirs(self, output_folder: Path):
+        output_folder = Path(output_folder)
+        latest = output_folder / "latest"
+        history = output_folder / "history"
+
+        latest.mkdir(parents=True, exist_ok=True)
+        history.mkdir(parents=True, exist_ok=True)
+
+        return latest, history
+
+    def _find_latest(self, latest_dir: Path, prefix: str):
+        files = list(latest_dir.glob(f"{prefix}_V*.zip"))
+
+        if len(files) > 1:
+            raise RuntimeError(f"Multiple latest archives detected in {latest_dir}")
+
+        return files[0] if files else None
+
+    def _format_timestamp(self, dt: datetime.datetime) -> str:
+        """
+        YYYYMMDDThhmmss
+        """
+        return dt.strftime("%Y%m%dT%H%M%S")
+
+    def _parse_timestamp_from_name(self, filename: str, prefix: str):
+        """
+        Extract datetime from '<prefix>_VYYYYMMDDThhmmss.zip'
+        """
+        stem = Path(filename).stem
+
+        expected = f"{prefix}_V"
+        if not stem.startswith(expected):
+            raise ValueError(f"Invalid archive name: {filename}")
+
+        ts = stem[len(expected) :]
+
+        try:
+            return datetime.datetime.strptime(ts, "%Y%m%dT%H%M%S")
+        except ValueError as exc:
+            raise ValueError(f"Invalid timestamp in archive name: {filename}") from exc
+
+    def _stage_targets(self, targets, staging_root: Path):
+        """
+        Copy target directories into staging_root, preserving
+        paths relative to project root.
+        """
+        anchor = Path(self.folder_root).resolve()
+
+        for t in targets:
+            t = t.resolve()
+
+            try:
+                rel = t.relative_to(anchor)
+            except ValueError:
+                raise ValueError(f"Target {t} is not under project root {anchor}")
+
+            dst = staging_root / rel
+            dst.parent.mkdir(parents=True, exist_ok=True)
+
+            shutil.copytree(t, dst)
+
+    def _stage_targets_old(self, targets, staging_root: Path):
+        """
+        Copy target directories into staging_root.
+
+        Each target becomes:
+            staging_root/<target_name>/
+        """
+        for t in targets:
+            dst = staging_root / t.name
+
+            if dst.exists():
+                raise RuntimeError(f"Duplicate target folder name detected: {t.name}")
+
+            shutil.copytree(t, dst)
 
 
 # CLASSES -- Module-level

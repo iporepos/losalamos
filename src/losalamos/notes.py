@@ -48,6 +48,7 @@ from losalamos.paths import FOLDER_TEMPLATES_NOTES
 HARMONIZE_TEXT_FIELDS = [
     "name",
     "title",
+    "subtitle",
     "subject",
     "abstract",
     "contract",
@@ -57,6 +58,9 @@ HARMONIZE_TEXT_FIELDS = [
     "caption",
     "alttext",
     "source",
+    "document",
+    "file",
+    "file_draft",
 ]
 HARMONIZE_DATE_FIELDS = [
     "timestamp",
