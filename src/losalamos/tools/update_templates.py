@@ -30,6 +30,7 @@ from pathlib import Path
 # Project-level imports
 # =======================================================================
 from losalamos.paths import FOLDER_TEMPLATES_NOTES
+from losalamos.tools.core import *
 
 # ... {develop}
 
@@ -54,31 +55,25 @@ def get_arguments():
 
 def main():
 
-    print("\nLos Alamos Templates Installer")
-    print(80 * "=")
-    print("\n")
+    heading_section("UPDATE TEMPLATES")
 
     args = get_arguments()
 
     # NOTES
     # -------------------------------------------------------------------
-    print("[Notes]")
-    print(80 * "-")
+    heading_subsection("[Notes]")
 
     dst_notes = Path(args.notes)
-    print(f"  Source folder: {FOLDER_TEMPLATES_NOTES}")
-    print(f"  Target folder: {dst_notes}")
+    print(get_message(f"Source folder: {FOLDER_TEMPLATES_NOTES}"))
+    print(get_message(f"Target folder: {dst_notes}"))
 
-    # ls = os.listdir(FOLDER_TEMPLATES_NOTES)
-    # print(f"LIST from SRC: {ls}")
-
-    st_pattern = f"{FOLDER_TEMPLATES_NOTES}\_*.md"
+    st_pattern = f"{FOLDER_TEMPLATES_NOTES}\\_*.md"
     ls_notes = glob.glob(st_pattern)
 
     if not ls_notes:
-        print("  No note templates found.")
+        print(get_warning("No note templates found."))
     else:
-        print(f"  Found {len(ls_notes)} template(s):")
+        print(get_message(f"Found {len(ls_notes)} template(s):\n"))
 
         for f in ls_notes:
             file_current = Path(f)
@@ -87,8 +82,6 @@ def main():
 
             shutil.copy(src=file_current, dst=file_new)
             print(f"    - {name}")
-
-    print()  # spacing between template groups
 
     # FIGURES (future)
     # -------------------------------------------------------------------
@@ -99,8 +92,7 @@ def main():
     # -------------------------------------------------------------------
     # print("[Documents]")
     # ...
-
-    print("Templates update completed.\n")
+    heading_done()
 
 
 # SCRIPT

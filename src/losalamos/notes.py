@@ -61,6 +61,7 @@ HARMONIZE_TEXT_FIELDS = [
     "document",
     "file",
     "file_draft",
+    "publisher",
 ]
 HARMONIZE_DATE_FIELDS = [
     "timestamp",
@@ -554,6 +555,7 @@ class Note(MbaE):
 class NoteBasic(Note):
 
     TEMPLATE_FILE = FOLDER_TEMPLATES_NOTES / "_basic.md"
+    THUMBNAIL_SIZE = None
 
     def __init__(self, name="MyNote", alias="Nt1"):
         super().__init__(name=name, alias=alias)
@@ -563,9 +565,21 @@ class NoteBasic(Note):
 
     @classmethod
     def get_template_file(cls):
+        """
+        Retrieves the filesystem path of the template file associated with the class.
+
+        :return: The path to the template file.
+        :rtype: :class:`pathlib.Path`
+        """
         return Path(cls.TEMPLATE_FILE)
 
     def load_new(self, file_note):
+        """
+        Initializes a new note instance using a template and assigns it a new file path.
+
+        :param file_note: The destination path where the new note will be saved.
+        :type file_note: str or :class:`pathlib.Path`
+        """
         self.file_note = self.file_note_template
         self.load()
         self.file_note = Path(file_note)
@@ -573,16 +587,39 @@ class NoteBasic(Note):
         self.update_timestamp()
 
     def load_data_standard(self):
+        """
+        Parses and returns the standard data content from the template file.
+
+        :return: A dictionary containing the parsed data from the template.
+        :rtype: dict
+        """
         dc = Note.parse_note(file_path=self.file_note_template)
         return dc
 
     def load_metadata_standard(self):
+        """
+        Retrieves the metadata structure from the template and initializes all values to ``None``.
+
+        :return: A dictionary of metadata keys with cleared values.
+        :rtype: dict
+        """
         dc = Note.parse_metadata(note_file=self.file_note_template)
         for k in dc:
             dc[k] = None
         return dc
 
     def load_metadata(self):
+        """
+        Loads metadata and synchronizes it against the standard template schema.
+
+        .. important::
+
+            This method filters the current metadata to ensure only keys present in
+            ``metadata_standard`` are kept, filling missing keys with ``None``.
+
+        :return: No value is returned.
+        :rtype: None
+        """
         super().load_metadata()
         # filter standard entries
         dc = {}
@@ -597,17 +634,105 @@ class NoteBasic(Note):
         self.metadata = dc.copy()
         return None
 
+    def reset_data(self):
+        """
+        Resets all data segments including ``Head``, ``Body`` and ``Tail`` to their standard values.
+
+        .. danger::
+
+            This action will erase all current data in the instance.
+
+        """
+        self.reset_data_head()
+        self.reset_data_body()
+        self.reset_data_tail()
+
+    def reset_data_segment(self, segment):
+        """
+        Resets a specific data segment to its standard default state.
+
+        :param segment: The name of the data segment to reset (e.g., ``Head``, ``Body``, or ``Tail``).
+        :type segment: str
+
+        .. danger::
+
+            This action will erase the current data for the specified segment.
+
+        """
+        dc = self.load_data_standard()
+        self.data[segment] = dc[segment][:]
+        self.update()
+
+    def reset_data_head(self):
+        """
+        Resets the ``Head`` data segment to its standard default state.
+
+        .. danger::
+
+            This action will erase the current data segment.
+
+        """
+        self.reset_data_segment("Head")
+
+    def reset_data_body(self):
+        """
+        Resets the ``Body`` data segment to its standard default state.
+
+        .. danger::
+
+            This action will erase the current data segment.
+
+        """
+        self.reset_data_segment("Body")
+
+    def reset_data_tail(self):
+        """
+        Resets the ``Tail`` data segment to its standard default state.
+
+        .. danger::
+
+            This action will erase the current data segment.
+
+        """
+        self.reset_data_segment("Tail")
+
     def update(self):
+        """
+        Triggers a sequence of internal updates to synchronize the note's name, abstract, and thumbnail.
+
+        .. note::
+
+            This method acts as a base update sequence; additional update logic may be implemented in downstream classes.
+
+        """
         self.update_name()
         self.update_abstract()
+        self.update_thumbnail()
+        # -- continues in downstream classes
 
     def update_name(self):
+        """
+        Updates the note metadata and the first line of the Head segment with the current file stem.
+
+        .. warning::
+
+            This method assumes the first item in the ``Head`` data segment is the title and will overwrite it.
+
+        """
         current_name = Path(self.file_note).stem
         self.metadata["name"] = current_name
         # always the first item
         self.data["Head"][0] = f"# {current_name}"
 
     def update_abstract(self):
+        """
+        Synchronizes the abstract from metadata into the Head data segment block.
+
+        .. note::
+
+            The method searches for the ``[!Abstract]`` identifier within the ``Head`` segment and replaces the subsequent line with the formatted abstract string.
+
+        """
         if self.metadata["abstract"] is not None:
             current_abstract = self.metadata["abstract"][1:-1]
             n = 0
@@ -618,7 +743,35 @@ class NoteBasic(Note):
             if n > 0:
                 self.data["Head"][n] = f"> {current_abstract}\n"
 
+    def update_thumbnail(self):
+        """
+        Updates the thumbnail image link in the Head data segment based on the current file name and predefined size.
+
+        .. note::
+
+            The method searches for an existing Wikilink image pattern (``![[``) within the ``Head`` segment to perform the replacement.
+
+        """
+        size = self.THUMBNAIL_SIZE
+        name = self.file_note.stem
+        if size is not None:
+            n = 0
+            for line in self.data["Head"]:
+                if "![[" in line[:3]:
+                    break
+                n = n + 1
+            if n > 0:
+                self.data["Head"][n] = f"![[{name}.jpeg|{size}]]"
+
     def update_timestamp(self):
+        """
+        Records the current local date and time into the note metadata.
+
+        .. note::
+
+            The timestamp is formatted as a string following the ``%Y-%m-%d %H:%M:%S`` pattern.
+
+        """
         from datetime import datetime
 
         now = datetime.now()
@@ -628,15 +781,27 @@ class NoteBasic(Note):
 class NoteProject(NoteBasic):
 
     TEMPLATE_FILE = FOLDER_TEMPLATES_NOTES / "_project.md"
+    THUMBNAIL_SIZE = None
+
+
+class NoteJournal(NoteBasic):
+
+    TEMPLATE_FILE = FOLDER_TEMPLATES_NOTES / "_journal.md"
+    THUMBNAIL_SIZE = 300
+
+    def update(self):
+        super().update()
+        self.update_title()
+
+    def update_title(self):
+        name = self.metadata["name"]
+        self.metadata["title"] = f'"{name}"'
 
 
 class NoteFigure(NoteBasic):
 
     TEMPLATE_FILE = FOLDER_TEMPLATES_NOTES / "_figure.md"
-
-    def load_new(self, file_note):
-        super().load_new(file_note=file_note)
-        self.metadata["subject"] = "'[[Scientific Illustration]]'"
+    THUMBNAIL_SIZE = 500
 
 
 # COLLECTIONS
@@ -712,6 +877,11 @@ class NoteCollBasic(NoteCollection):
 class NoteCollProject(NoteCollection):
 
     BASE_OBJECT = NoteProject
+
+
+class NoteCollJournal(NoteCollection):
+
+    BASE_OBJECT = NoteJournal
 
 
 class NoteCollFigure(NoteCollection):

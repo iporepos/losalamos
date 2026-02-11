@@ -56,13 +56,7 @@ class BCMKTestFigureSVG(unittest.TestCase):
         """
         Prepare large datasets and output folders
         """
-        if os.getenv("RUN_BENCHMARKS") == "1":
-            cls.output_dir = OUTPUT_DIR
-        else:
-            cls.output_dir = Path(
-                tempfile.mkdtemp(prefix="losalamos_test_figures_svg_")
-            )
-
+        cls.output_dir = OUTPUT_DIR
         cls.data_file = DATA_DIR / "drawing_01.svg"
 
         print(testmsg(f"figures :: folder = {cls.output_dir}"))

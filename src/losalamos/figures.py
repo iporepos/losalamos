@@ -306,6 +306,25 @@ class FigureSVG(Figure):
         :return: Always returns ``None``
         :rtype: None
         """
+        xml_str = etree.tostring(
+            self.tree, encoding="utf-8", xml_declaration=True, pretty_print=False
+        )
+
+        with open(self.file_data, "wb") as f:
+            f.write(xml_str)
+
+        return None
+
+    '''
+    # keeping this code block in case bugs in save() arise again
+
+    def save_old(self):
+        """
+        Serializes the current XML tree and writes it to the local file system.
+
+        :return: Always returns ``None``
+        :rtype: None
+        """
         root = self.tree.getroot()
         xml_str = etree.tostring(
             root, encoding="utf-8", xml_declaration=True, pretty_print=True
@@ -315,6 +334,8 @@ class FigureSVG(Figure):
             f.write(xml_str)
 
         return None
+
+    '''
 
     def export(self, folder, filename, data_suffix=None):
         """
@@ -609,7 +630,9 @@ class FigureSVG(Figure):
         temp_folder = tempfile.mkdtemp(prefix="losalamos_svg_")
         dst_file = Path(temp_folder) / "losalamos.svg"
         src_file = self.file_data
+
         shutil.copy(src=self.file_data, dst=dst_file)
+
         self.file_data = dst_file
 
         # Get abspath
@@ -617,14 +640,19 @@ class FigureSVG(Figure):
 
         # handle visibility of layers
         # -----------------------------------------------------------------------
+        b_save = False
+
         if hide_layers is not None:
             self.hide_layers(labels=hide_layers)
+            b_save = True
 
         if show_layers is not None:
             self.show_layers(labels=hide_layers, inclusive=show_inclusive)
+            b_save = True
 
         # save to temporary file
-        self.save()
+        if b_save:
+            self.save()
 
         # set return file
         return_file = file_output
@@ -662,6 +690,7 @@ class FigureSVG(Figure):
         # restore file data and cleanup
         # -----------------------------------------------------------------------
         self.file_data = src_file
+        # print(temp_folder)
         shutil.rmtree(temp_folder)
 
         return return_file

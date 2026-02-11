@@ -39,7 +39,7 @@ date_end:
 
 FIGURE
 
-![[{file}|500]]
+![[<% tp.file.title %>.jpeg|500]]
 
 **`=this.label`**
 
