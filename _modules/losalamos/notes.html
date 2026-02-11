@@ -443,6 +443,7 @@
     <span class="s2">&quot;document&quot;</span><span class="p">,</span>
     <span class="s2">&quot;file&quot;</span><span class="p">,</span>
     <span class="s2">&quot;file_draft&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;publisher&quot;</span><span class="p">,</span>
 <span class="p">]</span>
 <span class="n">HARMONIZE_DATE_FIELDS</span> <span class="o">=</span> <span class="p">[</span>
     <span class="s2">&quot;timestamp&quot;</span><span class="p">,</span>
@@ -992,6 +993,7 @@
 <span class="k">class</span><span class="w"> </span><span class="nc">NoteBasic</span><span class="p">(</span><span class="n">Note</span><span class="p">):</span>
 
     <span class="n">TEMPLATE_FILE</span> <span class="o">=</span> <span class="n">FOLDER_TEMPLATES_NOTES</span> <span class="o">/</span> <span class="s2">&quot;_basic.md&quot;</span>
+    <span class="n">THUMBNAIL_SIZE</span> <span class="o">=</span> <span class="kc">None</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;MyNote&quot;</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s2">&quot;Nt1&quot;</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="n">alias</span><span class="p">)</span>
@@ -1003,12 +1005,24 @@
 <a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.NoteBasic.get_template_file">[docs]</a>
     <span class="nd">@classmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_template_file</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retrieves the filesystem path of the template file associated with the class.</span>
+
+<span class="sd">        :return: The path to the template file.</span>
+<span class="sd">        :rtype: :class:`pathlib.Path`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">Path</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">TEMPLATE_FILE</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="NoteBasic.load_new">
 <a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.NoteBasic.load_new">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">load_new</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_note</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initializes a new note instance using a template and assigns it a new file path.</span>
+
+<span class="sd">        :param file_note: The destination path where the new note will be saved.</span>
+<span class="sd">        :type file_note: str or :class:`pathlib.Path`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">file_note</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_note_template</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">file_note</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">file_note</span><span class="p">)</span>
@@ -1019,6 +1033,12 @@
 <div class="viewcode-block" id="NoteBasic.load_data_standard">
 <a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.NoteBasic.load_data_standard">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">load_data_standard</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Parses and returns the standard data content from the template file.</span>
+
+<span class="sd">        :return: A dictionary containing the parsed data from the template.</span>
+<span class="sd">        :rtype: dict</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">dc</span> <span class="o">=</span> <span class="n">Note</span><span class="o">.</span><span class="n">parse_note</span><span class="p">(</span><span class="n">file_path</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">file_note_template</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">dc</span></div>
 
@@ -1026,6 +1046,12 @@
 <div class="viewcode-block" id="NoteBasic.load_metadata_standard">
 <a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.NoteBasic.load_metadata_standard">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">load_metadata_standard</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retrieves the metadata structure from the template and initializes all values to ``None``.</span>
+
+<span class="sd">        :return: A dictionary of metadata keys with cleared values.</span>
+<span class="sd">        :rtype: dict</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">dc</span> <span class="o">=</span> <span class="n">Note</span><span class="o">.</span><span class="n">parse_metadata</span><span class="p">(</span><span class="n">note_file</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">file_note_template</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">dc</span><span class="p">:</span>
             <span class="n">dc</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
@@ -1035,6 +1061,17 @@
 <div class="viewcode-block" id="NoteBasic.load_metadata">
 <a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.NoteBasic.load_metadata">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">load_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Loads metadata and synchronizes it against the standard template schema.</span>
+
+<span class="sd">        .. important::</span>
+
+<span class="sd">            This method filters the current metadata to ensure only keys present in</span>
+<span class="sd">            ``metadata_standard`` are kept, filling missing keys with ``None``.</span>
+
+<span class="sd">        :return: No value is returned.</span>
+<span class="sd">        :rtype: None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">load_metadata</span><span class="p">()</span>
         <span class="c1"># filter standard entries</span>
         <span class="n">dc</span> <span class="o">=</span> <span class="p">{}</span>
@@ -1050,16 +1087,111 @@
         <span class="k">return</span> <span class="kc">None</span></div>
 
 
+<div class="viewcode-block" id="NoteBasic.reset_data">
+<a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.NoteBasic.reset_data">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">reset_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Resets all data segments including ``Head``, ``Body`` and ``Tail`` to their standard values.</span>
+
+<span class="sd">        .. danger::</span>
+
+<span class="sd">            This action will erase all current data in the instance.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reset_data_head</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reset_data_body</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reset_data_tail</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="NoteBasic.reset_data_segment">
+<a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.NoteBasic.reset_data_segment">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">reset_data_segment</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">segment</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Resets a specific data segment to its standard default state.</span>
+
+<span class="sd">        :param segment: The name of the data segment to reset (e.g., ``Head``, ``Body``, or ``Tail``).</span>
+<span class="sd">        :type segment: str</span>
+
+<span class="sd">        .. danger::</span>
+
+<span class="sd">            This action will erase the current data for the specified segment.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">dc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">load_data_standard</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">segment</span><span class="p">]</span> <span class="o">=</span> <span class="n">dc</span><span class="p">[</span><span class="n">segment</span><span class="p">][:]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="NoteBasic.reset_data_head">
+<a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.NoteBasic.reset_data_head">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">reset_data_head</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Resets the ``Head`` data segment to its standard default state.</span>
+
+<span class="sd">        .. danger::</span>
+
+<span class="sd">            This action will erase the current data segment.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reset_data_segment</span><span class="p">(</span><span class="s2">&quot;Head&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="NoteBasic.reset_data_body">
+<a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.NoteBasic.reset_data_body">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">reset_data_body</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Resets the ``Body`` data segment to its standard default state.</span>
+
+<span class="sd">        .. danger::</span>
+
+<span class="sd">            This action will erase the current data segment.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reset_data_segment</span><span class="p">(</span><span class="s2">&quot;Body&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="NoteBasic.reset_data_tail">
+<a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.NoteBasic.reset_data_tail">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">reset_data_tail</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Resets the ``Tail`` data segment to its standard default state.</span>
+
+<span class="sd">        .. danger::</span>
+
+<span class="sd">            This action will erase the current data segment.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reset_data_segment</span><span class="p">(</span><span class="s2">&quot;Tail&quot;</span><span class="p">)</span></div>
+
+
 <div class="viewcode-block" id="NoteBasic.update">
 <a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.NoteBasic.update">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">update_name</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">update_abstract</span><span class="p">()</span></div>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Triggers a sequence of internal updates to synchronize the note&#39;s name, abstract, and thumbnail.</span>
 
+<span class="sd">        .. note::</span>
+
+<span class="sd">            This method acts as a base update sequence; additional update logic may be implemented in downstream classes.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_name</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_abstract</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_thumbnail</span><span class="p">()</span></div>
+
+        <span class="c1"># -- continues in downstream classes</span>
 
 <div class="viewcode-block" id="NoteBasic.update_name">
 <a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.NoteBasic.update_name">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">update_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Updates the note metadata and the first line of the Head segment with the current file stem.</span>
+
+<span class="sd">        .. warning::</span>
+
+<span class="sd">            This method assumes the first item in the ``Head`` data segment is the title and will overwrite it.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">current_name</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">file_note</span><span class="p">)</span><span class="o">.</span><span class="n">stem</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">current_name</span>
         <span class="c1"># always the first item</span>
@@ -1069,6 +1201,14 @@
 <div class="viewcode-block" id="NoteBasic.update_abstract">
 <a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.NoteBasic.update_abstract">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">update_abstract</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Synchronizes the abstract from metadata into the Head data segment block.</span>
+
+<span class="sd">        .. note::</span>
+
+<span class="sd">            The method searches for the ``[!Abstract]`` identifier within the ``Head`` segment and replaces the subsequent line with the formatted abstract string.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;abstract&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">current_abstract</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;abstract&quot;</span><span class="p">][</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
             <span class="n">n</span> <span class="o">=</span> <span class="mi">0</span>
@@ -1080,9 +1220,40 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;Head&quot;</span><span class="p">][</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&gt; </span><span class="si">{</span><span class="n">current_abstract</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span></div>
 
 
+<div class="viewcode-block" id="NoteBasic.update_thumbnail">
+<a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.NoteBasic.update_thumbnail">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">update_thumbnail</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Updates the thumbnail image link in the Head data segment based on the current file name and predefined size.</span>
+
+<span class="sd">        .. note::</span>
+
+<span class="sd">            The method searches for an existing Wikilink image pattern (``![[``) within the ``Head`` segment to perform the replacement.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">THUMBNAIL_SIZE</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_note</span><span class="o">.</span><span class="n">stem</span>
+        <span class="k">if</span> <span class="n">size</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">n</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;Head&quot;</span><span class="p">]:</span>
+                <span class="k">if</span> <span class="s2">&quot;![[&quot;</span> <span class="ow">in</span> <span class="n">line</span><span class="p">[:</span><span class="mi">3</span><span class="p">]:</span>
+                    <span class="k">break</span>
+                <span class="n">n</span> <span class="o">=</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="n">n</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;Head&quot;</span><span class="p">][</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;![[</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">.jpeg|</span><span class="si">{</span><span class="n">size</span><span class="si">}</span><span class="s2">]]&quot;</span></div>
+
+
 <div class="viewcode-block" id="NoteBasic.update_timestamp">
 <a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.NoteBasic.update_timestamp">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">update_timestamp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Records the current local date and time into the note metadata.</span>
+
+<span class="sd">        .. note::</span>
+
+<span class="sd">            The timestamp is formatted as a string following the ``%Y-%m-%d %H:%M:%S`` pattern.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span>
 
         <span class="n">now</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
@@ -1095,7 +1266,31 @@
 <a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.NoteProject">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">NoteProject</span><span class="p">(</span><span class="n">NoteBasic</span><span class="p">):</span>
 
-    <span class="n">TEMPLATE_FILE</span> <span class="o">=</span> <span class="n">FOLDER_TEMPLATES_NOTES</span> <span class="o">/</span> <span class="s2">&quot;_project.md&quot;</span></div>
+    <span class="n">TEMPLATE_FILE</span> <span class="o">=</span> <span class="n">FOLDER_TEMPLATES_NOTES</span> <span class="o">/</span> <span class="s2">&quot;_project.md&quot;</span>
+    <span class="n">THUMBNAIL_SIZE</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+
+
+<div class="viewcode-block" id="NoteJournal">
+<a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.NoteJournal">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">NoteJournal</span><span class="p">(</span><span class="n">NoteBasic</span><span class="p">):</span>
+
+    <span class="n">TEMPLATE_FILE</span> <span class="o">=</span> <span class="n">FOLDER_TEMPLATES_NOTES</span> <span class="o">/</span> <span class="s2">&quot;_journal.md&quot;</span>
+    <span class="n">THUMBNAIL_SIZE</span> <span class="o">=</span> <span class="mi">300</span>
+
+<div class="viewcode-block" id="NoteJournal.update">
+<a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.NoteJournal.update">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_title</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="NoteJournal.update_title">
+<a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.NoteJournal.update_title">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">update_title</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;title&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1">&quot;&#39;</span></div>
+</div>
 
 
 
@@ -1104,13 +1299,7 @@
 <span class="k">class</span><span class="w"> </span><span class="nc">NoteFigure</span><span class="p">(</span><span class="n">NoteBasic</span><span class="p">):</span>
 
     <span class="n">TEMPLATE_FILE</span> <span class="o">=</span> <span class="n">FOLDER_TEMPLATES_NOTES</span> <span class="o">/</span> <span class="s2">&quot;_figure.md&quot;</span>
-
-<div class="viewcode-block" id="NoteFigure.load_new">
-<a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.NoteFigure.load_new">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">load_new</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_note</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">load_new</span><span class="p">(</span><span class="n">file_note</span><span class="o">=</span><span class="n">file_note</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;subject&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&#39;[[Scientific Illustration]]&#39;&quot;</span></div>
-</div>
+    <span class="n">THUMBNAIL_SIZE</span> <span class="o">=</span> <span class="mi">500</span></div>
 
 
 
@@ -1204,6 +1393,14 @@
 <span class="k">class</span><span class="w"> </span><span class="nc">NoteCollProject</span><span class="p">(</span><span class="n">NoteCollection</span><span class="p">):</span>
 
     <span class="n">BASE_OBJECT</span> <span class="o">=</span> <span class="n">NoteProject</span></div>
+
+
+
+<div class="viewcode-block" id="NoteCollJournal">
+<a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.NoteCollJournal">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">NoteCollJournal</span><span class="p">(</span><span class="n">NoteCollection</span><span class="p">):</span>
+
+    <span class="n">BASE_OBJECT</span> <span class="o">=</span> <span class="n">NoteJournal</span></div>
 
 
 

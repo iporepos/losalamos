@@ -12,8 +12,10 @@
       NoteBasic
       NoteCollBasic
       NoteCollFigure
+      NoteCollJournal
       NoteCollProject
       NoteCollection
       NoteFigure
+      NoteJournal
       NoteProject
    

@@ -710,9 +710,8 @@
 <span class="sd">        :return: Always returns ``None``</span>
 <span class="sd">        :rtype: None</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">root</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">getroot</span><span class="p">()</span>
         <span class="n">xml_str</span> <span class="o">=</span> <span class="n">etree</span><span class="o">.</span><span class="n">tostring</span><span class="p">(</span>
-            <span class="n">root</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">,</span> <span class="n">xml_declaration</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">pretty_print</span><span class="o">=</span><span class="kc">True</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tree</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">,</span> <span class="n">xml_declaration</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">pretty_print</span><span class="o">=</span><span class="kc">False</span>
         <span class="p">)</span>
 
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">file_data</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
@@ -720,6 +719,28 @@
 
         <span class="k">return</span> <span class="kc">None</span></div>
 
+
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    # keeping this code block in case bugs in save() arise again</span>
+
+<span class="sd">    def save_old(self):</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        Serializes the current XML tree and writes it to the local file system.</span>
+
+<span class="sd">        :return: Always returns ``None``</span>
+<span class="sd">        :rtype: None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        root = self.tree.getroot()</span>
+<span class="sd">        xml_str = etree.tostring(</span>
+<span class="sd">            root, encoding=&quot;utf-8&quot;, xml_declaration=True, pretty_print=True</span>
+<span class="sd">        )</span>
+
+<span class="sd">        with open(self.file_data, &quot;wb&quot;) as f:</span>
+<span class="sd">            f.write(xml_str)</span>
+
+<span class="sd">        return None</span>
+
+<span class="sd">    &#39;&#39;&#39;</span>
 
 <div class="viewcode-block" id="FigureSVG.export">
 <a class="viewcode-back" href="../../generated/losalamos.figures.html#losalamos.figures.FigureSVG.export">[docs]</a>
@@ -1049,7 +1070,9 @@
         <span class="n">temp_folder</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">mkdtemp</span><span class="p">(</span><span class="n">prefix</span><span class="o">=</span><span class="s2">&quot;losalamos_svg_&quot;</span><span class="p">)</span>
         <span class="n">dst_file</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">temp_folder</span><span class="p">)</span> <span class="o">/</span> <span class="s2">&quot;losalamos.svg&quot;</span>
         <span class="n">src_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_data</span>
+
         <span class="n">shutil</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">src</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">file_data</span><span class="p">,</span> <span class="n">dst</span><span class="o">=</span><span class="n">dst_file</span><span class="p">)</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">file_data</span> <span class="o">=</span> <span class="n">dst_file</span>
 
         <span class="c1"># Get abspath</span>
@@ -1057,14 +1080,19 @@
 
         <span class="c1"># handle visibility of layers</span>
         <span class="c1"># -----------------------------------------------------------------------</span>
+        <span class="n">b_save</span> <span class="o">=</span> <span class="kc">False</span>
+
         <span class="k">if</span> <span class="n">hide_layers</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">hide_layers</span><span class="p">(</span><span class="n">labels</span><span class="o">=</span><span class="n">hide_layers</span><span class="p">)</span>
+            <span class="n">b_save</span> <span class="o">=</span> <span class="kc">True</span>
 
         <span class="k">if</span> <span class="n">show_layers</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">show_layers</span><span class="p">(</span><span class="n">labels</span><span class="o">=</span><span class="n">hide_layers</span><span class="p">,</span> <span class="n">inclusive</span><span class="o">=</span><span class="n">show_inclusive</span><span class="p">)</span>
+            <span class="n">b_save</span> <span class="o">=</span> <span class="kc">True</span>
 
         <span class="c1"># save to temporary file</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">b_save</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
 
         <span class="c1"># set return file</span>
         <span class="n">return_file</span> <span class="o">=</span> <span class="n">file_output</span>
@@ -1102,6 +1130,7 @@
         <span class="c1"># restore file data and cleanup</span>
         <span class="c1"># -----------------------------------------------------------------------</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">file_data</span> <span class="o">=</span> <span class="n">src_file</span>
+        <span class="c1"># print(temp_folder)</span>
         <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">temp_folder</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">return_file</span></div>
