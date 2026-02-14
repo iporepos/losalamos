@@ -49,7 +49,7 @@ name = "losalamos"
 # Version number
 dynamic = ["version"]    # used for automated versioning
 # Short description
-description = "A Python toolkit for productivity and research."
+description = "A Python toolkit for productivity and research"
 # Keywords (optional) for search on PyPI
 keywords = [
   "python", 
