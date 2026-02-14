@@ -78,8 +78,8 @@ class BCMKTestFigure(unittest.TestCase):
         Verifies that the image scaling process produces the expected output file
         and maintains valid image properties.
         """
-        file_input = DATA_DIR / "budyko.jpg"
-        file_output = self.output_dir / "budyko scaled.jpg"
+        file_input = DATA_DIR / "budyko.jpeg"
+        file_output = self.output_dir / "budyko scaled.jpeg"
         self.fig.scale_image(
             file_input=file_input, file_output=file_output, scale_factor=0.5, dpi=300
         )
