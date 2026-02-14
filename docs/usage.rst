@@ -24,8 +24,17 @@ For casual users, the installation instructions allow quick setup and testing of
 Installation
 ***********************************************************************
 
-For causal users, install ``losalamos`` to a Python 3 environment via terminal:
+Install as a Python package
+============================================
 
+For Python regular users, install the latest package deploy
+to a Python 3 environment via pip:
+
+.. code-block:: console
+
+    python -m pip install losalamos
+
+Or any desired branch or version via github url:
 
 .. code-block:: console
 

@@ -5,7 +5,9 @@
 ![Status](https://img.shields.io/badge/status-development-yellow.svg)
 [![Code Style](https://img.shields.io/badge/style-black-000000.svg)](https://github.com/psf/black)
 [![Documentation](https://img.shields.io/badge/docs-online-blue)](https://iporepos.github.io/losalamos/)
-
+[![PyPI Latest Release](https://img.shields.io/pypi/v/losalamos.svg?label=PyPI)](https://pypi.org/project/losalamos/)
+[![PyPI Downloads](https://img.shields.io/pypi/dm/losalamos.svg?label=PyPI%20downloads)](
+https://pypi.org/project/losalamos/)
 
 
 <a logo>
@@ -16,8 +18,20 @@
 
 # Los Alamos
 
-A comprehensive Python toolkit for productivity and research. 
+A Python toolkit for productivity and research. 
 
 > [!NOTE]
 > Check out the [documentation website](https://iporepos.github.io/losalamos/)
+
+---
+
+# Install easily
+
+```bash
+python -m pip install losalamos
+```
+
+---
+
+# Quick Gallery
 

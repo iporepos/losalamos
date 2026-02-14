@@ -12,6 +12,7 @@ url:
 abstract:
 name: <% tp.file.title %>
 title:
+alias:
 category:
 service_id:
 crea_id:
