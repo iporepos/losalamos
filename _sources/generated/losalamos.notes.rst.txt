@@ -4,6 +4,12 @@
 .. automodule:: losalamos.notes
 
    
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      search_markdown_files
+   
    .. rubric:: Classes
 
    .. autosummary::

@@ -465,7 +465,28 @@
 
 <span class="c1"># FUNCTIONS -- Project-level</span>
 <span class="c1"># =======================================================================</span>
-<span class="c1"># ... {develop}</span>
+
+
+<div class="viewcode-block" id="search_markdown_files">
+<a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.search_markdown_files">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">search_markdown_files</span><span class="p">(</span><span class="n">paths</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Path</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Path</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Recursively scans the provided paths to identify and collect all files with a ``.md`` extension.</span>
+
+<span class="sd">    :param paths: A list of file or directory paths to search.</span>
+<span class="sd">    :type paths: list[:class:`pathlib.Path`]</span>
+<span class="sd">    :return: A list of paths pointing to the discovered markdown files.</span>
+<span class="sd">    :rtype: list[:class:`pathlib.Path`]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">files</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">paths</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">is_file</span><span class="p">()</span> <span class="ow">and</span> <span class="n">p</span><span class="o">.</span><span class="n">suffix</span> <span class="o">==</span> <span class="s2">&quot;.md&quot;</span><span class="p">:</span>
+            <span class="n">files</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">p</span><span class="o">.</span><span class="n">is_dir</span><span class="p">():</span>
+            <span class="n">files</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">rglob</span><span class="p">(</span><span class="s2">&quot;*.md&quot;</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">files</span></div>
+
+
 
 <span class="c1"># FUNCTIONS -- Module-level</span>
 <span class="c1"># =======================================================================</span>
@@ -640,6 +661,72 @@
         <span class="c1"># clean up excessive lines</span>
         <span class="k">if</span> <span class="n">cleanup</span><span class="p">:</span>
             <span class="n">Note</span><span class="o">.</span><span class="n">remove_excessive_blank_lines</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="Note.refactor">
+<a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.Note.refactor">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">refactor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_name</span><span class="p">,</span> <span class="n">scope</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Renames the current file note and updates all internal markdown</span>
+<span class="sd">        links within a specified scope.</span>
+
+<span class="sd">        .. note::</span>
+
+<span class="sd">             This function performs a regex-based search across the provided scope to find and replace</span>
+<span class="sd">             Obsidian-style internal links (e.g., ``[[OldName]]`` or ``[[OldName|Alias]]``) with the</span>
+<span class="sd">             newly defined name.</span>
+
+<span class="sd">        :param new_name: The new filename (without extension) to be applied.</span>
+<span class="sd">        :type new_name: str</span>
+<span class="sd">        :param scope: The directories or file paths where link references should be updated.</span>
+<span class="sd">        :type scope: :class:`pathlib.Path`, str, or Iterable</span>
+<span class="sd">        :return: None</span>
+<span class="sd">        :rtype: None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">Union</span>
+
+        <span class="k">def</span><span class="w"> </span><span class="nf">_normalize_scope</span><span class="p">(</span><span class="n">scope</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">scope</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">return</span> <span class="p">[</span><span class="n">source</span><span class="p">]</span>  <span class="c1"># only self</span>
+
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">scope</span><span class="p">,</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">)):</span>
+                <span class="k">return</span> <span class="p">[</span><span class="n">Path</span><span class="p">(</span><span class="n">scope</span><span class="p">)]</span>
+
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">scope</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">):</span>
+                <span class="k">return</span> <span class="p">[</span><span class="n">Path</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">scope</span><span class="p">]</span>
+
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Invalid scope for refactoring&quot;</span><span class="p">)</span>
+
+        <span class="n">source</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">file_note</span><span class="p">)</span>
+        <span class="n">old_name</span> <span class="o">=</span> <span class="n">source</span><span class="o">.</span><span class="n">stem</span>
+
+        <span class="k">if</span> <span class="n">old_name</span> <span class="o">==</span> <span class="n">new_name</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="c1"># Rename file itself</span>
+        <span class="n">new_path</span> <span class="o">=</span> <span class="n">source</span><span class="o">.</span><span class="n">with_name</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">new_name</span><span class="si">}</span><span class="s2">.md&quot;</span><span class="p">)</span>
+        <span class="n">source</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">new_path</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">file_note</span> <span class="o">=</span> <span class="n">new_path</span>
+
+        <span class="c1"># determine scope</span>
+        <span class="n">scope_paths</span> <span class="o">=</span> <span class="n">_normalize_scope</span><span class="p">(</span><span class="n">scope</span><span class="p">)</span>
+
+        <span class="c1"># search files</span>
+        <span class="n">md_files</span> <span class="o">=</span> <span class="n">search_markdown_files</span><span class="p">(</span><span class="n">scope_paths</span><span class="p">)</span>
+
+        <span class="c1"># Build regex</span>
+        <span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">rf</span><span class="s2">&quot;\[\[</span><span class="si">{</span><span class="n">re</span><span class="o">.</span><span class="n">escape</span><span class="p">(</span><span class="n">old_name</span><span class="p">)</span><span class="si">}</span><span class="s2">(\|[^\]]+)?\]\]&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Replace in files</span>
+        <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">md_files</span><span class="p">:</span>
+            <span class="n">text</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">read_text</span><span class="p">(</span><span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
+
+            <span class="n">new_text</span> <span class="o">=</span> <span class="n">pattern</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">rf</span><span class="s2">&quot;[[</span><span class="si">{</span><span class="n">new_name</span><span class="si">}</span><span class="s2">\1]]&quot;</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">new_text</span> <span class="o">!=</span> <span class="n">text</span><span class="p">:</span>
+                <span class="n">file</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="n">new_text</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="kc">None</span></div>
 
@@ -1162,6 +1249,26 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">reset_data_segment</span><span class="p">(</span><span class="s2">&quot;Tail&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="NoteBasic.refactor">
+<a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.NoteBasic.refactor">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">refactor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_name</span><span class="p">,</span> <span class="n">scope</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Performs a full refactor operation by renaming the resource and</span>
+<span class="sd">        refreshing its local data state.</span>
+
+<span class="sd">        :param new_name: The new filename to be assigned to the resource.</span>
+<span class="sd">        :type new_name: str</span>
+<span class="sd">        :param scope: The scope of files where references to this resource should be updated.</span>
+<span class="sd">        :type scope: :class:`pathlib.Path`, str, or Iterable</span>
+<span class="sd">        :return: None</span>
+<span class="sd">        :rtype: None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">refactor</span><span class="p">(</span><span class="n">new_name</span><span class="o">=</span><span class="n">new_name</span><span class="p">,</span> <span class="n">scope</span><span class="o">=</span><span class="n">scope</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">()</span></div>
 
 
 <div class="viewcode-block" id="NoteBasic.update">
