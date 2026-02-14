@@ -128,7 +128,7 @@ class BCMKTestFigure(unittest.TestCase):
         file_input = DATA_DIR / "horton.png"
 
         # fit mode
-        file_output = self.output_dir / "horton thumbnail fit.jpg"
+        file_output = self.output_dir / "horton thumbnail fit.jpeg"
         self.fig.make_thumbnail(
             file_input=file_input, file_output=file_output, mode="fit"
         )
@@ -138,7 +138,7 @@ class BCMKTestFigure(unittest.TestCase):
         print(testmsg("thumbnail output check passed"))
 
         # crop mode
-        file_output = self.output_dir / "horton thumbnail crop.jpg"
+        file_output = self.output_dir / "horton thumbnail crop.jpeg"
         self.fig.make_thumbnail(
             file_input=file_input, file_output=file_output, mode="crop"
         )
@@ -148,7 +148,7 @@ class BCMKTestFigure(unittest.TestCase):
         print(testmsg("thumbnail output check passed"))
 
         # crop mode 3:4
-        file_output = self.output_dir / "horton thumbnail crop 3x4.jpg"
+        file_output = self.output_dir / "horton thumbnail crop 3x4.jpeg"
         self.fig.make_thumbnail(
             file_input=file_input,
             file_output=file_output,
@@ -162,7 +162,7 @@ class BCMKTestFigure(unittest.TestCase):
 
     def test_image_to_jpg(self):
         file_input = DATA_DIR / "horton.png"
-        file_output = self.output_dir / "horton converted.jpg"
+        file_output = self.output_dir / "horton converted.jpeg"
 
         Figure.image_to_jpeg(file_input=file_input, file_output=file_output)
 

@@ -618,7 +618,7 @@ class FigureSVG(Figure):
 
         """
         import subprocess
-        import tempfile
+        from losalamos.utils import make_local_tempfile
 
         # handle output file
         # -----------------------------------------------------------------------
@@ -627,12 +627,9 @@ class FigureSVG(Figure):
 
         # handle svg file copy
         # -----------------------------------------------------------------------
-        temp_folder = tempfile.mkdtemp(prefix="losalamos_svg_")
-        dst_file = Path(temp_folder) / "losalamos.svg"
         src_file = self.file_data
-
+        dst_file = make_local_tempfile(src_file=src_file)
         shutil.copy(src=self.file_data, dst=dst_file)
-
         self.file_data = dst_file
 
         # Get abspath
@@ -691,7 +688,7 @@ class FigureSVG(Figure):
         # -----------------------------------------------------------------------
         self.file_data = src_file
         # print(temp_folder)
-        shutil.rmtree(temp_folder)
+        os.remove(dst_file)
 
         return return_file
 

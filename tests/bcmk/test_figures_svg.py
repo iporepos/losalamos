@@ -16,6 +16,7 @@ todo docstring
 # Native imports
 # =======================================================================
 import os
+import shutil
 import unittest
 import tempfile
 from pathlib import Path
@@ -31,6 +32,7 @@ from PIL import Image
 # Project-level imports
 # =======================================================================
 from tests.conftest import *
+from losalamos.utils import *
 from losalamos.figures import FigureSVG
 
 # ... {develop}
@@ -57,7 +59,10 @@ class BCMKTestFigureSVG(unittest.TestCase):
         Prepare large datasets and output folders
         """
         cls.output_dir = OUTPUT_DIR
-        cls.data_file = DATA_DIR / "drawing_01.svg"
+        cls.src_data_file = DATA_DIR / "drawing_01.svg"
+
+        # make a temporary copy
+        cls.data_file = make_local_tempfile(cls.src_data_file)
 
         print(testmsg(f"figures :: folder = {cls.output_dir}"))
         print(testmsg(f"figures :: svg = {cls.data_file}"))
@@ -74,6 +79,10 @@ class BCMKTestFigureSVG(unittest.TestCase):
         self.svg.show_layers(labels=ls, inclusive=True)
 
         return None
+
+    @classmethod
+    def tearDownClass(cls):
+        os.remove(cls.data_file)
 
     def test_init(self):
         self.assertIsInstance(self.svg, FigureSVG)
@@ -126,6 +135,9 @@ class BCMKTestFigureSVG(unittest.TestCase):
             folder=OUTPUT_DIR,
             filename=file_name,
         )
+
+        # include image
+        shutil.copy(DATA_DIR / "budyko.jpeg", OUTPUT_DIR / "budyko.jpeg")
 
         new_svg = FigureSVG()
         new_svg.load_data(file_output_svg)

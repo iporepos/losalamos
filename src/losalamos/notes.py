@@ -83,7 +83,25 @@ HARMONIZE_DATE_FIELDS = [
 
 # FUNCTIONS -- Project-level
 # =======================================================================
-# ... {develop}
+
+
+def search_markdown_files(paths: list[Path]) -> list[Path]:
+    """
+    Recursively scans the provided paths to identify and collect all files with a ``.md`` extension.
+
+    :param paths: A list of file or directory paths to search.
+    :type paths: list[:class:`pathlib.Path`]
+    :return: A list of paths pointing to the discovered markdown files.
+    :rtype: list[:class:`pathlib.Path`]
+    """
+    files = []
+    for p in paths:
+        if p.is_file() and p.suffix == ".md":
+            files.append(p)
+        elif p.is_dir():
+            files.extend(p.rglob("*.md"))
+    return files
+
 
 # FUNCTIONS -- Module-level
 # =======================================================================
@@ -236,6 +254,69 @@ class Note(MbaE):
         # clean up excessive lines
         if cleanup:
             Note.remove_excessive_blank_lines(file_path)
+
+        return None
+
+    def refactor(self, new_name, scope):
+        """
+        Renames the current file note and updates all internal markdown
+        links within a specified scope.
+
+        .. note::
+
+             This function performs a regex-based search across the provided scope to find and replace
+             Obsidian-style internal links (e.g., ``[[OldName]]`` or ``[[OldName|Alias]]``) with the
+             newly defined name.
+
+        :param new_name: The new filename (without extension) to be applied.
+        :type new_name: str
+        :param scope: The directories or file paths where link references should be updated.
+        :type scope: :class:`pathlib.Path`, str, or Iterable
+        :return: None
+        :rtype: None
+        """
+        from typing import Iterable, Union
+
+        def _normalize_scope(scope):
+            if scope is None:
+                return [source]  # only self
+
+            if isinstance(scope, (str, Path)):
+                return [Path(scope)]
+
+            if isinstance(scope, Iterable):
+                return [Path(p) for p in scope]
+
+            raise ValueError("Invalid scope for refactoring")
+
+        source = Path(self.file_note)
+        old_name = source.stem
+
+        if old_name == new_name:
+            return None
+
+        # Rename file itself
+        new_path = source.with_name(f"{new_name}.md")
+        source.rename(new_path)
+        self.file_note = new_path
+
+        # determine scope
+        scope_paths = _normalize_scope(scope)
+
+        # search files
+        md_files = search_markdown_files(scope_paths)
+
+        # Build regex
+        pattern = re.compile(rf"\[\[{re.escape(old_name)}(\|[^\]]+)?\]\]")
+
+        # Replace in files
+        for file in md_files:
+            text = file.read_text(encoding="utf-8")
+
+            new_text = pattern.sub(rf"[[{new_name}\1]]", text)
+
+            if new_text != text:
+                file.write_text(new_text, encoding="utf-8")
 
         return None
 
@@ -695,6 +776,23 @@ class NoteBasic(Note):
 
         """
         self.reset_data_segment("Tail")
+
+    def refactor(self, new_name, scope):
+        """
+        Performs a full refactor operation by renaming the resource and
+        refreshing its local data state.
+
+        :param new_name: The new filename to be assigned to the resource.
+        :type new_name: str
+        :param scope: The scope of files where references to this resource should be updated.
+        :type scope: :class:`pathlib.Path`, str, or Iterable
+        :return: None
+        :rtype: None
+        """
+        super().refactor(new_name=new_name, scope=scope)
+        self.load()
+        self.update()
+        self.save()
 
     def update(self):
         """

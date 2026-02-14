@@ -7,11 +7,12 @@
    id="svg5"
    inkscape:version="1.2.2 (732a01da63, 2022-12-09)"
    sodipodi:docname="drawing_01.svg"
+   xml:space="preserve"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns="http://www.w3.org/2000/svg"
-   xmlns:svg="http://www.w3.org/2000/svg">
-  <sodipodi:namedview
+   xmlns:svg="http://www.w3.org/2000/svg"><sodipodi:namedview
      id="namedview7"
      pagecolor="#FFFFFF"
      bordercolor="#eeeeee"
@@ -22,30 +23,26 @@
      inkscape:deskcolor="#505050"
      inkscape:document-units="mm"
      showgrid="false"
-     inkscape:zoom="2.1543544"
-     inkscape:cx="317.7286"
-     inkscape:cy="356.02313"
+     inkscape:zoom="1.5233586"
+     inkscape:cx="351.5259"
+     inkscape:cy="416.8421"
      inkscape:window-width="1920"
      inkscape:window-height="1009"
      inkscape:window-x="-8"
      inkscape:window-y="-8"
      inkscape:window-maximized="1"
-     inkscape:current-layer="main" />
-  <defs
-     id="defs2" />
-  <g
+     inkscape:current-layer="main" /><defs
+     id="defs2" /><g
      inkscape:label="main"
      inkscape:groupmode="layer"
      id="main"
-     style="display:inline">
-    <rect
+     style="display:inline"><rect
        style="opacity:1;fill:#ff0000;stroke-width:0.165;stroke-linecap:round;stop-color:#000000"
        id="rect234"
        width="101.77895"
        height="86.494736"
        x="49.673683"
-       y="58.357895" />
-    <path
+       y="58.357895" /><path
        sodipodi:type="star"
        style="opacity:1;fill:#ffff00;stroke-width:0.165;stroke-linecap:round;stop-color:#000000"
        id="path894"
@@ -62,26 +59,29 @@
        d="m 95.873686,98.652635 -8.650761,-5.946778 -8.582358,6.04508 2.98249,-10.065018 -8.401307,-6.294275 10.494041,-0.273745 3.390064,-9.935156 3.503185,9.895835 10.49648,0.15401 -8.328952,6.389708 z"
        inkscape:transform-center-x="0.025841318"
        inkscape:transform-center-y="-1.3752706"
-       transform="translate(12.157895,13.2)" />
-    <ellipse
+       transform="translate(12.157895,13.2)" /><ellipse
        style="fill:#0000ff;stroke:#ff00ff;stroke-width:0.165001;stroke-linecap:round;stop-color:#000000"
        id="path294"
        cx="113.19868"
        cy="73.728935"
        rx="10.898684"
        ry="10.160525"
-       inkscape:label="path294" />
-    <path
+       inkscape:label="path294" /><path
        style="fill:none;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 120.97108,98.619063 11.0532,10.193507 3.07033,-19.281688 -19.89575,-2.210639 -30.58051,17.193857"
-       id="path626" />
-  </g>
-  <g
+       id="path626" /><image
+       width="28.845095"
+       height="39.710865"
+       preserveAspectRatio="none"
+       xlink:href="budyko.jpeg"
+       id="image252"
+       x="52.64909"
+       y="102.21316"
+       style="stroke-width:3.38467" /></g><g
      inkscape:groupmode="layer"
      id="layer3"
      inkscape:label="decorations"
-     style="display:inline">
-    <path
+     style="display:inline"><path
        sodipodi:type="star"
        style="fill:#ff00ff;stroke:#000000;stroke-width:0.165;stroke-linecap:round;stop-color:#000000"
        id="path1015"
@@ -98,14 +98,11 @@
        d="m 125.02392,77.126738 -15.89953,2.724963 -7.50482,-14.279298 11.2613,-11.550054 14.46469,7.140972 z"
        inkscape:transform-center-x="0.71630018"
        inkscape:transform-center-y="-0.6102784"
-       transform="translate(17.930739,18.667619)" />
-  </g>
-  <g
+       transform="translate(17.930739,18.667619)" /></g><g
      inkscape:groupmode="layer"
      id="annotations"
      inkscape:label="annotations"
-     style="display:inline">
-    <text
+     style="display:inline"><text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:3px;line-height:1.25;font-family:sans-serif;fill:#ffff00;fill-opacity:1;stroke:none;stroke-width:0.264583"
        x="108.15379"
@@ -116,20 +113,15 @@
          id="tspan458"
          style="font-size:3px;fill:#ffff00;stroke-width:0.264583"
          x="108.15379"
-         y="114.05846">This is a yellow text</tspan></text>
-  </g>
-  <g
+         y="114.05846">This is a yellow text</tspan></text></g><g
      inkscape:groupmode="layer"
      id="layer1"
      inkscape:label="frame"
-     style="display:inline">
-    <rect
+     style="display:inline"><rect
        style="fill:none;stroke:#000000;stroke-width:0.165;stroke-linecap:round;stop-color:#000000"
        id="mainframe"
        width="142.76842"
        height="110.28947"
        x="18.584209"
        y="51.93158"
-       inkscape:label="mainframe" />
-  </g>
-</svg>
+       inkscape:label="mainframe" /></g></svg>

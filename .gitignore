@@ -31,9 +31,10 @@
 bench*.py
 # ... [ADD MORE IF NEEDED]
 
-# Deprecated files conventions (e.g. '__mymodule.py')
+# Deprecated or temporary files conventions (e.g. '__mymodule.py')
 # -----------------------------------------------------------------------
 __*.*
+__tempfile__*
 # Exception
 !__init__.py
 # ... [ADD MORE IF NEEDED]
