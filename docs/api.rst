@@ -45,7 +45,14 @@ guide for integrating and extending the functionality of the project.
 
    losalamos.notes
 
+
 .. autosummary::
    :toctree: generated
 
    losalamos.figures
+
+
+.. autosummary::
+   :toctree: generated
+
+   losalamos.references

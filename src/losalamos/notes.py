@@ -30,6 +30,7 @@ import pandas as pd
 # Project-level imports
 # =======================================================================
 from losalamos.root import MbaE, Collection
+from losalamos.references import Reference, REFERENCE_DISPATCHER
 from losalamos.paths import FOLDER_TEMPLATES_NOTES
 
 # ... {develop}
@@ -60,8 +61,11 @@ HARMONIZE_TEXT_FIELDS = [
     "source",
     "document",
     "file",
+    "pdf",
     "file_draft",
     "publisher",
+    "booktitle",
+    "cite_bibli",
 ]
 HARMONIZE_DATE_FIELDS = [
     "timestamp",
@@ -158,7 +162,11 @@ class Note(MbaE):
 
         return dc_main
 
-    def load_metadata(self):
+    def load_metadata(self, file_note=None):
+
+        if file_note is not None:
+            self.file_note = Path(file_note)
+
         dc = Note.parse_metadata(self.file_note)
 
         # DATE
@@ -175,12 +183,16 @@ class Note(MbaE):
 
         self.metadata = dc.copy()
 
-    def load_data(self):
+    def load_data(self, file_note=None):
+
+        if file_note is not None:
+            self.file_note = Path(file_note)
+
         self.data = Note.parse_note(self.file_note)
 
-    def load(self):
-        self.load_metadata()
-        self.load_data()
+    def load(self, file_note=None):
+        self.load_metadata(file_note=file_note)
+        self.load_data(file_note=file_note)
 
     def save(self):
         self.to_file(file_path=self.file_note)
@@ -210,6 +222,7 @@ class Note(MbaE):
             super().export(folder=folder, filename=filename)
         fpath = Path(folder) / f"{filename}.md"
         self.to_file(fpath, cleanup=True)
+
         return fpath.absolute()
 
     def to_file(self, file_path, cleanup=True):
@@ -637,6 +650,7 @@ class NoteBasic(Note):
 
     TEMPLATE_FILE = FOLDER_TEMPLATES_NOTES / "_basic.md"
     THUMBNAIL_SIZE = None
+    PATTERN_ABSTRACT = "[!Abstract]"
 
     def __init__(self, name="MyNote", alias="Nt1"):
         super().__init__(name=name, alias=alias)
@@ -689,7 +703,7 @@ class NoteBasic(Note):
             dc[k] = None
         return dc
 
-    def load_metadata(self):
+    def load_metadata(self, file_note=None):
         """
         Loads metadata and synchronizes it against the standard template schema.
 
@@ -701,7 +715,7 @@ class NoteBasic(Note):
         :return: No value is returned.
         :rtype: None
         """
-        super().load_metadata()
+        super().load_metadata(file_note=file_note)
         # filter standard entries
         dc = {}
         for k in self.metadata_standard:
@@ -742,7 +756,7 @@ class NoteBasic(Note):
         """
         dc = self.load_data_standard()
         self.data[segment] = dc[segment][:]
-        self.update()
+        ### self.update()
 
     def reset_data_head(self):
         """
@@ -800,7 +814,8 @@ class NoteBasic(Note):
 
         .. note::
 
-            This method acts as a base update sequence; additional update logic may be implemented in downstream classes.
+            This method acts as a base update sequence; additional update
+            logic may be implemented in downstream classes.
 
         """
         self.update_name()
@@ -828,7 +843,8 @@ class NoteBasic(Note):
 
         .. note::
 
-            The method searches for the ``[!Abstract]`` identifier within the ``Head`` segment and replaces the subsequent line with the formatted abstract string.
+            The method searches for the ``self.PATTERN_ABSTRACT`` identifier within the ``Head``
+            segment and replaces the subsequent line with the formatted abstract string.
 
         """
         if self.metadata["abstract"] is not None:
@@ -836,22 +852,27 @@ class NoteBasic(Note):
             n = 0
             for line in self.data["Head"]:
                 n = n + 1
-                if "[!Abstract]" in line:
+                if self.PATTERN_ABSTRACT in line:
                     break
             if n > 0:
                 self.data["Head"][n] = f"> {current_abstract}\n"
 
-    def update_thumbnail(self):
+    def update_thumbnail(self, image_name=None):
         """
-        Updates the thumbnail image link in the Head data segment based on the current file name and predefined size.
+        Updates the thumbnail image link in the Head data segment based
+        on the current file name and predefined size.
 
         .. note::
 
-            The method searches for an existing Wikilink image pattern (``![[``) within the ``Head`` segment to perform the replacement.
+            The method searches for an existing Wikilink image pattern
+            (``![[``) within the ``Head`` segment to perform the replacement.
 
         """
         size = self.THUMBNAIL_SIZE
-        name = self.file_note.stem
+
+        if image_name is None:
+            image_name = self.file_note.stem
+
         if size is not None:
             n = 0
             for line in self.data["Head"]:
@@ -859,7 +880,7 @@ class NoteBasic(Note):
                     break
                 n = n + 1
             if n > 0:
-                self.data["Head"][n] = f"![[{name}.jpeg|{size}]]"
+                self.data["Head"][n] = f"![[{image_name}.jpeg|{size}]]"
 
     def update_timestamp(self):
         """
@@ -867,13 +888,20 @@ class NoteBasic(Note):
 
         .. note::
 
-            The timestamp is formatted as a string following the ``%Y-%m-%d %H:%M:%S`` pattern.
+            The timestamp is formatted as a string following
+            the ``%Y-%m-%d %H:%M:%S`` pattern.
 
         """
         from datetime import datetime
 
         now = datetime.now()
         self.metadata["timestamp"] = now.strftime("%Y-%m-%d %H:%M:%S")
+
+    def update_note(self, file_note=None):
+        if file_note is not None:
+            self.load(file_note=file_note)
+        self.update()
+        self.save()
 
 
 class NoteProject(NoteBasic):
@@ -900,6 +928,73 @@ class NoteFigure(NoteBasic):
 
     TEMPLATE_FILE = FOLDER_TEMPLATES_NOTES / "_figure.md"
     THUMBNAIL_SIZE = 500
+
+
+class NoteReference(NoteBasic):
+
+    TEMPLATE_FILE = FOLDER_TEMPLATES_NOTES / "_reference.md"
+    THUMBNAIL_SIZE = 200
+    PATTERN_ABSTRACT = "[!Info]"
+
+    def __init__(self):
+        super().__init__()
+        self.cite_style = "apa"
+
+    def get_reference(self):
+        dc = self.metadata.copy()
+        ref = REFERENCE_DISPATCHER[dc["entry_type"]]()
+        ref.data = dc.copy()
+        ref.standardize()
+        return ref
+
+    def update(self):
+        super().update()
+        self.update_cite_inline()
+        self.update_cite_bibli()
+        self.update_pdf()
+        self.update_data_tail()
+
+    def update_cite_inline(self):
+        self.metadata["cite_inline"] = Reference.cite_line(
+            bib_dict=self.metadata, text_format="plain", embed_link=False
+        )
+
+    def update_cite_bibli(self):
+        self.metadata["cite_bibli"] = Reference.cite_full(
+            bib_dict=self.metadata, text_format="plain", style=self.cite_style
+        )
+
+    def update_pdf(self):
+        self.metadata["pdf"] = '"[[{}.pdf]]"'.format(self.metadata["name"])
+
+    def update_data_tail(self):
+        self.reset_data_tail()
+        # replace inline and bibli
+        dc = self.metadata.copy()
+
+        ref = self.get_reference()
+        del ref.data["pdf"]
+        del ref.data["abstract"]
+
+        dc["bibtex"] = ref.get_str_bib()
+
+        ls = []
+        for line in self.data["Tail"]:
+            print(line)
+            line = line.format(**dc)
+            ls.append(line[:])
+        self.data["Tail"] = ls[:]
+
+    def update_thumbnail(self, image_name=None):
+        if self.metadata["entry_type"] == "article":
+            image_name = self.metadata["journal"]
+        super().update_thumbnail(image_name=image_name)
+
+    def to_bib(self, output, drop_pdf=True):
+        ref = self.get_reference()
+        if drop_pdf:
+            del ref.data["pdf"]
+        ref.to_bib(output=output)
 
 
 # COLLECTIONS

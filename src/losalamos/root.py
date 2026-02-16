@@ -703,7 +703,6 @@ class DataSet(MbaE):
             str_df_data = "None"
             str_out = "{}\nData:\n{}\n".format(str_super, str_df_data)
         else:
-            # first 5 rows
             str_df_data_head = self.data.head().to_string(index=False)
             str_df_data_tail = self.data.tail().to_string(index=False)
             str_out = "{}\nData:\n{}\n ... \n{}\n".format(

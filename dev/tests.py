@@ -99,7 +99,7 @@ def main():
         run_bcmk = True
 
     if run_unit:
-        s = "tests/unit"
+        s = "tests"
 
     if run_bcmk:
         s = "tests/bcmk"

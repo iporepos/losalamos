@@ -25,7 +25,7 @@ publisher:
 
 JOURNAL
 
-![[<% tp.file.title %>.jpeg|500]]
+![[<% tp.file.title %>.jpeg|300]]
 
 > [!Abstract] Summary
 > {a paragraph description of the note}
