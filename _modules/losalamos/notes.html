@@ -412,6 +412,7 @@
 <span class="c1"># Project-level imports</span>
 <span class="c1"># =======================================================================</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">losalamos.root</span><span class="w"> </span><span class="kn">import</span> <span class="n">MbaE</span><span class="p">,</span> <span class="n">Collection</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">losalamos.references</span><span class="w"> </span><span class="kn">import</span> <span class="n">Reference</span><span class="p">,</span> <span class="n">REFERENCE_DISPATCHER</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">losalamos.paths</span><span class="w"> </span><span class="kn">import</span> <span class="n">FOLDER_TEMPLATES_NOTES</span>
 
 <span class="c1"># ... {develop}</span>
@@ -442,8 +443,11 @@
     <span class="s2">&quot;source&quot;</span><span class="p">,</span>
     <span class="s2">&quot;document&quot;</span><span class="p">,</span>
     <span class="s2">&quot;file&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;pdf&quot;</span><span class="p">,</span>
     <span class="s2">&quot;file_draft&quot;</span><span class="p">,</span>
     <span class="s2">&quot;publisher&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;booktitle&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;cite_bibli&quot;</span><span class="p">,</span>
 <span class="p">]</span>
 <span class="n">HARMONIZE_DATE_FIELDS</span> <span class="o">=</span> <span class="p">[</span>
     <span class="s2">&quot;timestamp&quot;</span><span class="p">,</span>
@@ -550,7 +554,11 @@
 
 <div class="viewcode-block" id="Note.load_metadata">
 <a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.Note.load_metadata">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">load_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">load_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_note</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+        <span class="k">if</span> <span class="n">file_note</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">file_note</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">file_note</span><span class="p">)</span>
+
         <span class="n">dc</span> <span class="o">=</span> <span class="n">Note</span><span class="o">.</span><span class="n">parse_metadata</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">file_note</span><span class="p">)</span>
 
         <span class="c1"># DATE</span>
@@ -570,15 +578,19 @@
 
 <div class="viewcode-block" id="Note.load_data">
 <a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.Note.load_data">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">load_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">load_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_note</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+        <span class="k">if</span> <span class="n">file_note</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">file_note</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">file_note</span><span class="p">)</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">Note</span><span class="o">.</span><span class="n">parse_note</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">file_note</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="Note.load">
 <a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.Note.load">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">load_metadata</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">load_data</span><span class="p">()</span></div>
+    <span class="k">def</span><span class="w"> </span><span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_note</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">load_metadata</span><span class="p">(</span><span class="n">file_note</span><span class="o">=</span><span class="n">file_note</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">load_data</span><span class="p">(</span><span class="n">file_note</span><span class="o">=</span><span class="n">file_note</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="Note.save">
@@ -614,6 +626,7 @@
             <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">export</span><span class="p">(</span><span class="n">folder</span><span class="o">=</span><span class="n">folder</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="n">filename</span><span class="p">)</span>
         <span class="n">fpath</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">folder</span><span class="p">)</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">.md&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">to_file</span><span class="p">(</span><span class="n">fpath</span><span class="p">,</span> <span class="n">cleanup</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
         <span class="k">return</span> <span class="n">fpath</span><span class="o">.</span><span class="n">absolute</span><span class="p">()</span></div>
 
 
@@ -1081,6 +1094,7 @@
 
     <span class="n">TEMPLATE_FILE</span> <span class="o">=</span> <span class="n">FOLDER_TEMPLATES_NOTES</span> <span class="o">/</span> <span class="s2">&quot;_basic.md&quot;</span>
     <span class="n">THUMBNAIL_SIZE</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">PATTERN_ABSTRACT</span> <span class="o">=</span> <span class="s2">&quot;[!Abstract]&quot;</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;MyNote&quot;</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s2">&quot;Nt1&quot;</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="n">alias</span><span class="p">)</span>
@@ -1147,7 +1161,7 @@
 
 <div class="viewcode-block" id="NoteBasic.load_metadata">
 <a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.NoteBasic.load_metadata">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">load_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">load_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_note</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Loads metadata and synchronizes it against the standard template schema.</span>
 
@@ -1159,7 +1173,7 @@
 <span class="sd">        :return: No value is returned.</span>
 <span class="sd">        :rtype: None</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">load_metadata</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">load_metadata</span><span class="p">(</span><span class="n">file_note</span><span class="o">=</span><span class="n">file_note</span><span class="p">)</span>
         <span class="c1"># filter standard entries</span>
         <span class="n">dc</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata_standard</span><span class="p">:</span>
@@ -1205,9 +1219,9 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">dc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">load_data_standard</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">segment</span><span class="p">]</span> <span class="o">=</span> <span class="n">dc</span><span class="p">[</span><span class="n">segment</span><span class="p">][:]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">segment</span><span class="p">]</span> <span class="o">=</span> <span class="n">dc</span><span class="p">[</span><span class="n">segment</span><span class="p">][:]</span></div>
 
+        <span class="c1">### self.update()</span>
 
 <div class="viewcode-block" id="NoteBasic.reset_data_head">
 <a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.NoteBasic.reset_data_head">[docs]</a>
@@ -1279,7 +1293,8 @@
 
 <span class="sd">        .. note::</span>
 
-<span class="sd">            This method acts as a base update sequence; additional update logic may be implemented in downstream classes.</span>
+<span class="sd">            This method acts as a base update sequence; additional update</span>
+<span class="sd">            logic may be implemented in downstream classes.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">update_name</span><span class="p">()</span>
@@ -1313,7 +1328,8 @@
 
 <span class="sd">        .. note::</span>
 
-<span class="sd">            The method searches for the ``[!Abstract]`` identifier within the ``Head`` segment and replaces the subsequent line with the formatted abstract string.</span>
+<span class="sd">            The method searches for the ``self.PATTERN_ABSTRACT`` identifier within the ``Head``</span>
+<span class="sd">            segment and replaces the subsequent line with the formatted abstract string.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;abstract&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -1321,7 +1337,7 @@
             <span class="n">n</span> <span class="o">=</span> <span class="mi">0</span>
             <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;Head&quot;</span><span class="p">]:</span>
                 <span class="n">n</span> <span class="o">=</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span>
-                <span class="k">if</span> <span class="s2">&quot;[!Abstract]&quot;</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">PATTERN_ABSTRACT</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
                     <span class="k">break</span>
             <span class="k">if</span> <span class="n">n</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;Head&quot;</span><span class="p">][</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&gt; </span><span class="si">{</span><span class="n">current_abstract</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span></div>
@@ -1329,17 +1345,22 @@
 
 <div class="viewcode-block" id="NoteBasic.update_thumbnail">
 <a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.NoteBasic.update_thumbnail">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">update_thumbnail</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">update_thumbnail</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image_name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Updates the thumbnail image link in the Head data segment based on the current file name and predefined size.</span>
+<span class="sd">        Updates the thumbnail image link in the Head data segment based</span>
+<span class="sd">        on the current file name and predefined size.</span>
 
 <span class="sd">        .. note::</span>
 
-<span class="sd">            The method searches for an existing Wikilink image pattern (``![[``) within the ``Head`` segment to perform the replacement.</span>
+<span class="sd">            The method searches for an existing Wikilink image pattern</span>
+<span class="sd">            (``![[``) within the ``Head`` segment to perform the replacement.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">THUMBNAIL_SIZE</span>
-        <span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_note</span><span class="o">.</span><span class="n">stem</span>
+
+        <span class="k">if</span> <span class="n">image_name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">image_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_note</span><span class="o">.</span><span class="n">stem</span>
+
         <span class="k">if</span> <span class="n">size</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">n</span> <span class="o">=</span> <span class="mi">0</span>
             <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;Head&quot;</span><span class="p">]:</span>
@@ -1347,7 +1368,7 @@
                     <span class="k">break</span>
                 <span class="n">n</span> <span class="o">=</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span>
             <span class="k">if</span> <span class="n">n</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;Head&quot;</span><span class="p">][</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;![[</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">.jpeg|</span><span class="si">{</span><span class="n">size</span><span class="si">}</span><span class="s2">]]&quot;</span></div>
+                <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;Head&quot;</span><span class="p">][</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;![[</span><span class="si">{</span><span class="n">image_name</span><span class="si">}</span><span class="s2">.jpeg|</span><span class="si">{</span><span class="n">size</span><span class="si">}</span><span class="s2">]]&quot;</span></div>
 
 
 <div class="viewcode-block" id="NoteBasic.update_timestamp">
@@ -1358,13 +1379,23 @@
 
 <span class="sd">        .. note::</span>
 
-<span class="sd">            The timestamp is formatted as a string following the ``%Y-%m-%d %H:%M:%S`` pattern.</span>
+<span class="sd">            The timestamp is formatted as a string following</span>
+<span class="sd">            the ``%Y-%m-%d %H:%M:%S`` pattern.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span>
 
         <span class="n">now</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;timestamp&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">now</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M:%S&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="NoteBasic.update_note">
+<a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.NoteBasic.update_note">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">update_note</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_note</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">file_note</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">file_note</span><span class="o">=</span><span class="n">file_note</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">()</span></div>
 </div>
 
 
@@ -1407,6 +1438,100 @@
 
     <span class="n">TEMPLATE_FILE</span> <span class="o">=</span> <span class="n">FOLDER_TEMPLATES_NOTES</span> <span class="o">/</span> <span class="s2">&quot;_figure.md&quot;</span>
     <span class="n">THUMBNAIL_SIZE</span> <span class="o">=</span> <span class="mi">500</span></div>
+
+
+
+<div class="viewcode-block" id="NoteReference">
+<a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.NoteReference">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">NoteReference</span><span class="p">(</span><span class="n">NoteBasic</span><span class="p">):</span>
+
+    <span class="n">TEMPLATE_FILE</span> <span class="o">=</span> <span class="n">FOLDER_TEMPLATES_NOTES</span> <span class="o">/</span> <span class="s2">&quot;_reference.md&quot;</span>
+    <span class="n">THUMBNAIL_SIZE</span> <span class="o">=</span> <span class="mi">200</span>
+    <span class="n">PATTERN_ABSTRACT</span> <span class="o">=</span> <span class="s2">&quot;[!Info]&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cite_style</span> <span class="o">=</span> <span class="s2">&quot;apa&quot;</span>
+
+<div class="viewcode-block" id="NoteReference.get_reference">
+<a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.NoteReference.get_reference">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_reference</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">dc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">ref</span> <span class="o">=</span> <span class="n">REFERENCE_DISPATCHER</span><span class="p">[</span><span class="n">dc</span><span class="p">[</span><span class="s2">&quot;entry_type&quot;</span><span class="p">]]()</span>
+        <span class="n">ref</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">dc</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">ref</span><span class="o">.</span><span class="n">standardize</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">ref</span></div>
+
+
+<div class="viewcode-block" id="NoteReference.update">
+<a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.NoteReference.update">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_cite_inline</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_cite_bibli</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_pdf</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_data_tail</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="NoteReference.update_cite_inline">
+<a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.NoteReference.update_cite_inline">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">update_cite_inline</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;cite_inline&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Reference</span><span class="o">.</span><span class="n">cite_line</span><span class="p">(</span>
+            <span class="n">bib_dict</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">,</span> <span class="n">text_format</span><span class="o">=</span><span class="s2">&quot;plain&quot;</span><span class="p">,</span> <span class="n">embed_link</span><span class="o">=</span><span class="kc">False</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="NoteReference.update_cite_bibli">
+<a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.NoteReference.update_cite_bibli">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">update_cite_bibli</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;cite_bibli&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Reference</span><span class="o">.</span><span class="n">cite_full</span><span class="p">(</span>
+            <span class="n">bib_dict</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">,</span> <span class="n">text_format</span><span class="o">=</span><span class="s2">&quot;plain&quot;</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cite_style</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="NoteReference.update_pdf">
+<a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.NoteReference.update_pdf">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">update_pdf</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;pdf&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;&quot;[[</span><span class="si">{}</span><span class="s1">.pdf]]&quot;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">])</span></div>
+
+
+<div class="viewcode-block" id="NoteReference.update_data_tail">
+<a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.NoteReference.update_data_tail">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">update_data_tail</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reset_data_tail</span><span class="p">()</span>
+        <span class="c1"># replace inline and bibli</span>
+        <span class="n">dc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+        <span class="n">ref</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_reference</span><span class="p">()</span>
+        <span class="k">del</span> <span class="n">ref</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;pdf&quot;</span><span class="p">]</span>
+        <span class="k">del</span> <span class="n">ref</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;abstract&quot;</span><span class="p">]</span>
+
+        <span class="n">dc</span><span class="p">[</span><span class="s2">&quot;bibtex&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ref</span><span class="o">.</span><span class="n">get_str_bib</span><span class="p">()</span>
+
+        <span class="n">ls</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;Tail&quot;</span><span class="p">]:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+            <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">**</span><span class="n">dc</span><span class="p">)</span>
+            <span class="n">ls</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">[:])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;Tail&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ls</span><span class="p">[:]</span></div>
+
+
+<div class="viewcode-block" id="NoteReference.update_thumbnail">
+<a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.NoteReference.update_thumbnail">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">update_thumbnail</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image_name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;entry_type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;article&quot;</span><span class="p">:</span>
+            <span class="n">image_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;journal&quot;</span><span class="p">]</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">update_thumbnail</span><span class="p">(</span><span class="n">image_name</span><span class="o">=</span><span class="n">image_name</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="NoteReference.to_bib">
+<a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.NoteReference.to_bib">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">to_bib</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">drop_pdf</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="n">ref</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_reference</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">drop_pdf</span><span class="p">:</span>
+            <span class="k">del</span> <span class="n">ref</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;pdf&quot;</span><span class="p">]</span>
+        <span class="n">ref</span><span class="o">.</span><span class="n">to_bib</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="n">output</span><span class="p">)</span></div>
+</div>
 
 
 

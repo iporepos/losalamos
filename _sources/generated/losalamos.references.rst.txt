@@ -1,0 +1,23 @@
+﻿losalamos.references
+====================
+
+.. automodule:: losalamos.references
+
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      RefArticle
+      RefBook
+      RefDataset
+      RefInbook
+      RefInproceedings
+      RefLegislation
+      RefMisc
+      RefOnline
+      RefSoftware
+      RefTechreport
+      RefThesis
+      Reference
+   

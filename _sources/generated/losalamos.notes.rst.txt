@@ -24,4 +24,5 @@
       NoteFigure
       NoteJournal
       NoteProject
+      NoteReference
    

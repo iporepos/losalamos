@@ -1,0 +1,1380 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" data-theme="light">
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>losalamos.references &#8212; losalamos 0.0.1 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../../_static/documentation_options.js?v=d45e8c67"></script>
+    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/losalamos/references';</script>
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="light">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+    
+    
+    
+    <img src="https://github.com/iporepos/losalamos/blob/main/docs/figs/logo.png?raw=true" class="logo__image only-light" alt="losalamos 0.0.1 documentation - Home"/>
+    <img src="https://github.com/iporepos/losalamos/blob/main/docs/figs/logo.png?raw=true" class="logo__image only-dark pst-js-only" alt="losalamos 0.0.1 documentation - Home"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../index.html">
+    Home
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../about.html">
+    About
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../usage.html">
+    Usage
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../api.html">
+    API
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../development.html">
+    Development
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/iporepos/losalamos" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../index.html">
+    Home
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../about.html">
+    About
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../usage.html">
+    Usage
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../api.html">
+    API
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../development.html">
+    Development
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/iporepos/losalamos" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../index.html" class="nav-link">Module code</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">losalamos.references</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for losalamos.references</h1><div class="highlight"><pre>
+<span></span><span class="c1"># SPDX-License-Identifier: GPL-3.0-or-later</span>
+<span class="c1">#</span>
+<span class="c1"># Copyright (C) 2025 The Project Authors</span>
+<span class="c1"># See pyproject.toml for authors/maintainers.</span>
+<span class="c1"># See LICENSE for license details.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Short module description (1-3 sentences)</span>
+<span class="sd">todo docstring</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="c1"># IMPORTS</span>
+<span class="c1"># ***********************************************************************</span>
+<span class="c1"># import modules from other libs</span>
+
+<span class="c1"># Native imports</span>
+<span class="c1"># =======================================================================</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pprint</span><span class="o">,</span><span class="w"> </span><span class="nn">re</span>
+
+<span class="c1"># ... {develop}</span>
+
+<span class="c1"># External imports</span>
+<span class="c1"># =======================================================================</span>
+<span class="c1"># import {module}</span>
+<span class="c1"># ... {develop}</span>
+
+<span class="c1"># Project-level imports</span>
+<span class="c1"># =======================================================================</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">losalamos.root</span><span class="w"> </span><span class="kn">import</span> <span class="n">DataSet</span>
+
+
+<span class="c1"># ... {develop}</span>
+
+
+<span class="c1"># CONSTANTS</span>
+<span class="c1"># ***********************************************************************</span>
+<span class="c1"># define constants in uppercase</span>
+
+<span class="c1"># CONSTANTS -- Project-level</span>
+<span class="c1"># =======================================================================</span>
+<span class="c1"># ... {develop}</span>
+
+
+<span class="c1"># CONSTANTS -- Module-level</span>
+<span class="c1"># =======================================================================</span>
+<span class="c1"># ... {develop}</span>
+
+
+<span class="c1"># FUNCTIONS</span>
+<span class="c1"># ***********************************************************************</span>
+
+<span class="c1"># FUNCTIONS -- Project-level</span>
+<span class="c1"># =======================================================================</span>
+<span class="c1"># ... {develop}</span>
+
+
+<span class="c1"># FUNCTIONS -- Module-level</span>
+<span class="c1"># =======================================================================</span>
+<span class="c1"># ... {develop}</span>
+
+
+<span class="c1"># CLASSES</span>
+<span class="c1"># ***********************************************************************</span>
+
+
+<span class="c1"># CLASSES -- Project-level</span>
+<span class="c1"># =======================================================================</span>
+<div class="viewcode-block" id="Reference">
+<a class="viewcode-back" href="../../generated/losalamos.references.html#losalamos.references.Reference">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Reference</span><span class="p">(</span><span class="n">DataSet</span><span class="p">):</span>
+
+    <span class="n">ENTRY_TYPE</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="n">CORE_FIELDS</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;entry_type&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;author&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;year&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;doi&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;abstract&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;pdf&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="n">SPECIFIC_FIELDS</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="n">TAIL_ENTRIES</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;abstract&quot;</span><span class="p">,</span> <span class="s2">&quot;pdf&quot;</span><span class="p">]</span>
+
+    <span class="c1"># ---------------------------------------------------------</span>
+    <span class="c1"># Text formatting rules (role-based styling)</span>
+    <span class="c1"># ---------------------------------------------------------</span>
+    <span class="n">FORMAT_RULES</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;plain&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">{text}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;journal&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">{text}</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;html&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;&lt;i&gt;</span><span class="si">{text}</span><span class="s2">&lt;/i&gt;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;journal&quot;</span><span class="p">:</span> <span class="s2">&quot;&lt;b&gt;</span><span class="si">{text}</span><span class="s2">&lt;/b&gt;&quot;</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;md&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;*</span><span class="si">{text}</span><span class="s2">*&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;journal&quot;</span><span class="p">:</span> <span class="s2">&quot;**</span><span class="si">{text}</span><span class="s2">**&quot;</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;tex&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="sa">r</span><span class="s2">&quot;\textit{{</span><span class="si">{text}</span><span class="s2">}}&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;journal&quot;</span><span class="p">:</span> <span class="sa">r</span><span class="s2">&quot;\textbf{{</span><span class="si">{text}</span><span class="s2">}}&quot;</span><span class="p">,</span>
+        <span class="p">},</span>
+    <span class="p">}</span>
+
+    <span class="c1"># ---------------------------------------------------------</span>
+    <span class="c1"># Citation templates</span>
+    <span class="c1"># ---------------------------------------------------------</span>
+    <span class="n">CITATION_TEMPLATES</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;article&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;apa&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">{authors}</span><span class="s2"> (</span><span class="si">{year}</span><span class="s2">). </span><span class="si">{title}</span><span class="s2">. </span><span class="si">{journal}</span><span class="s2">, </span><span class="si">{volume_issue}{pages}</span><span class="s2">. </span><span class="si">{doi}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;mla&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">{authors}</span><span class="s2">. </span><span class="si">{raw_title}</span><span class="s2">. </span><span class="si">{journal}</span><span class="s2"> </span><span class="si">{volume}</span><span class="s2">. </span><span class="si">{issue}</span><span class="s2"> (</span><span class="si">{year}</span><span class="s2">): </span><span class="si">{pages}</span><span class="s2">. </span><span class="si">{doi}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;chicago&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">{authors}</span><span class="s2">. </span><span class="si">{raw_title}</span><span class="s2">. </span><span class="si">{journal}</span><span class="s2"> </span><span class="si">{volume}</span><span class="s2">, no. </span><span class="si">{issue}</span><span class="s2"> (</span><span class="si">{year}</span><span class="s2">): </span><span class="si">{pages}</span><span class="s2">. </span><span class="si">{doi}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;harvard&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">{authors}</span><span class="s2"> (</span><span class="si">{year}</span><span class="s2">) </span><span class="si">{raw_title}</span><span class="s2">, </span><span class="si">{journal}</span><span class="s2">, vol. </span><span class="si">{volume}</span><span class="s2">, no. </span><span class="si">{issue}</span><span class="s2">, pp. </span><span class="si">{pages}</span><span class="s2">. </span><span class="si">{doi}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;vancouver&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">{authors}</span><span class="s2">. </span><span class="si">{title}</span><span class="s2">. </span><span class="si">{journal}</span><span class="s2">. </span><span class="si">{year}</span><span class="s2">; </span><span class="si">{volume}</span><span class="s2"> (</span><span class="si">{issue}</span><span class="s2">):</span><span class="si">{pages}</span><span class="s2">. </span><span class="si">{doi}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;abnt&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">{authors}</span><span class="s2">. </span><span class="si">{title}</span><span class="s2">. </span><span class="si">{journal}</span><span class="s2">, </span><span class="si">{volume}</span><span class="s2"> (</span><span class="si">{issue}</span><span class="s2">), p. </span><span class="si">{pages}</span><span class="s2">, </span><span class="si">{year}</span><span class="s2">. </span><span class="si">{doi}</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;book&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;apa&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">{authors}</span><span class="s2"> (</span><span class="si">{year}</span><span class="s2">). </span><span class="si">{title}</span><span class="s2">. </span><span class="si">{publisher}</span><span class="s2">.&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;mla&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">{authors}</span><span class="s2">. </span><span class="si">{title}</span><span class="s2">. </span><span class="si">{publisher}</span><span class="s2">, </span><span class="si">{year}</span><span class="s2">.&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;chicago&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">{authors}</span><span class="s2">. </span><span class="si">{title}</span><span class="s2">. </span><span class="si">{location}</span><span class="s2">: </span><span class="si">{publisher}</span><span class="s2">, </span><span class="si">{year}</span><span class="s2">.&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;harvard&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">{authors}</span><span class="s2"> (</span><span class="si">{year}</span><span class="s2">) </span><span class="si">{title}</span><span class="s2">, </span><span class="si">{publisher}</span><span class="s2">.&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;vancouver&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">{authors}</span><span class="s2">. </span><span class="si">{title}</span><span class="s2">. </span><span class="si">{publisher}</span><span class="s2">; </span><span class="si">{year}</span><span class="s2">.&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;abnt&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">{authors}</span><span class="s2">. </span><span class="si">{title}</span><span class="s2">. </span><span class="si">{publisher}</span><span class="s2">, </span><span class="si">{year}</span><span class="s2">.&quot;</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;misc&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;apa&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">{authors}</span><span class="s2"> (</span><span class="si">{year}</span><span class="s2">). </span><span class="si">{title}</span><span class="s2">. </span><span class="si">{note}</span><span class="s2">. </span><span class="si">{url}</span><span class="s2">.&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;mla&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">{authors}</span><span class="s2">. </span><span class="si">{title}</span><span class="s2">. </span><span class="si">{note}</span><span class="s2">, </span><span class="si">{year}</span><span class="s2">.&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;chicago&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">{authors}</span><span class="s2">. </span><span class="si">{title}</span><span class="s2">. </span><span class="si">{note}</span><span class="s2">, </span><span class="si">{year}</span><span class="s2">.&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;harvard&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">{authors}</span><span class="s2"> (</span><span class="si">{year}</span><span class="s2">) </span><span class="si">{title}</span><span class="s2">, </span><span class="si">{note}</span><span class="s2">.&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;vancouver&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">{authors}</span><span class="s2">. </span><span class="si">{title}</span><span class="s2">. </span><span class="si">{note}</span><span class="s2">; </span><span class="si">{year}</span><span class="s2">.&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;abnt&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">{authors}</span><span class="s2">. </span><span class="si">{title}</span><span class="s2">. </span><span class="si">{note}</span><span class="s2">, </span><span class="si">{year}</span><span class="s2">.&quot;</span><span class="p">,</span>
+        <span class="p">},</span>
+    <span class="p">}</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;MyReference&quot;</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s2">&quot;Ref&quot;</span><span class="p">):</span>
+
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="n">alias</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">loading_order</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">entry_type_field</span> <span class="o">=</span> <span class="s2">&quot;entry_type&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">citation_key_field</span> <span class="o">=</span> <span class="s2">&quot;name&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">str_type</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span>
+        <span class="n">str_df_metadata</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_metadata_df</span><span class="p">()</span><span class="o">.</span><span class="n">to_string</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">str_super</span> <span class="o">=</span> <span class="s2">&quot;[</span><span class="si">{}</span><span class="s2"> (</span><span class="si">{}</span><span class="s2">)]</span><span class="se">\n</span><span class="si">{}</span><span class="s2"> (</span><span class="si">{}</span><span class="s2">):</span><span class="se">\t</span><span class="si">{}</span><span class="se">\n</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">alias</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">object_name</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">object_alias</span><span class="p">,</span>
+            <span class="n">str_type</span><span class="p">,</span>
+            <span class="n">str_df_metadata</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">str_data</span> <span class="o">=</span> <span class="s2">&quot;None&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">str_data</span> <span class="o">=</span> <span class="n">pprint</span><span class="o">.</span><span class="n">pformat</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+
+        <span class="n">str_out</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="se">\n</span><span class="s2">Data:</span><span class="se">\n</span><span class="si">{}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">str_super</span><span class="p">,</span> <span class="n">str_data</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">str_out</span>
+
+<div class="viewcode-block" id="Reference.load_data">
+<a class="viewcode-back" href="../../generated/losalamos.references.html#losalamos.references.Reference.load_data">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">load_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_data</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">file_data</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">file_data</span><span class="p">)</span><span class="o">.</span><span class="n">absolute</span><span class="p">()</span>
+
+        <span class="c1"># set up a parser system</span>
+        <span class="n">dc_parsers</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;bib&quot;</span><span class="p">:</span> <span class="n">Reference</span><span class="o">.</span><span class="n">parse_bib</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="c1"># parse as a list</span>
+        <span class="n">extension</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_data</span><span class="o">.</span><span class="n">suffix</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+        <span class="n">ls</span> <span class="o">=</span> <span class="n">dc_parsers</span><span class="p">[</span><span class="n">extension</span><span class="p">](</span><span class="n">file_parse</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">file_data</span><span class="p">)</span>
+
+        <span class="c1"># take the element as copy</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">ls</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">loading_order</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">standardize</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="Reference.save">
+<a class="viewcode-back" href="../../generated/losalamos.references.html#losalamos.references.Reference.save">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">dc_saver</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;bib&quot;</span><span class="p">:</span> <span class="n">Reference</span><span class="o">.</span><span class="n">to_bib</span><span class="p">}</span>
+
+        <span class="n">extension</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_data</span><span class="o">.</span><span class="n">suffix</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+
+        <span class="n">dc_saver</span><span class="p">[</span><span class="n">extension</span><span class="p">](</span><span class="bp">self</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">file_data</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="Reference.to_bib">
+<a class="viewcode-back" href="../../generated/losalamos.references.html#losalamos.references.Reference.to_bib">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">to_bib</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generates a ``bib`` file from the current item&#39;s data</span>
+<span class="sd">        and saves it to the specified output.</span>
+
+<span class="sd">        :param output: file Path to output</span>
+<span class="sd">        :type output: str or Path</span>
+<span class="sd">        :return: The path to the saved ``bib`` file.</span>
+<span class="sd">        :rtype: Path</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">dc_out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_clean_data</span><span class="p">()</span>
+
+        <span class="n">bibtex_content</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;@</span><span class="si">{</span><span class="n">dc_out</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">entry_type_field</span><span class="p">]</span><span class="si">}</span><span class="se">{{</span><span class="si">{</span><span class="n">dc_out</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">citation_key_field</span><span class="p">]</span><span class="si">}</span><span class="s2">,</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">dc_out</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">entry_type_field</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">citation_key_field</span><span class="p">]:</span>
+                <span class="n">bibtex_content</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2"> = </span><span class="se">{{</span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="se">}}</span><span class="s2">,</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="n">bibtex_content</span> <span class="o">=</span> <span class="n">bibtex_content</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s2">&quot;,</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+
+        <span class="c1"># write file</span>
+        <span class="n">file_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">output</span><span class="p">)</span>
+
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">bib_file</span><span class="p">:</span>
+            <span class="n">bib_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">bibtex_content</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">file_path</span></div>
+
+
+<div class="viewcode-block" id="Reference.get_clean_data">
+<a class="viewcode-back" href="../../generated/losalamos.references.html#losalamos.references.Reference.get_clean_data">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_clean_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">dc</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">dc</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">dc</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="Reference.get_str_bib">
+<a class="viewcode-back" href="../../generated/losalamos.references.html#losalamos.references.Reference.get_str_bib">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_str_bib</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Converts the dictionary representation of a BibTeX entry into a string.</span>
+
+<span class="sd">        :return: The BibTeX entry as a formatted string.</span>
+<span class="sd">        :rtype: str</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">dc_out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_clean_data</span><span class="p">()</span>
+        <span class="c1">#</span>
+        <span class="n">citation_key</span> <span class="o">=</span> <span class="n">dc_out</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">citation_key_field</span><span class="p">]</span>
+
+        <span class="c1"># list available fields</span>
+        <span class="n">bibtex_fields</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2"> = </span><span class="se">{{</span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="se">}}</span><span class="s2">&quot;</span>
+            <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">dc_out</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">entry_type_field</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">citation_key_field</span><span class="p">]</span>
+        <span class="p">]</span>
+
+        <span class="c1"># build the string</span>
+        <span class="n">bibtex_str</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;@</span><span class="si">{</span><span class="n">dc_out</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">entry_type_field</span><span class="p">]</span><span class="si">}</span><span class="se">{{</span><span class="si">{</span><span class="n">citation_key</span><span class="si">}</span><span class="s2">,</span><span class="se">\n</span><span class="s2">  &quot;</span>
+            <span class="o">+</span> <span class="s2">&quot;,</span><span class="se">\n</span><span class="s2">  &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">bibtex_fields</span><span class="p">)</span>
+            <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">}&quot;</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">bibtex_str</span></div>
+
+
+<div class="viewcode-block" id="Reference.standardize">
+<a class="viewcode-back" href="../../generated/losalamos.references.html#losalamos.references.Reference.standardize">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">standardize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="n">new_data</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="n">ls_keys</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">CORE_FIELDS</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">SPECIFIC_FIELDS</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">ls_keys</span> <span class="o">=</span> <span class="n">ls_keys</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">SPECIFIC_FIELDS</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+
+        <span class="c1"># Fill empty keys</span>
+        <span class="c1"># -----------------------------</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">ls_keys</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+                <span class="n">new_data</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">new_data</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># Send abstract and file to the end</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">TAIL_ENTRIES</span><span class="p">:</span>
+            <span class="n">new_data</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_data</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ENTRY_TYPE</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">new_data</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">entry_type_field</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ENTRY_TYPE</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">new_data</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">harmonize_abstract</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="Reference.harmonize_abstract">
+<a class="viewcode-back" href="../../generated/losalamos.references.html#losalamos.references.Reference.harmonize_abstract">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">harmonize_abstract</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;abstract&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="kn">from</span><span class="w"> </span><span class="nn">losalamos.documents</span><span class="w"> </span><span class="kn">import</span> <span class="n">escape_percent_latex</span>
+
+            <span class="n">text</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;abstract&quot;</span><span class="p">][:]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;abstract&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">escape_percent_latex</span><span class="p">(</span><span class="n">text</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Reference.export_template">
+<a class="viewcode-back" href="../../generated/losalamos.references.html#losalamos.references.Reference.export_template">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">export_template</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output</span><span class="p">):</span>
+        <span class="n">current_data</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">current_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">CORE_FIELDS</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">SPECIFIC_FIELDS</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">SPECIFIC_FIELDS</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">standardize</span><span class="p">()</span>
+
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+            <span class="k">if</span> <span class="n">k</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">entry_type_field</span><span class="p">:</span>
+                <span class="k">pass</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">to_bib</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="n">output</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">current_data</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="Reference.parse_bib">
+<a class="viewcode-back" href="../../generated/losalamos.references.html#losalamos.references.Reference.parse_bib">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">parse_bib</span><span class="p">(</span><span class="n">file_parse</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Parse a ``bib`` file and return a list of references as dictionaries.</span>
+
+<span class="sd">        :param file_parse: Path to the ``bib`` file.</span>
+<span class="sd">        :return: A list of dictionaries, each representing a BibTeX bib_dict.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">entries</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">entry</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">key</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">file_parse</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">file</span><span class="p">:</span>
+                <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+                <span class="c1"># Ignore empty lines and body</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">line</span> <span class="ow">or</span> <span class="n">line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;%&quot;</span><span class="p">):</span>
+                    <span class="k">continue</span>
+
+                <span class="c1"># New bib_dict starts</span>
+                <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;@&quot;</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="n">entry</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                        <span class="n">entries</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">entry</span><span class="p">)</span>
+                    <span class="n">entry</span> <span class="o">=</span> <span class="p">{}</span>
+                    <span class="c1"># Extracting the entry_type and citation key</span>
+                    <span class="n">entry_type</span><span class="p">,</span> <span class="n">citation_key</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">lstrip</span><span class="p">(</span><span class="s2">&quot;@&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;{&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+                    <span class="n">entry</span><span class="p">[</span><span class="s2">&quot;entry_type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">entry_type</span>
+                    <span class="n">entry</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">citation_key</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                <span class="k">elif</span> <span class="s2">&quot;=&quot;</span> <span class="ow">in</span> <span class="n">line</span> <span class="ow">and</span> <span class="n">entry</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="c1"># Extracting the field key and value</span>
+                    <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;=&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+                    <span class="n">key</span> <span class="o">=</span> <span class="n">key</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+                    <span class="n">value</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s2">&quot;{&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s2">&quot;}&quot;</span><span class="p">)</span>
+                    <span class="n">entry</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+                <span class="k">elif</span> <span class="n">entry</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">key</span><span class="p">:</span>
+                    <span class="c1"># Continuation of a field value in a new line</span>
+                    <span class="n">entry</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">+=</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s2">&quot;{&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s2">&quot;}&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Add the last bib_dict if it exists</span>
+        <span class="k">if</span> <span class="n">entry</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># ensure values are stripped:</span>
+            <span class="n">entry_new</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">entry</span><span class="p">:</span>
+                <span class="n">entry_new</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">entry</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+            <span class="n">entries</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">entry_new</span><span class="p">)</span>
+
+        <span class="n">stripped_data</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="n">value</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">item</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">entries</span>
+        <span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">stripped_data</span></div>
+
+
+<div class="viewcode-block" id="Reference.cite_line">
+<a class="viewcode-back" href="../../generated/losalamos.references.html#losalamos.references.Reference.cite_line">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">cite_line</span><span class="p">(</span><span class="n">bib_dict</span><span class="p">,</span> <span class="n">text_format</span><span class="o">=</span><span class="s2">&quot;plain&quot;</span><span class="p">,</span> <span class="n">embed_link</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Format a dictionary of bibliometric parameters into an in-line</span>
+<span class="sd">        citation string with optional DOI or URL links.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># ---------------------------------------------------------</span>
+        <span class="c1"># Helper: Apply formatting rules depending on output format</span>
+        <span class="c1"># ---------------------------------------------------------</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">apply_format</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">text_format</span><span class="p">):</span>
+            <span class="c1"># Create a shallow copy of the string (strings are immutable,</span>
+            <span class="c1"># so this is mostly stylistic rather than necessary)</span>
+            <span class="n">formatted</span> <span class="o">=</span> <span class="n">text</span><span class="p">[:]</span>
+
+            <span class="c1"># No transformation for plain text</span>
+            <span class="k">if</span> <span class="n">text_format</span> <span class="o">==</span> <span class="s2">&quot;plain&quot;</span><span class="p">:</span>
+                <span class="k">pass</span>
+
+            <span class="c1"># HTML formatting</span>
+            <span class="c1"># Replace &quot;et al.&quot; with italic version</span>
+            <span class="k">elif</span> <span class="n">text_format</span> <span class="o">==</span> <span class="s2">&quot;html&quot;</span><span class="p">:</span>
+                <span class="n">formatted</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;et al.&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;i&gt;et al.&lt;/i&gt;&quot;</span><span class="p">)</span>
+
+            <span class="c1"># Markdown formatting</span>
+            <span class="c1"># Replace &quot;et al.&quot; with Markdown italics</span>
+            <span class="k">elif</span> <span class="n">text_format</span> <span class="o">==</span> <span class="s2">&quot;md&quot;</span><span class="p">:</span>
+                <span class="n">formatted</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;et al.&quot;</span><span class="p">,</span> <span class="s2">&quot;*et al.*&quot;</span><span class="p">)</span>
+
+            <span class="c1"># LaTeX formatting</span>
+            <span class="c1"># - Italicize &quot;et al.&quot;</span>
+            <span class="c1"># - Escape ampersand (special character in TeX)</span>
+            <span class="k">elif</span> <span class="n">text_format</span> <span class="o">==</span> <span class="s2">&quot;tex&quot;</span><span class="p">:</span>
+                <span class="n">formatted</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;et al.&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;\textit{et al.}&quot;</span><span class="p">)</span>
+                <span class="n">formatted</span> <span class="o">=</span> <span class="n">formatted</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;&amp;&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;\&amp;&quot;</span><span class="p">)</span>
+
+            <span class="k">return</span> <span class="n">formatted</span>
+
+        <span class="c1"># ---------------------------------------------------------</span>
+        <span class="c1"># Helper: Wrap the citation string in a hyperlink</span>
+        <span class="c1"># depending on output format</span>
+        <span class="c1"># ---------------------------------------------------------</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">embed_link</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">text_format</span><span class="p">,</span> <span class="n">link</span><span class="p">):</span>
+
+            <span class="c1"># HTML anchor tag</span>
+            <span class="k">if</span> <span class="n">text_format</span> <span class="o">==</span> <span class="s2">&quot;html&quot;</span><span class="p">:</span>
+                <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;&lt;a href=&quot;</span><span class="si">{</span><span class="n">link</span><span class="si">}</span><span class="s1">&quot;&gt;</span><span class="si">{</span><span class="n">text</span><span class="si">}</span><span class="s1">&lt;/a&gt;&#39;</span>
+
+            <span class="c1"># Markdown link syntax</span>
+            <span class="k">elif</span> <span class="n">text_format</span> <span class="o">==</span> <span class="s2">&quot;md&quot;</span><span class="p">:</span>
+                <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;[</span><span class="si">{</span><span class="n">text</span><span class="si">}</span><span class="s2">](</span><span class="si">{</span><span class="n">link</span><span class="si">}</span><span class="s2">)&quot;</span>
+
+            <span class="c1"># LaTeX hyperlink (requires hyperref package)</span>
+            <span class="k">elif</span> <span class="n">text_format</span> <span class="o">==</span> <span class="s2">&quot;tex&quot;</span><span class="p">:</span>
+                <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">href</span><span class="se">{{</span><span class="si">{</span><span class="n">link</span><span class="si">}</span><span class="se">}}{{</span><span class="si">{</span><span class="n">text</span><span class="si">}</span><span class="se">}}</span><span class="s2">&quot;</span>
+
+            <span class="c1"># If format does not support linking, return unchanged</span>
+            <span class="k">return</span> <span class="n">text</span>
+
+        <span class="c1"># ---------------------------------------------------------</span>
+        <span class="c1"># Defensive normalization:</span>
+        <span class="c1"># Replace None values with empty strings</span>
+        <span class="c1"># This prevents .strip() from failing later.</span>
+        <span class="c1"># ---------------------------------------------------------</span>
+        <span class="n">bib_dict</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="n">key</span><span class="p">:</span> <span class="p">(</span><span class="n">value</span> <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">bib_dict</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+        <span class="p">}</span>
+
+        <span class="c1"># ---------------------------------------------------------</span>
+        <span class="c1"># Extract relevant bibliographic fields</span>
+        <span class="c1"># Provide fallback defaults when missing</span>
+        <span class="c1"># ---------------------------------------------------------</span>
+        <span class="n">author</span> <span class="o">=</span> <span class="n">bib_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;author&quot;</span><span class="p">,</span> <span class="s2">&quot;Unknown Author&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="n">year</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">bib_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;year&quot;</span><span class="p">,</span> <span class="s2">&quot;n.d.&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="n">doi</span> <span class="o">=</span> <span class="n">bib_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;doi&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="n">bib_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;url&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="n">entry_type</span> <span class="o">=</span> <span class="n">bib_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;entry_type&quot;</span><span class="p">,</span> <span class="s2">&quot;misc&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+        <span class="c1"># ---------------------------------------------------------</span>
+        <span class="c1"># Build author string for in-text citation</span>
+        <span class="c1">#</span>
+        <span class="c1"># Assumes authors are already normalized as:</span>
+        <span class="c1"># &quot;Last, First and Last, First&quot;</span>
+        <span class="c1"># ---------------------------------------------------------</span>
+        <span class="n">author_list</span> <span class="o">=</span> <span class="n">author</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; and &quot;</span><span class="p">)</span>
+
+        <span class="c1"># Extract first author&#39;s last name</span>
+        <span class="c1"># (everything before comma)</span>
+        <span class="n">first_author_lastname</span> <span class="o">=</span> <span class="n">author_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+        <span class="c1"># More than two authors:</span>
+        <span class="c1"># Use &quot;FirstAuthor et al.&quot;</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">author_list</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="n">formatted_authors</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">first_author_lastname</span><span class="si">}</span><span class="s2"> et al.&quot;</span>
+
+        <span class="c1"># Exactly two authors:</span>
+        <span class="c1"># Use &quot;FirstAuthor &amp; SecondAuthor&quot;</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">author_list</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="n">second_author_lastname</span> <span class="o">=</span> <span class="n">author_list</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+            <span class="n">formatted_authors</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">first_author_lastname</span><span class="si">}</span><span class="s2"> &amp; </span><span class="si">{</span><span class="n">second_author_lastname</span><span class="si">}</span><span class="s2">&quot;</span>
+
+        <span class="c1"># Single author:</span>
+        <span class="c1"># If there is only one author in the author_list</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">single_author</span> <span class="o">=</span> <span class="n">author</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+            <span class="c1"># Detect corporate author wrapped in {}</span>
+            <span class="k">if</span> <span class="n">single_author</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;{&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">single_author</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;}&quot;</span><span class="p">):</span>
+                <span class="c1"># Remove outer braces</span>
+                <span class="n">formatted_authors</span> <span class="o">=</span> <span class="n">single_author</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># Assume personal author</span>
+                <span class="n">formatted_authors</span> <span class="o">=</span> <span class="n">first_author_lastname</span>
+
+        <span class="c1"># Apply format-specific styling (italics, escaping, etc.)</span>
+        <span class="n">formatted_authors</span> <span class="o">=</span> <span class="n">apply_format</span><span class="p">(</span><span class="n">formatted_authors</span><span class="p">,</span> <span class="n">text_format</span><span class="p">)</span>
+
+        <span class="c1"># ---------------------------------------------------------</span>
+        <span class="c1"># Construct final in-text citation</span>
+        <span class="c1"># Example: &quot;Einstein (1905)&quot;</span>
+        <span class="c1"># ---------------------------------------------------------</span>
+        <span class="n">in_text_citation</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">formatted_authors</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s2">)&quot;</span>
+
+        <span class="c1"># ---------------------------------------------------------</span>
+        <span class="c1"># Optionally embed hyperlink (DOI preferred over URL)</span>
+        <span class="c1"># ---------------------------------------------------------</span>
+        <span class="k">if</span> <span class="n">embed_link</span><span class="p">:</span>
+
+            <span class="c1"># Prefer DOI if available</span>
+            <span class="k">if</span> <span class="n">doi</span><span class="p">:</span>
+                <span class="n">link</span> <span class="o">=</span> <span class="n">doi</span>
+
+                <span class="c1"># Normalize DOI to full HTTPS form if needed</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">doi</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;https://doi.org/&quot;</span><span class="p">):</span>
+                    <span class="n">link</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;https://doi.org/</span><span class="si">{</span><span class="n">doi</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">link</span> <span class="o">=</span> <span class="n">url</span>
+
+            <span class="c1"># Only embed link for supported formats</span>
+            <span class="k">if</span> <span class="n">link</span> <span class="ow">and</span> <span class="n">text_format</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;html&quot;</span><span class="p">,</span> <span class="s2">&quot;md&quot;</span><span class="p">,</span> <span class="s2">&quot;tex&quot;</span><span class="p">]:</span>
+                <span class="n">in_text_citation</span> <span class="o">=</span> <span class="n">embed_link</span><span class="p">(</span><span class="n">in_text_citation</span><span class="p">,</span> <span class="n">text_format</span><span class="p">,</span> <span class="n">link</span><span class="p">)</span>
+
+        <span class="c1"># Return formatted citation string</span>
+        <span class="k">return</span> <span class="n">in_text_citation</span></div>
+
+
+<div class="viewcode-block" id="Reference.cite_full">
+<a class="viewcode-back" href="../../generated/losalamos.references.html#losalamos.references.Reference.cite_full">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">cite_full</span><span class="p">(</span><span class="n">bib_dict</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s2">&quot;apa&quot;</span><span class="p">,</span> <span class="n">text_format</span><span class="o">=</span><span class="s2">&quot;plain&quot;</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generate a formatted bibliographic citation string based on a dictionary of metadata and a specified style.</span>
+
+<span class="sd">        :param bib_dict: Dictionary containing bibliographic fields such as ``author``, ``year``, ``title``, and ``entry_type``.</span>
+<span class="sd">        :type bib_dict: dict</span>
+<span class="sd">        :param style: The citation style to use (e.g., ``apa``). Default value = ``apa``</span>
+<span class="sd">        :type style: str</span>
+<span class="sd">        :param text_format: The markup format for the output string (e.g., ``plain``, ``html``, or ``latex``). Default value = ``plain``</span>
+<span class="sd">        :type text_format: str</span>
+<span class="sd">        :return: A cleaned, single-line citation string.</span>
+<span class="sd">        :rtype: str</span>
+
+<span class="sd">        .. note:: Processing Logic</span>
+
+<span class="sd">            The function normalizes input dictionary values, handles author list formatting (splitting by ``and``),</span>
+<span class="sd">            and applies text formatting rules (e.g., italics or bold) based on the ``text_format``.</span>
+<span class="sd">            It then maps the ``entry_type`` to a specific template defined in ``Reference.CITATION_TEMPLATES``.</span>
+
+<span class="sd">        .. warning::</span>
+
+<span class="sd">             If the provided ``entry_type`` or ``style`` is not found in the internal templates,</span>
+<span class="sd">             it defaults to the ``article`` type in ``apa`` style.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">entry_type</span> <span class="o">=</span> <span class="n">bib_dict</span><span class="p">[</span><span class="s2">&quot;entry_type&quot;</span><span class="p">]</span>
+
+        <span class="c1"># 1) Normalize None values</span>
+        <span class="n">bib</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="p">(</span><span class="n">v</span> <span class="k">if</span> <span class="n">v</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">bib_dict</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+
+        <span class="c1"># 2) Extract and clean fields</span>
+        <span class="n">author</span> <span class="o">=</span> <span class="n">bib</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;author&quot;</span><span class="p">,</span> <span class="s2">&quot;Unknown Author&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="n">year</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">bib</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;year&quot;</span><span class="p">,</span> <span class="s2">&quot;n.d.&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="n">title_raw</span> <span class="o">=</span> <span class="n">bib</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;title&quot;</span><span class="p">,</span> <span class="s2">&quot;Untitled&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s1">&#39;&quot;&#39;</span><span class="p">)</span>
+        <span class="n">journal_raw</span> <span class="o">=</span> <span class="n">bib</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;journal&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s1">&#39;&quot;&#39;</span><span class="p">)</span>
+        <span class="n">volume</span> <span class="o">=</span> <span class="n">bib</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;volume&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="n">issue</span> <span class="o">=</span> <span class="n">bib</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;issue&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="n">pages</span> <span class="o">=</span> <span class="n">bib</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;pages&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="n">doi</span> <span class="o">=</span> <span class="n">bib</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;doi&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="n">publisher</span> <span class="o">=</span> <span class="n">bib</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;publisher&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="n">address</span> <span class="o">=</span> <span class="n">bib</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;location&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="n">note</span> <span class="o">=</span> <span class="n">bib</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;note&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="n">bib</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;url&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+        <span class="c1"># 3) Format authors (simple join logic preserved)</span>
+        <span class="k">if</span> <span class="n">author</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;{&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">author</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;}&quot;</span><span class="p">):</span>
+            <span class="n">formatted_authors</span> <span class="o">=</span> <span class="n">author</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">author_list</span> <span class="o">=</span> <span class="n">author</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; and &quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">author_list</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">formatted_authors</span> <span class="o">=</span> <span class="s2">&quot;; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">author_list</span><span class="p">[:])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">formatted_authors</span> <span class="o">=</span> <span class="n">author_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="c1"># 4) Apply role-based text formatting</span>
+        <span class="n">format_rules</span> <span class="o">=</span> <span class="n">Reference</span><span class="o">.</span><span class="n">FORMAT_RULES</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+            <span class="n">text_format</span><span class="p">,</span> <span class="n">Reference</span><span class="o">.</span><span class="n">FORMAT_RULES</span><span class="p">[</span><span class="s2">&quot;plain&quot;</span><span class="p">]</span>
+        <span class="p">)</span>
+
+        <span class="k">def</span><span class="w"> </span><span class="nf">apply_role</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">role</span><span class="p">):</span>
+            <span class="n">template</span> <span class="o">=</span> <span class="n">format_rules</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">role</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{text}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">template</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="n">text</span><span class="p">)</span>
+
+        <span class="n">title</span> <span class="o">=</span> <span class="n">apply_role</span><span class="p">(</span><span class="n">title_raw</span><span class="p">,</span> <span class="s2">&quot;title&quot;</span><span class="p">)</span>
+        <span class="n">journal</span> <span class="o">=</span> <span class="n">apply_role</span><span class="p">(</span><span class="n">journal_raw</span><span class="p">,</span> <span class="s2">&quot;journal&quot;</span><span class="p">)</span>
+
+        <span class="c1"># 5) Precompute reusable derived fields</span>
+        <span class="n">volume_issue</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">volume</span><span class="si">}</span><span class="s2">(</span><span class="si">{</span><span class="n">issue</span><span class="si">}</span><span class="s2">)&quot;</span> <span class="k">if</span> <span class="n">issue</span> <span class="k">else</span> <span class="n">volume</span>
+        <span class="n">pages_str</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;, </span><span class="si">{</span><span class="n">pages</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">if</span> <span class="n">pages</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">doi_str</span> <span class="o">=</span> <span class="n">doi</span> <span class="k">if</span> <span class="n">doi</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
+
+        <span class="c1"># 6) Build rendering context</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;authors&quot;</span><span class="p">:</span> <span class="n">formatted_authors</span><span class="p">,</span>
+            <span class="s2">&quot;year&quot;</span><span class="p">:</span> <span class="n">year</span><span class="p">,</span>
+            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="n">title</span><span class="p">,</span>
+            <span class="s2">&quot;raw_title&quot;</span><span class="p">:</span> <span class="n">title_raw</span><span class="p">,</span>
+            <span class="s2">&quot;journal&quot;</span><span class="p">:</span> <span class="n">journal</span><span class="p">,</span>
+            <span class="s2">&quot;volume&quot;</span><span class="p">:</span> <span class="n">volume</span><span class="p">,</span>
+            <span class="s2">&quot;issue&quot;</span><span class="p">:</span> <span class="n">issue</span><span class="p">,</span>
+            <span class="s2">&quot;pages&quot;</span><span class="p">:</span> <span class="n">pages</span><span class="p">,</span>
+            <span class="s2">&quot;volume_issue&quot;</span><span class="p">:</span> <span class="n">volume_issue</span><span class="p">,</span>
+            <span class="s2">&quot;pages_str&quot;</span><span class="p">:</span> <span class="n">pages_str</span><span class="p">,</span>
+            <span class="s2">&quot;doi&quot;</span><span class="p">:</span> <span class="n">doi_str</span><span class="p">,</span>
+            <span class="s2">&quot;publisher&quot;</span><span class="p">:</span> <span class="n">publisher</span><span class="p">,</span>
+            <span class="s2">&quot;address&quot;</span><span class="p">:</span> <span class="n">address</span><span class="p">,</span>
+            <span class="s2">&quot;note&quot;</span><span class="p">:</span> <span class="n">note</span><span class="p">,</span>
+            <span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="n">url</span><span class="p">,</span>
+        <span class="p">}</span>
+
+        <span class="c1"># 7) Resolve template</span>
+        <span class="n">template</span> <span class="o">=</span> <span class="n">Reference</span><span class="o">.</span><span class="n">CITATION_TEMPLATES</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">entry_type</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">style</span><span class="p">)</span>
+
+        <span class="c1"># Fallback strategy</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">template</span><span class="p">:</span>
+            <span class="n">template</span> <span class="o">=</span> <span class="n">Reference</span><span class="o">.</span><span class="n">CITATION_TEMPLATES</span><span class="p">[</span><span class="s2">&quot;article&quot;</span><span class="p">][</span><span class="s2">&quot;apa&quot;</span><span class="p">]</span>
+
+        <span class="c1"># 8) Render citation</span>
+        <span class="n">citation</span> <span class="o">=</span> <span class="n">template</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">**</span><span class="n">context</span><span class="p">)</span>
+
+        <span class="c1"># 9) Cleanup excessive whitespace</span>
+        <span class="n">citation</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">citation</span><span class="o">.</span><span class="n">split</span><span class="p">())</span>
+
+        <span class="k">return</span> <span class="n">citation</span></div>
+
+
+<div class="viewcode-block" id="Reference.standardize_author">
+<a class="viewcode-back" href="../../generated/losalamos.references.html#losalamos.references.Reference.standardize_author">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">standardize_author</span><span class="p">(</span><span class="n">bib_dict</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Standardizes the ``author`` field in a BibTeX entry.</span>
+
+<span class="sd">        :param bib_dict: The dictionary containing the BibTeX entry data, expected to have an ``author`` field.</span>
+<span class="sd">        :type bib_dict: dict</span>
+<span class="sd">        :return: A formatted string of standardized author names.</span>
+<span class="sd">        :rtype: str</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># ---------------------------------------------------------</span>
+        <span class="c1"># Internal helper function to normalize a single author name</span>
+        <span class="c1"># ---------------------------------------------------------</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">normalize_author_name</span><span class="p">(</span><span class="n">author_name</span><span class="p">):</span>
+            <span class="c1"># Case 1: If the name already contains a comma,</span>
+            <span class="c1"># we assume it is already in &quot;Last, First&quot; format.</span>
+            <span class="c1"># Example: &quot;Einstein, Albert&quot;</span>
+            <span class="k">if</span> <span class="s2">&quot;,&quot;</span> <span class="ow">in</span> <span class="n">author_name</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">author_name</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+            <span class="c1"># Case 2: Name does NOT contain a comma.</span>
+            <span class="c1"># Likely in &quot;First Last&quot; format.</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">parts</span> <span class="o">=</span> <span class="n">author_name</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>  <span class="c1"># Split by whitespace</span>
+
+                <span class="c1"># Subcase 2.1: Only one part (e.g., &quot;Plato&quot; or initials)</span>
+                <span class="c1"># Nothing to reorder.</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">parts</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="n">author_name</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+                <span class="c1"># Subcase 2.2: Two parts (e.g., &quot;Albert Einstein&quot;)</span>
+                <span class="c1"># Convert to &quot;Einstein, Albert&quot;</span>
+                <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">parts</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">parts</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">parts</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+
+                <span class="c1"># Subcase 2.3: More than two parts</span>
+                <span class="c1"># Assume last token is the surname.</span>
+                <span class="c1"># Example: &quot;John Ronald Reuel Tolkien&quot;</span>
+                <span class="c1"># -&gt; &quot;Tolkien, John Ronald Reuel&quot;</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">parts</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">parts</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span><span class="si">}</span><span class="s2">&quot;</span>
+
+        <span class="c1"># This will store the final formatted author string</span>
+        <span class="n">standard_authors</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+        <span class="c1"># ---------------------------------------------------------</span>
+        <span class="c1"># Main logic</span>
+
+        <span class="c1"># If the author string contains:</span>
+        <span class="c1"># - a comma (meaning at least one name may already be formatted), OR</span>
+        <span class="c1"># - &quot; and &quot; (BibTeX separator for multiple authors)</span>
+        <span class="c1">#</span>
+        <span class="c1"># Then we process it more carefully.</span>
+        <span class="k">if</span> <span class="s2">&quot;,&quot;</span> <span class="ow">in</span> <span class="n">bib_dict</span><span class="p">[</span><span class="s2">&quot;author&quot;</span><span class="p">]</span> <span class="ow">or</span> <span class="s2">&quot; and &quot;</span> <span class="ow">in</span> <span class="n">bib_dict</span><span class="p">[</span><span class="s2">&quot;author&quot;</span><span class="p">]:</span>
+
+            <span class="c1"># Split authors using BibTeX standard separator &quot; and &quot;</span>
+            <span class="c1"># Example:</span>
+            <span class="c1"># &quot;Albert Einstein and Niels Bohr&quot;</span>
+            <span class="c1"># -&gt; [&quot;Albert Einstein&quot;, &quot;Niels Bohr&quot;]</span>
+            <span class="n">author_list</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">normalize_author_name</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+                <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">bib_dict</span><span class="p">[</span><span class="s2">&quot;author&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; and &quot;</span><span class="p">)</span>
+            <span class="p">]</span>
+
+            <span class="c1"># Rejoin authors in BibTeX format using &quot; and &quot;</span>
+            <span class="c1"># Example:</span>
+            <span class="c1"># [&quot;Einstein, Albert&quot;, &quot;Bohr, Niels&quot;]</span>
+            <span class="c1"># -&gt; &quot;Einstein, Albert and Bohr, Niels&quot;</span>
+            <span class="n">standard_authors</span> <span class="o">=</span> <span class="s2">&quot; and &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">author_list</span><span class="p">)</span>
+
+        <span class="c1"># If there is no comma and no &quot; and &quot;,</span>
+        <span class="c1"># the function leaves the author string untouched.</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">standard_authors</span> <span class="o">=</span> <span class="n">bib_dict</span><span class="p">[</span><span class="s2">&quot;author&quot;</span><span class="p">]</span>
+
+        <span class="c1"># Return the standardized author string</span>
+        <span class="k">return</span> <span class="n">standard_authors</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="RefArticle">
+<a class="viewcode-back" href="../../generated/losalamos.references.html#losalamos.references.RefArticle">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">RefArticle</span><span class="p">(</span><span class="n">Reference</span><span class="p">):</span>
+
+    <span class="n">ENTRY_TYPE</span> <span class="o">=</span> <span class="s2">&quot;article&quot;</span>
+
+    <span class="n">SPECIFIC_FIELDS</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;issn&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;journal&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;issue&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;volume&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;number&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;pages&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;month&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">}</span>
+
+<div class="viewcode-block" id="RefArticle.load_data">
+<a class="viewcode-back" href="../../generated/losalamos.references.html#losalamos.references.RefArticle.load_data">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">load_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_data</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">load_data</span><span class="p">(</span><span class="n">file_data</span><span class="o">=</span><span class="n">file_data</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">harmonize_issue</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="RefArticle.harmonize_issue">
+<a class="viewcode-back" href="../../generated/losalamos.references.html#losalamos.references.RefArticle.harmonize_issue">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">harmonize_issue</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;issue&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;issue&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;1&quot;</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="RefBook">
+<a class="viewcode-back" href="../../generated/losalamos.references.html#losalamos.references.RefBook">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">RefBook</span><span class="p">(</span><span class="n">Reference</span><span class="p">):</span>
+
+    <span class="n">ENTRY_TYPE</span> <span class="o">=</span> <span class="s2">&quot;book&quot;</span>
+
+    <span class="n">SPECIFIC_FIELDS</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;isbn&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;publisher&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;subtitle&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;edition&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">}</span></div>
+
+
+
+<div class="viewcode-block" id="RefTechreport">
+<a class="viewcode-back" href="../../generated/losalamos.references.html#losalamos.references.RefTechreport">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">RefTechreport</span><span class="p">(</span><span class="n">Reference</span><span class="p">):</span>
+
+    <span class="n">ENTRY_TYPE</span> <span class="o">=</span> <span class="s2">&quot;techreport&quot;</span>
+
+    <span class="n">SPECIFIC_FIELDS</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;subtitle&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;institution&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;language&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;version&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;location&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;note&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">}</span></div>
+
+
+
+<div class="viewcode-block" id="RefThesis">
+<a class="viewcode-back" href="../../generated/losalamos.references.html#losalamos.references.RefThesis">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">RefThesis</span><span class="p">(</span><span class="n">Reference</span><span class="p">):</span>
+    <span class="n">ENTRY_TYPE</span> <span class="o">=</span> <span class="s2">&quot;thesis&quot;</span>
+    <span class="n">SPECIFIC_FIELDS</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;institution&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;language&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;location&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;note&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">}</span></div>
+
+
+
+<div class="viewcode-block" id="RefDataset">
+<a class="viewcode-back" href="../../generated/losalamos.references.html#losalamos.references.RefDataset">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">RefDataset</span><span class="p">(</span><span class="n">Reference</span><span class="p">):</span>
+    <span class="n">ENTRY_TYPE</span> <span class="o">=</span> <span class="s2">&quot;dataset&quot;</span>
+    <span class="n">SPECIFIC_FIELDS</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;organization&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;version&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;note&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">}</span></div>
+
+
+
+<div class="viewcode-block" id="RefInproceedings">
+<a class="viewcode-back" href="../../generated/losalamos.references.html#losalamos.references.RefInproceedings">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">RefInproceedings</span><span class="p">(</span><span class="n">Reference</span><span class="p">):</span>
+    <span class="n">ENTRY_TYPE</span> <span class="o">=</span> <span class="s2">&quot;inproceedings&quot;</span>
+    <span class="n">SPECIFIC_FIELDS</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;isbn&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;booktitle:&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;location&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;organization&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">}</span></div>
+
+
+
+<div class="viewcode-block" id="RefInbook">
+<a class="viewcode-back" href="../../generated/losalamos.references.html#losalamos.references.RefInbook">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">RefInbook</span><span class="p">(</span><span class="n">Reference</span><span class="p">):</span>
+    <span class="n">ENTRY_TYPE</span> <span class="o">=</span> <span class="s2">&quot;inbook&quot;</span>
+    <span class="n">SPECIFIC_FIELDS</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;isbn&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;publisher&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;subtitle&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;chapter&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;edition&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;booktitle:&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">}</span></div>
+
+
+
+<div class="viewcode-block" id="RefMisc">
+<a class="viewcode-back" href="../../generated/losalamos.references.html#losalamos.references.RefMisc">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">RefMisc</span><span class="p">(</span><span class="n">Reference</span><span class="p">):</span>
+
+    <span class="n">ENTRY_TYPE</span> <span class="o">=</span> <span class="s2">&quot;misc&quot;</span>
+    <span class="n">SPECIFIC_FIELDS</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;organization&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;note&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;howpublished&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">}</span></div>
+
+
+
+<div class="viewcode-block" id="RefOnline">
+<a class="viewcode-back" href="../../generated/losalamos.references.html#losalamos.references.RefOnline">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">RefOnline</span><span class="p">(</span><span class="n">Reference</span><span class="p">):</span>
+
+    <span class="n">ENTRY_TYPE</span> <span class="o">=</span> <span class="s2">&quot;online&quot;</span>
+    <span class="n">SPECIFIC_FIELDS</span> <span class="o">=</span> <span class="n">RefMisc</span><span class="o">.</span><span class="n">SPECIFIC_FIELDS</span></div>
+
+
+
+<div class="viewcode-block" id="RefSoftware">
+<a class="viewcode-back" href="../../generated/losalamos.references.html#losalamos.references.RefSoftware">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">RefSoftware</span><span class="p">(</span><span class="n">Reference</span><span class="p">):</span>
+
+    <span class="n">ENTRY_TYPE</span> <span class="o">=</span> <span class="s2">&quot;software&quot;</span>
+    <span class="n">SPECIFIC_FIELDS</span> <span class="o">=</span> <span class="n">RefMisc</span><span class="o">.</span><span class="n">SPECIFIC_FIELDS</span></div>
+
+
+
+<div class="viewcode-block" id="RefLegislation">
+<a class="viewcode-back" href="../../generated/losalamos.references.html#losalamos.references.RefLegislation">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">RefLegislation</span><span class="p">(</span><span class="n">Reference</span><span class="p">):</span>
+
+    <span class="n">ENTRY_TYPE</span> <span class="o">=</span> <span class="s2">&quot;legislation&quot;</span>
+    <span class="n">SPECIFIC_FIELDS</span> <span class="o">=</span> <span class="n">RefMisc</span><span class="o">.</span><span class="n">SPECIFIC_FIELDS</span></div>
+
+
+
+<span class="c1"># CLASSES -- Module-level</span>
+<span class="c1"># =======================================================================</span>
+<span class="c1"># ... {develop}</span>
+
+
+<span class="n">REFERENCE_DISPATCHER</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;article&quot;</span><span class="p">:</span> <span class="n">RefArticle</span><span class="p">,</span>
+    <span class="s2">&quot;book&quot;</span><span class="p">:</span> <span class="n">RefBook</span><span class="p">,</span>
+    <span class="s2">&quot;techreport&quot;</span><span class="p">:</span> <span class="n">RefTechreport</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="c1"># SCRIPT</span>
+<span class="c1"># ***********************************************************************</span>
+<span class="c1"># standalone behaviour as a script</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">losalamos.paths</span><span class="w"> </span><span class="kn">import</span> <span class="n">FOLDER_TEMPLATES</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">tests.conftest</span><span class="w"> </span><span class="kn">import</span> <span class="n">OUTPUT_DIR</span>
+
+    <span class="c1"># Script section</span>
+    <span class="c1"># ===================================================================</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Hello world!&quot;</span><span class="p">)</span>
+    <span class="c1"># ... {develop}</span>
+
+    <span class="n">ls</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">RefArticle</span><span class="p">,</span>
+        <span class="n">RefBook</span><span class="p">,</span>
+        <span class="n">RefTechreport</span><span class="p">,</span>
+        <span class="n">RefThesis</span><span class="p">,</span>
+        <span class="n">RefInproceedings</span><span class="p">,</span>
+    <span class="p">]</span>
+
+    <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">ls</span><span class="p">:</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="n">r</span><span class="p">()</span>
+        <span class="n">o</span> <span class="o">=</span> <span class="n">OUTPUT_DIR</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;bibtex/</span><span class="si">{</span><span class="n">a</span><span class="o">.</span><span class="n">ENTRY_TYPE</span><span class="si">}</span><span class="s2">.bib&quot;</span>
+        <span class="n">a</span><span class="o">.</span><span class="n">export_template</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="n">o</span><span class="p">)</span>
+</pre></div>
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2026, Iporã Possantti.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.0.4.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

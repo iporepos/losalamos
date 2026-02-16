@@ -349,6 +349,9 @@
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="losalamos.figures.html">losalamos.figures</a></li>
 </ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="losalamos.references.html">losalamos.references</a></li>
+</ul>
 </div>
 </nav></div>
     </div>
@@ -454,6 +457,9 @@ todo docstring</p>
 <tr class="row-even"><td><p><a class="reference internal" href="#losalamos.notes.NoteProject" title="losalamos.notes.NoteProject"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NoteProject</span></code></a>([name, alias])</p></td>
 <td><p></p></td>
 </tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#losalamos.notes.NoteReference" title="losalamos.notes.NoteReference"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NoteReference</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -487,17 +493,17 @@ attributes beyond the metadata of the file</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="losalamos.notes.Note.load_metadata">
-<span class="sig-name descname"><span class="pre">load_metadata</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/notes.html#Note.load_metadata"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.notes.Note.load_metadata" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">load_metadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_note</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/notes.html#Note.load_metadata"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.notes.Note.load_metadata" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="losalamos.notes.Note.load_data">
-<span class="sig-name descname"><span class="pre">load_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/notes.html#Note.load_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.notes.Note.load_data" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">load_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_note</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/notes.html#Note.load_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.notes.Note.load_data" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="losalamos.notes.Note.load">
-<span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/notes.html#Note.load"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.notes.Note.load" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_note</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/notes.html#Note.load"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.notes.Note.load" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -769,6 +775,11 @@ undergo a <code class="docutils literal notranslate"><span class="pre">strip()</
 <span class="sig-name descname"><span class="pre">THUMBNAIL_SIZE</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#losalamos.notes.NoteBasic.THUMBNAIL_SIZE" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
+<dl class="py attribute">
+<dt class="sig sig-object py" id="losalamos.notes.NoteBasic.PATTERN_ABSTRACT">
+<span class="sig-name descname"><span class="pre">PATTERN_ABSTRACT</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'[!Abstract]'</span></span><a class="headerlink" href="#losalamos.notes.NoteBasic.PATTERN_ABSTRACT" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="losalamos.notes.NoteBasic.get_template_file">
 <span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">get_template_file</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/notes.html#NoteBasic.get_template_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.notes.NoteBasic.get_template_file" title="Link to this definition">#</a></dt>
@@ -824,7 +835,7 @@ undergo a <code class="docutils literal notranslate"><span class="pre">strip()</
 
 <dl class="py method">
 <dt class="sig sig-object py" id="losalamos.notes.NoteBasic.load_metadata">
-<span class="sig-name descname"><span class="pre">load_metadata</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/notes.html#NoteBasic.load_metadata"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.notes.NoteBasic.load_metadata" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">load_metadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_note</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/notes.html#NoteBasic.load_metadata"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.notes.NoteBasic.load_metadata" title="Link to this definition">#</a></dt>
 <dd><p>Loads metadata and synchronizes it against the standard template schema.</p>
 <div class="admonition important">
 <p class="admonition-title">Important</p>
@@ -923,7 +934,8 @@ refreshing its local data state.</p>
 <dd><p>Triggers a sequence of internal updates to synchronize the note’s name, abstract, and thumbnail.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This method acts as a base update sequence; additional update logic may be implemented in downstream classes.</p>
+<p>This method acts as a base update sequence; additional update
+logic may be implemented in downstream classes.</p>
 </div>
 </dd></dl>
 
@@ -943,17 +955,20 @@ refreshing its local data state.</p>
 <dd><p>Synchronizes the abstract from metadata into the Head data segment block.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The method searches for the <code class="docutils literal notranslate"><span class="pre">[!Abstract]</span></code> identifier within the <code class="docutils literal notranslate"><span class="pre">Head</span></code> segment and replaces the subsequent line with the formatted abstract string.</p>
+<p>The method searches for the <code class="docutils literal notranslate"><span class="pre">self.PATTERN_ABSTRACT</span></code> identifier within the <code class="docutils literal notranslate"><span class="pre">Head</span></code>
+segment and replaces the subsequent line with the formatted abstract string.</p>
 </div>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="losalamos.notes.NoteBasic.update_thumbnail">
-<span class="sig-name descname"><span class="pre">update_thumbnail</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/notes.html#NoteBasic.update_thumbnail"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.notes.NoteBasic.update_thumbnail" title="Link to this definition">#</a></dt>
-<dd><p>Updates the thumbnail image link in the Head data segment based on the current file name and predefined size.</p>
+<span class="sig-name descname"><span class="pre">update_thumbnail</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/notes.html#NoteBasic.update_thumbnail"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.notes.NoteBasic.update_thumbnail" title="Link to this definition">#</a></dt>
+<dd><p>Updates the thumbnail image link in the Head data segment based
+on the current file name and predefined size.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The method searches for an existing Wikilink image pattern (<code class="docutils literal notranslate"><span class="pre">![[</span></code>) within the <code class="docutils literal notranslate"><span class="pre">Head</span></code> segment to perform the replacement.</p>
+<p>The method searches for an existing Wikilink image pattern
+(<code class="docutils literal notranslate"><span class="pre">![[</span></code>) within the <code class="docutils literal notranslate"><span class="pre">Head</span></code> segment to perform the replacement.</p>
 </div>
 </dd></dl>
 
@@ -963,9 +978,15 @@ refreshing its local data state.</p>
 <dd><p>Records the current local date and time into the note metadata.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The timestamp is formatted as a string following the <code class="docutils literal notranslate"><span class="pre">%Y-%m-%d</span> <span class="pre">%H:%M:%S</span></code> pattern.</p>
+<p>The timestamp is formatted as a string following
+the <code class="docutils literal notranslate"><span class="pre">%Y-%m-%d</span> <span class="pre">%H:%M:%S</span></code> pattern.</p>
 </div>
 </dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.notes.NoteBasic.update_note">
+<span class="sig-name descname"><span class="pre">update_note</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_note</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/notes.html#NoteBasic.update_note"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.notes.NoteBasic.update_note" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
 
 </dd></dl>
 
@@ -1005,7 +1026,8 @@ refreshing its local data state.</p>
 <dd><p>Triggers a sequence of internal updates to synchronize the note’s name, abstract, and thumbnail.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This method acts as a base update sequence; additional update logic may be implemented in downstream classes.</p>
+<p>This method acts as a base update sequence; additional update
+logic may be implemented in downstream classes.</p>
 </div>
 </dd></dl>
 
@@ -1028,6 +1050,80 @@ refreshing its local data state.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="losalamos.notes.NoteFigure.THUMBNAIL_SIZE">
 <span class="sig-name descname"><span class="pre">THUMBNAIL_SIZE</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">500</span></span><a class="headerlink" href="#losalamos.notes.NoteFigure.THUMBNAIL_SIZE" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="losalamos.notes.NoteReference">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">losalamos.notes.</span></span><span class="sig-name descname"><span class="pre">NoteReference</span></span><a class="reference internal" href="../_modules/losalamos/notes.html#NoteReference"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.notes.NoteReference" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#losalamos.notes.NoteBasic" title="losalamos.notes.NoteBasic"><code class="xref py py-class docutils literal notranslate"><span class="pre">NoteBasic</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="losalamos.notes.NoteReference.TEMPLATE_FILE">
+<span class="sig-name descname"><span class="pre">TEMPLATE_FILE</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">PosixPath('/home/runner/work/losalamos/losalamos/src/losalamos/data/templates/notes/_reference.md')</span></span><a class="headerlink" href="#losalamos.notes.NoteReference.TEMPLATE_FILE" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="losalamos.notes.NoteReference.THUMBNAIL_SIZE">
+<span class="sig-name descname"><span class="pre">THUMBNAIL_SIZE</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">200</span></span><a class="headerlink" href="#losalamos.notes.NoteReference.THUMBNAIL_SIZE" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="losalamos.notes.NoteReference.PATTERN_ABSTRACT">
+<span class="sig-name descname"><span class="pre">PATTERN_ABSTRACT</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'[!Info]'</span></span><a class="headerlink" href="#losalamos.notes.NoteReference.PATTERN_ABSTRACT" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.notes.NoteReference.get_reference">
+<span class="sig-name descname"><span class="pre">get_reference</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/notes.html#NoteReference.get_reference"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.notes.NoteReference.get_reference" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.notes.NoteReference.update">
+<span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/notes.html#NoteReference.update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.notes.NoteReference.update" title="Link to this definition">#</a></dt>
+<dd><p>Triggers a sequence of internal updates to synchronize the note’s name, abstract, and thumbnail.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This method acts as a base update sequence; additional update
+logic may be implemented in downstream classes.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.notes.NoteReference.update_cite_inline">
+<span class="sig-name descname"><span class="pre">update_cite_inline</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/notes.html#NoteReference.update_cite_inline"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.notes.NoteReference.update_cite_inline" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.notes.NoteReference.update_cite_bibli">
+<span class="sig-name descname"><span class="pre">update_cite_bibli</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/notes.html#NoteReference.update_cite_bibli"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.notes.NoteReference.update_cite_bibli" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.notes.NoteReference.update_pdf">
+<span class="sig-name descname"><span class="pre">update_pdf</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/notes.html#NoteReference.update_pdf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.notes.NoteReference.update_pdf" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.notes.NoteReference.update_data_tail">
+<span class="sig-name descname"><span class="pre">update_data_tail</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/notes.html#NoteReference.update_data_tail"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.notes.NoteReference.update_data_tail" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.notes.NoteReference.update_thumbnail">
+<span class="sig-name descname"><span class="pre">update_thumbnail</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/notes.html#NoteReference.update_thumbnail"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.notes.NoteReference.update_thumbnail" title="Link to this definition">#</a></dt>
+<dd><p>Updates the thumbnail image link in the Head data segment based
+on the current file name and predefined size.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The method searches for an existing Wikilink image pattern
+(<code class="docutils literal notranslate"><span class="pre">![[</span></code>) within the <code class="docutils literal notranslate"><span class="pre">Head</span></code> segment to perform the replacement.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.notes.NoteReference.to_bib">
+<span class="sig-name descname"><span class="pre">to_bib</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">drop_pdf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/notes.html#NoteReference.to_bib"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.notes.NoteReference.to_bib" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -1217,6 +1313,7 @@ refreshing its local data state.</p>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.notes.NoteBasic"><code class="docutils literal notranslate"><span class="pre">NoteBasic</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.notes.NoteBasic.TEMPLATE_FILE"><code class="docutils literal notranslate"><span class="pre">NoteBasic.TEMPLATE_FILE</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.notes.NoteBasic.THUMBNAIL_SIZE"><code class="docutils literal notranslate"><span class="pre">NoteBasic.THUMBNAIL_SIZE</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.notes.NoteBasic.PATTERN_ABSTRACT"><code class="docutils literal notranslate"><span class="pre">NoteBasic.PATTERN_ABSTRACT</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.notes.NoteBasic.get_template_file"><code class="docutils literal notranslate"><span class="pre">NoteBasic.get_template_file()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.notes.NoteBasic.load_new"><code class="docutils literal notranslate"><span class="pre">NoteBasic.load_new()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.notes.NoteBasic.load_data_standard"><code class="docutils literal notranslate"><span class="pre">NoteBasic.load_data_standard()</span></code></a></li>
@@ -1233,6 +1330,7 @@ refreshing its local data state.</p>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.notes.NoteBasic.update_abstract"><code class="docutils literal notranslate"><span class="pre">NoteBasic.update_abstract()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.notes.NoteBasic.update_thumbnail"><code class="docutils literal notranslate"><span class="pre">NoteBasic.update_thumbnail()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.notes.NoteBasic.update_timestamp"><code class="docutils literal notranslate"><span class="pre">NoteBasic.update_timestamp()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.notes.NoteBasic.update_note"><code class="docutils literal notranslate"><span class="pre">NoteBasic.update_note()</span></code></a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.notes.NoteProject"><code class="docutils literal notranslate"><span class="pre">NoteProject</span></code></a><ul class="nav section-nav flex-column">
@@ -1250,6 +1348,20 @@ refreshing its local data state.</p>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.notes.NoteFigure"><code class="docutils literal notranslate"><span class="pre">NoteFigure</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.notes.NoteFigure.TEMPLATE_FILE"><code class="docutils literal notranslate"><span class="pre">NoteFigure.TEMPLATE_FILE</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.notes.NoteFigure.THUMBNAIL_SIZE"><code class="docutils literal notranslate"><span class="pre">NoteFigure.THUMBNAIL_SIZE</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.notes.NoteReference"><code class="docutils literal notranslate"><span class="pre">NoteReference</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.notes.NoteReference.TEMPLATE_FILE"><code class="docutils literal notranslate"><span class="pre">NoteReference.TEMPLATE_FILE</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.notes.NoteReference.THUMBNAIL_SIZE"><code class="docutils literal notranslate"><span class="pre">NoteReference.THUMBNAIL_SIZE</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.notes.NoteReference.PATTERN_ABSTRACT"><code class="docutils literal notranslate"><span class="pre">NoteReference.PATTERN_ABSTRACT</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.notes.NoteReference.get_reference"><code class="docutils literal notranslate"><span class="pre">NoteReference.get_reference()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.notes.NoteReference.update"><code class="docutils literal notranslate"><span class="pre">NoteReference.update()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.notes.NoteReference.update_cite_inline"><code class="docutils literal notranslate"><span class="pre">NoteReference.update_cite_inline()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.notes.NoteReference.update_cite_bibli"><code class="docutils literal notranslate"><span class="pre">NoteReference.update_cite_bibli()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.notes.NoteReference.update_pdf"><code class="docutils literal notranslate"><span class="pre">NoteReference.update_pdf()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.notes.NoteReference.update_data_tail"><code class="docutils literal notranslate"><span class="pre">NoteReference.update_data_tail()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.notes.NoteReference.update_thumbnail"><code class="docutils literal notranslate"><span class="pre">NoteReference.update_thumbnail()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.notes.NoteReference.to_bib"><code class="docutils literal notranslate"><span class="pre">NoteReference.to_bib()</span></code></a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.notes.NoteCollection"><code class="docutils literal notranslate"><span class="pre">NoteCollection</span></code></a><ul class="nav section-nav flex-column">
