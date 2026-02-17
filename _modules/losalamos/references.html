@@ -452,6 +452,7 @@
 <span class="k">class</span><span class="w"> </span><span class="nc">Reference</span><span class="p">(</span><span class="n">DataSet</span><span class="p">):</span>
 
     <span class="n">ENTRY_TYPE</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">_REGISTRY</span> <span class="o">=</span> <span class="p">{}</span>
 
     <span class="n">CORE_FIELDS</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s2">&quot;entry_type&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
@@ -495,30 +496,12 @@
     <span class="c1"># Citation templates</span>
     <span class="c1"># ---------------------------------------------------------</span>
     <span class="n">CITATION_TEMPLATES</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;article&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;apa&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">{authors}</span><span class="s2"> (</span><span class="si">{year}</span><span class="s2">). </span><span class="si">{title}</span><span class="s2">. </span><span class="si">{journal}</span><span class="s2">, </span><span class="si">{volume_issue}{pages}</span><span class="s2">. </span><span class="si">{doi}</span><span class="s2">&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;mla&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">{authors}</span><span class="s2">. </span><span class="si">{raw_title}</span><span class="s2">. </span><span class="si">{journal}</span><span class="s2"> </span><span class="si">{volume}</span><span class="s2">. </span><span class="si">{issue}</span><span class="s2"> (</span><span class="si">{year}</span><span class="s2">): </span><span class="si">{pages}</span><span class="s2">. </span><span class="si">{doi}</span><span class="s2">&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;chicago&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">{authors}</span><span class="s2">. </span><span class="si">{raw_title}</span><span class="s2">. </span><span class="si">{journal}</span><span class="s2"> </span><span class="si">{volume}</span><span class="s2">, no. </span><span class="si">{issue}</span><span class="s2"> (</span><span class="si">{year}</span><span class="s2">): </span><span class="si">{pages}</span><span class="s2">. </span><span class="si">{doi}</span><span class="s2">&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;harvard&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">{authors}</span><span class="s2"> (</span><span class="si">{year}</span><span class="s2">) </span><span class="si">{raw_title}</span><span class="s2">, </span><span class="si">{journal}</span><span class="s2">, vol. </span><span class="si">{volume}</span><span class="s2">, no. </span><span class="si">{issue}</span><span class="s2">, pp. </span><span class="si">{pages}</span><span class="s2">. </span><span class="si">{doi}</span><span class="s2">&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;vancouver&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">{authors}</span><span class="s2">. </span><span class="si">{title}</span><span class="s2">. </span><span class="si">{journal}</span><span class="s2">. </span><span class="si">{year}</span><span class="s2">; </span><span class="si">{volume}</span><span class="s2"> (</span><span class="si">{issue}</span><span class="s2">):</span><span class="si">{pages}</span><span class="s2">. </span><span class="si">{doi}</span><span class="s2">&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;abnt&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">{authors}</span><span class="s2">. </span><span class="si">{title}</span><span class="s2">. </span><span class="si">{journal}</span><span class="s2">, </span><span class="si">{volume}</span><span class="s2"> (</span><span class="si">{issue}</span><span class="s2">), p. </span><span class="si">{pages}</span><span class="s2">, </span><span class="si">{year}</span><span class="s2">. </span><span class="si">{doi}</span><span class="s2">&quot;</span><span class="p">,</span>
-        <span class="p">},</span>
-        <span class="s2">&quot;book&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;apa&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">{authors}</span><span class="s2"> (</span><span class="si">{year}</span><span class="s2">). </span><span class="si">{title}</span><span class="s2">. </span><span class="si">{publisher}</span><span class="s2">.&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;mla&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">{authors}</span><span class="s2">. </span><span class="si">{title}</span><span class="s2">. </span><span class="si">{publisher}</span><span class="s2">, </span><span class="si">{year}</span><span class="s2">.&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;chicago&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">{authors}</span><span class="s2">. </span><span class="si">{title}</span><span class="s2">. </span><span class="si">{location}</span><span class="s2">: </span><span class="si">{publisher}</span><span class="s2">, </span><span class="si">{year}</span><span class="s2">.&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;harvard&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">{authors}</span><span class="s2"> (</span><span class="si">{year}</span><span class="s2">) </span><span class="si">{title}</span><span class="s2">, </span><span class="si">{publisher}</span><span class="s2">.&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;vancouver&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">{authors}</span><span class="s2">. </span><span class="si">{title}</span><span class="s2">. </span><span class="si">{publisher}</span><span class="s2">; </span><span class="si">{year}</span><span class="s2">.&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;abnt&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">{authors}</span><span class="s2">. </span><span class="si">{title}</span><span class="s2">. </span><span class="si">{publisher}</span><span class="s2">, </span><span class="si">{year}</span><span class="s2">.&quot;</span><span class="p">,</span>
-        <span class="p">},</span>
-        <span class="s2">&quot;misc&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;apa&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">{authors}</span><span class="s2"> (</span><span class="si">{year}</span><span class="s2">). </span><span class="si">{title}</span><span class="s2">. </span><span class="si">{note}</span><span class="s2">. </span><span class="si">{url}</span><span class="s2">.&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;mla&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">{authors}</span><span class="s2">. </span><span class="si">{title}</span><span class="s2">. </span><span class="si">{note}</span><span class="s2">, </span><span class="si">{year}</span><span class="s2">.&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;chicago&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">{authors}</span><span class="s2">. </span><span class="si">{title}</span><span class="s2">. </span><span class="si">{note}</span><span class="s2">, </span><span class="si">{year}</span><span class="s2">.&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;harvard&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">{authors}</span><span class="s2"> (</span><span class="si">{year}</span><span class="s2">) </span><span class="si">{title}</span><span class="s2">, </span><span class="si">{note}</span><span class="s2">.&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;vancouver&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">{authors}</span><span class="s2">. </span><span class="si">{title}</span><span class="s2">. </span><span class="si">{note}</span><span class="s2">; </span><span class="si">{year}</span><span class="s2">.&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;abnt&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">{authors}</span><span class="s2">. </span><span class="si">{title}</span><span class="s2">. </span><span class="si">{note}</span><span class="s2">, </span><span class="si">{year}</span><span class="s2">.&quot;</span><span class="p">,</span>
-        <span class="p">},</span>
+        <span class="s2">&quot;apa&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">{authors}</span><span class="s2"> (</span><span class="si">{year}</span><span class="s2">). </span><span class="si">{title}</span><span class="s2">.&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;mla&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">{authors}</span><span class="s2">. </span><span class="si">{title}</span><span class="s2">. </span><span class="si">{year}</span><span class="s2">.&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;chicago&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">{authors}</span><span class="s2">. </span><span class="si">{title}</span><span class="s2">. </span><span class="si">{year}</span><span class="s2">.&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;harvard&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">{authors}</span><span class="s2"> (</span><span class="si">{year}</span><span class="s2">) </span><span class="si">{title}</span><span class="s2">.&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;vancouver&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">{authors}</span><span class="s2">. </span><span class="si">{title}</span><span class="s2">. </span><span class="si">{year}</span><span class="s2">.&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;abnt&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">{authors}</span><span class="s2">. </span><span class="si">{title}</span><span class="s2">. </span><span class="si">{year}</span><span class="s2">.&quot;</span><span class="p">,</span>
     <span class="p">}</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;MyReference&quot;</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s2">&quot;Ref&quot;</span><span class="p">):</span>
@@ -528,6 +511,27 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">loading_order</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">entry_type_field</span> <span class="o">=</span> <span class="s2">&quot;entry_type&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">citation_key_field</span> <span class="o">=</span> <span class="s2">&quot;name&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">__init_subclass__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init_subclass__</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="c1"># Only register concrete subclasses with ENTRY_TYPE defined</span>
+        <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">ENTRY_TYPE</span><span class="p">:</span>
+            <span class="n">key</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">ENTRY_TYPE</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_REGISTRY</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Duplicate ENTRY_TYPE detected: </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="n">_REGISTRY</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="bp">cls</span>
+
+<div class="viewcode-block" id="Reference.get_by_entry">
+<a class="viewcode-back" href="../../generated/losalamos.references.html#losalamos.references.Reference.get_by_entry">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_by_entry</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">entry_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="c1"># todo docstring</span>
+        <span class="k">if</span> <span class="n">entry_type</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_REGISTRY</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Warning: Entry type </span><span class="si">{</span><span class="n">entry_type</span><span class="si">}</span><span class="s2"> found, falling back to &#39;misc&#39;&quot;</span><span class="p">)</span>
+            <span class="n">entry_type</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_REGISTRY</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">entry_type</span><span class="p">,</span> <span class="n">RefMisc</span><span class="p">)(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">str_type</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span>
@@ -922,12 +926,13 @@
         <span class="k">return</span> <span class="n">in_text_citation</span></div>
 
 
-<div class="viewcode-block" id="Reference.cite_full">
-<a class="viewcode-back" href="../../generated/losalamos.references.html#losalamos.references.Reference.cite_full">[docs]</a>
+<div class="viewcode-block" id="Reference.cite_bibli">
+<a class="viewcode-back" href="../../generated/losalamos.references.html#losalamos.references.Reference.cite_bibli">[docs]</a>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">cite_full</span><span class="p">(</span><span class="n">bib_dict</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s2">&quot;apa&quot;</span><span class="p">,</span> <span class="n">text_format</span><span class="o">=</span><span class="s2">&quot;plain&quot;</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">cite_bibli</span><span class="p">(</span><span class="n">bib_dict</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s2">&quot;apa&quot;</span><span class="p">,</span> <span class="n">text_format</span><span class="o">=</span><span class="s2">&quot;plain&quot;</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Generate a formatted bibliographic citation string based on a dictionary of metadata and a specified style.</span>
+<span class="sd">        Generate a formatted bibliographic citation string based on a dictionary</span>
+<span class="sd">        of metadata and a specified style.</span>
 
 <span class="sd">        :param bib_dict: Dictionary containing bibliographic fields such as ``author``, ``year``, ``title``, and ``entry_type``.</span>
 <span class="sd">        :type bib_dict: dict</span>
@@ -942,7 +947,7 @@
 
 <span class="sd">            The function normalizes input dictionary values, handles author list formatting (splitting by ``and``),</span>
 <span class="sd">            and applies text formatting rules (e.g., italics or bold) based on the ``text_format``.</span>
-<span class="sd">            It then maps the ``entry_type`` to a specific template defined in ``Reference.CITATION_TEMPLATES``.</span>
+<span class="sd">            It then maps to a specific template defined in ``self.CITATION_TEMPLATES``.</span>
 
 <span class="sd">        .. warning::</span>
 
@@ -964,7 +969,7 @@
         <span class="n">issue</span> <span class="o">=</span> <span class="n">bib</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;issue&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
         <span class="n">pages</span> <span class="o">=</span> <span class="n">bib</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;pages&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
         <span class="n">doi</span> <span class="o">=</span> <span class="n">bib</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;doi&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
-        <span class="n">publisher</span> <span class="o">=</span> <span class="n">bib</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;publisher&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="n">publisher</span> <span class="o">=</span> <span class="n">bib</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;publisher&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s1">&#39;&quot;&#39;</span><span class="p">)</span>
         <span class="n">address</span> <span class="o">=</span> <span class="n">bib</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;location&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
         <span class="n">note</span> <span class="o">=</span> <span class="n">bib</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;note&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
         <span class="n">url</span> <span class="o">=</span> <span class="n">bib</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;url&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
@@ -1016,17 +1021,15 @@
         <span class="p">}</span>
 
         <span class="c1"># 7) Resolve template</span>
-        <span class="n">template</span> <span class="o">=</span> <span class="n">Reference</span><span class="o">.</span><span class="n">CITATION_TEMPLATES</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">entry_type</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">style</span><span class="p">)</span>
-
-        <span class="c1"># Fallback strategy</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">template</span><span class="p">:</span>
-            <span class="n">template</span> <span class="o">=</span> <span class="n">Reference</span><span class="o">.</span><span class="n">CITATION_TEMPLATES</span><span class="p">[</span><span class="s2">&quot;article&quot;</span><span class="p">][</span><span class="s2">&quot;apa&quot;</span><span class="p">]</span>
+        <span class="n">ref_class</span> <span class="o">=</span> <span class="n">Reference</span><span class="o">.</span><span class="n">_REGISTRY</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">entry_type</span><span class="p">,</span> <span class="n">RefMisc</span><span class="p">)</span>
+        <span class="n">template</span> <span class="o">=</span> <span class="n">ref_class</span><span class="o">.</span><span class="n">CITATION_TEMPLATES</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">style</span><span class="p">)</span>
 
         <span class="c1"># 8) Render citation</span>
         <span class="n">citation</span> <span class="o">=</span> <span class="n">template</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">**</span><span class="n">context</span><span class="p">)</span>
 
         <span class="c1"># 9) Cleanup excessive whitespace</span>
         <span class="n">citation</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">citation</span><span class="o">.</span><span class="n">split</span><span class="p">())</span>
+        <span class="n">citation</span> <span class="o">=</span> <span class="n">citation</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s1">&#39;&quot;&#39;</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">citation</span></div>
 
@@ -1131,6 +1134,15 @@
         <span class="s2">&quot;month&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">}</span>
 
+    <span class="n">CITATION_TEMPLATES</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;apa&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">{authors}</span><span class="s2"> (</span><span class="si">{year}</span><span class="s2">). </span><span class="si">{title}</span><span class="s2">. </span><span class="si">{journal}</span><span class="s2">, </span><span class="si">{volume_issue}{pages}</span><span class="s2">. </span><span class="si">{doi}</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;mla&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">{authors}</span><span class="s2">. </span><span class="si">{raw_title}</span><span class="s2">. </span><span class="si">{journal}</span><span class="s2"> </span><span class="si">{volume}</span><span class="s2">. </span><span class="si">{issue}</span><span class="s2"> (</span><span class="si">{year}</span><span class="s2">): </span><span class="si">{pages}</span><span class="s2">. </span><span class="si">{doi}</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;chicago&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">{authors}</span><span class="s2">. </span><span class="si">{raw_title}</span><span class="s2">. </span><span class="si">{journal}</span><span class="s2"> </span><span class="si">{volume}</span><span class="s2">, no. </span><span class="si">{issue}</span><span class="s2"> (</span><span class="si">{year}</span><span class="s2">): </span><span class="si">{pages}</span><span class="s2">. </span><span class="si">{doi}</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;harvard&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">{authors}</span><span class="s2"> (</span><span class="si">{year}</span><span class="s2">) </span><span class="si">{raw_title}</span><span class="s2">, </span><span class="si">{journal}</span><span class="s2">, vol. </span><span class="si">{volume}</span><span class="s2">, no. </span><span class="si">{issue}</span><span class="s2">, pp. </span><span class="si">{pages}</span><span class="s2">. </span><span class="si">{doi}</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;vancouver&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">{authors}</span><span class="s2">. </span><span class="si">{title}</span><span class="s2">. </span><span class="si">{journal}</span><span class="s2">. </span><span class="si">{year}</span><span class="s2">; </span><span class="si">{volume}</span><span class="s2"> (</span><span class="si">{issue}</span><span class="s2">):</span><span class="si">{pages}</span><span class="s2">. </span><span class="si">{doi}</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;abnt&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">{authors}</span><span class="s2">. </span><span class="si">{title}</span><span class="s2">. </span><span class="si">{journal}</span><span class="s2">, </span><span class="si">{volume}</span><span class="s2"> (</span><span class="si">{issue}</span><span class="s2">), p. </span><span class="si">{pages}</span><span class="s2">, </span><span class="si">{year}</span><span class="s2">. </span><span class="si">{doi}</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="p">}</span>
+
 <div class="viewcode-block" id="RefArticle.load_data">
 <a class="viewcode-back" href="../../generated/losalamos.references.html#losalamos.references.RefArticle.load_data">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">load_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_data</span><span class="p">):</span>
@@ -1158,6 +1170,15 @@
         <span class="s2">&quot;publisher&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
         <span class="s2">&quot;subtitle&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
         <span class="s2">&quot;edition&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="n">CITATION_TEMPLATES</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;apa&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">{authors}</span><span class="s2"> (</span><span class="si">{year}</span><span class="s2">). </span><span class="si">{title}</span><span class="s2">. </span><span class="si">{publisher}</span><span class="s2">.&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;mla&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">{authors}</span><span class="s2">. </span><span class="si">{title}</span><span class="s2">. </span><span class="si">{publisher}</span><span class="s2">, </span><span class="si">{year}</span><span class="s2">.&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;chicago&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">{authors}</span><span class="s2">. </span><span class="si">{title}</span><span class="s2">. </span><span class="si">{location}</span><span class="s2">: </span><span class="si">{publisher}</span><span class="s2">, </span><span class="si">{year}</span><span class="s2">.&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;harvard&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">{authors}</span><span class="s2"> (</span><span class="si">{year}</span><span class="s2">) </span><span class="si">{title}</span><span class="s2">, </span><span class="si">{publisher}</span><span class="s2">.&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;vancouver&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">{authors}</span><span class="s2">. </span><span class="si">{title}</span><span class="s2">. </span><span class="si">{publisher}</span><span class="s2">; </span><span class="si">{year}</span><span class="s2">.&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;abnt&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">{authors}</span><span class="s2">. </span><span class="si">{title}</span><span class="s2">. </span><span class="si">{publisher}</span><span class="s2">, </span><span class="si">{year}</span><span class="s2">.&quot;</span><span class="p">,</span>
     <span class="p">}</span></div>
 
 
@@ -1229,6 +1250,14 @@
         <span class="s2">&quot;chapter&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
         <span class="s2">&quot;edition&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
         <span class="s2">&quot;booktitle:&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="n">CITATION_TEMPLATES</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;apa&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">{authors}</span><span class="s2"> (</span><span class="si">{year}</span><span class="s2">). </span><span class="si">{title}</span><span class="s2">. </span><span class="si">{note}</span><span class="s2">. </span><span class="si">{url}</span><span class="s2">.&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;mla&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">{authors}</span><span class="s2">. </span><span class="si">{title}</span><span class="s2">. </span><span class="si">{note}</span><span class="s2">, </span><span class="si">{year}</span><span class="s2">.&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;chicago&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">{authors}</span><span class="s2">. </span><span class="si">{title}</span><span class="s2">. </span><span class="si">{note}</span><span class="s2">, </span><span class="si">{year}</span><span class="s2">.&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;harvard&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">{authors}</span><span class="s2"> (</span><span class="si">{year}</span><span class="s2">) </span><span class="si">{title}</span><span class="s2">, </span><span class="si">{note}</span><span class="s2">.&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;vancouver&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">{authors}</span><span class="s2">. </span><span class="si">{title}</span><span class="s2">. </span><span class="si">{note}</span><span class="s2">; </span><span class="si">{year}</span><span class="s2">.&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;abnt&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">{authors}</span><span class="s2">. </span><span class="si">{title}</span><span class="s2">. </span><span class="si">{note}</span><span class="s2">, </span><span class="si">{year}</span><span class="s2">.&quot;</span><span class="p">,</span>
     <span class="p">}</span></div>
 
 
@@ -1278,6 +1307,9 @@
     <span class="s2">&quot;article&quot;</span><span class="p">:</span> <span class="n">RefArticle</span><span class="p">,</span>
     <span class="s2">&quot;book&quot;</span><span class="p">:</span> <span class="n">RefBook</span><span class="p">,</span>
     <span class="s2">&quot;techreport&quot;</span><span class="p">:</span> <span class="n">RefTechreport</span><span class="p">,</span>
+    <span class="s2">&quot;thesis&quot;</span><span class="p">:</span> <span class="n">RefThesis</span><span class="p">,</span>
+    <span class="s2">&quot;inproceedings&quot;</span><span class="p">:</span> <span class="n">RefInproceedings</span><span class="p">,</span>
+    <span class="c1"># ... continue</span>
 <span class="p">}</span>
 
 <span class="c1"># SCRIPT</span>

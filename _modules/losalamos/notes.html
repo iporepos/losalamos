@@ -512,6 +512,10 @@
 <span class="k">class</span><span class="w"> </span><span class="nc">Note</span><span class="p">(</span><span class="n">MbaE</span><span class="p">):</span>
     <span class="c1"># todo [docstring]</span>
 
+    <span class="n">STR_HEAD</span> <span class="o">=</span> <span class="s2">&quot;Head&quot;</span>
+    <span class="n">STR_BODY</span> <span class="o">=</span> <span class="s2">&quot;Body&quot;</span>
+    <span class="n">STR_TAIL</span> <span class="o">=</span> <span class="s2">&quot;Tail&quot;</span>
+
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;MyNote&quot;</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s2">&quot;Nt1&quot;</span><span class="p">):</span>
         <span class="c1"># set attributes</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">file_note</span> <span class="o">=</span> <span class="kc">None</span>
@@ -982,7 +986,7 @@
         <span class="n">ls_out</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">level</span> <span class="ow">in</span> <span class="n">data_dict</span><span class="p">:</span>
             <span class="n">ls_out</span> <span class="o">=</span> <span class="n">ls_out</span> <span class="o">+</span> <span class="n">data_dict</span><span class="p">[</span><span class="n">level</span><span class="p">][:]</span>
-            <span class="k">if</span> <span class="n">level</span> <span class="o">!=</span> <span class="s2">&quot;Tail&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">level</span> <span class="o">!=</span> <span class="n">Note</span><span class="o">.</span><span class="n">STR_TAIL</span><span class="p">:</span>
                 <span class="n">ls_out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
                 <span class="n">ls_out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;---&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">ls_out</span></div>
@@ -1048,7 +1052,7 @@
         <span class="n">body</span> <span class="o">=</span> <span class="p">[</span><span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">body</span><span class="p">]</span>
         <span class="n">tail</span> <span class="o">=</span> <span class="p">[</span><span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">tail</span><span class="p">]</span>
 
-        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;Head&quot;</span><span class="p">:</span> <span class="n">head</span><span class="p">,</span> <span class="s2">&quot;Body&quot;</span><span class="p">:</span> <span class="n">body</span><span class="p">,</span> <span class="s2">&quot;Tail&quot;</span><span class="p">:</span> <span class="n">tail</span><span class="p">}</span></div>
+        <span class="k">return</span> <span class="p">{</span><span class="n">Note</span><span class="o">.</span><span class="n">STR_HEAD</span><span class="p">:</span> <span class="n">head</span><span class="p">,</span> <span class="n">Note</span><span class="o">.</span><span class="n">STR_BODY</span><span class="p">:</span> <span class="n">body</span><span class="p">,</span> <span class="n">Note</span><span class="o">.</span><span class="n">STR_TAIL</span><span class="p">:</span> <span class="n">tail</span><span class="p">}</span></div>
 
 
 <div class="viewcode-block" id="Note.list_by_pattern">
@@ -1234,7 +1238,7 @@
 <span class="sd">            This action will erase the current data segment.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">reset_data_segment</span><span class="p">(</span><span class="s2">&quot;Head&quot;</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reset_data_segment</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">STR_HEAD</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="NoteBasic.reset_data_body">
@@ -1248,7 +1252,7 @@
 <span class="sd">            This action will erase the current data segment.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">reset_data_segment</span><span class="p">(</span><span class="s2">&quot;Body&quot;</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reset_data_segment</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">STR_BODY</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="NoteBasic.reset_data_tail">
@@ -1262,7 +1266,7 @@
 <span class="sd">            This action will erase the current data segment.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">reset_data_segment</span><span class="p">(</span><span class="s2">&quot;Tail&quot;</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reset_data_segment</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">STR_TAIL</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="NoteBasic.refactor">
@@ -1317,7 +1321,7 @@
         <span class="n">current_name</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">file_note</span><span class="p">)</span><span class="o">.</span><span class="n">stem</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">current_name</span>
         <span class="c1"># always the first item</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;Head&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;# </span><span class="si">{</span><span class="n">current_name</span><span class="si">}</span><span class="s2">&quot;</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">STR_HEAD</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;# </span><span class="si">{</span><span class="n">current_name</span><span class="si">}</span><span class="s2">&quot;</span></div>
 
 
 <div class="viewcode-block" id="NoteBasic.update_abstract">
@@ -1335,12 +1339,12 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;abstract&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">current_abstract</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;abstract&quot;</span><span class="p">][</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
             <span class="n">n</span> <span class="o">=</span> <span class="mi">0</span>
-            <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;Head&quot;</span><span class="p">]:</span>
+            <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">STR_HEAD</span><span class="p">]:</span>
                 <span class="n">n</span> <span class="o">=</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">PATTERN_ABSTRACT</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
                     <span class="k">break</span>
             <span class="k">if</span> <span class="n">n</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;Head&quot;</span><span class="p">][</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&gt; </span><span class="si">{</span><span class="n">current_abstract</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span></div>
+                <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">STR_HEAD</span><span class="p">][</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&gt; </span><span class="si">{</span><span class="n">current_abstract</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span></div>
 
 
 <div class="viewcode-block" id="NoteBasic.update_thumbnail">
@@ -1363,12 +1367,12 @@
 
         <span class="k">if</span> <span class="n">size</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">n</span> <span class="o">=</span> <span class="mi">0</span>
-            <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;Head&quot;</span><span class="p">]:</span>
+            <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">STR_HEAD</span><span class="p">]:</span>
                 <span class="k">if</span> <span class="s2">&quot;![[&quot;</span> <span class="ow">in</span> <span class="n">line</span><span class="p">[:</span><span class="mi">3</span><span class="p">]:</span>
                     <span class="k">break</span>
                 <span class="n">n</span> <span class="o">=</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span>
             <span class="k">if</span> <span class="n">n</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;Head&quot;</span><span class="p">][</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;![[</span><span class="si">{</span><span class="n">image_name</span><span class="si">}</span><span class="s2">.jpeg|</span><span class="si">{</span><span class="n">size</span><span class="si">}</span><span class="s2">]]&quot;</span></div>
+                <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">STR_HEAD</span><span class="p">][</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;![[</span><span class="si">{</span><span class="n">image_name</span><span class="si">}</span><span class="s2">.jpeg|</span><span class="si">{</span><span class="n">size</span><span class="si">}</span><span class="s2">]]&quot;</span></div>
 
 
 <div class="viewcode-block" id="NoteBasic.update_timestamp">
@@ -1456,26 +1460,47 @@
 <div class="viewcode-block" id="NoteReference.get_reference">
 <a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.NoteReference.get_reference">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_reference</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># todo docstring</span>
         <span class="n">dc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-        <span class="n">ref</span> <span class="o">=</span> <span class="n">REFERENCE_DISPATCHER</span><span class="p">[</span><span class="n">dc</span><span class="p">[</span><span class="s2">&quot;entry_type&quot;</span><span class="p">]]()</span>
+        <span class="n">ref</span> <span class="o">=</span> <span class="n">Reference</span><span class="o">.</span><span class="n">get_by_entry</span><span class="p">(</span><span class="n">entry_type</span><span class="o">=</span><span class="n">dc</span><span class="p">[</span><span class="s2">&quot;entry_type&quot;</span><span class="p">])</span>
         <span class="n">ref</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">dc</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
         <span class="n">ref</span><span class="o">.</span><span class="n">standardize</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">ref</span></div>
 
 
+<div class="viewcode-block" id="NoteReference.get_str_bib">
+<a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.NoteReference.get_str_bib">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_str_bib</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">drop_fields</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="c1"># todo docstring</span>
+        <span class="n">ref</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_reference</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">drop_fields</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">drop</span> <span class="ow">in</span> <span class="n">drop_fields</span><span class="p">:</span>
+                <span class="k">del</span> <span class="n">ref</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">drop</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">ref</span><span class="o">.</span><span class="n">get_str_bib</span><span class="p">()</span></div>
+
+
 <div class="viewcode-block" id="NoteReference.update">
 <a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.NoteReference.update">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+        <span class="c1"># todo docstring</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_name</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">update_cite_inline</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">update_cite_bibli</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">update_pdf</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">update_data_tail</span><span class="p">()</span></div>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_data_head</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_data_tail</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_abstract</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_thumbnail</span><span class="p">()</span></div>
 
 
 <div class="viewcode-block" id="NoteReference.update_cite_inline">
 <a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.NoteReference.update_cite_inline">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">update_cite_inline</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># todo docstring</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;cite_inline&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Reference</span><span class="o">.</span><span class="n">cite_line</span><span class="p">(</span>
             <span class="n">bib_dict</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">,</span> <span class="n">text_format</span><span class="o">=</span><span class="s2">&quot;plain&quot;</span><span class="p">,</span> <span class="n">embed_link</span><span class="o">=</span><span class="kc">False</span>
         <span class="p">)</span></div>
@@ -1484,41 +1509,66 @@
 <div class="viewcode-block" id="NoteReference.update_cite_bibli">
 <a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.NoteReference.update_cite_bibli">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">update_cite_bibli</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;cite_bibli&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Reference</span><span class="o">.</span><span class="n">cite_full</span><span class="p">(</span>
+        <span class="c1"># todo docstring</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">Reference</span><span class="o">.</span><span class="n">cite_bibli</span><span class="p">(</span>
             <span class="n">bib_dict</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">,</span> <span class="n">text_format</span><span class="o">=</span><span class="s2">&quot;plain&quot;</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cite_style</span>
-        <span class="p">)</span></div>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;cite_bibli&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;&quot;</span><span class="si">{</span><span class="n">s</span><span class="si">}</span><span class="s1">&quot;&#39;</span></div>
 
 
 <div class="viewcode-block" id="NoteReference.update_pdf">
 <a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.NoteReference.update_pdf">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">update_pdf</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># todo docstring</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;pdf&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;&quot;[[</span><span class="si">{}</span><span class="s1">.pdf]]&quot;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">])</span></div>
+
+
+<div class="viewcode-block" id="NoteReference.update_data_head">
+<a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.NoteReference.update_data_head">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">update_data_head</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># todo docstring</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reset_data_head</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_name</span><span class="p">()</span>
+
+        <span class="c1"># Handle article case</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;entry_type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;article&quot;</span><span class="p">:</span>
+            <span class="n">journal</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;journal&quot;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">journal</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">pass</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">old_line</span> <span class="o">=</span> <span class="s2">&quot;By `=this.cite_inline`&quot;</span>
+                <span class="n">new_line</span> <span class="o">=</span> <span class="s2">&quot;By `=this.cite_inline` in [[</span><span class="si">{}</span><span class="s2">]]&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">journal</span><span class="p">)</span>
+                <span class="n">c</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">STR_HEAD</span><span class="p">]:</span>
+                    <span class="k">if</span> <span class="n">old_line</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">STR_HEAD</span><span class="p">][</span><span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">old_line</span><span class="p">,</span> <span class="n">new_line</span><span class="p">)</span>
+                    <span class="n">c</span> <span class="o">=</span> <span class="n">c</span> <span class="o">+</span> <span class="mi">1</span></div>
 
 
 <div class="viewcode-block" id="NoteReference.update_data_tail">
 <a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.NoteReference.update_data_tail">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">update_data_tail</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># todo docstring</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">reset_data_tail</span><span class="p">()</span>
+
         <span class="c1"># replace inline and bibli</span>
         <span class="n">dc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
 
-        <span class="n">ref</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_reference</span><span class="p">()</span>
-        <span class="k">del</span> <span class="n">ref</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;pdf&quot;</span><span class="p">]</span>
-        <span class="k">del</span> <span class="n">ref</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;abstract&quot;</span><span class="p">]</span>
-
-        <span class="n">dc</span><span class="p">[</span><span class="s2">&quot;bibtex&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ref</span><span class="o">.</span><span class="n">get_str_bib</span><span class="p">()</span>
+        <span class="n">ls_drop</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;pdf&quot;</span><span class="p">,</span> <span class="s2">&quot;abstract&quot;</span><span class="p">]</span>
+        <span class="n">dc</span><span class="p">[</span><span class="s2">&quot;bibtex&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_str_bib</span><span class="p">(</span><span class="n">drop_fields</span><span class="o">=</span><span class="n">ls_drop</span><span class="p">)</span>
 
         <span class="n">ls</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;Tail&quot;</span><span class="p">]:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
-            <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">**</span><span class="n">dc</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">STR_TAIL</span><span class="p">]:</span>
+            <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">**</span><span class="n">dc</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s1">&#39;&quot;&#39;</span><span class="p">)</span>
             <span class="n">ls</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">[:])</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;Tail&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ls</span><span class="p">[:]</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">STR_TAIL</span><span class="p">]</span> <span class="o">=</span> <span class="n">ls</span><span class="p">[:]</span></div>
 
 
 <div class="viewcode-block" id="NoteReference.update_thumbnail">
 <a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.NoteReference.update_thumbnail">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">update_thumbnail</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image_name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="c1"># todo docstring</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;entry_type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;article&quot;</span><span class="p">:</span>
             <span class="n">image_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;journal&quot;</span><span class="p">]</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">update_thumbnail</span><span class="p">(</span><span class="n">image_name</span><span class="o">=</span><span class="n">image_name</span><span class="p">)</span></div>
@@ -1527,6 +1577,7 @@
 <div class="viewcode-block" id="NoteReference.to_bib">
 <a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.NoteReference.to_bib">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">to_bib</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">drop_pdf</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="c1"># todo docstring</span>
         <span class="n">ref</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_reference</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">drop_pdf</span><span class="p">:</span>
             <span class="k">del</span> <span class="n">ref</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;pdf&quot;</span><span class="p">]</span>
