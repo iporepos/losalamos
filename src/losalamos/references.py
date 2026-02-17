@@ -68,6 +68,7 @@ from losalamos.root import DataSet
 class Reference(DataSet):
 
     ENTRY_TYPE = None
+    _REGISTRY = {}
 
     CORE_FIELDS = {
         "entry_type": None,
@@ -111,30 +112,12 @@ class Reference(DataSet):
     # Citation templates
     # ---------------------------------------------------------
     CITATION_TEMPLATES = {
-        "article": {
-            "apa": "{authors} ({year}). {title}. {journal}, {volume_issue}{pages}. {doi}",
-            "mla": "{authors}. {raw_title}. {journal} {volume}. {issue} ({year}): {pages}. {doi}",
-            "chicago": "{authors}. {raw_title}. {journal} {volume}, no. {issue} ({year}): {pages}. {doi}",
-            "harvard": "{authors} ({year}) {raw_title}, {journal}, vol. {volume}, no. {issue}, pp. {pages}. {doi}",
-            "vancouver": "{authors}. {title}. {journal}. {year}; {volume} ({issue}):{pages}. {doi}",
-            "abnt": "{authors}. {title}. {journal}, {volume} ({issue}), p. {pages}, {year}. {doi}",
-        },
-        "book": {
-            "apa": "{authors} ({year}). {title}. {publisher}.",
-            "mla": "{authors}. {title}. {publisher}, {year}.",
-            "chicago": "{authors}. {title}. {location}: {publisher}, {year}.",
-            "harvard": "{authors} ({year}) {title}, {publisher}.",
-            "vancouver": "{authors}. {title}. {publisher}; {year}.",
-            "abnt": "{authors}. {title}. {publisher}, {year}.",
-        },
-        "misc": {
-            "apa": "{authors} ({year}). {title}. {note}. {url}.",
-            "mla": "{authors}. {title}. {note}, {year}.",
-            "chicago": "{authors}. {title}. {note}, {year}.",
-            "harvard": "{authors} ({year}) {title}, {note}.",
-            "vancouver": "{authors}. {title}. {note}; {year}.",
-            "abnt": "{authors}. {title}. {note}, {year}.",
-        },
+        "apa": "{authors} ({year}). {title}.",
+        "mla": "{authors}. {title}. {year}.",
+        "chicago": "{authors}. {title}. {year}.",
+        "harvard": "{authors} ({year}) {title}.",
+        "vancouver": "{authors}. {title}. {year}.",
+        "abnt": "{authors}. {title}. {year}.",
     }
 
     def __init__(self, name="MyReference", alias="Ref"):
@@ -144,6 +127,24 @@ class Reference(DataSet):
         self.loading_order = 0
         self.entry_type_field = "entry_type"
         self.citation_key_field = "name"
+
+    def __init_subclass__(cls, **kwargs):
+        super().__init_subclass__(**kwargs)
+        # Only register concrete subclasses with ENTRY_TYPE defined
+        if cls.ENTRY_TYPE:
+            key = cls.ENTRY_TYPE.lower()
+            if key in cls._REGISTRY:
+                raise ValueError(f"Duplicate ENTRY_TYPE detected: {key}")
+            cls._REGISTRY[key] = cls
+
+    @classmethod
+    def get_by_entry(cls, entry_type: str, **kwargs):
+        # todo docstring
+        if entry_type not in cls._REGISTRY:
+            print(f"Warning: Entry type {entry_type} found, falling back to 'misc'")
+            entry_type = None
+
+        return cls._REGISTRY.get(entry_type, RefMisc)(**kwargs)
 
     def __str__(self):
         str_type = str(type(self))
@@ -509,9 +510,10 @@ class Reference(DataSet):
         return in_text_citation
 
     @staticmethod
-    def cite_full(bib_dict, style="apa", text_format="plain"):
+    def cite_bibli(bib_dict, style="apa", text_format="plain"):
         """
-        Generate a formatted bibliographic citation string based on a dictionary of metadata and a specified style.
+        Generate a formatted bibliographic citation string based on a dictionary
+        of metadata and a specified style.
 
         :param bib_dict: Dictionary containing bibliographic fields such as ``author``, ``year``, ``title``, and ``entry_type``.
         :type bib_dict: dict
@@ -526,7 +528,7 @@ class Reference(DataSet):
 
             The function normalizes input dictionary values, handles author list formatting (splitting by ``and``),
             and applies text formatting rules (e.g., italics or bold) based on the ``text_format``.
-            It then maps the ``entry_type`` to a specific template defined in ``Reference.CITATION_TEMPLATES``.
+            It then maps to a specific template defined in ``self.CITATION_TEMPLATES``.
 
         .. warning::
 
@@ -548,7 +550,7 @@ class Reference(DataSet):
         issue = bib.get("issue", "").strip()
         pages = bib.get("pages", "").strip()
         doi = bib.get("doi", "").strip()
-        publisher = bib.get("publisher", "").strip()
+        publisher = bib.get("publisher", "").strip().strip('"')
         address = bib.get("location", "").strip()
         note = bib.get("note", "").strip()
         url = bib.get("url", "").strip()
@@ -600,17 +602,15 @@ class Reference(DataSet):
         }
 
         # 7) Resolve template
-        template = Reference.CITATION_TEMPLATES.get(entry_type, {}).get(style)
-
-        # Fallback strategy
-        if not template:
-            template = Reference.CITATION_TEMPLATES["article"]["apa"]
+        ref_class = Reference._REGISTRY.get(entry_type, RefMisc)
+        template = ref_class.CITATION_TEMPLATES.get(style)
 
         # 8) Render citation
         citation = template.format(**context)
 
         # 9) Cleanup excessive whitespace
         citation = " ".join(citation.split())
+        citation = citation.strip('"')
 
         return citation
 
@@ -708,6 +708,15 @@ class RefArticle(Reference):
         "month": None,
     }
 
+    CITATION_TEMPLATES = {
+        "apa": "{authors} ({year}). {title}. {journal}, {volume_issue}{pages}. {doi}",
+        "mla": "{authors}. {raw_title}. {journal} {volume}. {issue} ({year}): {pages}. {doi}",
+        "chicago": "{authors}. {raw_title}. {journal} {volume}, no. {issue} ({year}): {pages}. {doi}",
+        "harvard": "{authors} ({year}) {raw_title}, {journal}, vol. {volume}, no. {issue}, pp. {pages}. {doi}",
+        "vancouver": "{authors}. {title}. {journal}. {year}; {volume} ({issue}):{pages}. {doi}",
+        "abnt": "{authors}. {title}. {journal}, {volume} ({issue}), p. {pages}, {year}. {doi}",
+    }
+
     def load_data(self, file_data):
         super().load_data(file_data=file_data)
         self.harmonize_issue()
@@ -726,6 +735,15 @@ class RefBook(Reference):
         "publisher": None,
         "subtitle": None,
         "edition": None,
+    }
+
+    CITATION_TEMPLATES = {
+        "apa": "{authors} ({year}). {title}. {publisher}.",
+        "mla": "{authors}. {title}. {publisher}, {year}.",
+        "chicago": "{authors}. {title}. {location}: {publisher}, {year}.",
+        "harvard": "{authors} ({year}) {title}, {publisher}.",
+        "vancouver": "{authors}. {title}. {publisher}; {year}.",
+        "abnt": "{authors}. {title}. {publisher}, {year}.",
     }
 
 
@@ -783,6 +801,14 @@ class RefInbook(Reference):
         "edition": None,
         "booktitle:": None,
     }
+    CITATION_TEMPLATES = {
+        "apa": "{authors} ({year}). {title}. {note}. {url}.",
+        "mla": "{authors}. {title}. {note}, {year}.",
+        "chicago": "{authors}. {title}. {note}, {year}.",
+        "harvard": "{authors} ({year}) {title}, {note}.",
+        "vancouver": "{authors}. {title}. {note}; {year}.",
+        "abnt": "{authors}. {title}. {note}, {year}.",
+    }
 
 
 class RefMisc(Reference):
@@ -818,6 +844,9 @@ REFERENCE_DISPATCHER = {
     "article": RefArticle,
     "book": RefBook,
     "techreport": RefTechreport,
+    "thesis": RefThesis,
+    "inproceedings": RefInproceedings,
+    # ... continue
 }
 
 # SCRIPT

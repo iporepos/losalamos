@@ -125,6 +125,10 @@ def search_markdown_files(paths: list[Path]) -> list[Path]:
 class Note(MbaE):
     # todo [docstring]
 
+    STR_HEAD = "Head"
+    STR_BODY = "Body"
+    STR_TAIL = "Tail"
+
     def __init__(self, name="MyNote", alias="Nt1"):
         # set attributes
         self.file_note = None
@@ -548,7 +552,7 @@ class Note(MbaE):
         ls_out = []
         for level in data_dict:
             ls_out = ls_out + data_dict[level][:]
-            if level != "Tail":
+            if level != Note.STR_TAIL:
                 ls_out.append("")
                 ls_out.append("---")
         return ls_out
@@ -611,7 +615,7 @@ class Note(MbaE):
         body = [line.strip() for line in body]
         tail = [line.strip() for line in tail]
 
-        return {"Head": head, "Body": body, "Tail": tail}
+        return {Note.STR_HEAD: head, Note.STR_BODY: body, Note.STR_TAIL: tail}
 
     @staticmethod
     def list_by_pattern(md_dict, patt_type="tag"):
@@ -767,7 +771,7 @@ class NoteBasic(Note):
             This action will erase the current data segment.
 
         """
-        self.reset_data_segment("Head")
+        self.reset_data_segment(self.STR_HEAD)
 
     def reset_data_body(self):
         """
@@ -778,7 +782,7 @@ class NoteBasic(Note):
             This action will erase the current data segment.
 
         """
-        self.reset_data_segment("Body")
+        self.reset_data_segment(self.STR_BODY)
 
     def reset_data_tail(self):
         """
@@ -789,7 +793,7 @@ class NoteBasic(Note):
             This action will erase the current data segment.
 
         """
-        self.reset_data_segment("Tail")
+        self.reset_data_segment(self.STR_TAIL)
 
     def refactor(self, new_name, scope):
         """
@@ -835,7 +839,7 @@ class NoteBasic(Note):
         current_name = Path(self.file_note).stem
         self.metadata["name"] = current_name
         # always the first item
-        self.data["Head"][0] = f"# {current_name}"
+        self.data[self.STR_HEAD][0] = f"# {current_name}"
 
     def update_abstract(self):
         """
@@ -850,12 +854,12 @@ class NoteBasic(Note):
         if self.metadata["abstract"] is not None:
             current_abstract = self.metadata["abstract"][1:-1]
             n = 0
-            for line in self.data["Head"]:
+            for line in self.data[self.STR_HEAD]:
                 n = n + 1
                 if self.PATTERN_ABSTRACT in line:
                     break
             if n > 0:
-                self.data["Head"][n] = f"> {current_abstract}\n"
+                self.data[self.STR_HEAD][n] = f"> {current_abstract}\n"
 
     def update_thumbnail(self, image_name=None):
         """
@@ -875,12 +879,12 @@ class NoteBasic(Note):
 
         if size is not None:
             n = 0
-            for line in self.data["Head"]:
+            for line in self.data[self.STR_HEAD]:
                 if "![[" in line[:3]:
                     break
                 n = n + 1
             if n > 0:
-                self.data["Head"][n] = f"![[{image_name}.jpeg|{size}]]"
+                self.data[self.STR_HEAD][n] = f"![[{image_name}.jpeg|{size}]]"
 
     def update_timestamp(self):
         """
@@ -941,56 +945,97 @@ class NoteReference(NoteBasic):
         self.cite_style = "apa"
 
     def get_reference(self):
+        # todo docstring
         dc = self.metadata.copy()
-        ref = REFERENCE_DISPATCHER[dc["entry_type"]]()
+        ref = Reference.get_by_entry(entry_type=dc["entry_type"])
         ref.data = dc.copy()
         ref.standardize()
         return ref
 
+    def get_str_bib(self, drop_fields=None):
+        # todo docstring
+        ref = self.get_reference()
+
+        if drop_fields:
+            for drop in drop_fields:
+                del ref.data[drop]
+
+        return ref.get_str_bib()
+
     def update(self):
-        super().update()
+        # todo docstring
+        self.update_name()
         self.update_cite_inline()
         self.update_cite_bibli()
         self.update_pdf()
+
+        self.update_data_head()
         self.update_data_tail()
 
+        self.update_abstract()
+        self.update_thumbnail()
+
     def update_cite_inline(self):
+        # todo docstring
         self.metadata["cite_inline"] = Reference.cite_line(
             bib_dict=self.metadata, text_format="plain", embed_link=False
         )
 
     def update_cite_bibli(self):
-        self.metadata["cite_bibli"] = Reference.cite_full(
+        # todo docstring
+        s = Reference.cite_bibli(
             bib_dict=self.metadata, text_format="plain", style=self.cite_style
         )
+        self.metadata["cite_bibli"] = f'"{s}"'
 
     def update_pdf(self):
+        # todo docstring
         self.metadata["pdf"] = '"[[{}.pdf]]"'.format(self.metadata["name"])
 
+    def update_data_head(self):
+        # todo docstring
+        self.reset_data_head()
+
+        self.update_name()
+
+        # Handle article case
+        if self.metadata["entry_type"] == "article":
+            journal = self.metadata["journal"]
+            if journal is None:
+                pass
+            else:
+                old_line = "By `=this.cite_inline`"
+                new_line = "By `=this.cite_inline` in [[{}]]".format(journal)
+                c = 0
+                for line in self.data[self.STR_HEAD]:
+                    if old_line in line:
+                        self.data[self.STR_HEAD][c] = line.replace(old_line, new_line)
+                    c = c + 1
+
     def update_data_tail(self):
+        # todo docstring
         self.reset_data_tail()
+
         # replace inline and bibli
         dc = self.metadata.copy()
 
-        ref = self.get_reference()
-        del ref.data["pdf"]
-        del ref.data["abstract"]
-
-        dc["bibtex"] = ref.get_str_bib()
+        ls_drop = ["pdf", "abstract"]
+        dc["bibtex"] = self.get_str_bib(drop_fields=ls_drop)
 
         ls = []
-        for line in self.data["Tail"]:
-            print(line)
-            line = line.format(**dc)
+        for line in self.data[self.STR_TAIL]:
+            line = line.format(**dc).strip('"')
             ls.append(line[:])
-        self.data["Tail"] = ls[:]
+        self.data[self.STR_TAIL] = ls[:]
 
     def update_thumbnail(self, image_name=None):
+        # todo docstring
         if self.metadata["entry_type"] == "article":
             image_name = self.metadata["journal"]
         super().update_thumbnail(image_name=image_name)
 
     def to_bib(self, output, drop_pdf=True):
+        # todo docstring
         ref = self.get_reference()
         if drop_pdf:
             del ref.data["pdf"]

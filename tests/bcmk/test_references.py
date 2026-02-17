@@ -175,7 +175,7 @@ class BCMKTestReference(unittest.TestCase):
         print("\n\n")
         for mode in ls:
             for style in ls2:
-                s1 = self.ref.cite_full(
+                s1 = self.ref.cite_bibli(
                     bib_dict=self.ref.data,
                     style=style,
                     text_format=mode,

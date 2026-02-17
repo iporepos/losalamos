@@ -1,19 +1,24 @@
 ---
-note_type: basic
+note_type: reference
 timestamp: <% tp.file.creation_date("YYYY-MM-DD HH:mm:ss") %>
 tags:
-  - basic-note
+  - reference-note
 aliases:
 subject:
-url:
+category:
 name: <% tp.file.title %>
-abstract:
-doi:
+pdf:
+download:
+cite_inline:
+cite_bibli:
 entry_type:
 author:
 title:
 subtitle:
 year:
+doi:
+url:
+abstract:
 note:
 issn:
 journal:
@@ -34,9 +39,6 @@ location:
 type:
 language:
 version:
-pdf:
-cite_inline:
-cite_bibli:
 ---
 # <% tp.file.title %>
 

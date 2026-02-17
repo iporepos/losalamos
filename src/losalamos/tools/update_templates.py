@@ -47,7 +47,7 @@ from losalamos.tools.core import *
 def get_arguments():
     parser = argparse.ArgumentParser()
     parser.add_argument("-n", "--notes", help="folder for notes templates.")
-    # keep addig if more templates arise
+    # keep adding if more templates arise
     args = parser.parse_args()
 
     return args
