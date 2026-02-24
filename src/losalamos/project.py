@@ -272,6 +272,7 @@ class Project(FileSys):
         targets,
         prefix,
         output_folder=None,
+        surface=False,
     ):
         """
         Publish a versioned snapshot of selected directories to a managed output location.
@@ -282,6 +283,8 @@ class Project(FileSys):
         :type prefix: str
         :param output_folder: [optional] The destination directory for the published archives.
         :type output_folder: :class:`pathlib.Path`
+        :param surface: If True, target folders are placed at the zip root instead of preserving project subfolder structure.
+        :type surface: bool
         :return: A dictionary containing the publication status, the resulting path, and metadata.
         :rtype: dict
 
@@ -345,14 +348,11 @@ class Project(FileSys):
             staging_root = tmpdir / "payload"
             staging_root.mkdir()
 
-            self._stage_targets(targets, staging_root)
+            # Pass surface flag to the staging logic
+            self._stage_targets(targets, staging_root, surface=surface)
 
             staging_zip = tmpdir / filename
-
-            self._zip_with_tqdm(
-                staging_root,
-                staging_zip,
-            )
+            self._zip_with_tqdm(staging_root, staging_zip)
 
             # rotate latest
             # ----------------------------------------------------------------
@@ -430,24 +430,34 @@ class Project(FileSys):
         except ValueError as exc:
             raise ValueError(f"Invalid timestamp in archive name: {filename}") from exc
 
-    def _stage_targets(self, targets, staging_root: Path):
+    def _stage_targets(self, targets, staging_root: Path, surface: bool = False):
         """
-        Copy target directories into staging_root, preserving
-        paths relative to project root.
+        Copy target directories into staging_root.
         """
         anchor = Path(self.folder_root).resolve()
 
         for t in targets:
             t = t.resolve()
 
-            try:
-                rel = t.relative_to(anchor)
-            except ValueError:
-                raise ValueError(f"Target {t} is not under project root {anchor}")
+            if surface:
+                # Place directly in the root of the zip using the folder's name
+                dst = staging_root / t.name
+            else:
+                # Preserve the relative path from the project root
+                try:
+                    rel = t.relative_to(anchor)
+                except ValueError:
+                    raise ValueError(f"Target {t} is not under project root {anchor}")
+                dst = staging_root / rel
 
-            dst = staging_root / rel
+            # Prevent overwriting if two different paths have the same folder name in surface mode
+            if dst.exists():
+                raise FileExistsError(
+                    f"Collision detected at destination: {dst}. "
+                    "Disable 'surface' or rename folders."
+                )
+
             dst.parent.mkdir(parents=True, exist_ok=True)
-
             shutil.copytree(t, dst)
 
     def _stage_targets_old(self, targets, staging_root: Path):
