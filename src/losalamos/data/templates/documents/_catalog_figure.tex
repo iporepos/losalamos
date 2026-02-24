@@ -1,0 +1,63 @@
+\section{[[title]]} \label{sec_[[label]]}
+
+\scriptsize
+\sffamily
+
+% set the file and size
+\includegraphics[width=[[width]], left]{[[file_mvp]]}
+
+% CAPTION
+% ===============================
+\noindent \textbf{Caption} --- [[caption]]
+
+% METADATA
+% ===============================
+\vspace{16pt}
+\hrule
+
+\begin{minipage}[t]{0.40\textwidth}
+
+\textbf{Metadata}
+
+\vspace{1pt}
+
+\renewcommand{\arraystretch}{1.1}
+\begin{tabularx}{\linewidth}{>{\bfseries}l X}
+Title      & [[title]] \\
+File       & [[file]] \\
+Status MVP & [[status_mvp]]\\
+Status FTP & [[status_ftp]]\\
+Chapter    & [[chapter]] \\
+Collection & [[collection]] \\
+Category   & [[category]] \\
+Width      & [[width]] \\
+\end{tabularx}
+
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.57\textwidth}
+
+\textbf{Draft}
+
+\vspace{1pt}
+
+\includegraphics[width=\linewidth, height=4cm, keepaspectratio=true, center]{[[file_draft]]}
+
+\end{minipage}
+
+
+% COMMENTS
+% ===============================
+\vspace{5pt}
+\hrule
+\noindent \textbf{Comments} --- [[comment]]
+
+
+% CREDITS
+% ===============================
+\vspace{5pt}
+\hrule
+\noindent \textbf{Credits} \\
+[[credits]]
+
+\clearpage

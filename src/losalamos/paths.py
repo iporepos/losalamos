@@ -35,6 +35,7 @@ FOLDER_DATA = files("losalamos") / "data"
 FOLDER_TEMPLATES = FOLDER_DATA / "templates"
 FOLDER_TEMPLATES_NOTES = FOLDER_TEMPLATES / "notes"
 FOLDER_TEMPLATES_DRAWINGS = FOLDER_TEMPLATES / "drawings"
+FOLDER_TEMPLATES_DOCUMENTS = FOLDER_TEMPLATES / "documents"
 
 
 if __name__ == "__main__":
