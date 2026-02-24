@@ -543,7 +543,7 @@ based on <code class="docutils literal notranslate"><span class="pre">SUBFOLDERS
 
 <dl class="py method">
 <dt class="sig sig-object py" id="losalamos.project.Project.publish">
-<span class="sig-name descname"><span class="pre">publish</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">targets</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_folder</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/project.html#Project.publish"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.project.Project.publish" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">publish</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">targets</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_folder</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">surface</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/project.html#Project.publish"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.project.Project.publish" title="Link to this definition">#</a></dt>
 <dd><p>Publish a versioned snapshot of selected directories to a managed output location.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -551,6 +551,7 @@ based on <code class="docutils literal notranslate"><span class="pre">SUBFOLDERS
 <li><p><strong>targets</strong> (<em>list</em>) – A list of directory paths to be included in the snapshot.</p></li>
 <li><p><strong>prefix</strong> (<em>str</em>) – The string prefix used for naming the generated archive file.</p></li>
 <li><p><strong>output_folder</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">pathlib.Path</span></code>) – [optional] The destination directory for the published archives.</p></li>
+<li><p><strong>surface</strong> (<em>bool</em>) – If True, target folders are placed at the zip root instead of preserving project subfolder structure.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
