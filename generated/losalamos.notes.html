@@ -448,16 +448,19 @@ todo docstring</p>
 <tr class="row-odd"><td><p><a class="reference internal" href="#losalamos.notes.NoteCollection" title="losalamos.notes.NoteCollection"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NoteCollection</span></code></a>([name, alias])</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#losalamos.notes.NoteFigure" title="losalamos.notes.NoteFigure"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NoteFigure</span></code></a>([name, alias])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#losalamos.notes.NoteDataset" title="losalamos.notes.NoteDataset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NoteDataset</span></code></a>()</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#losalamos.notes.NoteJournal" title="losalamos.notes.NoteJournal"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NoteJournal</span></code></a>([name, alias])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#losalamos.notes.NoteFigure" title="losalamos.notes.NoteFigure"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NoteFigure</span></code></a>([name, alias])</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#losalamos.notes.NoteProject" title="losalamos.notes.NoteProject"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NoteProject</span></code></a>([name, alias])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#losalamos.notes.NoteJournal" title="losalamos.notes.NoteJournal"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NoteJournal</span></code></a>([name, alias])</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#losalamos.notes.NoteReference" title="losalamos.notes.NoteReference"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NoteReference</span></code></a>()</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#losalamos.notes.NoteProject" title="losalamos.notes.NoteProject"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NoteProject</span></code></a>([name, alias])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#losalamos.notes.NoteReference" title="losalamos.notes.NoteReference"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NoteReference</span></code></a>()</p></td>
 <td><p></p></td>
 </tr>
 </tbody>
@@ -1154,6 +1157,73 @@ on the current file name and predefined size.</p>
 </dd></dl>
 
 <dl class="py class">
+<dt class="sig sig-object py" id="losalamos.notes.NoteDataset">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">losalamos.notes.</span></span><span class="sig-name descname"><span class="pre">NoteDataset</span></span><a class="reference internal" href="../_modules/losalamos/notes.html#NoteDataset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.notes.NoteDataset" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#losalamos.notes.NoteReference" title="losalamos.notes.NoteReference"><code class="xref py py-class docutils literal notranslate"><span class="pre">NoteReference</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="losalamos.notes.NoteDataset.TEMPLATE_FILE">
+<span class="sig-name descname"><span class="pre">TEMPLATE_FILE</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">PosixPath('/home/runner/work/losalamos/losalamos/src/losalamos/data/templates/notes/_dataset.md')</span></span><a class="headerlink" href="#losalamos.notes.NoteDataset.TEMPLATE_FILE" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="losalamos.notes.NoteDataset.THUMBNAIL_SIZE">
+<span class="sig-name descname"><span class="pre">THUMBNAIL_SIZE</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">200</span></span><a class="headerlink" href="#losalamos.notes.NoteDataset.THUMBNAIL_SIZE" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="losalamos.notes.NoteDataset.PATTERN_ABSTRACT">
+<span class="sig-name descname"><span class="pre">PATTERN_ABSTRACT</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'[!Info]'</span></span><a class="headerlink" href="#losalamos.notes.NoteDataset.PATTERN_ABSTRACT" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.notes.NoteDataset.update">
+<span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/notes.html#NoteDataset.update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.notes.NoteDataset.update" title="Link to this definition">#</a></dt>
+<dd><p>Triggers a sequence of internal updates to synchronize the note’s name, abstract, and thumbnail.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This method acts as a base update sequence; additional update
+logic may be implemented in downstream classes.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.notes.NoteDataset.to_bib">
+<span class="sig-name descname"><span class="pre">to_bib</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/notes.html#NoteDataset.to_bib"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.notes.NoteDataset.to_bib" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.notes.NoteDataset.update_pdf">
+<span class="sig-name descname"><span class="pre">update_pdf</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/notes.html#NoteDataset.update_pdf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.notes.NoteDataset.update_pdf" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.notes.NoteDataset.update_source">
+<span class="sig-name descname"><span class="pre">update_source</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/notes.html#NoteDataset.update_source"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.notes.NoteDataset.update_source" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.notes.NoteDataset.update_alias">
+<span class="sig-name descname"><span class="pre">update_alias</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/notes.html#NoteDataset.update_alias"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.notes.NoteDataset.update_alias" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.notes.NoteDataset.update_version">
+<span class="sig-name descname"><span class="pre">update_version</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/notes.html#NoteDataset.update_version"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.notes.NoteDataset.update_version" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.notes.NoteDataset.get_dataset_folder">
+<span class="sig-name descname"><span class="pre">get_dataset_folder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">folder_base</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/notes.html#NoteDataset.get_dataset_folder"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.notes.NoteDataset.get_dataset_folder" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.notes.NoteDataset.setup_dataset_folder">
+<span class="sig-name descname"><span class="pre">setup_dataset_folder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">folder_base</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/notes.html#NoteDataset.setup_dataset_folder"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.notes.NoteDataset.setup_dataset_folder" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
 <dt class="sig sig-object py" id="losalamos.notes.NoteCollection">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">losalamos.notes.</span></span><span class="sig-name descname"><span class="pre">NoteCollection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'MyNoteColl'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alias</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'NtCol0'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/notes.html#NoteCollection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.notes.NoteCollection" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference internal" href="losalamos.root.html#losalamos.root.Collection" title="losalamos.root.Collection"><code class="xref py py-class docutils literal notranslate"><span class="pre">Collection</span></code></a></p>
@@ -1392,6 +1462,20 @@ on the current file name and predefined size.</p>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.notes.NoteReference.update_data_tail"><code class="docutils literal notranslate"><span class="pre">NoteReference.update_data_tail()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.notes.NoteReference.update_thumbnail"><code class="docutils literal notranslate"><span class="pre">NoteReference.update_thumbnail()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.notes.NoteReference.to_bib"><code class="docutils literal notranslate"><span class="pre">NoteReference.to_bib()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.notes.NoteDataset"><code class="docutils literal notranslate"><span class="pre">NoteDataset</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.notes.NoteDataset.TEMPLATE_FILE"><code class="docutils literal notranslate"><span class="pre">NoteDataset.TEMPLATE_FILE</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.notes.NoteDataset.THUMBNAIL_SIZE"><code class="docutils literal notranslate"><span class="pre">NoteDataset.THUMBNAIL_SIZE</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.notes.NoteDataset.PATTERN_ABSTRACT"><code class="docutils literal notranslate"><span class="pre">NoteDataset.PATTERN_ABSTRACT</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.notes.NoteDataset.update"><code class="docutils literal notranslate"><span class="pre">NoteDataset.update()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.notes.NoteDataset.to_bib"><code class="docutils literal notranslate"><span class="pre">NoteDataset.to_bib()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.notes.NoteDataset.update_pdf"><code class="docutils literal notranslate"><span class="pre">NoteDataset.update_pdf()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.notes.NoteDataset.update_source"><code class="docutils literal notranslate"><span class="pre">NoteDataset.update_source()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.notes.NoteDataset.update_alias"><code class="docutils literal notranslate"><span class="pre">NoteDataset.update_alias()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.notes.NoteDataset.update_version"><code class="docutils literal notranslate"><span class="pre">NoteDataset.update_version()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.notes.NoteDataset.get_dataset_folder"><code class="docutils literal notranslate"><span class="pre">NoteDataset.get_dataset_folder()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.notes.NoteDataset.setup_dataset_folder"><code class="docutils literal notranslate"><span class="pre">NoteDataset.setup_dataset_folder()</span></code></a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.notes.NoteCollection"><code class="docutils literal notranslate"><span class="pre">NoteCollection</span></code></a><ul class="nav section-nav flex-column">

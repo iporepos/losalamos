@@ -1,15 +1,15 @@
 {
-    "about": 0.015,
+    "about": 0.016,
     "api": 0.013,
-    "development": 0.036,
-    "generated/losalamos": 0.011,
-    "generated/losalamos.figures": 0.221,
-    "generated/losalamos.notes": 0.352,
-    "generated/losalamos.project": 0.094,
-    "generated/losalamos.references": 0.175,
+    "development": 0.037,
+    "generated/losalamos": 0.01,
+    "generated/losalamos.figures": 0.25,
+    "generated/losalamos.notes": 0.419,
+    "generated/losalamos.project": 0.102,
+    "generated/losalamos.references": 0.169,
     "generated/losalamos.root": 0.196,
     "includes/ipsum": 0.001,
     "includes/warning_development": 0.001,
-    "index": 0.003,
+    "index": 0.004,
     "usage": 0.007
 }

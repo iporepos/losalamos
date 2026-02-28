@@ -21,6 +21,7 @@
       NoteCollJournal
       NoteCollProject
       NoteCollection
+      NoteDataset
       NoteFigure
       NoteJournal
       NoteProject
