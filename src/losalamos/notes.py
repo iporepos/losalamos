@@ -1042,6 +1042,56 @@ class NoteReference(NoteBasic):
         ref.to_bib(output=output)
 
 
+class NoteDataset(NoteReference):
+
+    TEMPLATE_FILE = FOLDER_TEMPLATES_NOTES / "_dataset.md"
+    THUMBNAIL_SIZE = 200
+    PATTERN_ABSTRACT = "[!Info]"
+
+    def update(self):
+        super().update()
+        self.update_source()
+        self.update_alias()
+        self.update_version()
+
+    def to_bib(self, output):
+        super().to_bib(output=output, drop_pdf=False)
+
+    def update_pdf(self):
+        return None
+
+    def update_source(self):
+        s = Path(self.file_note).stem.split("_")[0]
+        self.metadata["source"] = s
+
+    def update_alias(self):
+        s = Path(self.file_note).stem.split("_")[1]
+        self.metadata["alias"] = s
+
+    def update_version(self):
+        s = Path(self.file_note).stem.split("_")[2]
+        self.metadata["version"] = s
+
+    def get_dataset_folder(self, folder_base):
+        r = Path(folder_base)
+        src = self.metadata["source"]
+        als = self.metadata["alias"]
+        vrs = self.metadata["version"]
+        d = r / f"{src}/{als}/{vrs}"
+        return d
+
+    def setup_dataset_folder(self, folder_base):
+        d = self.get_dataset_folder(folder_base=folder_base)
+        d.mkdir(exist_ok=True, parents=True)
+        ls = ["SRC", "T0", "T1", "T2"]
+        for i in ls:
+            if i == "SRC":
+                dsub = d / i
+            else:
+                dsub = d / f"{i}/ASSETS"
+            dsub.mkdir(exist_ok=True, parents=True)
+
+
 # COLLECTIONS
 # -----------------------------------------------------------------------
 

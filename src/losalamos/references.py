@@ -551,9 +551,11 @@ class Reference(DataSet):
         pages = bib.get("pages", "").strip()
         doi = bib.get("doi", "").strip()
         publisher = bib.get("publisher", "").strip().strip('"')
+        organization = bib.get("organization", "").strip().strip('"')
         address = bib.get("location", "").strip()
         note = bib.get("note", "").strip()
         url = bib.get("url", "").strip()
+        version = bib.get("version", "V1").strip().strip('"')
 
         # 3) Format authors (simple join logic preserved)
         if author.startswith("{") and author.endswith("}"):
@@ -599,6 +601,8 @@ class Reference(DataSet):
             "address": address,
             "note": note,
             "url": url,
+            "organization": organization,
+            "version": version,
         }
 
         # 7) Resolve template
@@ -778,6 +782,14 @@ class RefDataset(Reference):
         "organization": None,
         "version": None,
         "note": None,
+    }
+    CITATION_TEMPLATES = {
+        "apa": "{authors} ({year}). {title}. {organization}. {version} [Data Set] {url}.",
+        "mla": "{authors}. {title}. {year}. {organization}. {version} [Data Set] {url}.",
+        "chicago": "{authors}. {title}. {year}. {organization}. {version} [Data Set] {url}.",
+        "harvard": "{authors} ({year}) {title}. {organization}. {version} [Data Set] {url}.",
+        "vancouver": "{authors}. {title}. {year}.  {organization}. {version} [Data Set] {url}.",
+        "abnt": "{authors}. {title}. {year}. {organization}. {version} [Data Set] {url}.",
     }
 
 

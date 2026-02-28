@@ -1,48 +1,41 @@
 ---
-note_type: reference
+note_type: dataset
 timestamp: <% tp.file.creation_date("YYYY-MM-DD HH:mm:ss") %>
 tags:
-  - reference-note
+  - dataset-note
 aliases:
 subject:
 category:
-name: <% tp.file.title %>
-pdf:
-download:
+name:  <% tp.file.title %>
+source:
+alias:
+version:
 cite_inline:
 cite_bibli:
-entry_type:
-author:
-title:
-subtitle:
-year:
+entry_type: dataset
 doi:
 url:
-abstract:
+author:
+title:
+year:
 note:
-issn:
-journal:
-issue:
-volume:
-month:
-number:
-pages:
-isbn:
-edition:
-publisher:
-booktitle:
-chapter:
-howpublished:
 organization:
-institution:
-location:
-type:
-language:
-version:
+abstract:
+license:
+download:
+access:
+datetime:
+frequency:
+structure:
+resolution_xy:
+resolution_t:
+extent_xy:
+extent_t:
+bbox:
 ---
 # <% tp.file.title %>
 
-`= upper(this.entry_type)`
+DATASET
 
 ![[<% tp.file.title %>.jpeg|200]]
 
@@ -50,9 +43,7 @@ version:
 
 By `=this.cite_inline`
 
-- File: `=this.pdf`
 - URL: `=this.url`
-- DOI: `=this.doi`
 
 > [!Info] Abstract
 > {a paragraph description of the note}
@@ -68,14 +59,34 @@ By `=this.cite_inline`
 > - List related notes
 
 ---
-# Comments
+# Description
+
+*Start typing here*
+
+---
+# Specifications
+
+*Start typing here*
+
+---
+# Downloading
+
+*Start typing here*
+
+---
+# Loading
 
 *Start typing here*
 
 ---
 # References
 
-- List references
+*Start typing here*
+
+---
+# Resources
+
+*Start typing here*
 
 ---
 # Bibliographic information
