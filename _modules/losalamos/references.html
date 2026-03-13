@@ -386,10 +386,94 @@
 <span class="c1"># See pyproject.toml for authors/maintainers.</span>
 <span class="c1"># See LICENSE for license details.</span>
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">Short module description (1-3 sentences)</span>
-<span class="sd">todo docstring</span>
+<span class="sd">Reference management utilities for bibliographic metadata.</span>
+
+<span class="sd">This module defines a schema-driven ``Reference`` base class and a registry</span>
+<span class="sd">of entry-type subclasses (e.g., article, book, thesis). It provides tools for</span>
+<span class="sd">loading, standardizing, formatting, and exporting references, including</span>
+<span class="sd">BibTeX parsing, citation generation, and metadata templates.</span>
+
+<span class="sd">Quick start</span>
+<span class="sd">===========</span>
+
+<span class="sd">This section demonstrates a few common operations with the reference system.</span>
+
+<span class="sd">Load a reference from a BibTeX file</span>
+
+<span class="sd">.. code-block:: python</span>
+
+<span class="sd">    from losalamos.references import Reference</span>
+
+<span class="sd">    ref = Reference.get_by_entry(&quot;article&quot;)</span>
+<span class="sd">    ref.load_data(&quot;path/to/file.bib&quot;)</span>
+
+<span class="sd">    print(ref.data)</span>
+
+
+<span class="sd">Generate an in-text citation</span>
+
+<span class="sd">.. code-block:: python</span>
+
+<span class="sd">    citation = Reference.cite_line(ref.data)</span>
+
+<span class="sd">    print(citation)</span>
+<span class="sd">    # Example: &quot;Smith et al. (2022)&quot;</span>
+
+
+<span class="sd">Generate a formatted bibliography entry</span>
+
+<span class="sd">.. code-block:: python</span>
+
+<span class="sd">    bibli = Reference.cite_bibli(</span>
+<span class="sd">        ref.data,</span>
+<span class="sd">        style=&quot;apa&quot;,</span>
+<span class="sd">        text_format=&quot;plain&quot;,</span>
+<span class="sd">    )</span>
+
+<span class="sd">    print(bibli)</span>
+
+
+<span class="sd">Export a BibTeX entry</span>
+
+<span class="sd">.. code-block:: python</span>
+
+<span class="sd">    ref.save()  # saves to the same file path used in load_data</span>
+
+
+<span class="sd">Create a new reference manually</span>
+
+<span class="sd">.. code-block:: python</span>
+
+<span class="sd">    from losalamos.references import RefArticle</span>
+
+<span class="sd">    ref = RefArticle()</span>
+
+<span class="sd">    ref.setup_data({</span>
+<span class="sd">        &quot;name&quot;: &quot;smith2022&quot;,</span>
+<span class="sd">        &quot;author&quot;: &quot;Smith, John and Doe, Jane&quot;,</span>
+<span class="sd">        &quot;title&quot;: &quot;Example Article&quot;,</span>
+<span class="sd">        &quot;year&quot;: &quot;2022&quot;,</span>
+<span class="sd">        &quot;journal&quot;: &quot;Journal of Examples&quot;,</span>
+<span class="sd">        &quot;volume&quot;: &quot;10&quot;,</span>
+<span class="sd">        &quot;issue&quot;: &quot;2&quot;,</span>
+<span class="sd">        &quot;pages&quot;: &quot;100-110&quot;,</span>
+<span class="sd">        &quot;doi&quot;: &quot;10.1000/example&quot;</span>
+<span class="sd">    })</span>
+
+<span class="sd">    print(ref.get_str_bib())</span>
+
+
+<span class="sd">Generate a BibTeX template</span>
+
+<span class="sd">.. code-block:: python</span>
+
+<span class="sd">    from losalamos.references import RefArticle</span>
+
+<span class="sd">    ref = RefArticle()</span>
+<span class="sd">    ref.export_template(&quot;path/to/file.bib&quot;)</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
+
 <span class="c1"># IMPORTS</span>
 <span class="c1"># ***********************************************************************</span>
 <span class="c1"># import modules from other libs</span>

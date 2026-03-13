@@ -386,8 +386,125 @@
 <span class="c1"># See pyproject.toml for authors/maintainers.</span>
 <span class="c1"># See LICENSE for license details.</span>
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">{Short module description (1-3 sentences)}</span>
-<span class="sd">todo module docstring</span>
+<span class="sd">Utilities for managing structured Markdown notes.</span>
+
+<span class="sd">This module provides a lightweight framework for creating, loading, and managing</span>
+<span class="sd">Markdown-based notes with structured metadata. It supports templated note</span>
+<span class="sd">creation, automated refactoring of note names and links, reference notes with</span>
+<span class="sd">BibTeX integration, and utilities for working with collections of notes.</span>
+
+<span class="sd">Quick start</span>
+<span class="sd">===========</span>
+
+<span class="sd">This section demonstrates common operations for working with Markdown-based notes.</span>
+
+
+<span class="sd">Load a note</span>
+
+
+<span class="sd">.. code-block:: python</span>
+
+<span class="sd">    from losalamos.notes import Note</span>
+
+<span class="sd">    note = Note(name=&quot;Example&quot;, alias=&quot;Nt1&quot;)</span>
+<span class="sd">    note.load(&quot;path/to/note.md&quot;)</span>
+
+<span class="sd">    print(note.metadata)</span>
+<span class="sd">    print(note.data)</span>
+
+
+<span class="sd">Create a new note from a template</span>
+
+<span class="sd">.. code-block:: python</span>
+
+<span class="sd">    from losalamos.notes import NoteBasic</span>
+
+<span class="sd">    note = NoteBasic()</span>
+<span class="sd">    note.load_new(&quot;path/to/new_note.md&quot;)</span>
+
+<span class="sd">    note.metadata[&quot;abstract&quot;] = &#39;&quot;Short description of the note.&quot;&#39;</span>
+<span class="sd">    note.update()</span>
+<span class="sd">    note.save()</span>
+
+
+<span class="sd">Refactor a note and update links</span>
+
+<span class="sd">.. code-block:: python</span>
+
+<span class="sd">    from losalamos.notes import Note</span>
+
+<span class="sd">    note = Note()</span>
+<span class="sd">    note.load(&quot;path/to/old_name.md&quot;)</span>
+
+<span class="sd">    note.refactor(</span>
+<span class="sd">        new_name=&quot;new_name&quot;,</span>
+<span class="sd">        scope=&quot;path/to/notes_folder&quot;</span>
+<span class="sd">    )</span>
+
+
+<span class="sd">Create a reference note</span>
+
+<span class="sd">.. code-block:: python</span>
+
+<span class="sd">    from losalamos.notes import NoteReference</span>
+
+<span class="sd">    note = NoteReference()</span>
+
+<span class="sd">    metadata = {</span>
+<span class="sd">        &quot;entry_type&quot;: &quot;article&quot;,</span>
+<span class="sd">        &quot;name&quot;: &quot;smith2022&quot;,</span>
+<span class="sd">        &quot;author&quot;: &quot;Smith, John and Doe, Jane&quot;,</span>
+<span class="sd">        &quot;title&quot;: &quot;Example Article&quot;,</span>
+<span class="sd">        &quot;year&quot;: &quot;2022&quot;,</span>
+<span class="sd">        &quot;journal&quot;: &quot;Journal of Examples&quot;,</span>
+<span class="sd">        &quot;doi&quot;: &quot;10.1000/example&quot;</span>
+<span class="sd">    }</span>
+
+<span class="sd">    note.load_new(</span>
+<span class="sd">        file_note=&quot;path/to/smith2022.md&quot;,</span>
+<span class="sd">        metadata=metadata</span>
+<span class="sd">    )</span>
+
+<span class="sd">    note.save()</span>
+
+
+<span class="sd">Export BibTeX from a reference note</span>
+
+<span class="sd">.. code-block:: python</span>
+
+<span class="sd">    from losalamos.notes import NoteReference</span>
+
+<span class="sd">    note = NoteReference()</span>
+<span class="sd">    note.load(&quot;path/to/smith2022.md&quot;)</span>
+
+<span class="sd">    note.to_bib(&quot;path/to/file.bib&quot;)</span>
+
+
+<span class="sd">Load a collection of notes</span>
+
+<span class="sd">.. code-block:: python</span>
+
+<span class="sd">    from losalamos.notes import NoteCollection</span>
+
+<span class="sd">    coll = NoteCollection()</span>
+
+<span class="sd">    coll.load_folder(&quot;path/to/notes&quot;)</span>
+
+<span class="sd">    print(len(coll))</span>
+
+
+<span class="sd">Search notes using a glob pattern</span>
+
+<span class="sd">.. code-block:: python</span>
+
+<span class="sd">    from losalamos.notes import NoteCollection</span>
+
+<span class="sd">    coll = NoteCollection()</span>
+
+<span class="sd">    coll.load_pattern(&quot;path/to/notes/**/*.md&quot;)</span>
+
+<span class="sd">    for note in coll:</span>
+<span class="sd">        print(note.name)</span>
 
 
 <span class="sd">&quot;&quot;&quot;</span>

@@ -352,6 +352,9 @@
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="losalamos.references.html">losalamos.references</a></li>
 </ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="losalamos.ingestion.html">losalamos.ingestion</a></li>
+</ul>
 </div>
 </nav></div>
     </div>
@@ -413,8 +416,100 @@
                   
   <section id="module-losalamos.notes">
 <span id="losalamos-notes"></span><h1>losalamos.notes<a class="headerlink" href="#module-losalamos.notes" title="Link to this heading">#</a></h1>
-<p>{Short module description (1-3 sentences)}
-todo module docstring</p>
+<p>Utilities for managing structured Markdown notes.</p>
+<p>This module provides a lightweight framework for creating, loading, and managing
+Markdown-based notes with structured metadata. It supports templated note
+creation, automated refactoring of note names and links, reference notes with
+BibTeX integration, and utilities for working with collections of notes.</p>
+<section id="quick-start">
+<h2>Quick start<a class="headerlink" href="#quick-start" title="Link to this heading">#</a></h2>
+<p>This section demonstrates common operations for working with Markdown-based notes.</p>
+<p>Load a note</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">losalamos.notes</span><span class="w"> </span><span class="kn">import</span> <span class="n">Note</span>
+
+<span class="n">note</span> <span class="o">=</span> <span class="n">Note</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Example&quot;</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s2">&quot;Nt1&quot;</span><span class="p">)</span>
+<span class="n">note</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;path/to/note.md&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">note</span><span class="o">.</span><span class="n">metadata</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">note</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Create a new note from a template</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">losalamos.notes</span><span class="w"> </span><span class="kn">import</span> <span class="n">NoteBasic</span>
+
+<span class="n">note</span> <span class="o">=</span> <span class="n">NoteBasic</span><span class="p">()</span>
+<span class="n">note</span><span class="o">.</span><span class="n">load_new</span><span class="p">(</span><span class="s2">&quot;path/to/new_note.md&quot;</span><span class="p">)</span>
+
+<span class="n">note</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;abstract&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;&quot;Short description of the note.&quot;&#39;</span>
+<span class="n">note</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+<span class="n">note</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Refactor a note and update links</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">losalamos.notes</span><span class="w"> </span><span class="kn">import</span> <span class="n">Note</span>
+
+<span class="n">note</span> <span class="o">=</span> <span class="n">Note</span><span class="p">()</span>
+<span class="n">note</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;path/to/old_name.md&quot;</span><span class="p">)</span>
+
+<span class="n">note</span><span class="o">.</span><span class="n">refactor</span><span class="p">(</span>
+    <span class="n">new_name</span><span class="o">=</span><span class="s2">&quot;new_name&quot;</span><span class="p">,</span>
+    <span class="n">scope</span><span class="o">=</span><span class="s2">&quot;path/to/notes_folder&quot;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Create a reference note</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">losalamos.notes</span><span class="w"> </span><span class="kn">import</span> <span class="n">NoteReference</span>
+
+<span class="n">note</span> <span class="o">=</span> <span class="n">NoteReference</span><span class="p">()</span>
+
+<span class="n">metadata</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;entry_type&quot;</span><span class="p">:</span> <span class="s2">&quot;article&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;smith2022&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;author&quot;</span><span class="p">:</span> <span class="s2">&quot;Smith, John and Doe, Jane&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Example Article&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;year&quot;</span><span class="p">:</span> <span class="s2">&quot;2022&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;journal&quot;</span><span class="p">:</span> <span class="s2">&quot;Journal of Examples&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;doi&quot;</span><span class="p">:</span> <span class="s2">&quot;10.1000/example&quot;</span>
+<span class="p">}</span>
+
+<span class="n">note</span><span class="o">.</span><span class="n">load_new</span><span class="p">(</span>
+    <span class="n">file_note</span><span class="o">=</span><span class="s2">&quot;path/to/smith2022.md&quot;</span><span class="p">,</span>
+    <span class="n">metadata</span><span class="o">=</span><span class="n">metadata</span>
+<span class="p">)</span>
+
+<span class="n">note</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Export BibTeX from a reference note</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">losalamos.notes</span><span class="w"> </span><span class="kn">import</span> <span class="n">NoteReference</span>
+
+<span class="n">note</span> <span class="o">=</span> <span class="n">NoteReference</span><span class="p">()</span>
+<span class="n">note</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;path/to/smith2022.md&quot;</span><span class="p">)</span>
+
+<span class="n">note</span><span class="o">.</span><span class="n">to_bib</span><span class="p">(</span><span class="s2">&quot;path/to/file.bib&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Load a collection of notes</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">losalamos.notes</span><span class="w"> </span><span class="kn">import</span> <span class="n">NoteCollection</span>
+
+<span class="n">coll</span> <span class="o">=</span> <span class="n">NoteCollection</span><span class="p">()</span>
+
+<span class="n">coll</span><span class="o">.</span><span class="n">load_folder</span><span class="p">(</span><span class="s2">&quot;path/to/notes&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">coll</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>Search notes using a glob pattern</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">losalamos.notes</span><span class="w"> </span><span class="kn">import</span> <span class="n">NoteCollection</span>
+
+<span class="n">coll</span> <span class="o">=</span> <span class="n">NoteCollection</span><span class="p">()</span>
+
+<span class="n">coll</span><span class="o">.</span><span class="n">load_pattern</span><span class="p">(</span><span class="s2">&quot;path/to/notes/**/*.md&quot;</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">note</span> <span class="ow">in</span> <span class="n">coll</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">note</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+</pre></div>
+</div>
 <p class="rubric">Functions</p>
 <div class="pst-scrollable-table-container"><table class="autosummary longtable table">
 <tbody>
@@ -466,6 +561,7 @@ todo module docstring</p>
 </tbody>
 </table>
 </div>
+</section>
 <dl class="py function">
 <dt class="sig sig-object py" id="losalamos.notes.search_markdown_files">
 <span class="sig-prename descclassname"><span class="pre">losalamos.notes.</span></span><span class="sig-name descname"><span class="pre">search_markdown_files</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">paths</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">Path</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">Path</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/losalamos/notes.html#search_markdown_files"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.notes.search_markdown_files" title="Link to this definition">#</a></dt>
@@ -1530,6 +1626,7 @@ template list using the current metadata dictionary.</p>
   </div>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#quick-start">Quick start</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.notes.search_markdown_files"><code class="docutils literal notranslate"><span class="pre">search_markdown_files()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.notes.Note"><code class="docutils literal notranslate"><span class="pre">Note</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.notes.Note.STR_HEAD"><code class="docutils literal notranslate"><span class="pre">Note.STR_HEAD</span></code></a></li>
