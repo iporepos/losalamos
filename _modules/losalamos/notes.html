@@ -387,7 +387,7 @@
 <span class="c1"># See LICENSE for license details.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">{Short module description (1-3 sentences)}</span>
-<span class="sd">todo docstring</span>
+<span class="sd">todo module docstring</span>
 
 
 <span class="sd">&quot;&quot;&quot;</span>
@@ -510,7 +510,7 @@
 <div class="viewcode-block" id="Note">
 <a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.Note">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">Note</span><span class="p">(</span><span class="n">MbaE</span><span class="p">):</span>
-    <span class="c1"># todo [docstring]</span>
+    <span class="c1"># todo major docstring</span>
 
     <span class="n">STR_HEAD</span> <span class="o">=</span> <span class="s2">&quot;Head&quot;</span>
     <span class="n">STR_BODY</span> <span class="o">=</span> <span class="s2">&quot;Body&quot;</span>
@@ -565,7 +565,17 @@
 
         <span class="n">dc</span> <span class="o">=</span> <span class="n">Note</span><span class="o">.</span><span class="n">parse_metadata</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">file_note</span><span class="p">)</span>
 
-        <span class="c1"># DATE</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setup_metadata</span><span class="p">(</span><span class="n">metadata</span><span class="o">=</span><span class="n">dc</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="Note.setup_metadata">
+<a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.Note.setup_metadata">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">setup_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">metadata</span><span class="p">):</span>
+        <span class="n">dc</span> <span class="o">=</span> <span class="n">metadata</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+        <span class="c1"># TEXT</span>
         <span class="c1"># ---------------------</span>
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">dc</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">HARMONIZE_TEXT_FIELDS</span><span class="p">:</span>
@@ -577,7 +587,12 @@
             <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">HARMONIZE_DATE_FIELDS</span><span class="p">:</span>
                 <span class="n">dc</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">Note</span><span class="o">.</span><span class="n">harmonize_entry_date</span><span class="p">(</span><span class="n">dc</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="n">key</span><span class="o">=</span><span class="n">k</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span> <span class="o">=</span> <span class="n">dc</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span></div>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span> <span class="o">=</span> <span class="n">dc</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">dc</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="kc">None</span></div>
 
 
 <div class="viewcode-block" id="Note.load_data">
@@ -1460,7 +1475,12 @@
 <div class="viewcode-block" id="NoteReference.get_reference">
 <a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.NoteReference.get_reference">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_reference</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="c1"># todo docstring</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Creates and returns a standardized ``Reference`` object based on the current metadata.</span>
+
+<span class="sd">        :return: A reference instance populated with standardized internal metadata.</span>
+<span class="sd">        :rtype: :class:`Reference`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">dc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
         <span class="n">ref</span> <span class="o">=</span> <span class="n">Reference</span><span class="o">.</span><span class="n">get_by_entry</span><span class="p">(</span><span class="n">entry_type</span><span class="o">=</span><span class="n">dc</span><span class="p">[</span><span class="s2">&quot;entry_type&quot;</span><span class="p">])</span>
         <span class="n">ref</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">dc</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
@@ -1471,7 +1491,14 @@
 <div class="viewcode-block" id="NoteReference.get_str_bib">
 <a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.NoteReference.get_str_bib">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_str_bib</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">drop_fields</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="c1"># todo docstring</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generates a BibTeX string representation of the reference with an option to exclude specific fields.</span>
+
+<span class="sd">        :param drop_fields: [optional] A list of metadata keys to remove before generating the string.</span>
+<span class="sd">        :type drop_fields: list</span>
+<span class="sd">        :return: The formatted BibTeX string.</span>
+<span class="sd">        :rtype: str</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">ref</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_reference</span><span class="p">()</span>
 
         <span class="k">if</span> <span class="n">drop_fields</span><span class="p">:</span>
@@ -1481,10 +1508,35 @@
         <span class="k">return</span> <span class="n">ref</span><span class="o">.</span><span class="n">get_str_bib</span><span class="p">()</span></div>
 
 
+<div class="viewcode-block" id="NoteReference.load_new">
+<a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.NoteReference.load_new">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">load_new</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_note</span><span class="p">,</span> <span class="n">metadata</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initializes a new note from a file and optionally sets and updates its metadata.</span>
+
+<span class="sd">        :param file_note: The path or identifier for the note file.</span>
+<span class="sd">        :type file_note: str | :class:`pathlib.Path`</span>
+<span class="sd">        :param metadata: [optional] A dictionary of metadata to apply to the new note.</span>
+<span class="sd">        :type metadata: dict</span>
+<span class="sd">        :return: No value is returned.</span>
+<span class="sd">        :rtype: None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">load_new</span><span class="p">(</span><span class="n">file_note</span><span class="o">=</span><span class="n">file_note</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">metadata</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">setup_metadata</span><span class="p">(</span><span class="n">metadata</span><span class="o">=</span><span class="n">metadata</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
+
+
 <div class="viewcode-block" id="NoteReference.update">
 <a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.NoteReference.update">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="c1"># todo docstring</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Triggers a comprehensive refresh of all derived metadata, citation strings, and document sections.</span>
+
+<span class="sd">        :return: No value is returned.</span>
+<span class="sd">        :rtype: None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">update_name</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">update_cite_inline</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">update_cite_bibli</span><span class="p">()</span>
@@ -1500,7 +1552,12 @@
 <div class="viewcode-block" id="NoteReference.update_cite_inline">
 <a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.NoteReference.update_cite_inline">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">update_cite_inline</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="c1"># todo docstring</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Updates the inline citation string in the metadata using the plain text format.</span>
+
+<span class="sd">        :return: No value is returned.</span>
+<span class="sd">        :rtype: None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;cite_inline&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Reference</span><span class="o">.</span><span class="n">cite_line</span><span class="p">(</span>
             <span class="n">bib_dict</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">,</span> <span class="n">text_format</span><span class="o">=</span><span class="s2">&quot;plain&quot;</span><span class="p">,</span> <span class="n">embed_link</span><span class="o">=</span><span class="kc">False</span>
         <span class="p">)</span></div>
@@ -1509,7 +1566,12 @@
 <div class="viewcode-block" id="NoteReference.update_cite_bibli">
 <a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.NoteReference.update_cite_bibli">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">update_cite_bibli</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="c1"># todo docstring</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Updates the bibliographic citation string in the metadata according to the defined style.</span>
+
+<span class="sd">        :return: No value is returned.</span>
+<span class="sd">        :rtype: None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">s</span> <span class="o">=</span> <span class="n">Reference</span><span class="o">.</span><span class="n">cite_bibli</span><span class="p">(</span>
             <span class="n">bib_dict</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">,</span> <span class="n">text_format</span><span class="o">=</span><span class="s2">&quot;plain&quot;</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cite_style</span>
         <span class="p">)</span>
@@ -1519,14 +1581,24 @@
 <div class="viewcode-block" id="NoteReference.update_pdf">
 <a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.NoteReference.update_pdf">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">update_pdf</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="c1"># todo docstring</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Formats and updates the PDF link field in the metadata based on the entry name.</span>
+
+<span class="sd">        :return: No value is returned.</span>
+<span class="sd">        :rtype: None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;pdf&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;&quot;[[</span><span class="si">{}</span><span class="s1">.pdf]]&quot;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">])</span></div>
 
 
 <div class="viewcode-block" id="NoteReference.update_data_head">
 <a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.NoteReference.update_data_head">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">update_data_head</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="c1"># todo docstring</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Refreshes the header section of the document data, specifically handling journal links for articles.</span>
+
+<span class="sd">        :return: No value is returned.</span>
+<span class="sd">        :rtype: None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">reset_data_head</span><span class="p">()</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">update_name</span><span class="p">()</span>
@@ -1549,7 +1621,18 @@
 <div class="viewcode-block" id="NoteReference.update_data_tail">
 <a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.NoteReference.update_data_tail">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">update_data_tail</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="c1"># todo docstring</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Refreshes the tail section of the document by injecting formatted metadata and BibTeX strings.</span>
+
+<span class="sd">        .. note::</span>
+
+<span class="sd">             This method synchronizes the end-of-file data by generating a clean BibTeX entry (excluding</span>
+<span class="sd">             bloat like PDFs or abstracts) and performing string interpolation on the ``STR_TAIL``</span>
+<span class="sd">             template list using the current metadata dictionary.</span>
+
+<span class="sd">        :return: No value is returned.</span>
+<span class="sd">        :rtype: None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">reset_data_tail</span><span class="p">()</span>
 
         <span class="c1"># replace inline and bibli</span>
@@ -1568,7 +1651,14 @@
 <div class="viewcode-block" id="NoteReference.update_thumbnail">
 <a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.NoteReference.update_thumbnail">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">update_thumbnail</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image_name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="c1"># todo docstring</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Updates the document thumbnail, automatically selecting the journal name as the image source for articles.</span>
+
+<span class="sd">        :param image_name: [optional] The specific image name or key to use for the thumbnail.</span>
+<span class="sd">        :type image_name: str</span>
+<span class="sd">        :return: No value is returned.</span>
+<span class="sd">        :rtype: None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;entry_type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;article&quot;</span><span class="p">:</span>
             <span class="n">image_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;journal&quot;</span><span class="p">]</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">update_thumbnail</span><span class="p">(</span><span class="n">image_name</span><span class="o">=</span><span class="n">image_name</span><span class="p">)</span></div>
@@ -1577,7 +1667,16 @@
 <div class="viewcode-block" id="NoteReference.to_bib">
 <a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.NoteReference.to_bib">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">to_bib</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">drop_pdf</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-        <span class="c1"># todo docstring</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Exports the reference metadata to a BibTeX file with an option to exclude the PDF field.</span>
+
+<span class="sd">        :param output: The file path or buffer where the BibTeX data should be saved.</span>
+<span class="sd">        :type output: str | :class:`pathlib.Path`</span>
+<span class="sd">        :param drop_pdf: Whether to remove the ``pdf`` field from the exported file. Default value = ``True``</span>
+<span class="sd">        :type drop_pdf: bool</span>
+<span class="sd">        :return: No value is returned.</span>
+<span class="sd">        :rtype: None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">ref</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_reference</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">drop_pdf</span><span class="p">:</span>
             <span class="k">del</span> <span class="n">ref</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;pdf&quot;</span><span class="p">]</span>
@@ -1671,7 +1770,7 @@
 <a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.NoteCollection">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">NoteCollection</span><span class="p">(</span><span class="n">Collection</span><span class="p">):</span>
 
-    <span class="c1"># todo docstring</span>
+    <span class="c1"># todo major docstring</span>
 
     <span class="n">BASE_OBJECT</span> <span class="o">=</span> <span class="n">Note</span>
 

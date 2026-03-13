@@ -414,7 +414,7 @@
   <section id="module-losalamos.notes">
 <span id="losalamos-notes"></span><h1>losalamos.notes<a class="headerlink" href="#module-losalamos.notes" title="Link to this heading">#</a></h1>
 <p>{Short module description (1-3 sentences)}
-todo docstring</p>
+todo module docstring</p>
 <p class="rubric">Functions</p>
 <div class="pst-scrollable-table-container"><table class="autosummary longtable table">
 <tbody>
@@ -512,6 +512,11 @@ attributes beyond the metadata of the file</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="losalamos.notes.Note.load_metadata">
 <span class="sig-name descname"><span class="pre">load_metadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_note</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/notes.html#Note.load_metadata"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.notes.Note.load_metadata" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.notes.Note.setup_metadata">
+<span class="sig-name descname"><span class="pre">setup_metadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">metadata</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/notes.html#Note.setup_metadata"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.notes.Note.setup_metadata" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -1094,65 +1099,180 @@ logic may be implemented in downstream classes.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="losalamos.notes.NoteReference.get_reference">
 <span class="sig-name descname"><span class="pre">get_reference</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/notes.html#NoteReference.get_reference"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.notes.NoteReference.get_reference" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Creates and returns a standardized <code class="docutils literal notranslate"><span class="pre">Reference</span></code> object based on the current metadata.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A reference instance populated with standardized internal metadata.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Reference</span></code></p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="losalamos.notes.NoteReference.get_str_bib">
 <span class="sig-name descname"><span class="pre">get_str_bib</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">drop_fields</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/notes.html#NoteReference.get_str_bib"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.notes.NoteReference.get_str_bib" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Generates a BibTeX string representation of the reference with an option to exclude specific fields.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>drop_fields</strong> (<em>list</em>) – [optional] A list of metadata keys to remove before generating the string.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The formatted BibTeX string.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.notes.NoteReference.load_new">
+<span class="sig-name descname"><span class="pre">load_new</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_note</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/notes.html#NoteReference.load_new"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.notes.NoteReference.load_new" title="Link to this definition">#</a></dt>
+<dd><p>Initializes a new note from a file and optionally sets and updates its metadata.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>file_note</strong> (str | <code class="xref py py-class docutils literal notranslate"><span class="pre">pathlib.Path</span></code>) – The path or identifier for the note file.</p></li>
+<li><p><strong>metadata</strong> (<em>dict</em>) – [optional] A dictionary of metadata to apply to the new note.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>No value is returned.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="losalamos.notes.NoteReference.update">
 <span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/notes.html#NoteReference.update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.notes.NoteReference.update" title="Link to this definition">#</a></dt>
-<dd><p>Triggers a sequence of internal updates to synchronize the note’s name, abstract, and thumbnail.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>This method acts as a base update sequence; additional update
-logic may be implemented in downstream classes.</p>
-</div>
+<dd><p>Triggers a comprehensive refresh of all derived metadata, citation strings, and document sections.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>No value is returned.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="losalamos.notes.NoteReference.update_cite_inline">
 <span class="sig-name descname"><span class="pre">update_cite_inline</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/notes.html#NoteReference.update_cite_inline"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.notes.NoteReference.update_cite_inline" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Updates the inline citation string in the metadata using the plain text format.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>No value is returned.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="losalamos.notes.NoteReference.update_cite_bibli">
 <span class="sig-name descname"><span class="pre">update_cite_bibli</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/notes.html#NoteReference.update_cite_bibli"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.notes.NoteReference.update_cite_bibli" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Updates the bibliographic citation string in the metadata according to the defined style.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>No value is returned.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="losalamos.notes.NoteReference.update_pdf">
 <span class="sig-name descname"><span class="pre">update_pdf</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/notes.html#NoteReference.update_pdf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.notes.NoteReference.update_pdf" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Formats and updates the PDF link field in the metadata based on the entry name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>No value is returned.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="losalamos.notes.NoteReference.update_data_head">
 <span class="sig-name descname"><span class="pre">update_data_head</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/notes.html#NoteReference.update_data_head"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.notes.NoteReference.update_data_head" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Refreshes the header section of the document data, specifically handling journal links for articles.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>No value is returned.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="losalamos.notes.NoteReference.update_data_tail">
 <span class="sig-name descname"><span class="pre">update_data_tail</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/notes.html#NoteReference.update_data_tail"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.notes.NoteReference.update_data_tail" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Refreshes the tail section of the document by injecting formatted metadata and BibTeX strings.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This method synchronizes the end-of-file data by generating a clean BibTeX entry (excluding
+bloat like PDFs or abstracts) and performing string interpolation on the <code class="docutils literal notranslate"><span class="pre">STR_TAIL</span></code>
+template list using the current metadata dictionary.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>No value is returned.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="losalamos.notes.NoteReference.update_thumbnail">
 <span class="sig-name descname"><span class="pre">update_thumbnail</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/notes.html#NoteReference.update_thumbnail"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.notes.NoteReference.update_thumbnail" title="Link to this definition">#</a></dt>
-<dd><p>Updates the thumbnail image link in the Head data segment based
-on the current file name and predefined size.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>The method searches for an existing Wikilink image pattern
-(<code class="docutils literal notranslate"><span class="pre">![[</span></code>) within the <code class="docutils literal notranslate"><span class="pre">Head</span></code> segment to perform the replacement.</p>
-</div>
+<dd><p>Updates the document thumbnail, automatically selecting the journal name as the image source for articles.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>image_name</strong> (<em>str</em>) – [optional] The specific image name or key to use for the thumbnail.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>No value is returned.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="losalamos.notes.NoteReference.to_bib">
 <span class="sig-name descname"><span class="pre">to_bib</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">drop_pdf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/notes.html#NoteReference.to_bib"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.notes.NoteReference.to_bib" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Exports the reference metadata to a BibTeX file with an option to exclude the PDF field.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>output</strong> (str | <code class="xref py py-class docutils literal notranslate"><span class="pre">pathlib.Path</span></code>) – The file path or buffer where the BibTeX data should be saved.</p></li>
+<li><p><strong>drop_pdf</strong> (<em>bool</em>) – Whether to remove the <code class="docutils literal notranslate"><span class="pre">pdf</span></code> field from the exported file. Default value = <code class="docutils literal notranslate"><span class="pre">True</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>No value is returned.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 
@@ -1178,23 +1298,50 @@ on the current file name and predefined size.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="losalamos.notes.NoteDataset.update">
 <span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/notes.html#NoteDataset.update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.notes.NoteDataset.update" title="Link to this definition">#</a></dt>
-<dd><p>Triggers a sequence of internal updates to synchronize the note’s name, abstract, and thumbnail.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>This method acts as a base update sequence; additional update
-logic may be implemented in downstream classes.</p>
-</div>
+<dd><p>Triggers a comprehensive refresh of all derived metadata, citation strings, and document sections.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>No value is returned.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="losalamos.notes.NoteDataset.to_bib">
 <span class="sig-name descname"><span class="pre">to_bib</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/notes.html#NoteDataset.to_bib"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.notes.NoteDataset.to_bib" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Exports the reference metadata to a BibTeX file with an option to exclude the PDF field.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>output</strong> (str | <code class="xref py py-class docutils literal notranslate"><span class="pre">pathlib.Path</span></code>) – The file path or buffer where the BibTeX data should be saved.</p></li>
+<li><p><strong>drop_pdf</strong> (<em>bool</em>) – Whether to remove the <code class="docutils literal notranslate"><span class="pre">pdf</span></code> field from the exported file. Default value = <code class="docutils literal notranslate"><span class="pre">True</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>No value is returned.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="losalamos.notes.NoteDataset.update_pdf">
 <span class="sig-name descname"><span class="pre">update_pdf</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/notes.html#NoteDataset.update_pdf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.notes.NoteDataset.update_pdf" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Formats and updates the PDF link field in the metadata based on the entry name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>No value is returned.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="losalamos.notes.NoteDataset.update_source">
@@ -1390,6 +1537,7 @@ logic may be implemented in downstream classes.</p>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.notes.Note.STR_TAIL"><code class="docutils literal notranslate"><span class="pre">Note.STR_TAIL</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.notes.Note.get_metadata"><code class="docutils literal notranslate"><span class="pre">Note.get_metadata()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.notes.Note.load_metadata"><code class="docutils literal notranslate"><span class="pre">Note.load_metadata()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.notes.Note.setup_metadata"><code class="docutils literal notranslate"><span class="pre">Note.setup_metadata()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.notes.Note.load_data"><code class="docutils literal notranslate"><span class="pre">Note.load_data()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.notes.Note.load"><code class="docutils literal notranslate"><span class="pre">Note.load()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.notes.Note.save"><code class="docutils literal notranslate"><span class="pre">Note.save()</span></code></a></li>
@@ -1454,6 +1602,7 @@ logic may be implemented in downstream classes.</p>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.notes.NoteReference.PATTERN_ABSTRACT"><code class="docutils literal notranslate"><span class="pre">NoteReference.PATTERN_ABSTRACT</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.notes.NoteReference.get_reference"><code class="docutils literal notranslate"><span class="pre">NoteReference.get_reference()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.notes.NoteReference.get_str_bib"><code class="docutils literal notranslate"><span class="pre">NoteReference.get_str_bib()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.notes.NoteReference.load_new"><code class="docutils literal notranslate"><span class="pre">NoteReference.load_new()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.notes.NoteReference.update"><code class="docutils literal notranslate"><span class="pre">NoteReference.update()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.notes.NoteReference.update_cite_inline"><code class="docutils literal notranslate"><span class="pre">NoteReference.update_cite_inline()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.notes.NoteReference.update_cite_bibli"><code class="docutils literal notranslate"><span class="pre">NoteReference.update_cite_bibli()</span></code></a></li>

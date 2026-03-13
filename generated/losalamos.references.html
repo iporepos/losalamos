@@ -494,15 +494,50 @@ todo docstring</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="losalamos.references.Reference.get_by_entry">
 <span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">get_by_entry</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">entry_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/references.html#Reference.get_by_entry"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.references.Reference.get_by_entry" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Instantiates and returns a reference object based on the provided entry type from the registry.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>entry_type</strong> (<em>str</em>) – The key representing the type of entry to retrieve.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>An instance of the requested entry class, or a <code class="docutils literal notranslate"><span class="pre">RefMisc</span></code> instance if the type is not found.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#losalamos.references.Reference" title="losalamos.references.Reference"><code class="xref py py-class docutils literal notranslate"><span class="pre">Reference</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="losalamos.references.Reference.load_data">
 <span class="sig-name descname"><span class="pre">load_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/references.html#Reference.load_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.references.Reference.load_data" title="Link to this definition">#</a></dt>
-<dd><p>Load data from file.</p>
+<dd><p>Loads and parses bibliography data from a specified file path into the instance.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>file_data</strong> (<em>str</em>) – file path to data.</p>
+<dd class="field-odd"><p><strong>file_data</strong> (str | <code class="xref py py-class docutils literal notranslate"><span class="pre">pathlib.Path</span></code>) – The file path or name containing the data to be loaded.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>No value is returned.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.references.Reference.setup_data">
+<span class="sig-name descname"><span class="pre">setup_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/references.html#Reference.setup_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.references.Reference.setup_data" title="Link to this definition">#</a></dt>
+<dd><p>Initializes the instance data by creating a copy of the input and applying standardization.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>data</strong> (dict | <code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.Series</span></code>) – The raw dictionary or object containing reference metadata.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>No value is returned.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
 </dd>
 </dl>
 </dd></dl>
@@ -510,11 +545,15 @@ todo docstring</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="losalamos.references.Reference.save">
 <span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/references.html#Reference.save"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.references.Reference.save" title="Link to this definition">#</a></dt>
-<dd><p>Save object resources to sourced files.</p>
-<div class="admonition danger">
-<p class="admonition-title">Danger</p>
-<p>This method overwrites the sourced data file.</p>
-</div>
+<dd><p>Saves the current reference data to the file path defined in <code class="docutils literal notranslate"><span class="pre">file_data</span></code> using the appropriate format.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>No value is returned.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
@@ -538,7 +577,44 @@ and saves it to the specified output.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="losalamos.references.Reference.get_clean_data">
 <span class="sig-name descname"><span class="pre">get_clean_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/references.html#Reference.get_clean_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.references.Reference.get_clean_data" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Returns a copy of the internal data dictionary excluding all keys with <code class="docutils literal notranslate"><span class="pre">None</span></code> values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A filtered dictionary containing only non-null reference data.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.references.Reference.define_file_name">
+<span class="sig-name descname"><span class="pre">define_file_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">library_folder</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extension</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'md'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/references.html#Reference.define_file_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.references.Reference.define_file_name" title="Link to this definition">#</a></dt>
+<dd><p>Generates a unique filename based on author, year, and an alphabetic suffix to avoid collisions.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This method extracts the primary author and year from the citation metadata to form a base
+filename. If a <code class="docutils literal notranslate"><span class="pre">library_folder</span></code> is provided and accessible, it scans the directory for
+existing files matching the <code class="docutils literal notranslate"><span class="pre">{author}_{year}_*</span></code> pattern, identifies the highest
+alphabetic suffix used (e.g., <code class="docutils literal notranslate"><span class="pre">a</span></code>, <code class="docutils literal notranslate"><span class="pre">b</span></code>, <code class="docutils literal notranslate"><span class="pre">c</span></code>), and increments it to ensure the
+new filename is unique.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>library_folder</strong> (str | <code class="xref py py-class docutils literal notranslate"><span class="pre">pathlib.Path</span></code>) – [optional] The directory path to check for existing files to determine the next suffix.</p></li>
+<li><p><strong>extension</strong> (<em>str</em>) – The file extension to use when searching for existing patterns. Default value = <code class="docutils literal notranslate"><span class="pre">md</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The generated filename string in the format <code class="docutils literal notranslate"><span class="pre">{author}_{year}_{suffix}</span></code>.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="losalamos.references.Reference.get_str_bib">
@@ -557,17 +633,61 @@ and saves it to the specified output.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="losalamos.references.Reference.standardize">
 <span class="sig-name descname"><span class="pre">standardize</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/references.html#Reference.standardize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.references.Reference.standardize" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Standardizes the internal data dictionary by enforcing schema fields, ordering, and formatting rules.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This method reconstructs the <code class="docutils literal notranslate"><span class="pre">data</span></code> attribute by merging <code class="docutils literal notranslate"><span class="pre">CORE_FIELDS</span></code> and <code class="docutils literal notranslate"><span class="pre">SPECIFIC_FIELDS</span></code>.
+It ensures all expected keys exist (defaulting to <code class="docutils literal notranslate"><span class="pre">None</span></code>), reorders specific metadata to the
+end of the dictionary based on <code class="docutils literal notranslate"><span class="pre">TAIL_ENTRIES</span></code>, and applies specific formatting logic
+to the abstract and author fields via <code class="docutils literal notranslate"><span class="pre">harmonize_abstract</span></code> and <code class="docutils literal notranslate"><span class="pre">standardize_author</span></code>.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>No value is returned.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="losalamos.references.Reference.harmonize_abstract">
 <span class="sig-name descname"><span class="pre">harmonize_abstract</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/references.html#Reference.harmonize_abstract"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.references.Reference.harmonize_abstract" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Ensures the abstract field is properly formatted by escaping LaTeX-specific percent symbols.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>No value is returned.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="losalamos.references.Reference.export_template">
 <span class="sig-name descname"><span class="pre">export_template</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/references.html#Reference.export_template"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.references.Reference.export_template" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Generates an empty metadata template file based on the current class schema and exports it.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This method temporarily replaces the instance data with a skeleton derived from <code class="docutils literal notranslate"><span class="pre">CORE_FIELDS</span></code>
+and <code class="docutils literal notranslate"><span class="pre">SPECIFIC_FIELDS</span></code>. It runs the <code class="docutils literal notranslate"><span class="pre">standardize</span></code> routine to ensure correct field ordering,
+clears all values except the entry type, and calls <code class="docutils literal notranslate"><span class="pre">to_bib</span></code> to write the template to the
+specified output path before restoring the original data state.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>output</strong> (str | <code class="xref py py-class docutils literal notranslate"><span class="pre">pathlib.Path</span></code> | file-like object) – The file path or buffer where the template should be saved.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>No value is returned.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="losalamos.references.Reference.parse_bib">
@@ -665,10 +785,16 @@ it defaults to the <code class="docutils literal notranslate"><span class="pre">
 <dl class="py method">
 <dt class="sig sig-object py" id="losalamos.references.RefArticle.load_data">
 <span class="sig-name descname"><span class="pre">load_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/references.html#RefArticle.load_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.references.RefArticle.load_data" title="Link to this definition">#</a></dt>
-<dd><p>Load data from file.</p>
+<dd><p>Loads and parses bibliography data from a specified file path into the instance.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>file_data</strong> (<em>str</em>) – file path to data.</p>
+<dd class="field-odd"><p><strong>file_data</strong> (str | <code class="xref py py-class docutils literal notranslate"><span class="pre">pathlib.Path</span></code>) – The file path or name containing the data to be loaded.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>No value is returned.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
 </dd>
 </dl>
 </dd></dl>
@@ -913,9 +1039,11 @@ it defaults to the <code class="docutils literal notranslate"><span class="pre">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.references.Reference.CITATION_TEMPLATES"><code class="docutils literal notranslate"><span class="pre">Reference.CITATION_TEMPLATES</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.references.Reference.get_by_entry"><code class="docutils literal notranslate"><span class="pre">Reference.get_by_entry()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.references.Reference.load_data"><code class="docutils literal notranslate"><span class="pre">Reference.load_data()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.references.Reference.setup_data"><code class="docutils literal notranslate"><span class="pre">Reference.setup_data()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.references.Reference.save"><code class="docutils literal notranslate"><span class="pre">Reference.save()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.references.Reference.to_bib"><code class="docutils literal notranslate"><span class="pre">Reference.to_bib()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.references.Reference.get_clean_data"><code class="docutils literal notranslate"><span class="pre">Reference.get_clean_data()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.references.Reference.define_file_name"><code class="docutils literal notranslate"><span class="pre">Reference.define_file_name()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.references.Reference.get_str_bib"><code class="docutils literal notranslate"><span class="pre">Reference.get_str_bib()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.references.Reference.standardize"><code class="docutils literal notranslate"><span class="pre">Reference.standardize()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.references.Reference.harmonize_abstract"><code class="docutils literal notranslate"><span class="pre">Reference.harmonize_abstract()</span></code></a></li>

@@ -403,7 +403,8 @@
 
 <span class="c1"># External imports</span>
 <span class="c1"># =======================================================================</span>
-<span class="c1"># import {module}</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+
 <span class="c1"># ... {develop}</span>
 
 <span class="c1"># Project-level imports</span>
@@ -447,6 +448,8 @@
 
 <span class="c1"># CLASSES -- Project-level</span>
 <span class="c1"># =======================================================================</span>
+
+
 <div class="viewcode-block" id="Reference">
 <a class="viewcode-back" href="../../generated/losalamos.references.html#losalamos.references.Reference">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">Reference</span><span class="p">(</span><span class="n">DataSet</span><span class="p">):</span>
@@ -525,9 +528,16 @@
 <a class="viewcode-back" href="../../generated/losalamos.references.html#losalamos.references.Reference.get_by_entry">[docs]</a>
     <span class="nd">@classmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_by_entry</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">entry_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="c1"># todo docstring</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Instantiates and returns a reference object based on the provided entry type from the registry.</span>
+
+<span class="sd">        :param entry_type: The key representing the type of entry to retrieve.</span>
+<span class="sd">        :type entry_type: str</span>
+<span class="sd">        :return: An instance of the requested entry class, or a ``RefMisc`` instance if the type is not found.</span>
+<span class="sd">        :rtype: :class:`Reference`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">entry_type</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_REGISTRY</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Warning: Entry type </span><span class="si">{</span><span class="n">entry_type</span><span class="si">}</span><span class="s2"> found, falling back to &#39;misc&#39;&quot;</span><span class="p">)</span>
+            <span class="c1"># print(f&quot;Warning: Entry type {entry_type} not found, falling back to &#39;misc&#39;&quot;)</span>
             <span class="n">entry_type</span> <span class="o">=</span> <span class="kc">None</span>
 
         <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_REGISTRY</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">entry_type</span><span class="p">,</span> <span class="n">RefMisc</span><span class="p">)(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
@@ -556,7 +566,14 @@
 <div class="viewcode-block" id="Reference.load_data">
 <a class="viewcode-back" href="../../generated/losalamos.references.html#losalamos.references.Reference.load_data">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">load_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_data</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Loads and parses bibliography data from a specified file path into the instance.</span>
 
+<span class="sd">        :param file_data: The file path or name containing the data to be loaded.</span>
+<span class="sd">        :type file_data: str | :class:`pathlib.Path`</span>
+<span class="sd">        :return: No value is returned.</span>
+<span class="sd">        :rtype: None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">file_data</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">file_data</span><span class="p">)</span><span class="o">.</span><span class="n">absolute</span><span class="p">()</span>
 
         <span class="c1"># set up a parser system</span>
@@ -566,16 +583,35 @@
         <span class="c1"># parse as a list</span>
         <span class="n">extension</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_data</span><span class="o">.</span><span class="n">suffix</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
         <span class="n">ls</span> <span class="o">=</span> <span class="n">dc_parsers</span><span class="p">[</span><span class="n">extension</span><span class="p">](</span><span class="n">file_parse</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">file_data</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setup_data</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">ls</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">loading_order</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
 
-        <span class="c1"># take the element as copy</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">ls</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">loading_order</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">standardize</span><span class="p">()</span></div>
+<div class="viewcode-block" id="Reference.setup_data">
+<a class="viewcode-back" href="../../generated/losalamos.references.html#losalamos.references.Reference.setup_data">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">setup_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initializes the instance data by creating a copy of the input and applying standardization.</span>
+
+<span class="sd">        :param data: The raw dictionary or object containing reference metadata.</span>
+<span class="sd">        :type data: dict | :class:`pandas.Series`</span>
+<span class="sd">        :return: No value is returned.</span>
+<span class="sd">        :rtype: None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">standardize</span><span class="p">()</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
 
 
 <div class="viewcode-block" id="Reference.save">
 <a class="viewcode-back" href="../../generated/losalamos.references.html#losalamos.references.Reference.save">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Saves the current reference data to the file path defined in ``file_data`` using the appropriate format.</span>
+
+<span class="sd">        :return: No value is returned.</span>
+<span class="sd">        :rtype: None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">dc_saver</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;bib&quot;</span><span class="p">:</span> <span class="n">Reference</span><span class="o">.</span><span class="n">to_bib</span><span class="p">}</span>
 
         <span class="n">extension</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_data</span><span class="o">.</span><span class="n">suffix</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
@@ -619,11 +655,129 @@
 <div class="viewcode-block" id="Reference.get_clean_data">
 <a class="viewcode-back" href="../../generated/losalamos.references.html#losalamos.references.Reference.get_clean_data">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_clean_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns a copy of the internal data dictionary excluding all keys with ``None`` values.</span>
+
+<span class="sd">        :return: A filtered dictionary containing only non-null reference data.</span>
+<span class="sd">        :rtype: dict</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">dc</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">dc</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">dc</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="Reference.define_file_name">
+<a class="viewcode-back" href="../../generated/losalamos.references.html#losalamos.references.Reference.define_file_name">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">define_file_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">library_folder</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">extension</span><span class="o">=</span><span class="s2">&quot;md&quot;</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generates a unique filename based on author, year, and an alphabetic suffix to avoid collisions.</span>
+
+<span class="sd">        .. note::</span>
+
+<span class="sd">             This method extracts the primary author and year from the citation metadata to form a base</span>
+<span class="sd">             filename. If a ``library_folder`` is provided and accessible, it scans the directory for</span>
+<span class="sd">             existing files matching the ``{author}_{year}_*`` pattern, identifies the highest</span>
+<span class="sd">             alphabetic suffix used (e.g., ``a``, ``b``, ``c``), and increments it to ensure the</span>
+<span class="sd">             new filename is unique.</span>
+
+<span class="sd">        :param library_folder: [optional] The directory path to check for existing files to determine the next suffix.</span>
+<span class="sd">        :type library_folder: str | :class:`pathlib.Path`</span>
+<span class="sd">        :param extension: The file extension to use when searching for existing patterns. Default value = ``md``</span>
+<span class="sd">        :type extension: str</span>
+<span class="sd">        :return: The generated filename string in the format ``{author}_{year}_{suffix}``.</span>
+<span class="sd">        :rtype: str</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># -------------------------------------------------------</span>
+        <span class="c1"># 1. Build the base key (author + year)</span>
+        <span class="c1"># -------------------------------------------------------</span>
+
+        <span class="c1"># Extract the citation string</span>
+        <span class="n">cite</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cite_line</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">text_format</span><span class="o">=</span><span class="s2">&quot;plain&quot;</span><span class="p">,</span> <span class="n">embed_link</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="c1"># Assume first token is the author surname</span>
+        <span class="n">author</span> <span class="o">=</span> <span class="n">cite</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="c1"># Extract year from stored metadata</span>
+        <span class="n">year</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;year&quot;</span><span class="p">])</span>
+
+        <span class="c1"># Default suffix if no existing file is found</span>
+        <span class="n">suffix</span> <span class="o">=</span> <span class="s2">&quot;a&quot;</span>
+
+        <span class="c1"># -------------------------------------------------------</span>
+        <span class="c1"># 2. If a library folder is provided, inspect it</span>
+        <span class="c1"># -------------------------------------------------------</span>
+
+        <span class="k">if</span> <span class="n">library_folder</span><span class="p">:</span>
+            <span class="kn">import</span><span class="w"> </span><span class="nn">string</span>
+
+            <span class="n">dst_folder</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">library_folder</span><span class="p">)</span>
+
+            <span class="c1"># Only proceed if the folder actually exists</span>
+            <span class="k">if</span> <span class="n">dst_folder</span><span class="o">.</span><span class="n">is_dir</span><span class="p">():</span>
+
+                <span class="c1"># ---------------------------------------------------</span>
+                <span class="c1"># 3. Search for existing files that match the pattern</span>
+                <span class="c1">#</span>
+                <span class="c1"># Example pattern:</span>
+                <span class="c1"># Smith_2020_*.md</span>
+                <span class="c1"># ---------------------------------------------------</span>
+
+                <span class="n">pattern</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">author</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s2">_*.</span><span class="si">{</span><span class="n">extension</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="n">existing_files</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">dst_folder</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">pattern</span><span class="p">))</span>
+
+                <span class="c1"># ---------------------------------------------------</span>
+                <span class="c1"># 4. Extract suffix letters from existing filenames</span>
+                <span class="c1"># ---------------------------------------------------</span>
+
+                <span class="n">suffixes</span> <span class="o">=</span> <span class="p">[]</span>
+
+                <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">existing_files</span><span class="p">:</span>
+
+                    <span class="c1"># Remove extension</span>
+                    <span class="c1"># Example:</span>
+                    <span class="c1"># Smith_2020_a</span>
+                    <span class="n">name</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">stem</span>
+
+                    <span class="c1"># Split components by &quot;_&quot;</span>
+                    <span class="n">parts</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)</span>
+
+                    <span class="c1"># Expected structure:</span>
+                    <span class="c1"># [author, year, suffix]</span>
+                    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">parts</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">3</span><span class="p">:</span>
+
+                        <span class="n">candidate_suffix</span> <span class="o">=</span> <span class="n">parts</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+                        <span class="c1"># Only accept valid single lowercase letters</span>
+                        <span class="k">if</span> <span class="p">(</span>
+                            <span class="nb">len</span><span class="p">(</span><span class="n">candidate_suffix</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span>
+                            <span class="ow">and</span> <span class="n">candidate_suffix</span> <span class="ow">in</span> <span class="n">string</span><span class="o">.</span><span class="n">ascii_lowercase</span>
+                        <span class="p">):</span>
+                            <span class="n">suffixes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">candidate_suffix</span><span class="p">)</span>
+
+                <span class="c1"># ---------------------------------------------------</span>
+                <span class="c1"># 5. Determine next suffix in alphabet</span>
+                <span class="c1"># ---------------------------------------------------</span>
+
+                <span class="k">if</span> <span class="n">suffixes</span><span class="p">:</span>
+                    <span class="c1"># Find the largest existing letter</span>
+                    <span class="c1"># Example: [&quot;a&quot;,&quot;b&quot;,&quot;c&quot;] -&gt; &quot;c&quot;</span>
+                    <span class="n">last_suffix</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">suffixes</span><span class="p">)</span>
+
+                    <span class="c1"># Convert letter → ASCII → next letter</span>
+                    <span class="n">next_letter</span> <span class="o">=</span> <span class="nb">chr</span><span class="p">(</span><span class="nb">ord</span><span class="p">(</span><span class="n">last_suffix</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+
+                    <span class="n">suffix</span> <span class="o">=</span> <span class="n">next_letter</span>
+
+        <span class="c1"># -------------------------------------------------------</span>
+        <span class="c1"># 6. Build the final filename</span>
+        <span class="c1"># -------------------------------------------------------</span>
+
+        <span class="n">filename</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">author</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">suffix</span><span class="si">}</span><span class="s2">&quot;</span>
+
+        <span class="k">return</span> <span class="n">filename</span></div>
 
 
 <div class="viewcode-block" id="Reference.get_str_bib">
@@ -658,7 +812,19 @@
 <div class="viewcode-block" id="Reference.standardize">
 <a class="viewcode-back" href="../../generated/losalamos.references.html#losalamos.references.Reference.standardize">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">standardize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Standardizes the internal data dictionary by enforcing schema fields, ordering, and formatting rules.</span>
 
+<span class="sd">        .. note::</span>
+
+<span class="sd">             This method reconstructs the ``data`` attribute by merging ``CORE_FIELDS`` and ``SPECIFIC_FIELDS``.</span>
+<span class="sd">             It ensures all expected keys exist (defaulting to ``None``), reorders specific metadata to the</span>
+<span class="sd">             end of the dictionary based on ``TAIL_ENTRIES``, and applies specific formatting logic</span>
+<span class="sd">             to the abstract and author fields via ``harmonize_abstract`` and ``standardize_author``.</span>
+
+<span class="sd">        :return: No value is returned.</span>
+<span class="sd">        :rtype: None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">new_data</span> <span class="o">=</span> <span class="p">{}</span>
 
         <span class="n">ls_keys</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">CORE_FIELDS</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
@@ -685,12 +851,21 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">harmonize_abstract</span><span class="p">()</span>
 
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;author&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;author&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Reference</span><span class="o">.</span><span class="n">standardize_author</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+
         <span class="k">return</span> <span class="kc">None</span></div>
 
 
 <div class="viewcode-block" id="Reference.harmonize_abstract">
 <a class="viewcode-back" href="../../generated/losalamos.references.html#losalamos.references.Reference.harmonize_abstract">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">harmonize_abstract</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Ensures the abstract field is properly formatted by escaping LaTeX-specific percent symbols.</span>
+
+<span class="sd">        :return: No value is returned.</span>
+<span class="sd">        :rtype: None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;abstract&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="kn">from</span><span class="w"> </span><span class="nn">losalamos.documents</span><span class="w"> </span><span class="kn">import</span> <span class="n">escape_percent_latex</span>
 
@@ -701,6 +876,21 @@
 <div class="viewcode-block" id="Reference.export_template">
 <a class="viewcode-back" href="../../generated/losalamos.references.html#losalamos.references.Reference.export_template">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">export_template</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generates an empty metadata template file based on the current class schema and exports it.</span>
+
+<span class="sd">        .. note::</span>
+
+<span class="sd">             This method temporarily replaces the instance data with a skeleton derived from ``CORE_FIELDS``</span>
+<span class="sd">             and ``SPECIFIC_FIELDS``. It runs the ``standardize`` routine to ensure correct field ordering,</span>
+<span class="sd">             clears all values except the entry type, and calls ``to_bib`` to write the template to the</span>
+<span class="sd">             specified output path before restoring the original data state.</span>
+
+<span class="sd">        :param output: The file path or buffer where the template should be saved.</span>
+<span class="sd">        :type output: str | :class:`pathlib.Path` | file-like object</span>
+<span class="sd">        :return: No value is returned.</span>
+<span class="sd">        :rtype: None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">current_data</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">current_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
@@ -1112,9 +1302,15 @@
             <span class="n">standard_authors</span> <span class="o">=</span> <span class="s2">&quot; and &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">author_list</span><span class="p">)</span>
 
         <span class="c1"># If there is no comma and no &quot; and &quot;,</span>
-        <span class="c1"># the function leaves the author string untouched.</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">standard_authors</span> <span class="o">=</span> <span class="n">bib_dict</span><span class="p">[</span><span class="s2">&quot;author&quot;</span><span class="p">]</span>
+            <span class="c1"># ... but if is article or thesis</span>
+            <span class="n">entry_type</span> <span class="o">=</span> <span class="n">bib_dict</span><span class="p">[</span><span class="s2">&quot;entry_type&quot;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">entry_type</span> <span class="o">==</span> <span class="s2">&quot;article&quot;</span> <span class="ow">or</span> <span class="n">entry_type</span> <span class="o">==</span> <span class="s2">&quot;thesis&quot;</span><span class="p">:</span>
+                <span class="c1"># ... then it is formatted as Last, First</span>
+                <span class="n">standard_authors</span> <span class="o">=</span> <span class="n">normalize_author_name</span><span class="p">(</span><span class="n">bib_dict</span><span class="p">[</span><span class="s2">&quot;author&quot;</span><span class="p">])</span>
+            <span class="c1"># Else assumes single authorship by institution name, etc</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">standard_authors</span> <span class="o">=</span> <span class="n">bib_dict</span><span class="p">[</span><span class="s2">&quot;author&quot;</span><span class="p">]</span>
 
         <span class="c1"># Return the standardized author string</span>
         <span class="k">return</span> <span class="n">standard_authors</span></div>
