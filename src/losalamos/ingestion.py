@@ -4,8 +4,40 @@
 # See pyproject.toml for authors/maintainers.
 # See LICENSE for license details.
 """
-Short module description (1-3 sentences)
-todo module docstring
+Automated ingestion utilities for bibliographic files.
+
+This module provides tools for processing incoming collections of PDF and
+BibTeX files and converting them into standardized reference notes. The
+ingestion pipeline detects PDF–BibTeX pairs, extracts and normalizes metadata,
+generates unique filenames, creates Markdown reference notes, and copies the
+associated PDFs into a managed library structure.
+
+Quick start
+===========
+
+The ingestion system converts incoming PDF and BibTeX files into standardized
+reference notes and library assets.
+
+Run the ingestion pipeline
+
+.. code-block:: python
+
+    from losalamos.ingestion import Ingester
+
+    ing = Ingester(
+        src="path/to/incoming/article",
+        dst="path/to/library/papers"
+    )
+
+    ing.run()
+
+This command will:
+
+- explode multi-entry ``.bib`` files if needed
+- pair PDF files with their corresponding BibTeX metadata
+- generate standardized filenames
+- create Markdown reference notes
+- copy PDFs into the destination library
 
 """
 import os

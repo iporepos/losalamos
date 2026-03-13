@@ -4,8 +4,125 @@
 # See pyproject.toml for authors/maintainers.
 # See LICENSE for license details.
 """
-{Short module description (1-3 sentences)}
-todo module docstring
+Utilities for managing structured Markdown notes.
+
+This module provides a lightweight framework for creating, loading, and managing
+Markdown-based notes with structured metadata. It supports templated note
+creation, automated refactoring of note names and links, reference notes with
+BibTeX integration, and utilities for working with collections of notes.
+
+Quick start
+===========
+
+This section demonstrates common operations for working with Markdown-based notes.
+
+
+Load a note
+
+
+.. code-block:: python
+
+    from losalamos.notes import Note
+
+    note = Note(name="Example", alias="Nt1")
+    note.load("path/to/note.md")
+
+    print(note.metadata)
+    print(note.data)
+
+
+Create a new note from a template
+
+.. code-block:: python
+
+    from losalamos.notes import NoteBasic
+
+    note = NoteBasic()
+    note.load_new("path/to/new_note.md")
+
+    note.metadata["abstract"] = '"Short description of the note."'
+    note.update()
+    note.save()
+
+
+Refactor a note and update links
+
+.. code-block:: python
+
+    from losalamos.notes import Note
+
+    note = Note()
+    note.load("path/to/old_name.md")
+
+    note.refactor(
+        new_name="new_name",
+        scope="path/to/notes_folder"
+    )
+
+
+Create a reference note
+
+.. code-block:: python
+
+    from losalamos.notes import NoteReference
+
+    note = NoteReference()
+
+    metadata = {
+        "entry_type": "article",
+        "name": "smith2022",
+        "author": "Smith, John and Doe, Jane",
+        "title": "Example Article",
+        "year": "2022",
+        "journal": "Journal of Examples",
+        "doi": "10.1000/example"
+    }
+
+    note.load_new(
+        file_note="path/to/smith2022.md",
+        metadata=metadata
+    )
+
+    note.save()
+
+
+Export BibTeX from a reference note
+
+.. code-block:: python
+
+    from losalamos.notes import NoteReference
+
+    note = NoteReference()
+    note.load("path/to/smith2022.md")
+
+    note.to_bib("path/to/file.bib")
+
+
+Load a collection of notes
+
+.. code-block:: python
+
+    from losalamos.notes import NoteCollection
+
+    coll = NoteCollection()
+
+    coll.load_folder("path/to/notes")
+
+    print(len(coll))
+
+
+Search notes using a glob pattern
+
+.. code-block:: python
+
+    from losalamos.notes import NoteCollection
+
+    coll = NoteCollection()
+
+    coll.load_pattern("path/to/notes/**/*.md")
+
+    for note in coll:
+        print(note.name)
 
 
 """

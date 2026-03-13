@@ -4,10 +4,94 @@
 # See pyproject.toml for authors/maintainers.
 # See LICENSE for license details.
 """
-Short module description (1-3 sentences)
-todo docstring
+Reference management utilities for bibliographic metadata.
+
+This module defines a schema-driven ``Reference`` base class and a registry
+of entry-type subclasses (e.g., article, book, thesis). It provides tools for
+loading, standardizing, formatting, and exporting references, including
+BibTeX parsing, citation generation, and metadata templates.
+
+Quick start
+===========
+
+This section demonstrates a few common operations with the reference system.
+
+Load a reference from a BibTeX file
+
+.. code-block:: python
+
+    from losalamos.references import Reference
+
+    ref = Reference.get_by_entry("article")
+    ref.load_data("path/to/file.bib")
+
+    print(ref.data)
+
+
+Generate an in-text citation
+
+.. code-block:: python
+
+    citation = Reference.cite_line(ref.data)
+
+    print(citation)
+    # Example: "Smith et al. (2022)"
+
+
+Generate a formatted bibliography entry
+
+.. code-block:: python
+
+    bibli = Reference.cite_bibli(
+        ref.data,
+        style="apa",
+        text_format="plain",
+    )
+
+    print(bibli)
+
+
+Export a BibTeX entry
+
+.. code-block:: python
+
+    ref.save()  # saves to the same file path used in load_data
+
+
+Create a new reference manually
+
+.. code-block:: python
+
+    from losalamos.references import RefArticle
+
+    ref = RefArticle()
+
+    ref.setup_data({
+        "name": "smith2022",
+        "author": "Smith, John and Doe, Jane",
+        "title": "Example Article",
+        "year": "2022",
+        "journal": "Journal of Examples",
+        "volume": "10",
+        "issue": "2",
+        "pages": "100-110",
+        "doi": "10.1000/example"
+    })
+
+    print(ref.get_str_bib())
+
+
+Generate a BibTeX template
+
+.. code-block:: python
+
+    from losalamos.references import RefArticle
+
+    ref = RefArticle()
+    ref.export_template("path/to/file.bib")
 
 """
+
 # IMPORTS
 # ***********************************************************************
 # import modules from other libs

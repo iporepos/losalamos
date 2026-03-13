@@ -49,7 +49,7 @@ from losalamos.ingestion import Ingester
 # ***********************************************************************
 
 
-# @unittest.skipUnless(RUN_BENCHMARKS, reason="skipping benchmarks")
+@unittest.skipUnless(RUN_BENCHMARKS, reason="skipping benchmarks")
 class BCMKTestIngesterArticle(unittest.TestCase):
 
     OBJECT = Ingester
