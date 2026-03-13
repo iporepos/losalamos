@@ -439,6 +439,7 @@
 <span class="c1"># External imports</span>
 <span class="c1"># =======================================================================</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tqdm</span><span class="w"> </span><span class="kn">import</span> <span class="n">tqdm</span>
 
 <span class="c1"># ... {develop}</span>
 
@@ -524,9 +525,9 @@
         <span class="n">ref</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_reference_object</span><span class="p">()</span>
         <span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_incoming_files</span><span class="p">()</span>
 
-        <span class="c1"># Iterate over rows as dictionaries</span>
-        <span class="c1"># ------------------------------------------------</span>
-        <span class="k">for</span> <span class="n">row_dict</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">to_dict</span><span class="p">(</span><span class="n">orient</span><span class="o">=</span><span class="s2">&quot;records&quot;</span><span class="p">):</span>
+        <span class="n">records</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">to_dict</span><span class="p">(</span><span class="n">orient</span><span class="o">=</span><span class="s2">&quot;records&quot;</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">row_dict</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">records</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Ingesting papers&quot;</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="s2">&quot;file&quot;</span><span class="p">):</span>
 
             <span class="n">file_pdf</span> <span class="o">=</span> <span class="n">row_dict</span><span class="p">[</span><span class="s2">&quot;file&quot;</span><span class="p">]</span>
             <span class="n">subject</span> <span class="o">=</span> <span class="n">row_dict</span><span class="p">[</span><span class="s2">&quot;subject&quot;</span><span class="p">]</span>
@@ -545,8 +546,9 @@
                 <span class="n">note</span> <span class="o">=</span> <span class="n">NoteReference</span><span class="p">()</span>
                 <span class="n">file_note</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dst_folder</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">.md&quot;</span>
                 <span class="n">note</span><span class="o">.</span><span class="n">load_new</span><span class="p">(</span><span class="n">file_note</span><span class="o">=</span><span class="n">file_note</span><span class="p">,</span> <span class="n">metadata</span><span class="o">=</span><span class="n">ref</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+
                 <span class="c1"># include subject</span>
-                <span class="n">note</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;subject&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;&quot;[[</span><span class="si">{}</span><span class="s1">]]&quot;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">subject</span><span class="p">)</span>
+                <span class="n">note</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;subject&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;&quot;[[</span><span class="si">{</span><span class="n">subject</span><span class="si">}</span><span class="s1">]]&quot;&#39;</span>
                 <span class="n">note</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
 
                 <span class="c1"># copy the PDF</span>
@@ -591,6 +593,7 @@
                     <span class="n">name</span> <span class="o">=</span> <span class="n">ref</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span>
                     <span class="n">fo</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">.bib&quot;</span>
                     <span class="n">ref</span><span class="o">.</span><span class="n">to_bib</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="n">fo</span><span class="p">)</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span></div>
 
 
