@@ -57,6 +57,7 @@ import pprint, re
 # External imports
 # =======================================================================
 import pandas as pd
+from tqdm import tqdm
 
 # ... {develop}
 
@@ -138,9 +139,9 @@ class Ingester:
         ref = self.get_reference_object()
         df = self.get_incoming_files()
 
-        # Iterate over rows as dictionaries
-        # ------------------------------------------------
-        for row_dict in df.to_dict(orient="records"):
+        records = df.to_dict(orient="records")
+
+        for row_dict in tqdm(records, desc="Ingesting papers", unit="file"):
 
             file_pdf = row_dict["file"]
             subject = row_dict["subject"]
@@ -159,8 +160,9 @@ class Ingester:
                 note = NoteReference()
                 file_note = self.dst_folder / f"{name}.md"
                 note.load_new(file_note=file_note, metadata=ref.data)
+
                 # include subject
-                note.metadata["subject"] = '"[[{}]]"'.format(subject)
+                note.metadata["subject"] = f'"[[{subject}]]"'
                 note.save()
 
                 # copy the PDF
@@ -202,6 +204,7 @@ class Ingester:
                     name = ref.data["name"]
                     fo = p.parent / f"{name}.bib"
                     ref.to_bib(output=fo)
+                os.remove(p)
         return None
 
     def get_incoming_files(self):
