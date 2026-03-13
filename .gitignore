@@ -64,6 +64,7 @@ misc/
 scripts/
 _scripts/
 old/
+_incoming/
 # ... [ADD MORE IF NEEDED]
 
 # PyCharm folders

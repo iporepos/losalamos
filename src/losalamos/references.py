@@ -21,7 +21,8 @@ import pprint, re
 
 # External imports
 # =======================================================================
-# import {module}
+import pandas as pd
+
 # ... {develop}
 
 # Project-level imports
@@ -65,6 +66,8 @@ from losalamos.root import DataSet
 
 # CLASSES -- Project-level
 # =======================================================================
+
+
 class Reference(DataSet):
 
     ENTRY_TYPE = None
@@ -139,9 +142,16 @@ class Reference(DataSet):
 
     @classmethod
     def get_by_entry(cls, entry_type: str, **kwargs):
-        # todo docstring
+        """
+        Instantiates and returns a reference object based on the provided entry type from the registry.
+
+        :param entry_type: The key representing the type of entry to retrieve.
+        :type entry_type: str
+        :return: An instance of the requested entry class, or a ``RefMisc`` instance if the type is not found.
+        :rtype: :class:`Reference`
+        """
         if entry_type not in cls._REGISTRY:
-            print(f"Warning: Entry type {entry_type} found, falling back to 'misc'")
+            # print(f"Warning: Entry type {entry_type} not found, falling back to 'misc'")
             entry_type = None
 
         return cls._REGISTRY.get(entry_type, RefMisc)(**kwargs)
@@ -167,7 +177,14 @@ class Reference(DataSet):
         return str_out
 
     def load_data(self, file_data):
+        """
+        Loads and parses bibliography data from a specified file path into the instance.
 
+        :param file_data: The file path or name containing the data to be loaded.
+        :type file_data: str | :class:`pathlib.Path`
+        :return: No value is returned.
+        :rtype: None
+        """
         self.file_data = Path(file_data).absolute()
 
         # set up a parser system
@@ -177,13 +194,29 @@ class Reference(DataSet):
         # parse as a list
         extension = self.file_data.suffix[1:]
         ls = dc_parsers[extension](file_parse=self.file_data)
+        self.setup_data(data=ls[self.loading_order].copy())
+        return None
 
-        # take the element as copy
-        self.data = ls[self.loading_order].copy()
+    def setup_data(self, data):
+        """
+        Initializes the instance data by creating a copy of the input and applying standardization.
 
+        :param data: The raw dictionary or object containing reference metadata.
+        :type data: dict | :class:`pandas.Series`
+        :return: No value is returned.
+        :rtype: None
+        """
+        self.data = data.copy()
         self.standardize()
+        return None
 
     def save(self):
+        """
+        Saves the current reference data to the file path defined in ``file_data`` using the appropriate format.
+
+        :return: No value is returned.
+        :rtype: None
+        """
         dc_saver = {"bib": Reference.to_bib}
 
         extension = self.file_data.suffix[1:]
@@ -221,11 +254,126 @@ class Reference(DataSet):
         return file_path
 
     def get_clean_data(self):
+        """
+        Returns a copy of the internal data dictionary excluding all keys with ``None`` values.
+
+        :return: A filtered dictionary containing only non-null reference data.
+        :rtype: dict
+        """
         dc = {}
         for k in self.data:
             if self.data[k] is not None:
                 dc[k] = self.data[k]
         return dc.copy()
+
+    def define_file_name(self, library_folder=None, extension="md"):
+        """
+        Generates a unique filename based on author, year, and an alphabetic suffix to avoid collisions.
+
+        .. note::
+
+             This method extracts the primary author and year from the citation metadata to form a base
+             filename. If a ``library_folder`` is provided and accessible, it scans the directory for
+             existing files matching the ``{author}_{year}_*`` pattern, identifies the highest
+             alphabetic suffix used (e.g., ``a``, ``b``, ``c``), and increments it to ensure the
+             new filename is unique.
+
+        :param library_folder: [optional] The directory path to check for existing files to determine the next suffix.
+        :type library_folder: str | :class:`pathlib.Path`
+        :param extension: The file extension to use when searching for existing patterns. Default value = ``md``
+        :type extension: str
+        :return: The generated filename string in the format ``{author}_{year}_{suffix}``.
+        :rtype: str
+        """
+
+        # -------------------------------------------------------
+        # 1. Build the base key (author + year)
+        # -------------------------------------------------------
+
+        # Extract the citation string
+        cite = self.cite_line(self.data, text_format="plain", embed_link=False)
+
+        # Assume first token is the author surname
+        author = cite.split(" ")[0]
+
+        # Extract year from stored metadata
+        year = str(self.data["year"])
+
+        # Default suffix if no existing file is found
+        suffix = "a"
+
+        # -------------------------------------------------------
+        # 2. If a library folder is provided, inspect it
+        # -------------------------------------------------------
+
+        if library_folder:
+            import string
+
+            dst_folder = Path(library_folder)
+
+            # Only proceed if the folder actually exists
+            if dst_folder.is_dir():
+
+                # ---------------------------------------------------
+                # 3. Search for existing files that match the pattern
+                #
+                # Example pattern:
+                # Smith_2020_*.md
+                # ---------------------------------------------------
+
+                pattern = f"{author}_{year}_*.{extension}"
+                existing_files = list(dst_folder.glob(pattern))
+
+                # ---------------------------------------------------
+                # 4. Extract suffix letters from existing filenames
+                # ---------------------------------------------------
+
+                suffixes = []
+
+                for f in existing_files:
+
+                    # Remove extension
+                    # Example:
+                    # Smith_2020_a
+                    name = f.stem
+
+                    # Split components by "_"
+                    parts = name.split("_")
+
+                    # Expected structure:
+                    # [author, year, suffix]
+                    if len(parts) >= 3:
+
+                        candidate_suffix = parts[-1]
+
+                        # Only accept valid single lowercase letters
+                        if (
+                            len(candidate_suffix) == 1
+                            and candidate_suffix in string.ascii_lowercase
+                        ):
+                            suffixes.append(candidate_suffix)
+
+                # ---------------------------------------------------
+                # 5. Determine next suffix in alphabet
+                # ---------------------------------------------------
+
+                if suffixes:
+                    # Find the largest existing letter
+                    # Example: ["a","b","c"] -> "c"
+                    last_suffix = max(suffixes)
+
+                    # Convert letter → ASCII → next letter
+                    next_letter = chr(ord(last_suffix) + 1)
+
+                    suffix = next_letter
+
+        # -------------------------------------------------------
+        # 6. Build the final filename
+        # -------------------------------------------------------
+
+        filename = f"{author}_{year}_{suffix}"
+
+        return filename
 
     def get_str_bib(self):
         """
@@ -254,7 +402,19 @@ class Reference(DataSet):
         return bibtex_str
 
     def standardize(self):
+        """
+        Standardizes the internal data dictionary by enforcing schema fields, ordering, and formatting rules.
 
+        .. note::
+
+             This method reconstructs the ``data`` attribute by merging ``CORE_FIELDS`` and ``SPECIFIC_FIELDS``.
+             It ensures all expected keys exist (defaulting to ``None``), reorders specific metadata to the
+             end of the dictionary based on ``TAIL_ENTRIES``, and applies specific formatting logic
+             to the abstract and author fields via ``harmonize_abstract`` and ``standardize_author``.
+
+        :return: No value is returned.
+        :rtype: None
+        """
         new_data = {}
 
         ls_keys = list(self.CORE_FIELDS.keys())
@@ -281,9 +441,18 @@ class Reference(DataSet):
 
         self.harmonize_abstract()
 
+        if self.data["author"] is not None:
+            self.data["author"] = Reference.standardize_author(self.data)
+
         return None
 
     def harmonize_abstract(self):
+        """
+        Ensures the abstract field is properly formatted by escaping LaTeX-specific percent symbols.
+
+        :return: No value is returned.
+        :rtype: None
+        """
         if self.data["abstract"] is not None:
             from losalamos.documents import escape_percent_latex
 
@@ -291,6 +460,21 @@ class Reference(DataSet):
             self.data["abstract"] = escape_percent_latex(text)
 
     def export_template(self, output):
+        """
+        Generates an empty metadata template file based on the current class schema and exports it.
+
+        .. note::
+
+             This method temporarily replaces the instance data with a skeleton derived from ``CORE_FIELDS``
+             and ``SPECIFIC_FIELDS``. It runs the ``standardize`` routine to ensure correct field ordering,
+             clears all values except the entry type, and calls ``to_bib`` to write the template to the
+             specified output path before restoring the original data state.
+
+        :param output: The file path or buffer where the template should be saved.
+        :type output: str | :class:`pathlib.Path` | file-like object
+        :return: No value is returned.
+        :rtype: None
+        """
         current_data = None
         if self.data is not None:
             current_data = self.data.copy()
@@ -690,9 +874,15 @@ class Reference(DataSet):
             standard_authors = " and ".join(author_list)
 
         # If there is no comma and no " and ",
-        # the function leaves the author string untouched.
         else:
-            standard_authors = bib_dict["author"]
+            # ... but if is article or thesis
+            entry_type = bib_dict["entry_type"]
+            if entry_type == "article" or entry_type == "thesis":
+                # ... then it is formatted as Last, First
+                standard_authors = normalize_author_name(bib_dict["author"])
+            # Else assumes single authorship by institution name, etc
+            else:
+                standard_authors = bib_dict["author"]
 
         # Return the standardized author string
         return standard_authors

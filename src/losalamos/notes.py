@@ -5,7 +5,7 @@
 # See LICENSE for license details.
 """
 {Short module description (1-3 sentences)}
-todo docstring
+todo module docstring
 
 
 """
@@ -123,7 +123,7 @@ def search_markdown_files(paths: list[Path]) -> list[Path]:
 
 
 class Note(MbaE):
-    # todo [docstring]
+    # todo major docstring
 
     STR_HEAD = "Head"
     STR_BODY = "Body"
@@ -173,7 +173,14 @@ class Note(MbaE):
 
         dc = Note.parse_metadata(self.file_note)
 
-        # DATE
+        self.setup_metadata(metadata=dc)
+
+        return None
+
+    def setup_metadata(self, metadata):
+        dc = metadata.copy()
+
+        # TEXT
         # ---------------------
         for k in dc:
             if k in HARMONIZE_TEXT_FIELDS:
@@ -185,7 +192,12 @@ class Note(MbaE):
             if k in HARMONIZE_DATE_FIELDS:
                 dc[k] = Note.harmonize_entry_date(dc[k], key=k)
 
-        self.metadata = dc.copy()
+        if self.metadata is None:
+            self.metadata = dc.copy()
+        else:
+            self.metadata.update(dc)
+
+        return None
 
     def load_data(self, file_note=None):
 
@@ -945,7 +957,12 @@ class NoteReference(NoteBasic):
         self.cite_style = "apa"
 
     def get_reference(self):
-        # todo docstring
+        """
+        Creates and returns a standardized ``Reference`` object based on the current metadata.
+
+        :return: A reference instance populated with standardized internal metadata.
+        :rtype: :class:`Reference`
+        """
         dc = self.metadata.copy()
         ref = Reference.get_by_entry(entry_type=dc["entry_type"])
         ref.data = dc.copy()
@@ -953,7 +970,14 @@ class NoteReference(NoteBasic):
         return ref
 
     def get_str_bib(self, drop_fields=None):
-        # todo docstring
+        """
+        Generates a BibTeX string representation of the reference with an option to exclude specific fields.
+
+        :param drop_fields: [optional] A list of metadata keys to remove before generating the string.
+        :type drop_fields: list
+        :return: The formatted BibTeX string.
+        :rtype: str
+        """
         ref = self.get_reference()
 
         if drop_fields:
@@ -962,8 +986,30 @@ class NoteReference(NoteBasic):
 
         return ref.get_str_bib()
 
+    def load_new(self, file_note, metadata=None):
+        """
+        Initializes a new note from a file and optionally sets and updates its metadata.
+
+        :param file_note: The path or identifier for the note file.
+        :type file_note: str | :class:`pathlib.Path`
+        :param metadata: [optional] A dictionary of metadata to apply to the new note.
+        :type metadata: dict
+        :return: No value is returned.
+        :rtype: None
+        """
+
+        super().load_new(file_note=file_note)
+        if metadata is not None:
+            self.setup_metadata(metadata=metadata)
+            self.update()
+
     def update(self):
-        # todo docstring
+        """
+        Triggers a comprehensive refresh of all derived metadata, citation strings, and document sections.
+
+        :return: No value is returned.
+        :rtype: None
+        """
         self.update_name()
         self.update_cite_inline()
         self.update_cite_bibli()
@@ -976,24 +1022,44 @@ class NoteReference(NoteBasic):
         self.update_thumbnail()
 
     def update_cite_inline(self):
-        # todo docstring
+        """
+        Updates the inline citation string in the metadata using the plain text format.
+
+        :return: No value is returned.
+        :rtype: None
+        """
         self.metadata["cite_inline"] = Reference.cite_line(
             bib_dict=self.metadata, text_format="plain", embed_link=False
         )
 
     def update_cite_bibli(self):
-        # todo docstring
+        """
+        Updates the bibliographic citation string in the metadata according to the defined style.
+
+        :return: No value is returned.
+        :rtype: None
+        """
         s = Reference.cite_bibli(
             bib_dict=self.metadata, text_format="plain", style=self.cite_style
         )
         self.metadata["cite_bibli"] = f'"{s}"'
 
     def update_pdf(self):
-        # todo docstring
+        """
+        Formats and updates the PDF link field in the metadata based on the entry name.
+
+        :return: No value is returned.
+        :rtype: None
+        """
         self.metadata["pdf"] = '"[[{}.pdf]]"'.format(self.metadata["name"])
 
     def update_data_head(self):
-        # todo docstring
+        """
+        Refreshes the header section of the document data, specifically handling journal links for articles.
+
+        :return: No value is returned.
+        :rtype: None
+        """
         self.reset_data_head()
 
         self.update_name()
@@ -1013,7 +1079,18 @@ class NoteReference(NoteBasic):
                     c = c + 1
 
     def update_data_tail(self):
-        # todo docstring
+        """
+        Refreshes the tail section of the document by injecting formatted metadata and BibTeX strings.
+
+        .. note::
+
+             This method synchronizes the end-of-file data by generating a clean BibTeX entry (excluding
+             bloat like PDFs or abstracts) and performing string interpolation on the ``STR_TAIL``
+             template list using the current metadata dictionary.
+
+        :return: No value is returned.
+        :rtype: None
+        """
         self.reset_data_tail()
 
         # replace inline and bibli
@@ -1029,13 +1106,29 @@ class NoteReference(NoteBasic):
         self.data[self.STR_TAIL] = ls[:]
 
     def update_thumbnail(self, image_name=None):
-        # todo docstring
+        """
+        Updates the document thumbnail, automatically selecting the journal name as the image source for articles.
+
+        :param image_name: [optional] The specific image name or key to use for the thumbnail.
+        :type image_name: str
+        :return: No value is returned.
+        :rtype: None
+        """
         if self.metadata["entry_type"] == "article":
             image_name = self.metadata["journal"]
         super().update_thumbnail(image_name=image_name)
 
     def to_bib(self, output, drop_pdf=True):
-        # todo docstring
+        """
+        Exports the reference metadata to a BibTeX file with an option to exclude the PDF field.
+
+        :param output: The file path or buffer where the BibTeX data should be saved.
+        :type output: str | :class:`pathlib.Path`
+        :param drop_pdf: Whether to remove the ``pdf`` field from the exported file. Default value = ``True``
+        :type drop_pdf: bool
+        :return: No value is returned.
+        :rtype: None
+        """
         ref = self.get_reference()
         if drop_pdf:
             del ref.data["pdf"]
@@ -1098,7 +1191,7 @@ class NoteDataset(NoteReference):
 
 class NoteCollection(Collection):
 
-    # todo docstring
+    # todo major docstring
 
     BASE_OBJECT = Note
 

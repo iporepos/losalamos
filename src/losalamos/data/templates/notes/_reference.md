@@ -6,6 +6,7 @@ tags:
 aliases:
 subject:
 category:
+place:
 name: <% tp.file.title %>
 pdf:
 download:
