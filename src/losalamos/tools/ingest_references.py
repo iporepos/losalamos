@@ -4,10 +4,32 @@
 # See pyproject.toml for authors/maintainers.
 # See LICENSE for license details.
 """
-{Short module description (1-3 sentences)}
-todo docstring
+Ingest reference files from a source directory into a target dataset structure.
 
+This CLI wraps the project Ingester, providing a minimal interface for
+batch ingestion with basic validation and progress feedback.
+
+Usage
+-----
+
+Module execution (recommended):
+
+Shell (bash/zsh):
+```sh
+python -m losalamos.tools.ingest_references \
+    --src /path/to/source \
+    --dst /path/to/destination
+```
+
+PowerShell (ps1):
+```powershell
+$SRC="C:\path\to\source"
+$DST="C:\path\to\destination"
+
+python -m losalamos.tools.ingest_references --src $SRC --dst $DST
+```
 """
+
 # IMPORTS
 # ***********************************************************************
 # import modules from other libs

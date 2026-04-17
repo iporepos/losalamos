@@ -105,13 +105,14 @@ requires-python = ">=3.10"  # <-- [CHECK THIS] Python 3.10 or higher
 # Installed automatically when someone installs your package
 
 dependencies = [
-    "requests",  # network operations
-    "numpy",     # numerical computations
-    "pandas",    # data manipulation
-    "pillow",    # image manipulation
-    "lxml",      # XML manipulation
-    "PyMuPDF",   # PDF handler
-    "tdqm",      # UX progress bars
+    "requests",    # network operations
+    "numpy",       # numerical computations
+    "pandas",      # data manipulation
+    "pillow",      # image manipulation
+    "lxml",        # XML manipulation
+    "PyMuPDF",     # PDF handler
+    "tdqm",        # UX progress bars
+    "google-genai" # LLM tools
     # [EXAMPLE] custom dependency directly from GitHub:
     # "my-package @ git+https://github.com/username/my-package.git@main",
     # ... [ADD MORE IF NEDDED]

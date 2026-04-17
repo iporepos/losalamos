@@ -194,6 +194,7 @@ class Ingester:
         ls = self.list_bibs()
 
         for f in ls:
+            print(f)
             p = Path(f)
             ls_bibs = Reference.parse_bib(file_parse=f)
             # explode file into subfiles
