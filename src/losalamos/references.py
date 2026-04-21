@@ -691,6 +691,15 @@ class Reference(DataSet):
             # If format does not support linking, return unchanged
             return text
 
+        def get_author_alias(author):
+            # handle first author
+            if "," in author:
+                return author.split(",")[0].strip()
+            elif "(" in author and ")" in author:
+                return author.split("(")[1].split(")")[0].strip()
+            else:
+                return author
+
         # ---------------------------------------------------------
         # Defensive normalization:
         # Replace None values with empty strings
@@ -716,35 +725,30 @@ class Reference(DataSet):
         # Assumes authors are already normalized as:
         # "Last, First and Last, First"
         # ---------------------------------------------------------
-        author_list = author.split(" and ")
+        if "(" not in author:
+            author_list = author.split(" and ")
 
-        # Extract first author's last name
-        # (everything before comma)
-        first_author_lastname = author_list[0].split(",")[0].strip()
+            # More than two authors:
+            # Use "FirstAuthor et al."
+            if len(author_list) > 2:
+                first_author_alias = get_author_alias(author_list[0])
+                formatted_authors = f"{first_author_alias} et al."
 
-        # More than two authors:
-        # Use "FirstAuthor et al."
-        if len(author_list) > 2:
-            formatted_authors = f"{first_author_lastname} et al."
+            # Exactly two authors:
+            # Use "FirstAuthor & SecondAuthor"
+            elif len(author_list) == 2:
+                first_author_alias = get_author_alias(author_list[0])
+                second_author_alias = get_author_alias(author_list[1])
+                formatted_authors = f"{first_author_alias} & {second_author_alias}"
 
-        # Exactly two authors:
-        # Use "FirstAuthor & SecondAuthor"
-        elif len(author_list) == 2:
-            second_author_lastname = author_list[1].split(",")[0].strip()
-            formatted_authors = f"{first_author_lastname} & {second_author_lastname}"
-
-        # Single author:
-        # If there is only one author in the author_list
-        else:
-            single_author = author.strip()
-
-            # Detect corporate author wrapped in {}
-            if single_author.startswith("{") and single_author.endswith("}"):
-                # Remove outer braces
-                formatted_authors = single_author[1:-1].strip()
+            # Single author:
+            # If there is only one author in the author_list
             else:
-                # Assume personal author
-                formatted_authors = first_author_lastname
+                first_author_alias = get_author_alias(author)
+                formatted_authors = first_author_alias
+        else:
+            first_author_alias = get_author_alias(author)
+            formatted_authors = first_author_alias
 
         # Apply format-specific styling (italics, escaping, etc.)
         formatted_authors = apply_format(formatted_authors, text_format)
