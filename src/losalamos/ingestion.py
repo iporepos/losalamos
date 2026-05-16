@@ -141,7 +141,7 @@ class Ingester:
 
         records = df.to_dict(orient="records")
 
-        for row_dict in tqdm(records, desc="Ingesting papers", unit="file"):
+        for row_dict in tqdm(records, desc="Ingesting refs", unit="file"):
 
             file_pdf = row_dict["file"]
             subject = row_dict["subject"]

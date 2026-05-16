@@ -81,6 +81,39 @@ from losalamos.ingestion import Ingester
 
 # FUNCTIONS
 # ***********************************************************************
+def get_auxiliary_context(pdf_path: Path) -> str:
+    """
+    Look for auxiliary ``.txt`` and ``.ris`` files alongside the PDF.
+
+    Reads the contents of any matching auxiliary files (sharing the same stem
+    as the PDF) and returns them as a formatted string to be injected into
+    the LLM prompt context.
+
+    :param pdf_path: The file path to the target PDF document.
+    :type pdf_path: pathlib.Path
+    :return: A formatted string containing the text from the auxiliary files,
+             or an empty string if no such files exist.
+    :rtype: str
+    """
+    aux_text = ""
+
+    # Define the extensions to look for
+    aux_extensions = [".txt", ".ris"]
+
+    for ext in aux_extensions:
+        aux_file = pdf_path.with_suffix(ext)
+        if aux_file.is_file():
+            try:
+                with open(aux_file, "r", encoding="utf-8") as f:
+                    content = f.read().strip()
+                    if content:
+                        aux_text += (
+                            f"\n--- Metadata from {aux_file.name} ---\n{content}\n"
+                        )
+            except Exception as e:
+                print(f"Warning: Could not read {aux_file.name}: {e}")
+
+    return aux_text
 
 
 def get_arguments():
@@ -195,12 +228,24 @@ def main() -> None:
             pages = Ingester.parse_pdf_pages(file_parse=pdf, n_pages=n_pages)
 
             # --------------------------------------------
-            # Built context
+            # Get auxiliary context
+            aux_context = get_auxiliary_context(pdf)
+
+            # --------------------------------------------
+            # Build context
             filename = pdf.name
-            context_data = f"\n\n>>>>> Context \nFile name: {filename}\n\nFirst {n_pages} pages content:\n\n\n{pages}"
+
+            # Start building the context block
+            context_data = f"\n\n>>>>> Context \nFile name: {filename}\n"
+
+            # Inject auxiliary data if it exists
+            if aux_context:
+                context_data += f"\n>>>>> Auxiliary File Data:{aux_context}\n"
+
+            # Append the PDF pages
+            context_data += f"\n>>>>> First {n_pages} pages content:\n\n{pages}"
 
             prompt = f"{prompt_head} {context_data}"
-            print(filename)
 
             # --------------------------------------------
             # Ask
