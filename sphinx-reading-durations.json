@@ -1,16 +1,16 @@
 {
-    "about": 0.014,
-    "api": 0.014,
+    "about": 0.013,
+    "api": 0.013,
     "development": 0.032,
-    "generated/losalamos": 0.01,
-    "generated/losalamos.figures": 0.251,
-    "generated/losalamos.ingestion": 0.131,
-    "generated/losalamos.notes": 0.405,
-    "generated/losalamos.project": 0.037,
-    "generated/losalamos.references": 0.138,
-    "generated/losalamos.root": 0.263,
+    "generated/losalamos": 0.009,
+    "generated/losalamos.figures": 0.203,
+    "generated/losalamos.ingestion": 0.124,
+    "generated/losalamos.notes": 0.362,
+    "generated/losalamos.project": 0.035,
+    "generated/losalamos.references": 0.132,
+    "generated/losalamos.root": 0.221,
     "includes/ipsum": 0.001,
     "includes/warning_development": 0.001,
-    "index": 0.004,
-    "usage": 0.008
+    "index": 0.003,
+    "usage": 0.007
 }
