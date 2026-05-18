@@ -98,7 +98,7 @@ def get_auxiliary_context(pdf_path: Path) -> str:
     aux_text = ""
 
     # Define the extensions to look for
-    aux_extensions = [".txt", ".ris"]
+    aux_extensions = [".txt", ".ris", ".md"]
 
     for ext in aux_extensions:
         aux_file = pdf_path.with_suffix(ext)
@@ -213,6 +213,8 @@ def main() -> None:
     for pdf in ls_pdfs:
 
         nm = pdf.stem
+        heading_subsection(msg=f"File search: {nm}.pdf")
+
         fbib = pdf.parent / f"{nm}.bib"
         if fbib.is_file():
             print(get_message("File already searched (bib found)"))
@@ -220,7 +222,7 @@ def main() -> None:
             print(get_message("Backup folder detected"))
         else:
 
-            heading_subsection(msg="Asking Gemini ...")
+            print("Asking Gemini ...")
             sleep(1)
 
             # --------------------------------------------

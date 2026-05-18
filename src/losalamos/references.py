@@ -374,11 +374,16 @@ class Reference(DataSet):
         # 1. Build the base key (author + year)
         # -------------------------------------------------------
 
+        entry_type = self.data.get("entry_type").strip()
+
         # Extract the citation string
         cite = self.cite_line(self.data, text_format="plain", embed_link=False)
 
-        # Assume first token is the author surname
-        author = cite.split(" ")[0]
+        if entry_type in ["article", "book"]:
+            # Assume first token is the author surname
+            author = cite.split(" ")[0]
+        else:
+            author = "".join(cite.split(" ")[:-1])
 
         # Extract year from stored metadata
         year = str(self.data["year"])
