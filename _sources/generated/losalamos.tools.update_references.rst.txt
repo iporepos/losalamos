@@ -1,0 +1,13 @@
+﻿losalamos.tools.update\_references
+==================================
+
+.. automodule:: losalamos.tools.update_references
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      get_arguments
+      main
+   

@@ -1,0 +1,13 @@
+﻿losalamos.tools.build\_figures
+==============================
+
+.. automodule:: losalamos.tools.build_figures
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      get_arguments
+      main
+   

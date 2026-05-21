@@ -1,0 +1,13 @@
+﻿losalamos.tools.ingest\_references
+==================================
+
+.. automodule:: losalamos.tools.ingest_references
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      get_arguments
+      main
+   

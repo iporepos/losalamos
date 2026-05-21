@@ -1,0 +1,16 @@
+﻿losalamos.tools.search\_references
+==================================
+
+.. automodule:: losalamos.tools.search_references
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      ask_gemini
+      get_arguments
+      get_auxiliary_context
+      main
+      next_available_path
+   

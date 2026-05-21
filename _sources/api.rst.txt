@@ -1,64 +1,47 @@
 .. _api:
 
-API
+API Reference
 ############################################
 
-.. develop a small description for the API [CHANGE THIS]:
-
-Welcome to the API documentation for this project.
-This reference, automatically generated using Sphinx, provides a complete overview of all relevant modules,
-classes, functions, and constants in the repository. It is intended to help developers quickly understand
-and navigate the available components and their usage, serving as a reliable
-guide for integrating and extending the functionality of the project.
-
-
-.. remove this note after enter maintenance mode [CHANGE THIS]:
+This reference is automatically generated from docstrings in the source code.
+It covers the main modules, classes, and functions available in the package.
 
 .. warning::
 
-    This API documentation is under active development
+    This documentation is under active development and may be incomplete.
 
 
-.. list down here all modules that must be in the API [CHANGE THIS]:
-
+Core
+--------------------------------------------
 
 .. autosummary::
    :toctree: generated
 
    losalamos
-
-
-.. autosummary::
-   :toctree: generated
-
    losalamos.root
-
-
-.. autosummary::
-   :toctree: generated
-
    losalamos.project
 
+
+Domain
+--------------------------------------------
 
 .. autosummary::
    :toctree: generated
 
    losalamos.notes
-
-
-.. autosummary::
-   :toctree: generated
-
    losalamos.figures
-
-
-.. autosummary::
-   :toctree: generated
-
    losalamos.references
+   losalamos.ingestion
 
+
+Tools
+--------------------------------------------
 
 .. autosummary::
    :toctree: generated
 
-   losalamos.ingestion
+   losalamos.tools.build_figures
+   losalamos.tools.ingest_references
+   losalamos.tools.search_references
+   losalamos.tools.update_references
+   losalamos.tools.update_templates

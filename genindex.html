@@ -26,18 +26,18 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="_static/styles/theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
-<link href="_static/styles/pydata-sphinx-theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+  <link href="_static/styles/theme.css?digest=0790524f97105ba85085" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=0790524f97105ba85085" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
   
   <!-- So that users can add custom icons -->
-  <script defer src="_static/scripts/fontawesome.js?digest=55c26ed414f5f8a31ebb"></script>
+  <script defer src="_static/scripts/fontawesome.js?digest=0790524f97105ba85085"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb" />
-<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb" />
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=0790524f97105ba85085" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=0790524f97105ba85085" />
 
     <script src="_static/documentation_options.js?v=d45e8c67"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
@@ -161,7 +161,7 @@
 
 <li class="nav-item ">
   <a class="nav-link nav-internal" href="api.html">
-    API
+    API Reference
   </a>
 </li>
 
@@ -193,11 +193,18 @@
       
         <div class="navbar-item">
 
-<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
-  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
-  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
-  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
-</button></div>
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
       
         <div class="navbar-item"><ul class="navbar-icon-links"
     aria-label="Icon Links">
@@ -210,8 +217,7 @@
           
           
           
-          <a href="https://github.com/iporepos/losalamos" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
-            <span class="sr-only">GitHub</span></a>
+          <a href="https://github.com/iporepos/losalamos" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
         </li>
 </ul></div>
       
@@ -282,7 +288,7 @@
 
 <li class="nav-item ">
   <a class="nav-link nav-internal" href="api.html">
-    API
+    API Reference
   </a>
 </li>
 
@@ -305,11 +311,18 @@
         
           <div class="navbar-item">
 
-<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
-  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
-  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
-  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
-</button></div>
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
         
           <div class="navbar-item"><ul class="navbar-icon-links"
     aria-label="Icon Links">
@@ -322,8 +335,7 @@
           
           
           
-          <a href="https://github.com/iporepos/losalamos" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
-            <span class="sr-only">GitHub</span></a>
+          <a href="https://github.com/iporepos/losalamos" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
         </li>
 </ul></div>
         
@@ -388,11 +400,13 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="generated/losalamos.root.html#losalamos.root.Collection.append">append() (losalamos.root.Collection method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="generated/losalamos.root.html#losalamos.root.FileSys.archive_folder">archive_folder() (losalamos.root.FileSys static method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="generated/losalamos.root.html#losalamos.root.RecordTable.archive_record">archive_record() (losalamos.root.RecordTable method)</a>
+</li>
+      <li><a href="generated/losalamos.tools.search_references.html#losalamos.tools.search_references.ask_gemini">ask_gemini() (in module losalamos.tools.search_references)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -544,6 +558,20 @@
 <h2 id="G">G</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="generated/losalamos.tools.build_figures.html#losalamos.tools.build_figures.get_arguments">get_arguments() (in module losalamos.tools.build_figures)</a>
+
+      <ul>
+        <li><a href="generated/losalamos.tools.ingest_references.html#losalamos.tools.ingest_references.get_arguments">(in module losalamos.tools.ingest_references)</a>
+</li>
+        <li><a href="generated/losalamos.tools.search_references.html#losalamos.tools.search_references.get_arguments">(in module losalamos.tools.search_references)</a>
+</li>
+        <li><a href="generated/losalamos.tools.update_references.html#losalamos.tools.update_references.get_arguments">(in module losalamos.tools.update_references)</a>
+</li>
+        <li><a href="generated/losalamos.tools.update_templates.html#losalamos.tools.update_templates.get_arguments">(in module losalamos.tools.update_templates)</a>
+</li>
+      </ul></li>
+      <li><a href="generated/losalamos.tools.search_references.html#losalamos.tools.search_references.get_auxiliary_context">get_auxiliary_context() (in module losalamos.tools.search_references)</a>
+</li>
       <li><a href="generated/losalamos.references.html#losalamos.references.Reference.get_by_entry">get_by_entry() (losalamos.references.Reference class method)</a>
 </li>
       <li><a href="generated/losalamos.references.html#losalamos.references.Reference.get_clean_data">get_clean_data() (losalamos.references.Reference method)</a>
@@ -560,6 +588,8 @@
 </li>
       <li><a href="generated/losalamos.figures.html#losalamos.figures.FigureSVG.get_layers_labels">get_layers_labels() (losalamos.figures.FigureSVG method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="generated/losalamos.notes.html#losalamos.notes.Note.get_metadata">get_metadata() (losalamos.notes.Note method)</a>
 
       <ul>
@@ -572,8 +602,6 @@
         <li><a href="generated/losalamos.root.html#losalamos.root.MbaE.get_metadata">(losalamos.root.MbaE method)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="generated/losalamos.root.html#losalamos.root.MbaE.get_metadata_df">get_metadata_df() (losalamos.root.MbaE method)</a>
 </li>
       <li><a href="generated/losalamos.root.html#losalamos.root.RecordTable.get_record">get_record() (losalamos.root.RecordTable method)</a>
@@ -680,8 +708,6 @@
         <li><a href="generated/losalamos.notes.html#losalamos.notes.NoteBasic.load_metadata">(losalamos.notes.NoteBasic method)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="generated/losalamos.notes.html#losalamos.notes.NoteBasic.load_metadata_standard">load_metadata_standard() (losalamos.notes.NoteBasic method)</a>
 </li>
       <li><a href="generated/losalamos.notes.html#losalamos.notes.NoteBasic.load_new">load_new() (losalamos.notes.NoteBasic method)</a>
@@ -694,6 +720,8 @@
 </li>
       <li><a href="generated/losalamos.project.html#losalamos.project.load_project">load_project() (in module losalamos.project)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="generated/losalamos.root.html#losalamos.root.RecordTable.load_record_data">load_record_data() (losalamos.root.RecordTable method)</a>
 </li>
       <li>
@@ -745,12 +773,59 @@
         <li><a href="generated/losalamos.root.html#module-losalamos.root">module</a>
 </li>
       </ul></li>
+      <li>
+    losalamos.tools.build_figures
+
+      <ul>
+        <li><a href="generated/losalamos.tools.build_figures.html#module-losalamos.tools.build_figures">module</a>
+</li>
+      </ul></li>
+      <li>
+    losalamos.tools.ingest_references
+
+      <ul>
+        <li><a href="generated/losalamos.tools.ingest_references.html#module-losalamos.tools.ingest_references">module</a>
+</li>
+      </ul></li>
+      <li>
+    losalamos.tools.search_references
+
+      <ul>
+        <li><a href="generated/losalamos.tools.search_references.html#module-losalamos.tools.search_references">module</a>
+</li>
+      </ul></li>
+      <li>
+    losalamos.tools.update_references
+
+      <ul>
+        <li><a href="generated/losalamos.tools.update_references.html#module-losalamos.tools.update_references">module</a>
+</li>
+      </ul></li>
+      <li>
+    losalamos.tools.update_templates
+
+      <ul>
+        <li><a href="generated/losalamos.tools.update_templates.html#module-losalamos.tools.update_templates">module</a>
+</li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
 <h2 id="M">M</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="generated/losalamos.tools.build_figures.html#losalamos.tools.build_figures.main">main() (in module losalamos.tools.build_figures)</a>
+
+      <ul>
+        <li><a href="generated/losalamos.tools.ingest_references.html#losalamos.tools.ingest_references.main">(in module losalamos.tools.ingest_references)</a>
+</li>
+        <li><a href="generated/losalamos.tools.search_references.html#losalamos.tools.search_references.main">(in module losalamos.tools.search_references)</a>
+</li>
+        <li><a href="generated/losalamos.tools.update_references.html#losalamos.tools.update_references.main">(in module losalamos.tools.update_references)</a>
+</li>
+        <li><a href="generated/losalamos.tools.update_templates.html#losalamos.tools.update_templates.main">(in module losalamos.tools.update_templates)</a>
+</li>
+      </ul></li>
       <li><a href="generated/losalamos.figures.html#losalamos.figures.Figure.make_thumbnail">make_thumbnail() (losalamos.figures.Figure static method)</a>
 </li>
       <li><a href="generated/losalamos.root.html#losalamos.root.MbaE">MbaE (class in losalamos.root)</a>
@@ -775,6 +850,16 @@
 </li>
         <li><a href="generated/losalamos.root.html#module-losalamos.root">losalamos.root</a>
 </li>
+        <li><a href="generated/losalamos.tools.build_figures.html#module-losalamos.tools.build_figures">losalamos.tools.build_figures</a>
+</li>
+        <li><a href="generated/losalamos.tools.ingest_references.html#module-losalamos.tools.ingest_references">losalamos.tools.ingest_references</a>
+</li>
+        <li><a href="generated/losalamos.tools.search_references.html#module-losalamos.tools.search_references">losalamos.tools.search_references</a>
+</li>
+        <li><a href="generated/losalamos.tools.update_references.html#module-losalamos.tools.update_references">losalamos.tools.update_references</a>
+</li>
+        <li><a href="generated/losalamos.tools.update_templates.html#module-losalamos.tools.update_templates">losalamos.tools.update_templates</a>
+</li>
       </ul></li>
   </ul></td>
 </tr></table>
@@ -783,6 +868,8 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="generated/losalamos.project.html#losalamos.project.new_project">new_project() (in module losalamos.project)</a>
+</li>
+      <li><a href="generated/losalamos.tools.search_references.html#losalamos.tools.search_references.next_available_path">next_available_path() (in module losalamos.tools.search_references)</a>
 </li>
       <li><a href="generated/losalamos.notes.html#losalamos.notes.Note">Note (class in losalamos.notes)</a>
 </li>
@@ -1056,6 +1143,10 @@
 </li>
       <li><a href="generated/losalamos.figures.html#losalamos.figures.FigureSVG.to_image">to_image() (losalamos.figures.FigureSVG method)</a>
 </li>
+      <li><a href="generated/losalamos.figures.html#losalamos.figures.FigureSVG.to_pdf">to_pdf() (losalamos.figures.FigureSVG method)</a>
+</li>
+      <li><a href="generated/losalamos.figures.html#losalamos.figures.FigureSVG.to_svg">to_svg() (losalamos.figures.FigureSVG method)</a>
+</li>
   </ul></td>
 </tr></table>
 
@@ -1158,8 +1249,8 @@
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb"></script>
-<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb"></script>
+  <script defer src="_static/scripts/bootstrap.js?digest=0790524f97105ba85085"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=0790524f97105ba85085"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -1193,7 +1284,7 @@
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.17.1.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.18.0.
 </p></div>
       
     </div>

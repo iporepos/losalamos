@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>API &#8212; losalamos 0.0.1 documentation</title>
+    <title>API Reference &#8212; losalamos 0.0.1 documentation</title>
   
   
   
@@ -27,18 +27,18 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="_static/styles/theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
-<link href="_static/styles/pydata-sphinx-theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+  <link href="_static/styles/theme.css?digest=0790524f97105ba85085" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=0790524f97105ba85085" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
   
   <!-- So that users can add custom icons -->
-  <script defer src="_static/scripts/fontawesome.js?digest=55c26ed414f5f8a31ebb"></script>
+  <script defer src="_static/scripts/fontawesome.js?digest=0790524f97105ba85085"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb" />
-<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb" />
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=0790524f97105ba85085" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=0790524f97105ba85085" />
 
     <script src="_static/documentation_options.js?v=d45e8c67"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
@@ -164,7 +164,7 @@
 
 <li class="nav-item current active">
   <a class="nav-link nav-internal" href="#">
-    API
+    API Reference
   </a>
 </li>
 
@@ -196,11 +196,18 @@
       
         <div class="navbar-item">
 
-<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
-  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
-  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
-  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
-</button></div>
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
       
         <div class="navbar-item"><ul class="navbar-icon-links"
     aria-label="Icon Links">
@@ -213,8 +220,7 @@
           
           
           
-          <a href="https://github.com/iporepos/losalamos" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
-            <span class="sr-only">GitHub</span></a>
+          <a href="https://github.com/iporepos/losalamos" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
         </li>
 </ul></div>
       
@@ -287,7 +293,7 @@
 
 <li class="nav-item current active">
   <a class="nav-link nav-internal" href="#">
-    API
+    API Reference
   </a>
 </li>
 
@@ -310,11 +316,18 @@
         
           <div class="navbar-item">
 
-<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
-  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
-  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
-  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
-</button></div>
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
         
           <div class="navbar-item"><ul class="navbar-icon-links"
     aria-label="Icon Links">
@@ -327,8 +340,7 @@
           
           
           
-          <a href="https://github.com/iporepos/losalamos" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
-            <span class="sr-only">GitHub</span></a>
+          <a href="https://github.com/iporepos/losalamos" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
         </li>
 </ul></div>
         
@@ -350,24 +362,21 @@
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="generated/losalamos.html">losalamos</a></li>
-</ul>
-<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="generated/losalamos.root.html">losalamos.root</a></li>
-</ul>
-<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="generated/losalamos.project.html">losalamos.project</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="generated/losalamos.notes.html">losalamos.notes</a></li>
-</ul>
-<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="generated/losalamos.figures.html">losalamos.figures</a></li>
-</ul>
-<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="generated/losalamos.references.html">losalamos.references</a></li>
+<li class="toctree-l1"><a class="reference internal" href="generated/losalamos.ingestion.html">losalamos.ingestion</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="generated/losalamos.ingestion.html">losalamos.ingestion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="generated/losalamos.tools.build_figures.html">losalamos.tools.build_figures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="generated/losalamos.tools.ingest_references.html">losalamos.tools.ingest_references</a></li>
+<li class="toctree-l1"><a class="reference internal" href="generated/losalamos.tools.search_references.html">losalamos.tools.search_references</a></li>
+<li class="toctree-l1"><a class="reference internal" href="generated/losalamos.tools.update_references.html">losalamos.tools.update_references</a></li>
+<li class="toctree-l1"><a class="reference internal" href="generated/losalamos.tools.update_templates.html">losalamos.tools.update_templates</a></li>
 </ul>
 </div>
 </nav></div>
@@ -408,7 +417,7 @@
         <i class="fa-solid fa-home"></i>
       </a>
     </li>
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">API</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">API Reference</span></li>
   </ul>
 </nav>
 </div>
@@ -425,73 +434,74 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="api">
-<span id="id1"></span><h1>API<a class="headerlink" href="#api" title="Link to this heading">#</a></h1>
-<p>Welcome to the API documentation for this project.
-This reference, automatically generated using Sphinx, provides a complete overview of all relevant modules,
-classes, functions, and constants in the repository. It is intended to help developers quickly understand
-and navigate the available components and their usage, serving as a reliable
-guide for integrating and extending the functionality of the project.</p>
+  <section id="api-reference">
+<span id="api"></span><h1>API Reference<a class="headerlink" href="#api-reference" title="Link to this heading">#</a></h1>
+<p>This reference is automatically generated from docstrings in the source code.
+It covers the main modules, classes, and functions available in the package.</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>This API documentation is under active development</p>
+<p>This documentation is under active development and may be incomplete.</p>
 </div>
+<section id="core">
+<h2>Core<a class="headerlink" href="#core" title="Link to this heading">#</a></h2>
 <div class="pst-scrollable-table-container"><table class="autosummary longtable table">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/losalamos.html#module-losalamos" title="losalamos"><code class="xref py py-obj docutils literal notranslate"><span class="pre">losalamos</span></code></a></p></td>
 <td><p>{Short package description (1-3 sentences)} todo docstring</p></td>
 </tr>
-</tbody>
-</table>
-</div>
-<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
-<tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/losalamos.root.html#module-losalamos.root" title="losalamos.root"><code class="xref py py-obj docutils literal notranslate"><span class="pre">losalamos.root</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/losalamos.root.html#module-losalamos.root" title="losalamos.root"><code class="xref py py-obj docutils literal notranslate"><span class="pre">losalamos.root</span></code></a></p></td>
 <td><p>A set of primitive classes used in other modules.</p></td>
 </tr>
-</tbody>
-</table>
-</div>
-<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
-<tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/losalamos.project.html#module-losalamos.project" title="losalamos.project"><code class="xref py py-obj docutils literal notranslate"><span class="pre">losalamos.project</span></code></a></p></td>
 <td><p>Project management and filesystem initialization utilities.</p></td>
 </tr>
 </tbody>
 </table>
 </div>
+</section>
+<section id="domain">
+<h2>Domain<a class="headerlink" href="#domain" title="Link to this heading">#</a></h2>
 <div class="pst-scrollable-table-container"><table class="autosummary longtable table">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/losalamos.notes.html#module-losalamos.notes" title="losalamos.notes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">losalamos.notes</span></code></a></p></td>
 <td><p>Utilities for managing structured Markdown notes.</p></td>
 </tr>
-</tbody>
-</table>
-</div>
-<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
-<tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/losalamos.figures.html#module-losalamos.figures" title="losalamos.figures"><code class="xref py py-obj docutils literal notranslate"><span class="pre">losalamos.figures</span></code></a></p></td>
-<td><p>{Short module description (1-3 sentences)} todo docstring</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/losalamos.figures.html#module-losalamos.figures" title="losalamos.figures"><code class="xref py py-obj docutils literal notranslate"><span class="pre">losalamos.figures</span></code></a></p></td>
+<td><p>SVG and raster figure handling for export pipelines.</p></td>
 </tr>
-</tbody>
-</table>
-</div>
-<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
-<tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/losalamos.references.html#module-losalamos.references" title="losalamos.references"><code class="xref py py-obj docutils literal notranslate"><span class="pre">losalamos.references</span></code></a></p></td>
 <td><p>Reference management utilities for bibliographic metadata.</p></td>
 </tr>
-</tbody>
-</table>
-</div>
-<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
-<tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/losalamos.ingestion.html#module-losalamos.ingestion" title="losalamos.ingestion"><code class="xref py py-obj docutils literal notranslate"><span class="pre">losalamos.ingestion</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/losalamos.ingestion.html#module-losalamos.ingestion" title="losalamos.ingestion"><code class="xref py py-obj docutils literal notranslate"><span class="pre">losalamos.ingestion</span></code></a></p></td>
 <td><p>Automated ingestion utilities for bibliographic files.</p></td>
 </tr>
 </tbody>
 </table>
 </div>
+</section>
+<section id="tools">
+<h2>Tools<a class="headerlink" href="#tools" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/losalamos.tools.build_figures.html#module-losalamos.tools.build_figures" title="losalamos.tools.build_figures"><code class="xref py py-obj docutils literal notranslate"><span class="pre">losalamos.tools.build_figures</span></code></a></p></td>
+<td><p>Build image outputs from a folder of SVG files using a JSON parameter file.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/losalamos.tools.ingest_references.html#module-losalamos.tools.ingest_references" title="losalamos.tools.ingest_references"><code class="xref py py-obj docutils literal notranslate"><span class="pre">losalamos.tools.ingest_references</span></code></a></p></td>
+<td><p>Ingest reference files from a source directory into a target dataset structure.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/losalamos.tools.search_references.html#module-losalamos.tools.search_references" title="losalamos.tools.search_references"><code class="xref py py-obj docutils literal notranslate"><span class="pre">losalamos.tools.search_references</span></code></a></p></td>
+<td><p>Batch-extract bibliographic references from PDFs using a Gemini model.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/losalamos.tools.update_references.html#module-losalamos.tools.update_references" title="losalamos.tools.update_references"><code class="xref py py-obj docutils literal notranslate"><span class="pre">losalamos.tools.update_references</span></code></a></p></td>
+<td><p>Update reference notes in a target folder.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/losalamos.tools.update_templates.html#module-losalamos.tools.update_templates" title="losalamos.tools.update_templates"><code class="xref py py-obj docutils literal notranslate"><span class="pre">losalamos.tools.update_templates</span></code></a></p></td>
+<td><p>Synchronise note templates to a target project folder.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
 </section>
 
 
@@ -534,6 +544,20 @@ guide for integrating and extending the functionality of the project.</p>
 
 
   <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#core">Core</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#domain">Domain</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tools">Tools</a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
 
   <div class="tocsection sourcelink">
     <a href="_sources/api.rst.txt">
@@ -555,8 +579,8 @@ guide for integrating and extending the functionality of the project.</p>
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb"></script>
-<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb"></script>
+  <script defer src="_static/scripts/bootstrap.js?digest=0790524f97105ba85085"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=0790524f97105ba85085"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -590,7 +614,7 @@ guide for integrating and extending the functionality of the project.</p>
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.17.1.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.18.0.
 </p></div>
       
     </div>
