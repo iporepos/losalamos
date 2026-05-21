@@ -15,19 +15,21 @@ Usage
 Module execution (recommended):
 
 Shell (bash/zsh):
-```sh
-python -m losalamos.tools.ingest_references \
-    --src /path/to/source \
-    --dst /path/to/destination
-```
+
+.. code-block:: sh
+
+    python -m losalamos.tools.ingest_references \
+        --src /path/to/source \
+        --dst /path/to/destination
 
 PowerShell (ps1):
-```powershell
-$SRC="C:\path\to\source"
-$DST="C:\path\to\destination"
 
-python -m losalamos.tools.ingest_references --src $SRC --dst $DST
-```
+.. code-block:: powershell
+
+    $SRC="C:\path\to\source"
+    $DST="C:\path\to\destination"
+
+    python -m losalamos.tools.ingest_references --src $SRC --dst $DST
 """
 
 # IMPORTS

@@ -8,7 +8,7 @@ Batch-extract bibliographic references from PDFs using a Gemini model.
 
 This tool scans a folder of PDF files, builds a prompt from the first N pages,
 and queries a generative model to produce BibTeX entries. Results are saved
-as `.bib` files and the corresponding PDFs are renamed accordingly.
+as ``.bib`` files and the corresponding PDFs are renamed accordingly.
 
 Usage
 -----
@@ -16,38 +16,42 @@ Usage
 Module execution (recommended):
 
 Shell (bash/zsh):
-```shell
-python -m losalamos.tools.search_references \
-    --file specs.json
-```
+
+.. code-block:: shell
+
+    python -m losalamos.tools.search_references \
+        --file specs.json
 
 PowerShell (ps1):
-```shell
-$SPEC="C:\\path\\to\\specs.json"
 
-python -m losalamos.tools.search_references `
-    --file $SPEC
-```
+.. code-block:: powershell
+
+    $SPEC="C:\\path\\to\\specs.json"
+
+    python -m losalamos.tools.search_references `
+        --file $SPEC
 
 Specification (JSON)
 --------------------
 
 The input file must define:
-```json
-{
-    "folder": "/path/to/pdf_dir",
-    "api": "YOUR_API_KEY",
-    "model": "gemini-3-flash-preview",
-    "pages": 2,
-    "prompt": "path/to/prompt.txt or inline string"
-}
-```
+
+.. code-block:: json
+
+    {
+        "folder": "/path/to/pdf_dir",
+        "api": "YOUR_API_KEY",
+        "model": "gemini-3-flash-preview",
+        "pages": 2,
+        "prompt": "path/to/prompt.txt or inline string"
+    }
+
 Side effects
 ------------
 
-- Creates `.bib` files alongside each PDF
+- Creates ``.bib`` files alongside each PDF
 - Renames PDFs based on the generated BibTeX key
-- Skips files that already have a corresponding `.bib`
+- Skips files that already have a corresponding ``.bib``
 
 """
 

@@ -4,8 +4,19 @@
 # See pyproject.toml for authors/maintainers.
 # See LICENSE for license details.
 """
-{Short module description (1-3 sentences)}
-todo docstring
+Update reference notes in a target folder.
+
+Scans a directory for Markdown files whose metadata declares
+``note_type: reference`` and runs the update pipeline on each one.
+
+**Shell usage**
+
+.. code-block:: bash
+
+    python -m losalamos.tools.update_references --folder /path/to/notes
+
+    # Using short flag
+    python -m losalamos.tools.update_references -d /path/to/notes
 
 """
 # IMPORTS

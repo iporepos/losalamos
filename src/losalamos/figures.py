@@ -4,8 +4,10 @@
 # See pyproject.toml for authors/maintainers.
 # See LICENSE for license details.
 """
-{Short module description (1-3 sentences)}
-todo docstring
+SVG and raster figure handling for export pipelines.
+
+Provides classes for loading, manipulating, and exporting figures
+in SVG, PDF, PNG, and JPEG formats using Inkscape as the rendering backend.
 
 """
 # IMPORTS
@@ -69,8 +71,13 @@ from losalamos.root import DataSet
 
 
 class Figure(DataSet):
+    """
 
-    # todo docstring
+    Base class for figure objects.
+
+    Extends :class:`~losalamos.root.DataSet` with image utility methods
+    for scaling, thumbnail generation, and format conversion.
+    """
 
     def __init__(self, name="MyFig", alias="Fig"):
 
@@ -233,6 +240,28 @@ class Figure(DataSet):
 
 
 class FigureSVG(Figure):
+    """
+    SVG figure with layer control and multi-format export.
+
+    Loads an Inkscape SVG file and exposes methods to manipulate layer
+    visibility and export the drawing to SVG, PDF, PNG, or JPEG via
+    Inkscape subprocess calls.
+
+    :param name: Internal object name. Default value = ``MySVG``
+    :type name: str
+    :param alias: Short display alias. Default value = ``SVG``
+    :type alias: str
+
+    .. note::
+
+        All export methods (``to_svg``, ``to_pdf``, ``to_image``) operate
+        on a temporary copy of the source file, leaving the original untouched.
+
+    .. warning::
+
+        Requires ``inkscape`` to be installed and available in the system PATH.
+
+    """
 
     def __init__(self, name="MySVG", alias="SVG"):
 
@@ -314,28 +343,6 @@ class FigureSVG(Figure):
             f.write(xml_str)
 
         return None
-
-    '''
-    # keeping this code block in case bugs in save() arise again
-
-    def save_old(self):
-        """
-        Serializes the current XML tree and writes it to the local file system.
-
-        :return: Always returns ``None``
-        :rtype: None
-        """
-        root = self.tree.getroot()
-        xml_str = etree.tostring(
-            root, encoding="utf-8", xml_declaration=True, pretty_print=True
-        )
-
-        with open(self.file_data, "wb") as f:
-            f.write(xml_str)
-
-        return None
-
-    '''
 
     def export(self, folder, filename, data_suffix=None):
         """
@@ -432,8 +439,9 @@ class FigureSVG(Figure):
 
         else:
             all_layers = self.get_layers_labels()
-            for lbl in all_layers and lbl not in labels:
-                self.hide_layer(label=lbl)
+            for lbl in all_layers:
+                if lbl not in labels:
+                    self.hide_layer(label=lbl)
 
         return None
 
@@ -644,7 +652,7 @@ class FigureSVG(Figure):
             b_save = True
 
         if show_layers is not None:
-            self.show_layers(labels=hide_layers, inclusive=show_inclusive)
+            self.show_layers(labels=show_layers, inclusive=show_inclusive)
             b_save = True
 
         # save to temporary file
@@ -691,6 +699,261 @@ class FigureSVG(Figure):
         os.remove(dst_file)
 
         return return_file
+
+    def to_pdf(
+        self,
+        file_output=None,
+        crop_id=None,
+        hide_layers=None,
+        show_layers=None,
+        show_inclusive=True,
+    ):
+        """
+        Export the current drawing as a PDF file.
+
+        This method uses a two-stage vector export pipeline when ``crop_id``
+        is provided:
+
+            original.svg
+                -> temporary cropped svg
+                -> final pdf
+
+        This approach preserves SVG clipping semantics more reliably than
+        direct PDF export from Inkscape.
+
+        :param file_output: [optional] Destination PDF path.
+        :type file_output: str or :class:`pathlib.Path`
+
+        :param crop_id: [optional] Object ID used for cropping/export.
+        :type crop_id: str
+
+        :param hide_layers: [optional] List of layer labels to hide.
+        :type hide_layers: list
+
+        :param show_layers: [optional] List of layer labels to show.
+        :type show_layers: list
+
+        :param show_inclusive:
+            Whether ``show_layers`` should act inclusively.
+        :type show_inclusive: bool
+
+        :return: Path to generated PDF file.
+        :rtype: :class:`pathlib.Path`
+
+        .. warning::
+
+            Requires ``inkscape`` available in system PATH.
+
+        """
+        import os
+        import shutil
+        import subprocess
+
+        from pathlib import Path
+        from losalamos.utils import make_local_tempfile
+
+        # handle output file
+        # -------------------------------------------------------------------------
+        if file_output is None:
+            file_output = self.file_data.parent / (self.file_data.stem + ".pdf")
+
+        file_output = Path(file_output).resolve()
+
+        # enforce extension
+        # -------------------------------------------------------------------------
+        if file_output.suffix.lower() != ".pdf":
+            file_output = file_output.with_suffix(".pdf")
+
+        # create temporary working copy
+        # -------------------------------------------------------------------------
+        src_file = self.file_data
+        dst_file = make_local_tempfile(src_file=src_file)
+
+        shutil.copy(src=self.file_data, dst=dst_file)
+
+        self.file_data = dst_file
+
+        # handle layer visibility
+        # -------------------------------------------------------------------------
+        b_save = False
+
+        if hide_layers is not None:
+            self.hide_layers(labels=hide_layers)
+            b_save = True
+
+        if show_layers is not None:
+            self.show_layers(
+                labels=show_layers,
+                inclusive=show_inclusive,
+            )
+            b_save = True
+
+        # save temporary document if modified
+        # -------------------------------------------------------------------------
+        if b_save:
+            self.save()
+
+        # -------------------------------------------------------------------------
+        # CROPPED VECTOR EXPORT
+        # -------------------------------------------------------------------------
+        if crop_id is not None:
+
+            temp_svg = make_local_tempfile(src_file=self.file_data.with_suffix(".svg"))
+
+            # stage 1:
+            # export cropped standalone svg
+            # ---------------------------------------------------------------------
+            cmd_svg = [
+                "inkscape",
+                self.file_data,
+                "--export-type=svg",
+                f"--export-filename={temp_svg}",
+                f"--export-id={crop_id}",
+                # "--export-id-only",
+            ]
+
+            subprocess.run(cmd_svg, check=True)
+
+            # stage 2:
+            # export svg -> pdf
+            # ---------------------------------------------------------------------
+            cmd_pdf = [
+                "inkscape",
+                temp_svg,
+                "--export-type=pdf",
+                "--export-area-page",
+                f"--export-filename={file_output}",
+            ]
+
+            subprocess.run(cmd_pdf, check=True)
+
+            # cleanup temporary svg
+            # ---------------------------------------------------------------------
+            if os.path.exists(temp_svg):
+                os.remove(temp_svg)
+
+        # -------------------------------------------------------------------------
+        # STANDARD FULL-PAGE EXPORT
+        # -------------------------------------------------------------------------
+        else:
+
+            cmd_pdf = [
+                "inkscape",
+                self.file_data,
+                "--export-type=pdf",
+                "--export-area-page",
+                f"--export-filename={file_output}",
+            ]
+
+            subprocess.run(cmd_pdf, check=True)
+
+        # restore original state
+        # -------------------------------------------------------------------------
+        self.file_data = src_file
+
+        # cleanup temporary working file
+        # -------------------------------------------------------------------------
+        if os.path.exists(dst_file):
+            os.remove(dst_file)
+
+        return file_output
+
+    def to_svg(
+        self,
+        file_output=None,
+        crop_id=None,
+        hide_layers=None,
+        show_layers=None,
+        show_inclusive=True,
+    ):
+        """
+        Export the current drawing as an SVG file.
+
+        :param file_output: [optional] Destination SVG path. Defaults to the source file name.
+        :type file_output: str or :class:`pathlib.Path`
+        :param crop_id: [optional] Object ID to crop the export to.
+        :type crop_id: str
+        :param hide_layers: [optional] List of layer labels to hide before export.
+        :type hide_layers: list
+        :param show_layers: [optional] List of layer labels to show before export.
+        :type show_layers: list
+        :param show_inclusive: Whether to show layers inclusively. Default value = ``True``
+        :type show_inclusive: bool
+        :return: Path to the generated SVG file.
+        :rtype: :class:`pathlib.Path`
+
+        :raises FileExistsError: If ``file_output`` resolves to the same path as the source file.
+
+        .. warning::
+
+            This method requires ``inkscape`` to be installed and available in the system PATH.
+
+        """
+        import subprocess
+        from losalamos.utils import make_local_tempfile
+
+        # handle output file
+        # -----------------------------------------------------------------------
+        if file_output is None:
+            file_output = self.file_data.parent / (self.file_data.stem + ".svg")
+
+        file_output = Path(file_output).resolve()
+
+        if file_output.suffix.lower() != ".svg":
+            file_output = file_output.with_suffix(".svg")
+
+        # guard against overwriting the source file
+        # -----------------------------------------------------------------------
+        if file_output == self.file_data.resolve():
+            raise FileExistsError(
+                f"file_output resolves to the source file: {file_output}\n"
+                f"Provide an explicit destination path to avoid overwriting the master SVG."
+            )
+
+        # create temporary working copy
+        # -----------------------------------------------------------------------
+        src_file = self.file_data
+        dst_file = make_local_tempfile(src_file=src_file)
+        shutil.copy(src=self.file_data, dst=dst_file)
+        self.file_data = dst_file
+
+        # handle layer visibility
+        # -----------------------------------------------------------------------
+        b_save = False
+
+        if hide_layers is not None:
+            self.hide_layers(labels=hide_layers)
+            b_save = True
+
+        if show_layers is not None:
+            self.show_layers(labels=show_layers, inclusive=show_inclusive)
+            b_save = True
+
+        if b_save:
+            self.save()
+
+        # build and run inkscape command
+        # -----------------------------------------------------------------------
+        cmd = [
+            "inkscape",
+            self.file_data,
+            "--export-type=svg",
+            f"--export-filename={file_output}",
+        ]
+
+        if crop_id is not None:
+            cmd.append(f"--export-id={crop_id}")
+
+        subprocess.run(cmd, check=True)
+
+        # restore original state and cleanup
+        # -----------------------------------------------------------------------
+        self.file_data = src_file
+
+        if os.path.exists(dst_file):
+            os.remove(dst_file)
+
+        return file_output
 
     @staticmethod
     def _parse_style(style_str):

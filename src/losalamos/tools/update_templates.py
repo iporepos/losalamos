@@ -4,13 +4,23 @@
 # See pyproject.toml for authors/maintainers.
 # See LICENSE for license details.
 """
-{Short module description (1-3 sentences)}
-todo docstring
+Synchronise note templates to a target project folder.
+
+Copies all ``_*.md`` template files from the project-level templates
+source into the specified destination directory.
+
+**Shell usage**
+
+.. code-block:: bash
+
+    python -m losalamos.tools.update_templates --notes /path/to/notes
+
+    # Using short flag
+    python -m losalamos.tools.update_templates -n /path/to/notes
 
 """
 # IMPORTS
 # ***********************************************************************
-# import modules from other libs
 
 # Native imports
 # =======================================================================
@@ -20,24 +30,10 @@ import os
 import shutil
 from pathlib import Path
 
-# ... {develop}
-
-# External imports
-# =======================================================================
-# import {module}
-# ... {develop}
-
 # Project-level imports
 # =======================================================================
 from losalamos.paths import FOLDER_TEMPLATES_NOTES
 from losalamos.tools.core import *
-
-# ... {develop}
-
-
-# CONSTANTS
-# ***********************************************************************
-# define constants in uppercase
 
 
 # FUNCTIONS
@@ -46,15 +42,18 @@ from losalamos.tools.core import *
 
 def get_arguments():
     parser = argparse.ArgumentParser()
-    parser.add_argument("-n", "--notes", help="folder for notes templates.")
-    # keep adding if more templates arise
+    parser.add_argument("-n", "--notes", help="Destination folder for note templates.")
     args = parser.parse_args()
-
     return args
 
 
 def main():
+    """
+    Copy note templates from the project source into the target folder.
 
+    Templates are identified by the ``_*.md`` glob pattern. Missing
+    templates produce a warning; no error is raised.
+    """
     heading_section("UPDATE TEMPLATES")
 
     args = get_arguments()
@@ -85,22 +84,18 @@ def main():
 
     # FIGURES (future)
     # -------------------------------------------------------------------
-    # print("[Figures]")
+    # heading_subsection("[Figures]")
     # ...
 
     # DOCUMENTS (future)
     # -------------------------------------------------------------------
-    # print("[Documents]")
+    # heading_subsection("[Documents]")
     # ...
+
     heading_done()
 
 
 # SCRIPT
 # ***********************************************************************
-# standalone behaviour as a script
 if __name__ == "__main__":
-
-    # Script section
-    # ===================================================================
     main()
-    # ... {develop}
