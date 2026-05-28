@@ -640,6 +640,12 @@ class FigureSVG(Figure):
         shutil.copy(src=self.file_data, dst=dst_file)
         self.file_data = dst_file
 
+        # handle page opacity for jpeg render
+        # -----------------------------------------------------------------------
+        if to_jpeg:
+            self.set_page_opacity(opacity=1.0)
+            self.save()
+
         # Get abspath
         file_output = Path(file_output).resolve()
 

@@ -85,6 +85,7 @@ autodoc_mock_imports = [
     "requests",
     "numpy",
     "pandas",
+    "geopandas",
     "lxml",
     "PyPDF2",
     # ... keep adding as new dependencies arise

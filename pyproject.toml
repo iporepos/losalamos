@@ -108,6 +108,8 @@ dependencies = [
     "requests",    # network operations
     "numpy",       # numerical computations
     "pandas",      # data manipulation
+    "geopandas",   # spatial data manipulation
+    "fiona",   # spatial data manipulation
     "pillow",      # image manipulation
     "lxml",        # XML manipulation
     "PyMuPDF",     # PDF handler

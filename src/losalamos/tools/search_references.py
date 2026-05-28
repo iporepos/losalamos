@@ -87,11 +87,12 @@ from losalamos.ingestion import Ingester
 # ***********************************************************************
 def get_auxiliary_context(pdf_path: Path) -> str:
     """
-    Look for auxiliary ``.txt`` and ``.ris`` files alongside the PDF.
+    Look for auxiliary ``.txt``, ``.ris``, and ``.md`` files alongside the PDF,
+    as well as a general ``context.txt`` file in the same folder.
 
     Reads the contents of any matching auxiliary files (sharing the same stem
-    as the PDF) and returns them as a formatted string to be injected into
-    the LLM prompt context.
+    as the PDF) and a standard ``context.txt`` file if present, returning them
+    as a formatted string to be injected into the LLM prompt context.
 
     :param pdf_path: The file path to the target PDF document.
     :type pdf_path: pathlib.Path
@@ -101,21 +102,27 @@ def get_auxiliary_context(pdf_path: Path) -> str:
     """
     aux_text = ""
 
-    # Define the extensions to look for
-    aux_extensions = [".txt", ".ris", ".md"]
+    def read_file(file: Path, label: str) -> str:
+        try:
+            content = file.read_text(encoding="utf-8").strip()
+            if content:
+                return f"\n--- {label} ---\n{content}\n"
+        except Exception as e:
+            print(f"Warning: Could not read {file.name}: {e}")
+        return ""
 
-    for ext in aux_extensions:
+    # General folder-level context (always context.txt, regardless of PDF name)
+    general_context_file = pdf_path.parent / "context.txt"
+    if general_context_file.is_file() and general_context_file != pdf_path.with_suffix(
+        ".txt"
+    ):
+        aux_text += read_file(general_context_file, "General context from context.txt")
+
+    # PDF-specific auxiliary files (same stem as the PDF)
+    for ext in [".txt", ".ris", ".md"]:
         aux_file = pdf_path.with_suffix(ext)
         if aux_file.is_file():
-            try:
-                with open(aux_file, "r", encoding="utf-8") as f:
-                    content = f.read().strip()
-                    if content:
-                        aux_text += (
-                            f"\n--- Metadata from {aux_file.name} ---\n{content}\n"
-                        )
-            except Exception as e:
-                print(f"Warning: Could not read {aux_file.name}: {e}")
+            aux_text += read_file(aux_file, f"Specific context from {aux_file.name}")
 
     return aux_text
 

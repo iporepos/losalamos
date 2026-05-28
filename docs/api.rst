@@ -41,7 +41,9 @@ Tools
    :toctree: generated
 
    losalamos.tools.build_figures
+   losalamos.tools.new_drawing
    losalamos.tools.ingest_references
    losalamos.tools.search_references
    losalamos.tools.update_references
    losalamos.tools.update_templates
+   losalamos.tools.database

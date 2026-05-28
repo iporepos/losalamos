@@ -350,23 +350,59 @@ class Reference(DataSet):
                 dc[k] = self.data[k]
         return dc.copy()
 
+    def _increment_suffix(self, suffix: str) -> str:
+        """
+        Increment an alphabetic suffix using base-26 'odometer' logic.
+        Examples: 'a' -> 'b', 'z' -> 'aa', 'az' -> 'ba', 'zz' -> 'aaa'
+        """
+        chars = list(suffix)
+        carry = True
+        for i in reversed(range(len(chars))):
+            if carry:
+                if chars[i] == "z":
+                    chars[i] = "a"
+                else:
+                    chars[i] = chr(ord(chars[i]) + 1)
+                    carry = False
+        if carry:
+            chars.insert(0, "a")
+        return "".join(chars)
+
     def define_file_name(self, library_folder=None, extension="md"):
         """
-        Generates a unique filename based on author, year, and an alphabetic suffix to avoid collisions.
+        Generate a unique filename based on author, year, and an incrementing
+        alphabetic suffix to avoid collisions.
 
-        .. note::
+        The filename follows the pattern ``{author}_{year}_{suffix}``, where
+        ``suffix`` starts at ``"a"`` and increments through ``"b"``, ``"c"``,
+        ..., ``"z"``, ``"aa"``, ``"ab"``, and so on — supporting an unlimited
+        number of collisions via variable-length base-26 suffixes.
 
-             This method extracts the primary author and year from the citation metadata to form a base
-             filename. If a ``library_folder`` is provided and accessible, it scans the directory for
-             existing files matching the ``{author}_{year}_*`` pattern, identifies the highest
-             alphabetic suffix used (e.g., ``a``, ``b``, ``c``), and increments it to ensure the
-             new filename is unique.
+        If ``library_folder`` is provided and exists, the directory is scanned
+        for files matching ``{author}_{year}_*.{extension}``. The highest
+        existing suffix (ordered by length first, then alphabetically) is
+        identified and incremented to produce the next unique name. If no
+        matching files are found, the suffix defaults to ``"a"``.
 
-        :param library_folder: [optional] The directory path to check for existing files to determine the next suffix.
-        :type library_folder: str | :class:`pathlib.Path`
-        :param extension: The file extension to use when searching for existing patterns. Default value = ``md``
+        Examples of generated filenames::
+
+            Smith_2020_a      # first entry
+            Smith_2020_b      # second entry
+            Smith_2020_z      # 26th entry
+            Smith_2020_aa     # 27th entry
+            Smith_2020_az     # 52nd entry
+            Smith_2020_ba     # 53rd entry
+            Smith_2020_aaa    # 703rd entry
+
+        :param library_folder: Directory to scan for existing files when
+            determining the next suffix. If ``None`` or the path does not
+            exist, the suffix defaults to ``"a"``.
+        :type library_folder: str or :class:`pathlib.Path`, optional
+        :param extension: File extension used when globbing for existing
+            filename collisions. Defaults to ``"md"``.
         :type extension: str
-        :return: The generated filename string in the format ``{author}_{year}_{suffix}``.
+        :return: The generated filename string in the format
+            ``{author}_{year}_{suffix}``, without a file extension.
         :rtype: str
         """
 
@@ -376,19 +412,15 @@ class Reference(DataSet):
 
         entry_type = self.data.get("entry_type").strip()
 
-        # Extract the citation string
         cite = self.cite_line(self.data, text_format="plain", embed_link=False)
 
         if entry_type in ["article", "book"]:
-            # Assume first token is the author surname
             author = cite.split(" ")[0]
         else:
             author = "".join(cite.split(" ")[:-1])
 
-        # Extract year from stored metadata
         year = str(self.data["year"])
 
-        # Default suffix if no existing file is found
         suffix = "a"
 
         # -------------------------------------------------------
@@ -400,69 +432,53 @@ class Reference(DataSet):
 
             dst_folder = Path(library_folder)
 
-            # Only proceed if the folder actually exists
             if dst_folder.is_dir():
 
-                # ---------------------------------------------------
-                # 3. Search for existing files that match the pattern
+                # -------------------------------------------------------
+                # 3. Search for existing files matching the pattern
                 #
-                # Example pattern:
-                # Smith_2020_*.md
-                # ---------------------------------------------------
+                # Example pattern: Smith_2020_*.md
+                # -------------------------------------------------------
 
                 pattern = f"{author}_{year}_*.{extension}"
                 existing_files = list(dst_folder.glob(pattern))
 
-                # ---------------------------------------------------
+                # -------------------------------------------------------
                 # 4. Extract suffix letters from existing filenames
-                # ---------------------------------------------------
+                # -------------------------------------------------------
 
                 suffixes = []
 
                 for f in existing_files:
-
-                    # Remove extension
-                    # Example:
-                    # Smith_2020_a
                     name = f.stem
-
-                    # Split components by "_"
                     parts = name.split("_")
 
-                    # Expected structure:
-                    # [author, year, suffix]
+                    # Expected structure: [author, year, suffix]
                     if len(parts) >= 3:
-
                         candidate_suffix = parts[-1]
 
-                        # Only accept valid single lowercase letters
-                        if (
-                            len(candidate_suffix) == 1
-                            and candidate_suffix in string.ascii_lowercase
+                        # Accept any non-empty all-lowercase suffix (a, z, aa, ab, ...)
+                        if candidate_suffix and all(
+                            c in string.ascii_lowercase for c in candidate_suffix
                         ):
                             suffixes.append(candidate_suffix)
 
-                # ---------------------------------------------------
-                # 5. Determine next suffix in alphabet
-                # ---------------------------------------------------
+                # -------------------------------------------------------
+                # 5. Determine the next suffix in the sequence
+                #
+                # Sort by (length, value) so that 'z' < 'aa' — plain
+                # lexicographic max() would incorrectly rank 'b' > 'aa'.
+                # -------------------------------------------------------
 
                 if suffixes:
-                    # Find the largest existing letter
-                    # Example: ["a","b","c"] -> "c"
-                    last_suffix = max(suffixes)
-
-                    # Convert letter → ASCII → next letter
-                    next_letter = chr(ord(last_suffix) + 1)
-
-                    suffix = next_letter
+                    last_suffix = max(suffixes, key=lambda s: (len(s), s))
+                    suffix = self._increment_suffix(last_suffix)
 
         # -------------------------------------------------------
-        # 6. Build the final filename
+        # 6. Build and return the final filename
         # -------------------------------------------------------
 
-        filename = f"{author}_{year}_{suffix}"
-
-        return filename
+        return f"{author}_{year}_{suffix}"
 
     def get_str_bib(self):
         """

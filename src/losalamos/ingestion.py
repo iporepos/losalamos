@@ -178,10 +178,6 @@ class Ingester:
         #  include a system for querying data from CrossRef
         #  evaluate an enrichment system
 
-        # todo develop
-        #  include a system for integration with AI API
-        #  read first pages and ask for the bib file
-
         return None
 
     def explode_bib_files(self):
