@@ -32,6 +32,7 @@ Domain
    losalamos.figures
    losalamos.references
    losalamos.ingestion
+   losalamos.documents
 
 
 Tools

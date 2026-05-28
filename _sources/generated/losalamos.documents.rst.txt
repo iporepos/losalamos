@@ -1,0 +1,18 @@
+﻿losalamos.documents
+===================
+
+.. automodule:: losalamos.documents
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      escape_percent_latex
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      DocumentTeX
+   

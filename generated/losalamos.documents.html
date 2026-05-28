@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>losalamos.tools.update_templates &#8212; losalamos 0.0.1 documentation</title>
+    <title>losalamos.documents &#8212; losalamos 0.0.1 documentation</title>
   
   
   
@@ -46,13 +46,13 @@
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../_static/copybutton.js?v=f281be69"></script>
     <script src="../_static/design-tabs.js?v=f930bc37"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'generated/losalamos.tools.update_templates';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'generated/losalamos.documents';</script>
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <link rel="author" title="About these documents" href="../about.html" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="losalamos.tools.database" href="losalamos.tools.database.html" />
-    <link rel="prev" title="losalamos.tools.update_references" href="losalamos.tools.update_references.html" />
+    <link rel="next" title="losalamos.tools.build_figures" href="losalamos.tools.build_figures.html" />
+    <link rel="prev" title="losalamos.ingestion" href="losalamos.ingestion.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
@@ -365,20 +365,20 @@
 <li class="toctree-l1"><a class="reference internal" href="losalamos.root.html">losalamos.root</a></li>
 <li class="toctree-l1"><a class="reference internal" href="losalamos.project.html">losalamos.project</a></li>
 </ul>
-<ul class="nav bd-sidenav">
+<ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="losalamos.notes.html">losalamos.notes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="losalamos.figures.html">losalamos.figures</a></li>
 <li class="toctree-l1"><a class="reference internal" href="losalamos.references.html">losalamos.references</a></li>
 <li class="toctree-l1"><a class="reference internal" href="losalamos.ingestion.html">losalamos.ingestion</a></li>
-<li class="toctree-l1"><a class="reference internal" href="losalamos.documents.html">losalamos.documents</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">losalamos.documents</a></li>
 </ul>
-<ul class="current nav bd-sidenav">
+<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="losalamos.tools.build_figures.html">losalamos.tools.build_figures</a></li>
 <li class="toctree-l1"><a class="reference internal" href="losalamos.tools.new_drawing.html">losalamos.tools.new_drawing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="losalamos.tools.ingest_references.html">losalamos.tools.ingest_references</a></li>
 <li class="toctree-l1"><a class="reference internal" href="losalamos.tools.search_references.html">losalamos.tools.search_references</a></li>
 <li class="toctree-l1"><a class="reference internal" href="losalamos.tools.update_references.html">losalamos.tools.update_references</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">losalamos.tools.update_templates</a></li>
+<li class="toctree-l1"><a class="reference internal" href="losalamos.tools.update_templates.html">losalamos.tools.update_templates</a></li>
 <li class="toctree-l1"><a class="reference internal" href="losalamos.tools.database.html">losalamos.tools.database</a></li>
 </ul>
 </div>
@@ -423,7 +423,7 @@
     
     <li class="breadcrumb-item"><a href="../api.html" class="nav-link">API Reference</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">losalamos.tools.update_templates</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">losalamos.documents</span></li>
   </ul>
 </nav>
 </div>
@@ -440,41 +440,94 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="module-losalamos.tools.update_templates">
-<span id="losalamos-tools-update-templates"></span><h1>losalamos.tools.update_templates<a class="headerlink" href="#module-losalamos.tools.update_templates" title="Link to this heading">#</a></h1>
-<p>Synchronise note templates to a target project folder.</p>
-<p>Copies all <code class="docutils literal notranslate"><span class="pre">_*.md</span></code> template files from the project-level templates
-source into the specified destination directory.</p>
-<p><strong>Shell usage</strong></p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>losalamos.tools.update_templates<span class="w"> </span>--notes<span class="w"> </span>/path/to/notes
-
-<span class="c1"># Using short flag</span>
-python<span class="w"> </span>-m<span class="w"> </span>losalamos.tools.update_templates<span class="w"> </span>-n<span class="w"> </span>/path/to/notes
-</pre></div>
-</div>
+  <section id="module-losalamos.documents">
+<span id="losalamos-documents"></span><h1>losalamos.documents<a class="headerlink" href="#module-losalamos.documents" title="Link to this heading">#</a></h1>
+<p>Handle Documents editing, managing and builds</p>
 <p class="rubric">Functions</p>
 <div class="pst-scrollable-table-container"><table class="autosummary longtable table">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#losalamos.tools.update_templates.get_arguments" title="losalamos.tools.update_templates.get_arguments"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_arguments</span></code></a>()</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#losalamos.documents.escape_percent_latex" title="losalamos.documents.escape_percent_latex"><code class="xref py py-obj docutils literal notranslate"><span class="pre">escape_percent_latex</span></code></a>(text)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#losalamos.tools.update_templates.main" title="losalamos.tools.update_templates.main"><code class="xref py py-obj docutils literal notranslate"><span class="pre">main</span></code></a>()</p></td>
-<td><p>Copy note templates from the project source into the target folder.</p></td>
+</tbody>
+</table>
+</div>
+<p class="rubric">Classes</p>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#losalamos.documents.DocumentTeX" title="losalamos.documents.DocumentTeX"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DocumentTeX</span></code></a>([name, alias])</p></td>
+<td><p></p></td>
 </tr>
 </tbody>
 </table>
 </div>
 <dl class="py function">
-<dt class="sig sig-object py" id="losalamos.tools.update_templates.get_arguments">
-<span class="sig-prename descclassname"><span class="pre">losalamos.tools.update_templates.</span></span><span class="sig-name descname"><span class="pre">get_arguments</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/tools/update_templates.html#get_arguments"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.tools.update_templates.get_arguments" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="losalamos.documents.escape_percent_latex">
+<span class="sig-prename descclassname"><span class="pre">losalamos.documents.</span></span><span class="sig-name descname"><span class="pre">escape_percent_latex</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../_modules/losalamos/documents.html#escape_percent_latex"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.documents.escape_percent_latex" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
-<dl class="py function">
-<dt class="sig sig-object py" id="losalamos.tools.update_templates.main">
-<span class="sig-prename descclassname"><span class="pre">losalamos.tools.update_templates.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/tools/update_templates.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.tools.update_templates.main" title="Link to this definition">#</a></dt>
-<dd><p>Copy note templates from the project source into the target folder.</p>
-<p>Templates are identified by the <code class="docutils literal notranslate"><span class="pre">_*.md</span></code> glob pattern. Missing
-templates produce a warning; no error is raised.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="losalamos.documents.DocumentTeX">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">losalamos.documents.</span></span><span class="sig-name descname"><span class="pre">DocumentTeX</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'MyDocTeX'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alias</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'TeX'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/documents.html#DocumentTeX"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.documents.DocumentTeX" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference internal" href="losalamos.root.html#losalamos.root.DataSet" title="losalamos.root.DataSet"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataSet</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.documents.DocumentTeX.load_data">
+<span class="sig-name descname"><span class="pre">load_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/documents.html#DocumentTeX.load_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.documents.DocumentTeX.load_data" title="Link to this definition">#</a></dt>
+<dd><p>Loads data from a TeX file if it is the main document.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>file_data</strong> (<em>str</em>) – path to the TeX file</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.documents.DocumentTeX.to_pdf">
+<span class="sig-name descname"><span class="pre">to_pdf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_output</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cleanup</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">command</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'pdf'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/documents.html#DocumentTeX.to_pdf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.documents.DocumentTeX.to_pdf" title="Link to this definition">#</a></dt>
+<dd><p>Compiles the TeX document into a PDF using latexmk.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>file_output</strong> (<em>str</em>) – desired output path for the compiled PDF (optional)</p></li>
+<li><p><strong>cleanup</strong> (<em>bool</em>) – flag to remove auxiliary files after compilation</p></li>
+<li><p><strong>command</strong> (<em>str</em>) – latexmk command flag (e.g., pdf, pdflua, pdfxe)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.documents.DocumentTeX.to_flat">
+<span class="sig-name descname"><span class="pre">to_flat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_output</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compile_first</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">command</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'pdf'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/documents.html#DocumentTeX.to_flat"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.documents.DocumentTeX.to_flat" title="Link to this definition">#</a></dt>
+<dd><p>Flattens the TeX document by recursively resolving inputs and compiling to embed the bibliography.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>file_output</strong> (<em>str</em>) – desired output path for the flattened TeX file</p></li>
+<li><p><strong>compile_first</strong> (<em>bool</em>) – flag to compile the document first to generate an updated .bbl file</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>the fully flattened LaTeX document string</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
 </dd></dl>
 
 </section>
@@ -490,20 +543,20 @@ templates produce a warning; no error is raised.</p>
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="losalamos.tools.update_references.html"
+       href="losalamos.ingestion.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">losalamos.tools.update_references</p>
+        <p class="prev-next-title">losalamos.ingestion</p>
       </div>
     </a>
     <a class="right-next"
-       href="losalamos.tools.database.html"
+       href="losalamos.tools.build_figures.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">losalamos.tools.database</p>
+        <p class="prev-next-title">losalamos.tools.build_figures</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -526,15 +579,20 @@ templates produce a warning; no error is raised.</p>
   </div>
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="pst-show_toc_level nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.tools.update_templates.get_arguments"><code class="docutils literal notranslate"><span class="pre">get_arguments()</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.tools.update_templates.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.documents.escape_percent_latex"><code class="docutils literal notranslate"><span class="pre">escape_percent_latex()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.documents.DocumentTeX"><code class="docutils literal notranslate"><span class="pre">DocumentTeX</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.documents.DocumentTeX.load_data"><code class="docutils literal notranslate"><span class="pre">DocumentTeX.load_data()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.documents.DocumentTeX.to_pdf"><code class="docutils literal notranslate"><span class="pre">DocumentTeX.to_pdf()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.documents.DocumentTeX.to_flat"><code class="docutils literal notranslate"><span class="pre">DocumentTeX.to_flat()</span></code></a></li>
+</ul>
+</li>
 </ul>
   </nav></div>
 
   <div class="sidebar-secondary-item">
 
   <div class="tocsection sourcelink">
-    <a href="../_sources/generated/losalamos.tools.update_templates.rst.txt">
+    <a href="../_sources/generated/losalamos.documents.rst.txt">
       <i class="fa-solid fa-file-lines"></i> Show Source
     </a>
   </div>
