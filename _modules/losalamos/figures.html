@@ -1099,6 +1099,12 @@
         <span class="n">shutil</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">src</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">file_data</span><span class="p">,</span> <span class="n">dst</span><span class="o">=</span><span class="n">dst_file</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">file_data</span> <span class="o">=</span> <span class="n">dst_file</span>
 
+        <span class="c1"># handle page opacity for jpeg render</span>
+        <span class="c1"># -----------------------------------------------------------------------</span>
+        <span class="k">if</span> <span class="n">to_jpeg</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">set_page_opacity</span><span class="p">(</span><span class="n">opacity</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+
         <span class="c1"># Get abspath</span>
         <span class="n">file_output</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">file_output</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
 

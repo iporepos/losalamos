@@ -1,0 +1,13 @@
+﻿losalamos.tools.new\_drawing
+============================
+
+.. automodule:: losalamos.tools.new_drawing
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      get_arguments
+      main
+   

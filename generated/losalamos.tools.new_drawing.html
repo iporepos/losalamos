@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>losalamos.tools.ingest_references &#8212; losalamos 0.0.1 documentation</title>
+    <title>losalamos.tools.new_drawing &#8212; losalamos 0.0.1 documentation</title>
   
   
   
@@ -46,13 +46,13 @@
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../_static/copybutton.js?v=f281be69"></script>
     <script src="../_static/design-tabs.js?v=f930bc37"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'generated/losalamos.tools.ingest_references';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'generated/losalamos.tools.new_drawing';</script>
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <link rel="author" title="About these documents" href="../about.html" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="losalamos.tools.search_references" href="losalamos.tools.search_references.html" />
-    <link rel="prev" title="losalamos.tools.new_drawing" href="losalamos.tools.new_drawing.html" />
+    <link rel="next" title="losalamos.tools.ingest_references" href="losalamos.tools.ingest_references.html" />
+    <link rel="prev" title="losalamos.tools.build_figures" href="losalamos.tools.build_figures.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
@@ -373,8 +373,8 @@
 </ul>
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="losalamos.tools.build_figures.html">losalamos.tools.build_figures</a></li>
-<li class="toctree-l1"><a class="reference internal" href="losalamos.tools.new_drawing.html">losalamos.tools.new_drawing</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">losalamos.tools.ingest_references</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">losalamos.tools.new_drawing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="losalamos.tools.ingest_references.html">losalamos.tools.ingest_references</a></li>
 <li class="toctree-l1"><a class="reference internal" href="losalamos.tools.search_references.html">losalamos.tools.search_references</a></li>
 <li class="toctree-l1"><a class="reference internal" href="losalamos.tools.update_references.html">losalamos.tools.update_references</a></li>
 <li class="toctree-l1"><a class="reference internal" href="losalamos.tools.update_templates.html">losalamos.tools.update_templates</a></li>
@@ -422,7 +422,7 @@
     
     <li class="breadcrumb-item"><a href="../api.html" class="nav-link">API Reference</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">losalamos.tools.ingest_references</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">losalamos.tools.new_drawing</span></li>
   </ul>
 </nav>
 </div>
@@ -439,46 +439,50 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="module-losalamos.tools.ingest_references">
-<span id="losalamos-tools-ingest-references"></span><h1>losalamos.tools.ingest_references<a class="headerlink" href="#module-losalamos.tools.ingest_references" title="Link to this heading">#</a></h1>
-<p>Ingest reference files from a source directory into a target dataset structure.</p>
-<p>This CLI wraps the project Ingester, providing a minimal interface for
-batch ingestion with basic validation and progress feedback.</p>
-<section id="usage">
-<h2>Usage<a class="headerlink" href="#usage" title="Link to this heading">#</a></h2>
-<p>Module execution (recommended):</p>
-<p>Shell (bash/zsh):</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>losalamos.tools.ingest_references<span class="w">         </span>--src<span class="w"> </span>/path/to/source<span class="w">         </span>--dst<span class="w"> </span>/path/to/destination
+  <section id="module-losalamos.tools.new_drawing">
+<span id="losalamos-tools-new-drawing"></span><h1>losalamos.tools.new_drawing<a class="headerlink" href="#module-losalamos.tools.new_drawing" title="Link to this heading">#</a></h1>
+<p>Create a new SVG figure from a named drawing template.</p>
+<p>Copies a template file from the project drawings library into a target
+folder under the specified filename.</p>
+<p><strong>Shell usage</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>losalamos.tools.new_figure<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--tem<span class="w"> </span>story<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--nam<span class="w"> </span>my_figure<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--dst<span class="w"> </span>/path/to/output
 </pre></div>
 </div>
-<p>PowerShell (ps1):</p>
-<div class="highlight-powershell notranslate"><div class="highlight"><pre><span></span><span class="nv">$SRC</span><span class="p">=</span><span class="s2">&quot;C:\path       o\source&quot;</span>
-<span class="nv">$DST</span><span class="p">=</span><span class="s2">&quot;C:\path       o\destination&quot;</span>
-
-<span class="n">python</span> <span class="n">-m</span> <span class="n">losalamos</span><span class="p">.</span><span class="n">tools</span><span class="p">.</span><span class="n">ingest_references</span> <span class="p">-</span><span class="n">-src</span> <span class="nv">$SRC</span> <span class="p">-</span><span class="n">-dst</span> <span class="nv">$DST</span>
+<div class="highlight-powershell notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">-m</span> <span class="n">losalamos</span><span class="p">.</span><span class="n">tools</span><span class="p">.</span><span class="n">new_figure</span> <span class="p">`</span>
+    <span class="p">-</span><span class="n">-tem</span> <span class="n">story</span> <span class="p">`</span>
+    <span class="p">-</span><span class="n">-nam</span> <span class="n">my_figure</span> <span class="p">`</span>
+    <span class="p">-</span><span class="n">-dst</span> <span class="s2">&quot;C:\path\to\output&quot;</span>
 </pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The template is resolved as <code class="docutils literal notranslate"><span class="pre">_{template_name}.svg</span></code> inside the
+project drawings library (<code class="docutils literal notranslate"><span class="pre">FOLDER_TEMPLATES_DRAWINGS</span></code>).
+The destination folder is created if it does not exist.</p>
 </div>
 <p class="rubric">Functions</p>
 <div class="pst-scrollable-table-container"><table class="autosummary longtable table">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#losalamos.tools.ingest_references.get_arguments" title="losalamos.tools.ingest_references.get_arguments"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_arguments</span></code></a>()</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#losalamos.tools.new_drawing.get_arguments" title="losalamos.tools.new_drawing.get_arguments"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_arguments</span></code></a>()</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#losalamos.tools.ingest_references.main" title="losalamos.tools.ingest_references.main"><code class="xref py py-obj docutils literal notranslate"><span class="pre">main</span></code></a>()</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#losalamos.tools.new_drawing.main" title="losalamos.tools.new_drawing.main"><code class="xref py py-obj docutils literal notranslate"><span class="pre">main</span></code></a>()</p></td>
 <td><p></p></td>
 </tr>
 </tbody>
 </table>
 </div>
-</section>
 <dl class="py function">
-<dt class="sig sig-object py" id="losalamos.tools.ingest_references.get_arguments">
-<span class="sig-prename descclassname"><span class="pre">losalamos.tools.ingest_references.</span></span><span class="sig-name descname"><span class="pre">get_arguments</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/tools/ingest_references.html#get_arguments"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.tools.ingest_references.get_arguments" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="losalamos.tools.new_drawing.get_arguments">
+<span class="sig-prename descclassname"><span class="pre">losalamos.tools.new_drawing.</span></span><span class="sig-name descname"><span class="pre">get_arguments</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/tools/new_drawing.html#get_arguments"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.tools.new_drawing.get_arguments" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="losalamos.tools.ingest_references.main">
-<span class="sig-prename descclassname"><span class="pre">losalamos.tools.ingest_references.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../_modules/losalamos/tools/ingest_references.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.tools.ingest_references.main" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="losalamos.tools.new_drawing.main">
+<span class="sig-prename descclassname"><span class="pre">losalamos.tools.new_drawing.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../_modules/losalamos/tools/new_drawing.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.tools.new_drawing.main" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 </section>
@@ -494,20 +498,20 @@ batch ingestion with basic validation and progress feedback.</p>
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="losalamos.tools.new_drawing.html"
+       href="losalamos.tools.build_figures.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">losalamos.tools.new_drawing</p>
+        <p class="prev-next-title">losalamos.tools.build_figures</p>
       </div>
     </a>
     <a class="right-next"
-       href="losalamos.tools.search_references.html"
+       href="losalamos.tools.ingest_references.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">losalamos.tools.search_references</p>
+        <p class="prev-next-title">losalamos.tools.ingest_references</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -530,16 +534,15 @@ batch ingestion with basic validation and progress feedback.</p>
   </div>
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="pst-show_toc_level nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#usage">Usage</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.tools.ingest_references.get_arguments"><code class="docutils literal notranslate"><span class="pre">get_arguments()</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.tools.ingest_references.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.tools.new_drawing.get_arguments"><code class="docutils literal notranslate"><span class="pre">get_arguments()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.tools.new_drawing.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
 </ul>
   </nav></div>
 
   <div class="sidebar-secondary-item">
 
   <div class="tocsection sourcelink">
-    <a href="../_sources/generated/losalamos.tools.ingest_references.rst.txt">
+    <a href="../_sources/generated/losalamos.tools.new_drawing.rst.txt">
       <i class="fa-solid fa-file-lines"></i> Show Source
     </a>
   </div>

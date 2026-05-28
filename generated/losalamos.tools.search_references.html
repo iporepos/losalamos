@@ -373,10 +373,12 @@
 </ul>
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="losalamos.tools.build_figures.html">losalamos.tools.build_figures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="losalamos.tools.new_drawing.html">losalamos.tools.new_drawing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="losalamos.tools.ingest_references.html">losalamos.tools.ingest_references</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">losalamos.tools.search_references</a></li>
 <li class="toctree-l1"><a class="reference internal" href="losalamos.tools.update_references.html">losalamos.tools.update_references</a></li>
 <li class="toctree-l1"><a class="reference internal" href="losalamos.tools.update_templates.html">losalamos.tools.update_templates</a></li>
+<li class="toctree-l1"><a class="reference internal" href="losalamos.tools.database.html">losalamos.tools.database</a></li>
 </ul>
 </div>
 </nav></div>
@@ -488,7 +490,7 @@ as <code class="docutils literal notranslate"><span class="pre">.bib</span></cod
 <td><p></p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#losalamos.tools.search_references.get_auxiliary_context" title="losalamos.tools.search_references.get_auxiliary_context"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_auxiliary_context</span></code></a>(pdf_path)</p></td>
-<td><p>Look for auxiliary <code class="docutils literal notranslate"><span class="pre">.txt</span></code> and <code class="docutils literal notranslate"><span class="pre">.ris</span></code> files alongside the PDF.</p></td>
+<td><p>Look for auxiliary <code class="docutils literal notranslate"><span class="pre">.txt</span></code>, <code class="docutils literal notranslate"><span class="pre">.ris</span></code>, and <code class="docutils literal notranslate"><span class="pre">.md</span></code> files alongside the PDF, as well as a general <code class="docutils literal notranslate"><span class="pre">context.txt</span></code> file in the same folder.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#losalamos.tools.search_references.main" title="losalamos.tools.search_references.main"><code class="xref py py-obj docutils literal notranslate"><span class="pre">main</span></code></a>()</p></td>
 <td><p></p></td>
@@ -503,10 +505,11 @@ as <code class="docutils literal notranslate"><span class="pre">.bib</span></cod
 <dl class="py function">
 <dt class="sig sig-object py" id="losalamos.tools.search_references.get_auxiliary_context">
 <span class="sig-prename descclassname"><span class="pre">losalamos.tools.search_references.</span></span><span class="sig-name descname"><span class="pre">get_auxiliary_context</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pdf_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../_modules/losalamos/tools/search_references.html#get_auxiliary_context"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.tools.search_references.get_auxiliary_context" title="Link to this definition">#</a></dt>
-<dd><p>Look for auxiliary <code class="docutils literal notranslate"><span class="pre">.txt</span></code> and <code class="docutils literal notranslate"><span class="pre">.ris</span></code> files alongside the PDF.</p>
+<dd><p>Look for auxiliary <code class="docutils literal notranslate"><span class="pre">.txt</span></code>, <code class="docutils literal notranslate"><span class="pre">.ris</span></code>, and <code class="docutils literal notranslate"><span class="pre">.md</span></code> files alongside the PDF,
+as well as a general <code class="docutils literal notranslate"><span class="pre">context.txt</span></code> file in the same folder.</p>
 <p>Reads the contents of any matching auxiliary files (sharing the same stem
-as the PDF) and returns them as a formatted string to be injected into
-the LLM prompt context.</p>
+as the PDF) and a standard <code class="docutils literal notranslate"><span class="pre">context.txt</span></code> file if present, returning them
+as a formatted string to be injected into the LLM prompt context.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>pdf_path</strong> (<em>pathlib.Path</em>) – The file path to the target PDF document.</p>

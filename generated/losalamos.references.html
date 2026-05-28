@@ -373,10 +373,12 @@
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="losalamos.tools.build_figures.html">losalamos.tools.build_figures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="losalamos.tools.new_drawing.html">losalamos.tools.new_drawing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="losalamos.tools.ingest_references.html">losalamos.tools.ingest_references</a></li>
 <li class="toctree-l1"><a class="reference internal" href="losalamos.tools.search_references.html">losalamos.tools.search_references</a></li>
 <li class="toctree-l1"><a class="reference internal" href="losalamos.tools.update_references.html">losalamos.tools.update_references</a></li>
 <li class="toctree-l1"><a class="reference internal" href="losalamos.tools.update_templates.html">losalamos.tools.update_templates</a></li>
+<li class="toctree-l1"><a class="reference internal" href="losalamos.tools.database.html">losalamos.tools.database</a></li>
 </ul>
 </div>
 </nav></div>
@@ -681,24 +683,40 @@ and saves it to the specified output.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="losalamos.references.Reference.define_file_name">
 <span class="sig-name descname"><span class="pre">define_file_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">library_folder</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extension</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'md'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/references.html#Reference.define_file_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.references.Reference.define_file_name" title="Link to this definition">#</a></dt>
-<dd><p>Generates a unique filename based on author, year, and an alphabetic suffix to avoid collisions.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>This method extracts the primary author and year from the citation metadata to form a base
-filename. If a <code class="docutils literal notranslate"><span class="pre">library_folder</span></code> is provided and accessible, it scans the directory for
-existing files matching the <code class="docutils literal notranslate"><span class="pre">{author}_{year}_*</span></code> pattern, identifies the highest
-alphabetic suffix used (e.g., <code class="docutils literal notranslate"><span class="pre">a</span></code>, <code class="docutils literal notranslate"><span class="pre">b</span></code>, <code class="docutils literal notranslate"><span class="pre">c</span></code>), and increments it to ensure the
-new filename is unique.</p>
+<dd><p>Generate a unique filename based on author, year, and an incrementing
+alphabetic suffix to avoid collisions.</p>
+<p>The filename follows the pattern <code class="docutils literal notranslate"><span class="pre">{author}_{year}_{suffix}</span></code>, where
+<code class="docutils literal notranslate"><span class="pre">suffix</span></code> starts at <code class="docutils literal notranslate"><span class="pre">&quot;a&quot;</span></code> and increments through <code class="docutils literal notranslate"><span class="pre">&quot;b&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;c&quot;</span></code>,
+…, <code class="docutils literal notranslate"><span class="pre">&quot;z&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;aa&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;ab&quot;</span></code>, and so on — supporting an unlimited
+number of collisions via variable-length base-26 suffixes.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">library_folder</span></code> is provided and exists, the directory is scanned
+for files matching <code class="docutils literal notranslate"><span class="pre">{author}_{year}_*.{extension}</span></code>. The highest
+existing suffix (ordered by length first, then alphabetically) is
+identified and incremented to produce the next unique name. If no
+matching files are found, the suffix defaults to <code class="docutils literal notranslate"><span class="pre">&quot;a&quot;</span></code>.</p>
+<p>Examples of generated filenames:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Smith_2020_a</span>      <span class="c1"># first entry</span>
+<span class="n">Smith_2020_b</span>      <span class="c1"># second entry</span>
+<span class="n">Smith_2020_z</span>      <span class="c1"># 26th entry</span>
+<span class="n">Smith_2020_aa</span>     <span class="c1"># 27th entry</span>
+<span class="n">Smith_2020_az</span>     <span class="c1"># 52nd entry</span>
+<span class="n">Smith_2020_ba</span>     <span class="c1"># 53rd entry</span>
+<span class="n">Smith_2020_aaa</span>    <span class="c1"># 703rd entry</span>
+</pre></div>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>library_folder</strong> (str | <code class="xref py py-class docutils literal notranslate"><span class="pre">pathlib.Path</span></code>) – [optional] The directory path to check for existing files to determine the next suffix.</p></li>
-<li><p><strong>extension</strong> (<em>str</em>) – The file extension to use when searching for existing patterns. Default value = <code class="docutils literal notranslate"><span class="pre">md</span></code></p></li>
+<li><p><strong>library_folder</strong> (str or <code class="xref py py-class docutils literal notranslate"><span class="pre">pathlib.Path</span></code>, optional) – Directory to scan for existing files when
+determining the next suffix. If <code class="docutils literal notranslate"><span class="pre">None</span></code> or the path does not
+exist, the suffix defaults to <code class="docutils literal notranslate"><span class="pre">&quot;a&quot;</span></code>.</p></li>
+<li><p><strong>extension</strong> (<em>str</em>) – File extension used when globbing for existing
+filename collisions. Defaults to <code class="docutils literal notranslate"><span class="pre">&quot;md&quot;</span></code>.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The generated filename string in the format <code class="docutils literal notranslate"><span class="pre">{author}_{year}_{suffix}</span></code>.</p>
+<dd class="field-even"><p>The generated filename string in the format
+<code class="docutils literal notranslate"><span class="pre">{author}_{year}_{suffix}</span></code>, without a file extension.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>

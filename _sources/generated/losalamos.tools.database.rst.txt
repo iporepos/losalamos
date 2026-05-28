@@ -1,0 +1,36 @@
+﻿losalamos.tools.database
+========================
+
+.. automodule:: losalamos.tools.database
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      align_columns
+      cmd_append
+      cmd_initialize
+      cmd_update
+      detect_category
+      detect_has_time
+      dispatch
+      get_schema
+      gpkg_bootstrap
+      gpkg_code_id_map
+      gpkg_connect
+      gpkg_exec_file
+      gpkg_exec_sql
+      gpkg_pk_col
+      gpkg_table_columns
+      gpkg_table_exists
+      gpkg_table_info
+      gpkg_write_spatial
+      insert_rows
+      load_csv
+      load_spatial
+      main
+      normalise_datetime
+      resolve_fk
+      setup_logging
+   

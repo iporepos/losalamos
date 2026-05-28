@@ -490,11 +490,12 @@
 <a class="viewcode-back" href="../../../generated/losalamos.tools.search_references.html#losalamos.tools.search_references.get_auxiliary_context">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">get_auxiliary_context</span><span class="p">(</span><span class="n">pdf_path</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Look for auxiliary ``.txt`` and ``.ris`` files alongside the PDF.</span>
+<span class="sd">    Look for auxiliary ``.txt``, ``.ris``, and ``.md`` files alongside the PDF,</span>
+<span class="sd">    as well as a general ``context.txt`` file in the same folder.</span>
 
 <span class="sd">    Reads the contents of any matching auxiliary files (sharing the same stem</span>
-<span class="sd">    as the PDF) and returns them as a formatted string to be injected into</span>
-<span class="sd">    the LLM prompt context.</span>
+<span class="sd">    as the PDF) and a standard ``context.txt`` file if present, returning them</span>
+<span class="sd">    as a formatted string to be injected into the LLM prompt context.</span>
 
 <span class="sd">    :param pdf_path: The file path to the target PDF document.</span>
 <span class="sd">    :type pdf_path: pathlib.Path</span>
@@ -504,21 +505,27 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">aux_text</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
 
-    <span class="c1"># Define the extensions to look for</span>
-    <span class="n">aux_extensions</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;.txt&quot;</span><span class="p">,</span> <span class="s2">&quot;.ris&quot;</span><span class="p">,</span> <span class="s2">&quot;.md&quot;</span><span class="p">]</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">read_file</span><span class="p">(</span><span class="n">file</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">label</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">content</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">read_text</span><span class="p">(</span><span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">content</span><span class="p">:</span>
+                <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">--- </span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2"> ---</span><span class="se">\n</span><span class="si">{</span><span class="n">content</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Warning: Could not read </span><span class="si">{</span><span class="n">file</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span>
 
-    <span class="k">for</span> <span class="n">ext</span> <span class="ow">in</span> <span class="n">aux_extensions</span><span class="p">:</span>
+    <span class="c1"># General folder-level context (always context.txt, regardless of PDF name)</span>
+    <span class="n">general_context_file</span> <span class="o">=</span> <span class="n">pdf_path</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="s2">&quot;context.txt&quot;</span>
+    <span class="k">if</span> <span class="n">general_context_file</span><span class="o">.</span><span class="n">is_file</span><span class="p">()</span> <span class="ow">and</span> <span class="n">general_context_file</span> <span class="o">!=</span> <span class="n">pdf_path</span><span class="o">.</span><span class="n">with_suffix</span><span class="p">(</span>
+        <span class="s2">&quot;.txt&quot;</span>
+    <span class="p">):</span>
+        <span class="n">aux_text</span> <span class="o">+=</span> <span class="n">read_file</span><span class="p">(</span><span class="n">general_context_file</span><span class="p">,</span> <span class="s2">&quot;General context from context.txt&quot;</span><span class="p">)</span>
+
+    <span class="c1"># PDF-specific auxiliary files (same stem as the PDF)</span>
+    <span class="k">for</span> <span class="n">ext</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;.txt&quot;</span><span class="p">,</span> <span class="s2">&quot;.ris&quot;</span><span class="p">,</span> <span class="s2">&quot;.md&quot;</span><span class="p">]:</span>
         <span class="n">aux_file</span> <span class="o">=</span> <span class="n">pdf_path</span><span class="o">.</span><span class="n">with_suffix</span><span class="p">(</span><span class="n">ext</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">aux_file</span><span class="o">.</span><span class="n">is_file</span><span class="p">():</span>
-            <span class="k">try</span><span class="p">:</span>
-                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">aux_file</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-                    <span class="n">content</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
-                    <span class="k">if</span> <span class="n">content</span><span class="p">:</span>
-                        <span class="n">aux_text</span> <span class="o">+=</span> <span class="p">(</span>
-                            <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">--- Metadata from </span><span class="si">{</span><span class="n">aux_file</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> ---</span><span class="se">\n</span><span class="si">{</span><span class="n">content</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
-                        <span class="p">)</span>
-            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Warning: Could not read </span><span class="si">{</span><span class="n">aux_file</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">aux_text</span> <span class="o">+=</span> <span class="n">read_file</span><span class="p">(</span><span class="n">aux_file</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Specific context from </span><span class="si">{</span><span class="n">aux_file</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">aux_text</span></div>
 
