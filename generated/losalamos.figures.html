@@ -748,6 +748,49 @@ have inkscape:groupmode=”layer” are considered.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="losalamos.figures.FigureSVG.get_text">
+<span class="sig-name descname"><span class="pre">get_text</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">element</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/figures.html#FigureSVG.get_text"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.figures.FigureSVG.get_text" title="Link to this definition">#</a></dt>
+<dd><p>Get the text content of a SVG text element.</p>
+<p>Reads from the first <code class="docutils literal notranslate"><span class="pre">&lt;tspan&gt;</span></code> descendant if present,
+since Inkscape stores the actual string there rather than
+directly on the <code class="docutils literal notranslate"><span class="pre">&lt;text&gt;</span></code> node. Falls back to the element’s
+own text if no tspan is found.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>element</strong> (<em>etree.Element</em>) – The lxml SVG text element to read.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The text content, or an empty string if none is found.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#losalamos.figures.FigureSVG.set_text" title="losalamos.figures.FigureSVG.set_text"><code class="xref py py-meth docutils literal notranslate"><span class="pre">set_text()</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.figures.FigureSVG.get_text_lines">
+<span class="sig-name descname"><span class="pre">get_text_lines</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">element</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/figures.html#FigureSVG.get_text_lines"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.figures.FigureSVG.get_text_lines" title="Link to this definition">#</a></dt>
+<dd><p>Return all text lines from a multi-line SVG text element.</p>
+<p>Each <code class="docutils literal notranslate"><span class="pre">&lt;tspan</span> <span class="pre">sodipodi:role='line'&gt;</span></code> is treated as one line.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>element</strong> (<em>etree.Element</em>) – The lxml SVG text element to read.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of strings, one per tspan.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list[str]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="losalamos.figures.FigureSVG.set_page_opacity">
 <span class="sig-name descname"><span class="pre">set_page_opacity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">opacity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/figures.html#FigureSVG.set_page_opacity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.figures.FigureSVG.set_page_opacity" title="Link to this definition">#</a></dt>
 <dd><p>Set the Inkscape page background opacity.</p>
@@ -770,21 +813,6 @@ have inkscape:groupmode=”layer” are considered.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="losalamos.figures.FigureSVG.set_element_color">
-<span class="sig-name descname"><span class="pre">set_element_color</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">element</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fill</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stroke</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/figures.html#FigureSVG.set_element_color"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.figures.FigureSVG.set_element_color" title="Link to this definition">#</a></dt>
-<dd><p>Set fill and/or stroke color of an SVG element.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>element</strong> – lxml SVG element</p></li>
-<li><p><strong>fill</strong> – Fill color (e.g. ‘#00ff00’) or None</p></li>
-<li><p><strong>stroke</strong> – Stroke color or None</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
 <dt class="sig sig-object py" id="losalamos.figures.FigureSVG.get_layer_elements">
 <span class="sig-name descname"><span class="pre">get_layer_elements</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">drawable_only</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/figures.html#FigureSVG.get_layer_elements"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.figures.FigureSVG.get_layer_elements" title="Link to this definition">#</a></dt>
 <dd><p>Return drawable SVG elements from a layer, indexed by element ID.</p>
@@ -799,6 +827,232 @@ have inkscape:groupmode=”layer” are considered.</p>
 <dd class="field-even"><p>dict[str, dict]</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.figures.FigureSVG.set_property">
+<span class="sig-name descname"><span class="pre">set_property</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">element</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/figures.html#FigureSVG.set_property"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.figures.FigureSVG.set_property" title="Link to this definition">#</a></dt>
+<dd><p>Set a visual or geometric property on an SVG element.</p>
+<p>Searches for the key in the element’s <code class="docutils literal notranslate"><span class="pre">style</span></code> attribute first,
+then in bare XML attributes. Writes to whichever location already
+holds the key, falling back to the <code class="docutils literal notranslate"><span class="pre">style</span></code> string if the key is
+not found in either. If the key exists in both locations, the bare
+attribute is removed and the <code class="docutils literal notranslate"><span class="pre">style</span></code> string is kept as the single
+source of truth.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>element</strong> (<em>etree.Element</em>) – The lxml SVG element to modify.</p></li>
+<li><p><strong>key</strong> (<em>str</em>) – Property name (e.g. <code class="docutils literal notranslate"><span class="pre">'fill'</span></code>, <code class="docutils literal notranslate"><span class="pre">'width'</span></code>, <code class="docutils literal notranslate"><span class="pre">'opacity'</span></code>).</p></li>
+<li><p><strong>value</strong> (<em>str</em>) – New value to assign.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>NoneType</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Mutations are applied in place on the lxml tree. A subsequent
+call to <a class="reference internal" href="#losalamos.figures.FigureSVG.save" title="losalamos.figures.FigureSVG.save"><code class="xref py py-meth docutils literal notranslate"><span class="pre">save()</span></code></a> or <a class="reference internal" href="#losalamos.figures.FigureSVG.export" title="losalamos.figures.FigureSVG.export"><code class="xref py py-meth docutils literal notranslate"><span class="pre">export()</span></code></a> will persist the changes
+to disk.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>When the same property exists in both the <code class="docutils literal notranslate"><span class="pre">style</span></code> string and
+as a bare XML attribute, the bare attribute is silently removed
+to resolve the ambiguity. This normalisation is intentional but
+changes the element structure beyond the requested property.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.figures.FigureSVG.set_color">
+<span class="sig-name descname"><span class="pre">set_color</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">element</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fill</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stroke</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/figures.html#FigureSVG.set_color"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.figures.FigureSVG.set_color" title="Link to this definition">#</a></dt>
+<dd><p>Set fill and/or stroke color of an SVG element.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>element</strong> – lxml SVG element</p></li>
+<li><p><strong>fill</strong> – Fill color (e.g. ‘#00ff00’) or None</p></li>
+<li><p><strong>stroke</strong> – Stroke color or None</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.figures.FigureSVG.set_font">
+<span class="sig-name descname"><span class="pre">set_font</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">element</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">font_family</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variant</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/figures.html#FigureSVG.set_font"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.figures.FigureSVG.set_font" title="Link to this definition">#</a></dt>
+<dd><p>Set the font family on a text element and all its <code class="docutils literal notranslate"><span class="pre">&lt;tspan&gt;</span></code> descendants.</p>
+<p>Updates both <code class="docutils literal notranslate"><span class="pre">font-family</span></code> and <code class="docutils literal notranslate"><span class="pre">-inkscape-font-specification</span></code> to
+keep Inkscape’s internal font state consistent with the rendered output.
+The method iterates over the element itself and all child nodes, applying
+changes only to <code class="docutils literal notranslate"><span class="pre">&lt;text&gt;</span></code> and <code class="docutils literal notranslate"><span class="pre">&lt;tspan&gt;</span></code> tags.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>element</strong> (<em>etree.Element</em>) – The lxml SVG text element to modify.</p></li>
+<li><p><strong>font_family</strong> (<em>str</em>) – Target font family name (e.g. <code class="docutils literal notranslate"><span class="pre">'Arial'</span></code>, <code class="docutils literal notranslate"><span class="pre">'Georgia'</span></code>).</p></li>
+<li><p><strong>variant</strong> (<em>str</em><em> or </em><em>None</em>) – Font variant to apply (e.g. <code class="docutils literal notranslate"><span class="pre">'Normal'</span></code>, <code class="docutils literal notranslate"><span class="pre">'Bold'</span></code>, <code class="docutils literal notranslate"><span class="pre">'Italic'</span></code>).
+If <code class="docutils literal notranslate"><span class="pre">None</span></code>, the variant is read from the existing
+<code class="docutils literal notranslate"><span class="pre">-inkscape-font-specification</span></code> of each node and preserved
+individually, so mixed variants within the same text element
+are handled correctly. Default value = <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>NoneType</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>When <code class="docutils literal notranslate"><span class="pre">variant</span></code> is <code class="docutils literal notranslate"><span class="pre">None</span></code> and no <code class="docutils literal notranslate"><span class="pre">-inkscape-font-specification</span></code>
+is present on a node, the variant defaults to <code class="docutils literal notranslate"><span class="pre">'Normal'</span></code>.</p>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#losalamos.figures.FigureSVG.set_property" title="losalamos.figures.FigureSVG.set_property"><code class="xref py py-meth docutils literal notranslate"><span class="pre">set_property()</span></code></a>, <code class="xref py py-meth docutils literal notranslate"><span class="pre">_extract_variant()</span></code></p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.figures.FigureSVG.set_text">
+<span class="sig-name descname"><span class="pre">set_text</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">element</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">content</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/figures.html#FigureSVG.set_text"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.figures.FigureSVG.set_text" title="Link to this definition">#</a></dt>
+<dd><p>Set the text content of a SVG text element.</p>
+<p>Writes to the first <code class="docutils literal notranslate"><span class="pre">&lt;tspan&gt;</span></code> descendant if present,
+since Inkscape stores the actual string there rather than
+directly on the <code class="docutils literal notranslate"><span class="pre">&lt;text&gt;</span></code> node.
+Falls back to writing on the element itself if no tspan is found.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>element</strong> (<em>etree.Element</em>) – The lxml SVG text element to modify.</p></li>
+<li><p><strong>content</strong> (<em>str</em>) – The new text string.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>NoneType</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.figures.FigureSVG.set_font_layers">
+<span class="sig-name descname"><span class="pre">set_font_layers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">font_family</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variant</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/figures.html#FigureSVG.set_font_layers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.figures.FigureSVG.set_font_layers" title="Link to this definition">#</a></dt>
+<dd><p>Set the font family on all text elements across specified layers.</p>
+<p>Scans every specified layer in the document and applies <a class="reference internal" href="#losalamos.figures.FigureSVG.set_font" title="losalamos.figures.FigureSVG.set_font"><code class="xref py py-meth docutils literal notranslate"><span class="pre">set_font()</span></code></a>
+to each <code class="docutils literal notranslate"><span class="pre">&lt;text&gt;</span></code> element found, preserving individual node
+variants unless <code class="docutils literal notranslate"><span class="pre">variant</span></code> is explicitly provided.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>font_family</strong> (<em>str</em>) – Target font family name (e.g. <code class="docutils literal notranslate"><span class="pre">'Arial'</span></code>, <code class="docutils literal notranslate"><span class="pre">'Georgia'</span></code>).</p></li>
+<li><p><strong>variant</strong> (<em>str</em><em> or </em><em>None</em>) – Font variant to apply (e.g. <code class="docutils literal notranslate"><span class="pre">'Normal'</span></code>, <code class="docutils literal notranslate"><span class="pre">'Bold'</span></code>, <code class="docutils literal notranslate"><span class="pre">'Italic'</span></code>).
+If <code class="docutils literal notranslate"><span class="pre">None</span></code>, the existing variant of each node is preserved.
+Default value = <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+<li><p><strong>layers</strong> (<em>list</em><em>[</em><em>str</em><em>] or </em><em>None</em>) – List of layer labels to process. If <code class="docutils literal notranslate"><span class="pre">None</span></code>, all layers
+in the document are scanned. Default value = <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>NoneType</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#losalamos.figures.FigureSVG.set_font" title="losalamos.figures.FigureSVG.set_font"><code class="xref py py-meth docutils literal notranslate"><span class="pre">set_font()</span></code></a>, <a class="reference internal" href="#losalamos.figures.FigureSVG.get_layers" title="losalamos.figures.FigureSVG.get_layers"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_layers()</span></code></a>, <a class="reference internal" href="#losalamos.figures.FigureSVG.get_layer_elements" title="losalamos.figures.FigureSVG.get_layer_elements"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_layer_elements()</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.figures.FigureSVG.rename_layer">
+<span class="sig-name descname"><span class="pre">rename_layer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_label</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/figures.html#FigureSVG.rename_layer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.figures.FigureSVG.rename_layer" title="Link to this definition">#</a></dt>
+<dd><p>Rename an Inkscape layer by updating its label attribute.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>label</strong> (<em>str</em>) – Current label of the layer to rename.</p></li>
+<li><p><strong>new_label</strong> (<em>str</em>) – New label to assign to the layer.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>NoneType</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If no layer with the given label is found.</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Only the <code class="docutils literal notranslate"><span class="pre">inkscape:label</span></code> attribute is updated. The element
+<code class="docutils literal notranslate"><span class="pre">id</span></code> attribute is left unchanged as it may be referenced
+elsewhere in the document.</p>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#losalamos.figures.FigureSVG.get_layers" title="losalamos.figures.FigureSVG.get_layers"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_layers()</span></code></a>, <a class="reference internal" href="#losalamos.figures.FigureSVG.get_layers_labels" title="losalamos.figures.FigureSVG.get_layers_labels"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_layers_labels()</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.figures.FigureSVG.rename_element_id">
+<span class="sig-name descname"><span class="pre">rename_element_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">old_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/figures.html#FigureSVG.rename_element_id"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.figures.FigureSVG.rename_element_id" title="Link to this definition">#</a></dt>
+<dd><p>Rename an element ID and update all references to it within the document.</p>
+<p>Updates the <code class="docutils literal notranslate"><span class="pre">id</span></code> attribute on the target element and scans the
+entire SVG tree for cross-references (<code class="docutils literal notranslate"><span class="pre">clip-path</span></code>, <code class="docutils literal notranslate"><span class="pre">mask</span></code>,
+<code class="docutils literal notranslate"><span class="pre">xlink:href</span></code>, <code class="docutils literal notranslate"><span class="pre">href</span></code>) that point to the old ID, replacing them
+with the new one.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>old_id</strong> (<em>str</em>) – Current ID of the element to rename.</p></li>
+<li><p><strong>new_id</strong> (<em>str</em>) – New ID to assign.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>NoneType</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If no element with <code class="docutils literal notranslate"><span class="pre">old_id</span></code> is found in the document.</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This method is required when changing the target of the <code class="docutils literal notranslate"><span class="pre">crop_id</span></code>
+parameter in <a class="reference internal" href="#losalamos.figures.FigureSVG.to_image" title="losalamos.figures.FigureSVG.to_image"><code class="xref py py-meth docutils literal notranslate"><span class="pre">to_image()</span></code></a>, <a class="reference internal" href="#losalamos.figures.FigureSVG.to_pdf" title="losalamos.figures.FigureSVG.to_pdf"><code class="xref py py-meth docutils literal notranslate"><span class="pre">to_pdf()</span></code></a>, and <a class="reference internal" href="#losalamos.figures.FigureSVG.to_svg" title="losalamos.figures.FigureSVG.to_svg"><code class="xref py py-meth docutils literal notranslate"><span class="pre">to_svg()</span></code></a>,
+since Inkscape’s <code class="docutils literal notranslate"><span class="pre">--export-id</span></code> flag resolves elements by their
+<code class="docutils literal notranslate"><span class="pre">id</span></code> attribute.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>ID uniqueness is not enforced by this method. Passing a <code class="docutils literal notranslate"><span class="pre">new_id</span></code>
+that already exists in the document will produce duplicate IDs,
+which is invalid SVG and may cause undefined behaviour in Inkscape
+and browsers.</p>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#losalamos.figures.FigureSVG.to_image" title="losalamos.figures.FigureSVG.to_image"><code class="xref py py-meth docutils literal notranslate"><span class="pre">to_image()</span></code></a>, <a class="reference internal" href="#losalamos.figures.FigureSVG.to_pdf" title="losalamos.figures.FigureSVG.to_pdf"><code class="xref py py-meth docutils literal notranslate"><span class="pre">to_pdf()</span></code></a>, <a class="reference internal" href="#losalamos.figures.FigureSVG.to_svg" title="losalamos.figures.FigureSVG.to_svg"><code class="xref py py-meth docutils literal notranslate"><span class="pre">to_svg()</span></code></a></p>
+</div>
 </dd></dl>
 
 <dl class="py method">
@@ -973,10 +1227,18 @@ direct PDF export from Inkscape.</p>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.figures.FigureSVG.show_layers"><code class="docutils literal notranslate"><span class="pre">FigureSVG.show_layers()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.figures.FigureSVG.get_layers"><code class="docutils literal notranslate"><span class="pre">FigureSVG.get_layers()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.figures.FigureSVG.get_layers_labels"><code class="docutils literal notranslate"><span class="pre">FigureSVG.get_layers_labels()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.figures.FigureSVG.get_text"><code class="docutils literal notranslate"><span class="pre">FigureSVG.get_text()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.figures.FigureSVG.get_text_lines"><code class="docutils literal notranslate"><span class="pre">FigureSVG.get_text_lines()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.figures.FigureSVG.set_page_opacity"><code class="docutils literal notranslate"><span class="pre">FigureSVG.set_page_opacity()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.figures.FigureSVG.set_page_color"><code class="docutils literal notranslate"><span class="pre">FigureSVG.set_page_color()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.figures.FigureSVG.set_element_color"><code class="docutils literal notranslate"><span class="pre">FigureSVG.set_element_color()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.figures.FigureSVG.get_layer_elements"><code class="docutils literal notranslate"><span class="pre">FigureSVG.get_layer_elements()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.figures.FigureSVG.set_property"><code class="docutils literal notranslate"><span class="pre">FigureSVG.set_property()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.figures.FigureSVG.set_color"><code class="docutils literal notranslate"><span class="pre">FigureSVG.set_color()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.figures.FigureSVG.set_font"><code class="docutils literal notranslate"><span class="pre">FigureSVG.set_font()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.figures.FigureSVG.set_text"><code class="docutils literal notranslate"><span class="pre">FigureSVG.set_text()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.figures.FigureSVG.set_font_layers"><code class="docutils literal notranslate"><span class="pre">FigureSVG.set_font_layers()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.figures.FigureSVG.rename_layer"><code class="docutils literal notranslate"><span class="pre">FigureSVG.rename_layer()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.figures.FigureSVG.rename_element_id"><code class="docutils literal notranslate"><span class="pre">FigureSVG.rename_element_id()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.figures.FigureSVG.to_image"><code class="docutils literal notranslate"><span class="pre">FigureSVG.to_image()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.figures.FigureSVG.to_pdf"><code class="docutils literal notranslate"><span class="pre">FigureSVG.to_pdf()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.figures.FigureSVG.to_svg"><code class="docutils literal notranslate"><span class="pre">FigureSVG.to_svg()</span></code></a></li>

@@ -934,6 +934,54 @@
         <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">dc</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span></div>
 
 
+<div class="viewcode-block" id="FigureSVG.get_text">
+<a class="viewcode-back" href="../../generated/losalamos.figures.html#losalamos.figures.FigureSVG.get_text">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_text</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the text content of a SVG text element.</span>
+
+<span class="sd">        Reads from the first ``&lt;tspan&gt;`` descendant if present,</span>
+<span class="sd">        since Inkscape stores the actual string there rather than</span>
+<span class="sd">        directly on the ``&lt;text&gt;`` node. Falls back to the element&#39;s</span>
+<span class="sd">        own text if no tspan is found.</span>
+
+<span class="sd">        :param element: The lxml SVG text element to read.</span>
+<span class="sd">        :type element: etree.Element</span>
+<span class="sd">        :return: The text content, or an empty string if none is found.</span>
+<span class="sd">        :rtype: str</span>
+
+<span class="sd">        .. seealso::</span>
+
+<span class="sd">            :meth:`set_text`</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">element</span><span class="o">.</span><span class="n">iter</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">etree</span><span class="o">.</span><span class="n">QName</span><span class="p">(</span><span class="n">child</span><span class="p">)</span><span class="o">.</span><span class="n">localname</span> <span class="o">==</span> <span class="s2">&quot;tspan&quot;</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">child</span><span class="o">.</span><span class="n">text</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="n">element</span><span class="o">.</span><span class="n">text</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="FigureSVG.get_text_lines">
+<a class="viewcode-back" href="../../generated/losalamos.figures.html#losalamos.figures.FigureSVG.get_text_lines">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_text_lines</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return all text lines from a multi-line SVG text element.</span>
+
+<span class="sd">        Each ``&lt;tspan sodipodi:role=&#39;line&#39;&gt;`` is treated as one line.</span>
+
+<span class="sd">        :param element: The lxml SVG text element to read.</span>
+<span class="sd">        :type element: etree.Element</span>
+<span class="sd">        :return: List of strings, one per tspan.</span>
+<span class="sd">        :rtype: list[str]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">lines</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">element</span><span class="o">.</span><span class="n">iter</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">etree</span><span class="o">.</span><span class="n">QName</span><span class="p">(</span><span class="n">child</span><span class="p">)</span><span class="o">.</span><span class="n">localname</span> <span class="o">==</span> <span class="s2">&quot;tspan&quot;</span><span class="p">:</span>
+                <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">child</span><span class="o">.</span><span class="n">text</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">lines</span></div>
+
+
 <div class="viewcode-block" id="FigureSVG.set_page_opacity">
 <a class="viewcode-back" href="../../generated/losalamos.figures.html#losalamos.figures.FigureSVG.set_page_opacity">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">set_page_opacity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">opacity</span><span class="o">=</span><span class="mf">1.0</span><span class="p">):</span>
@@ -964,28 +1012,6 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">namedview</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_namedview</span><span class="p">()</span>
         <span class="n">namedview</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;pagecolor&quot;</span><span class="p">,</span> <span class="n">color</span><span class="p">)</span>
-        <span class="k">return</span> <span class="kc">None</span></div>
-
-
-<div class="viewcode-block" id="FigureSVG.set_element_color">
-<a class="viewcode-back" href="../../generated/losalamos.figures.html#losalamos.figures.FigureSVG.set_element_color">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">set_element_color</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">stroke</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Set fill and/or stroke color of an SVG element.</span>
-
-<span class="sd">        :param element: lxml SVG element</span>
-<span class="sd">        :param fill: Fill color (e.g. &#39;#00ff00&#39;) or None</span>
-<span class="sd">        :param stroke: Stroke color or None</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">style</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_style</span><span class="p">(</span><span class="n">element</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;style&quot;</span><span class="p">))</span>
-
-        <span class="k">if</span> <span class="n">fill</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">style</span><span class="p">[</span><span class="s2">&quot;fill&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fill</span>
-
-        <span class="k">if</span> <span class="n">stroke</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">style</span><span class="p">[</span><span class="s2">&quot;stroke&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">stroke</span>
-
-        <span class="n">element</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;style&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_style_to_string</span><span class="p">(</span><span class="n">style</span><span class="p">))</span>
         <span class="k">return</span> <span class="kc">None</span></div>
 
 
@@ -1035,6 +1061,314 @@
             <span class="p">}</span>
 
         <span class="k">return</span> <span class="n">out</span></div>
+
+
+<div class="viewcode-block" id="FigureSVG.set_property">
+<a class="viewcode-back" href="../../generated/losalamos.figures.html#losalamos.figures.FigureSVG.set_property">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_property</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set a visual or geometric property on an SVG element.</span>
+
+<span class="sd">        Searches for the key in the element&#39;s ``style`` attribute first,</span>
+<span class="sd">        then in bare XML attributes. Writes to whichever location already</span>
+<span class="sd">        holds the key, falling back to the ``style`` string if the key is</span>
+<span class="sd">        not found in either. If the key exists in both locations, the bare</span>
+<span class="sd">        attribute is removed and the ``style`` string is kept as the single</span>
+<span class="sd">        source of truth.</span>
+
+<span class="sd">        :param element: The lxml SVG element to modify.</span>
+<span class="sd">        :type element: etree.Element</span>
+<span class="sd">        :param key: Property name (e.g. ``&#39;fill&#39;``, ``&#39;width&#39;``, ``&#39;opacity&#39;``).</span>
+<span class="sd">        :type key: str</span>
+<span class="sd">        :param value: New value to assign.</span>
+<span class="sd">        :type value: str</span>
+<span class="sd">        :return: None</span>
+<span class="sd">        :rtype: NoneType</span>
+
+<span class="sd">        .. note::</span>
+
+<span class="sd">            Mutations are applied in place on the lxml tree. A subsequent</span>
+<span class="sd">            call to :meth:`save` or :meth:`export` will persist the changes</span>
+<span class="sd">            to disk.</span>
+
+<span class="sd">        .. warning::</span>
+
+<span class="sd">            When the same property exists in both the ``style`` string and</span>
+<span class="sd">            as a bare XML attribute, the bare attribute is silently removed</span>
+<span class="sd">            to resolve the ambiguity. This normalisation is intentional but</span>
+<span class="sd">            changes the element structure beyond the requested property.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">style</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_style</span><span class="p">(</span><span class="n">element</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;style&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">))</span>
+        <span class="n">in_style</span> <span class="o">=</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">style</span>
+        <span class="n">in_attr</span> <span class="o">=</span> <span class="n">element</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="n">in_style</span> <span class="ow">and</span> <span class="n">in_attr</span><span class="p">:</span>
+            <span class="c1"># clean up the duplicate — remove bare attr, keep style</span>
+            <span class="k">del</span> <span class="n">element</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+            <span class="n">in_attr</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="k">if</span> <span class="n">in_style</span><span class="p">:</span>
+            <span class="n">style</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+            <span class="n">element</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;style&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_style_to_string</span><span class="p">(</span><span class="n">style</span><span class="p">))</span>
+        <span class="k">elif</span> <span class="n">in_attr</span><span class="p">:</span>
+            <span class="n">element</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">style</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+            <span class="n">element</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;style&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_style_to_string</span><span class="p">(</span><span class="n">style</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="FigureSVG.set_color">
+<a class="viewcode-back" href="../../generated/losalamos.figures.html#losalamos.figures.FigureSVG.set_color">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_color</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">stroke</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set fill and/or stroke color of an SVG element.</span>
+
+<span class="sd">        :param element: lxml SVG element</span>
+<span class="sd">        :param fill: Fill color (e.g. &#39;#00ff00&#39;) or None</span>
+<span class="sd">        :param stroke: Stroke color or None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">style</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_style</span><span class="p">(</span><span class="n">element</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;style&quot;</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">fill</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">style</span><span class="p">[</span><span class="s2">&quot;fill&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fill</span>
+
+        <span class="k">if</span> <span class="n">stroke</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">style</span><span class="p">[</span><span class="s2">&quot;stroke&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">stroke</span>
+
+        <span class="n">element</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;style&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_style_to_string</span><span class="p">(</span><span class="n">style</span><span class="p">))</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="FigureSVG.set_font">
+<a class="viewcode-back" href="../../generated/losalamos.figures.html#losalamos.figures.FigureSVG.set_font">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_font</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element</span><span class="p">,</span> <span class="n">font_family</span><span class="p">,</span> <span class="n">variant</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set the font family on a text element and all its ``&lt;tspan&gt;`` descendants.</span>
+
+<span class="sd">        Updates both ``font-family`` and ``-inkscape-font-specification`` to</span>
+<span class="sd">        keep Inkscape&#39;s internal font state consistent with the rendered output.</span>
+<span class="sd">        The method iterates over the element itself and all child nodes, applying</span>
+<span class="sd">        changes only to ``&lt;text&gt;`` and ``&lt;tspan&gt;`` tags.</span>
+
+<span class="sd">        :param element: The lxml SVG text element to modify.</span>
+<span class="sd">        :type element: etree.Element</span>
+<span class="sd">        :param font_family: Target font family name (e.g. ``&#39;Arial&#39;``, ``&#39;Georgia&#39;``).</span>
+<span class="sd">        :type font_family: str</span>
+<span class="sd">        :param variant: Font variant to apply (e.g. ``&#39;Normal&#39;``, ``&#39;Bold&#39;``, ``&#39;Italic&#39;``).</span>
+<span class="sd">            If ``None``, the variant is read from the existing</span>
+<span class="sd">            ``-inkscape-font-specification`` of each node and preserved</span>
+<span class="sd">            individually, so mixed variants within the same text element</span>
+<span class="sd">            are handled correctly. Default value = ``None``</span>
+<span class="sd">        :type variant: str or None</span>
+<span class="sd">        :return: None</span>
+<span class="sd">        :rtype: NoneType</span>
+
+<span class="sd">        .. note::</span>
+
+<span class="sd">            When ``variant`` is ``None`` and no ``-inkscape-font-specification``</span>
+<span class="sd">            is present on a node, the variant defaults to ``&#39;Normal&#39;``.</span>
+
+<span class="sd">        .. seealso::</span>
+
+<span class="sd">            :meth:`set_property`, :meth:`_extract_variant`</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="p">[</span><span class="n">element</span><span class="p">,</span> <span class="o">*</span><span class="n">element</span><span class="o">.</span><span class="n">iter</span><span class="p">()]:</span>
+            <span class="n">tag</span> <span class="o">=</span> <span class="n">etree</span><span class="o">.</span><span class="n">QName</span><span class="p">(</span><span class="n">node</span><span class="p">)</span><span class="o">.</span><span class="n">localname</span>
+            <span class="k">if</span> <span class="n">tag</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;text&quot;</span><span class="p">,</span> <span class="s2">&quot;tspan&quot;</span><span class="p">):</span>
+                <span class="k">continue</span>
+
+            <span class="n">style</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_style</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;style&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">))</span>
+
+            <span class="k">if</span> <span class="n">variant</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">current_spec</span> <span class="o">=</span> <span class="n">style</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;-inkscape-font-specification&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+                <span class="n">resolved_variant</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_extract_variant</span><span class="p">(</span><span class="n">current_spec</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">resolved_variant</span> <span class="o">=</span> <span class="n">variant</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">set_property</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="s2">&quot;font-family&quot;</span><span class="p">,</span> <span class="n">font_family</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">set_property</span><span class="p">(</span>
+                <span class="n">node</span><span class="p">,</span>
+                <span class="s2">&quot;-inkscape-font-specification&quot;</span><span class="p">,</span>
+                <span class="sa">f</span><span class="s2">&quot;&#39;</span><span class="si">{</span><span class="n">font_family</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">resolved_variant</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
+
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="FigureSVG.set_text">
+<a class="viewcode-back" href="../../generated/losalamos.figures.html#losalamos.figures.FigureSVG.set_text">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_text</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element</span><span class="p">,</span> <span class="n">content</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set the text content of a SVG text element.</span>
+
+<span class="sd">        Writes to the first ``&lt;tspan&gt;`` descendant if present,</span>
+<span class="sd">        since Inkscape stores the actual string there rather than</span>
+<span class="sd">        directly on the ``&lt;text&gt;`` node.</span>
+<span class="sd">        Falls back to writing on the element itself if no tspan is found.</span>
+
+<span class="sd">        :param element: The lxml SVG text element to modify.</span>
+<span class="sd">        :type element: etree.Element</span>
+<span class="sd">        :param content: The new text string.</span>
+<span class="sd">        :type content: str</span>
+<span class="sd">        :return: None</span>
+<span class="sd">        :rtype: NoneType</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">element</span><span class="o">.</span><span class="n">iter</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">etree</span><span class="o">.</span><span class="n">QName</span><span class="p">(</span><span class="n">child</span><span class="p">)</span><span class="o">.</span><span class="n">localname</span> <span class="o">==</span> <span class="s2">&quot;tspan&quot;</span><span class="p">:</span>
+                <span class="n">child</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="n">content</span>
+                <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="c1"># fallback: no tspan found</span>
+        <span class="n">element</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="n">content</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="FigureSVG.set_font_layers">
+<a class="viewcode-back" href="../../generated/losalamos.figures.html#losalamos.figures.FigureSVG.set_font_layers">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_font_layers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">font_family</span><span class="p">,</span> <span class="n">variant</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">layers</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set the font family on all text elements across specified layers.</span>
+
+<span class="sd">        Scans every specified layer in the document and applies :meth:`set_font`</span>
+<span class="sd">        to each ``&lt;text&gt;`` element found, preserving individual node</span>
+<span class="sd">        variants unless ``variant`` is explicitly provided.</span>
+
+<span class="sd">        :param font_family: Target font family name (e.g. ``&#39;Arial&#39;``, ``&#39;Georgia&#39;``).</span>
+<span class="sd">        :type font_family: str</span>
+<span class="sd">        :param variant: Font variant to apply (e.g. ``&#39;Normal&#39;``, ``&#39;Bold&#39;``, ``&#39;Italic&#39;``).</span>
+<span class="sd">            If ``None``, the existing variant of each node is preserved.</span>
+<span class="sd">            Default value = ``None``</span>
+<span class="sd">        :type variant: str or None</span>
+<span class="sd">        :param layers: List of layer labels to process. If ``None``, all layers</span>
+<span class="sd">            in the document are scanned. Default value = ``None``</span>
+<span class="sd">        :type layers: list[str] or None</span>
+<span class="sd">        :return: None</span>
+<span class="sd">        :rtype: NoneType</span>
+
+<span class="sd">        .. seealso::</span>
+
+<span class="sd">            :meth:`set_font`, :meth:`get_layers`, :meth:`get_layer_elements`</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">all_layers</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_layers</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">layers</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">target_layers</span> <span class="o">=</span> <span class="n">all_layers</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">target_layers</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">all_layers</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">layers</span><span class="p">}</span>
+
+        <span class="k">for</span> <span class="n">label</span> <span class="ow">in</span> <span class="n">target_layers</span><span class="p">:</span>
+            <span class="n">elements</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_layer_elements</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="n">drawable_only</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">el_id</span><span class="p">,</span> <span class="n">el_data</span> <span class="ow">in</span> <span class="n">elements</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">el_data</span><span class="p">[</span><span class="s2">&quot;tag&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;text&quot;</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">set_font</span><span class="p">(</span><span class="n">el_data</span><span class="p">[</span><span class="s2">&quot;element&quot;</span><span class="p">],</span> <span class="n">font_family</span><span class="p">,</span> <span class="n">variant</span><span class="o">=</span><span class="n">variant</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="FigureSVG.rename_layer">
+<a class="viewcode-back" href="../../generated/losalamos.figures.html#losalamos.figures.FigureSVG.rename_layer">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">rename_layer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">new_label</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Rename an Inkscape layer by updating its label attribute.</span>
+
+<span class="sd">        :param label: Current label of the layer to rename.</span>
+<span class="sd">        :type label: str</span>
+<span class="sd">        :param new_label: New label to assign to the layer.</span>
+<span class="sd">        :type new_label: str</span>
+<span class="sd">        :return: None</span>
+<span class="sd">        :rtype: NoneType</span>
+
+<span class="sd">        :raises ValueError: If no layer with the given label is found.</span>
+
+<span class="sd">        .. note::</span>
+
+<span class="sd">            Only the ``inkscape:label`` attribute is updated. The element</span>
+<span class="sd">            ``id`` attribute is left unchanged as it may be referenced</span>
+<span class="sd">            elsewhere in the document.</span>
+
+<span class="sd">        .. seealso::</span>
+
+<span class="sd">            :meth:`get_layers`, :meth:`get_layers_labels`</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">layers</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_layers</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">label</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">layers</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Layer &#39;</span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2">&#39; not found in document.&quot;</span><span class="p">)</span>
+
+        <span class="n">label_attr</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="se">{{</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name_spaces</span><span class="p">[</span><span class="s1">&#39;inkscape&#39;</span><span class="p">]</span><span class="si">}</span><span class="se">}}</span><span class="s2">label&quot;</span>
+        <span class="n">layers</span><span class="p">[</span><span class="n">label</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">label_attr</span><span class="p">,</span> <span class="n">new_label</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="FigureSVG.rename_element_id">
+<a class="viewcode-back" href="../../generated/losalamos.figures.html#losalamos.figures.FigureSVG.rename_element_id">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">rename_element_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">old_id</span><span class="p">,</span> <span class="n">new_id</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Rename an element ID and update all references to it within the document.</span>
+
+<span class="sd">        Updates the ``id`` attribute on the target element and scans the</span>
+<span class="sd">        entire SVG tree for cross-references (``clip-path``, ``mask``,</span>
+<span class="sd">        ``xlink:href``, ``href``) that point to the old ID, replacing them</span>
+<span class="sd">        with the new one.</span>
+
+<span class="sd">        :param old_id: Current ID of the element to rename.</span>
+<span class="sd">        :type old_id: str</span>
+<span class="sd">        :param new_id: New ID to assign.</span>
+<span class="sd">        :type new_id: str</span>
+<span class="sd">        :return: None</span>
+<span class="sd">        :rtype: NoneType</span>
+
+<span class="sd">        :raises ValueError: If no element with ``old_id`` is found in the document.</span>
+
+<span class="sd">        .. note::</span>
+
+<span class="sd">            This method is required when changing the target of the ``crop_id``</span>
+<span class="sd">            parameter in :meth:`to_image`, :meth:`to_pdf`, and :meth:`to_svg`,</span>
+<span class="sd">            since Inkscape&#39;s ``--export-id`` flag resolves elements by their</span>
+<span class="sd">            ``id`` attribute.</span>
+
+<span class="sd">        .. warning::</span>
+
+<span class="sd">            ID uniqueness is not enforced by this method. Passing a ``new_id``</span>
+<span class="sd">            that already exists in the document will produce duplicate IDs,</span>
+<span class="sd">            which is invalid SVG and may cause undefined behaviour in Inkscape</span>
+<span class="sd">            and browsers.</span>
+
+<span class="sd">        .. seealso::</span>
+
+<span class="sd">            :meth:`to_image`, :meth:`to_pdf`, :meth:`to_svg`</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># find the target element</span>
+        <span class="n">target</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;.//*[@id=&#39;</span><span class="si">{</span><span class="n">old_id</span><span class="si">}</span><span class="s2">&#39;]&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">target</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Element with id &#39;</span><span class="si">{</span><span class="n">old_id</span><span class="si">}</span><span class="s2">&#39; not found in document.&quot;</span><span class="p">)</span>
+
+        <span class="c1"># rename the element id</span>
+        <span class="n">target</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="n">new_id</span><span class="p">)</span>
+
+        <span class="c1"># update all cross-references in the tree</span>
+        <span class="n">ref_attrs</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;clip-path&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;url(#</span><span class="si">{</span><span class="n">old_id</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;mask&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;url(#</span><span class="si">{</span><span class="n">old_id</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;href&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;#</span><span class="si">{</span><span class="n">old_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="se">{{</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name_spaces</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;xlink&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;http://www.w3.org/1999/xlink&#39;</span><span class="p">)</span><span class="si">}</span><span class="se">}}</span><span class="s2">href&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;#</span><span class="si">{</span><span class="n">old_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="p">}</span>
+
+        <span class="k">for</span> <span class="n">element</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">iter</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">attr</span><span class="p">,</span> <span class="n">old_ref</span> <span class="ow">in</span> <span class="n">ref_attrs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">element</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">attr</span><span class="p">)</span> <span class="o">==</span> <span class="n">old_ref</span><span class="p">:</span>
+                    <span class="n">element</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">attr</span><span class="p">,</span> <span class="n">old_ref</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">old_id</span><span class="p">,</span> <span class="n">new_id</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="kc">None</span></div>
 
 
 <div class="viewcode-block" id="FigureSVG.to_image">
@@ -1426,6 +1760,21 @@
 
         <span class="k">return</span> <span class="n">file_output</span></div>
 
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_extract_variant</span><span class="p">(</span><span class="n">spec</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Extract the variant portion from an inkscape font specification string.</span>
+
+<span class="sd">        e.g. &quot;&#39;Arial, Bold&#39;&quot;  -&gt; &quot;Bold&quot;</span>
+<span class="sd">             &quot;&#39;Arial, Normal&#39;&quot; -&gt; &quot;Normal&quot;</span>
+<span class="sd">             &quot;&quot; -&gt; &quot;Normal&quot;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># strip quotes and whitespace</span>
+        <span class="n">spec</span> <span class="o">=</span> <span class="n">spec</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s2">&quot;&#39;</span><span class="se">\&quot;</span><span class="s2"> &quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">&quot;,&quot;</span> <span class="ow">in</span> <span class="n">spec</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">spec</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="k">return</span> <span class="s2">&quot;Normal&quot;</span>
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">_parse_style</span><span class="p">(</span><span class="n">style_str</span><span class="p">):</span>
