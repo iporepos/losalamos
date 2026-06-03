@@ -489,6 +489,48 @@ class FigureSVG(Figure):
         dc = self.get_layers()
         return list(dc.keys())
 
+    def get_text(self, element):
+        """
+        Get the text content of a SVG text element.
+
+        Reads from the first ``<tspan>`` descendant if present,
+        since Inkscape stores the actual string there rather than
+        directly on the ``<text>`` node. Falls back to the element's
+        own text if no tspan is found.
+
+        :param element: The lxml SVG text element to read.
+        :type element: etree.Element
+        :return: The text content, or an empty string if none is found.
+        :rtype: str
+
+        .. seealso::
+
+            :meth:`set_text`
+
+        """
+        for child in element.iter():
+            if etree.QName(child).localname == "tspan":
+                return child.text or ""
+
+        return element.text or ""
+
+    def get_text_lines(self, element):
+        """
+        Return all text lines from a multi-line SVG text element.
+
+        Each ``<tspan sodipodi:role='line'>`` is treated as one line.
+
+        :param element: The lxml SVG text element to read.
+        :type element: etree.Element
+        :return: List of strings, one per tspan.
+        :rtype: list[str]
+        """
+        lines = []
+        for child in element.iter():
+            if etree.QName(child).localname == "tspan":
+                lines.append(child.text or "")
+        return lines
+
     def set_page_opacity(self, opacity=1.0):
         """
         Set the Inkscape page background opacity.
@@ -514,25 +556,6 @@ class FigureSVG(Figure):
         """
         namedview = self._get_namedview()
         namedview.set("pagecolor", color)
-        return None
-
-    def set_element_color(self, element, fill=None, stroke=None):
-        """
-        Set fill and/or stroke color of an SVG element.
-
-        :param element: lxml SVG element
-        :param fill: Fill color (e.g. '#00ff00') or None
-        :param stroke: Stroke color or None
-        """
-        style = self._parse_style(element.get("style"))
-
-        if fill is not None:
-            style["fill"] = fill
-
-        if stroke is not None:
-            style["stroke"] = stroke
-
-        element.set("style", self._style_to_string(style))
         return None
 
     def get_layer_elements(self, label, drawable_only=True):
@@ -579,6 +602,293 @@ class FigureSVG(Figure):
             }
 
         return out
+
+    def set_property(self, element, key, value):
+        """
+        Set a visual or geometric property on an SVG element.
+
+        Searches for the key in the element's ``style`` attribute first,
+        then in bare XML attributes. Writes to whichever location already
+        holds the key, falling back to the ``style`` string if the key is
+        not found in either. If the key exists in both locations, the bare
+        attribute is removed and the ``style`` string is kept as the single
+        source of truth.
+
+        :param element: The lxml SVG element to modify.
+        :type element: etree.Element
+        :param key: Property name (e.g. ``'fill'``, ``'width'``, ``'opacity'``).
+        :type key: str
+        :param value: New value to assign.
+        :type value: str
+        :return: None
+        :rtype: NoneType
+
+        .. note::
+
+            Mutations are applied in place on the lxml tree. A subsequent
+            call to :meth:`save` or :meth:`export` will persist the changes
+            to disk.
+
+        .. warning::
+
+            When the same property exists in both the ``style`` string and
+            as a bare XML attribute, the bare attribute is silently removed
+            to resolve the ambiguity. This normalisation is intentional but
+            changes the element structure beyond the requested property.
+
+        """
+        style = self._parse_style(element.get("style", ""))
+        in_style = key in style
+        in_attr = element.get(key) is not None
+
+        if in_style and in_attr:
+            # clean up the duplicate — remove bare attr, keep style
+            del element.attrib[key]
+            in_attr = False
+
+        if in_style:
+            style[key] = value
+            element.set("style", self._style_to_string(style))
+        elif in_attr:
+            element.set(key, value)
+        else:
+            style[key] = value
+            element.set("style", self._style_to_string(style))
+
+        return None
+
+    def set_color(self, element, fill=None, stroke=None):
+        """
+        Set fill and/or stroke color of an SVG element.
+
+        :param element: lxml SVG element
+        :param fill: Fill color (e.g. '#00ff00') or None
+        :param stroke: Stroke color or None
+        """
+        style = self._parse_style(element.get("style"))
+
+        if fill is not None:
+            style["fill"] = fill
+
+        if stroke is not None:
+            style["stroke"] = stroke
+
+        element.set("style", self._style_to_string(style))
+        return None
+
+    def set_font(self, element, font_family, variant=None):
+        """
+        Set the font family on a text element and all its ``<tspan>`` descendants.
+
+        Updates both ``font-family`` and ``-inkscape-font-specification`` to
+        keep Inkscape's internal font state consistent with the rendered output.
+        The method iterates over the element itself and all child nodes, applying
+        changes only to ``<text>`` and ``<tspan>`` tags.
+
+        :param element: The lxml SVG text element to modify.
+        :type element: etree.Element
+        :param font_family: Target font family name (e.g. ``'Arial'``, ``'Georgia'``).
+        :type font_family: str
+        :param variant: Font variant to apply (e.g. ``'Normal'``, ``'Bold'``, ``'Italic'``).
+            If ``None``, the variant is read from the existing
+            ``-inkscape-font-specification`` of each node and preserved
+            individually, so mixed variants within the same text element
+            are handled correctly. Default value = ``None``
+        :type variant: str or None
+        :return: None
+        :rtype: NoneType
+
+        .. note::
+
+            When ``variant`` is ``None`` and no ``-inkscape-font-specification``
+            is present on a node, the variant defaults to ``'Normal'``.
+
+        .. seealso::
+
+            :meth:`set_property`, :meth:`_extract_variant`
+
+        """
+        for node in [element, *element.iter()]:
+            tag = etree.QName(node).localname
+            if tag not in ("text", "tspan"):
+                continue
+
+            style = self._parse_style(node.get("style", ""))
+
+            if variant is None:
+                current_spec = style.get("-inkscape-font-specification", "")
+                resolved_variant = self._extract_variant(current_spec)
+            else:
+                resolved_variant = variant
+
+            self.set_property(node, "font-family", font_family)
+            self.set_property(
+                node,
+                "-inkscape-font-specification",
+                f"'{font_family}, {resolved_variant}'",
+            )
+
+        return None
+
+    def set_text(self, element, content):
+        """
+        Set the text content of a SVG text element.
+
+        Writes to the first ``<tspan>`` descendant if present,
+        since Inkscape stores the actual string there rather than
+        directly on the ``<text>`` node.
+        Falls back to writing on the element itself if no tspan is found.
+
+        :param element: The lxml SVG text element to modify.
+        :type element: etree.Element
+        :param content: The new text string.
+        :type content: str
+        :return: None
+        :rtype: NoneType
+        """
+        for child in element.iter():
+            if etree.QName(child).localname == "tspan":
+                child.text = content
+                return None
+
+        # fallback: no tspan found
+        element.text = content
+        return None
+
+    def set_font_layers(self, font_family, variant=None, layers=None):
+        """
+        Set the font family on all text elements across specified layers.
+
+        Scans every specified layer in the document and applies :meth:`set_font`
+        to each ``<text>`` element found, preserving individual node
+        variants unless ``variant`` is explicitly provided.
+
+        :param font_family: Target font family name (e.g. ``'Arial'``, ``'Georgia'``).
+        :type font_family: str
+        :param variant: Font variant to apply (e.g. ``'Normal'``, ``'Bold'``, ``'Italic'``).
+            If ``None``, the existing variant of each node is preserved.
+            Default value = ``None``
+        :type variant: str or None
+        :param layers: List of layer labels to process. If ``None``, all layers
+            in the document are scanned. Default value = ``None``
+        :type layers: list[str] or None
+        :return: None
+        :rtype: NoneType
+
+        .. seealso::
+
+            :meth:`set_font`, :meth:`get_layers`, :meth:`get_layer_elements`
+
+        """
+        all_layers = self.get_layers()
+
+        if layers is None:
+            target_layers = all_layers
+        else:
+            target_layers = {k: v for k, v in all_layers.items() if k in layers}
+
+        for label in target_layers:
+            elements = self.get_layer_elements(label, drawable_only=True)
+            for el_id, el_data in elements.items():
+                if el_data["tag"] == "text":
+                    self.set_font(el_data["element"], font_family, variant=variant)
+
+        return None
+
+    def rename_layer(self, label, new_label):
+        """
+        Rename an Inkscape layer by updating its label attribute.
+
+        :param label: Current label of the layer to rename.
+        :type label: str
+        :param new_label: New label to assign to the layer.
+        :type new_label: str
+        :return: None
+        :rtype: NoneType
+
+        :raises ValueError: If no layer with the given label is found.
+
+        .. note::
+
+            Only the ``inkscape:label`` attribute is updated. The element
+            ``id`` attribute is left unchanged as it may be referenced
+            elsewhere in the document.
+
+        .. seealso::
+
+            :meth:`get_layers`, :meth:`get_layers_labels`
+
+        """
+        layers = self.get_layers()
+
+        if label not in layers:
+            raise ValueError(f"Layer '{label}' not found in document.")
+
+        label_attr = f"{{{self.name_spaces['inkscape']}}}label"
+        layers[label].set(label_attr, new_label)
+
+        return None
+
+    def rename_element_id(self, old_id, new_id):
+        """
+        Rename an element ID and update all references to it within the document.
+
+        Updates the ``id`` attribute on the target element and scans the
+        entire SVG tree for cross-references (``clip-path``, ``mask``,
+        ``xlink:href``, ``href``) that point to the old ID, replacing them
+        with the new one.
+
+        :param old_id: Current ID of the element to rename.
+        :type old_id: str
+        :param new_id: New ID to assign.
+        :type new_id: str
+        :return: None
+        :rtype: NoneType
+
+        :raises ValueError: If no element with ``old_id`` is found in the document.
+
+        .. note::
+
+            This method is required when changing the target of the ``crop_id``
+            parameter in :meth:`to_image`, :meth:`to_pdf`, and :meth:`to_svg`,
+            since Inkscape's ``--export-id`` flag resolves elements by their
+            ``id`` attribute.
+
+        .. warning::
+
+            ID uniqueness is not enforced by this method. Passing a ``new_id``
+            that already exists in the document will produce duplicate IDs,
+            which is invalid SVG and may cause undefined behaviour in Inkscape
+            and browsers.
+
+        .. seealso::
+
+            :meth:`to_image`, :meth:`to_pdf`, :meth:`to_svg`
+
+        """
+        # find the target element
+        target = self.data.find(f".//*[@id='{old_id}']")
+
+        if target is None:
+            raise ValueError(f"Element with id '{old_id}' not found in document.")
+
+        # rename the element id
+        target.set("id", new_id)
+
+        # update all cross-references in the tree
+        ref_attrs = {
+            "clip-path": f"url(#{old_id})",
+            "mask": f"url(#{old_id})",
+            "href": f"#{old_id}",
+            f"{{{self.name_spaces.get('xlink', 'http://www.w3.org/1999/xlink')}}}href": f"#{old_id}",
+        }
+
+        for element in self.data.iter():
+            for attr, old_ref in ref_attrs.items():
+                if element.get(attr) == old_ref:
+                    element.set(attr, old_ref.replace(old_id, new_id))
+
+        return None
 
     def to_image(
         self,
@@ -960,6 +1270,21 @@ class FigureSVG(Figure):
             os.remove(dst_file)
 
         return file_output
+
+    @staticmethod
+    def _extract_variant(spec):
+        """
+        Extract the variant portion from an inkscape font specification string.
+
+        e.g. "'Arial, Bold'"  -> "Bold"
+             "'Arial, Normal'" -> "Normal"
+             "" -> "Normal"
+        """
+        # strip quotes and whitespace
+        spec = spec.strip("'\" ")
+        if "," in spec:
+            return spec.split(",", 1)[1].strip()
+        return "Normal"
 
     @staticmethod
     def _parse_style(style_str):

@@ -126,7 +126,7 @@ class BCMKTestFigureSVG(unittest.TestCase):
         file_output = OUTPUT_DIR / "test_change_color.png"
 
         dc = self.svg.get_layer_elements(label="main")
-        self.svg.set_element_color(
+        self.svg.set_color(
             element=dc["rect234"]["element"],
             fill="#2BBFD6",
         )
