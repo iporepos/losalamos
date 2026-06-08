@@ -14,5 +14,6 @@
 
    .. autosummary::
    
+      Document
       DocumentTeX
    

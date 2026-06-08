@@ -442,7 +442,44 @@
                   
   <section id="module-losalamos.documents">
 <span id="losalamos-documents"></span><h1>losalamos.documents<a class="headerlink" href="#module-losalamos.documents" title="Link to this heading">#</a></h1>
-<p>Handle Documents editing, managing and builds</p>
+<p>Handle Documents editing, managing and builds.</p>
+<section id="class-hierarchy">
+<h2>Class hierarchy<a class="headerlink" href="#class-hierarchy" title="Link to this heading">#</a></h2>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>DataSet
+└── Document                    (base for all document types)
+    └── DocumentTeX             (base for all TeX documents)
+        ├── Preprint            (preprint / arXiv-style)
+        ├── Report              (standard report)
+        ├── ReportLarge         (multi-chapter report)
+        └── Memo                (short internal memo)
+</pre></div>
+</div>
+</section>
+<section id="template-resolution">
+<h2>Template resolution<a class="headerlink" href="#template-resolution" title="Link to this heading">#</a></h2>
+<p>Every <code class="docutils literal notranslate"><span class="pre">new()</span></code> call merges up to three template layers in priority order:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>BASE_TEMPLATE  ←  VARIANT_TEMPLATE  ←  template_overlay (user)
+</pre></div>
+</div>
+<ul>
+<li><dl>
+<dt><code class="docutils literal notranslate"><span class="pre">BASE_TEMPLATE</span></code><span class="classifier">defined on <code class="docutils literal notranslate"><span class="pre">DocumentTeX</span></code>; canonical TeX base shared</span></dt><dd><p>by all document types.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">VARIANT_TEMPLATE</span></code><span class="classifier">defined per subclass; files that differentiate the</span></dt><dd><p>document type (cover, class options, etc.).</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">template_overlay</span></code><span class="classifier">optional user-supplied folder for private or</span></dt><dd><p>client-specific files (logos, confidential covers).</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Each layer wins over the one to its left. Files absent from a layer are
+inherited transparently from the layer below.</p>
 <p class="rubric">Functions</p>
 <div class="pst-scrollable-table-container"><table class="autosummary longtable table">
 <tbody>
@@ -455,28 +492,180 @@
 <p class="rubric">Classes</p>
 <div class="pst-scrollable-table-container"><table class="autosummary longtable table">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#losalamos.documents.DocumentTeX" title="losalamos.documents.DocumentTeX"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DocumentTeX</span></code></a>([name, alias])</p></td>
-<td><p></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#losalamos.documents.Document" title="losalamos.documents.Document"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Document</span></code></a>([name, alias])</p></td>
+<td><p>Base class for all document types.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#losalamos.documents.DocumentTeX" title="losalamos.documents.DocumentTeX"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DocumentTeX</span></code></a>([name, alias])</p></td>
+<td><p>Base class for all TeX-based document types.</p></td>
 </tr>
 </tbody>
 </table>
 </div>
+</section>
 <dl class="py function">
 <dt class="sig sig-object py" id="losalamos.documents.escape_percent_latex">
 <span class="sig-prename descclassname"><span class="pre">losalamos.documents.</span></span><span class="sig-name descname"><span class="pre">escape_percent_latex</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../_modules/losalamos/documents.html#escape_percent_latex"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.documents.escape_percent_latex" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py class">
+<dt class="sig sig-object py" id="losalamos.documents.Document">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">losalamos.documents.</span></span><span class="sig-name descname"><span class="pre">Document</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'MyDocument'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alias</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Doc'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/documents.html#Document"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.documents.Document" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference internal" href="losalamos.root.html#losalamos.root.DataSet" title="losalamos.root.DataSet"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataSet</span></code></a></p>
+<p>Base class for all document types.</p>
+<p>Handles generic file loading and the three-layer template merge
+used by <a class="reference internal" href="#losalamos.documents.Document.new" title="losalamos.documents.Document.new"><code class="xref py py-meth docutils literal notranslate"><span class="pre">new()</span></code></a>. Subclasses specialise behaviour by overriding
+<a class="reference internal" href="#losalamos.documents.Document.BASE_TEMPLATE" title="losalamos.documents.Document.BASE_TEMPLATE"><code class="xref py py-attr docutils literal notranslate"><span class="pre">BASE_TEMPLATE</span></code></a> and <a class="reference internal" href="#losalamos.documents.Document.VARIANT_TEMPLATE" title="losalamos.documents.Document.VARIANT_TEMPLATE"><code class="xref py py-attr docutils literal notranslate"><span class="pre">VARIANT_TEMPLATE</span></code></a>.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="losalamos.documents.Document.BASE_TEMPLATE">
+<span class="sig-name descname"><span class="pre">BASE_TEMPLATE</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">PosixPath('/home/runner/work/losalamos/losalamos/src/losalamos/data/templates/documents/txt/demo')</span></span><a class="headerlink" href="#losalamos.documents.Document.BASE_TEMPLATE" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="losalamos.documents.Document.VARIANT_TEMPLATE">
+<span class="sig-name descname"><span class="pre">VARIANT_TEMPLATE</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#losalamos.documents.Document.VARIANT_TEMPLATE" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.documents.Document.load_data">
+<span class="sig-name descname"><span class="pre">load_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/documents.html#Document.load_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.documents.Document.load_data" title="Link to this definition">#</a></dt>
+<dd><p>Load data from file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>file_data</strong> (<em>str</em>) – file path to data.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.documents.Document.new">
+<span class="sig-name descname"><span class="pre">new</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">folder</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">template_overlay</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/documents.html#Document.new"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.documents.Document.new" title="Link to this definition">#</a></dt>
+<dd><p>Create a new document folder by materializing template files into a target location.</p>
+<p>This method creates a folder named <code class="docutils literal notranslate"><span class="pre">name</span></code> inside <code class="docutils literal notranslate"><span class="pre">folder</span></code> and populates it
+by merging up to three template layers in the following priority order:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>BASE_TEMPLATE  ←  VARIANT_TEMPLATE  ←  template_overlay
+</pre></div>
+</div>
+<p>Each layer wins over the one to its left. Layers that are <code class="docutils literal notranslate"><span class="pre">None</span></code> are
+skipped transparently. The caller is responsible for ensuring the target
+path does not already exist; if it does, a <code class="xref py py-exc docutils literal notranslate"><span class="pre">FileExistsError</span></code> is
+raised immediately and no files are written.</p>
+<p><strong>Single-layer mode</strong> (only <code class="docutils literal notranslate"><span class="pre">BASE_TEMPLATE</span></code>, both <code class="docutils literal notranslate"><span class="pre">VARIANT_TEMPLATE</span></code>
+and <code class="docutils literal notranslate"><span class="pre">template_overlay</span></code> are <code class="docutils literal notranslate"><span class="pre">None</span></code>):</p>
+<p>The entire <a class="reference internal" href="#losalamos.documents.Document.BASE_TEMPLATE" title="losalamos.documents.Document.BASE_TEMPLATE"><code class="xref py py-attr docutils literal notranslate"><span class="pre">BASE_TEMPLATE</span></code></a> directory tree is copied as-is into the
+target folder, preserving all subdirectories and files.</p>
+<p><strong>Multi-layer mode</strong> (one or both of <code class="docutils literal notranslate"><span class="pre">VARIANT_TEMPLATE</span></code>,
+<code class="docutils literal notranslate"><span class="pre">template_overlay</span></code> are provided):</p>
+<p>All active layers are scanned recursively and merged into the target.</p>
+<ul class="simple">
+<li><p>Files present in only one layer are copied from that layer.</p></li>
+<li><p>Files present in multiple layers are resolved in favour of the
+highest-priority layer (right-most in the chain).</p></li>
+</ul>
+<details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3" open="open">
+<summary class="sd-summary-title sd-card-header">
+<span class="sd-summary-icon"><svg version="1.1" width="1.0em" height="1.0em" class="sd-octicon sd-octicon-file-directory" viewBox="0 0 16 16" aria-hidden="true"><path d="M0 2.75C0 1.784.784 1 1.75 1H5c.55 0 1.07.26 1.4.7l.9 1.2a.25.25 0 0 0 .2.1h6.75c.966 0 1.75.784 1.75 1.75v8.5A1.75 1.75 0 0 1 14.25 15H1.75A1.75 1.75 0 0 1 0 13.25Zm1.75-.25a.25.25 0 0 0-.25.25v10.5c0 .138.112.25.25.25h12.5a.25.25 0 0 0 .25-.25v-8.5a.25.25 0 0 0-.25-.25H7.5c-.55 0-1.07-.26-1.4-.7l-.9-1.2a.25.25 0 0 0-.2-.1Z"></path></svg></span><span class="sd-summary-text">Merge example — three active layers</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>BASE_TEMPLATE/      VARIANT_TEMPLATE/     template_overlay/
+├── main.tex        ├── main.tex           └── cover.tex
+├── preamble.tex    └── cover.tex
+└── refs.bib
+
+# Resolution:
+# main.tex     → VARIANT_TEMPLATE  (highest priority)
+# cover.tex    → template_overlay  (highest priority)
+# preamble.tex → BASE_TEMPLATE     (only source)
+# refs.bib     → BASE_TEMPLATE     (only source)
+
+# Result in target:
+folder/name/
+├── main.tex        # from VARIANT_TEMPLATE
+├── cover.tex       # from template_overlay
+├── preamble.tex    # from BASE_TEMPLATE
+└── refs.bib        # from BASE_TEMPLATE
+</pre></div>
+</div>
+</div>
+</details><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>) – Name of the new document folder to be created inside <code class="docutils literal notranslate"><span class="pre">folder</span></code>.</p></li>
+<li><p><strong>folder</strong> (<em>str</em><em> or </em><em>pathlib.Path</em>) – Parent directory under which the new document folder is created.
+Must already exist as a directory on the filesystem.</p></li>
+<li><p><strong>template_overlay</strong> (<em>str</em><em>, </em><em>pathlib.Path</em><em>, or </em><em>None</em>) – Optional user-supplied directory whose files take
+priority over both <a class="reference internal" href="#losalamos.documents.Document.BASE_TEMPLATE" title="losalamos.documents.Document.BASE_TEMPLATE"><code class="xref py py-attr docutils literal notranslate"><span class="pre">BASE_TEMPLATE</span></code></a> and <a class="reference internal" href="#losalamos.documents.Document.VARIANT_TEMPLATE" title="losalamos.documents.Document.VARIANT_TEMPLATE"><code class="xref py py-attr docutils literal notranslate"><span class="pre">VARIANT_TEMPLATE</span></code></a>.
+Intended for private or client-specific files (logos, confidential covers,
+etc.). When <code class="docutils literal notranslate"><span class="pre">None</span></code> (default), only the class-level templates are used.
+When provided, must be a valid existing directory; otherwise
+<code class="xref py py-exc docutils literal notranslate"><span class="pre">NotADirectoryError</span></code> is raised before any files are written.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>FileExistsError</strong> – If the target folder <code class="docutils literal notranslate"><span class="pre">folder/name</span></code> already exists.
+No files are created or modified in this case.</p></li>
+<li><p><strong>NotADirectoryError</strong> – If <code class="docutils literal notranslate"><span class="pre">template_overlay</span></code> is provided but does not
+point to a valid directory. Validated before any files are written.</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Absolute path to the newly created document folder.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>pathlib.Path</p>
+</dd>
+</dl>
+<details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3" open="open">
+<summary class="sd-summary-title sd-card-header">
+<span class="sd-summary-icon"><svg version="1.1" width="1.0em" height="1.0em" class="sd-octicon sd-octicon-code-square" viewBox="0 0 16 16" aria-hidden="true"><path d="M0 1.75C0 .784.784 0 1.75 0h12.5C15.216 0 16 .784 16 1.75v12.5A1.75 1.75 0 0 1 14.25 16H1.75A1.75 1.75 0 0 1 0 14.25Zm1.75-.25a.25.25 0 0 0-.25.25v12.5c0 .138.112.25.25.25h12.5a.25.25 0 0 0 .25-.25V1.75a.25.25 0 0 0-.25-.25Zm7.47 3.97a.75.75 0 0 1 1.06 0l2 2a.75.75 0 0 1 0 1.06l-2 2a.749.749 0 0 1-1.275-.326.749.749 0 0 1 .215-.734L10.69 8 9.22 6.53a.75.75 0 0 1 0-1.06ZM6.78 6.53 5.31 8l1.47 1.47a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215l-2-2a.75.75 0 0 1 0-1.06l2-2a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042Z"></path></svg></span><span class="sd-summary-text">Usage example</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Single-layer: base template only (Document base class)</span>
+<span class="n">doc</span> <span class="o">=</span> <span class="n">Document</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;MyDoc&quot;</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s2">&quot;D&quot;</span><span class="p">)</span>
+<span class="n">target</span> <span class="o">=</span> <span class="n">doc</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;my_doc&quot;</span><span class="p">,</span> <span class="s2">&quot;/home/user/documents&quot;</span><span class="p">)</span>
+
+<span class="c1"># Two-layer: base + variant (subclass sets VARIANT_TEMPLATE)</span>
+<span class="n">report</span> <span class="o">=</span> <span class="n">Report</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;AnnualReport&quot;</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s2">&quot;AR&quot;</span><span class="p">)</span>
+<span class="n">target</span> <span class="o">=</span> <span class="n">report</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;annual_report&quot;</span><span class="p">,</span> <span class="s2">&quot;/home/user/documents&quot;</span><span class="p">)</span>
+
+<span class="c1"># Three-layer: base + variant + private user overlay</span>
+<span class="n">target</span> <span class="o">=</span> <span class="n">report</span><span class="o">.</span><span class="n">new</span><span class="p">(</span>
+    <span class="s2">&quot;client_report&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;/home/user/documents&quot;</span><span class="p">,</span>
+    <span class="n">template_overlay</span><span class="o">=</span><span class="s2">&quot;/home/user/private/client_x&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</details></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
 <dt class="sig sig-object py" id="losalamos.documents.DocumentTeX">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">losalamos.documents.</span></span><span class="sig-name descname"><span class="pre">DocumentTeX</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'MyDocTeX'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alias</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'TeX'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/documents.html#DocumentTeX"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.documents.DocumentTeX" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <a class="reference internal" href="losalamos.root.html#losalamos.root.DataSet" title="losalamos.root.DataSet"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataSet</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#losalamos.documents.Document" title="losalamos.documents.Document"><code class="xref py py-class docutils literal notranslate"><span class="pre">Document</span></code></a></p>
+<p>Base class for all TeX-based document types.</p>
+<p>Extends <a class="reference internal" href="#losalamos.documents.Document" title="losalamos.documents.Document"><code class="xref py py-class docutils literal notranslate"><span class="pre">Document</span></code></a> with TeX-specific behaviour: main-file
+detection, PDF compilation via <code class="docutils literal notranslate"><span class="pre">latexmk</span></code>, and document flattening.
+Subclasses set <a class="reference internal" href="#losalamos.documents.DocumentTeX.VARIANT_TEMPLATE" title="losalamos.documents.DocumentTeX.VARIANT_TEMPLATE"><code class="xref py py-attr docutils literal notranslate"><span class="pre">VARIANT_TEMPLATE</span></code></a> to select their template layer.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="losalamos.documents.DocumentTeX.BASE_TEMPLATE">
+<span class="sig-name descname"><span class="pre">BASE_TEMPLATE</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">PosixPath('/home/runner/work/losalamos/losalamos/src/losalamos/data/templates/documents/tex/base')</span></span><a class="headerlink" href="#losalamos.documents.DocumentTeX.BASE_TEMPLATE" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="losalamos.documents.DocumentTeX.VARIANT_TEMPLATE">
+<span class="sig-name descname"><span class="pre">VARIANT_TEMPLATE</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#losalamos.documents.DocumentTeX.VARIANT_TEMPLATE" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="losalamos.documents.DocumentTeX.load_data">
 <span class="sig-name descname"><span class="pre">load_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/documents.html#DocumentTeX.load_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.documents.DocumentTeX.load_data" title="Link to this definition">#</a></dt>
-<dd><p>Loads data from a TeX file if it is the main document.</p>
+<dd><p>Load data from a TeX file and detect whether it is a main document.</p>
+<p>A file is considered a main document if it contains a
+<code class="docutils literal notranslate"><span class="pre">\documentclass</span></code> declaration. Partial files (chapters, sections)
+intended to be <code class="docutils literal notranslate"><span class="pre">\input</span></code>-ted by a main file will have
+<code class="xref py py-attr docutils literal notranslate"><span class="pre">is_main</span></code> set to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>file_data</strong> (<em>str</em>) – path to the TeX file</p>
+<dd class="field-odd"><p><strong>file_data</strong> (<em>str</em><em> or </em><em>pathlib.Path</em>) – Path to the <code class="docutils literal notranslate"><span class="pre">.tex</span></code> file to load.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>None</p>
@@ -490,13 +679,31 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="losalamos.documents.DocumentTeX.to_pdf">
 <span class="sig-name descname"><span class="pre">to_pdf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_output</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cleanup</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">command</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'pdf'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/documents.html#DocumentTeX.to_pdf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.documents.DocumentTeX.to_pdf" title="Link to this definition">#</a></dt>
-<dd><p>Compiles the TeX document into a PDF using latexmk.</p>
+<dd><p>Compile the TeX document into a PDF using <code class="docutils literal notranslate"><span class="pre">latexmk</span></code>.</p>
+<p>Only executes when <code class="xref py py-attr docutils literal notranslate"><span class="pre">is_main</span></code> is <code class="docutils literal notranslate"><span class="pre">True</span></code>; partial files are
+silently skipped.</p>
+<p>The method temporarily switches the working directory to the source
+file’s parent folder before invoking <code class="docutils literal notranslate"><span class="pre">latexmk</span></code>, ensuring that all
+relative paths in the document (<code class="docutils literal notranslate"><span class="pre">\input</span></code>, <code class="docutils literal notranslate"><span class="pre">\include</span></code>, figures,
+etc.) resolve correctly regardless of where the Python process was
+launched from. The original working directory is always restored,
+even if compilation raises an exception.</p>
+<p>A project-local <code class="docutils literal notranslate"><span class="pre">latexmkrc</span></code> file is expected at the root of the
+document folder. It is passed explicitly via <code class="docutils literal notranslate"><span class="pre">-r</span> <span class="pre">latexmkrc</span></code> so
+that glossaries and nomenclature are built correctly on all platforms
+without requiring a global <code class="docutils literal notranslate"><span class="pre">latexmkrc</span></code> installation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>file_output</strong> (<em>str</em>) – desired output path for the compiled PDF (optional)</p></li>
-<li><p><strong>cleanup</strong> (<em>bool</em>) – flag to remove auxiliary files after compilation</p></li>
-<li><p><strong>command</strong> (<em>str</em>) – latexmk command flag (e.g., pdf, pdflua, pdfxe)</p></li>
+<li><p><strong>file_output</strong> (<em>str</em><em> or </em><em>pathlib.Path</em><em> or </em><em>None</em>) – Desired output path for the compiled PDF. When
+<code class="docutils literal notranslate"><span class="pre">None</span></code> (default), the PDF is left next to the source <code class="docutils literal notranslate"><span class="pre">.tex</span></code>
+file.</p></li>
+<li><p><strong>cleanup</strong> (<em>bool</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code> (default), removes auxiliary files
+produced by <code class="docutils literal notranslate"><span class="pre">latexmk</span></code> after a successful compilation
+(equivalent to <code class="docutils literal notranslate"><span class="pre">latexmk</span> <span class="pre">-c</span></code>).</p></li>
+<li><p><strong>command</strong> (<em>str</em>) – <code class="docutils literal notranslate"><span class="pre">latexmk</span></code> engine flag controlling the PDF backend.
+Common values: <code class="docutils literal notranslate"><span class="pre">&quot;pdf&quot;</span></code> (pdflatex), <code class="docutils literal notranslate"><span class="pre">&quot;pdflua&quot;</span></code> (lualatex),
+<code class="docutils literal notranslate"><span class="pre">&quot;pdfxe&quot;</span></code> (xelatex).</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -511,19 +718,32 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="losalamos.documents.DocumentTeX.to_flat">
 <span class="sig-name descname"><span class="pre">to_flat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_output</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compile_first</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">command</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'pdf'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/documents.html#DocumentTeX.to_flat"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.documents.DocumentTeX.to_flat" title="Link to this definition">#</a></dt>
-<dd><p>Flattens the TeX document by recursively resolving inputs and compiling to embed the bibliography.</p>
+<dd><p>Flatten the TeX document by recursively resolving <code class="docutils literal notranslate"><span class="pre">\input</span></code> /
+<code class="docutils literal notranslate"><span class="pre">\include</span></code> directives and embedding the compiled bibliography.</p>
+<p>The flattened output is a single self-contained <code class="docutils literal notranslate"><span class="pre">.tex</span></code> file
+suitable for journal submission (e.g. arXiv, Elsevier Editorial
+Manager). Only executes when <code class="xref py py-attr docutils literal notranslate"><span class="pre">is_main</span></code> is <code class="docutils literal notranslate"><span class="pre">True</span></code>; partial
+files return <code class="docutils literal notranslate"><span class="pre">None</span></code> silently.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>file_output</strong> (<em>str</em>) – desired output path for the flattened TeX file</p></li>
-<li><p><strong>compile_first</strong> (<em>bool</em>) – flag to compile the document first to generate an updated .bbl file</p></li>
+<li><p><strong>file_output</strong> (<em>str</em><em> or </em><em>pathlib.Path</em><em> or </em><em>None</em>) – Desired output path for the flattened <code class="docutils literal notranslate"><span class="pre">.tex</span></code>
+file. When <code class="docutils literal notranslate"><span class="pre">None</span></code>, the result is returned as a string but not
+written to disk.</p></li>
+<li><p><strong>compile_first</strong> (<em>bool</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code> (default), compiles the document
+before flattening so that the <code class="docutils literal notranslate"><span class="pre">.bbl</span></code> file reflects the current
+bibliography state. The intermediate PDF and <code class="docutils literal notranslate"><span class="pre">.bbl</span></code> are removed
+after flattening.</p></li>
+<li><p><strong>command</strong> (<em>str</em>) – <code class="docutils literal notranslate"><span class="pre">latexmk</span></code> engine flag passed to <a class="reference internal" href="#losalamos.documents.DocumentTeX.to_pdf" title="losalamos.documents.DocumentTeX.to_pdf"><code class="xref py py-meth docutils literal notranslate"><span class="pre">to_pdf()</span></code></a> when
+<code class="docutils literal notranslate"><span class="pre">compile_first=True</span></code>.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>the fully flattened LaTeX document string</p>
+<dd class="field-even"><p>The fully flattened LaTeX document as a string, or <code class="docutils literal notranslate"><span class="pre">None</span></code>
+if <code class="xref py py-attr docutils literal notranslate"><span class="pre">is_main</span></code> is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>str</p>
+<dd class="field-odd"><p>str or None</p>
 </dd>
 </dl>
 </dd></dl>
@@ -579,8 +799,19 @@
   </div>
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#class-hierarchy">Class hierarchy</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#template-resolution">Template resolution</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.documents.escape_percent_latex"><code class="docutils literal notranslate"><span class="pre">escape_percent_latex()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.documents.Document"><code class="docutils literal notranslate"><span class="pre">Document</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.documents.Document.BASE_TEMPLATE"><code class="docutils literal notranslate"><span class="pre">Document.BASE_TEMPLATE</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.documents.Document.VARIANT_TEMPLATE"><code class="docutils literal notranslate"><span class="pre">Document.VARIANT_TEMPLATE</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.documents.Document.load_data"><code class="docutils literal notranslate"><span class="pre">Document.load_data()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.documents.Document.new"><code class="docutils literal notranslate"><span class="pre">Document.new()</span></code></a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.documents.DocumentTeX"><code class="docutils literal notranslate"><span class="pre">DocumentTeX</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.documents.DocumentTeX.BASE_TEMPLATE"><code class="docutils literal notranslate"><span class="pre">DocumentTeX.BASE_TEMPLATE</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.documents.DocumentTeX.VARIANT_TEMPLATE"><code class="docutils literal notranslate"><span class="pre">DocumentTeX.VARIANT_TEMPLATE</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.documents.DocumentTeX.load_data"><code class="docutils literal notranslate"><span class="pre">DocumentTeX.load_data()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.documents.DocumentTeX.to_pdf"><code class="docutils literal notranslate"><span class="pre">DocumentTeX.to_pdf()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.documents.DocumentTeX.to_flat"><code class="docutils literal notranslate"><span class="pre">DocumentTeX.to_flat()</span></code></a></li>
