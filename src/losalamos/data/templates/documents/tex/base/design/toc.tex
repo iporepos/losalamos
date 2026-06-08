@@ -1,0 +1,45 @@
+% ==============================================================
+% toc.tex
+% Table of contents, list of figures and list of tables
+% typography. All entries rendered in sans-serif to match the
+% section title convention in design/titles.tex.
+% ==============================================================
+
+% --------------------------------------------------------------
+% TOC title
+\renewcommand{\cfttoctitlefont}{\Large\bfseries\sffamily}
+
+% --------------------------------------------------------------
+% TOC entry fonts
+\renewcommand{\cftsecfont}{\sffamily}
+\renewcommand{\cftsecpagefont}{\sffamily}
+
+\renewcommand{\cftsubsecfont}{\sffamily}
+\renewcommand{\cftsubsecpagefont}{\sffamily}
+
+\renewcommand{\cftsubsubsecfont}{\sffamily}
+\renewcommand{\cftsubsubsecpagefont}{\sffamily}
+
+% --------------------------------------------------------------
+% TOC dot leaders
+% Sections show dots, subsections and below are flush
+\renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}}
+\renewcommand{\cftsubsecleader}{\hfill}
+\renewcommand{\cftsubsubsecleader}{\hfill}
+
+% --------------------------------------------------------------
+% TOC spacing
+\setlength{\cftbeforesecskip}{1ex}
+\setlength{\cftbeforesubsecskip}{0.5ex}
+
+% --------------------------------------------------------------
+% List of Figures
+\renewcommand{\cftloftitlefont}{\Large\bfseries\sffamily}
+\renewcommand{\cftfigfont}{\sffamily}
+\renewcommand{\cftfigpagefont}{\sffamily}
+
+% --------------------------------------------------------------
+% List of Tables
+\renewcommand{\cftlottitlefont}{\Large\bfseries\sffamily}
+\renewcommand{\cfttabfont}{\sffamily}
+\renewcommand{\cfttabpagefont}{\sffamily}

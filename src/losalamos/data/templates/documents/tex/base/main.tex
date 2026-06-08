@@ -1,0 +1,57 @@
+% ==============================================================
+% SET DOCUMENT CLASS
+\documentclass[11pt]{article}
+
+% ==============================================================
+% PREAMBLE
+\input{preamble}
+
+% ==============================================================
+% DOCUMENT
+\begin{document}
+
+% --------------------------------------------------------------
+% Cover
+\input{partials/cover}
+
+% --------------------------------------------------------------
+% Table of contents (TOC)
+\input{partials/toc}
+
+% --------------------------------------------------------------
+% List of Figures (LOF)
+\input{partials/lof}
+
+% --------------------------------------------------------------
+% List of Tables (LOT)
+\input{partials/lot}
+
+% --------------------------------------------------------------
+% Content
+\input{content}
+\newpage
+
+% --------------------------------------------------------------
+% List of Acronyms (LOA)
+\input{partials/loa}
+
+% --------------------------------------------------------------
+% List of Symbols (LOS)
+\input{partials/los}
+
+% --------------------------------------------------------------
+% Glossary
+\input{partials/glo}
+
+% --------------------------------------------------------------
+% References
+\footnotesize
+\printbibliography[heading=bibintoc, title=\trReferences]
+
+% --------------------------------------------------------------
+% Appendix
+%%% \input{appendix}
+%%% \clearpage
+
+
+\end{document}

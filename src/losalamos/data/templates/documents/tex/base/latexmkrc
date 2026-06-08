@@ -1,0 +1,32 @@
+# ==============================================================
+# latexmkrc
+# Teaches latexmk how to build glossaries and nomenclature.
+# Place this file in the project root alongside main.tex.
+# ==============================================================
+
+$pdf_mode = 1;
+
+# --------------------------------------------------------------
+# Glossaries (handles both main glossary and acronyms)
+add_cus_dep('glo', 'gls', 0, 'run_makeglossaries');
+add_cus_dep('acn', 'acr', 0, 'run_makeglossaries');
+
+sub run_makeglossaries {
+    my ($base_name, $path) = fileparse($_[0]);
+    pushd $path;
+    my $return = system "makeglossaries \"$base_name\"";
+    popd;
+    return $return;
+}
+
+# --------------------------------------------------------------
+# Nomenclature (symbols list)
+add_cus_dep('nlo', 'nls', 0, 'run_makeindex');
+
+sub run_makeindex {
+    my ($base_name, $path) = fileparse($_[0]);
+    pushd $path;
+    my $return = system "makeindex \"$base_name.nlo\" -s nomencl.ist -o \"$base_name.nls\"";
+    popd;
+    return $return;
+}

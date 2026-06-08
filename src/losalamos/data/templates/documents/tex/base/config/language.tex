@@ -1,0 +1,16 @@
+% ==============================================================
+% config/language.tex
+% Default: English with ISO date format.
+% Override this file via template overlay for other locales.
+%
+% cleveref and hyperref are loaded here to guarantee the
+% required load order:  babel → cleveref → hyperref
+% ==============================================================
+\usepackage[english]{babel}
+\usepackage[useregional]{datetime2}
+\usepackage{csquotes}
+
+% --------------------------------------------------------------
+% References (load after babel)
+\usepackage{hyperref}
+\usepackage{cleveref}

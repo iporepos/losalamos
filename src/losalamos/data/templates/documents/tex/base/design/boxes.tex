@@ -1,0 +1,25 @@
+% --------------------------------------------------------------
+% Simple Box
+\newtcolorbox[auto counter, number within=section]{simplebox}[2][]{
+    arc=1mm,
+    coltitle=black,
+    coltext=black,
+    colback=verylightgray,
+    colframe=lightgray,
+    fontupper=\sffamily,
+    fonttitle=\sffamily\bfseries,
+    title=\sffamily Destaque~\thetcbcounter\;--- #2,#1
+}
+
+% --------------------------------------------------------------
+% Code box
+\newtcolorbox[auto counter,number within=section]{codebox}[2][]{
+arc=0mm,
+%coltitle=white,
+%coltext=black,
+colback=lightgray,
+%colframe=darkgray,
+fontupper=\sffamily,
+fonttitle=\sffamily\bfseries,
+title=\sffamily Algorithm~\thetcbcounter -- #2,#1
+}

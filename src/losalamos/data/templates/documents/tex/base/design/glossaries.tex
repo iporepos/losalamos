@@ -1,0 +1,31 @@
+% ==============================================================
+% glossaries.tex
+% Typography for LOA, LOS and Glossary lists.
+% All titles and entries in sans-serif, matching design/titles.tex.
+% ==============================================================
+
+% --------------------------------------------------------------
+% Glossaries and Acronyms title style
+\renewcommand{\glossarysection}[2][]{%
+    {\sffamily\bfseries\Large #2}%
+    \par\vspace{1ex}%
+}
+
+% --------------------------------------------------------------
+% Glossary entry name font
+\renewcommand{\glsnamefont}[1]{\sffamily\bfseries #1}
+
+% --------------------------------------------------------------
+% Glossary entry body font (description text)
+%\renewcommand{\glossaryentrynumbers}[1]{\sffamily #1}
+
+% --------------------------------------------------------------
+% Nomenclature title
+\renewcommand{\nomname}{%
+    {\sffamily\bfseries\Large \trSymbols}%
+}
+
+% --------------------------------------------------------------
+% Nomenclature entry font
+\renewcommand{\nomlabelwidth}{2cm}
+\renewcommand*{\nompreamble}{\sffamily}

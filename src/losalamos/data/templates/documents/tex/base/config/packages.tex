@@ -1,0 +1,108 @@
+% ==============================================================
+% config/packages.tex
+% Core package configuration for DocumentTeX base template.
+%
+% Isolation strategy
+% ------------------
+% The following concerns are intentionally excluded from this
+% file and expected to be supplied by variant or user overlay:
+%
+%   config/fonts.tex          — fontenc, inputenc, font packages
+%   config/language.tex       — babel, datetime2, csquotes, nomencl,
+%                               cleveref, hyperref
+%   config/bibliography.tex   — biblatex style, backend, options
+%
+% Private/project-specific inputs (gitignored):
+%
+%   locals/bibliography.tex   — \addbibresource declarations
+%
+% Load order contract
+% -------------------
+%   fonts → language → (everything else) → bibliography
+%
+% cleveref and hyperref are loaded at the end of language.tex
+% to guarantee:  babel → cleveref → hyperref
+%
+% ==============================================================
+
+% --------------------------------------------------------------
+% Fonts (overlayable)
+\input{config/fonts}
+
+% --------------------------------------------------------------
+% Math and Symbols
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{textcomp}
+
+% --------------------------------------------------------------
+% Language, References and Datetime (overlayable)
+\input{config/language}
+
+% --------------------------------------------------------------
+% Colors
+\usepackage[dvipsnames, table]{xcolor}
+
+% --------------------------------------------------------------
+% Layout
+\usepackage{geometry}
+\usepackage{setspace}
+\usepackage{changepage}
+\usepackage{lineno}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage[export]{adjustbox}
+
+% --------------------------------------------------------------
+% Quoting
+\usepackage{epigraph}
+\usepackage{dirtytalk}
+\usepackage{nameref}
+
+% --------------------------------------------------------------
+% Bibliography (overlayable style)
+\input{config/bibliography}
+
+% --------------------------------------------------------------
+% Sections
+\usepackage{tocloft}
+\usepackage[title]{appendix}
+\usepackage[acronym]{glossaries}
+\usepackage{nomencl}       % list of symbols, language-agnostic
+\usepackage{etoolbox}
+
+% --------------------------------------------------------------
+% Text
+\usepackage{lipsum}
+
+% --------------------------------------------------------------
+% Captions
+\usepackage[font={scriptsize,sf}, labelfont=bf]{caption}
+\usepackage[leftcaption]{sidecap}
+
+% --------------------------------------------------------------
+% Figures
+\usepackage{graphicx}
+\usepackage{wrapfig}
+\usepackage{rotating}
+
+% --------------------------------------------------------------
+% Tables
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{threeparttable}
+
+% --------------------------------------------------------------
+% Boxes
+\usepackage{tcolorbox}
+
+% --------------------------------------------------------------
+% Listings
+\usepackage{listings}
+
+% --------------------------------------------------------------
+% Misc
+\usepackage{enumerate}
+\usepackage{soul}
+\usepackage{xstring}
