@@ -2,7 +2,6 @@
 
 Hey, lets make a citation \cite{Pearce_2002_a}. Now what about a defined acronym \acrfull{cn}. Or a glossary entry \gls{rationalism}.
 
-
 \lipsum[1-3]
 
 \subsection{Simple subsection} \label{sec:subsection}
@@ -27,7 +26,7 @@ The \Cref{fig:regular} is a regular figure.
 % setup caption
 \caption[A here figure] % LOF caption
 {
-    \textbf{ ---\;The here figure }
+    \textbf{The here figure.}
     Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
     \;\textbf{a}\;---\;Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
     \;\textbf{b}\;---\;Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
@@ -47,7 +46,7 @@ The \Cref{fig:regular} is a regular figure.
 % setup caption
 \caption[A top figure] % LOF caption
 {
-    \textbf{ ---\;The top figure.}
+    \textbf{The top figure.}
     Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
     \;\textbf{a}\;---\;Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
     \;\textbf{b}\;---\;Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
@@ -67,7 +66,7 @@ The \Cref{fig:regular} is a regular figure.
 % setup caption
 \caption[A bottom figure] % LOF caption
 {
-    \textbf{ ---\;The bottom figure.}
+    \textbf{The bottom figure.}
     Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
     \;\textbf{a}\;---\;Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
     \;\textbf{b}\;---\;Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
@@ -98,3 +97,248 @@ The \Cref{tbl:table} is a three-part table.
 \input{tables/_table}
 
 \lipsum[3]
+
+\section{Boxes} \label{sec:boxes}
+
+The \Cref{box:first,box:second,box:third} are examples of the
+\texttt{boxstory} environment. Boxes are numbered document-wide
+like figures and tables, and appear in the List of Boxes.
+
+\lipsum[1]
+
+\begin{boxstory}{First box}
+\label{box:first}
+\lipsum[1]
+\end{boxstory}
+
+\lipsum[1-2]
+
+\begin{boxstory}{Second box}
+\label{box:second}
+\lipsum[2]
+\end{boxstory}
+
+\lipsum[1]
+
+\begin{boxstory}{A longer title for the third box}
+\label{box:third}
+\lipsum[3]
+\end{boxstory}
+
+\lipsum[1-2]
+
+\section{Admonitions} \label{sec:admonitions}
+
+Admonition boxes are colour-coded unnumbered environments used to
+draw the reader's attention to information of a particular kind.
+\Cref{sec:admonitions} demonstrates all five variants available
+in the base template.
+
+\lipsum[1]
+
+\begin{amdnote}
+    Use \texttt{amdnote} for supplementary information that is helpful
+    but not essential to the main flow. Suitable for clarifications,
+    context, or additional references.
+\end{amdnote}
+
+\lipsum[1]
+
+\begin{amdtip}
+    Use \texttt{amdtip} for a positive suggestion or shortcut that
+    makes the reader's work easier. Suitable for best practices
+    and efficiency hints.
+\end{amdtip}
+
+\lipsum[1]
+
+\begin{amdimportant}
+    Use \texttt{amdimportant} to flag information the reader must not
+    overlook. Suitable for prerequisites, constraints, or decisions
+    that affect downstream steps.
+\end{amdimportant}
+
+\lipsum[1]
+
+\begin{amdwarning}
+    Use \texttt{amdwarning} when a particular action or omission could
+    lead to unexpected or hard-to-recover results. Proceed with care
+    and verify assumptions before continuing.
+\end{amdwarning}
+
+\lipsum[1]
+
+\begin{amdcaution}
+    Use \texttt{amdcaution} for situations where incorrect action could
+    cause data loss, system damage, or other serious consequences.
+    This is the strongest admonition level.
+\end{amdcaution}
+
+\lipsum[1]
+
+\section{Theorems} \label{sec:theorems}
+
+The base template provides six theorem-like environments via
+\texttt{amsthm}. \Cref{def:continuity,thm:ivt,lem:lipschitz,cor:poly}
+share a single document-wide counter. \Cref{def:field,ex:sqrt}
+maintain independent sequences. \Cref{rem:starred} is unnumbered.
+
+\lipsum[1]
+
+\begin{definition}
+    \label{def:continuity}
+    A function $f : \mathbb{R} \to \mathbb{R}$ is \emph{continuous at} $a$
+    if for every $\varepsilon > 0$ there exists $\delta > 0$ such that
+    $|x - a| < \delta$ implies $|f(x) - f(a)| < \varepsilon$.
+\end{definition}
+
+\lipsum[1]
+
+\begin{theorem}[Intermediate Value Theorem]
+    \label{thm:ivt}
+    Let $f$ be continuous on the closed interval $[a, b]$.
+    If $k$ is any value strictly between $f(a)$ and $f(b)$,
+    then there exists $c \in (a, b)$ such that $f(c) = k$.
+\end{theorem}
+
+\begin{proof}
+    Standard bisection argument using the completeness of $\mathbb{R}$.
+\end{proof}
+
+\lipsum[1]
+
+\begin{lemma}
+    \label{lem:lipschitz}
+    Every Lipschitz-continuous function is uniformly continuous.
+\end{lemma}
+
+\begin{corollary}
+    \label{cor:poly}
+    Every polynomial is uniformly continuous on any bounded interval.
+\end{corollary}
+
+\lipsum[1]
+
+\begin{definition}
+    \label{def:field}
+    A \emph{field} is a set $F$ equipped with two binary operations,
+    addition and multiplication, satisfying the field axioms: associativity,
+    commutativity, distributivity, and the existence of identity and
+    inverse elements for both operations.
+\end{definition}
+
+\lipsum[1]
+
+\begin{example}
+    \label{ex:sqrt}
+    The function $f(x) = \sqrt{x}$ on $[0,1]$ is Hölder continuous
+    with exponent $\tfrac{1}{2}$, but not Lipschitz continuous on the
+    full interval due to the singularity of $f'(x) = \tfrac{1}{2\sqrt{x}}$
+    at $x = 0$. Lipschitz continuity holds on $[\delta, 1]$ for any
+    $\delta > 0$, with constant $L = \tfrac{1}{2\sqrt{\delta}}$.
+\end{example}
+
+\lipsum[1]
+
+\begin{remark}
+    \label{rem:starred}
+    The \texttt{remark} environment is declared with the starred form\\
+    \verb|\newtheorem*{remark}{Remark}|, producing no number and no
+    counter entry. It cannot be targeted by \verb|\cref|.
+\end{remark}
+
+\lipsum[1]
+
+\section{Equations} \label{sec:equations}
+
+Equations are numbered document-wide via the \texttt{equation}
+environment. The \texttt{align} environment numbers each row
+independently, and \texttt{subequations} groups related steps
+under a shared parent number with lettered suffixes.
+
+\lipsum[1]
+
+% --------------------------------------------------------------
+% Single equation
+\subsection{Single equation}
+
+The quadratic formula,
+
+\begin{equation}
+    \label{eq:quadratic}
+    x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a},
+\end{equation}
+
+gives the roots of $ax^2 + bx + c = 0$. \Cref{eq:quadratic} is
+the canonical example of a single numbered display equation.
+
+\lipsum[1]
+
+% --------------------------------------------------------------
+% Aligned equations
+\subsection{Aligned equations}
+
+The \texttt{align} environment numbers each row independently.
+A \verb|\nonumber| tag suppresses a specific line:
+
+\begin{align}
+    \label{eq:euler}
+    e^{i\pi} + 1 &= 0, \\
+    \label{eq:gaussian}
+    \int_{-\infty}^{\infty} e^{-x^2}\,dx &= \sqrt{\pi}, \\
+    \cos^2\theta + \sin^2\theta &= 1. \nonumber
+\end{align}
+
+\Cref{eq:euler} is Euler's identity and \Cref{eq:gaussian} is the
+Gaussian integral. The trigonometric identity on the last line
+carries no number because it is not referenced.
+
+\lipsum[1]
+
+% --------------------------------------------------------------
+% Subequations
+\subsection{Subequations}
+
+The \texttt{subequations} environment groups a derivation under a
+shared parent number with lettered suffixes. Steps
+\crefrange{eq:work_a}{eq:work_c} derive the work--energy theorem
+from Newton's second law:
+
+\begin{subequations}
+    \label{eq:work_deriv}
+    \begin{align}
+        F          &= ma = m\frac{dv}{dt}                  \label{eq:work_a} \\
+        F\,dx      &= m\frac{dv}{dt}\,dx = mv\,dv          \label{eq:work_b} \\
+        \int F\,dx &= \tfrac{1}{2}m(v^2 - v_0^2)          \label{eq:work_c}
+    \end{align}
+\end{subequations}
+
+The canonical result follows as a fresh numbered equation:
+
+\begin{equation}
+    \label{eq:work_energy}
+    W = \Delta K = \tfrac{1}{2}mv^2 - \tfrac{1}{2}mv_0^2.
+\end{equation}
+
+\Cref{eq:work_energy} is the result; the derivation in
+\crefrange{eq:work_a}{eq:work_c} provides the justification.
+
+\lipsum[1]
+
+% --------------------------------------------------------------
+% Unnumbered intermediates
+\subsection{Unnumbered intermediates}
+
+Suppressing numbers on intermediate steps and labelling only the
+final line keeps the derivation clean:
+
+\begin{align}
+    (a+b)^2 &= (a+b)(a+b)           \nonumber \\
+            &= a^2 + ab + ba + b^2  \nonumber \\
+            &= a^2 + 2ab + b^2.     \label{eq:binom}
+\end{align}
+
+Only \Cref{eq:binom} is referenceable; the intermediate lines
+consume no counter value.
+
+\lipsum[1]

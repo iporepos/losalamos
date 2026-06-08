@@ -1,0 +1,66 @@
+% ==============================================================
+% admonitions.tex
+% Color-coded unnumbered admonition boxes.
+% All inherit boxbasestyle from design/boxes.tex.
+% Icons require fontawesome5.
+% ==============================================================
+
+% --------------------------------------------------------------
+% NOTE — informational, neutral
+% Usage: \begin{amdnote} ... \end{amdnote}
+\newtcolorbox{amdnote}{
+    boxbasestyle,
+    colback      = cyan!5,
+    colbacktitle = cyan!50!black,
+    colframe     = cyan!50!black,
+    coltitle     = white,
+    title        = {\faInfoCircle\quad \trAdmNote},
+}
+
+% --------------------------------------------------------------
+% TIP — positive suggestion
+% Usage: \begin{amdtip} ... \end{amdtip}
+\newtcolorbox{amdtip}{
+    boxbasestyle,
+    colback      = green!5!white,
+    colbacktitle = green!40!black,
+    colframe     = green!40!black,
+    coltitle     = white,
+    title        = {\faLightbulb\quad \trAdmTip},
+}
+
+% --------------------------------------------------------------
+% IMPORTANT — strong emphasis
+% Usage: \begin{amdimportant} ... \end{amdimportant}
+\newtcolorbox{amdimportant}{
+    boxbasestyle,
+    colback      = violet!5,
+    colbacktitle = violet!60!black,
+    colframe     = violet!60!black,
+    coltitle     = white,
+    title        = {\faExclamationCircle\quad \trAdmImportant},
+}
+
+% --------------------------------------------------------------
+% WARNING — proceed with caution
+% Usage: \begin{amdwarning} ... \end{amdwarning}
+\newtcolorbox{amdwarning}{
+    boxbasestyle,
+    colback      = orange!5,
+    colbacktitle = orange!70!black,
+    colframe     = orange!70!black,
+    coltitle     = white,
+    title        = {\faExclamationTriangle\quad \trAdmWarning},
+}
+
+% --------------------------------------------------------------
+% CAUTION — potential for serious harm or data loss
+% Usage: \begin{amdcaution} ... \end{amdcaution}
+\newtcolorbox{amdcaution}{
+    boxbasestyle,
+    colback      = red!5,
+    colbacktitle = red!70!black,
+    colframe     = red!70!black,
+    coltitle     = white,
+    title        = {\faBan\quad \trAdmCaution},
+}

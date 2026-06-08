@@ -1,0 +1,55 @@
+% ==============================================================
+% theorems.tex
+% Theorem-like environments via amsthm.
+% Head font in sans-serif, colored by AccentColor (design/colors.tex).
+% All counters are document-wide.
+%
+% Translation strategy
+% --------------------
+% Each environment name is driven by a \*name macro. English
+% defaults are set here via \providecommand. The language overlay
+% can define these with \newcommand before this file loads and
+% \providecommand will silently skip them.
+% ==============================================================
+
+% --------------------------------------------------------------
+% Name macros — English defaults
+\providecommand{\theoremname}{Theorem}
+\providecommand{\lemmaname}{Lemma}
+\providecommand{\corollaryname}{Corollary}
+\providecommand{\definitionname}{Definition}
+\providecommand{\examplename}{Example}
+\providecommand{\remarkname}{Remark}
+% \proofname is defined by amsthm — override only in language overlay
+
+% --------------------------------------------------------------
+% Override amsthm head font to sans-serif + AccentColor
+\makeatletter
+\renewcommand{\th@plain}{%
+    \thm@headfont{\bfseries\sffamily\color{AccentColor}}%
+    \itshape
+}
+\renewcommand{\th@definition}{%
+    \thm@headfont{\bfseries\sffamily\color{AccentColor}}%
+    \normalfont
+}
+\renewcommand{\th@remark}{%
+    \thm@headfont{\itshape\sffamily\color{AccentColor}}%
+    \normalfont
+}
+\makeatother
+
+% --------------------------------------------------------------
+% Shared counter: theorem, lemma, corollary
+\newtheorem{theorem}{\theoremname}
+\newtheorem{lemma}[theorem]{\lemmaname}
+\newtheorem{corollary}[theorem]{\corollaryname}
+
+% --------------------------------------------------------------
+% Independent counters
+\newtheorem{definition}{\definitionname}
+\newtheorem{example}{\examplename}
+
+% --------------------------------------------------------------
+% Unnumbered
+\newtheorem*{remark}{\remarkname}

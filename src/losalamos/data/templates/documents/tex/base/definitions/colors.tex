@@ -1,0 +1,39 @@
+% ==============================================================
+% colors.tex
+% Document color palette.
+% Override this file via variant or user overlay to apply
+% a different brand or theme color scheme.
+% ==============================================================
+
+% --------------------------------------------------------------
+% Grayscale utilities
+\definecolor{rowgray}{gray}{0.95}
+\definecolor{verylightgray}{gray}{0.97}
+\definecolor{lightgray}{gray}{0.85}
+\definecolor{midgray}{gray}{0.50}
+
+% --------------------------------------------------------------
+% Brand / accent
+% using a mix expression
+\colorlet{AccentColor}{blue!60!black}
+
+% --------------------------------------------------------------
+% Semantic aliases
+\definecolor{HeadingColor}{named}{AccentColor}
+\definecolor{LinkColor}{named}{blue}
+\definecolor{RuleColor}{named}{midgray}
+
+% --------------------------------------------------------------
+% Page and text
+\pagecolor{white}
+\color{black}
+
+% --------------------------------------------------------------
+% Links
+\hypersetup{
+    colorlinks=true,
+    linkcolor=LinkColor,
+    citecolor=LinkColor,
+    filecolor=LinkColor,
+    urlcolor=LinkColor,
+}

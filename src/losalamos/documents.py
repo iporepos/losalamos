@@ -82,6 +82,7 @@ from losalamos.paths import FOLDER_TEMPLATES_DOCUMENTS
 # FUNCTIONS -- Project-level
 # =======================================================================
 
+
 def escape_percent_latex(text: str) -> str:
     # Replace % not preceded by an odd number of backslashes
     return re.sub(r"(?<!\\)%", r"\%", text)
@@ -99,6 +100,7 @@ def escape_percent_latex(text: str) -> str:
 # CLASSES -- Project-level
 # =======================================================================
 
+
 class Document(DataSet):
     """
     Base class for all document types.
@@ -108,7 +110,7 @@ class Document(DataSet):
     :attr:`BASE_TEMPLATE` and :attr:`VARIANT_TEMPLATE`.
     """
 
-    BASE_TEMPLATE    = FOLDER_TEMPLATES_DOCUMENTS / "txt/demo"
+    BASE_TEMPLATE = FOLDER_TEMPLATES_DOCUMENTS / "txt/demo"
     VARIANT_TEMPLATE = None
 
     def __init__(self, name="MyDocument", alias="Doc"):
@@ -254,11 +256,7 @@ class Document(DataSet):
         # --------------------------------------------------
         def relative_files(root: Path) -> dict:
             """Returns {relative_path: absolute_path} for every file under root."""
-            return {
-                f.relative_to(root): f
-                for f in root.rglob("*")
-                if f.is_file()
-            }
+            return {f.relative_to(root): f for f in root.rglob("*") if f.is_file()}
 
         # Build each active layer; higher layers overwrite lower ones
         # --------------------------------------------------
@@ -285,6 +283,7 @@ class Document(DataSet):
 # CLASSES -- Module-level
 # =======================================================================
 
+
 class DocumentTeX(Document):
     """
     Base class for all TeX-based document types.
@@ -294,7 +293,7 @@ class DocumentTeX(Document):
     Subclasses set :attr:`VARIANT_TEMPLATE` to select their template layer.
     """
 
-    BASE_TEMPLATE    = FOLDER_TEMPLATES_DOCUMENTS / "tex/base"
+    BASE_TEMPLATE = FOLDER_TEMPLATES_DOCUMENTS / "tex/base"
     VARIANT_TEMPLATE = None
 
     def __init__(self, name="MyDocTeX", alias="TeX"):
@@ -493,9 +492,6 @@ class DocumentTeX(Document):
                 f_out.write(flat_content)
 
         return flat_content
-
-
-
 
 
 # ***********************************************************************

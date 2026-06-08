@@ -89,7 +89,9 @@ class TestDocumentNew(unittest.TestCase):
         cls._overlay_template = Path(cls._tmp_root) / "_overlay_template"
         cls._overlay_template.mkdir()
         (cls._overlay_template / "main.txt").write_text("overlay main")  # collision
-        (cls._overlay_template / "extra.txt").write_text("overlay extra")  # overlay-only
+        (cls._overlay_template / "extra.txt").write_text(
+            "overlay extra"
+        )  # overlay-only
 
     @classmethod
     def tearDownClass(cls):

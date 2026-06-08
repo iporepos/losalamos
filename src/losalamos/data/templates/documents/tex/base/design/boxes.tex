@@ -1,25 +1,50 @@
+% ==============================================================
+% boxes.tex
+% Styled tcolorbox environments.
+% Colors driven by AccentColor defined in design/colors.tex.
+% ==============================================================
+
+\tcbuselibrary{skins, breakable}
+
 % --------------------------------------------------------------
-% Simple Box
-\newtcolorbox[auto counter, number within=section]{simplebox}[2][]{
-    arc=1mm,
-    coltitle=black,
-    coltext=black,
-    colback=verylightgray,
-    colframe=lightgray,
-    fontupper=\sffamily,
-    fonttitle=\sffamily\bfseries,
-    title=\sffamily Destaque~\thetcbcounter\;--- #2,#1
+% Shared style preset
+\tcbset{
+    boxbasestyle/.style={
+        enhanced,
+        breakable,
+        colback      = AccentColor!5,
+        colbacktitle = AccentColor!10,
+        coltitle     = AccentColor,
+        colframe     = AccentColor!70!black,
+        boxrule      = 0.5pt,
+        arc          = 2pt,
+        fonttitle    = \bfseries\sffamily\small,
+        fontupper    = \sffamily\footnotesize,
+    }
 }
 
 % --------------------------------------------------------------
-% Code box
-\newtcolorbox[auto counter,number within=section]{codebox}[2][]{
-arc=0mm,
-%coltitle=white,
-%coltext=black,
-colback=lightgray,
-%colframe=darkgray,
-fontupper=\sffamily,
-fonttitle=\sffamily\bfseries,
-title=\sffamily Algorithm~\thetcbcounter -- #2,#1
+% boxstory — numbered, breakable, document-wide counter
+% Usage:
+%   \begin{boxstory}{Title}
+%     Content here.
+%   \end{boxstory}
+%
+%   Optional first arg accepts any tcolorbox key, e.g.:
+%   \begin{boxstory}[list text=Short entry]{Long title}
+\newtcolorbox[
+    auto counter,
+    list inside = lob,
+]{boxstory}[2][]{
+    boxbasestyle,
+    title = {\sffamily Box~\thetcbcounter\quad #2},
+    #1,
+}
+
+% --------------------------------------------------------------
+% List of Boxes command
+% Usage in main.tex:
+%   \tcblistof[\section*]{lob}{\trListOfBoxes}
+\newcommand{\listofboxes}{%
+    \tcblistof[\section*]{lob}{\trListOfBoxes}%
 }

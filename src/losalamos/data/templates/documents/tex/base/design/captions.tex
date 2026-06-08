@@ -1,0 +1,24 @@
+% --------------------------------------------------------------
+% Captions
+\DeclareCaptionLabelSeparator{pipe}{\space|\space}
+
+% --------------------------------------------------------------
+% Figures
+\captionsetup[figure]{
+    font={scriptsize, sf},
+    labelfont={bf, color=AccentColor},
+    labelsep=pipe, % quad, colon, pipe
+    width=\textwidth
+}
+
+% aligned on top for side caption
+\sidecaptionvpos{figure}{t}
+
+% --------------------------------------------------------------
+% Tables
+\captionsetup[table]{
+    font={scriptsize, sf},
+    labelfont={bf, color=AccentColor},
+    labelsep=pipe,
+    width=\textwidth
+}

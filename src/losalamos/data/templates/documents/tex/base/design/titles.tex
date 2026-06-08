@@ -1,16 +1,19 @@
+% ==============================================================
+% titles.tex
+% Section title formatting.
+% Heading color is driven by HeadingColor defined in design/colors.tex.
+% ==============================================================
+
 % --------------------------------------------------------------
 % Section title formatting
-
-%\titleformat*{\chapter}{\bfseries\fontfamily{phv}\selectfont\LARGE}
-
 \titleformat{\section}
-  {\bfseries\sffamily\selectfont\Large}
+  {\bfseries\sffamily\Large\color{HeadingColor}}
   {\thesection}{1em}{}
 
 \titleformat{\subsection}
-  {\bfseries\sffamily\selectfont\large}
+  {\bfseries\sffamily\large\color{HeadingColor}}
   {\thesubsection}{1em}{}
 
 \titleformat{\subsubsection}
-  {\sffamily\selectfont\normalsize}
+  {\sffamily\normalsize\color{HeadingColor}}
   {\thesubsubsection}{1em}{}
