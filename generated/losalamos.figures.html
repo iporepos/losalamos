@@ -748,6 +748,32 @@ have inkscape:groupmode=”layer” are considered.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="losalamos.figures.FigureSVG.get_property">
+<span class="sig-name descname"><span class="pre">get_property</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">element</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/figures.html#FigureSVG.get_property"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.figures.FigureSVG.get_property" title="Link to this definition">#</a></dt>
+<dd><p>Get a visual or geometric property from an SVG element.</p>
+<p>Searches the element’s <code class="docutils literal notranslate"><span class="pre">style</span></code> attribute first, then falls back
+to bare XML attributes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>element</strong> (<em>etree.Element</em>) – The lxml SVG element to read.</p></li>
+<li><p><strong>key</strong> (<em>str</em>) – Property name (e.g. <code class="docutils literal notranslate"><span class="pre">'fill'</span></code>, <code class="docutils literal notranslate"><span class="pre">'width'</span></code>, <code class="docutils literal notranslate"><span class="pre">'opacity'</span></code>).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The property value, or <code class="docutils literal notranslate"><span class="pre">None</span></code> if not found in either location.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str or None</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#losalamos.figures.FigureSVG.set_property" title="losalamos.figures.FigureSVG.set_property"><code class="xref py py-meth docutils literal notranslate"><span class="pre">set_property()</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="losalamos.figures.FigureSVG.get_text">
 <span class="sig-name descname"><span class="pre">get_text</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">element</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/figures.html#FigureSVG.get_text"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.figures.FigureSVG.get_text" title="Link to this definition">#</a></dt>
 <dd><p>Get the text content of a SVG text element.</p>
@@ -1056,6 +1082,45 @@ and browsers.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="losalamos.figures.FigureSVG.rename_element_label">
+<span class="sig-name descname"><span class="pre">rename_element_label</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">old_label</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_label</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tag</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/figures.html#FigureSVG.rename_element_label"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.figures.FigureSVG.rename_element_label" title="Link to this definition">#</a></dt>
+<dd><p>Rename an element’s <code class="docutils literal notranslate"><span class="pre">inkscape:label</span></code> attribute within the document.</p>
+<p>Searches the entire SVG tree for the first element whose
+<code class="docutils literal notranslate"><span class="pre">inkscape:label</span></code> matches <code class="docutils literal notranslate"><span class="pre">old_label</span></code> and updates it to <code class="docutils literal notranslate"><span class="pre">new_label</span></code>.
+Optionally restricts the search to a specific SVG tag name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>old_label</strong> (<em>str</em>) – Current <code class="docutils literal notranslate"><span class="pre">inkscape:label</span></code> value to find.</p></li>
+<li><p><strong>new_label</strong> (<em>str</em>) – New label value to assign.</p></li>
+<li><p><strong>tag</strong> (<em>str</em><em> or </em><em>None</em>) – [optional] Local tag name to restrict the search
+(e.g. <code class="docutils literal notranslate"><span class="pre">'g'</span></code>, <code class="docutils literal notranslate"><span class="pre">'rect'</span></code>, <code class="docutils literal notranslate"><span class="pre">'text'</span></code>). If <code class="docutils literal notranslate"><span class="pre">None</span></code>, all
+element types are searched. Default value = <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>NoneType</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If no element with the given <code class="docutils literal notranslate"><span class="pre">old_label</span></code> is found.</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Unlike <a class="reference internal" href="#losalamos.figures.FigureSVG.rename_layer" title="losalamos.figures.FigureSVG.rename_layer"><code class="xref py py-meth docutils literal notranslate"><span class="pre">rename_layer()</span></code></a>, which operates only on top-level layer
+<code class="docutils literal notranslate"><span class="pre">&lt;g&gt;</span></code> elements, this method searches the entire document tree and
+works on any element type.</p>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#losalamos.figures.FigureSVG.rename_layer" title="losalamos.figures.FigureSVG.rename_layer"><code class="xref py py-meth docutils literal notranslate"><span class="pre">rename_layer()</span></code></a>, <a class="reference internal" href="#losalamos.figures.FigureSVG.rename_element_id" title="losalamos.figures.FigureSVG.rename_element_id"><code class="xref py py-meth docutils literal notranslate"><span class="pre">rename_element_id()</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="losalamos.figures.FigureSVG.to_image">
 <span class="sig-name descname"><span class="pre">to_image</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_output</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dpi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">300</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">crop_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hide_layers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_layers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_inclusive</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">to_jpeg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">remove_png</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/figures.html#FigureSVG.to_image"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.figures.FigureSVG.to_image" title="Link to this definition">#</a></dt>
 <dd><p>Export the current drawing as an image file, optionally adjusting layers and format.</p>
@@ -1227,6 +1292,7 @@ direct PDF export from Inkscape.</p>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.figures.FigureSVG.show_layers"><code class="docutils literal notranslate"><span class="pre">FigureSVG.show_layers()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.figures.FigureSVG.get_layers"><code class="docutils literal notranslate"><span class="pre">FigureSVG.get_layers()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.figures.FigureSVG.get_layers_labels"><code class="docutils literal notranslate"><span class="pre">FigureSVG.get_layers_labels()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.figures.FigureSVG.get_property"><code class="docutils literal notranslate"><span class="pre">FigureSVG.get_property()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.figures.FigureSVG.get_text"><code class="docutils literal notranslate"><span class="pre">FigureSVG.get_text()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.figures.FigureSVG.get_text_lines"><code class="docutils literal notranslate"><span class="pre">FigureSVG.get_text_lines()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.figures.FigureSVG.set_page_opacity"><code class="docutils literal notranslate"><span class="pre">FigureSVG.set_page_opacity()</span></code></a></li>
@@ -1239,6 +1305,7 @@ direct PDF export from Inkscape.</p>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.figures.FigureSVG.set_font_layers"><code class="docutils literal notranslate"><span class="pre">FigureSVG.set_font_layers()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.figures.FigureSVG.rename_layer"><code class="docutils literal notranslate"><span class="pre">FigureSVG.rename_layer()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.figures.FigureSVG.rename_element_id"><code class="docutils literal notranslate"><span class="pre">FigureSVG.rename_element_id()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.figures.FigureSVG.rename_element_label"><code class="docutils literal notranslate"><span class="pre">FigureSVG.rename_element_label()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.figures.FigureSVG.to_image"><code class="docutils literal notranslate"><span class="pre">FigureSVG.to_image()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.figures.FigureSVG.to_pdf"><code class="docutils literal notranslate"><span class="pre">FigureSVG.to_pdf()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.figures.FigureSVG.to_svg"><code class="docutils literal notranslate"><span class="pre">FigureSVG.to_svg()</span></code></a></li>
