@@ -489,6 +489,32 @@ class FigureSVG(Figure):
         dc = self.get_layers()
         return list(dc.keys())
 
+    def get_property(self, element, key):
+        """
+        Get a visual or geometric property from an SVG element.
+
+        Searches the element's ``style`` attribute first, then falls back
+        to bare XML attributes.
+
+        :param element: The lxml SVG element to read.
+        :type element: etree.Element
+        :param key: Property name (e.g. ``'fill'``, ``'width'``, ``'opacity'``).
+        :type key: str
+        :return: The property value, or ``None`` if not found in either location.
+        :rtype: str or None
+
+        .. seealso::
+
+            :meth:`set_property`
+
+        """
+        style = self._parse_style(element.get("style", ""))
+
+        if key in style:
+            return style[key]
+
+        return element.get(key)
+
     def get_text(self, element):
         """
         Get the text content of a SVG text element.
@@ -889,6 +915,51 @@ class FigureSVG(Figure):
                     element.set(attr, old_ref.replace(old_id, new_id))
 
         return None
+
+    def rename_element_label(self, old_label, new_label, tag=None):
+        """
+        Rename an element's ``inkscape:label`` attribute within the document.
+
+        Searches the entire SVG tree for the first element whose
+        ``inkscape:label`` matches ``old_label`` and updates it to ``new_label``.
+        Optionally restricts the search to a specific SVG tag name.
+
+        :param old_label: Current ``inkscape:label`` value to find.
+        :type old_label: str
+        :param new_label: New label value to assign.
+        :type new_label: str
+        :param tag: [optional] Local tag name to restrict the search
+            (e.g. ``'g'``, ``'rect'``, ``'text'``). If ``None``, all
+            element types are searched. Default value = ``None``
+        :type tag: str or None
+        :return: None
+        :rtype: NoneType
+
+        :raises ValueError: If no element with the given ``old_label`` is found.
+
+        .. note::
+
+            Unlike :meth:`rename_layer`, which operates only on top-level layer
+            ``<g>`` elements, this method searches the entire document tree and
+            works on any element type.
+
+        .. seealso::
+
+            :meth:`rename_layer`, :meth:`rename_element_id`
+
+        """
+        label_attr = f"{{{self.name_spaces['inkscape']}}}label"
+
+        for element in self.data.iter():
+            if tag is not None and etree.QName(element).localname != tag:
+                continue
+            if element.get(label_attr) == old_label:
+                element.set(label_attr, new_label)
+                return None
+
+        raise ValueError(
+            f"Element with inkscape:label '{old_label}' not found in document."
+        )
 
     def to_image(
         self,
