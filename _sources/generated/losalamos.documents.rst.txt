@@ -16,4 +16,6 @@
    
       Document
       DocumentTeX
+      Essay
+      Professional
    
