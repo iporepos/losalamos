@@ -521,6 +521,16 @@ class DocumentTeX(Document):
         return flat_content
 
 
+class Essay(DocumentTeX):
+
+    pass
+
+
+class Professional(Essay):
+
+    VARIANT_TEMPLATE = FOLDER_TEMPLATES_DOCUMENTS / "tex/professional"
+
+
 # ***********************************************************************
 # SCRIPT
 # ***********************************************************************

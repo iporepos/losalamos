@@ -1,0 +1,42 @@
+% ==============================================================
+% metadata.tex — Essay
+% Minimal metadata for a single-author document.
+% ==============================================================
+
+% --------------------------------------------------------------
+% Draft mode
+\newcommand{\IsDraft}{false}
+
+% --------------------------------------------------------------
+% Content
+\newcommand{\DocTitle}{[Document Title]}
+\newcommand{\DocSubtitle}{[Document Subtitle]}
+\newcommand{\DocAbstract}{\lipsum[1] \lipsum[2] \lipsum[3]}
+
+% --------------------------------------------------------------
+% Authorship
+\newcommand{\DocAuthor}{[Author]}
+
+% --------------------------------------------------------------
+% Project
+\input{definitions/project}
+
+% --------------------------------------------------------------
+% Context
+\newcommand{\DocDate}{\DTMtoday}
+\newcommand{\DocCity}{[City]}
+
+% --------------------------------------------------------------
+% Parties
+\input{definitions/party_a}
+\input{definitions/party_b}
+
+% --------------------------------------------------------------
+% Service
+\input{definitions/service}
+
+% --------------------------------------------------------------
+% Draft watermark
+\ifdefstring{\IsDraft}{true}{
+    \usepackage{draftwatermark}
+}{}
