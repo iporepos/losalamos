@@ -794,7 +794,7 @@
         <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">source_dir</span><span class="p">)</span>
 
         <span class="k">try</span><span class="p">:</span>
-            <span class="c1"># 1. Compile</span>
+            <span class="c1"># Compile</span>
             <span class="c1"># --------------------------------------------------</span>
             <span class="n">compile_cmd</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;latexmk&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;-</span><span class="si">{</span><span class="n">command</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span>
 
@@ -806,7 +806,7 @@
 
             <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">compile_cmd</span><span class="p">,</span> <span class="n">check</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-            <span class="c1"># 2. Handle output destination</span>
+            <span class="c1"># Handle output destination</span>
             <span class="c1"># --------------------------------------------------</span>
             <span class="n">default_pdf</span> <span class="o">=</span> <span class="n">source</span><span class="o">.</span><span class="n">with_suffix</span><span class="p">(</span><span class="s2">&quot;.pdf&quot;</span><span class="p">)</span>
 
@@ -815,7 +815,7 @@
                 <span class="n">shutil</span><span class="o">.</span><span class="n">copy2</span><span class="p">(</span><span class="n">default_pdf</span><span class="p">,</span> <span class="n">target_path</span><span class="p">)</span>
                 <span class="n">default_pdf</span><span class="o">.</span><span class="n">unlink</span><span class="p">()</span>
 
-            <span class="c1"># 3. Cleanup auxiliary files</span>
+            <span class="c1"># Cleanup auxiliary files</span>
             <span class="c1"># --------------------------------------------------</span>
             <span class="k">if</span> <span class="n">cleanup</span><span class="p">:</span>
                 <span class="n">cleanup_cmd</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;latexmk&quot;</span><span class="p">,</span> <span class="s2">&quot;-c&quot;</span><span class="p">]</span>
@@ -823,6 +823,33 @@
                     <span class="n">cleanup_cmd</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;-r&quot;</span><span class="p">,</span> <span class="s2">&quot;latexmkrc&quot;</span><span class="p">]</span>
                 <span class="n">cleanup_cmd</span> <span class="o">+=</span> <span class="p">[</span><span class="n">source</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>
                 <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cleanup_cmd</span><span class="p">,</span> <span class="n">check</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+                <span class="c1"># Manual sweep for files latexmk -c never tracks</span>
+                <span class="n">_extra_suffixes</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="s2">&quot;.bbl&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;.bcf&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;.run.xml&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;.glo&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;.gls&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;.glg&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;.acn&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;.acr&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;.alg&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;.nlo&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;.nls&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;.nlg&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;.ist&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;.maf&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;.mtc&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;.mtc0&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;.lol&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;.lob&quot;</span><span class="p">,</span>
+                <span class="p">}</span>
+                <span class="n">stem</span> <span class="o">=</span> <span class="n">source</span><span class="o">.</span><span class="n">stem</span>
+                <span class="k">for</span> <span class="n">suffix</span> <span class="ow">in</span> <span class="n">_extra_suffixes</span><span class="p">:</span>
+                    <span class="n">leftover</span> <span class="o">=</span> <span class="n">source_dir</span> <span class="o">/</span> <span class="p">(</span><span class="n">stem</span> <span class="o">+</span> <span class="n">suffix</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">leftover</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+                        <span class="n">leftover</span><span class="o">.</span><span class="n">unlink</span><span class="p">()</span>
 
         <span class="k">finally</span><span class="p">:</span>
             <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">original_dir</span><span class="p">)</span>
