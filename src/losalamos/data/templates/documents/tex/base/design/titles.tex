@@ -4,16 +4,19 @@
 % Heading color is driven by HeadingColor defined in design/colors.tex.
 % ==============================================================
 
-% --------------------------------------------------------------
-% Section title formatting
 \titleformat{\section}
   {\bfseries\sffamily\Large\color{HeadingColor}}
-  {\thesection}{1em}{}
+  {\thesection}{5mm}{}
 
 \titleformat{\subsection}
   {\bfseries\sffamily\large\color{HeadingColor}}
-  {\thesubsection}{1em}{}
+  {\thesubsection}{4mm}{}
 
 \titleformat{\subsubsection}
   {\sffamily\normalsize\color{HeadingColor}}
-  {\thesubsubsection}{1em}{}
+  {\thesubsubsection}{4mm}{}
+
+\titleformat{\paragraph}[runin]
+  {\bfseries\sffamily\normalsize\color{HeadingColor}}
+  {}{0mm}{}[.]
+

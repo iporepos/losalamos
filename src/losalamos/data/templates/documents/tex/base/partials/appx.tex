@@ -1,0 +1,34 @@
+% ==============================================================
+% appendix.tex
+% ==============================================================
+\appendix
+
+% --- Force letter-based section counter ---
+\renewcommand{\thesection}{\Alph{section}}
+\renewcommand{\thesubsection}{\Alph{section}.\arabic{subsection}}
+\renewcommand{\thesubsubsection}{\Alph{section}.\arabic{subsection}.\arabic{subsubsection}}
+
+% --- Reset section counter ---
+\setcounter{section}{0}
+
+% --- Restart and prefix all counters ---
+\setcounter{equation}{0}
+\setcounter{figure}{0}
+\setcounter{table}{0}
+\setcounter{lstlisting}{0}
+
+\renewcommand{\theequation}{\Alph{section}.\arabic{equation}}
+\renewcommand{\thefigure}{\Alph{section}.\arabic{figure}}
+\renewcommand{\thetable}{\Alph{section}.\arabic{table}}
+\renewcommand{\thelstlisting}{\Alph{section}.\arabic{lstlisting}}
+
+% --- Opening title ---
+\pagesectionvspace
+\section*{\trAppendices}
+\phantomsection
+\addcontentsline{toc}{section}{\trAppendices}
+\label{sec:appendix}
+\vspace{10mm}
+
+% --- Typography: smaller font for appendix content ---
+\small

@@ -1,3 +1,15 @@
-% --------------------------------------------------------------
-% Set sans-serif font
-\renewcommand{\sfdefault}{phv} % phv=Helvetica
+% ==============================================================
+% design/fonts.tex
+% Assign Source family members to the three LaTeX font roles.
+% ==============================================================
+
+% --- Role assignments ---
+% sourceserifpro and sourcesanspro set their roles automatically
+% via the [default] option. Only mono needs explicit assignment.
+\renewcommand{\ttdefault}{SourceCodePro-TLF}
+
+% --- Document default: serif body ---
+\renewcommand{\familydefault}{\rmdefault}
+
+% --- lstlisting: inherit mono role ---
+\lstset{basicstyle=\ttfamily\footnotesize}

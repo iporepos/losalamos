@@ -11,12 +11,16 @@
 % --------------------------------------------------------------
 % Custom spaces
 \newcommand{\pagesectionvspace}{\vspace*{15mm}}
+
 % Text body tab space
-\newcommand{\bodytab}{10mm}
+\newcommand{\bodytab}{0mm}
+
+% Appendix body tab space
+\newcommand{\appendixtab}{15mm}
 
 % --------------------------------------------------------------
 % Paragraph indentation space
-\setlength{\parindent}{5mm}
+\setlength{\parindent}{0mm}
 
 % --------------------------------------------------------------
 % Paragraph spacing
@@ -42,6 +46,10 @@
 \titlespacing*{\section}      {0mm}{6mm}{2mm}
 \titlespacing*{\subsection}   {0mm}{2mm}{0mm}
 \titlespacing*{\subsubsection}{0mm}{2mm}{0mm}
+\titlespacing{\paragraph}
+  {0mm}   % left indent
+  {2mm}   % space before
+  {2mm}   % space after (between title and the following text)
 
 % --------------------------------------------------------------
 % Header spacing

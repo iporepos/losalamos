@@ -374,7 +374,7 @@ class DocumentTeX(Document):
         os.chdir(source_dir)
 
         try:
-            # 1. Compile
+            # Compile
             # --------------------------------------------------
             compile_cmd = ["latexmk", f"-{command}"]
 
@@ -386,7 +386,7 @@ class DocumentTeX(Document):
 
             subprocess.run(compile_cmd, check=True)
 
-            # 2. Handle output destination
+            # Handle output destination
             # --------------------------------------------------
             default_pdf = source.with_suffix(".pdf")
 
@@ -395,7 +395,7 @@ class DocumentTeX(Document):
                 shutil.copy2(default_pdf, target_path)
                 default_pdf.unlink()
 
-            # 3. Cleanup auxiliary files
+            # Cleanup auxiliary files
             # --------------------------------------------------
             if cleanup:
                 cleanup_cmd = ["latexmk", "-c"]
@@ -403,6 +403,33 @@ class DocumentTeX(Document):
                     cleanup_cmd += ["-r", "latexmkrc"]
                 cleanup_cmd += [source.name]
                 subprocess.run(cleanup_cmd, check=True)
+
+                # Manual sweep for files latexmk -c never tracks
+                _extra_suffixes = {
+                    ".bbl",
+                    ".bcf",
+                    ".run.xml",
+                    ".glo",
+                    ".gls",
+                    ".glg",
+                    ".acn",
+                    ".acr",
+                    ".alg",
+                    ".nlo",
+                    ".nls",
+                    ".nlg",
+                    ".ist",
+                    ".maf",
+                    ".mtc",
+                    ".mtc0",
+                    ".lol",
+                    ".lob",
+                }
+                stem = source.stem
+                for suffix in _extra_suffixes:
+                    leftover = source_dir / (stem + suffix)
+                    if leftover.exists():
+                        leftover.unlink()
 
         finally:
             os.chdir(original_dir)

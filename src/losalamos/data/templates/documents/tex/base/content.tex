@@ -12,14 +12,16 @@ Hey, lets make a citation \cite{Pearce_2002_a}. Now what about a defined acronym
 
 \lipsum[1-10]
 
-\section{Regular figure} \label{sec:figure}
+\paragraph{This a paragraph} \lipsum[1]
 
-The \Cref{fig:regular} is a regular figure.
+\section{Figures} \label{sec:figure}
 
-\lipsum[1]
+\subsection{Figure placed in text}
+
+The \Cref{fig:regular} is a regular figure placed in text. \lipsum[1]
 
 % start the figure
-\begin{figure}[h!] % set on top (t) or here (h)
+\begin{figure}[h!] % set here (h)
 \centering
 % set the file and size
 \includegraphics[width=0.5\textwidth]{example-image-golden}
@@ -30,7 +32,6 @@ The \Cref{fig:regular} is a regular figure.
     Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
     \;\textbf{a}\;---\;Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
     \;\textbf{b}\;---\;Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-    \;\textbf{c}\;---\;Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
 }
 % set the label
 \label{fig:regular}
@@ -38,8 +39,12 @@ The \Cref{fig:regular} is a regular figure.
 
 \lipsum[1-4]
 
+\subsection{Figure placed on top of the page}
+
+The \Cref{fig:regular:top} is a regular figure placed on top. \lipsum[1]
+
 % start the figure
-\begin{figure}[t!] % set on top (t) or here (h)
+\begin{figure}[t!] % set on top (t)
 \centering
 % set the file and size
 \includegraphics[width=0.5\textwidth]{example-image-golden}
@@ -58,8 +63,12 @@ The \Cref{fig:regular} is a regular figure.
 
 \lipsum[1-4]
 
+\subsection{Figure placed on bottom of the page}
+
+The \Cref{fig:regular:bottom} is a regular figure placed on bottom. \lipsum[1]
+
 % start the figure
-\begin{figure}[b!] % set on top (t) or here (h)
+\begin{figure}[b!] % set on bottom (b)
 \centering
 % set the file and size
 \includegraphics[width=0.5\textwidth]{example-image-golden}
@@ -78,21 +87,17 @@ The \Cref{fig:regular} is a regular figure.
 
 \lipsum[1-3]
 
-\section{Side figure} \label{sec:sidefig}
+\subsection{The side caption figure} \label{sec:sidefig}
 
-The \Cref{fig:side:caption} is a side-caption figure.
-
-\lipsum[1-3]
+The \Cref{fig:side:caption} is a side-caption figure. \lipsum[1-3]
 
 \input{figures/_figure_side}
 
 \lipsum[1-3]
 
-\section{Table}
+\section{Tables}
 
-The \Cref{tbl:table} is a three-part table.
-
-\lipsum[1]
+The \Cref{tbl:table} is a three-part table. \lipsum[1]
 
 \input{tables/_table}
 
@@ -115,7 +120,7 @@ like figures and tables, and appear in the List of Boxes.
 
 \begin{boxstory}{Second box}
 \label{box:second}
-\lipsum[2]
+\lipsum[1-6]
 \end{boxstory}
 
 \lipsum[1]
@@ -262,6 +267,15 @@ under a shared parent number with lettered suffixes.
 % Single equation
 \subsection{Single equation}
 
+A single display equation is written with the \texttt{equation} environment:
+
+\begin{verbatim}
+\begin{equation}
+    \label{eq:quadratic}
+    x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a},
+\end{equation}
+\end{verbatim}
+
 The quadratic formula,
 
 \begin{equation}
@@ -279,7 +293,17 @@ the canonical example of a single numbered display equation.
 \subsection{Aligned equations}
 
 The \texttt{align} environment numbers each row independently.
-A \verb|\nonumber| tag suppresses a specific line:
+Use \verb|\nonumber| to suppress a specific line:
+
+\begin{verbatim}
+\begin{align}
+    \label{eq:euler}
+    e^{i\pi} + 1 &= 0, \\
+    \label{eq:gaussian}
+    \int_{-\infty}^{\infty} e^{-x^2}\,dx &= \sqrt{\pi}, \\
+    \cos^2\theta + \sin^2\theta &= 1. \nonumber
+\end{align}
+\end{verbatim}
 
 \begin{align}
     \label{eq:euler}
@@ -300,16 +324,29 @@ carries no number because it is not referenced.
 \subsection{Subequations}
 
 The \texttt{subequations} environment groups a derivation under a
-shared parent number with lettered suffixes. Steps
-\crefrange{eq:work_a}{eq:work_c} derive the work--energy theorem
+shared parent number with lettered suffixes. Wrap the entire block
+and place individual \verb|\label| tags on each \texttt{align} row:
+
+\begin{verbatim}
+\begin{subequations}
+  \label{eq:work_deriv}
+  \begin{align}
+     F          &= ma = m\frac{dv}{dt}          \label{eq:work_a} \\
+     F\,dx      &= m\frac{dv}{dt}\,dx = mv\,dv  \label{eq:work_b} \\
+     \int F\,dx &= \tfrac{1}{2}m(v^2 - v_0^2)   \label{eq:work_c}
+  \end{align}
+\end{subequations}
+\end{verbatim}
+
+Steps \crefrange{eq:work_a}{eq:work_c} derive the work--energy theorem
 from Newton's second law:
 
 \begin{subequations}
     \label{eq:work_deriv}
     \begin{align}
-        F          &= ma = m\frac{dv}{dt}                  \label{eq:work_a} \\
-        F\,dx      &= m\frac{dv}{dt}\,dx = mv\,dv          \label{eq:work_b} \\
-        \int F\,dx &= \tfrac{1}{2}m(v^2 - v_0^2)          \label{eq:work_c}
+     F          &= ma = m\frac{dv}{dt}          \label{eq:work_a} \\
+     F\,dx      &= m\frac{dv}{dt}\,dx = mv\,dv  \label{eq:work_b} \\
+     \int F\,dx &= \tfrac{1}{2}m(v^2 - v_0^2)   \label{eq:work_c}
     \end{align}
 \end{subequations}
 
@@ -329,8 +366,16 @@ The canonical result follows as a fresh numbered equation:
 % Unnumbered intermediates
 \subsection{Unnumbered intermediates}
 
-Suppressing numbers on intermediate steps and labelling only the
-final line keeps the derivation clean:
+Suppress numbers on intermediate steps by appending \verb|\nonumber|
+to every line except the final one:
+
+\begin{verbatim}
+\begin{align}
+    (a+b)^2 &= (a+b)(a+b)           \nonumber \\
+            &= a^2 + ab + ba + b^2  \nonumber \\
+            &= a^2 + 2ab + b^2.     \label{eq:binom}
+\end{align}
+\end{verbatim}
 
 \begin{align}
     (a+b)^2 &= (a+b)(a+b)           \nonumber \\
@@ -340,5 +385,67 @@ final line keeps the derivation clean:
 
 Only \Cref{eq:binom} is referenceable; the intermediate lines
 consume no counter value.
+
+\lipsum[1]
+
+\section{Code Listings} \label{sec:listings}
+
+The \texttt{lstlisting} environment renders syntax-highlighted code blocks.
+The base template defaults to Python via \verb|\lstset{language=Python}|.
+A language override can be passed as an optional argument to any individual
+listing.
+
+Lets cite a code listing \Cref{lst:basic} now. \lipsum[1]
+
+\subsection{Inline snippet}
+
+Use \verb|\lstinline| for short references in prose, for example
+\lstinline|def f(x): return x ** 2| or a built-in like \lstinline|enumerate|.
+
+\subsection{Basic block}
+
+The minimal function with a docstring, type hints, and a return value:
+
+\begin{lstlisting}[caption={A basic Python function}, label={lst:basic}]
+def greet(name: str) -> str:
+    """Return a greeting string."""
+    # build the message
+    message = f"Hello, {name}!"
+    return message
+\end{lstlisting}
+
+\lipsum[1]
+
+\subsection{Class definition}
+
+A short class illustrating keywords, strings, comments, and numbers together:
+
+\begin{lstlisting}[caption={A simple Python class}, label={lst:class}]
+class Circle:
+    """A circle with a given radius."""
+
+    PI = 3.14159
+
+    def __init__(self, radius: float) -> None:
+        self.radius = radius  # store the radius
+
+    def area(self) -> float:
+        """Return the area of the circle."""
+        return self.PI * self.radius ** 2
+
+    def __repr__(self) -> str:
+        return f"Circle(radius={self.radius})"
+\end{lstlisting}
+
+\lipsum[1]
+
+\subsection{Long lines and wrapping}
+
+The \texttt{breaklines=true} option wraps lines that exceed the text width,
+marking the continuation with a \textcolor{gray}{$\hookrightarrow$} arrow:
+
+\begin{lstlisting}[caption={Long line wrapping example}, label={lst:wrap}]
+result = some_function(argument_one, argument_two, argument_three, argument_four, argument_five)
+\end{lstlisting}
 
 \lipsum[1]

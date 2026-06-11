@@ -1,11 +1,11 @@
 % --------------------------------------------------------------
 % Captions
-\DeclareCaptionLabelSeparator{pipe}{\space|\space}
+\DeclareCaptionLabelSeparator{pipe}{\;|\;}
 
 % --------------------------------------------------------------
 % Figures
 \captionsetup[figure]{
-    font={scriptsize, sf},
+    font={footnotesize, sf},
     labelfont={bf, color=AccentColor},
     labelsep=pipe, % quad, colon, pipe
     width=\textwidth
@@ -17,8 +17,22 @@
 % --------------------------------------------------------------
 % Tables
 \captionsetup[table]{
-    font={scriptsize, sf},
+    font={footnotesize, sf},
     labelfont={bf, color=AccentColor},
     labelsep=pipe,
     width=\textwidth
 }
+
+% --------------------------------------------------------------
+% Listings
+% Hook into the caption package so lstlisting captions
+% follow the same style as figures and tables.
+\DeclareCaptionStyle{lstlisting}{
+    font={footnotesize, sf},
+    labelfont={bf, color=AccentColor},
+    labelsep=pipe,
+    width=\textwidth,
+    justification=centering
+}
+\captionsetup[lstlisting]{style=lstlisting}
+

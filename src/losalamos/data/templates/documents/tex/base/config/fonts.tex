@@ -1,9 +1,24 @@
 % ==============================================================
 % config/fonts.tex
-% Default: T1 encoding with standard LaTeX font stack.
+% Source font family stack (serif + sans + mono).
+% All three designed by Adobe, released as open source.
+% Math: default Computer Modern (avoids symbol conflicts).
+% Compatible with pdflatex.
 % Override this file via template overlay to change the font stack.
 % ==============================================================
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
-\usepackage{helvet}
-\usepackage{times}
+
+% --- Source Serif 4 (main body text) ---
+\usepackage[default]{sourceserifpro}
+
+% --- Source Sans 3 (headings, captions, sans-serif elements) ---
+\usepackage[default]{sourcesanspro}
+
+% --- Source Code Pro (verbatim, lstlisting, \texttt) ---
+\usepackage{sourcecodepro}
+
+% --- Math: default Computer Modern (no extra package needed) ---
+% To switch later: replace with newpxmath or eulervm
+% after checking for symbol conflicts with your preamble.
+

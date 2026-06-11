@@ -1,0 +1,137 @@
+% ==============================================================
+% Input Appendix configuration
+\input{partials/appx}
+
+% adjust width
+\begin{adjustwidth}{\appendixtab}{0mm}
+
+% ==============================================================
+% Appendix A
+% ==============================================================
+\section{Supplementary Data} \label{app:data}
+
+This is appendix \Cref{app:data}. The \texttt{appendix} command
+resets the section counter and switches labels to letters
+automatically.
+
+\lipsum[1]
+
+\subsection{First subsection} \label{app:data:sub1}
+
+This is \Cref{app:data:sub1}. Subsections follow the \texttt{A.1},
+\texttt{A.2} pattern automatically.
+
+\lipsum[1]
+
+\subsection{Supplementary figure} \label{app:data:fig}
+
+The \Cref{fig:app:example} is a supplementary figure. Note the
+label follows the \texttt{A.1} numbering convention automatically.
+
+\lipsum[1-3]
+
+\begin{center}
+\begin{minipage}{\linewidth}
+\centering
+\includegraphics[width=0.6\linewidth]{example-image-golden}
+\captionof{figure}[Supplementary figure]
+{
+    \textbf{Supplementary figure.}
+    Ut enim ad minim veniam, quis nostrud exercitation ullamco
+    laboris nisi ut aliquip ex ea commodo consequat.
+    \;\textbf{a}\;---\;First panel description.
+    \;\textbf{b}\;---\;Second panel description.
+}
+\label{fig:app:example}
+\end{minipage}
+\end{center}
+
+\lipsum[1-3]
+
+% ==============================================================
+% Appendix B
+% ==============================================================
+\section{Derivations} \label{app:derivations}
+
+This is appendix \Cref{app:derivations}. Cross-references from the
+main body work normally, for example back to \Cref{sec:equations}.
+
+\lipsum[1]
+
+\subsection{First derivation} \label{app:derivations:sub1}
+
+\lipsum[1]
+
+\begin{equation}
+    \label{eq:app:example}
+    f(x) = \int_{-\infty}^{\infty} \hat{f}(\xi)\, e^{2\pi i \xi x}\, d\xi
+\end{equation}
+
+\Cref{eq:app:example} is an equation inside an appendix --- it is
+cited and numbered normally.
+
+\subsection{Supplementary table} \label{app:derivations:tbl}
+
+The \Cref{tbl:app:example} is a supplementary table. Columns
+follow the same booktabs convention as the main body.
+
+\lipsum[1]
+
+\begin{center}
+\begin{threeparttable}
+\scriptsize
+\sffamily
+\captionof{table}[Supplementary parameter table]{
+    Derived parameters referenced in \Cref{app:derivations}.
+    Values computed analytically from \Cref{eq:app:example}
+    using the method described in \Cref{app:derivations:sub1}.
+}
+\label{tbl:app:example}
+\rowcolors{2}{white}{AccentColorVeryLight}
+\begin{tabular}{
+    >{\raggedright\arraybackslash}m{2.3cm}
+    >{\raggedright\arraybackslash}m{2.3cm}
+    >{\raggedright\arraybackslash}m{2.3cm}
+    >{\raggedright\arraybackslash}m{2.3cm}
+    >{\raggedright\arraybackslash}m{2.3cm}}
+\toprule
+\textbf{Parameter} & \textbf{Symbol} & \textbf{Value} & \textbf{Unit} & \textbf{Notes} \\
+\midrule
+Frequency       & $\xi$      & 1.234 & Hz           & Measured          \\
+Amplitude       & $\hat{f}$  & 0.876 & ---          & Normalised        \\
+Phase shift     & $\phi$     & 0.314 & rad          & See note\tnote{a} \\
+Decay constant  & $\lambda$  & 2.718 & s$^{-1}$     & Derived           \\
+Derived result  & $f(x)$     & 3.141 & ---          & See note\tnote{b} \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}
+    \item[\textit{a}] Phase shift computed relative to the reference
+    signal defined in \Cref{eq:app:example}.
+    \item[\textit{b}] Final result after applying the Fourier transform
+    over the full integration domain $[-\infty, \infty]$.
+\end{tablenotes}
+\end{threeparttable}
+\end{center}
+
+\lipsum[1]
+
+% ==============================================================
+% Appendix C
+% ==============================================================
+\section{Code Listings} \label{app:listings}
+
+\lipsum[1]
+
+\begin{lstlisting}[caption={Example function}, label={lst:app:example}]
+def compute(x: float) -> float:
+    """Compute the square root safely."""
+    if x < 0:
+        raise ValueError(f"Expected non-negative, got {x}")
+    return x ** 0.5
+\end{lstlisting}
+
+\Cref{lst:app:example} is a listing inside an appendix.
+
+\lipsum[1]
+
+\end{adjustwidth}

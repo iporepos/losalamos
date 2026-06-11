@@ -24,6 +24,7 @@
 # Local configs [CHECK THIS]
 # -----------------------------------------------------------------------
 .pre-commit-config.yaml
+MEMORY.md
 # ... [ADD MORE IF NEEDED]
 
 # Non-sense script files

@@ -1,0 +1,39 @@
+% --------------------------------------------------------------
+% name of the listing item
+\renewcommand{\lstlistingname}{\trListing}
+
+% --------------------------------------------------------------
+% --- cleveref names for listings ---
+\crefname{lstlisting}{\trListing}{\trListings}
+\Crefname{lstlisting}{\trListing}{\trListings}
+
+% --------------------------------------------------------------
+% Listing
+\lstdefinestyle{codeblock}{
+    % --- colors ---
+    backgroundcolor=\color{black!5},        % very light gray, softer than lightgray
+    commentstyle=\color{black!40}\itshape,  % italic gray comments (Pythonic)
+    keywordstyle=\color{purple}\bfseries,   % bold keywords stand out
+    stringstyle=\color{teal},               % string literals
+    numberstyle=\tiny\color{black!40},      % line numbers subtle
+    % --- base font ---
+    basicstyle=\ttfamily\footnotesize,      % clean; linespread removed (had no effect)
+    % --- line breaking ---
+    breaklines=true,                        % prevent margin overflow
+    breakatwhitespace=true,                 % break only at spaces, not mid-token
+    postbreak=\mbox{\textcolor{gray}{$\hookrightarrow$}\space}, % arrow on wrapped line
+    % --- spacing ---
+    numbersep=8pt,                          % breathing room between numbers and code
+    tabsize=4,                              % PEP 8 standard
+    keepspaces=true,
+    % --- frame ---
+    frame=none,                             % no border (background is enough)
+    % --- caption ---
+    captionpos=b,                           % caption below
+    % --- misc ---
+    showspaces=false,
+    showstringspaces=false,
+    showtabs=false,
+    numbers=left,
+}
+\lstset{style=codeblock, language=Python}  % Python as default language

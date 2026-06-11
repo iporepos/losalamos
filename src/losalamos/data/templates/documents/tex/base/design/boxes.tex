@@ -12,14 +12,21 @@
     boxbasestyle/.style={
         enhanced,
         breakable,
-        colback      = AccentColor!5,
-        colbacktitle = AccentColor!10,
+        colback      = AccentColorVeryLight,
+        colbacktitle = AccentColorLight,
         coltitle     = AccentColor,
-        colframe     = AccentColor!70!black,
+        colframe     = AccentColor,
         boxrule      = 0.5pt,
         arc          = 2pt,
         fonttitle    = \bfseries\sffamily\small,
         fontupper    = \sffamily\footnotesize,
+        boxsep       = 0mm,  % base padding on all sides (default 4pt)
+        top          = 2mm,  % top inner padding
+        bottom       = 2mm,  % bottom inner padding
+        left         = 2mm,  % left inner padding
+        right        = 2mm,  % right inner padding
+        toptitle     = 1mm,  % top padding inside title bar
+        bottomtitle  = 1mm,  % bottom padding inside title bar
     }
 }
 
