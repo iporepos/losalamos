@@ -23,12 +23,14 @@ project metadata, filesystem layout, and downstream processing workflows.
 # Native imports
 # =======================================================================
 import os
+import fnmatch
 import datetime
 import pprint
 import tempfile
 import shutil
 import zipfile
 from pathlib import Path
+from typing import Union, List, Optional
 
 # ... {develop}
 
@@ -216,6 +218,215 @@ def load_project(project_folder):
         return p
     else:
         raise ValueError(f"Project folder not found: {project_folder}'")
+
+
+def archive(
+    sources: Union[str, Path, List[Union[str, Path]]],
+    folder: Union[str, Path],
+    name: str,
+    ignore_subfolders: bool = False,
+    ignore_names: Optional[List[str]] = None,
+    ignore_patterns: Optional[List[str]] = None,
+) -> Path:
+    """
+    Archive one or more files/folders into a single timestamped zip file.
+
+    Sources are merged into a shared tree at the zip root rather than being
+    namespaced under separate top-level folders — equivalent to pasting each
+    source folder into the same destination one after another. Same-named
+    subfolders combine their contents non-destructively. A file present in
+    only one source appears once in the result; a relative path present in
+    more than one source raises an error rather than silently overwriting.
+
+    :param sources: A single path or a list of paths (files and/or folders) to merge and include.
+    :type sources: str, pathlib.Path, or list
+    :param folder: Target folder where the zip file will be written. Must already exist.
+    :type folder: str or pathlib.Path
+    :param name: Base name for the archive (timestamp is appended).
+    :type name: str
+    :param ignore_subfolders: If ``True``, only the top-level files of each
+        source are archived; all subfolders (and their contents) are skipped.
+        Applied independently per source.
+    :type ignore_subfolders: bool
+    :param ignore_names: Exact folder or file names to exclude, anywhere in
+        the tree (e.g. ``["cache", "settings.txt"]``). File names must
+        include their extension.
+    :type ignore_names: list of str or None
+    :param ignore_patterns: Glob-style patterns (``*`` syntax) matched against
+        the filename only (not the full path), e.g. ``["*.tmp", "~*"]``.
+        Folders are matched the same way by their folder name and, if
+        matched, their entire contents are excluded.
+    :type ignore_patterns: list of str or None
+    :raises NotADirectoryError: If ``folder`` does not exist as a directory.
+    :raises FileNotFoundError: If any path in ``sources`` does not exist.
+    :raises FileExistsError: If two sources resolve to the same relative path
+        in the merged tree (conflicting file).
+    :returns: Absolute path to the created zip file.
+    :rtype: pathlib.Path
+    """
+    ignore_names = set(ignore_names or [])
+    ignore_patterns = ignore_patterns or []
+
+    def _is_ignored_name(part: str) -> bool:
+        if part in ignore_names:
+            return True
+        for pat in ignore_patterns:
+            if fnmatch.fnmatch(part, pat):
+                return True
+        return False
+
+    def _path_is_ignored(rel_path: Path) -> bool:
+        # check every component (folders and filename) against name/pattern rules
+        return any(_is_ignored_name(part) for part in rel_path.parts)
+
+    # normalize sources to a list
+    # --------------------------------------------------
+    if isinstance(sources, (str, Path)):
+        sources = [sources]
+    sources = [Path(s).absolute() for s in sources]
+
+    # validate target folder
+    # --------------------------------------------------
+    folder = Path(folder).absolute()
+    if not folder.is_dir():
+        raise NotADirectoryError(
+            f"Target folder does not exist: '{folder}'. "
+            "Please create it before calling archive()."
+        )
+
+    # validate sources
+    # --------------------------------------------------
+    for s in sources:
+        if not s.exists():
+            raise FileNotFoundError(f"Source path does not exist: '{s}'")
+
+    # build merged map of {relative_path: absolute_path}, detecting conflicts
+    # --------------------------------------------------
+    merged = {}
+    for s in tqdm(sources, desc="Scanning sources", unit="source"):
+        if s.is_file():
+            if _is_ignored_name(s.name):
+                continue
+            files = {Path(s.name): s}
+        else:
+            if ignore_subfolders:
+                candidates = [f for f in s.iterdir() if f.is_file()]
+            else:
+                candidates = [f for f in s.rglob("*") if f.is_file()]
+
+            files = {}
+            for f in candidates:
+                rel = f.relative_to(s)
+                if _path_is_ignored(rel):
+                    continue
+                files[rel] = f
+
+        for rel_path, abs_path in files.items():
+            if rel_path in merged:
+                raise FileExistsError(
+                    f"Conflicting path across sources: '{rel_path}' "
+                    f"(from '{abs_path}' and '{merged[rel_path]}')"
+                )
+            merged[rel_path] = abs_path
+
+    # build timestamp and output path
+    # --------------------------------------------------
+    timestamp = datetime.datetime.now().strftime("%Y%m%dT%H%M%S")
+    zip_name = f"{name}_{timestamp}.zip"
+    zip_path = folder / zip_name
+
+    # write zip
+    # --------------------------------------------------
+    with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED) as zf:
+        for rel_path, abs_path in tqdm(
+            merged.items(), desc="Writing archive", unit="file"
+        ):
+            zf.write(abs_path, arcname=rel_path)
+
+    return zip_path
+
+
+def publish(
+    sources: Union[str, Path, List[Union[str, Path]]],
+    folder: Union[str, Path],
+    name: str,
+    ignore_subfolders: bool = False,
+    ignore_names: Optional[List[str]] = None,
+    ignore_patterns: Optional[List[str]] = None,
+) -> Path:
+    """
+    Archive ``sources`` and publish the result under a managed
+    ``history``/``latest`` structure.
+
+    Builds (or reuses) a folder layout at ``folder/name/`` containing two
+    subfolders, ``history`` and ``latest``. The new archive is built
+    directly into ``latest`` first; only after it is successfully created
+    is the previously-existing zip (if any) moved into ``history``. This
+    ordering ensures that if archiving fails, ``latest`` still holds the
+    last good publish rather than being left empty or having prematurely
+    rotated a valid zip away. Each zip keeps its own timestamped filename
+    from :func:`archive`, so nothing is overwritten on rotation.
+
+    :param sources: A single path or a list of paths (files and/or folders) to merge and archive. See :func:`archive`.
+    :type sources: str, pathlib.Path, or list
+    :param folder: Output archive main folder. The managed structure is
+        created at ``folder/name/``. Must already exist.
+    :type folder: str or pathlib.Path
+    :param name: Base name for the archive and the managed subfolder under
+        ``folder``.
+    :type name: str
+    :param ignore_subfolders: See :func:`archive`.
+    :type ignore_subfolders: bool
+    :param ignore_names: See :func:`archive`.
+    :type ignore_names: list of str or None
+    :param ignore_patterns: See :func:`archive`.
+    :type ignore_patterns: list of str or None
+    :raises NotADirectoryError: If ``folder`` does not exist as a directory.
+    :raises FileNotFoundError: If any path in ``sources`` does not exist.
+    :raises FileExistsError: If two sources resolve to the same relative path
+        in the merged tree (conflicting file).
+    :returns: Absolute path to the newly published zip file inside ``latest``.
+    :rtype: pathlib.Path
+    """
+    folder = Path(folder).absolute()
+    if not folder.is_dir():
+        raise NotADirectoryError(
+            f"Target folder does not exist: '{folder}'. "
+            "Please create it before calling publish()."
+        )
+
+    # set up managed structure: folder/name/{history,latest}
+    # --------------------------------------------------
+    root = folder / name
+    folder_history = root / "history"
+    folder_latest = root / "latest"
+    folder_history.mkdir(parents=True, exist_ok=True)
+    folder_latest.mkdir(parents=True, exist_ok=True)
+
+    # snapshot what's currently in latest BEFORE building the new archive
+    # --------------------------------------------------
+    previous_zips = [
+        f for f in folder_latest.iterdir() if f.is_file() and f.suffix == ".zip"
+    ]
+
+    # build the new archive directly into latest
+    # if this raises, 'latest' still holds the previous good zip untouched
+    # --------------------------------------------------
+    zip_path = archive(
+        sources=sources,
+        folder=folder_latest,
+        name=name,
+        ignore_subfolders=ignore_subfolders,
+        ignore_names=ignore_names,
+        ignore_patterns=ignore_patterns,
+    )
+
+    # only now rotate the previously-existing zip(s) into history
+    # --------------------------------------------------
+    for existing in tqdm(previous_zips, desc="Rotating to history", unit="file"):
+        shutil.move(str(existing), str(folder_history / existing.name))
+
+    return zip_path
 
 
 # FUNCTIONS -- Module-level
