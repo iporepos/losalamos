@@ -26,18 +26,18 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../_static/styles/theme.css?digest=0790524f97105ba85085" rel="stylesheet" />
-<link href="../../_static/styles/pydata-sphinx-theme.css?digest=0790524f97105ba85085" rel="stylesheet" />
+  <link href="../../_static/styles/theme.css?digest=a95f357e85573c9b56d5" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=a95f357e85573c9b56d5" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
   
   <!-- So that users can add custom icons -->
-  <script defer src="../../_static/scripts/fontawesome.js?digest=0790524f97105ba85085"></script>
+  <script defer src="../../_static/scripts/fontawesome.js?digest=a95f357e85573c9b56d5"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=0790524f97105ba85085" />
-<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=0790524f97105ba85085" />
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=a95f357e85573c9b56d5" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=a95f357e85573c9b56d5" />
 
     <script src="../../_static/documentation_options.js?v=d45e8c67"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
@@ -424,12 +424,14 @@
 <span class="c1"># Native imports</span>
 <span class="c1"># =======================================================================</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">fnmatch</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">datetime</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">pprint</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">tempfile</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">shutil</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">zipfile</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
 
 <span class="c1"># ... {develop}</span>
 
@@ -622,6 +624,221 @@
         <span class="k">return</span> <span class="n">p</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Project folder not found: </span><span class="si">{</span><span class="n">project_folder</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="archive">
+<a class="viewcode-back" href="../../generated/losalamos.project.html#losalamos.project.archive">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">archive</span><span class="p">(</span>
+    <span class="n">sources</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">]]],</span>
+    <span class="n">folder</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">],</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">ignore_subfolders</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">ignore_names</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">ignore_patterns</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Archive one or more files/folders into a single timestamped zip file.</span>
+
+<span class="sd">    Sources are merged into a shared tree at the zip root rather than being</span>
+<span class="sd">    namespaced under separate top-level folders — equivalent to pasting each</span>
+<span class="sd">    source folder into the same destination one after another. Same-named</span>
+<span class="sd">    subfolders combine their contents non-destructively. A file present in</span>
+<span class="sd">    only one source appears once in the result; a relative path present in</span>
+<span class="sd">    more than one source raises an error rather than silently overwriting.</span>
+
+<span class="sd">    :param sources: A single path or a list of paths (files and/or folders) to merge and include.</span>
+<span class="sd">    :type sources: str, pathlib.Path, or list</span>
+<span class="sd">    :param folder: Target folder where the zip file will be written. Must already exist.</span>
+<span class="sd">    :type folder: str or pathlib.Path</span>
+<span class="sd">    :param name: Base name for the archive (timestamp is appended).</span>
+<span class="sd">    :type name: str</span>
+<span class="sd">    :param ignore_subfolders: If ``True``, only the top-level files of each</span>
+<span class="sd">        source are archived; all subfolders (and their contents) are skipped.</span>
+<span class="sd">        Applied independently per source.</span>
+<span class="sd">    :type ignore_subfolders: bool</span>
+<span class="sd">    :param ignore_names: Exact folder or file names to exclude, anywhere in</span>
+<span class="sd">        the tree (e.g. ``[&quot;cache&quot;, &quot;settings.txt&quot;]``). File names must</span>
+<span class="sd">        include their extension.</span>
+<span class="sd">    :type ignore_names: list of str or None</span>
+<span class="sd">    :param ignore_patterns: Glob-style patterns (``*`` syntax) matched against</span>
+<span class="sd">        the filename only (not the full path), e.g. ``[&quot;*.tmp&quot;, &quot;~*&quot;]``.</span>
+<span class="sd">        Folders are matched the same way by their folder name and, if</span>
+<span class="sd">        matched, their entire contents are excluded.</span>
+<span class="sd">    :type ignore_patterns: list of str or None</span>
+<span class="sd">    :raises NotADirectoryError: If ``folder`` does not exist as a directory.</span>
+<span class="sd">    :raises FileNotFoundError: If any path in ``sources`` does not exist.</span>
+<span class="sd">    :raises FileExistsError: If two sources resolve to the same relative path</span>
+<span class="sd">        in the merged tree (conflicting file).</span>
+<span class="sd">    :returns: Absolute path to the created zip file.</span>
+<span class="sd">    :rtype: pathlib.Path</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">ignore_names</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">ignore_names</span> <span class="ow">or</span> <span class="p">[])</span>
+    <span class="n">ignore_patterns</span> <span class="o">=</span> <span class="n">ignore_patterns</span> <span class="ow">or</span> <span class="p">[]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_is_ignored_name</span><span class="p">(</span><span class="n">part</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">part</span> <span class="ow">in</span> <span class="n">ignore_names</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">for</span> <span class="n">pat</span> <span class="ow">in</span> <span class="n">ignore_patterns</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">fnmatch</span><span class="o">.</span><span class="n">fnmatch</span><span class="p">(</span><span class="n">part</span><span class="p">,</span> <span class="n">pat</span><span class="p">):</span>
+                <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_path_is_ignored</span><span class="p">(</span><span class="n">rel_path</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="c1"># check every component (folders and filename) against name/pattern rules</span>
+        <span class="k">return</span> <span class="nb">any</span><span class="p">(</span><span class="n">_is_ignored_name</span><span class="p">(</span><span class="n">part</span><span class="p">)</span> <span class="k">for</span> <span class="n">part</span> <span class="ow">in</span> <span class="n">rel_path</span><span class="o">.</span><span class="n">parts</span><span class="p">)</span>
+
+    <span class="c1"># normalize sources to a list</span>
+    <span class="c1"># --------------------------------------------------</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sources</span><span class="p">,</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">)):</span>
+        <span class="n">sources</span> <span class="o">=</span> <span class="p">[</span><span class="n">sources</span><span class="p">]</span>
+    <span class="n">sources</span> <span class="o">=</span> <span class="p">[</span><span class="n">Path</span><span class="p">(</span><span class="n">s</span><span class="p">)</span><span class="o">.</span><span class="n">absolute</span><span class="p">()</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">sources</span><span class="p">]</span>
+
+    <span class="c1"># validate target folder</span>
+    <span class="c1"># --------------------------------------------------</span>
+    <span class="n">folder</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">folder</span><span class="p">)</span><span class="o">.</span><span class="n">absolute</span><span class="p">()</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">folder</span><span class="o">.</span><span class="n">is_dir</span><span class="p">():</span>
+        <span class="k">raise</span> <span class="ne">NotADirectoryError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Target folder does not exist: &#39;</span><span class="si">{</span><span class="n">folder</span><span class="si">}</span><span class="s2">&#39;. &quot;</span>
+            <span class="s2">&quot;Please create it before calling archive().&quot;</span>
+        <span class="p">)</span>
+
+    <span class="c1"># validate sources</span>
+    <span class="c1"># --------------------------------------------------</span>
+    <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">sources</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">s</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Source path does not exist: &#39;</span><span class="si">{</span><span class="n">s</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
+
+    <span class="c1"># build merged map of {relative_path: absolute_path}, detecting conflicts</span>
+    <span class="c1"># --------------------------------------------------</span>
+    <span class="n">merged</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">sources</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Scanning sources&quot;</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="s2">&quot;source&quot;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">s</span><span class="o">.</span><span class="n">is_file</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">_is_ignored_name</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">name</span><span class="p">):</span>
+                <span class="k">continue</span>
+            <span class="n">files</span> <span class="o">=</span> <span class="p">{</span><span class="n">Path</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">name</span><span class="p">):</span> <span class="n">s</span><span class="p">}</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">ignore_subfolders</span><span class="p">:</span>
+                <span class="n">candidates</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">s</span><span class="o">.</span><span class="n">iterdir</span><span class="p">()</span> <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">is_file</span><span class="p">()]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">candidates</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">s</span><span class="o">.</span><span class="n">rglob</span><span class="p">(</span><span class="s2">&quot;*&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">is_file</span><span class="p">()]</span>
+
+            <span class="n">files</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">candidates</span><span class="p">:</span>
+                <span class="n">rel</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">relative_to</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">_path_is_ignored</span><span class="p">(</span><span class="n">rel</span><span class="p">):</span>
+                    <span class="k">continue</span>
+                <span class="n">files</span><span class="p">[</span><span class="n">rel</span><span class="p">]</span> <span class="o">=</span> <span class="n">f</span>
+
+        <span class="k">for</span> <span class="n">rel_path</span><span class="p">,</span> <span class="n">abs_path</span> <span class="ow">in</span> <span class="n">files</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">rel_path</span> <span class="ow">in</span> <span class="n">merged</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">FileExistsError</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;Conflicting path across sources: &#39;</span><span class="si">{</span><span class="n">rel_path</span><span class="si">}</span><span class="s2">&#39; &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;(from &#39;</span><span class="si">{</span><span class="n">abs_path</span><span class="si">}</span><span class="s2">&#39; and &#39;</span><span class="si">{</span><span class="n">merged</span><span class="p">[</span><span class="n">rel_path</span><span class="p">]</span><span class="si">}</span><span class="s2">&#39;)&quot;</span>
+                <span class="p">)</span>
+            <span class="n">merged</span><span class="p">[</span><span class="n">rel_path</span><span class="p">]</span> <span class="o">=</span> <span class="n">abs_path</span>
+
+    <span class="c1"># build timestamp and output path</span>
+    <span class="c1"># --------------------------------------------------</span>
+    <span class="n">timestamp</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">T%H%M%S&quot;</span><span class="p">)</span>
+    <span class="n">zip_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">timestamp</span><span class="si">}</span><span class="s2">.zip&quot;</span>
+    <span class="n">zip_path</span> <span class="o">=</span> <span class="n">folder</span> <span class="o">/</span> <span class="n">zip_name</span>
+
+    <span class="c1"># write zip</span>
+    <span class="c1"># --------------------------------------------------</span>
+    <span class="k">with</span> <span class="n">zipfile</span><span class="o">.</span><span class="n">ZipFile</span><span class="p">(</span><span class="n">zip_path</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">zipfile</span><span class="o">.</span><span class="n">ZIP_DEFLATED</span><span class="p">)</span> <span class="k">as</span> <span class="n">zf</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">rel_path</span><span class="p">,</span> <span class="n">abs_path</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span>
+            <span class="n">merged</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span> <span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Writing archive&quot;</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="s2">&quot;file&quot;</span>
+        <span class="p">):</span>
+            <span class="n">zf</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">abs_path</span><span class="p">,</span> <span class="n">arcname</span><span class="o">=</span><span class="n">rel_path</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">zip_path</span></div>
+
+
+
+<div class="viewcode-block" id="publish">
+<a class="viewcode-back" href="../../generated/losalamos.project.html#losalamos.project.publish">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">publish</span><span class="p">(</span>
+    <span class="n">sources</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">]]],</span>
+    <span class="n">folder</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">],</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">ignore_subfolders</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">ignore_names</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">ignore_patterns</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Archive ``sources`` and publish the result under a managed</span>
+<span class="sd">    ``history``/``latest`` structure.</span>
+
+<span class="sd">    Builds (or reuses) a folder layout at ``folder/name/`` containing two</span>
+<span class="sd">    subfolders, ``history`` and ``latest``. The new archive is built</span>
+<span class="sd">    directly into ``latest`` first; only after it is successfully created</span>
+<span class="sd">    is the previously-existing zip (if any) moved into ``history``. This</span>
+<span class="sd">    ordering ensures that if archiving fails, ``latest`` still holds the</span>
+<span class="sd">    last good publish rather than being left empty or having prematurely</span>
+<span class="sd">    rotated a valid zip away. Each zip keeps its own timestamped filename</span>
+<span class="sd">    from :func:`archive`, so nothing is overwritten on rotation.</span>
+
+<span class="sd">    :param sources: A single path or a list of paths (files and/or folders) to merge and archive. See :func:`archive`.</span>
+<span class="sd">    :type sources: str, pathlib.Path, or list</span>
+<span class="sd">    :param folder: Output archive main folder. The managed structure is</span>
+<span class="sd">        created at ``folder/name/``. Must already exist.</span>
+<span class="sd">    :type folder: str or pathlib.Path</span>
+<span class="sd">    :param name: Base name for the archive and the managed subfolder under</span>
+<span class="sd">        ``folder``.</span>
+<span class="sd">    :type name: str</span>
+<span class="sd">    :param ignore_subfolders: See :func:`archive`.</span>
+<span class="sd">    :type ignore_subfolders: bool</span>
+<span class="sd">    :param ignore_names: See :func:`archive`.</span>
+<span class="sd">    :type ignore_names: list of str or None</span>
+<span class="sd">    :param ignore_patterns: See :func:`archive`.</span>
+<span class="sd">    :type ignore_patterns: list of str or None</span>
+<span class="sd">    :raises NotADirectoryError: If ``folder`` does not exist as a directory.</span>
+<span class="sd">    :raises FileNotFoundError: If any path in ``sources`` does not exist.</span>
+<span class="sd">    :raises FileExistsError: If two sources resolve to the same relative path</span>
+<span class="sd">        in the merged tree (conflicting file).</span>
+<span class="sd">    :returns: Absolute path to the newly published zip file inside ``latest``.</span>
+<span class="sd">    :rtype: pathlib.Path</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">folder</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">folder</span><span class="p">)</span><span class="o">.</span><span class="n">absolute</span><span class="p">()</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">folder</span><span class="o">.</span><span class="n">is_dir</span><span class="p">():</span>
+        <span class="k">raise</span> <span class="ne">NotADirectoryError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Target folder does not exist: &#39;</span><span class="si">{</span><span class="n">folder</span><span class="si">}</span><span class="s2">&#39;. &quot;</span>
+            <span class="s2">&quot;Please create it before calling publish().&quot;</span>
+        <span class="p">)</span>
+
+    <span class="c1"># set up managed structure: folder/name/{history,latest}</span>
+    <span class="c1"># --------------------------------------------------</span>
+    <span class="n">root</span> <span class="o">=</span> <span class="n">folder</span> <span class="o">/</span> <span class="n">name</span>
+    <span class="n">folder_history</span> <span class="o">=</span> <span class="n">root</span> <span class="o">/</span> <span class="s2">&quot;history&quot;</span>
+    <span class="n">folder_latest</span> <span class="o">=</span> <span class="n">root</span> <span class="o">/</span> <span class="s2">&quot;latest&quot;</span>
+    <span class="n">folder_history</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">folder_latest</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1"># snapshot what&#39;s currently in latest BEFORE building the new archive</span>
+    <span class="c1"># --------------------------------------------------</span>
+    <span class="n">previous_zips</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">folder_latest</span><span class="o">.</span><span class="n">iterdir</span><span class="p">()</span> <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">is_file</span><span class="p">()</span> <span class="ow">and</span> <span class="n">f</span><span class="o">.</span><span class="n">suffix</span> <span class="o">==</span> <span class="s2">&quot;.zip&quot;</span>
+    <span class="p">]</span>
+
+    <span class="c1"># build the new archive directly into latest</span>
+    <span class="c1"># if this raises, &#39;latest&#39; still holds the previous good zip untouched</span>
+    <span class="c1"># --------------------------------------------------</span>
+    <span class="n">zip_path</span> <span class="o">=</span> <span class="n">archive</span><span class="p">(</span>
+        <span class="n">sources</span><span class="o">=</span><span class="n">sources</span><span class="p">,</span>
+        <span class="n">folder</span><span class="o">=</span><span class="n">folder_latest</span><span class="p">,</span>
+        <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
+        <span class="n">ignore_subfolders</span><span class="o">=</span><span class="n">ignore_subfolders</span><span class="p">,</span>
+        <span class="n">ignore_names</span><span class="o">=</span><span class="n">ignore_names</span><span class="p">,</span>
+        <span class="n">ignore_patterns</span><span class="o">=</span><span class="n">ignore_patterns</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="c1"># only now rotate the previously-existing zip(s) into history</span>
+    <span class="c1"># --------------------------------------------------</span>
+    <span class="k">for</span> <span class="n">existing</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">previous_zips</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Rotating to history&quot;</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="s2">&quot;file&quot;</span><span class="p">):</span>
+        <span class="n">shutil</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">existing</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">folder_history</span> <span class="o">/</span> <span class="n">existing</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">zip_path</span></div>
 
 
 
@@ -939,8 +1156,8 @@
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../_static/scripts/bootstrap.js?digest=0790524f97105ba85085"></script>
-<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=0790524f97105ba85085"></script>
+  <script defer src="../../_static/scripts/bootstrap.js?digest=a95f357e85573c9b56d5"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=a95f357e85573c9b56d5"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -974,7 +1191,7 @@
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.18.0.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.19.0.
 </p></div>
       
     </div>

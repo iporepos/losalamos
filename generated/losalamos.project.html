@@ -27,18 +27,18 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../_static/styles/theme.css?digest=0790524f97105ba85085" rel="stylesheet" />
-<link href="../_static/styles/pydata-sphinx-theme.css?digest=0790524f97105ba85085" rel="stylesheet" />
+  <link href="../_static/styles/theme.css?digest=a95f357e85573c9b56d5" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=a95f357e85573c9b56d5" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
   
   <!-- So that users can add custom icons -->
-  <script defer src="../_static/scripts/fontawesome.js?digest=0790524f97105ba85085"></script>
+  <script defer src="../_static/scripts/fontawesome.js?digest=a95f357e85573c9b56d5"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=0790524f97105ba85085" />
-<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=0790524f97105ba85085" />
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=a95f357e85573c9b56d5" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=a95f357e85573c9b56d5" />
 
     <script src="../_static/documentation_options.js?v=d45e8c67"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
@@ -453,11 +453,17 @@ project metadata, filesystem layout, and downstream processing workflows.</p>
 <p class="rubric">Functions</p>
 <div class="pst-scrollable-table-container"><table class="autosummary longtable table">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#losalamos.project.load_project" title="losalamos.project.load_project"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_project</span></code></a>(project_folder)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#losalamos.project.archive" title="losalamos.project.archive"><code class="xref py py-obj docutils literal notranslate"><span class="pre">archive</span></code></a>(sources, folder, name[, ...])</p></td>
+<td><p>Archive one or more files/folders into a single timestamped zip file.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#losalamos.project.load_project" title="losalamos.project.load_project"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_project</span></code></a>(project_folder)</p></td>
 <td><p>Loads a Project from folder</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#losalamos.project.new_project" title="losalamos.project.new_project"><code class="xref py py-obj docutils literal notranslate"><span class="pre">new_project</span></code></a>(specs)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#losalamos.project.new_project" title="losalamos.project.new_project"><code class="xref py py-obj docutils literal notranslate"><span class="pre">new_project</span></code></a>(specs)</p></td>
 <td><p>Create a new Project from a specification dictionary.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#losalamos.project.publish" title="losalamos.project.publish"><code class="xref py py-obj docutils literal notranslate"><span class="pre">publish</span></code></a>(sources, folder, name[, ...])</p></td>
+<td><p>Archive <code class="docutils literal notranslate"><span class="pre">sources</span></code> and publish the result under a managed <code class="docutils literal notranslate"><span class="pre">history</span></code>/<code class="docutils literal notranslate"><span class="pre">latest</span></code> structure.</p></td>
 </tr>
 </tbody>
 </table>
@@ -553,6 +559,94 @@ project metadata, filesystem layout, and downstream processing workflows.</p>
 </div>
 </div>
 </details></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="losalamos.project.archive">
+<span class="sig-prename descclassname"><span class="pre">losalamos.project.</span></span><span class="sig-name descname"><span class="pre">archive</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sources</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Path</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Path</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">folder</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore_subfolders</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore_names</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore_patterns</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Path</span></span></span><a class="reference internal" href="../_modules/losalamos/project.html#archive"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.project.archive" title="Link to this definition">#</a></dt>
+<dd><p>Archive one or more files/folders into a single timestamped zip file.</p>
+<p>Sources are merged into a shared tree at the zip root rather than being
+namespaced under separate top-level folders — equivalent to pasting each
+source folder into the same destination one after another. Same-named
+subfolders combine their contents non-destructively. A file present in
+only one source appears once in the result; a relative path present in
+more than one source raises an error rather than silently overwriting.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sources</strong> (<em>str</em><em>, </em><em>pathlib.Path</em><em>, or </em><em>list</em>) – A single path or a list of paths (files and/or folders) to merge and include.</p></li>
+<li><p><strong>folder</strong> (<em>str</em><em> or </em><em>pathlib.Path</em>) – Target folder where the zip file will be written. Must already exist.</p></li>
+<li><p><strong>name</strong> (<em>str</em>) – Base name for the archive (timestamp is appended).</p></li>
+<li><p><strong>ignore_subfolders</strong> (<em>bool</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, only the top-level files of each
+source are archived; all subfolders (and their contents) are skipped.
+Applied independently per source.</p></li>
+<li><p><strong>ignore_names</strong> (<em>list</em><em> of </em><em>str</em><em> or </em><em>None</em>) – Exact folder or file names to exclude, anywhere in
+the tree (e.g. <code class="docutils literal notranslate"><span class="pre">[&quot;cache&quot;,</span> <span class="pre">&quot;settings.txt&quot;]</span></code>). File names must
+include their extension.</p></li>
+<li><p><strong>ignore_patterns</strong> (<em>list</em><em> of </em><em>str</em><em> or </em><em>None</em>) – Glob-style patterns (<code class="docutils literal notranslate"><span class="pre">*</span></code> syntax) matched against
+the filename only (not the full path), e.g. <code class="docutils literal notranslate"><span class="pre">[&quot;*.tmp&quot;,</span> <span class="pre">&quot;~*&quot;]</span></code>.
+Folders are matched the same way by their folder name and, if
+matched, their entire contents are excluded.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>NotADirectoryError</strong> – If <code class="docutils literal notranslate"><span class="pre">folder</span></code> does not exist as a directory.</p></li>
+<li><p><strong>FileNotFoundError</strong> – If any path in <code class="docutils literal notranslate"><span class="pre">sources</span></code> does not exist.</p></li>
+<li><p><strong>FileExistsError</strong> – If two sources resolve to the same relative path
+in the merged tree (conflicting file).</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Absolute path to the created zip file.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>pathlib.Path</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="losalamos.project.publish">
+<span class="sig-prename descclassname"><span class="pre">losalamos.project.</span></span><span class="sig-name descname"><span class="pre">publish</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sources</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Path</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Path</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">folder</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore_subfolders</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore_names</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore_patterns</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Path</span></span></span><a class="reference internal" href="../_modules/losalamos/project.html#publish"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.project.publish" title="Link to this definition">#</a></dt>
+<dd><p>Archive <code class="docutils literal notranslate"><span class="pre">sources</span></code> and publish the result under a managed
+<code class="docutils literal notranslate"><span class="pre">history</span></code>/<code class="docutils literal notranslate"><span class="pre">latest</span></code> structure.</p>
+<p>Builds (or reuses) a folder layout at <code class="docutils literal notranslate"><span class="pre">folder/name/</span></code> containing two
+subfolders, <code class="docutils literal notranslate"><span class="pre">history</span></code> and <code class="docutils literal notranslate"><span class="pre">latest</span></code>. The new archive is built
+directly into <code class="docutils literal notranslate"><span class="pre">latest</span></code> first; only after it is successfully created
+is the previously-existing zip (if any) moved into <code class="docutils literal notranslate"><span class="pre">history</span></code>. This
+ordering ensures that if archiving fails, <code class="docutils literal notranslate"><span class="pre">latest</span></code> still holds the
+last good publish rather than being left empty or having prematurely
+rotated a valid zip away. Each zip keeps its own timestamped filename
+from <a class="reference internal" href="#losalamos.project.archive" title="losalamos.project.archive"><code class="xref py py-func docutils literal notranslate"><span class="pre">archive()</span></code></a>, so nothing is overwritten on rotation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sources</strong> (<em>str</em><em>, </em><em>pathlib.Path</em><em>, or </em><em>list</em>) – A single path or a list of paths (files and/or folders) to merge and archive. See <a class="reference internal" href="#losalamos.project.archive" title="losalamos.project.archive"><code class="xref py py-func docutils literal notranslate"><span class="pre">archive()</span></code></a>.</p></li>
+<li><p><strong>folder</strong> (<em>str</em><em> or </em><em>pathlib.Path</em>) – Output archive main folder. The managed structure is
+created at <code class="docutils literal notranslate"><span class="pre">folder/name/</span></code>. Must already exist.</p></li>
+<li><p><strong>name</strong> (<em>str</em>) – Base name for the archive and the managed subfolder under
+<code class="docutils literal notranslate"><span class="pre">folder</span></code>.</p></li>
+<li><p><strong>ignore_subfolders</strong> (<em>bool</em>) – See <a class="reference internal" href="#losalamos.project.archive" title="losalamos.project.archive"><code class="xref py py-func docutils literal notranslate"><span class="pre">archive()</span></code></a>.</p></li>
+<li><p><strong>ignore_names</strong> (<em>list</em><em> of </em><em>str</em><em> or </em><em>None</em>) – See <a class="reference internal" href="#losalamos.project.archive" title="losalamos.project.archive"><code class="xref py py-func docutils literal notranslate"><span class="pre">archive()</span></code></a>.</p></li>
+<li><p><strong>ignore_patterns</strong> (<em>list</em><em> of </em><em>str</em><em> or </em><em>None</em>) – See <a class="reference internal" href="#losalamos.project.archive" title="losalamos.project.archive"><code class="xref py py-func docutils literal notranslate"><span class="pre">archive()</span></code></a>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>NotADirectoryError</strong> – If <code class="docutils literal notranslate"><span class="pre">folder</span></code> does not exist as a directory.</p></li>
+<li><p><strong>FileNotFoundError</strong> – If any path in <code class="docutils literal notranslate"><span class="pre">sources</span></code> does not exist.</p></li>
+<li><p><strong>FileExistsError</strong> – If two sources resolve to the same relative path
+in the merged tree (conflicting file).</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Absolute path to the newly published zip file inside <code class="docutils literal notranslate"><span class="pre">latest</span></code>.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>pathlib.Path</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="losalamos.project.Project">
@@ -651,6 +745,8 @@ archive into a history folder before promoting the new build.</p>
     <ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.project.new_project"><code class="docutils literal notranslate"><span class="pre">new_project()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.project.load_project"><code class="docutils literal notranslate"><span class="pre">load_project()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.project.archive"><code class="docutils literal notranslate"><span class="pre">archive()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.project.publish"><code class="docutils literal notranslate"><span class="pre">publish()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.project.Project"><code class="docutils literal notranslate"><span class="pre">Project</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.project.Project.load_data"><code class="docutils literal notranslate"><span class="pre">Project.load_data()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.project.Project.publish"><code class="docutils literal notranslate"><span class="pre">Project.publish()</span></code></a></li>
@@ -681,8 +777,8 @@ archive into a history folder before promoting the new build.</p>
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../_static/scripts/bootstrap.js?digest=0790524f97105ba85085"></script>
-<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=0790524f97105ba85085"></script>
+  <script defer src="../_static/scripts/bootstrap.js?digest=a95f357e85573c9b56d5"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=a95f357e85573c9b56d5"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -716,7 +812,7 @@ archive into a history folder before promoting the new build.</p>
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.18.0.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.19.0.
 </p></div>
       
     </div>

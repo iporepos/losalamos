@@ -8,8 +8,10 @@
 
    .. autosummary::
    
+      archive
       load_project
       new_project
+      publish
    
    .. rubric:: Classes
 
