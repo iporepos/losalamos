@@ -1302,6 +1302,334 @@ class NoteDataset(NoteReference):
             dsub.mkdir(exist_ok=True, parents=True)
 
 
+# =======================================================================
+# NoteAttribute
+# Paste this class into losalamos/notes.py after the NoteDataset class.
+# All imports it depends on are already present in notes.py:
+#   re, datetime, Path, FOLDER_TEMPLATES_NOTES
+# =======================================================================
+
+
+class NoteAttribute(NoteBasic):
+    """
+    Obsidian note for a single Flare canonical attribute registry entry.
+
+    Inherits from :class:`NoteBasic`. The template ``_attribute.md`` must be
+    present in ``FOLDER_TEMPLATES_NOTES`` before instantiation.
+
+    All field definitions and normalisation logic are class-level, making
+    the class fully self-contained.
+
+    :cvar TEMPLATE_FILE: Path to the ``.md`` attribute note template.
+    :cvar NOTE_TYPE: Fixed value written to the ``note_type`` metadata field.
+    :cvar METADATA_FIELDS: Ordered list of frontmatter fields matching the
+        template. Subclasses may override to extend.
+    :cvar TEXT_FIELDS: Fields double-quoted in YAML output. Subclasses may
+        extend: ``TEXT_FIELDS = NoteAttribute.TEXT_FIELDS | {...}``.
+    :cvar REQUIRED_FIELDS: Fields that must be present before writing.
+        Subclasses may extend: ``REQUIRED_FIELDS = NoteAttribute.REQUIRED_FIELDS | {...}``.
+
+    Example
+    -------
+    .. code-block:: python
+
+        from losalamos.notes import NoteAttribute
+
+        note = NoteAttribute()
+        note.load_new(
+            file_note="vault/Streamflow.md",
+            entry={
+                "code": "F101A001",
+                "name": "Streamflow",
+                "theme": "101",
+                "type": "R",
+                "units_ref": "m^3/s",
+                "domain": "[0U)",
+                "symbol": "Q",
+                "alias": "streamflow",
+                "dimension": "L^{3}/T",
+                "abstract": "Volumetric flow rate...",
+                "source": "Chow et al. (1988)",
+                "_tags": ["attribute-note", "hydrology"],
+                "_subject": "[[Surface Hydrology]]",
+            }
+        )
+        note.save()
+    """
+
+    TEMPLATE_FILE = FOLDER_TEMPLATES_NOTES / "_attribute.md"
+    NOTE_TYPE = "attribute"
+
+    # Ordered canonical field list — matches the attribute template exactly.
+    # Subclasses may extend by overriding and appending to this list.
+    METADATA_FIELDS = [
+        "note_type",
+        "timestamp",
+        "tags",
+        "aliases",
+        "subject",
+        "code",
+        "twin_code",
+        "alias",
+        "name",
+        "synonyms",
+        "title",
+        "abstract",
+        "symbol",
+        "theme",
+        "category",
+        "archetype",
+        "dimension",
+        "units_ref",
+        "type",
+        "domain",
+        "source",
+    ]
+
+    # Fields double-quoted in YAML output to guard against structural
+    # characters (colons, brackets, commas). Only short controlled-vocabulary
+    # fields are left unquoted: note_type, timestamp, tags, aliases, code,
+    # twin_code, theme, type, category.
+    # Subclasses: TEXT_FIELDS = NoteAttribute.TEXT_FIELDS | {"extra_field"}
+    TEXT_FIELDS = {
+        "subject",
+        "alias",
+        "name",
+        "synonyms",
+        "title",
+        "abstract",
+        "symbol",
+        "dimension",
+        "units_ref",
+        "domain",
+        "source",
+    }
+
+    # Fields required in each entry before a note is written.
+    # Subclasses: REQUIRED_FIELDS = NoteAttribute.REQUIRED_FIELDS | {"extra"}
+    REQUIRED_FIELDS = {"name", "theme"}
+
+    # ------------------------------------------------------------------
+    # Initialisation
+    # ------------------------------------------------------------------
+
+    def __init__(self):
+        super().__init__(name="NoteAttribute", alias="NtAttr")
+
+    # ------------------------------------------------------------------
+    # Public interface
+    # ------------------------------------------------------------------
+
+    def load_new(self, file_note: str | Path, entry: dict) -> None:
+        """
+        Initialise a new attribute note from a merged entry dict.
+
+        Overrides :meth:`NoteBasic.load_new` to inject canonical field
+        values directly rather than relying on Templater placeholders.
+
+        The ``entry`` dict may contain two special keys injected by the
+        population script and consumed here without being written to
+        frontmatter:
+
+        - ``_tags``    — pre-resolved tag list (additive merge of defaults
+          and entry-level tags, always starting with ``attribute-note``)
+        - ``_subject`` — pre-resolved subject string (local override wins
+          over default; Obsidian ``[[link]]`` notation)
+
+        :param file_note: Destination path for the new ``.md`` file,
+            named after the attribute ``name``.
+        :param entry: Merged entry dict — defaults already applied, code
+            already assigned, ``_tags`` and ``_subject`` pre-resolved.
+        """
+        self.file_note = self.file_note_template
+        self.load()
+        self.file_note = Path(file_note)
+        self._apply_entry(entry)
+        self.update_timestamp()
+
+    def update(self) -> None:
+        """
+        Override :meth:`NoteBasic.update` — skip name/abstract/thumbnail
+        sync since attribute notes are fully driven by ``_apply_entry``.
+        """
+        self.update_timestamp()
+
+    # ------------------------------------------------------------------
+    # Internal
+    # ------------------------------------------------------------------
+
+    def _apply_entry(self, entry: dict) -> None:
+        """
+        Write all canonical fields from ``entry`` into ``self.metadata``
+        and update the note body head section.
+
+        Field-type dispatch:
+
+        - ``tags``        — consumed from ``_tags`` key (pre-resolved list)
+        - ``subject``     — consumed from ``_subject`` key, quoted
+        - ``TEXT_FIELDS`` — normalised then wrapped in double quotes
+        - everything else — written as plain string
+
+        Within ``TEXT_FIELDS``, three fields receive additional normalisation
+        before quoting:
+
+        - ``symbol``    — ``$`` delimiters stripped
+        - ``dimension`` — ``[]`` brackets and ``$`` delimiters stripped
+        - ``units_ref`` — ``$`` delimiters stripped
+
+        :param entry: Merged and validated entry dict with code and
+            ``_tags`` / ``_subject`` assigned.
+        """
+        now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+        for field in self.METADATA_FIELDS:
+            if field == "note_type":
+                self.metadata[field] = self.NOTE_TYPE
+            elif field == "timestamp":
+                self.metadata[field] = now
+            elif field == "tags":
+                self.metadata[field] = entry.get("_tags") or ["attribute-note"]
+            elif field == "subject":
+                raw = entry.get("_subject") or ""
+                self.metadata[field] = f'"{raw}"' if raw else ""
+            elif field in self.TEXT_FIELDS:
+                raw = entry.get(field) or ""
+                raw = self._normalise_field(field, raw)
+                self.metadata[field] = f'"{raw}"' if raw else ""
+            else:
+                self.metadata[field] = entry.get(field, "") or ""
+
+        # Head: H1 line combines code and human name
+        code = entry.get("code", "")
+        name = entry.get("name", "")
+        if self.data and Note.STR_HEAD in self.data:
+            self.data[Note.STR_HEAD][0] = f"# {code} — {name}"
+
+    def _normalise_field(self, field: str, value: str) -> str:
+        """
+        Apply field-specific normalisation before quoting.
+
+        Dispatches to the appropriate static normaliser for ``symbol``,
+        ``dimension``, and ``units_ref``; returns value unchanged otherwise.
+
+        :param field: Metadata field name.
+        :param value: Raw string value from the seed entry.
+        :return: Normalised string, ready for quoting and storage.
+        """
+        if field == "symbol":
+            return self._normalise_symbol(value)
+        elif field == "dimension":
+            return self._normalise_dimension(value)
+        elif field == "units_ref":
+            return self._normalise_units(value)
+        return value
+
+    # ------------------------------------------------------------------
+    # Static resolvers — tags and subject
+    # ------------------------------------------------------------------
+
+    @staticmethod
+    def _normalise_subject(value: str) -> str:
+        """
+        Ensure the subject value is wrapped in Obsidian wiki-link notation.
+
+        If the value already contains ``[[...]]``, it is returned as-is.
+        If it is a plain string, ``[[`` and ``]]`` are added automatically.
+
+        :param value: Raw subject string from seed, e.g. ``"Hydrology"``
+            or ``"[[Hydrology]]"``.
+        :return: Wiki-link string, e.g. ``"[[Hydrology]]"``.
+        """
+        v = value.strip()
+        if v.startswith("[[") and v.endswith("]]"):
+            return v
+        return f"[[{v}]]"
+
+    @staticmethod
+    def _resolve_tags(default_tags: list, entry_tags: list) -> list:
+        """
+        Merge default and entry-level tags additively, preserving order and
+        removing duplicates. ``attribute-note`` is always first.
+
+        :param default_tags: Tag list from ``defaults`` block, may be empty.
+        :param entry_tags: Tag list from the individual entry, may be empty.
+        :return: Deduplicated merged tag list with ``attribute-note`` first.
+        """
+        seen = set()
+        result = []
+        for tag in ["attribute-note"] + (default_tags or []) + (entry_tags or []):
+            if tag and tag not in seen:
+                seen.add(tag)
+                result.append(tag)
+        return result
+
+    @staticmethod
+    def _resolve_subject(default_subject: str, entry_subject: str) -> str:
+        """
+        Resolve the subject field. Entry-level value overrides the default.
+        Missing or null at either level are ignored. The resolved value is
+        normalised to Obsidian wiki-link notation via ``_normalise_subject``.
+
+        Plain strings are accepted — ``[[...]]`` brackets are added
+        automatically if not already present.
+
+        :param default_subject: Subject from ``defaults`` block, may be empty.
+        :param entry_subject: Subject from the individual entry, may be empty.
+        :return: Resolved and normalised subject string, or empty string if
+            neither level provides a value.
+        """
+        raw = entry_subject or default_subject or ""
+        return NoteAttribute._normalise_subject(raw) if raw else ""
+
+    # ------------------------------------------------------------------
+    # Static normalisers
+    # ------------------------------------------------------------------
+
+    @staticmethod
+    def _normalise_symbol(value: str) -> str:
+        """
+        Strip surrounding ``$`` delimiters from a LaTeX symbol string.
+
+        :param value: Raw symbol string, e.g. ``$Q$`` or ``Q``.
+        :return: Clean LaTeX string, e.g. ``Q``.
+        """
+        v = value.strip()
+        if v.startswith("$") and v.endswith("$"):
+            v = v[1:-1].strip()
+        return v
+
+    @staticmethod
+    def _normalise_dimension(value: str) -> str:
+        """
+        Strip surrounding ``[]`` brackets and ``$`` delimiters from a
+        dimension string.
+
+        :param value: Raw dimension string, e.g. ``[L^{3}/T]``.
+        :return: Clean string, e.g. ``L^{3}/T``.
+        """
+        v = value.strip()
+        if v.startswith("$") and v.endswith("$"):
+            v = v[1:-1].strip()
+        if v.startswith("[") and v.endswith("]"):
+            v = v[1:-1].strip()
+        return v
+
+    @staticmethod
+    def _normalise_units(value: str) -> str:
+        """
+        Strip accidental ``$`` delimiters from a units string.
+        Units are stored as plain readable text and rendered to LaTeX
+        downstream.
+
+        :param value: Raw units string, e.g. ``m^3/s``.
+        :return: Plain units string.
+        """
+        v = value.strip()
+        if v.startswith("$") and v.endswith("$"):
+            v = v[1:-1].strip()
+        return v
+
+
 # COLLECTIONS
 # -----------------------------------------------------------------------
 
@@ -1385,6 +1713,11 @@ class NoteCollJournal(NoteCollection):
 class NoteCollFigure(NoteCollection):
 
     BASE_OBJECT = NoteFigure
+
+
+class NoteCollAttribute(NoteCollection):
+
+    BASE_OBJECT = NoteAttribute
 
 
 # ... {develop}
