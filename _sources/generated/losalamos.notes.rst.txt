@@ -15,7 +15,9 @@
    .. autosummary::
    
       Note
+      NoteAttribute
       NoteBasic
+      NoteCollAttribute
       NoteCollBasic
       NoteCollFigure
       NoteCollJournal

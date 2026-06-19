@@ -1898,6 +1898,343 @@
 
 
 
+<span class="c1"># =======================================================================</span>
+<span class="c1"># NoteAttribute</span>
+<span class="c1"># Paste this class into losalamos/notes.py after the NoteDataset class.</span>
+<span class="c1"># All imports it depends on are already present in notes.py:</span>
+<span class="c1">#   re, datetime, Path, FOLDER_TEMPLATES_NOTES</span>
+<span class="c1"># =======================================================================</span>
+
+
+<div class="viewcode-block" id="NoteAttribute">
+<a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.NoteAttribute">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">NoteAttribute</span><span class="p">(</span><span class="n">NoteBasic</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Obsidian note for a single Flare canonical attribute registry entry.</span>
+
+<span class="sd">    Inherits from :class:`NoteBasic`. The template ``_attribute.md`` must be</span>
+<span class="sd">    present in ``FOLDER_TEMPLATES_NOTES`` before instantiation.</span>
+
+<span class="sd">    All field definitions and normalisation logic are class-level, making</span>
+<span class="sd">    the class fully self-contained.</span>
+
+<span class="sd">    :cvar TEMPLATE_FILE: Path to the ``.md`` attribute note template.</span>
+<span class="sd">    :cvar NOTE_TYPE: Fixed value written to the ``note_type`` metadata field.</span>
+<span class="sd">    :cvar METADATA_FIELDS: Ordered list of frontmatter fields matching the</span>
+<span class="sd">        template. Subclasses may override to extend.</span>
+<span class="sd">    :cvar TEXT_FIELDS: Fields double-quoted in YAML output. Subclasses may</span>
+<span class="sd">        extend: ``TEXT_FIELDS = NoteAttribute.TEXT_FIELDS | {...}``.</span>
+<span class="sd">    :cvar REQUIRED_FIELDS: Fields that must be present before writing.</span>
+<span class="sd">        Subclasses may extend: ``REQUIRED_FIELDS = NoteAttribute.REQUIRED_FIELDS | {...}``.</span>
+
+<span class="sd">    Example</span>
+<span class="sd">    -------</span>
+<span class="sd">    .. code-block:: python</span>
+
+<span class="sd">        from losalamos.notes import NoteAttribute</span>
+
+<span class="sd">        note = NoteAttribute()</span>
+<span class="sd">        note.load_new(</span>
+<span class="sd">            file_note=&quot;vault/Streamflow.md&quot;,</span>
+<span class="sd">            entry={</span>
+<span class="sd">                &quot;code&quot;: &quot;F101A001&quot;,</span>
+<span class="sd">                &quot;name&quot;: &quot;Streamflow&quot;,</span>
+<span class="sd">                &quot;theme&quot;: &quot;101&quot;,</span>
+<span class="sd">                &quot;type&quot;: &quot;R&quot;,</span>
+<span class="sd">                &quot;units_ref&quot;: &quot;m^3/s&quot;,</span>
+<span class="sd">                &quot;domain&quot;: &quot;[0U)&quot;,</span>
+<span class="sd">                &quot;symbol&quot;: &quot;Q&quot;,</span>
+<span class="sd">                &quot;alias&quot;: &quot;streamflow&quot;,</span>
+<span class="sd">                &quot;dimension&quot;: &quot;L^{3}/T&quot;,</span>
+<span class="sd">                &quot;abstract&quot;: &quot;Volumetric flow rate...&quot;,</span>
+<span class="sd">                &quot;source&quot;: &quot;Chow et al. (1988)&quot;,</span>
+<span class="sd">                &quot;_tags&quot;: [&quot;attribute-note&quot;, &quot;hydrology&quot;],</span>
+<span class="sd">                &quot;_subject&quot;: &quot;[[Surface Hydrology]]&quot;,</span>
+<span class="sd">            }</span>
+<span class="sd">        )</span>
+<span class="sd">        note.save()</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">TEMPLATE_FILE</span> <span class="o">=</span> <span class="n">FOLDER_TEMPLATES_NOTES</span> <span class="o">/</span> <span class="s2">&quot;_attribute.md&quot;</span>
+    <span class="n">NOTE_TYPE</span> <span class="o">=</span> <span class="s2">&quot;attribute&quot;</span>
+
+    <span class="c1"># Ordered canonical field list — matches the attribute template exactly.</span>
+    <span class="c1"># Subclasses may extend by overriding and appending to this list.</span>
+    <span class="n">METADATA_FIELDS</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s2">&quot;note_type&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;timestamp&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;tags&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;aliases&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;subject&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;code&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;twin_code&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;alias&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;name&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;synonyms&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;title&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;abstract&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;symbol&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;theme&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;category&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;archetype&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;dimension&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;units_ref&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;type&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;domain&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;source&quot;</span><span class="p">,</span>
+    <span class="p">]</span>
+
+    <span class="c1"># Fields double-quoted in YAML output to guard against structural</span>
+    <span class="c1"># characters (colons, brackets, commas). Only short controlled-vocabulary</span>
+    <span class="c1"># fields are left unquoted: note_type, timestamp, tags, aliases, code,</span>
+    <span class="c1"># twin_code, theme, type, category.</span>
+    <span class="c1"># Subclasses: TEXT_FIELDS = NoteAttribute.TEXT_FIELDS | {&quot;extra_field&quot;}</span>
+    <span class="n">TEXT_FIELDS</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;subject&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;alias&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;name&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;synonyms&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;title&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;abstract&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;symbol&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;dimension&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;units_ref&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;domain&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;source&quot;</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="c1"># Fields required in each entry before a note is written.</span>
+    <span class="c1"># Subclasses: REQUIRED_FIELDS = NoteAttribute.REQUIRED_FIELDS | {&quot;extra&quot;}</span>
+    <span class="n">REQUIRED_FIELDS</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;theme&quot;</span><span class="p">}</span>
+
+    <span class="c1"># ------------------------------------------------------------------</span>
+    <span class="c1"># Initialisation</span>
+    <span class="c1"># ------------------------------------------------------------------</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;NoteAttribute&quot;</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s2">&quot;NtAttr&quot;</span><span class="p">)</span>
+
+    <span class="c1"># ------------------------------------------------------------------</span>
+    <span class="c1"># Public interface</span>
+    <span class="c1"># ------------------------------------------------------------------</span>
+
+<div class="viewcode-block" id="NoteAttribute.load_new">
+<a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.NoteAttribute.load_new">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">load_new</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_note</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Path</span><span class="p">,</span> <span class="n">entry</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialise a new attribute note from a merged entry dict.</span>
+
+<span class="sd">        Overrides :meth:`NoteBasic.load_new` to inject canonical field</span>
+<span class="sd">        values directly rather than relying on Templater placeholders.</span>
+
+<span class="sd">        The ``entry`` dict may contain two special keys injected by the</span>
+<span class="sd">        population script and consumed here without being written to</span>
+<span class="sd">        frontmatter:</span>
+
+<span class="sd">        - ``_tags``    — pre-resolved tag list (additive merge of defaults</span>
+<span class="sd">          and entry-level tags, always starting with ``attribute-note``)</span>
+<span class="sd">        - ``_subject`` — pre-resolved subject string (local override wins</span>
+<span class="sd">          over default; Obsidian ``[[link]]`` notation)</span>
+
+<span class="sd">        :param file_note: Destination path for the new ``.md`` file,</span>
+<span class="sd">            named after the attribute ``name``.</span>
+<span class="sd">        :param entry: Merged entry dict — defaults already applied, code</span>
+<span class="sd">            already assigned, ``_tags`` and ``_subject`` pre-resolved.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">file_note</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_note_template</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">file_note</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">file_note</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_apply_entry</span><span class="p">(</span><span class="n">entry</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_timestamp</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="NoteAttribute.update">
+<a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.NoteAttribute.update">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Override :meth:`NoteBasic.update` — skip name/abstract/thumbnail</span>
+<span class="sd">        sync since attribute notes are fully driven by ``_apply_entry``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_timestamp</span><span class="p">()</span></div>
+
+
+    <span class="c1"># ------------------------------------------------------------------</span>
+    <span class="c1"># Internal</span>
+    <span class="c1"># ------------------------------------------------------------------</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_apply_entry</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entry</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Write all canonical fields from ``entry`` into ``self.metadata``</span>
+<span class="sd">        and update the note body head section.</span>
+
+<span class="sd">        Field-type dispatch:</span>
+
+<span class="sd">        - ``tags``        — consumed from ``_tags`` key (pre-resolved list)</span>
+<span class="sd">        - ``subject``     — consumed from ``_subject`` key, quoted</span>
+<span class="sd">        - ``TEXT_FIELDS`` — normalised then wrapped in double quotes</span>
+<span class="sd">        - everything else — written as plain string</span>
+
+<span class="sd">        Within ``TEXT_FIELDS``, three fields receive additional normalisation</span>
+<span class="sd">        before quoting:</span>
+
+<span class="sd">        - ``symbol``    — ``$`` delimiters stripped</span>
+<span class="sd">        - ``dimension`` — ``[]`` brackets and ``$`` delimiters stripped</span>
+<span class="sd">        - ``units_ref`` — ``$`` delimiters stripped</span>
+
+<span class="sd">        :param entry: Merged and validated entry dict with code and</span>
+<span class="sd">            ``_tags`` / ``_subject`` assigned.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">now</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M:%S&quot;</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">METADATA_FIELDS</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">field</span> <span class="o">==</span> <span class="s2">&quot;note_type&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="n">field</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">NOTE_TYPE</span>
+            <span class="k">elif</span> <span class="n">field</span> <span class="o">==</span> <span class="s2">&quot;timestamp&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="n">field</span><span class="p">]</span> <span class="o">=</span> <span class="n">now</span>
+            <span class="k">elif</span> <span class="n">field</span> <span class="o">==</span> <span class="s2">&quot;tags&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="n">field</span><span class="p">]</span> <span class="o">=</span> <span class="n">entry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;_tags&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">[</span><span class="s2">&quot;attribute-note&quot;</span><span class="p">]</span>
+            <span class="k">elif</span> <span class="n">field</span> <span class="o">==</span> <span class="s2">&quot;subject&quot;</span><span class="p">:</span>
+                <span class="n">raw</span> <span class="o">=</span> <span class="n">entry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;_subject&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="n">field</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;&quot;</span><span class="si">{</span><span class="n">raw</span><span class="si">}</span><span class="s1">&quot;&#39;</span> <span class="k">if</span> <span class="n">raw</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
+            <span class="k">elif</span> <span class="n">field</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">TEXT_FIELDS</span><span class="p">:</span>
+                <span class="n">raw</span> <span class="o">=</span> <span class="n">entry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">field</span><span class="p">)</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span>
+                <span class="n">raw</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_normalise_field</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">raw</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="n">field</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;&quot;</span><span class="si">{</span><span class="n">raw</span><span class="si">}</span><span class="s1">&quot;&#39;</span> <span class="k">if</span> <span class="n">raw</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="n">field</span><span class="p">]</span> <span class="o">=</span> <span class="n">entry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span>
+
+        <span class="c1"># Head: H1 line combines code and human name</span>
+        <span class="n">code</span> <span class="o">=</span> <span class="n">entry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;code&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">entry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="ow">and</span> <span class="n">Note</span><span class="o">.</span><span class="n">STR_HEAD</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">Note</span><span class="o">.</span><span class="n">STR_HEAD</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;# </span><span class="si">{</span><span class="n">code</span><span class="si">}</span><span class="s2"> — </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_normalise_field</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Apply field-specific normalisation before quoting.</span>
+
+<span class="sd">        Dispatches to the appropriate static normaliser for ``symbol``,</span>
+<span class="sd">        ``dimension``, and ``units_ref``; returns value unchanged otherwise.</span>
+
+<span class="sd">        :param field: Metadata field name.</span>
+<span class="sd">        :param value: Raw string value from the seed entry.</span>
+<span class="sd">        :return: Normalised string, ready for quoting and storage.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">field</span> <span class="o">==</span> <span class="s2">&quot;symbol&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_normalise_symbol</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">field</span> <span class="o">==</span> <span class="s2">&quot;dimension&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_normalise_dimension</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">field</span> <span class="o">==</span> <span class="s2">&quot;units_ref&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_normalise_units</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">value</span>
+
+    <span class="c1"># ------------------------------------------------------------------</span>
+    <span class="c1"># Static resolvers — tags and subject</span>
+    <span class="c1"># ------------------------------------------------------------------</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_normalise_subject</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Ensure the subject value is wrapped in Obsidian wiki-link notation.</span>
+
+<span class="sd">        If the value already contains ``[[...]]``, it is returned as-is.</span>
+<span class="sd">        If it is a plain string, ``[[`` and ``]]`` are added automatically.</span>
+
+<span class="sd">        :param value: Raw subject string from seed, e.g. ``&quot;Hydrology&quot;``</span>
+<span class="sd">            or ``&quot;[[Hydrology]]&quot;``.</span>
+<span class="sd">        :return: Wiki-link string, e.g. ``&quot;[[Hydrology]]&quot;``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">v</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;[[&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">v</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;]]&quot;</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">v</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;[[</span><span class="si">{</span><span class="n">v</span><span class="si">}</span><span class="s2">]]&quot;</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_resolve_tags</span><span class="p">(</span><span class="n">default_tags</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">entry_tags</span><span class="p">:</span> <span class="nb">list</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Merge default and entry-level tags additively, preserving order and</span>
+<span class="sd">        removing duplicates. ``attribute-note`` is always first.</span>
+
+<span class="sd">        :param default_tags: Tag list from ``defaults`` block, may be empty.</span>
+<span class="sd">        :param entry_tags: Tag list from the individual entry, may be empty.</span>
+<span class="sd">        :return: Deduplicated merged tag list with ``attribute-note`` first.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">seen</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">tag</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;attribute-note&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span><span class="n">default_tags</span> <span class="ow">or</span> <span class="p">[])</span> <span class="o">+</span> <span class="p">(</span><span class="n">entry_tags</span> <span class="ow">or</span> <span class="p">[]):</span>
+            <span class="k">if</span> <span class="n">tag</span> <span class="ow">and</span> <span class="n">tag</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">seen</span><span class="p">:</span>
+                <span class="n">seen</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">tag</span><span class="p">)</span>
+                <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tag</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">result</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_resolve_subject</span><span class="p">(</span><span class="n">default_subject</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">entry_subject</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Resolve the subject field. Entry-level value overrides the default.</span>
+<span class="sd">        Missing or null at either level are ignored. The resolved value is</span>
+<span class="sd">        normalised to Obsidian wiki-link notation via ``_normalise_subject``.</span>
+
+<span class="sd">        Plain strings are accepted — ``[[...]]`` brackets are added</span>
+<span class="sd">        automatically if not already present.</span>
+
+<span class="sd">        :param default_subject: Subject from ``defaults`` block, may be empty.</span>
+<span class="sd">        :param entry_subject: Subject from the individual entry, may be empty.</span>
+<span class="sd">        :return: Resolved and normalised subject string, or empty string if</span>
+<span class="sd">            neither level provides a value.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">raw</span> <span class="o">=</span> <span class="n">entry_subject</span> <span class="ow">or</span> <span class="n">default_subject</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">NoteAttribute</span><span class="o">.</span><span class="n">_normalise_subject</span><span class="p">(</span><span class="n">raw</span><span class="p">)</span> <span class="k">if</span> <span class="n">raw</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="c1"># ------------------------------------------------------------------</span>
+    <span class="c1"># Static normalisers</span>
+    <span class="c1"># ------------------------------------------------------------------</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_normalise_symbol</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Strip surrounding ``$`` delimiters from a LaTeX symbol string.</span>
+
+<span class="sd">        :param value: Raw symbol string, e.g. ``$Q$`` or ``Q``.</span>
+<span class="sd">        :return: Clean LaTeX string, e.g. ``Q``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">v</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;$&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">v</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;$&quot;</span><span class="p">):</span>
+            <span class="n">v</span> <span class="o">=</span> <span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">v</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_normalise_dimension</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Strip surrounding ``[]`` brackets and ``$`` delimiters from a</span>
+<span class="sd">        dimension string.</span>
+
+<span class="sd">        :param value: Raw dimension string, e.g. ``[L^{3}/T]``.</span>
+<span class="sd">        :return: Clean string, e.g. ``L^{3}/T``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">v</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;$&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">v</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;$&quot;</span><span class="p">):</span>
+            <span class="n">v</span> <span class="o">=</span> <span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">v</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;[&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">v</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;]&quot;</span><span class="p">):</span>
+            <span class="n">v</span> <span class="o">=</span> <span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">v</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_normalise_units</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Strip accidental ``$`` delimiters from a units string.</span>
+<span class="sd">        Units are stored as plain readable text and rendered to LaTeX</span>
+<span class="sd">        downstream.</span>
+
+<span class="sd">        :param value: Raw units string, e.g. ``m^3/s``.</span>
+<span class="sd">        :return: Plain units string.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">v</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;$&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">v</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;$&quot;</span><span class="p">):</span>
+            <span class="n">v</span> <span class="o">=</span> <span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">v</span></div>
+
+
+
 <span class="c1"># COLLECTIONS</span>
 <span class="c1"># -----------------------------------------------------------------------</span>
 
@@ -2004,6 +2341,14 @@
 <span class="k">class</span><span class="w"> </span><span class="nc">NoteCollFigure</span><span class="p">(</span><span class="n">NoteCollection</span><span class="p">):</span>
 
     <span class="n">BASE_OBJECT</span> <span class="o">=</span> <span class="n">NoteFigure</span></div>
+
+
+
+<div class="viewcode-block" id="NoteCollAttribute">
+<a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.NoteCollAttribute">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">NoteCollAttribute</span><span class="p">(</span><span class="n">NoteCollection</span><span class="p">):</span>
+
+    <span class="n">BASE_OBJECT</span> <span class="o">=</span> <span class="n">NoteAttribute</span></div>
 
 
 

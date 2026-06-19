@@ -551,7 +551,13 @@ BibTeX integration, and utilities for working with collections of notes.</p>
 <tr class="row-odd"><td><p><a class="reference internal" href="#losalamos.notes.Note" title="losalamos.notes.Note"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Note</span></code></a>([name, alias])</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#losalamos.notes.NoteBasic" title="losalamos.notes.NoteBasic"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NoteBasic</span></code></a>([name, alias])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#losalamos.notes.NoteAttribute" title="losalamos.notes.NoteAttribute"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NoteAttribute</span></code></a>()</p></td>
+<td><p>Obsidian note for a single Flare canonical attribute registry entry.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#losalamos.notes.NoteBasic" title="losalamos.notes.NoteBasic"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NoteBasic</span></code></a>([name, alias])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#losalamos.notes.NoteCollAttribute" title="losalamos.notes.NoteCollAttribute"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NoteCollAttribute</span></code></a>([name, alias])</p></td>
 <td><p></p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#losalamos.notes.NoteCollBasic" title="losalamos.notes.NoteCollBasic"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NoteCollBasic</span></code></a>([name, alias])</p></td>
@@ -1493,6 +1499,117 @@ template list using the current metadata dictionary.</p>
 </dd></dl>
 
 <dl class="py class">
+<dt class="sig sig-object py" id="losalamos.notes.NoteAttribute">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">losalamos.notes.</span></span><span class="sig-name descname"><span class="pre">NoteAttribute</span></span><a class="reference internal" href="../_modules/losalamos/notes.html#NoteAttribute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.notes.NoteAttribute" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#losalamos.notes.NoteBasic" title="losalamos.notes.NoteBasic"><code class="xref py py-class docutils literal notranslate"><span class="pre">NoteBasic</span></code></a></p>
+<p>Obsidian note for a single Flare canonical attribute registry entry.</p>
+<p>Inherits from <a class="reference internal" href="#losalamos.notes.NoteBasic" title="losalamos.notes.NoteBasic"><code class="xref py py-class docutils literal notranslate"><span class="pre">NoteBasic</span></code></a>. The template <code class="docutils literal notranslate"><span class="pre">_attribute.md</span></code> must be
+present in <code class="docutils literal notranslate"><span class="pre">FOLDER_TEMPLATES_NOTES</span></code> before instantiation.</p>
+<p>All field definitions and normalisation logic are class-level, making
+the class fully self-contained.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Variables<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>TEMPLATE_FILE</strong> – Path to the <code class="docutils literal notranslate"><span class="pre">.md</span></code> attribute note template.</p></li>
+<li><p><strong>NOTE_TYPE</strong> – Fixed value written to the <code class="docutils literal notranslate"><span class="pre">note_type</span></code> metadata field.</p></li>
+<li><p><strong>METADATA_FIELDS</strong> – Ordered list of frontmatter fields matching the
+template. Subclasses may override to extend.</p></li>
+<li><p><strong>TEXT_FIELDS</strong> – Fields double-quoted in YAML output. Subclasses may
+extend: <code class="docutils literal notranslate"><span class="pre">TEXT_FIELDS</span> <span class="pre">=</span> <span class="pre">NoteAttribute.TEXT_FIELDS</span> <span class="pre">|</span> <span class="pre">{...}</span></code>.</p></li>
+<li><p><strong>REQUIRED_FIELDS</strong> – Fields that must be present before writing.
+Subclasses may extend: <code class="docutils literal notranslate"><span class="pre">REQUIRED_FIELDS</span> <span class="pre">=</span> <span class="pre">NoteAttribute.REQUIRED_FIELDS</span> <span class="pre">|</span> <span class="pre">{...}</span></code>.</p></li>
+</ul>
+</dd>
+</dl>
+<section id="example">
+<h2>Example<a class="headerlink" href="#example" title="Link to this heading">#</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">losalamos.notes</span><span class="w"> </span><span class="kn">import</span> <span class="n">NoteAttribute</span>
+
+<span class="n">note</span> <span class="o">=</span> <span class="n">NoteAttribute</span><span class="p">()</span>
+<span class="n">note</span><span class="o">.</span><span class="n">load_new</span><span class="p">(</span>
+    <span class="n">file_note</span><span class="o">=</span><span class="s2">&quot;vault/Streamflow.md&quot;</span><span class="p">,</span>
+    <span class="n">entry</span><span class="o">=</span><span class="p">{</span>
+        <span class="s2">&quot;code&quot;</span><span class="p">:</span> <span class="s2">&quot;F101A001&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Streamflow&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;theme&quot;</span><span class="p">:</span> <span class="s2">&quot;101&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;R&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;units_ref&quot;</span><span class="p">:</span> <span class="s2">&quot;m^3/s&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;domain&quot;</span><span class="p">:</span> <span class="s2">&quot;[0U)&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;symbol&quot;</span><span class="p">:</span> <span class="s2">&quot;Q&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;alias&quot;</span><span class="p">:</span> <span class="s2">&quot;streamflow&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;dimension&quot;</span><span class="p">:</span> <span class="s2">&quot;L^</span><span class="si">{3}</span><span class="s2">/T&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;abstract&quot;</span><span class="p">:</span> <span class="s2">&quot;Volumetric flow rate...&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;source&quot;</span><span class="p">:</span> <span class="s2">&quot;Chow et al. (1988)&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;_tags&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;attribute-note&quot;</span><span class="p">,</span> <span class="s2">&quot;hydrology&quot;</span><span class="p">],</span>
+        <span class="s2">&quot;_subject&quot;</span><span class="p">:</span> <span class="s2">&quot;[[Surface Hydrology]]&quot;</span><span class="p">,</span>
+    <span class="p">}</span>
+<span class="p">)</span>
+<span class="n">note</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+</pre></div>
+</div>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="losalamos.notes.NoteAttribute.TEMPLATE_FILE">
+<span class="sig-name descname"><span class="pre">TEMPLATE_FILE</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">PosixPath('/home/runner/work/losalamos/losalamos/src/losalamos/data/templates/notes/_attribute.md')</span></span><a class="headerlink" href="#losalamos.notes.NoteAttribute.TEMPLATE_FILE" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="losalamos.notes.NoteAttribute.NOTE_TYPE">
+<span class="sig-name descname"><span class="pre">NOTE_TYPE</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'attribute'</span></span><a class="headerlink" href="#losalamos.notes.NoteAttribute.NOTE_TYPE" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="losalamos.notes.NoteAttribute.METADATA_FIELDS">
+<span class="sig-name descname"><span class="pre">METADATA_FIELDS</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['note_type',</span> <span class="pre">'timestamp',</span> <span class="pre">'tags',</span> <span class="pre">'aliases',</span> <span class="pre">'subject',</span> <span class="pre">'code',</span> <span class="pre">'twin_code',</span> <span class="pre">'alias',</span> <span class="pre">'name',</span> <span class="pre">'synonyms',</span> <span class="pre">'title',</span> <span class="pre">'abstract',</span> <span class="pre">'symbol',</span> <span class="pre">'theme',</span> <span class="pre">'category',</span> <span class="pre">'archetype',</span> <span class="pre">'dimension',</span> <span class="pre">'units_ref',</span> <span class="pre">'type',</span> <span class="pre">'domain',</span> <span class="pre">'source']</span></span><a class="headerlink" href="#losalamos.notes.NoteAttribute.METADATA_FIELDS" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="losalamos.notes.NoteAttribute.TEXT_FIELDS">
+<span class="sig-name descname"><span class="pre">TEXT_FIELDS</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'abstract',</span> <span class="pre">'alias',</span> <span class="pre">'dimension',</span> <span class="pre">'domain',</span> <span class="pre">'name',</span> <span class="pre">'source',</span> <span class="pre">'subject',</span> <span class="pre">'symbol',</span> <span class="pre">'synonyms',</span> <span class="pre">'title',</span> <span class="pre">'units_ref'}</span></span><a class="headerlink" href="#losalamos.notes.NoteAttribute.TEXT_FIELDS" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="losalamos.notes.NoteAttribute.REQUIRED_FIELDS">
+<span class="sig-name descname"><span class="pre">REQUIRED_FIELDS</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'name',</span> <span class="pre">'theme'}</span></span><a class="headerlink" href="#losalamos.notes.NoteAttribute.REQUIRED_FIELDS" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.notes.NoteAttribute.load_new">
+<span class="sig-name descname"><span class="pre">load_new</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_note</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">entry</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../_modules/losalamos/notes.html#NoteAttribute.load_new"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.notes.NoteAttribute.load_new" title="Link to this definition">#</a></dt>
+<dd><p>Initialise a new attribute note from a merged entry dict.</p>
+<p>Overrides <a class="reference internal" href="#losalamos.notes.NoteBasic.load_new" title="losalamos.notes.NoteBasic.load_new"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NoteBasic.load_new()</span></code></a> to inject canonical field
+values directly rather than relying on Templater placeholders.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">entry</span></code> dict may contain two special keys injected by the
+population script and consumed here without being written to
+frontmatter:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">_tags</span></code>    — pre-resolved tag list (additive merge of defaults
+and entry-level tags, always starting with <code class="docutils literal notranslate"><span class="pre">attribute-note</span></code>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">_subject</span></code> — pre-resolved subject string (local override wins
+over default; Obsidian <code class="docutils literal notranslate"><span class="pre">[[link]]</span></code> notation)</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>file_note</strong> – Destination path for the new <code class="docutils literal notranslate"><span class="pre">.md</span></code> file,
+named after the attribute <code class="docutils literal notranslate"><span class="pre">name</span></code>.</p></li>
+<li><p><strong>entry</strong> – Merged entry dict — defaults already applied, code
+already assigned, <code class="docutils literal notranslate"><span class="pre">_tags</span></code> and <code class="docutils literal notranslate"><span class="pre">_subject</span></code> pre-resolved.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.notes.NoteAttribute.update">
+<span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../_modules/losalamos/notes.html#NoteAttribute.update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.notes.NoteAttribute.update" title="Link to this definition">#</a></dt>
+<dd><p>Override <a class="reference internal" href="#losalamos.notes.NoteBasic.update" title="losalamos.notes.NoteBasic.update"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NoteBasic.update()</span></code></a> — skip name/abstract/thumbnail
+sync since attribute notes are fully driven by <code class="docutils literal notranslate"><span class="pre">_apply_entry</span></code>.</p>
+</dd></dl>
+
+</section>
+</dd></dl>
+
+<dl class="py class">
 <dt class="sig sig-object py" id="losalamos.notes.NoteCollection">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">losalamos.notes.</span></span><span class="sig-name descname"><span class="pre">NoteCollection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'MyNoteColl'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alias</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'NtCol0'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/notes.html#NoteCollection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.notes.NoteCollection" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference internal" href="losalamos.root.html#losalamos.root.Collection" title="losalamos.root.Collection"><code class="xref py py-class docutils literal notranslate"><span class="pre">Collection</span></code></a></p>
@@ -1599,6 +1716,18 @@ template list using the current metadata dictionary.</p>
 <dt class="sig sig-object py" id="losalamos.notes.NoteCollFigure.BASE_OBJECT">
 <span class="sig-name descname"><span class="pre">BASE_OBJECT</span></span><a class="headerlink" href="#losalamos.notes.NoteCollFigure.BASE_OBJECT" title="Link to this definition">#</a></dt>
 <dd><p>alias of <a class="reference internal" href="#losalamos.notes.NoteFigure" title="losalamos.notes.NoteFigure"><code class="xref py py-class docutils literal notranslate"><span class="pre">NoteFigure</span></code></a></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="losalamos.notes.NoteCollAttribute">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">losalamos.notes.</span></span><span class="sig-name descname"><span class="pre">NoteCollAttribute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'MyNoteColl'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alias</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'NtCol0'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/notes.html#NoteCollAttribute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.notes.NoteCollAttribute" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#losalamos.notes.NoteCollection" title="losalamos.notes.NoteCollection"><code class="xref py py-class docutils literal notranslate"><span class="pre">NoteCollection</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="losalamos.notes.NoteCollAttribute.BASE_OBJECT">
+<span class="sig-name descname"><span class="pre">BASE_OBJECT</span></span><a class="headerlink" href="#losalamos.notes.NoteCollAttribute.BASE_OBJECT" title="Link to this definition">#</a></dt>
+<dd><p>alias of <a class="reference internal" href="#losalamos.notes.NoteAttribute" title="losalamos.notes.NoteAttribute"><code class="xref py py-class docutils literal notranslate"><span class="pre">NoteAttribute</span></code></a></p>
 </dd></dl>
 
 </dd></dl>
@@ -1750,6 +1879,16 @@ template list using the current metadata dictionary.</p>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.notes.NoteDataset.setup_dataset_folder"><code class="docutils literal notranslate"><span class="pre">NoteDataset.setup_dataset_folder()</span></code></a></li>
 </ul>
 </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.notes.NoteAttribute"><code class="docutils literal notranslate"><span class="pre">NoteAttribute</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.notes.NoteAttribute.TEMPLATE_FILE"><code class="docutils literal notranslate"><span class="pre">NoteAttribute.TEMPLATE_FILE</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.notes.NoteAttribute.NOTE_TYPE"><code class="docutils literal notranslate"><span class="pre">NoteAttribute.NOTE_TYPE</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.notes.NoteAttribute.METADATA_FIELDS"><code class="docutils literal notranslate"><span class="pre">NoteAttribute.METADATA_FIELDS</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.notes.NoteAttribute.TEXT_FIELDS"><code class="docutils literal notranslate"><span class="pre">NoteAttribute.TEXT_FIELDS</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.notes.NoteAttribute.REQUIRED_FIELDS"><code class="docutils literal notranslate"><span class="pre">NoteAttribute.REQUIRED_FIELDS</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.notes.NoteAttribute.load_new"><code class="docutils literal notranslate"><span class="pre">NoteAttribute.load_new()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.notes.NoteAttribute.update"><code class="docutils literal notranslate"><span class="pre">NoteAttribute.update()</span></code></a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.notes.NoteCollection"><code class="docutils literal notranslate"><span class="pre">NoteCollection</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.notes.NoteCollection.BASE_OBJECT"><code class="docutils literal notranslate"><span class="pre">NoteCollection.BASE_OBJECT</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.notes.NoteCollection.load_list"><code class="docutils literal notranslate"><span class="pre">NoteCollection.load_list()</span></code></a></li>
@@ -1771,6 +1910,10 @@ template list using the current metadata dictionary.</p>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.notes.NoteCollFigure"><code class="docutils literal notranslate"><span class="pre">NoteCollFigure</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.notes.NoteCollFigure.BASE_OBJECT"><code class="docutils literal notranslate"><span class="pre">NoteCollFigure.BASE_OBJECT</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.notes.NoteCollAttribute"><code class="docutils literal notranslate"><span class="pre">NoteCollAttribute</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.notes.NoteCollAttribute.BASE_OBJECT"><code class="docutils literal notranslate"><span class="pre">NoteCollAttribute.BASE_OBJECT</span></code></a></li>
 </ul>
 </li>
 </ul>

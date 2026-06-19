@@ -754,6 +754,106 @@ if <code class="xref py py-attr docutils literal notranslate"><span class="pre">
 </dl>
 </dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.documents.DocumentTeX.lint_paragraphs">
+<span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">lint_paragraphs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_tex</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_tex</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/documents.html#DocumentTeX.lint_paragraphs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.documents.DocumentTeX.lint_paragraphs" title="Link to this definition">#</a></dt>
+<dd><p>Join wrapped prose paragraphs in a LaTeX file into single lines.</p>
+<p>Reads <code class="docutils literal notranslate"><span class="pre">input_tex</span></code>, joins each wrapped prose paragraph in the document
+body into a single source line, and writes the result to
+<code class="docutils literal notranslate"><span class="pre">output_tex</span></code>.</p>
+<p>This function performs no backup of its own. When <code class="docutils literal notranslate"><span class="pre">output_tex</span></code> is
+<code class="docutils literal notranslate"><span class="pre">None</span></code> (or equal to <code class="docutils literal notranslate"><span class="pre">input_tex</span></code>), the input file is overwritten in
+place; callers that want a safety copy should take one beforehand (see
+<code class="xref py py-func docutils literal notranslate"><span class="pre">backup_file()</span></code>).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input_tex</strong> (<em>str</em><em> or </em><em>pathlib.Path</em>) – Path to the source <code class="docutils literal notranslate"><span class="pre">.tex</span></code> file to read.</p></li>
+<li><p><strong>output_tex</strong> (<em>str</em><em> or </em><em>pathlib.Path</em><em> or </em><em>None</em>) – Path to write the linted result to. If <code class="docutils literal notranslate"><span class="pre">None</span></code>
+(the default), <code class="docutils literal notranslate"><span class="pre">input_tex</span></code> is overwritten in place.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The path the linted <code class="docutils literal notranslate"><span class="pre">.tex</span></code> was written to (equal to
+<code class="docutils literal notranslate"><span class="pre">input_tex</span></code> if <code class="docutils literal notranslate"><span class="pre">output_tex</span></code> was <code class="docutils literal notranslate"><span class="pre">None</span></code>).</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pathlib.Path</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>FileNotFoundError</strong> – If <code class="docutils literal notranslate"><span class="pre">input_tex</span></code> does not exist.</p></li>
+<li><p><strong>UnicodeDecodeError</strong> – If <code class="docutils literal notranslate"><span class="pre">input_tex</span></code> is not valid UTF-8.</p></li>
+</ul>
+</dd>
+</dl>
+<section id="algorithm">
+<h2>Algorithm<a class="headerlink" href="#algorithm" title="Link to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p>Everything up to and including <code class="docutils literal notranslate"><span class="pre">\begin{document}</span></code>, and everything
+from <code class="docutils literal notranslate"><span class="pre">\end{document}</span></code> onward, is passed through unchanged. (The
+preamble’s <code class="docutils literal notranslate"><span class="pre">\newcommand</span></code> shorthand definitions are one-per-line by
+convention and must stay that way.)</p></li>
+<li><p>Within the document body, consecutive lines are grouped into
+“paragraphs”: maximal runs of lines that are not blank, not
+<code class="docutils literal notranslate"><span class="pre">\begin{...}</span></code>/<code class="docutils literal notranslate"><span class="pre">\end{...}</span></code>, not comment-only, and not inside a
+non-reflowable environment. Each run is joined into a single line:
+every line is stripped of leading/trailing whitespace, joined with a
+single space, and any remaining runs of spaces are collapsed to one.</p></li>
+<li><p>The following end the current paragraph and are emitted unchanged on
+their own line, without being joined to anything: blank lines;
+<code class="docutils literal notranslate"><span class="pre">\begin{...}</span></code>/<code class="docutils literal notranslate"><span class="pre">\end{...}</span></code> lines (which also push/pop an
+environment stack used to track non-reflowable regions, including
+nested ones, by scanning the <em>whole</em> line – e.g. a <code class="docutils literal notranslate"><span class="pre">pmatrix</span></code>
+opened and closed on the same line inside an <code class="docutils literal notranslate"><span class="pre">equation</span></code>/<code class="docutils literal notranslate"><span class="pre">align</span></code>
+nets to zero rather than leaking a permanently elevated
+non-reflowable count); a comment-only line that appears <em>between</em>
+paragraphs; and <code class="docutils literal notranslate"><span class="pre">\[</span></code>/<code class="docutils literal notranslate"><span class="pre">\]</span></code> display-math delimiters on their own
+line (tracked like a pseudo-environment), or inline <code class="docutils literal notranslate"><span class="pre">\[</span> <span class="pre">...</span> <span class="pre">\]</span></code>
+on one line.</p></li>
+<li><p>A <code class="docutils literal notranslate"><span class="pre">%</span></code> comment that appears <em>inside</em> a paragraph – either a
+comment-only line with real content already buffered, or a trailing
+<code class="docutils literal notranslate"><span class="pre">%</span> <span class="pre">...</span></code> after real content – does <strong>not</strong> split the paragraph.
+The real content (if any) is kept in the paragraph, and the comment
+text is deferred and appended to the end of the paragraph’s joined
+line once it is flushed. This avoids an editorial comment in the
+middle of a sentence cutting it into two “paragraphs”, the second
+starting mid-sentence (lower-case).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">\item</span></code> always starts a new paragraph (flush before it), but its
+own wrapped continuation lines still join onto it – so consecutive
+list items each end up on their own line.</p></li>
+<li><p>The following commands always stand alone on their own output line,
+never merged with the paragraph before or after them, even without a
+blank line in the source: <code class="docutils literal notranslate"><span class="pre">\tcblower</span></code>, <code class="docutils literal notranslate"><span class="pre">\newpage</span></code>,
+<code class="docutils literal notranslate"><span class="pre">\clearpage</span></code>, <code class="docutils literal notranslate"><span class="pre">\cleardoublepage</span></code>, <code class="docutils literal notranslate"><span class="pre">\pagebreak</span></code>, <code class="docutils literal notranslate"><span class="pre">\newline</span></code>,
+<code class="docutils literal notranslate"><span class="pre">\figplaceholder</span></code>, <code class="docutils literal notranslate"><span class="pre">\boxfigplaceholder</span></code>,
+<code class="docutils literal notranslate"><span class="pre">\boxbiofigplaceholder</span></code>, and <code class="docutils literal notranslate"><span class="pre">\chapter</span></code>/<code class="docutils literal notranslate"><span class="pre">\section</span></code>/
+<code class="docutils literal notranslate"><span class="pre">\subsection</span></code>/<code class="docutils literal notranslate"><span class="pre">\subsubsection</span></code> (starred or not).</p></li>
+<li><p>Non-reflowable environments (passed through verbatim, line-by-line,
+including any blank lines inside them): <code class="docutils literal notranslate"><span class="pre">equation</span></code>, <code class="docutils literal notranslate"><span class="pre">align</span></code>,
+<code class="docutils literal notranslate"><span class="pre">gather</span></code>, <code class="docutils literal notranslate"><span class="pre">multline</span></code>, <code class="docutils literal notranslate"><span class="pre">eqnarray</span></code>, <code class="docutils literal notranslate"><span class="pre">alignat</span></code> and their starred
+forms; <code class="docutils literal notranslate"><span class="pre">array</span></code>, <code class="docutils literal notranslate"><span class="pre">cases</span></code>, <code class="docutils literal notranslate"><span class="pre">matrix</span></code>/<code class="docutils literal notranslate"><span class="pre">pmatrix</span></code>/<code class="docutils literal notranslate"><span class="pre">bmatrix</span></code>/
+<code class="docutils literal notranslate"><span class="pre">vmatrix</span></code>/<code class="docutils literal notranslate"><span class="pre">Vmatrix</span></code>; <code class="docutils literal notranslate"><span class="pre">tabular</span></code>, <code class="docutils literal notranslate"><span class="pre">tabular*</span></code>, <code class="docutils literal notranslate"><span class="pre">tabularx</span></code>,
+<code class="docutils literal notranslate"><span class="pre">longtable</span></code>; <code class="docutils literal notranslate"><span class="pre">verbatim</span></code>, <code class="docutils literal notranslate"><span class="pre">lstlisting</span></code>, <code class="docutils literal notranslate"><span class="pre">minted</span></code>, <code class="docutils literal notranslate"><span class="pre">Verbatim</span></code>;
+and <code class="docutils literal notranslate"><span class="pre">\[</span> <span class="pre">...</span> <span class="pre">\]</span></code> display math.</p></li>
+</ol>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Only line breaks and runs of whitespace within a joined paragraph
+are changed; no other characters are altered, so the rendered PDF
+is unaffected.</p>
+</div>
+</section>
+<section id="example">
+<h2>Example<a class="headerlink" href="#example" title="Link to this heading">#</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="n">lint_paragraphs</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="s2">&quot;chapter07_T12.tex&quot;</span><span class="p">))</span>  <span class="c1"># overwrite in place</span>
+<span class="n">lint_paragraphs</span><span class="p">(</span><span class="s2">&quot;chapter07_T12.tex&quot;</span><span class="p">,</span> <span class="s2">&quot;chapter07_T12_linted.tex&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="py class">
@@ -838,6 +938,7 @@ if <code class="xref py py-attr docutils literal notranslate"><span class="pre">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.documents.DocumentTeX.load_data"><code class="docutils literal notranslate"><span class="pre">DocumentTeX.load_data()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.documents.DocumentTeX.to_pdf"><code class="docutils literal notranslate"><span class="pre">DocumentTeX.to_pdf()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.documents.DocumentTeX.to_flat"><code class="docutils literal notranslate"><span class="pre">DocumentTeX.to_flat()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.documents.DocumentTeX.lint_paragraphs"><code class="docutils literal notranslate"><span class="pre">DocumentTeX.lint_paragraphs()</span></code></a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.documents.Essay"><code class="docutils literal notranslate"><span class="pre">Essay</span></code></a></li>

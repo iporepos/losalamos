@@ -942,6 +942,317 @@
                 <span class="n">f_out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">flat_content</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">flat_content</span></div>
+
+
+<div class="viewcode-block" id="DocumentTeX.lint_paragraphs">
+<a class="viewcode-back" href="../../generated/losalamos.documents.html#losalamos.documents.DocumentTeX.lint_paragraphs">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">lint_paragraphs</span><span class="p">(</span><span class="n">input_tex</span><span class="p">,</span> <span class="n">output_tex</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Join wrapped prose paragraphs in a LaTeX file into single lines.</span>
+
+<span class="sd">        Reads ``input_tex``, joins each wrapped prose paragraph in the document</span>
+<span class="sd">        body into a single source line, and writes the result to</span>
+<span class="sd">        ``output_tex``.</span>
+
+<span class="sd">        This function performs no backup of its own. When ``output_tex`` is</span>
+<span class="sd">        ``None`` (or equal to ``input_tex``), the input file is overwritten in</span>
+<span class="sd">        place; callers that want a safety copy should take one beforehand (see</span>
+<span class="sd">        :func:`backup_file`).</span>
+
+<span class="sd">        :param input_tex: Path to the source ``.tex`` file to read.</span>
+<span class="sd">        :type input_tex: str or pathlib.Path</span>
+<span class="sd">        :param output_tex: Path to write the linted result to. If ``None``</span>
+<span class="sd">            (the default), ``input_tex`` is overwritten in place.</span>
+<span class="sd">        :type output_tex: str or pathlib.Path or None</span>
+
+<span class="sd">        :returns: The path the linted ``.tex`` was written to (equal to</span>
+<span class="sd">            ``input_tex`` if ``output_tex`` was ``None``).</span>
+<span class="sd">        :rtype: pathlib.Path</span>
+
+<span class="sd">        :raises FileNotFoundError: If ``input_tex`` does not exist.</span>
+<span class="sd">        :raises UnicodeDecodeError: If ``input_tex`` is not valid UTF-8.</span>
+
+<span class="sd">        Algorithm</span>
+<span class="sd">        ---------</span>
+<span class="sd">        1. Everything up to and including ``\\begin{document}``, and everything</span>
+<span class="sd">           from ``\\end{document}`` onward, is passed through unchanged. (The</span>
+<span class="sd">           preamble&#39;s ``\\newcommand`` shorthand definitions are one-per-line by</span>
+<span class="sd">           convention and must stay that way.)</span>
+<span class="sd">        2. Within the document body, consecutive lines are grouped into</span>
+<span class="sd">           &quot;paragraphs&quot;: maximal runs of lines that are not blank, not</span>
+<span class="sd">           ``\\begin{...}``/``\\end{...}``, not comment-only, and not inside a</span>
+<span class="sd">           non-reflowable environment. Each run is joined into a single line:</span>
+<span class="sd">           every line is stripped of leading/trailing whitespace, joined with a</span>
+<span class="sd">           single space, and any remaining runs of spaces are collapsed to one.</span>
+<span class="sd">        3. The following end the current paragraph and are emitted unchanged on</span>
+<span class="sd">           their own line, without being joined to anything: blank lines;</span>
+<span class="sd">           ``\\begin{...}``/``\\end{...}`` lines (which also push/pop an</span>
+<span class="sd">           environment stack used to track non-reflowable regions, including</span>
+<span class="sd">           nested ones, by scanning the *whole* line -- e.g. a ``pmatrix``</span>
+<span class="sd">           opened and closed on the same line inside an ``equation``/``align``</span>
+<span class="sd">           nets to zero rather than leaking a permanently elevated</span>
+<span class="sd">           non-reflowable count); a comment-only line that appears *between*</span>
+<span class="sd">           paragraphs; and ``\\[``/``\\]`` display-math delimiters on their own</span>
+<span class="sd">           line (tracked like a pseudo-environment), or inline ``\\[ ... \\]``</span>
+<span class="sd">           on one line.</span>
+<span class="sd">        4. A ``%`` comment that appears *inside* a paragraph -- either a</span>
+<span class="sd">           comment-only line with real content already buffered, or a trailing</span>
+<span class="sd">           ``% ...`` after real content -- does **not** split the paragraph.</span>
+<span class="sd">           The real content (if any) is kept in the paragraph, and the comment</span>
+<span class="sd">           text is deferred and appended to the end of the paragraph&#39;s joined</span>
+<span class="sd">           line once it is flushed. This avoids an editorial comment in the</span>
+<span class="sd">           middle of a sentence cutting it into two &quot;paragraphs&quot;, the second</span>
+<span class="sd">           starting mid-sentence (lower-case).</span>
+<span class="sd">        5. ``\\item`` always starts a new paragraph (flush before it), but its</span>
+<span class="sd">           own wrapped continuation lines still join onto it -- so consecutive</span>
+<span class="sd">           list items each end up on their own line.</span>
+<span class="sd">        6. The following commands always stand alone on their own output line,</span>
+<span class="sd">           never merged with the paragraph before or after them, even without a</span>
+<span class="sd">           blank line in the source: ``\\tcblower``, ``\\newpage``,</span>
+<span class="sd">           ``\\clearpage``, ``\\cleardoublepage``, ``\\pagebreak``, ``\\newline``,</span>
+<span class="sd">           ``\\figplaceholder``, ``\\boxfigplaceholder``,</span>
+<span class="sd">           ``\\boxbiofigplaceholder``, and ``\\chapter``/``\\section``/</span>
+<span class="sd">           ``\\subsection``/``\\subsubsection`` (starred or not).</span>
+<span class="sd">        7. Non-reflowable environments (passed through verbatim, line-by-line,</span>
+<span class="sd">           including any blank lines inside them): ``equation``, ``align``,</span>
+<span class="sd">           ``gather``, ``multline``, ``eqnarray``, ``alignat`` and their starred</span>
+<span class="sd">           forms; ``array``, ``cases``, ``matrix``/``pmatrix``/``bmatrix``/</span>
+<span class="sd">           ``vmatrix``/``Vmatrix``; ``tabular``, ``tabular*``, ``tabularx``,</span>
+<span class="sd">           ``longtable``; ``verbatim``, ``lstlisting``, ``minted``, ``Verbatim``;</span>
+<span class="sd">           and ``\\[ ... \\]`` display math.</span>
+
+<span class="sd">        .. note::</span>
+<span class="sd">           Only line breaks and runs of whitespace within a joined paragraph</span>
+<span class="sd">           are changed; no other characters are altered, so the rendered PDF</span>
+<span class="sd">           is unaffected.</span>
+
+<span class="sd">        Example</span>
+<span class="sd">        -------</span>
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            from pathlib import Path</span>
+<span class="sd">            lint_paragraphs(Path(&quot;chapter07_T12.tex&quot;))  # overwrite in place</span>
+<span class="sd">            lint_paragraphs(&quot;chapter07_T12.tex&quot;, &quot;chapter07_T12_linted.tex&quot;)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+
+        <span class="n">NO_REFLOW_ENVS</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;equation&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;equation*&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;align&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;align*&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;alignat&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;alignat*&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;gather&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;gather*&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;multline&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;multline*&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;eqnarray&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;eqnarray*&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;array&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;matrix&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;pmatrix&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;bmatrix&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;vmatrix&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Vmatrix&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;cases&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;tabular&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;tabular*&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;tabularx&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;longtable&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;verbatim&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;verbatim*&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;lstlisting&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;minted&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Verbatim&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;$$displaymath$$&quot;</span><span class="p">,</span>  <span class="c1"># pseudo-name for \[ ... \]</span>
+        <span class="p">}</span>
+
+        <span class="n">BEGIN_RE</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;^\s*</span><span class="se">\\</span><span class="s2">begin\{([^}]+)\}&quot;</span><span class="p">)</span>
+        <span class="n">END_RE</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;^\s*</span><span class="se">\\</span><span class="s2">end\{([^}]+)\}&quot;</span><span class="p">)</span>
+        <span class="n">TOKEN_RE</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">(begin|end)\{([^}]+)\}&quot;</span><span class="p">)</span>
+        <span class="n">DISPLAY_OPEN_RE</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;^\s*</span><span class="se">\\</span><span class="s2">\[\s*$&quot;</span><span class="p">)</span>
+        <span class="n">DISPLAY_CLOSE_RE</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;^\s*</span><span class="se">\\</span><span class="s2">\]\s*$&quot;</span><span class="p">)</span>
+        <span class="n">DISPLAY_INLINE_RE</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;^\s*</span><span class="se">\\</span><span class="s2">\[.*</span><span class="se">\\</span><span class="s2">\]\s*$&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Commands that always stand alone on their own output line -- never</span>
+        <span class="c1"># merged with the paragraph before or after them, even without a blank</span>
+        <span class="c1"># line in the source. These are one-shot structural commands</span>
+        <span class="c1"># (placeholders, page breaks, pure headings) rather than prose.</span>
+        <span class="n">STANDALONE_RE</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
+            <span class="sa">r</span><span class="s2">&quot;^\s*</span><span class="se">\\</span><span class="s2">(tcblower|newpage|clearpage|cleardoublepage|pagebreak|newline&quot;</span>
+            <span class="sa">r</span><span class="s2">&quot;|figplaceholder|boxfigplaceholder|boxbiofigplaceholder&quot;</span>
+            <span class="sa">r</span><span class="s2">&quot;|chapter\*?|section\*?|subsection\*?|subsubsection\*?)\b&quot;</span>
+        <span class="p">)</span>
+
+        <span class="c1"># \item always starts a new paragraph (flush before it), but its own</span>
+        <span class="c1"># wrapped continuation lines still join onto it.</span>
+        <span class="n">ITEM_RE</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;^\s*</span><span class="se">\\</span><span class="s2">item\b&quot;</span><span class="p">)</span>
+
+        <span class="k">def</span><span class="w"> </span><span class="nf">find_comment_pos</span><span class="p">(</span><span class="n">line</span><span class="p">):</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;Return the index of the first un-escaped &#39;%&#39; in line, or -1.&quot;&quot;&quot;</span>
+            <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+                <span class="n">idx</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;%&quot;</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">idx</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="o">-</span><span class="mi">1</span>
+                <span class="n">j</span> <span class="o">=</span> <span class="n">idx</span> <span class="o">-</span> <span class="mi">1</span>
+                <span class="n">nbs</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="k">while</span> <span class="n">j</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">line</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;</span><span class="se">\\</span><span class="s2">&quot;</span><span class="p">:</span>
+                    <span class="n">nbs</span> <span class="o">+=</span> <span class="mi">1</span>
+                    <span class="n">j</span> <span class="o">-=</span> <span class="mi">1</span>
+                <span class="k">if</span> <span class="n">nbs</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="n">idx</span>
+                <span class="n">i</span> <span class="o">=</span> <span class="n">idx</span> <span class="o">+</span> <span class="mi">1</span>
+
+        <span class="k">def</span><span class="w"> </span><span class="nf">process_tokens</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="n">env_stack</span><span class="p">,</span> <span class="n">no_reflow</span><span class="p">):</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Scan the (non-comment part of the) line for every</span>
+<span class="sd">            \\begin{name}/\\end{name} token, in order, and update env_stack /</span>
+<span class="sd">            no_reflow for each. A \\begin{X}...\\end{X} pair on the same line</span>
+<span class="sd">            (e.g. a pmatrix inside an equation) therefore nets to zero, instead</span>
+<span class="sd">            of leaking a permanently elevated no_reflow count. Returns the</span>
+<span class="sd">            updated no_reflow.</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="n">pos</span> <span class="o">=</span> <span class="n">find_comment_pos</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+            <span class="n">scan_part</span> <span class="o">=</span> <span class="n">line</span> <span class="k">if</span> <span class="n">pos</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span> <span class="k">else</span> <span class="n">line</span><span class="p">[:</span><span class="n">pos</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">TOKEN_RE</span><span class="o">.</span><span class="n">finditer</span><span class="p">(</span><span class="n">scan_part</span><span class="p">):</span>
+                <span class="n">kind</span><span class="p">,</span> <span class="n">env</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">kind</span> <span class="o">==</span> <span class="s2">&quot;begin&quot;</span><span class="p">:</span>
+                    <span class="n">env_stack</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">env</span> <span class="ow">in</span> <span class="n">NO_REFLOW_ENVS</span><span class="p">:</span>
+                        <span class="n">no_reflow</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">env_stack</span> <span class="ow">and</span> <span class="n">env_stack</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">env</span><span class="p">:</span>
+                        <span class="n">env_stack</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+                    <span class="k">if</span> <span class="n">env</span> <span class="ow">in</span> <span class="n">NO_REFLOW_ENVS</span><span class="p">:</span>
+                        <span class="n">no_reflow</span> <span class="o">-=</span> <span class="mi">1</span>
+            <span class="k">return</span> <span class="n">no_reflow</span>
+
+        <span class="k">def</span><span class="w"> </span><span class="nf">join_paragraphs</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;Join wrapped prose lines into one line per paragraph. Returns new text.&quot;&quot;&quot;</span>
+            <span class="n">lines</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">buf</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">env_stack</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">no_reflow</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">seen_begin_document</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="n">seen_end_document</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="n">pending_comments</span> <span class="o">=</span> <span class="p">[]</span>
+
+            <span class="k">def</span><span class="w"> </span><span class="nf">flush</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">buf</span> <span class="ow">or</span> <span class="n">pending_comments</span><span class="p">:</span>
+                    <span class="n">joined</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">buf</span><span class="p">)</span>
+                    <span class="n">joined</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot; {2,}&quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="n">joined</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                    <span class="k">if</span> <span class="n">pending_comments</span><span class="p">:</span>
+                        <span class="n">extra</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">pending_comments</span><span class="p">)</span>
+                        <span class="n">joined</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">joined</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">extra</span><span class="si">}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                    <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">joined</span><span class="p">)</span>
+                    <span class="n">buf</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+                    <span class="n">pending_comments</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+
+            <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">seen_begin_document</span> <span class="ow">or</span> <span class="n">seen_end_document</span><span class="p">:</span>
+                    <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+                    <span class="n">m</span> <span class="o">=</span> <span class="n">BEGIN_RE</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">m</span> <span class="ow">and</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;document&quot;</span><span class="p">:</span>
+                        <span class="n">seen_begin_document</span> <span class="o">=</span> <span class="kc">True</span>
+                    <span class="k">continue</span>
+
+                <span class="n">stripped</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                <span class="n">in_noreflow</span> <span class="o">=</span> <span class="n">no_reflow</span> <span class="o">&gt;</span> <span class="mi">0</span>
+
+                <span class="n">m_begin</span> <span class="o">=</span> <span class="n">BEGIN_RE</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+                <span class="n">m_end</span> <span class="o">=</span> <span class="n">END_RE</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="n">in_noreflow</span><span class="p">:</span>
+                    <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">rstrip</span><span class="p">())</span>
+                    <span class="n">no_reflow</span> <span class="o">=</span> <span class="n">process_tokens</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="n">env_stack</span><span class="p">,</span> <span class="n">no_reflow</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">DISPLAY_CLOSE_RE</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">line</span><span class="p">):</span>
+                        <span class="k">if</span> <span class="n">env_stack</span> <span class="ow">and</span> <span class="n">env_stack</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;$$displaymath$$&quot;</span><span class="p">:</span>
+                            <span class="n">env_stack</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+                            <span class="n">no_reflow</span> <span class="o">-=</span> <span class="mi">1</span>
+                    <span class="k">continue</span>
+
+                <span class="c1"># not currently inside a non-reflowable environment</span>
+                <span class="k">if</span> <span class="n">stripped</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+                    <span class="n">flush</span><span class="p">()</span>
+                    <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+                    <span class="k">continue</span>
+
+                <span class="k">if</span> <span class="n">m_end</span><span class="p">:</span>
+                    <span class="n">env</span> <span class="o">=</span> <span class="n">m_end</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+                    <span class="n">flush</span><span class="p">()</span>
+                    <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">rstrip</span><span class="p">())</span>
+                    <span class="n">no_reflow</span> <span class="o">=</span> <span class="n">process_tokens</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="n">env_stack</span><span class="p">,</span> <span class="n">no_reflow</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">env</span> <span class="o">==</span> <span class="s2">&quot;document&quot;</span><span class="p">:</span>
+                        <span class="n">seen_end_document</span> <span class="o">=</span> <span class="kc">True</span>
+                    <span class="k">continue</span>
+
+                <span class="k">if</span> <span class="n">m_begin</span><span class="p">:</span>
+                    <span class="n">flush</span><span class="p">()</span>
+                    <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">rstrip</span><span class="p">())</span>
+                    <span class="n">no_reflow</span> <span class="o">=</span> <span class="n">process_tokens</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="n">env_stack</span><span class="p">,</span> <span class="n">no_reflow</span><span class="p">)</span>
+                    <span class="k">continue</span>
+
+                <span class="k">if</span> <span class="n">DISPLAY_INLINE_RE</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">line</span><span class="p">):</span>
+                    <span class="n">flush</span><span class="p">()</span>
+                    <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">rstrip</span><span class="p">())</span>
+                    <span class="k">continue</span>
+
+                <span class="k">if</span> <span class="n">DISPLAY_OPEN_RE</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">line</span><span class="p">):</span>
+                    <span class="n">flush</span><span class="p">()</span>
+                    <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">rstrip</span><span class="p">())</span>
+                    <span class="n">env_stack</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;$$displaymath$$&quot;</span><span class="p">)</span>
+                    <span class="n">no_reflow</span> <span class="o">+=</span> <span class="mi">1</span>
+                    <span class="k">continue</span>
+
+                <span class="k">if</span> <span class="n">STANDALONE_RE</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">line</span><span class="p">):</span>
+                    <span class="n">flush</span><span class="p">()</span>
+                    <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">rstrip</span><span class="p">())</span>
+                    <span class="k">continue</span>
+
+                <span class="k">if</span> <span class="n">ITEM_RE</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">line</span><span class="p">):</span>
+                    <span class="n">flush</span><span class="p">()</span>
+                    <span class="c1"># fall through: this line (and its wrapped continuation</span>
+                    <span class="c1"># lines) form their own paragraph</span>
+
+                <span class="n">comment_pos</span> <span class="o">=</span> <span class="n">find_comment_pos</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">comment_pos</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                    <span class="n">before</span> <span class="o">=</span> <span class="n">line</span><span class="p">[:</span><span class="n">comment_pos</span><span class="p">]</span>
+                    <span class="k">if</span> <span class="n">before</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">buf</span><span class="p">:</span>
+                            <span class="c1"># comment-only line in the middle of a paragraph:</span>
+                            <span class="c1"># defer it to the end of this paragraph&#39;s joined</span>
+                            <span class="c1"># line rather than splitting the paragraph here</span>
+                            <span class="n">pending_comments</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="c1"># comment-only line between paragraphs: stands alone</span>
+                            <span class="n">flush</span><span class="p">()</span>
+                            <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">rstrip</span><span class="p">())</span>
+                        <span class="k">continue</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="c1"># real content with a trailing comment: keep the</span>
+                        <span class="c1"># content in the paragraph, defer the comment to the</span>
+                        <span class="c1"># end of the joined line</span>
+                        <span class="n">buf</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">before</span><span class="p">)</span>
+                        <span class="n">pending_comments</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="n">comment_pos</span><span class="p">:]</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+                        <span class="k">continue</span>
+
+                <span class="n">buf</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+
+            <span class="n">flush</span><span class="p">()</span>
+            <span class="k">return</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+
+        <span class="n">input_tex</span> <span class="o">=</span> <span class="n">_Path</span><span class="p">(</span><span class="n">input_tex</span><span class="p">)</span>
+        <span class="n">output_tex</span> <span class="o">=</span> <span class="n">_Path</span><span class="p">(</span><span class="n">output_tex</span><span class="p">)</span> <span class="k">if</span> <span class="n">output_tex</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">input_tex</span>
+
+        <span class="n">text</span> <span class="o">=</span> <span class="n">input_tex</span><span class="o">.</span><span class="n">read_text</span><span class="p">(</span><span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
+        <span class="n">new_text</span> <span class="o">=</span> <span class="n">join_paragraphs</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+
+        <span class="n">output_tex</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="n">new_text</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">output_tex</span></div>
 </div>
 
 
