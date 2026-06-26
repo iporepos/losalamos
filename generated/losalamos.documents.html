@@ -726,16 +726,14 @@ Common values: <code class="docutils literal notranslate"><span class="pre">&quo
 <span class="sig-name descname"><span class="pre">to_flat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_output</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compile_first</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">command</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'pdf'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/documents.html#DocumentTeX.to_flat"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.documents.DocumentTeX.to_flat" title="Link to this definition">#</a></dt>
 <dd><p>Flatten the TeX document by recursively resolving <code class="docutils literal notranslate"><span class="pre">\input</span></code> /
 <code class="docutils literal notranslate"><span class="pre">\include</span></code> directives and embedding the compiled bibliography.</p>
-<p>The flattened output is a single self-contained <code class="docutils literal notranslate"><span class="pre">.tex</span></code> file
-suitable for journal submission (e.g. arXiv, Elsevier Editorial
-Manager). Only executes when <code class="xref py py-attr docutils literal notranslate"><span class="pre">is_main</span></code> is <code class="docutils literal notranslate"><span class="pre">True</span></code>; partial
-files return <code class="docutils literal notranslate"><span class="pre">None</span></code> silently.</p>
+<p>Delegates the flattening work to <a class="reference internal" href="#losalamos.documents.DocumentTeX.make_flat" title="losalamos.documents.DocumentTeX.make_flat"><code class="xref py py-meth docutils literal notranslate"><span class="pre">make_flat()</span></code></a>. Only executes
+when <code class="xref py py-attr docutils literal notranslate"><span class="pre">is_main</span></code> is <code class="docutils literal notranslate"><span class="pre">True</span></code>; partial files return <code class="docutils literal notranslate"><span class="pre">None</span></code>
+silently.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>file_output</strong> (<em>str</em><em> or </em><em>pathlib.Path</em><em> or </em><em>None</em>) – Desired output path for the flattened <code class="docutils literal notranslate"><span class="pre">.tex</span></code>
-file. When <code class="docutils literal notranslate"><span class="pre">None</span></code>, the result is returned as a string but not
-written to disk.</p></li>
+file. When <code class="docutils literal notranslate"><span class="pre">None</span></code>, the source file is overwritten in-place.</p></li>
 <li><p><strong>compile_first</strong> (<em>bool</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code> (default), compiles the document
 before flattening so that the <code class="docutils literal notranslate"><span class="pre">.bbl</span></code> file reflects the current
 bibliography state. The intermediate PDF and <code class="docutils literal notranslate"><span class="pre">.bbl</span></code> are removed
@@ -750,6 +748,138 @@ if <code class="xref py py-attr docutils literal notranslate"><span class="pre">
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str or None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.documents.DocumentTeX.export">
+<span class="sig-name descname"><span class="pre">export</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">folder_root</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flatten</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/documents.html#DocumentTeX.export"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.documents.DocumentTeX.export" title="Link to this definition">#</a></dt>
+<dd><p>Export the TeX document to a self-contained folder.</p>
+<p>Creates <code class="docutils literal notranslate"><span class="pre">folder_root/name/</span></code> and writes the document into it
+according to the chosen mode:</p>
+<ul class="simple">
+<li><p><strong>Plain</strong> (<code class="docutils literal notranslate"><span class="pre">flatten=False</span></code>, <code class="docutils literal notranslate"><span class="pre">split=False</span></code>): the source file is
+copied as-is, retaining its original filename.</p></li>
+<li><p><strong>Flatten</strong> (<code class="docutils literal notranslate"><span class="pre">flatten=True</span></code>, <code class="docutils literal notranslate"><span class="pre">split=False</span></code>): <code class="docutils literal notranslate"><span class="pre">\input</span></code> /
+<code class="docutils literal notranslate"><span class="pre">\include</span></code> directives are resolved recursively and the result is
+written as a single file named <code class="docutils literal notranslate"><span class="pre">&lt;name&gt;.tex</span></code>.</p></li>
+<li><p><strong>Split</strong> (<code class="docutils literal notranslate"><span class="pre">split=True</span></code>): implies flattening. The document is
+first flattened into a temporary file, then split into
+<code class="docutils literal notranslate"><span class="pre">preamble.tex</span></code> and <code class="docutils literal notranslate"><span class="pre">main.tex</span></code>. The intermediate flat file is
+removed after splitting.</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>folder_root</strong> (<em>str</em><em> or </em><em>pathlib.Path</em>) – Parent directory under which the export folder
+is created.</p></li>
+<li><p><strong>name</strong> (<em>str</em>) – Name of the export folder and, in flatten mode, stem
+of the output <code class="docutils literal notranslate"><span class="pre">.tex</span></code> file.</p></li>
+<li><p><strong>flatten</strong> (<em>bool</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, resolve all <code class="docutils literal notranslate"><span class="pre">\input</span></code> / <code class="docutils literal notranslate"><span class="pre">\include</span></code>
+directives into a single file before exporting. Ignored when
+<code class="docutils literal notranslate"><span class="pre">split=True</span></code> (flattening is always performed in that case).</p></li>
+<li><p><strong>split</strong> (<em>bool</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, flatten the document and split the result
+into <code class="docutils literal notranslate"><span class="pre">preamble.tex</span></code> and <code class="docutils literal notranslate"><span class="pre">main.tex</span></code>. Takes precedence over
+<code class="docutils literal notranslate"><span class="pre">flatten</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Path to the created export folder.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pathlib.Path</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>RuntimeError</strong> – If the document is not a main file (i.e.
+<code class="docutils literal notranslate"><span class="pre">\documentclass</span></code> is absent). The <code class="docutils literal notranslate"><span class="pre">is_main</span></code> attribute is
+re-evaluated from <code class="docutils literal notranslate"><span class="pre">file_data</span></code> before the check so stale state
+does not produce a false negative.</p></li>
+<li><p><strong>FileExistsError</strong> – If <code class="docutils literal notranslate"><span class="pre">folder_root/name</span></code> already exists.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.documents.DocumentTeX.split_preamble">
+<span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">split_preamble</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_tex</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">preamble_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'preamble'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">main_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'main'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_folder</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/documents.html#DocumentTeX.split_preamble"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.documents.DocumentTeX.split_preamble" title="Link to this definition">#</a></dt>
+<dd><p>Split a main TeX file into a preamble fragment and a stub main file.</p>
+<p>The preamble fragment receives everything between the
+<code class="docutils literal notranslate"><span class="pre">\documentclass</span></code> line and <code class="docutils literal notranslate"><span class="pre">\begin{document}</span></code> (both exclusive).
+The stub main file retains <code class="docutils literal notranslate"><span class="pre">\documentclass</span></code>, replaces the preamble
+block with a single <code class="docutils literal notranslate"><span class="pre">\input{&lt;preamble_name&gt;}</span></code> line, and keeps
+everything from <code class="docutils literal notranslate"><span class="pre">\begin{document}</span></code> onward intact.</p>
+<p>Resulting structure:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">%</span> <span class="o">&lt;</span><span class="n">main_name</span><span class="o">&gt;.</span><span class="n">tex</span>
+\<span class="n">documentclass</span><span class="p">{</span><span class="o">...</span><span class="p">}</span>
+
+\<span class="nb">input</span><span class="p">{</span><span class="n">preamble</span><span class="p">}</span>
+
+\<span class="n">begin</span><span class="p">{</span><span class="n">document</span><span class="p">}</span>
+<span class="o">...</span>
+\<span class="n">end</span><span class="p">{</span><span class="n">document</span><span class="p">}</span>
+
+<span class="o">%</span> <span class="o">&lt;</span><span class="n">preamble_name</span><span class="o">&gt;.</span><span class="n">tex</span>
+\<span class="n">usepackage</span><span class="p">{</span><span class="o">...</span><span class="p">}</span>
+\<span class="n">newcommand</span><span class="p">{</span><span class="o">...</span><span class="p">}</span>
+<span class="o">...</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input_tex</strong> (<em>str</em><em> or </em><em>pathlib.Path</em>) – Path to the root <code class="docutils literal notranslate"><span class="pre">.tex</span></code> file to split. Must be a
+main document containing <code class="docutils literal notranslate"><span class="pre">\documentclass</span></code> and
+<code class="docutils literal notranslate"><span class="pre">\begin{document}</span></code>.</p></li>
+<li><p><strong>preamble_name</strong> (<em>str</em>) – Stem for the preamble output file, without
+extension. Defaults to <code class="docutils literal notranslate"><span class="pre">&quot;preamble&quot;</span></code>.</p></li>
+<li><p><strong>main_name</strong> (<em>str</em>) – Stem for the stub main output file, without
+extension. Defaults to <code class="docutils literal notranslate"><span class="pre">&quot;main&quot;</span></code>.</p></li>
+<li><p><strong>output_folder</strong> (<em>str</em><em> or </em><em>pathlib.Path</em><em> or </em><em>None</em>) – Directory where both output files are written.
+When <code class="docutils literal notranslate"><span class="pre">None</span></code> (default), the parent directory of <code class="docutils literal notranslate"><span class="pre">input_tex</span></code>
+is used.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Tuple of <code class="docutils literal notranslate"><span class="pre">(preamble_path,</span> <span class="pre">main_path)</span></code> as resolved
+<code class="xref py py-class docutils literal notranslate"><span class="pre">pathlib.Path</span></code> objects.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple[pathlib.Path, pathlib.Path]</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If <code class="docutils literal notranslate"><span class="pre">input_tex</span></code> does not contain a
+<code class="docutils literal notranslate"><span class="pre">\documentclass</span></code> declaration (i.e. is not a main TeX file),
+if <code class="docutils literal notranslate"><span class="pre">\begin{document}</span></code> is not found, or if the input file stem
+matches an output stem when both resolve to the same directory.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.documents.DocumentTeX.make_flat">
+<span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">make_flat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_tex</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_tex</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/documents.html#DocumentTeX.make_flat"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.documents.DocumentTeX.make_flat" title="Link to this definition">#</a></dt>
+<dd><p>Flatten a TeX document by recursively resolving <code class="docutils literal notranslate"><span class="pre">\input</span></code> /
+<code class="docutils literal notranslate"><span class="pre">\include</span></code> directives and embedding the compiled bibliography.</p>
+<p>This is a pure file-system operation with no dependency on any
+<a class="reference internal" href="#losalamos.documents.DocumentTeX" title="losalamos.documents.DocumentTeX"><code class="xref py py-class docutils literal notranslate"><span class="pre">DocumentTeX</span></code></a> instance. It can be used independently whenever
+a self-contained <code class="docutils literal notranslate"><span class="pre">.tex</span></code> file is needed (e.g. arXiv submission).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input_tex</strong> (<em>str</em><em> or </em><em>pathlib.Path</em>) – Path to the root <code class="docutils literal notranslate"><span class="pre">.tex</span></code> file to flatten.</p></li>
+<li><p><strong>output_tex</strong> (<em>str</em><em> or </em><em>pathlib.Path</em><em> or </em><em>None</em>) – Destination path for the flattened file. When
+<code class="docutils literal notranslate"><span class="pre">None</span></code> (default), the result is written back over the source
+file in-place.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The fully flattened LaTeX source as a string.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
 </dd>
 </dl>
 </dd></dl>
@@ -854,6 +984,261 @@ is unaffected.</p>
 </section>
 </dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.documents.DocumentTeX.lint_decorations_remove">
+<span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">lint_decorations_remove</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_tex</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_tex</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">document_only</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">except_chars</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/documents.html#DocumentTeX.lint_decorations_remove"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.documents.DocumentTeX.lint_decorations_remove" title="Link to this definition">#</a></dt>
+<dd><p>Remove decoration comments/rulers (no letter characters after <code class="docutils literal notranslate"><span class="pre">%</span></code>) from a
+LaTeX file.</p>
+<p>Reads <code class="docutils literal notranslate"><span class="pre">input_tex</span></code>, strips every decorative comment (comment-only lines
+and trailing comment suffixes on prose lines whose comment text contains
+no ASCII letter), and writes the result to <code class="docutils literal notranslate"><span class="pre">output_tex</span></code>.</p>
+<p>This function performs no backup of its own. When <code class="docutils literal notranslate"><span class="pre">output_tex</span></code> is
+<code class="docutils literal notranslate"><span class="pre">None</span></code> (or equal to <code class="docutils literal notranslate"><span class="pre">input_tex</span></code>), the input file is overwritten in
+place; callers that want a safety copy should take one beforehand (see
+<code class="xref py py-func docutils literal notranslate"><span class="pre">backup_file()</span></code>).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input_tex</strong> (<em>str</em><em> or </em><em>pathlib.Path</em>) – Path to the source <code class="docutils literal notranslate"><span class="pre">.tex</span></code> file to read.</p></li>
+<li><p><strong>output_tex</strong> (<em>str</em><em> or </em><em>pathlib.Path</em><em> or </em><em>None</em>) – Path to write the purged result to. If <code class="docutils literal notranslate"><span class="pre">None</span></code>
+(the default), <code class="docutils literal notranslate"><span class="pre">input_tex</span></code> is overwritten in place.</p></li>
+<li><p><strong>document_only</strong> (<em>bool</em>) – If <code class="docutils literal notranslate"><span class="pre">False</span></code> (the default), the purge runs over
+the entire file – preamble, body, and postamble alike.  If <code class="docutils literal notranslate"><span class="pre">True</span></code>,
+only the lines between <code class="docutils literal notranslate"><span class="pre">\begin{document}</span></code> and <code class="docutils literal notranslate"><span class="pre">\end{document}</span></code>
+are processed; the preamble and postamble are passed through unchanged.</p></li>
+<li><p><strong>except_chars</strong> (<em>list</em><em>[</em><em>str</em><em>] or </em><em>None</em>) – Optional list of single characters. A decoration
+comment (one whose text after <code class="docutils literal notranslate"><span class="pre">%</span></code> contains no ASCII letter) is
+nonetheless <strong>kept</strong> if its text contains at least one character from
+this list. Use this to preserve specific ruler styles, e.g.
+<code class="docutils literal notranslate"><span class="pre">except_chars=['#']</span></code> keeps <code class="docutils literal notranslate"><span class="pre">%</span> <span class="pre">####</span></code> lines.  <code class="docutils literal notranslate"><span class="pre">None</span></code> (the
+default) means no exceptions – all decoration comments are removed.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The path the purged <code class="docutils literal notranslate"><span class="pre">.tex</span></code> was written to (equal to
+<code class="docutils literal notranslate"><span class="pre">input_tex</span></code> if <code class="docutils literal notranslate"><span class="pre">output_tex</span></code> was <code class="docutils literal notranslate"><span class="pre">None</span></code>).</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pathlib.Path</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>FileNotFoundError</strong> – If <code class="docutils literal notranslate"><span class="pre">input_tex</span></code> does not exist.</p></li>
+<li><p><strong>UnicodeDecodeError</strong> – If <code class="docutils literal notranslate"><span class="pre">input_tex</span></code> is not valid UTF-8.</p></li>
+</ul>
+</dd>
+</dl>
+<section id="id1">
+<h2>Algorithm<a class="headerlink" href="#id1" title="Link to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p>When <code class="docutils literal notranslate"><span class="pre">document_only=True</span></code>, everything up to and including
+<code class="docutils literal notranslate"><span class="pre">\begin{document}</span></code>, and everything from <code class="docutils literal notranslate"><span class="pre">\end{document}</span></code> onward,
+is passed through unchanged.  When <code class="docutils literal notranslate"><span class="pre">document_only=False</span></code> (default),
+all lines – including the preamble – are processed uniformly.</p></li>
+<li><p>Within the processed region each line is classified as one of:</p>
+<ol class="loweralpha simple">
+<li><p><strong>Blank</strong> – passed through unchanged.</p></li>
+<li><p><strong>Comment-only decoration</strong> – the entire line’s non-whitespace
+content is a <code class="docutils literal notranslate"><span class="pre">%</span></code> whose following text (stripped) contains no
+ASCII letter and no <code class="docutils literal notranslate"><span class="pre">except_chars</span></code> character.  The line is
+<em>dropped</em>; if the previous output line was blank, that blank is
+also removed (blank-line collapse).</p></li>
+<li><p><strong>Comment-only kept</strong> – comment-only but preserved because the
+text contains a letter or an <code class="docutils literal notranslate"><span class="pre">except_chars</span></code> character.  Passed
+through unchanged.</p></li>
+<li><p><strong>Prose with trailing decoration comment</strong> – the <code class="docutils literal notranslate"><span class="pre">%</span></code> suffix
+qualifies as decoration.  The suffix (and any whitespace before
+it) is stripped; the prose remainder is kept.</p></li>
+<li><p><strong>Prose with trailing real comment</strong> – kept verbatim.</p></li>
+<li><p><strong>Prose without any comment</strong> – kept verbatim.</p></li>
+</ol>
+</li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">%</span></code> position is found via <code class="docutils literal notranslate"><span class="pre">_find_comment_pos</span></code>, which
+correctly handles escaped percent signs (<code class="docutils literal notranslate"><span class="pre">\%</span></code>).</p></li>
+<li><p>Non-reflowable environments (<code class="docutils literal notranslate"><span class="pre">equation</span></code>, <code class="docutils literal notranslate"><span class="pre">align</span></code>, <code class="docutils literal notranslate"><span class="pre">tabular</span></code>,
+<code class="docutils literal notranslate"><span class="pre">verbatim</span></code>, etc.) receive no special treatment here: comment lines
+inside math or table environments are still subject to the same rule.</p></li>
+</ol>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Only comment text is removed; no other characters are altered, so
+the rendered PDF is unaffected.</p>
+</div>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.documents.DocumentTeX.lint_decorations_add">
+<span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">lint_decorations_add</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_tex</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_tex</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ruler_chars</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ruler_len</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">60</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/documents.html#DocumentTeX.lint_decorations_add"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.documents.DocumentTeX.lint_decorations_add" title="Link to this definition">#</a></dt>
+<dd><p>Inject decoration rulers above section headings in a LaTeX file.</p>
+<p>Reads <code class="docutils literal notranslate"><span class="pre">input_tex</span></code>, inserts a comment ruler (<code class="docutils literal notranslate"><span class="pre">%</span> <span class="pre">``</span> <span class="pre">+</span> <span class="pre">N</span> <span class="pre">repetitions</span> <span class="pre">of</span>
+<span class="pre">a</span> <span class="pre">level-specific</span> <span class="pre">character)</span> <span class="pre">on</span> <span class="pre">the</span> <span class="pre">line</span> <span class="pre">immediately</span> <span class="pre">before</span> <span class="pre">every</span>
+<span class="pre">``\chapter</span></code>, <code class="docutils literal notranslate"><span class="pre">\section</span></code>, <code class="docutils literal notranslate"><span class="pre">\subsection</span></code>, and <code class="docutils literal notranslate"><span class="pre">\subsubsection</span></code>
+command found inside the document body, then writes the result to
+<code class="docutils literal notranslate"><span class="pre">output_tex</span></code>.</p>
+<p>The preamble (everything up to and including <code class="docutils literal notranslate"><span class="pre">\begin{document}</span></code>) and
+the postamble (<code class="docutils literal notranslate"><span class="pre">\end{document}</span></code> and everything after) are passed
+through unchanged.</p>
+<p>If a ruler with the correct character already exists on the line
+immediately before a heading, it is <strong>replaced</strong> rather than duplicated,
+making the function safe to call multiple times on the same file
+(idempotent with respect to ruler content; ruler length is always
+normalised to the current <code class="docutils literal notranslate"><span class="pre">ruler_len</span></code>).</p>
+<p>This function performs no backup of its own. When <code class="docutils literal notranslate"><span class="pre">output_tex</span></code> is
+<code class="docutils literal notranslate"><span class="pre">None</span></code> (or equal to <code class="docutils literal notranslate"><span class="pre">input_tex</span></code>), the input file is overwritten in
+place; callers that want a safety copy should take one beforehand (see
+<code class="xref py py-func docutils literal notranslate"><span class="pre">backup_file()</span></code>).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input_tex</strong> (<em>str</em><em> or </em><em>pathlib.Path</em>) – Path to the source <code class="docutils literal notranslate"><span class="pre">.tex</span></code> file to read.</p></li>
+<li><p><strong>output_tex</strong> (<em>str</em><em> or </em><em>pathlib.Path</em><em> or </em><em>None</em>) – Path to write the result to.  If <code class="docutils literal notranslate"><span class="pre">None</span></code> (the
+default), <code class="docutils literal notranslate"><span class="pre">input_tex</span></code> is overwritten in place.</p></li>
+<li><p><strong>ruler_chars</strong> (<em>str</em><em> or </em><em>list</em><em>[</em><em>str</em><em>] or </em><em>None</em>) – Sequence of up to four characters, one per heading
+level (chapter, section, subsection, subsubsection).  Missing
+positions fall back to the defaults <code class="docutils literal notranslate"><span class="pre">('#',</span> <span class="pre">'*',</span> <span class="pre">'=',</span> <span class="pre">'-')</span></code>.
+May be a string (each character is used positionally) or any
+sequence of single characters.  <code class="docutils literal notranslate"><span class="pre">None</span></code> uses all defaults.</p></li>
+<li><p><strong>ruler_len</strong> (<em>int</em>) – Number of times the ruler character is repeated after
+the <code class="docutils literal notranslate"><span class="pre">%</span> <span class="pre">``</span> <span class="pre">prefix.</span>&#160; <span class="pre">Defaults</span> <span class="pre">to</span> <span class="pre">``60</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The path the result was written to.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pathlib.Path</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>FileNotFoundError</strong> – If <code class="docutils literal notranslate"><span class="pre">input_tex</span></code> does not exist.</p></li>
+<li><p><strong>UnicodeDecodeError</strong> – If <code class="docutils literal notranslate"><span class="pre">input_tex</span></code> is not valid UTF-8.</p></li>
+<li><p><strong>ValueError</strong> – If <code class="docutils literal notranslate"><span class="pre">ruler_len</span></code> is less than 1.</p></li>
+</ul>
+</dd>
+</dl>
+<section id="id2">
+<h2>Algorithm<a class="headerlink" href="#id2" title="Link to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p>Split the file into preamble, body lines, and postamble at
+<code class="docutils literal notranslate"><span class="pre">\begin{document}</span></code> / <code class="docutils literal notranslate"><span class="pre">\end{document}</span></code>.  Only the body is
+processed.</p></li>
+<li><p>Resolve the four ruler strings from <code class="docutils literal notranslate"><span class="pre">ruler_chars</span></code> and <code class="docutils literal notranslate"><span class="pre">ruler_len</span></code>.</p></li>
+<li><p>Walk body lines.  When a line matches a heading command, look at the
+previous output line:</p>
+<ul class="simple">
+<li><p>If it is already a ruler whose dominant character matches the
+current level’s character, <strong>replace</strong> it with the freshly built
+ruler (normalises length on re-runs).</p></li>
+<li><p>Otherwise <strong>insert</strong> the ruler as a new line before the heading.</p></li>
+</ul>
+</li>
+<li><p>Reassemble preamble + processed body + postamble and write.</p></li>
+</ol>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>A “ruler line” for replacement detection is defined as a line whose
+stripped content matches <code class="docutils literal notranslate"><span class="pre">%</span> <span class="pre">&lt;char&gt;&lt;char&gt;...</span></code> with at least one
+repetition of <em>char</em> – the same format this function produces.
+Any other comment line is left untouched even if it precedes a
+heading.</p>
+</div>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.documents.DocumentTeX.lint_blank_lines">
+<span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">lint_blank_lines</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_tex</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_tex</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/documents.html#DocumentTeX.lint_blank_lines"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.documents.DocumentTeX.lint_blank_lines" title="Link to this definition">#</a></dt>
+<dd><p>Normalize blank-line spacing in a LaTeX file.</p>
+<p>Reads <code class="docutils literal notranslate"><span class="pre">input_tex</span></code> and enforces two rules throughout the document body:</p>
+<ul class="simple">
+<li><p><strong>Paragraph separation</strong> – any run of two or more consecutive blank
+lines in prose is collapsed to exactly one blank line.</p></li>
+<li><p><strong>Environment padding</strong> – every <code class="docutils literal notranslate"><span class="pre">\begin{...}</span></code> is preceded by
+exactly two blank lines, and every <code class="docutils literal notranslate"><span class="pre">\end{...}</span></code> is followed by
+exactly two blank lines. The interior of every environment (everything
+between its <code class="docutils literal notranslate"><span class="pre">\begin</span></code> and <code class="docutils literal notranslate"><span class="pre">\end</span></code>) is left completely untouched.</p></li>
+</ul>
+<p>Schematically, the target layout is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">prose</span><span class="o">&gt;</span>
+
+<span class="o">&lt;</span><span class="n">blank</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="n">blank</span><span class="o">&gt;</span>
+\<span class="n">begin</span><span class="p">{</span><span class="n">equation</span><span class="p">}</span>
+  <span class="o">...</span>            <span class="o">&lt;-</span> <span class="n">interior</span><span class="p">:</span> <span class="n">never</span> <span class="n">touched</span>
+\<span class="n">end</span><span class="p">{</span><span class="n">equation</span><span class="p">}</span>
+<span class="o">&lt;</span><span class="n">blank</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="n">blank</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="n">prose</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>Nested environments produce nested padding:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">blank</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="n">blank</span><span class="o">&gt;</span>
+\<span class="n">begin</span><span class="p">{</span><span class="n">subequations</span><span class="p">}</span>
+
+  <span class="o">&lt;</span><span class="n">blank</span><span class="o">&gt;</span>
+  <span class="o">&lt;</span><span class="n">blank</span><span class="o">&gt;</span>
+  \<span class="n">begin</span><span class="p">{</span><span class="n">align</span><span class="p">}</span>
+    <span class="o">...</span>
+  \<span class="n">end</span><span class="p">{</span><span class="n">align</span><span class="p">}</span>
+  <span class="o">&lt;</span><span class="n">blank</span><span class="o">&gt;</span>
+  <span class="o">&lt;</span><span class="n">blank</span><span class="o">&gt;</span>
+
+\<span class="n">end</span><span class="p">{</span><span class="n">subequations</span><span class="p">}</span>
+<span class="o">&lt;</span><span class="n">blank</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="n">blank</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>The preamble (everything up to and including <code class="docutils literal notranslate"><span class="pre">\begin{document}</span></code>) and
+the document environment boundary itself are exempt from padding.</p>
+<p>This function performs no backup of its own. When <code class="docutils literal notranslate"><span class="pre">output_tex</span></code> is
+<code class="docutils literal notranslate"><span class="pre">None</span></code> (or equal to <code class="docutils literal notranslate"><span class="pre">input_tex</span></code>), the input file is overwritten in
+place; callers that want a safety copy should take one beforehand.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input_tex</strong> (<em>str</em><em> or </em><em>pathlib.Path</em>) – Path to the source <code class="docutils literal notranslate"><span class="pre">.tex</span></code> file to read.</p></li>
+<li><p><strong>output_tex</strong> (<em>str</em><em> or </em><em>pathlib.Path</em><em> or </em><em>None</em>) – Path to write the result to. If <code class="docutils literal notranslate"><span class="pre">None</span></code> (the
+default), <code class="docutils literal notranslate"><span class="pre">input_tex</span></code> is overwritten in place.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">(output_path,</span> <span class="pre">stats)</span></code> where <code class="docutils literal notranslate"><span class="pre">stats</span></code> is a dict with keys
+<code class="docutils literal notranslate"><span class="pre">collapsed</span></code> (excess blank lines removed) and <code class="docutils literal notranslate"><span class="pre">padded</span></code> (blank
+lines inserted).</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple[pathlib.Path, dict]</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>FileNotFoundError</strong> – If <code class="docutils literal notranslate"><span class="pre">input_tex</span></code> does not exist.</p></li>
+<li><p><strong>UnicodeDecodeError</strong> – If <code class="docutils literal notranslate"><span class="pre">input_tex</span></code> is not valid UTF-8.</p></li>
+</ul>
+</dd>
+</dl>
+<section id="id3">
+<h2>Algorithm<a class="headerlink" href="#id3" title="Link to this heading">#</a></h2>
+<p>A single forward pass over the lines maintains:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">env_depth</span></code> – nesting depth of padded environments (0 = prose).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">pending_pad</span></code> – number of blank lines still to be emitted after
+an <code class="docutils literal notranslate"><span class="pre">\end{...}</span></code> before the next non-blank content.</p></li>
+</ul>
+<p>When a <code class="docutils literal notranslate"><span class="pre">\begin{...}</span></code> is encountered (outside the preamble and outside
+the document environment): any trailing blank lines in the output buffer
+are stripped, exactly two blank lines are inserted, and then the
+<code class="docutils literal notranslate"><span class="pre">\begin</span></code> line itself is emitted. <code class="docutils literal notranslate"><span class="pre">env_depth</span></code> is incremented, and
+all subsequent lines (including blank ones) are passed through verbatim
+until the matching <code class="docutils literal notranslate"><span class="pre">\end{...}</span></code> is reached. On <code class="docutils literal notranslate"><span class="pre">\end{...}</span></code>:
+<code class="docutils literal notranslate"><span class="pre">env_depth</span></code> is decremented, the <code class="docutils literal notranslate"><span class="pre">\end</span></code> line is emitted, and
+<code class="docutils literal notranslate"><span class="pre">pending_pad</span></code> is set to 2. The next non-blank line flushes those two
+blank lines first. Any blank lines in the source between <code class="docutils literal notranslate"><span class="pre">\end</span></code> and
+the next content are discarded (replaced by the controlled padding).</p>
+</section>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="py class">
@@ -938,7 +1323,13 @@ is unaffected.</p>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.documents.DocumentTeX.load_data"><code class="docutils literal notranslate"><span class="pre">DocumentTeX.load_data()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.documents.DocumentTeX.to_pdf"><code class="docutils literal notranslate"><span class="pre">DocumentTeX.to_pdf()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.documents.DocumentTeX.to_flat"><code class="docutils literal notranslate"><span class="pre">DocumentTeX.to_flat()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.documents.DocumentTeX.export"><code class="docutils literal notranslate"><span class="pre">DocumentTeX.export()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.documents.DocumentTeX.split_preamble"><code class="docutils literal notranslate"><span class="pre">DocumentTeX.split_preamble()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.documents.DocumentTeX.make_flat"><code class="docutils literal notranslate"><span class="pre">DocumentTeX.make_flat()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.documents.DocumentTeX.lint_paragraphs"><code class="docutils literal notranslate"><span class="pre">DocumentTeX.lint_paragraphs()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.documents.DocumentTeX.lint_decorations_remove"><code class="docutils literal notranslate"><span class="pre">DocumentTeX.lint_decorations_remove()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.documents.DocumentTeX.lint_decorations_add"><code class="docutils literal notranslate"><span class="pre">DocumentTeX.lint_decorations_add()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.documents.DocumentTeX.lint_blank_lines"><code class="docutils literal notranslate"><span class="pre">DocumentTeX.lint_blank_lines()</span></code></a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.documents.Essay"><code class="docutils literal notranslate"><span class="pre">Essay</span></code></a></li>
