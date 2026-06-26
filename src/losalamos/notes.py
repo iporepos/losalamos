@@ -1260,27 +1260,15 @@ class NoteDataset(NoteReference):
 
     def update(self):
         super().update()
-        self.update_source()
-        self.update_alias()
-        self.update_version()
+        # self.update_source()
+        # self.update_alias()
+        # self.update_version()
 
     def to_bib(self, output):
         super().to_bib(output=output, drop_pdf=False)
 
     def update_pdf(self):
         return None
-
-    def update_source(self):
-        s = Path(self.file_note).stem.split("_")[0]
-        self.metadata["source"] = s
-
-    def update_alias(self):
-        s = Path(self.file_note).stem.split("_")[1]
-        self.metadata["alias"] = s
-
-    def update_version(self):
-        s = Path(self.file_note).stem.split("_")[2]
-        self.metadata["version"] = s
 
     def get_dataset_folder(self, folder_base):
         r = Path(folder_base)

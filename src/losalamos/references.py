@@ -927,6 +927,8 @@ class Reference(DataSet):
 
         # 9) Cleanup excessive whitespace
         citation = " ".join(citation.split())
+        citation = citation.replace(" .", ".")
+        citation = citation.replace("..", ".")
         citation = citation.strip('"')
 
         return citation
