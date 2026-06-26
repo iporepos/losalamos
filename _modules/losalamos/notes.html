@@ -1832,11 +1832,11 @@
 <div class="viewcode-block" id="NoteDataset.update">
 <a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.NoteDataset.update">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">update_source</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">update_alias</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">update_version</span><span class="p">()</span></div>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
 
+        <span class="c1"># self.update_source()</span>
+        <span class="c1"># self.update_alias()</span>
+        <span class="c1"># self.update_version()</span>
 
 <div class="viewcode-block" id="NoteDataset.to_bib">
 <a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.NoteDataset.to_bib">[docs]</a>
@@ -1848,27 +1848,6 @@
 <a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.NoteDataset.update_pdf">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">update_pdf</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="kc">None</span></div>
-
-
-<div class="viewcode-block" id="NoteDataset.update_source">
-<a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.NoteDataset.update_source">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">update_source</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">s</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">file_note</span><span class="p">)</span><span class="o">.</span><span class="n">stem</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;source&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">s</span></div>
-
-
-<div class="viewcode-block" id="NoteDataset.update_alias">
-<a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.NoteDataset.update_alias">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">update_alias</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">s</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">file_note</span><span class="p">)</span><span class="o">.</span><span class="n">stem</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;alias&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">s</span></div>
-
-
-<div class="viewcode-block" id="NoteDataset.update_version">
-<a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.NoteDataset.update_version">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">update_version</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">s</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">file_note</span><span class="p">)</span><span class="o">.</span><span class="n">stem</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)[</span><span class="mi">2</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;version&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">s</span></div>
 
 
 <div class="viewcode-block" id="NoteDataset.get_dataset_folder">

@@ -1371,6 +1371,8 @@
 
         <span class="c1"># 9) Cleanup excessive whitespace</span>
         <span class="n">citation</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">citation</span><span class="o">.</span><span class="n">split</span><span class="p">())</span>
+        <span class="n">citation</span> <span class="o">=</span> <span class="n">citation</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot; .&quot;</span><span class="p">,</span> <span class="s2">&quot;.&quot;</span><span class="p">)</span>
+        <span class="n">citation</span> <span class="o">=</span> <span class="n">citation</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;..&quot;</span><span class="p">,</span> <span class="s2">&quot;.&quot;</span><span class="p">)</span>
         <span class="n">citation</span> <span class="o">=</span> <span class="n">citation</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s1">&#39;&quot;&#39;</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">citation</span></div>
