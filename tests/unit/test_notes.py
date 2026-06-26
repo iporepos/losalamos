@@ -30,6 +30,7 @@ import pandas as pd
 # =======================================================================
 from losalamos.notes import NoteCollection
 from tests.conftest import DATA_DIR
+from tests.conftest import OUTPUT_DIR, RUN_BENCHMARKS
 
 # ***********************************************************************
 # CLASSES
@@ -47,12 +48,17 @@ class TestNoteCollection(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls._tmp_root = tempfile.mkdtemp(prefix="losalamos_test_notes_")
+        if RUN_BENCHMARKS:
+            cls._tmp_root = OUTPUT_DIR / "notes"
+            cls._tmp_root.mkdir(parents=True, exist_ok=True)
+        else:
+            cls._tmp_root = Path(tempfile.mkdtemp(prefix="losalamos_test_notes_"))
         cls.ls_fields = ["note_name", "note_type", "timestamp", "note_file"]
 
     @classmethod
     def tearDownClass(cls):
-        shutil.rmtree(cls._tmp_root, ignore_errors=True)
+        if not RUN_BENCHMARKS:
+            shutil.rmtree(cls._tmp_root, ignore_errors=True)
 
     def setUp(self):
         self.base_dir = Path(self._tmp_root)

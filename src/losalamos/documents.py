@@ -441,14 +441,12 @@ class DocumentTeX(Document):
         Flatten the TeX document by recursively resolving ``\\input`` /
         ``\\include`` directives and embedding the compiled bibliography.
 
-        The flattened output is a single self-contained ``.tex`` file
-        suitable for journal submission (e.g. arXiv, Elsevier Editorial
-        Manager). Only executes when :attr:`is_main` is ``True``; partial
-        files return ``None`` silently.
+        Delegates the flattening work to :meth:`make_flat`. Only executes
+        when :attr:`is_main` is ``True``; partial files return ``None``
+        silently.
 
         :param file_output: Desired output path for the flattened ``.tex``
-            file. When ``None``, the result is returned as a string but not
-            written to disk.
+            file. When ``None``, the source file is overwritten in-place.
         :type file_output: str or pathlib.Path or None
         :param compile_first: If ``True`` (default), compiles the document
             before flattening so that the ``.bbl`` file reflects the current
@@ -465,17 +463,267 @@ class DocumentTeX(Document):
         if not self.is_main:
             return None
 
-        # 1. Compile to generate up-to-date .bbl
-        # --------------------------------------------------
         if compile_first:
             self.to_pdf(file_output=None, command=command, cleanup=True)
+
+        output_tex = (
+            Path(file_output).absolute() if file_output is not None else self.file_data
+        )
+
+        flat_content = DocumentTeX.make_flat(self.file_data, output_tex=output_tex)
+
+        if compile_first:
+            for suffix in (".bbl", ".pdf"):
+                p = self.file_data.with_suffix(suffix)
+                if p.exists():
+                    p.unlink()
+
+        return flat_content
+
+    def export(self, folder_root, name, flatten=False, split=False):
+        """
+        Export the TeX document to a self-contained folder.
+
+        Creates ``folder_root/name/`` and writes the document into it
+        according to the chosen mode:
+
+        - **Plain** (``flatten=False``, ``split=False``): the source file is
+          copied as-is, retaining its original filename.
+        - **Flatten** (``flatten=True``, ``split=False``): ``\\input`` /
+          ``\\include`` directives are resolved recursively and the result is
+          written as a single file named ``<name>.tex``.
+        - **Split** (``split=True``): implies flattening. The document is
+          first flattened into a temporary file, then split into
+          ``preamble.tex`` and ``main.tex``. The intermediate flat file is
+          removed after splitting.
+
+        :param folder_root: Parent directory under which the export folder
+            is created.
+        :type folder_root: str or pathlib.Path
+        :param name: Name of the export folder and, in flatten mode, stem
+            of the output ``.tex`` file.
+        :type name: str
+        :param flatten: If ``True``, resolve all ``\\input`` / ``\\include``
+            directives into a single file before exporting. Ignored when
+            ``split=True`` (flattening is always performed in that case).
+        :type flatten: bool
+        :param split: If ``True``, flatten the document and split the result
+            into ``preamble.tex`` and ``main.tex``. Takes precedence over
+            ``flatten``.
+        :type split: bool
+        :returns: Path to the created export folder.
+        :rtype: pathlib.Path
+        :raises RuntimeError: If the document is not a main file (i.e.
+            ``\\documentclass`` is absent). The ``is_main`` attribute is
+            re-evaluated from ``file_data`` before the check so stale state
+            does not produce a false negative.
+        :raises FileExistsError: If ``folder_root/name`` already exists.
+        """
+        # Re-evaluate is_main from file_data to avoid stale state
+        # --------------------------------------------------
+        self.is_main = any(r"\documentclass" in line for line in self.data)
+
+        if not self.is_main:
+            raise RuntimeError(
+                f"Cannot export '{self.file_data.name}': file has no "
+                f"\\documentclass declaration and is not a main TeX document."
+            )
+
+        # Resolve and guard the export folder
+        # --------------------------------------------------
+        folder_root = Path(folder_root).absolute()
+        export_dir = folder_root / name
+
+        if export_dir.exists():
+            raise FileExistsError(
+                f"Export folder already exists: '{export_dir}'. "
+                f"Provide a different name or remove the existing folder."
+            )
+
+        export_dir.mkdir(parents=True)
+
+        # Export modes
+        # --------------------------------------------------
+        if split:
+            # Flatten to a temp file inside the export folder, then split
+            # and remove the intermediate flat file
+            flat_file = export_dir / f"_{name}_flat.tex"
+            DocumentTeX.make_flat(self.file_data, output_tex=flat_file)
+            DocumentTeX.split_preamble(flat_file, output_folder=export_dir)
+            flat_file.unlink()
+
+        elif flatten:
+            # Single merged file named after the export folder
+            output_tex = export_dir / f"{name}.tex"
+            DocumentTeX.make_flat(self.file_data, output_tex=output_tex)
+
+        else:
+            # Plain copy, original filename retained
+            shutil.copy2(self.file_data, export_dir / self.file_data.name)
+
+        return export_dir
+
+    @staticmethod
+    def split_preamble(
+        input_tex, preamble_name="preamble", main_name="main", output_folder=None
+    ):
+        """
+        Split a main TeX file into a preamble fragment and a stub main file.
+
+        The preamble fragment receives everything between the
+        ``\\documentclass`` line and ``\\begin{document}`` (both exclusive).
+        The stub main file retains ``\\documentclass``, replaces the preamble
+        block with a single ``\\input{<preamble_name>}`` line, and keeps
+        everything from ``\\begin{document}`` onward intact.
+
+        Resulting structure::
+
+            % <main_name>.tex
+            \\documentclass{...}
+
+            \\input{preamble}
+
+            \\begin{document}
+            ...
+            \\end{document}
+
+            % <preamble_name>.tex
+            \\usepackage{...}
+            \\newcommand{...}
+            ...
+
+        :param input_tex: Path to the root ``.tex`` file to split. Must be a
+            main document containing ``\\documentclass`` and
+            ``\\begin{document}``.
+        :type input_tex: str or pathlib.Path
+        :param preamble_name: Stem for the preamble output file, without
+            extension. Defaults to ``"preamble"``.
+        :type preamble_name: str
+        :param main_name: Stem for the stub main output file, without
+            extension. Defaults to ``"main"``.
+        :type main_name: str
+        :param output_folder: Directory where both output files are written.
+            When ``None`` (default), the parent directory of ``input_tex``
+            is used.
+        :type output_folder: str or pathlib.Path or None
+        :returns: Tuple of ``(preamble_path, main_path)`` as resolved
+            :class:`pathlib.Path` objects.
+        :rtype: tuple[pathlib.Path, pathlib.Path]
+        :raises ValueError: If ``input_tex`` does not contain a
+            ``\\documentclass`` declaration (i.e. is not a main TeX file),
+            if ``\\begin{document}`` is not found, or if the input file stem
+            matches an output stem when both resolve to the same directory.
+        """
+        input_tex = Path(input_tex).absolute()
+        output_folder = (
+            Path(output_folder).absolute()
+            if output_folder is not None
+            else input_tex.parent
+        )
+
+        # Safety check: only raise if same folder AND stem collision
+        # --------------------------------------------------
+        if output_folder == input_tex.parent:
+            for candidate in (preamble_name, main_name):
+                if input_tex.stem == candidate:
+                    raise ValueError(
+                        f"Input file stem '{input_tex.stem}' matches output name "
+                        f"'{candidate}' in the same directory '{output_folder}'. "
+                        f"Provide a different output_folder or rename the output."
+                    )
+
+        preamble_path = output_folder / f"{preamble_name}.tex"
+        main_path = output_folder / f"{main_name}.tex"
+
+        # Parse the source file
+        # --------------------------------------------------
+        with open(input_tex, "r", encoding="utf-8") as f:
+            lines = f.readlines()
+
+        # Locate structural boundaries
+        # --------------------------------------------------
+        idx_documentclass = None
+        idx_begin_document = None
+
+        for i, line in enumerate(lines):
+            stripped = line.strip()
+            if stripped.startswith("%"):
+                continue
+            if idx_documentclass is None and stripped.startswith(r"\documentclass"):
+                idx_documentclass = i
+            if stripped.startswith(r"\begin{document}"):
+                idx_begin_document = i
+                break
+
+        if idx_documentclass is None:
+            raise ValueError(
+                f"No \\documentclass declaration found in '{input_tex}'. "
+                f"Only main TeX files can be split."
+            )
+        if idx_begin_document is None:
+            raise ValueError(f"No \\begin{{document}} found in '{input_tex}'.")
+
+        # Slice into regions
+        # --------------------------------------------------
+        before_preamble = lines[
+            : idx_documentclass + 1
+        ]  # \documentclass line (inclusive)
+        preamble_lines = lines[idx_documentclass + 1 : idx_begin_document]
+        after_preamble = lines[
+            idx_begin_document:
+        ]  # \begin{document} onward (inclusive)
+
+        # Build preamble file: raw block, stripped of leading/trailing blank lines
+        # --------------------------------------------------
+        preamble_content = "".join(preamble_lines).strip() + "\n"
+
+        # Build main file: documentclass + blank + \input{preamble} + blank + body
+        # --------------------------------------------------
+        main_content = (
+            "".join(before_preamble).rstrip("\n")
+            + "\n\n"
+            + f"\\input{{{preamble_name}}}"
+            + "\n\n"
+            + "".join(after_preamble)
+        )
+
+        # Write outputs
+        # --------------------------------------------------
+        output_folder.mkdir(parents=True, exist_ok=True)
+
+        preamble_path.write_text(preamble_content, encoding="utf-8")
+        main_path.write_text(main_content, encoding="utf-8")
+
+        return preamble_path, main_path
+
+    @staticmethod
+    def make_flat(input_tex, output_tex=None):
+        """
+        Flatten a TeX document by recursively resolving ``\\input`` /
+        ``\\include`` directives and embedding the compiled bibliography.
+
+        This is a pure file-system operation with no dependency on any
+        :class:`DocumentTeX` instance. It can be used independently whenever
+        a self-contained ``.tex`` file is needed (e.g. arXiv submission).
+
+        :param input_tex: Path to the root ``.tex`` file to flatten.
+        :type input_tex: str or pathlib.Path
+        :param output_tex: Destination path for the flattened file. When
+            ``None`` (default), the result is written back over the source
+            file in-place.
+        :type output_tex: str or pathlib.Path or None
+        :returns: The fully flattened LaTeX source as a string.
+        :rtype: str
+        """
+        input_tex = Path(input_tex).absolute()
+        output_tex = (
+            Path(output_tex).absolute() if output_tex is not None else input_tex
+        )
 
         def _flatten_recursive(current_path):
             with open(current_path, "r", encoding="utf-8") as f:
                 content = f.read()
 
-            # Flatten \input{} and \include{} commands
-            # --------------------------------------------------
             pattern_input = re.compile(r"\\(?:input|include)\s*\{\s*([^}]+)\s*\}")
 
             def replace_input(match):
@@ -486,12 +734,10 @@ class DocumentTeX(Document):
 
             content = pattern_input.sub(replace_input, content)
 
-            # Embed bibliography (.bbl)
-            # --------------------------------------------------
             pattern_bib = re.compile(r"\\bibliography\s*\{\s*([^}]+)\s*\}")
 
             def replace_bib(match):
-                bbl_path = self.file_data.with_suffix(".bbl")
+                bbl_path = input_tex.with_suffix(".bbl")
                 if bbl_path.exists():
                     with open(bbl_path, "r", encoding="utf-8") as bbl_file:
                         return bbl_file.read()
@@ -501,22 +747,10 @@ class DocumentTeX(Document):
 
             return content
 
-        flat_content = _flatten_recursive(self.file_data)
+        flat_content = _flatten_recursive(input_tex)
 
-        # 2. Aggressive cleanup of intermediate files
-        # --------------------------------------------------
-        if compile_first:
-            for suffix in (".bbl", ".pdf"):
-                p = self.file_data.with_suffix(suffix)
-                if p.exists():
-                    p.unlink()
-
-        # 3. Export to file
-        # --------------------------------------------------
-        if file_output is not None:
-            output_path = Path(file_output).absolute()
-            with open(output_path, "w", encoding="utf-8") as f_out:
-                f_out.write(flat_content)
+        with open(output_tex, "w", encoding="utf-8") as f_out:
+            f_out.write(flat_content)
 
         return flat_content
 
@@ -819,14 +1053,597 @@ class DocumentTeX(Document):
             flush()
             return "\n".join(out)
 
-        input_tex = _Path(input_tex)
-        output_tex = _Path(output_tex) if output_tex is not None else input_tex
+        input_tex = Path(input_tex)
+        output_tex = Path(output_tex) if output_tex is not None else input_tex
 
         text = input_tex.read_text(encoding="utf-8")
         new_text = join_paragraphs(text)
 
         output_tex.write_text(new_text, encoding="utf-8")
         return output_tex
+
+    @staticmethod
+    def lint_decorations_remove(
+        input_tex, output_tex=None, document_only=False, except_chars=None
+    ):
+        """
+        Remove decoration comments/rulers (no letter characters after ``%``) from a
+        LaTeX file.
+
+        Reads ``input_tex``, strips every decorative comment (comment-only lines
+        and trailing comment suffixes on prose lines whose comment text contains
+        no ASCII letter), and writes the result to ``output_tex``.
+
+        This function performs no backup of its own. When ``output_tex`` is
+        ``None`` (or equal to ``input_tex``), the input file is overwritten in
+        place; callers that want a safety copy should take one beforehand (see
+        :func:`backup_file`).
+
+        :param input_tex: Path to the source ``.tex`` file to read.
+        :type input_tex: str or pathlib.Path
+        :param output_tex: Path to write the purged result to. If ``None``
+            (the default), ``input_tex`` is overwritten in place.
+        :type output_tex: str or pathlib.Path or None
+        :param document_only: If ``False`` (the default), the purge runs over
+            the entire file -- preamble, body, and postamble alike.  If ``True``,
+            only the lines between ``\\begin{document}`` and ``\\end{document}``
+            are processed; the preamble and postamble are passed through unchanged.
+        :type document_only: bool
+        :param except_chars: Optional list of single characters. A decoration
+            comment (one whose text after ``%`` contains no ASCII letter) is
+            nonetheless **kept** if its text contains at least one character from
+            this list. Use this to preserve specific ruler styles, e.g.
+            ``except_chars=['#']`` keeps ``% ####`` lines.  ``None`` (the
+            default) means no exceptions -- all decoration comments are removed.
+        :type except_chars: list[str] or None
+
+        :returns: The path the purged ``.tex`` was written to (equal to
+            ``input_tex`` if ``output_tex`` was ``None``).
+        :rtype: pathlib.Path
+
+        :raises FileNotFoundError: If ``input_tex`` does not exist.
+        :raises UnicodeDecodeError: If ``input_tex`` is not valid UTF-8.
+
+        Algorithm
+        ---------
+        1. When ``document_only=True``, everything up to and including
+           ``\\begin{document}``, and everything from ``\\end{document}`` onward,
+           is passed through unchanged.  When ``document_only=False`` (default),
+           all lines -- including the preamble -- are processed uniformly.
+        2. Within the processed region each line is classified as one of:
+
+           a. **Blank** – passed through unchanged.
+           b. **Comment-only decoration** – the entire line's non-whitespace
+              content is a ``%`` whose following text (stripped) contains no
+              ASCII letter and no ``except_chars`` character.  The line is
+              *dropped*; if the previous output line was blank, that blank is
+              also removed (blank-line collapse).
+           c. **Comment-only kept** – comment-only but preserved because the
+              text contains a letter or an ``except_chars`` character.  Passed
+              through unchanged.
+           d. **Prose with trailing decoration comment** – the ``%`` suffix
+              qualifies as decoration.  The suffix (and any whitespace before
+              it) is stripped; the prose remainder is kept.
+           e. **Prose with trailing real comment** – kept verbatim.
+           f. **Prose without any comment** – kept verbatim.
+
+        3. The ``%`` position is found via ``_find_comment_pos``, which
+           correctly handles escaped percent signs (``\\%``).
+        4. Non-reflowable environments (``equation``, ``align``, ``tabular``,
+           ``verbatim``, etc.) receive no special treatment here: comment lines
+           inside math or table environments are still subject to the same rule.
+
+        .. note::
+           Only comment text is removed; no other characters are altered, so
+           the rendered PDF is unaffected.
+
+        """
+        import re
+
+        BEGIN_DOCUMENT_RE = re.compile(r"^\s*\\begin\{document\}")
+        END_DOCUMENT_RE = re.compile(r"^\s*\\end\{document\}")
+
+        def _find_comment_pos(line):
+            """Return the index of the first un-escaped '%' in *line*, or -1."""
+            i = 0
+            while True:
+                idx = line.find("%", i)
+                if idx == -1:
+                    return -1
+                # count immediately preceding backslashes
+                j = idx - 1
+                nbs = 0
+                while j >= 0 and line[j] == "\\":
+                    nbs += 1
+                    j -= 1
+                if nbs % 2 == 0:  # even number of backslashes -> real %
+                    return idx
+                i = idx + 1
+
+        def _is_decoration(comment_text):
+            """True when *comment_text* (text after the leading '%') should be removed.
+
+            A comment qualifies as decoration when it contains no ASCII letter AND
+            none of the characters in *except_chars* (captured from the outer
+            scope).
+            """
+            if re.search(r"[A-Za-z]", comment_text):
+                return False
+            if except_chars and any(ch in comment_text for ch in except_chars):
+                return False
+            return True
+
+        def _process_body(lines):
+            """Apply decoration-comment purge to *lines*. Returns list of lines."""
+            out = []
+
+            for line in lines:
+                # preserve blank lines as-is
+                if line.strip() == "":
+                    out.append(line)
+                    continue
+
+                comment_pos = _find_comment_pos(line)
+
+                if comment_pos == -1:
+                    # no comment at all
+                    out.append(line)
+                    continue
+
+                before = line[:comment_pos]  # prose part (may be empty)
+                comment_text = line[comment_pos + 1 :]  # everything after the %
+
+                if before.strip() == "":
+                    # ---- comment-only line ----
+                    if _is_decoration(comment_text):
+                        # drop this line; also collapse the preceding blank if present
+                        if out and out[-1].strip() == "":
+                            out.pop()
+                        # do NOT append anything
+                    else:
+                        out.append(line)
+                else:
+                    # ---- prose line with a trailing comment ----
+                    if _is_decoration(comment_text):
+                        # strip the comment suffix; rstrip any whitespace before %
+                        out.append(before.rstrip())
+                    else:
+                        out.append(line)
+
+            return out
+
+        # ------------------------------------------------------------------ #
+        # Main entry: split into preamble / body / postamble, process body    #
+        # ------------------------------------------------------------------ #
+        input_tex = Path(input_tex)
+        output_tex = Path(output_tex) if output_tex is not None else input_tex
+
+        raw = input_tex.read_text(encoding="utf-8")
+        lines = raw.split("\n")
+
+        if not document_only:
+            # Process the entire file uniformly -- no preamble/postamble split.
+            result = "\n".join(_process_body(lines))
+        else:
+            # Restrict processing to the body between \begin{document} and
+            # \end{document}; preamble and postamble pass through unchanged.
+            preamble = []
+            body_raw = []
+            postamble = []
+
+            seen_begin = False
+            seen_end = False
+
+            for line in lines:
+                if not seen_begin:
+                    preamble.append(line)
+                    if BEGIN_DOCUMENT_RE.match(line):
+                        seen_begin = True
+                elif seen_end:
+                    postamble.append(line)
+                else:
+                    if END_DOCUMENT_RE.match(line):
+                        seen_end = True
+                        postamble.append(line)
+                    else:
+                        body_raw.append(line)
+
+            body_clean = _process_body(body_raw)
+            result = "\n".join(preamble + body_clean + postamble)
+
+        output_tex.write_text(result, encoding="utf-8")
+        return output_tex
+
+    @staticmethod
+    def lint_decorations_add(
+        input_tex, output_tex=None, ruler_chars=None, ruler_len=60
+    ):
+        """
+        Inject decoration rulers above section headings in a LaTeX file.
+
+        Reads ``input_tex``, inserts a comment ruler (``% `` + N repetitions of
+        a level-specific character) on the line immediately before every
+        ``\\chapter``, ``\\section``, ``\\subsection``, and ``\\subsubsection``
+        command found inside the document body, then writes the result to
+        ``output_tex``.
+
+        The preamble (everything up to and including ``\\begin{document}``) and
+        the postamble (``\\end{document}`` and everything after) are passed
+        through unchanged.
+
+        If a ruler with the correct character already exists on the line
+        immediately before a heading, it is **replaced** rather than duplicated,
+        making the function safe to call multiple times on the same file
+        (idempotent with respect to ruler content; ruler length is always
+        normalised to the current ``ruler_len``).
+
+        This function performs no backup of its own. When ``output_tex`` is
+        ``None`` (or equal to ``input_tex``), the input file is overwritten in
+        place; callers that want a safety copy should take one beforehand (see
+        :func:`backup_file`).
+
+        :param input_tex: Path to the source ``.tex`` file to read.
+        :type input_tex: str or pathlib.Path
+        :param output_tex: Path to write the result to.  If ``None`` (the
+            default), ``input_tex`` is overwritten in place.
+        :type output_tex: str or pathlib.Path or None
+        :param ruler_chars: Sequence of up to four characters, one per heading
+            level (chapter, section, subsection, subsubsection).  Missing
+            positions fall back to the defaults ``('#', '*', '=', '-')``.
+            May be a string (each character is used positionally) or any
+            sequence of single characters.  ``None`` uses all defaults.
+        :type ruler_chars: str or list[str] or None
+        :param ruler_len: Number of times the ruler character is repeated after
+            the ``% `` prefix.  Defaults to ``60``.
+        :type ruler_len: int
+
+        :returns: The path the result was written to.
+        :rtype: pathlib.Path
+
+        :raises FileNotFoundError: If ``input_tex`` does not exist.
+        :raises UnicodeDecodeError: If ``input_tex`` is not valid UTF-8.
+        :raises ValueError: If ``ruler_len`` is less than 1.
+
+        Algorithm
+        ---------
+        1. Split the file into preamble, body lines, and postamble at
+           ``\\begin{document}`` / ``\\end{document}``.  Only the body is
+           processed.
+        2. Resolve the four ruler strings from ``ruler_chars`` and ``ruler_len``.
+        3. Walk body lines.  When a line matches a heading command, look at the
+           previous output line:
+
+           - If it is already a ruler whose dominant character matches the
+             current level's character, **replace** it with the freshly built
+             ruler (normalises length on re-runs).
+           - Otherwise **insert** the ruler as a new line before the heading.
+
+        4. Reassemble preamble + processed body + postamble and write.
+
+        .. note::
+           A "ruler line" for replacement detection is defined as a line whose
+           stripped content matches ``% <char><char>...`` with at least one
+           repetition of *char* -- the same format this function produces.
+           Any other comment line is left untouched even if it precedes a
+           heading.
+
+        """
+        if ruler_len < 1:
+            raise ValueError(f"ruler_len must be >= 1, got {ruler_len!r}")
+
+        DEFAULTS = ("#", "*", "=", "-")
+        LEVELS = ("chapter", "section", "subsection", "subsubsection")
+
+        # Resolve ruler characters: positional override, fall back to defaults.
+        resolved_chars = list(DEFAULTS)
+        if ruler_chars is not None:
+            for i, ch in enumerate(ruler_chars):
+                if i >= 4:
+                    break
+                resolved_chars[i] = ch
+
+        # Build the four ruler strings and their detection regexes.
+        rulers = {}  # level_name -> ruler string
+        ruler_res = (
+            {}
+        )  # level_name -> compiled regex that matches any ruler for that level
+        for level, ch in zip(LEVELS, resolved_chars):
+            rulers[level] = f"% {ch * ruler_len}"
+            escaped = re.escape(ch)
+            ruler_res[level] = re.compile(rf"^\s*%\s*{escaped}+\s*$")
+
+        # Heading detection: \chapter, \section, \subsection, \subsubsection
+        # (starred or unstarred), optionally followed by [] optional arg or {}.
+        HEADING_RE = re.compile(
+            r"^\s*\\(chapter|section|subsection|subsubsection)\*?\s*[\[{]"
+        )
+
+        BEGIN_DOCUMENT_RE = re.compile(r"^\s*\\begin\{document\}")
+        END_DOCUMENT_RE = re.compile(r"^\s*\\end\{document\}")
+
+        def _level_of(line):
+            """Return the heading level name if *line* is a heading, else None."""
+            m = HEADING_RE.match(line)
+            return m.group(1) if m else None
+
+        def _process_body(lines):
+            """Inject rulers above headings. Returns new list of lines."""
+            out = []
+            for line in lines:
+                level = _level_of(line)
+                if level is None:
+                    out.append(line)
+                    continue
+
+                ruler = rulers[level]
+                ruler_re = ruler_res[level]
+
+                # Check whether the previous output line is already a ruler for
+                # this level; if so, replace it (idempotent).
+                if out and ruler_re.match(out[-1]):
+                    out[-1] = ruler
+                else:
+                    out.append(ruler)
+
+                out.append(line)
+
+            return out
+
+        # ------------------------------------------------------------------ #
+        # Split, process body, reassemble                                      #
+        # ------------------------------------------------------------------ #
+        input_tex = Path(input_tex)
+        output_tex = Path(output_tex) if output_tex is not None else input_tex
+
+        raw = input_tex.read_text(encoding="utf-8")
+        lines = raw.split("\n")
+
+        preamble = []
+        body_raw = []
+        postamble = []
+
+        seen_begin = False
+        seen_end = False
+
+        for line in lines:
+            if not seen_begin:
+                preamble.append(line)
+                if BEGIN_DOCUMENT_RE.match(line):
+                    seen_begin = True
+            elif seen_end:
+                postamble.append(line)
+            else:
+                if END_DOCUMENT_RE.match(line):
+                    seen_end = True
+                    postamble.append(line)
+                else:
+                    body_raw.append(line)
+
+        body_clean = _process_body(body_raw)
+
+        result = "\n".join(preamble + body_clean + postamble)
+        output_tex.write_text(result, encoding="utf-8")
+        return output_tex
+
+    @staticmethod
+    def lint_blank_lines(input_tex, output_tex=None):
+        """
+        Normalize blank-line spacing in a LaTeX file.
+
+        Reads ``input_tex`` and enforces two rules throughout the document body:
+
+        * **Paragraph separation** -- any run of two or more consecutive blank
+          lines in prose is collapsed to exactly one blank line.
+        * **Environment padding** -- every ``\\begin{...}`` is preceded by
+          exactly two blank lines, and every ``\\end{...}`` is followed by
+          exactly two blank lines. The interior of every environment (everything
+          between its ``\\begin`` and ``\\end``) is left completely untouched.
+
+        Schematically, the target layout is::
+
+            <prose>
+
+            <blank>
+            <blank>
+            \\begin{equation}
+              ...            <- interior: never touched
+            \\end{equation}
+            <blank>
+            <blank>
+            <prose>
+
+        Nested environments produce nested padding::
+
+            <blank>
+            <blank>
+            \\begin{subequations}
+
+              <blank>
+              <blank>
+              \\begin{align}
+                ...
+              \\end{align}
+              <blank>
+              <blank>
+
+            \\end{subequations}
+            <blank>
+            <blank>
+
+        The preamble (everything up to and including ``\\begin{document}``) and
+        the document environment boundary itself are exempt from padding.
+
+        This function performs no backup of its own. When ``output_tex`` is
+        ``None`` (or equal to ``input_tex``), the input file is overwritten in
+        place; callers that want a safety copy should take one beforehand.
+
+        :param input_tex: Path to the source ``.tex`` file to read.
+        :type input_tex: str or pathlib.Path
+        :param output_tex: Path to write the result to. If ``None`` (the
+            default), ``input_tex`` is overwritten in place.
+        :type output_tex: str or pathlib.Path or None
+
+        :returns: ``(output_path, stats)`` where ``stats`` is a dict with keys
+            ``collapsed`` (excess blank lines removed) and ``padded`` (blank
+            lines inserted).
+        :rtype: tuple[pathlib.Path, dict]
+
+        :raises FileNotFoundError: If ``input_tex`` does not exist.
+        :raises UnicodeDecodeError: If ``input_tex`` is not valid UTF-8.
+
+        Algorithm
+        ---------
+        A single forward pass over the lines maintains:
+
+        * ``env_depth`` -- nesting depth of padded environments (0 = prose).
+        * ``pending_pad`` -- number of blank lines still to be emitted after
+          an ``\\end{...}`` before the next non-blank content.
+
+        When a ``\\begin{...}`` is encountered (outside the preamble and outside
+        the document environment): any trailing blank lines in the output buffer
+        are stripped, exactly two blank lines are inserted, and then the
+        ``\\begin`` line itself is emitted. ``env_depth`` is incremented, and
+        all subsequent lines (including blank ones) are passed through verbatim
+        until the matching ``\\end{...}`` is reached. On ``\\end{...}``:
+        ``env_depth`` is decremented, the ``\\end`` line is emitted, and
+        ``pending_pad`` is set to 2. The next non-blank line flushes those two
+        blank lines first. Any blank lines in the source between ``\\end`` and
+        the next content are discarded (replaced by the controlled padding).
+
+
+        """
+        import re
+
+        PAD = 2  # blank lines required before \begin and after \end
+
+        # Environments exempt from padding (structural wrappers)
+        NO_PAD_ENVS = {"document"}
+
+        BEGIN_RE = re.compile(r"^\s*\\begin\{([^}]+)\}")
+        END_RE = re.compile(r"^\s*\\end\{([^}]+)\}")
+
+        def is_blank(line):
+            return line.strip() == ""
+
+        def strip_trailing_blanks(lst):
+            """Remove trailing blank lines from lst; return count removed."""
+            n = 0
+            while lst and is_blank(lst[-1]):
+                lst.pop()
+                n += 1
+            return n
+
+        # ------------------------------------------------------------------
+        input_tex = Path(input_tex)
+        output_tex = Path(output_tex) if output_tex is not None else input_tex
+
+        lines = input_tex.read_text(encoding="utf-8").split("\n")
+
+        out = []
+        n_collapsed = 0
+        n_padded = 0
+
+        seen_begin_doc = False
+        seen_end_doc = False
+
+        # env_depth > 0 means we are inside a padded environment: pass verbatim
+        env_depth = 0
+        # env_stack tracks names so nested \end matches correctly
+        env_stack = []
+        # pending_pad: blank lines to emit before the next non-blank content
+        # (set after \end so we control the post-environment spacing)
+        pending_pad = 0
+        # consecutive blank lines in prose (for collapsing)
+        prose_blanks = 0
+
+        for line in lines:
+
+            # ----------------------------------------------------------------
+            # Preamble and post-document: verbatim
+            # ----------------------------------------------------------------
+            if not seen_begin_doc or seen_end_doc:
+                out.append(line)
+                m = BEGIN_RE.match(line)
+                if m and m.group(1) == "document":
+                    seen_begin_doc = True
+                continue
+
+            # ----------------------------------------------------------------
+            # Inside a padded environment: pass everything verbatim
+            # ----------------------------------------------------------------
+            if env_depth > 0:
+                m_end = END_RE.match(line)
+                if m_end and env_stack and env_stack[-1] == m_end.group(1):
+                    env_name = env_stack.pop()
+                    env_depth -= 1
+                    out.append(line)
+                    if env_name not in NO_PAD_ENVS:
+                        # Consume any source blank lines after \end
+                        # (we will emit our own controlled padding instead)
+                        pending_pad = PAD
+                        prose_blanks = 0
+                    if env_name == "document":
+                        seen_end_doc = True
+                else:
+                    # Check for nested \begin inside the environment
+                    m_begin = BEGIN_RE.match(line)
+                    if m_begin:
+                        env_stack.append(m_begin.group(1))
+                        env_depth += 1
+                    out.append(line)
+                continue
+
+            # ----------------------------------------------------------------
+            # Prose region
+            # ----------------------------------------------------------------
+            m_begin = BEGIN_RE.match(line)
+            m_end = END_RE.match(line)  # should not normally occur here
+
+            if m_begin:
+                env_name = m_begin.group(1)
+                if env_name in NO_PAD_ENVS:
+                    # document begin: no padding, just track
+                    out.append(line)
+                    env_stack.append(env_name)
+                    env_depth += 1
+                    seen_begin_doc = True
+                else:
+                    # Enforce PAD blank lines before \begin
+                    n_removed = strip_trailing_blanks(out)
+                    n_collapsed += max(0, n_removed - PAD)  # excess that were there
+                    out.extend([""] * PAD)
+                    n_padded += PAD
+                    out.append(line)
+                    env_stack.append(env_name)
+                    env_depth += 1
+                    prose_blanks = 0
+                    pending_pad = 0
+                continue
+
+            # Blank line in prose
+            if is_blank(line):
+                if pending_pad > 0:
+                    # Discard source blanks after \end; we control the padding
+                    pass
+                else:
+                    prose_blanks += 1
+                    if prose_blanks <= 1:
+                        out.append(line)
+                    else:
+                        n_collapsed += 1
+                continue
+
+            # Non-blank, non-begin line in prose
+            if pending_pad > 0:
+                # Emit the controlled post-\end padding then this line
+                out.extend([""] * pending_pad)
+                n_padded += pending_pad
+                pending_pad = 0
+            prose_blanks = 0
+            out.append(line)
+
+        output_tex.write_text("\n".join(out), encoding="utf-8")
+        return output_tex, {"collapsed": n_collapsed, "padded": n_padded}
 
 
 class Essay(DocumentTeX):

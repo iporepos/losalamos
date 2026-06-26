@@ -20,13 +20,24 @@ This test suite validates the behavioral contract of the ``Document.new``
 method, ensuring correct error handling, filesystem setup, overlay merge
 semantics, and the integrity of the returned path.
 
-Examples
---------
-From the terminal, run:
+Running
+-------
+Standard run (no output files retained)::
+
+    python -m tests.unit.test_documents_tex
+
+With benchmark output enabled (output files written to ``tests/outputs/tex/``):
 
 .. code-block:: bash
 
-    python ./tests/unit/test_documents.py
+    # Linux / macOS
+    RUN_BENCHMARKS=1 python -m tests.unit.test_documents_tex
+
+    # Windows (Command Prompt)
+    set RUN_BENCHMARKS=1 && python -m tests.unit.test_documents_tex
+
+    # Windows (PowerShell)
+    $env:RUN_BENCHMARKS="1"; python -m tests.unit.test_documents_tex
 
 """
 
@@ -44,6 +55,7 @@ from pathlib import Path
 # Project-level imports
 # =======================================================================
 from losalamos.documents import Document
+from tests.conftest import OUTPUT_DIR, RUN_BENCHMARKS
 
 # ***********************************************************************
 # CLASSES
@@ -72,7 +84,11 @@ class TestDocumentNew(unittest.TestCase):
         - ``cls._overlay_template``: used in overlay-mode tests; shares
           one file with the base (collision) and adds one exclusive file.
         """
-        cls._tmp_root = tempfile.mkdtemp(prefix="document_test_")
+        if RUN_BENCHMARKS:
+            cls._tmp_root = OUTPUT_DIR / "documents"
+            cls._tmp_root.mkdir(parents=True, exist_ok=True)
+        else:
+            cls._tmp_root = Path(tempfile.mkdtemp(prefix="document_test_"))
 
         # Build a minimal BASE_TEMPLATE tree
         # --------------------------------------------------------------
@@ -98,7 +114,8 @@ class TestDocumentNew(unittest.TestCase):
         """
         Runs once after all tests. Removes the entire temporary tree.
         """
-        shutil.rmtree(cls._tmp_root, ignore_errors=True)
+        if not RUN_BENCHMARKS:
+            shutil.rmtree(cls._tmp_root, ignore_errors=True)
 
     def setUp(self):
         """
