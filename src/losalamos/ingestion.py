@@ -219,7 +219,8 @@ class Ingester:
 
     def get_reference_object(self):
         """
-        Identifies the entry type from the source folder name and returns the corresponding reference class instance.
+        Identifies the entry type from the source folder name and
+        returns the corresponding reference class instance.
 
         :return: An instance of the reference class associated with the folder's name.
         :rtype: :class:`Reference`

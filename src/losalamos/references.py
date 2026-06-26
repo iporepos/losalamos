@@ -368,7 +368,7 @@ class Reference(DataSet):
             chars.insert(0, "a")
         return "".join(chars)
 
-    def define_file_name(self, library_folder=None, extension="md"):
+    def define_file_name(self, library_folder=None, extension="md", root_only=False):
         """
         Generate a unique filename based on author, year, and an incrementing
         alphabetic suffix to avoid collisions.
@@ -379,20 +379,35 @@ class Reference(DataSet):
         number of collisions via variable-length base-26 suffixes.
 
         If ``library_folder`` is provided and exists, the directory is scanned
-        for files matching ``{author}_{year}_*.{extension}``. The highest
+        for files matching ``{author}_{year}_*.{extension}``. By default the
+        scan is **recursive** (all subfolders included); set ``root_only=True``
+        to restrict the search to the top-level folder only. The highest
         existing suffix (ordered by length first, then alphabetically) is
         identified and incremented to produce the next unique name. If no
         matching files are found, the suffix defaults to ``"a"``.
 
-        Examples of generated filenames::
+        The table below illustrates the filename suffix sequence:
 
-            Smith_2020_a      # first entry
-            Smith_2020_b      # second entry
-            Smith_2020_z      # 26th entry
-            Smith_2020_aa     # 27th entry
-            Smith_2020_az     # 52nd entry
-            Smith_2020_ba     # 53rd entry
-            Smith_2020_aaa    # 703rd entry
+        .. list-table::
+           :header-rows: 1
+           :widths: auto
+
+           * - Filename
+             - Entry index
+           * - ``Smith_2020_a``
+             - 1st
+           * - ``Smith_2020_b``
+             - 2nd
+           * - ``Smith_2020_z``
+             - 26th
+           * - ``Smith_2020_aa``
+             - 27th
+           * - ``Smith_2020_az``
+             - 52nd
+           * - ``Smith_2020_ba``
+             - 53rd
+           * - ``Smith_2020_aaa``
+             - 703rd
 
         :param library_folder: Directory to scan for existing files when
             determining the next suffix. If ``None`` or the path does not
@@ -401,6 +416,10 @@ class Reference(DataSet):
         :param extension: File extension used when globbing for existing
             filename collisions. Defaults to ``"md"``.
         :type extension: str
+        :param root_only: If ``True``, restricts the search to the top-level
+            of ``library_folder``, ignoring subfolders. Defaults to ``False``
+            (recursive scan).
+        :type root_only: bool
         :return: The generated filename string in the format
             ``{author}_{year}_{suffix}``, without a file extension.
         :rtype: str
@@ -441,7 +460,8 @@ class Reference(DataSet):
                 # -------------------------------------------------------
 
                 pattern = f"{author}_{year}_*.{extension}"
-                existing_files = list(dst_folder.glob(pattern))
+                glob_fn = dst_folder.glob if root_only else dst_folder.rglob
+                existing_files = list(glob_fn(pattern))
 
                 # -------------------------------------------------------
                 # 4. Extract suffix letters from existing filenames
