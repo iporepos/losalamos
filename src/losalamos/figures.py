@@ -961,6 +961,148 @@ class FigureSVG(Figure):
             f"Element with inkscape:label '{old_label}' not found in document."
         )
 
+    def embed(self, file, layer, group, overwrite=False):
+        """
+        Embed an external SVG file as a new group, creating the target
+        layer if it does not already exist.
+
+        The entire content of ``file`` is wrapped in a single ``<g id=group>``
+        (itself wrapping a nested ``<svg>`` that preserves the source's own
+        ``viewBox``/``width``/``height``, keeping its ``<defs>`` self-contained
+        and immune to id collisions), then appended to the named layer. If
+        the layer does not exist, it is created as an empty Inkscape layer
+        first. If a group with the given ``id`` already exists anywhere in
+        the document, the call raises unless ``overwrite=True``.
+
+        :param file: Path to the external SVG file to embed (e.g. a
+            matplotlib-exported plot).
+        :type file: str or :class:`pathlib.Path`
+        :param layer: Label of the layer to embed into. Created if absent.
+        :type layer: str
+        :param group: ``id`` to assign to the embedded group. Used on
+            re-runs to find and replace this same group.
+        :type group: str
+        :param overwrite: If ``False`` (default), raises when a group with
+            this ``id`` already exists, to avoid silently clobbering
+            existing content. Set ``True`` to replace it in place.
+        :type overwrite: bool
+        :return: None
+        :rtype: NoneType
+
+        :raises FileNotFoundError: If ``file`` does not exist.
+        :raises ValueError: If ``group`` already exists and
+            ``overwrite=False``.
+
+        .. note::
+
+            This only updates the in-memory tree. Call :meth:`save` to
+            persist changes to disk.
+
+        .. seealso::
+
+            :meth:`get_layers`, :meth:`get_layer_elements`, :meth:`save`
+
+        """
+        file = Path(file)
+        if not file.exists():
+            raise FileNotFoundError(f"Embed source not found: {file}")
+
+        svg_ns = self.name_spaces["svg"]
+        inkscape_ns = self.name_spaces["inkscape"]
+        label_attr = f"{{{inkscape_ns}}}label"
+
+        # find or create the target layer
+        layers = self.get_layers()
+        target_layer = layers.get(layer)
+
+        if target_layer is None:
+            target_layer = etree.SubElement(
+                self.data,
+                f"{{{svg_ns}}}g",
+                nsmap={"inkscape": inkscape_ns},
+            )
+            target_layer.set("id", layer)
+            target_layer.set(label_attr, layer)
+            target_layer.set(f"{{{inkscape_ns}}}groupmode", "layer")
+
+        # check for an existing group with this id anywhere in the document
+        existing = self.data.xpath(
+            f"//svg:g[@id='{group}']", namespaces=self.name_spaces
+        )
+        if existing and not overwrite:
+            raise ValueError(
+                f"Group id='{group}' already exists. Pass overwrite=True to replace it."
+            )
+
+        # parse the external SVG and pull its sizing attributes
+        source_tree = etree.parse(str(file))
+        source_root = source_tree.getroot()
+        viewbox = source_root.get("viewBox")
+        width_str = source_root.get("width")
+        height_str = source_root.get("height")
+
+        # determine the scale factor needed to convert the source SVG's
+        # declared physical units into the master document's user-units.
+        # matplotlib exports width/height in points ("pt"); this document's
+        # user-units are mm (1 user-unit == 1mm, per its own viewBox/width
+        # match). 1pt = 25.4/72 mm, which matches the scale Inkscape itself
+        # applies on a manual SVG import.
+        PT_TO_MM = 25.4 / 72.0
+
+        def _parse_length(s):
+            """Split a numeric length string into (value, unit)."""
+            s = s.strip()
+            for unit in ("pt", "mm", "cm", "in", "px"):
+                if s.endswith(unit):
+                    return float(s[: -len(unit)]), unit
+            return float(s), "px"  # bare number: SVG user-units, treat as px
+
+        scale = 1.0
+        if width_str:
+            value, unit = _parse_length(width_str)
+            if unit == "pt":
+                scale = PT_TO_MM
+            elif unit == "mm":
+                scale = 1.0
+            elif unit == "cm":
+                scale = 10.0
+            elif unit == "in":
+                scale = 25.4
+            # "px"/bare: assume already in document user-units, scale = 1.0
+
+        # build the new group
+        new_group = etree.Element(f"{{{svg_ns}}}g")
+        new_group.set("id", group)
+        new_group.set("data-embedded-from", file.name)
+        if scale != 1.0:
+            new_group.set("transform", f"scale({scale})")
+
+        # nest the source content in its own <svg>, sized in raw viewBox
+        # units (no pt/mm suffix) since the group-level transform above
+        # already converts those units into the master's coordinate space
+        nested_svg = etree.SubElement(new_group, f"{{{svg_ns}}}svg")
+        if viewbox:
+            nested_svg.set("viewBox", viewbox)
+            # width/height in bare viewBox units; the wrapping <g> transform
+            # handles the physical-unit conversion, so no unit suffix here
+            vb_parts = viewbox.split()
+            if len(vb_parts) == 4:
+                nested_svg.set("width", vb_parts[2])
+                nested_svg.set("height", vb_parts[3])
+        nested_svg.set("overflow", "visible")
+
+        for child in list(source_root):
+            nested_svg.append(child)
+
+        if existing:
+            # overwrite=True path: replace in place, preserving position
+            old_group = existing[0]
+            old_group.getparent().replace(old_group, new_group)
+        else:
+            target_layer.append(new_group)
+
+        return None
+
     def to_image(
         self,
         file_output=None,
