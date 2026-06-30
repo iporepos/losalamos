@@ -1121,6 +1121,56 @@ works on any element type.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="losalamos.figures.FigureSVG.embed">
+<span class="sig-name descname"><span class="pre">embed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">group</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overwrite</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/figures.html#FigureSVG.embed"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.figures.FigureSVG.embed" title="Link to this definition">#</a></dt>
+<dd><p>Embed an external SVG file as a new group, creating the target
+layer if it does not already exist.</p>
+<p>The entire content of <code class="docutils literal notranslate"><span class="pre">file</span></code> is wrapped in a single <code class="docutils literal notranslate"><span class="pre">&lt;g</span> <span class="pre">id=group&gt;</span></code>
+(itself wrapping a nested <code class="docutils literal notranslate"><span class="pre">&lt;svg&gt;</span></code> that preserves the source’s own
+<code class="docutils literal notranslate"><span class="pre">viewBox</span></code>/<code class="docutils literal notranslate"><span class="pre">width</span></code>/<code class="docutils literal notranslate"><span class="pre">height</span></code>, keeping its <code class="docutils literal notranslate"><span class="pre">&lt;defs&gt;</span></code> self-contained
+and immune to id collisions), then appended to the named layer. If
+the layer does not exist, it is created as an empty Inkscape layer
+first. If a group with the given <code class="docutils literal notranslate"><span class="pre">id</span></code> already exists anywhere in
+the document, the call raises unless <code class="docutils literal notranslate"><span class="pre">overwrite=True</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>file</strong> (str or <code class="xref py py-class docutils literal notranslate"><span class="pre">pathlib.Path</span></code>) – Path to the external SVG file to embed (e.g. a
+matplotlib-exported plot).</p></li>
+<li><p><strong>layer</strong> (<em>str</em>) – Label of the layer to embed into. Created if absent.</p></li>
+<li><p><strong>group</strong> (<em>str</em>) – <code class="docutils literal notranslate"><span class="pre">id</span></code> to assign to the embedded group. Used on
+re-runs to find and replace this same group.</p></li>
+<li><p><strong>overwrite</strong> (<em>bool</em>) – If <code class="docutils literal notranslate"><span class="pre">False</span></code> (default), raises when a group with
+this <code class="docutils literal notranslate"><span class="pre">id</span></code> already exists, to avoid silently clobbering
+existing content. Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to replace it in place.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>NoneType</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>FileNotFoundError</strong> – If <code class="docutils literal notranslate"><span class="pre">file</span></code> does not exist.</p></li>
+<li><p><strong>ValueError</strong> – If <code class="docutils literal notranslate"><span class="pre">group</span></code> already exists and
+<code class="docutils literal notranslate"><span class="pre">overwrite=False</span></code>.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This only updates the in-memory tree. Call <a class="reference internal" href="#losalamos.figures.FigureSVG.save" title="losalamos.figures.FigureSVG.save"><code class="xref py py-meth docutils literal notranslate"><span class="pre">save()</span></code></a> to
+persist changes to disk.</p>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#losalamos.figures.FigureSVG.get_layers" title="losalamos.figures.FigureSVG.get_layers"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_layers()</span></code></a>, <a class="reference internal" href="#losalamos.figures.FigureSVG.get_layer_elements" title="losalamos.figures.FigureSVG.get_layer_elements"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_layer_elements()</span></code></a>, <a class="reference internal" href="#losalamos.figures.FigureSVG.save" title="losalamos.figures.FigureSVG.save"><code class="xref py py-meth docutils literal notranslate"><span class="pre">save()</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="losalamos.figures.FigureSVG.to_image">
 <span class="sig-name descname"><span class="pre">to_image</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_output</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dpi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">300</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">crop_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hide_layers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_layers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_inclusive</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">to_jpeg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">remove_png</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/figures.html#FigureSVG.to_image"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.figures.FigureSVG.to_image" title="Link to this definition">#</a></dt>
 <dd><p>Export the current drawing as an image file, optionally adjusting layers and format.</p>
@@ -1306,6 +1356,7 @@ direct PDF export from Inkscape.</p>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.figures.FigureSVG.rename_layer"><code class="docutils literal notranslate"><span class="pre">FigureSVG.rename_layer()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.figures.FigureSVG.rename_element_id"><code class="docutils literal notranslate"><span class="pre">FigureSVG.rename_element_id()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.figures.FigureSVG.rename_element_label"><code class="docutils literal notranslate"><span class="pre">FigureSVG.rename_element_label()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.figures.FigureSVG.embed"><code class="docutils literal notranslate"><span class="pre">FigureSVG.embed()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.figures.FigureSVG.to_image"><code class="docutils literal notranslate"><span class="pre">FigureSVG.to_image()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.figures.FigureSVG.to_pdf"><code class="docutils literal notranslate"><span class="pre">FigureSVG.to_pdf()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.figures.FigureSVG.to_svg"><code class="docutils literal notranslate"><span class="pre">FigureSVG.to_svg()</span></code></a></li>
