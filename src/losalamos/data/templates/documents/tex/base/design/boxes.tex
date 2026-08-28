@@ -49,9 +49,10 @@
 }
 
 % --------------------------------------------------------------
-% List of Boxes command
-% Usage in main.tex:
-%   \tcblistof[\section*]{lob}{\trListOfBoxes}
+\newcommand{\notitleheading}[1]{}
 \newcommand{\listofboxes}{%
-    \tcblistof[\section*]{lob}{\trListOfBoxes}%
+    \auxlisttitle{\trListOfBoxes}%
+    \tcblistof[\notitleheading]{lob}{\trListOfBoxes}%
 }
+
+

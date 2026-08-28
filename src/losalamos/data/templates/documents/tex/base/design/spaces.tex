@@ -4,8 +4,12 @@
  a4paper,
  left=40mm,
  right=20mm,
- top=10mm,
- bottom=25mm
+ top=20mm,
+ includefoot,
+ bottom=20mm,
+ headheight=8mm,    % must fit your header content exactly, or LaTeX pads it for you
+ headsep=5mm,        % blank space between header and body text
+ footskip=10mm,      % distance from body text to footer baseline
 }
 
 % --------------------------------------------------------------
@@ -20,11 +24,11 @@
 
 % --------------------------------------------------------------
 % Paragraph indentation space
-\setlength{\parindent}{0mm}
+\setlength{\parindent}{4mm}
 
 % --------------------------------------------------------------
 % Paragraph spacing
-\setlength{\parskip}{2mm} 
+\setlength{\parskip}{2mm}
 
 % --------------------------------------------------------------
 % Space between float and surrounding text
@@ -43,8 +47,8 @@
 
 % --------------------------------------------------------------
 % Section spacing
-\titlespacing*{\section}      {0mm}{6mm}{2mm}
-\titlespacing*{\subsection}   {0mm}{2mm}{0mm}
+\titlespacing*{\section}      {-10mm}{6mm}{2mm}
+\titlespacing*{\subsection}   {-10mm}{2mm}{0mm}
 \titlespacing*{\subsubsection}{0mm}{2mm}{0mm}
 \titlespacing{\paragraph}
   {0mm}   % left indent

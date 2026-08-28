@@ -116,6 +116,44 @@ class Document(DataSet):
     def __init__(self, name="MyDocument", alias="Doc"):
         super().__init__(name=name, alias=alias)
 
+    def __str__(self):
+        """
+        String representation of a text-based :class:`Document`.
+
+        :class:`DataSet` (the parent class) assumes ``self.data`` is a
+        :class:`pandas.DataFrame` and previews it with ``.head()``/``.tail()``.
+        :class:`Document` overrides ``self.data`` to hold a plain list of
+        text lines (from :meth:`load_data`), so this override previews the
+        first and last lines instead, and skips straight to :class:`MbaE`'s
+        header (bypassing :meth:`DataSet.__str__`, which would otherwise
+        raise ``AttributeError`` on a list).
+
+        :returns: Formatted string with the object header plus a line-based
+            preview of :attr:`data`.
+        :rtype: str
+        """
+        str_super = super(DataSet, self).__str__()
+
+        if self.data is None:
+            return "{}\nData:\nNone\n".format(str_super)
+
+        n_lines = len(self.data)
+        n_preview = 5
+
+        if n_lines <= 2 * n_preview:
+            str_body = "".join(self.data).rstrip("\n")
+            str_out = "{}\nData ({} lines):\n{}\n".format(
+                str_super, n_lines, str_body
+            )
+        else:
+            str_head = "".join(self.data[:n_preview]).rstrip("\n")
+            str_tail = "".join(self.data[-n_preview:]).rstrip("\n")
+            str_out = "{}\nData ({} lines):\n{}\n ... \n{}\n".format(
+                str_super, n_lines, str_head, str_tail
+            )
+
+        return str_out
+
     def load_data(self, file_data):
         # overwrite relative path input
         # --------------------------------------------------
@@ -132,7 +170,7 @@ class Document(DataSet):
         # --------------------------------------------------
         self.update()
 
-    def new(self, name, folder, template_overlay=None):
+    def new(self, folder, name=None, template_overlay=None):
         """
         Create a new document folder by materializing template files into a target location.
 
@@ -204,9 +242,15 @@ class Document(DataSet):
             No files are created or modified in this case.
         :raises NotADirectoryError: If ``template_overlay`` is provided but does not
             point to a valid directory. Validated before any files are written.
+        :raises FileNotFoundError: If the merged template does not contain exactly
+            one top-level ``main.*`` file to load as the document's entry point.
 
-        :returns: Absolute path to the newly created document folder.
-        :rtype: pathlib.Path
+        :returns: None. Acts in place: locates the merged tree's top-level
+            ``main.*`` file and calls :meth:`load_data` on it, which updates
+            :attr:`file_data`, :attr:`data`, and (for subclasses such as
+            :class:`DocumentTeX`) :attr:`is_main` to reflect the newly created
+            document.
+        :rtype: None
 
         .. dropdown:: Usage example
             :icon: code-square
@@ -216,19 +260,23 @@ class Document(DataSet):
 
                 # Single-layer: base template only (Document base class)
                 doc = Document(name="MyDoc", alias="D")
-                target = doc.new("my_doc", "/home/user/documents")
+                doc.new("my_doc", "/home/user/documents")
+                # doc.file_data now points at the new document's main file
 
                 # Two-layer: base + variant (subclass sets VARIANT_TEMPLATE)
                 report = Report(name="AnnualReport", alias="AR")
-                target = report.new("annual_report", "/home/user/documents")
+                report.new("annual_report", "/home/user/documents")
 
                 # Three-layer: base + variant + private user overlay
-                target = report.new(
+                report.new(
                     "client_report",
                     "/home/user/documents",
                     template_overlay="/home/user/private/client_x",
                 )
         """
+
+        if name is None:
+            name = self.name
 
         # Resolve paths
         # --------------------------------------------------
@@ -258,14 +306,31 @@ class Document(DataSet):
             """Returns {relative_path: absolute_path} for every file under root."""
             return {f.relative_to(root): f for f in root.rglob("*") if f.is_file()}
 
+        # Walk the class's MRO base-to-derived, collecting every distinct
+        # VARIANT_TEMPLATE set directly on each ancestor (via __dict__, not
+        # inherited attribute resolution). Plain attribute lookup on
+        # self.VARIANT_TEMPLATE would only ever see the single value set by
+        # the most-derived class -- e.g. ProposalCommercial(Professional)
+        # would silently shadow Professional's own VARIANT_TEMPLATE instead
+        # of layering on top of it, breaking the base -> variant -> variant
+        # inheritance chain this method is meant to support.
+        # --------------------------------------------------
+        variant_templates = []
+        seen = set()
+        for klass in reversed(type(self).__mro__):
+            variant = klass.__dict__.get("VARIANT_TEMPLATE")
+            if variant is not None and variant not in seen:
+                variant_templates.append(variant)
+                seen.add(variant)
+
         # Build each active layer; higher layers overwrite lower ones
         # --------------------------------------------------
         merged = {}
 
         merged.update(relative_files(self.BASE_TEMPLATE))
 
-        if self.VARIANT_TEMPLATE is not None:
-            merged.update(relative_files(self.VARIANT_TEMPLATE))
+        for variant_template in variant_templates:
+            merged.update(relative_files(variant_template))
 
         if template_overlay is not None:
             merged.update(relative_files(template_overlay))
@@ -277,8 +342,24 @@ class Document(DataSet):
             dest.parent.mkdir(parents=True, exist_ok=True)
             shutil.copy2(src, dest)
 
-        return target
+        # Locate the merged tree's entry file and load it in place
+        # --------------------------------------------------
+        main_candidates = [
+            rel_path
+            for rel_path in merged
+            if len(rel_path.parts) == 1 and rel_path.stem == "main"
+        ]
 
+        if len(main_candidates) != 1:
+            raise FileNotFoundError(
+                "Expected exactly one top-level 'main.*' file in the merged "
+                f"template, found {len(main_candidates)}: {main_candidates}. "
+                "Cannot determine which file to load."
+            )
+
+        self.load_data(target / main_candidates[0])
+
+        return None
 
 # CLASSES -- Module-level
 # =======================================================================
@@ -436,7 +517,7 @@ class DocumentTeX(Document):
 
         return None
 
-    def to_flat(self, file_output=None, compile_first=True, command="pdf"):
+    def to_flat(self, file_output=None, compile_first=False, command="pdf"):
         """
         Flatten the TeX document by recursively resolving ``\\input`` /
         ``\\include`` directives and embedding the compiled bibliography.
@@ -456,8 +537,7 @@ class DocumentTeX(Document):
         :param command: ``latexmk`` engine flag passed to :meth:`to_pdf` when
             ``compile_first=True``.
         :type command: str
-        :returns: The fully flattened LaTeX document as a string, or ``None``
-            if :attr:`is_main` is ``False``.
+        :returns: ``None``
         :rtype: str or None
         """
         if not self.is_main:
@@ -470,7 +550,7 @@ class DocumentTeX(Document):
             Path(file_output).absolute() if file_output is not None else self.file_data
         )
 
-        flat_content = DocumentTeX.make_flat(self.file_data, output_tex=output_tex)
+        DocumentTeX.make_flat(self.file_data, output_tex=output_tex)
 
         if compile_first:
             for suffix in (".bbl", ".pdf"):
@@ -478,9 +558,9 @@ class DocumentTeX(Document):
                 if p.exists():
                     p.unlink()
 
-        return flat_content
+        return None
 
-    def export(self, folder_root, name, flatten=False, split=False):
+    def export(self, folder_root, name, flatten=False, split=False, zip_export=False):
         """
         Export the TeX document to a self-contained folder.
 
@@ -491,11 +571,17 @@ class DocumentTeX(Document):
           copied as-is, retaining its original filename.
         - **Flatten** (``flatten=True``, ``split=False``): ``\\input`` /
           ``\\include`` directives are resolved recursively and the result is
-          written as a single file named ``<name>.tex``.
-        - **Split** (``split=True``): implies flattening. The document is
-          first flattened into a temporary file, then split into
-          ``preamble.tex`` and ``main.tex``. The intermediate flat file is
-          removed after splitting.
+          written as a single file named ``<name>.tex``. Every image
+          (``\\includegraphics``) and bibliography resource
+          (``\\addbibresource``) referenced anywhere in the document tree
+          is also copied alongside, preserving its path relative to the
+          original project root so the (unmodified) references in the
+          flattened text keep resolving correctly.
+        - **Split** (``split=True``): implies flattening, with the same
+          image/bibliography-resource copying described above. The
+          document is first flattened into a temporary file, then split
+          into ``preamble.tex`` and ``main.tex``. The intermediate flat
+          file is removed after splitting.
 
         :param folder_root: Parent directory under which the export folder
             is created.
@@ -511,7 +597,18 @@ class DocumentTeX(Document):
             into ``preamble.tex`` and ``main.tex``. Takes precedence over
             ``flatten``.
         :type split: bool
-        :returns: Path to the created export folder.
+        :param zip_export: If ``True``, additionally packages the export
+            folder's contents into a ``.zip`` archive at
+            ``folder_root/<name>.zip``. Files are placed at the archive's
+            root -- not nested inside a ``<name>/`` folder -- so the zip
+            can be dropped directly into Overleaf's "Upload Project" (or
+            any other single-archive project import) without any manual
+            restructuring first. The uncompressed export folder is left
+            in place alongside it either way.
+        :type zip_export: bool
+        :returns: Path to the created export folder. When ``zip_export``
+            is ``True``, the archive sits alongside it at
+            ``folder_root/<name>.zip``.
         :rtype: pathlib.Path
         :raises RuntimeError: If the document is not a main file (i.e.
             ``\\documentclass`` is absent). The ``is_main`` attribute is
@@ -548,21 +645,35 @@ class DocumentTeX(Document):
             # Flatten to a temp file inside the export folder, then split
             # and remove the intermediate flat file
             flat_file = export_dir / f"_{name}_flat.tex"
-            DocumentTeX.make_flat(self.file_data, output_tex=flat_file)
+            assets = set()
+            DocumentTeX.make_flat(self.file_data, output_tex=flat_file, assets=assets)
             DocumentTeX.split_preamble(flat_file, output_folder=export_dir)
             flat_file.unlink()
+            DocumentTeX._copy_assets(assets, self.file_data.parent, export_dir)
 
         elif flatten:
             # Single merged file named after the export folder
             output_tex = export_dir / f"{name}.tex"
-            DocumentTeX.make_flat(self.file_data, output_tex=output_tex)
+            assets = set()
+            DocumentTeX.make_flat(self.file_data, output_tex=output_tex, assets=assets)
+            DocumentTeX._copy_assets(assets, self.file_data.parent, export_dir)
 
         else:
             # Plain copy, original filename retained
             shutil.copy2(self.file_data, export_dir / self.file_data.name)
 
-        return export_dir
+        # Optional zip archive, contents at the archive root (no wrapping
+        # folder) so it can be dropped straight into Overleaf's project
+        # importer or similar
+        # --------------------------------------------------
+        if zip_export:
+            shutil.make_archive(
+                base_name=str(folder_root / name),
+                format="zip",
+                root_dir=export_dir,
+            )
 
+        return export_dir
     @staticmethod
     def split_preamble(
         input_tex, preamble_name="preamble", main_name="main", output_folder=None
@@ -697,7 +808,7 @@ class DocumentTeX(Document):
         return preamble_path, main_path
 
     @staticmethod
-    def make_flat(input_tex, output_tex=None):
+    def make_flat(input_tex, output_tex=None, assets=None):
         """
         Flatten a TeX document by recursively resolving ``\\input`` /
         ``\\include`` directives and embedding the compiled bibliography.
@@ -712,6 +823,20 @@ class DocumentTeX(Document):
             ``None`` (default), the result is written back over the source
             file in-place.
         :type output_tex: str or pathlib.Path or None
+        :param assets: Optional set, populated as a side effect with the
+            resolved absolute paths of every image (``\\includegraphics``)
+            and bibliography resource (``\\addbibresource``) referenced
+            anywhere in the document tree. Unlike ``\\bibliography``
+            (see below), ``\\addbibresource`` references are left
+            untouched in the flattened text -- biblatex/biber still needs
+            to read the raw ``.bib`` file after flattening -- so this is
+            the only way to learn which files must travel alongside the
+            flattened output. When ``None`` (default), no collection is
+            performed. Paths that can't be found on disk (e.g. images
+            resolved via TeX's own search path rather than the project
+            tree, such as the ``example-image-*`` placeholders) are never
+            added.
+        :type assets: set or None
         :returns: The fully flattened LaTeX source as a string.
         :rtype: str
         """
@@ -730,7 +855,10 @@ class DocumentTeX(Document):
                 target_file = match.group(1).strip()
                 if not target_file.endswith(".tex"):
                     target_file += ".tex"
-                return _flatten_recursive(current_path.parent / target_file)
+                # \input/\include paths in LaTeX always resolve relative to the
+                # root document's directory, regardless of nesting depth -- so
+                # this must anchor on input_tex.parent, not current_path.parent.
+                return _flatten_recursive(input_tex.parent / target_file)
 
             content = pattern_input.sub(replace_input, content)
 
@@ -745,6 +873,42 @@ class DocumentTeX(Document):
 
             content = pattern_bib.sub(replace_bib, content)
 
+            if assets is not None:
+                # \addbibresource{...} (biblatex) -- left in place in the
+                # flattened text (biber still needs the raw .bib file after
+                # flattening), so only the path is collected here.
+                pattern_addbibresource = re.compile(
+                    r"\\addbibresource\s*\{\s*([^}]+)\s*\}"
+                )
+                for m in pattern_addbibresource.finditer(content):
+                    target = m.group(1).strip()
+                    if not target.endswith(".bib"):
+                        target += ".bib"
+                    candidate = input_tex.parent / target
+                    if candidate.exists():
+                        assets.add(candidate)
+
+                # \includegraphics[...]{...} -- the extension is frequently
+                # omitted (LaTeX searches \Gin@extensions at compile time),
+                # so every existing file matching that stem is collected.
+                pattern_includegraphics = re.compile(
+                    r"\\includegraphics\s*(?:\[[^\]]*\])?\s*\{\s*([^}]+)\s*\}"
+                )
+                _image_extensions = (
+                    ".pdf", ".png", ".jpg", ".jpeg", ".eps", ".gif"
+                )
+                for m in pattern_includegraphics.finditer(content):
+                    target = m.group(1).strip()
+                    candidate = input_tex.parent / target
+                    if candidate.suffix:
+                        if candidate.exists():
+                            assets.add(candidate)
+                    else:
+                        for ext in _image_extensions:
+                            found = input_tex.parent / (target + ext)
+                            if found.exists():
+                                assets.add(found)
+
             return content
 
         flat_content = _flatten_recursive(input_tex)
@@ -753,6 +917,34 @@ class DocumentTeX(Document):
             f_out.write(flat_content)
 
         return flat_content
+
+    @staticmethod
+    def _copy_assets(assets, source_root, export_dir):
+        """
+        Copy every resolved asset path into ``export_dir``, preserving its
+        path relative to ``source_root`` so that the unmodified
+        ``\\includegraphics``/``\\addbibresource`` references already
+        present in the flattened output continue to resolve correctly
+        without any text rewriting.
+
+        :param assets: Absolute asset paths, as collected by
+            :meth:`make_flat`.
+        :type assets: set of pathlib.Path
+        :param source_root: The document's original project root
+            (typically ``self.file_data.parent``), used to compute each
+            asset's relative destination inside ``export_dir``.
+        :type source_root: pathlib.Path
+        :param export_dir: The export folder assets are copied into.
+        :type export_dir: pathlib.Path
+        """
+        for asset_path in assets:
+            try:
+                rel_path = asset_path.relative_to(source_root)
+            except ValueError:
+                rel_path = Path(asset_path.name)
+            dest = export_dir / rel_path
+            dest.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(asset_path, dest)
 
     @staticmethod
     def lint_paragraphs(input_tex, output_tex=None):
@@ -1648,12 +1840,16 @@ class DocumentTeX(Document):
 
 class Essay(DocumentTeX):
 
-    pass
+    VARIANT_TEMPLATE = FOLDER_TEMPLATES_DOCUMENTS / "tex/essay"
 
 
 class Professional(Essay):
 
     VARIANT_TEMPLATE = FOLDER_TEMPLATES_DOCUMENTS / "tex/professional"
+
+class ProposalCommercial(Professional):
+
+    VARIANT_TEMPLATE = FOLDER_TEMPLATES_DOCUMENTS / "tex/proposal-commercial"
 
 
 # ***********************************************************************

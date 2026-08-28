@@ -1,0 +1,37 @@
+\section{Simple section} \label{sec:simple}
+
+Hey, lets make a citation \cite{Hoffman_2023_a}. \lipsum[1].
+
+\lipsum[1-2]
+
+\subsection{Simple subsection} \label{sec:subsection}
+
+\lipsum[1]
+
+The quadratic formula,
+
+\begin{equation}
+    \label{eq:quadratic}
+    x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a},
+\end{equation}
+
+\lipsum[1-4]
+
+\paragraph{This a run-in paragraph} \lipsum[1]
+
+% start the figure
+\begin{figure}[h!] % set on bottom (b)
+\centering
+% set the file and size
+\includegraphics[width=0.5\textwidth]{images/water.png}
+% setup caption
+\caption[A water figure] % LOF caption
+{
+    \textbf{The water figure.}
+    Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+}
+% set the label
+\label{fig:regular:bottom}
+\end{figure}
+
+\lipsum[2-3]

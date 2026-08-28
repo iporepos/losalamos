@@ -6,17 +6,32 @@
 
 \titleformat{\section}
   {\bfseries\sffamily\Large\color{HeadingColor}}
-  {\thesection}{5mm}{}
+  {\makebox[8mm][l]{\thesection}}{2mm}{}
 
 \titleformat{\subsection}
   {\bfseries\sffamily\large\color{HeadingColor}}
-  {\thesubsection}{4mm}{}
+  {\makebox[8mm][l]{\thesubsection}}{2mm}{}
 
 \titleformat{\subsubsection}
   {\sffamily\normalsize\color{HeadingColor}}
-  {\thesubsubsection}{4mm}{}
+  {\makebox[10mm][l]{\thesubsubsection}}{4mm}{}
 
 \titleformat{\paragraph}[runin]
   {\bfseries\sffamily\normalsize\color{HeadingColor}}
   {}{0mm}{}[.]
+
+
+% --------------------------------------------------------------
+% Shared heading for auxiliary lists (List of Boxes, List of
+% Symbols, References) so they match the plain \section* styling
+% used by \tableofcontents / \listoffigures / \listoftables,
+% instead of falling back to each package's own internal heading
+\newcommand{\auxlisttitle}[1]{%
+  \begingroup
+    \titlespacing*{\section}{0mm}{6mm}{2mm}%
+    \section*{#1}%
+  \endgroup
+  \phantomsection
+  \addcontentsline{toc}{section}{#1}%
+}
 

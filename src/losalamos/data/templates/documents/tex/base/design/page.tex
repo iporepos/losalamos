@@ -1,5 +1,21 @@
+
+\fancyhfoffset[L]{20mm}   % header/footer extend 20mm further left than body text
+\fancyhfoffset[R]{0mm}   % header/footer extend 10mm further right than body text
+
 % --------------------------------------------------------------
-% Page style 
+
+\fancypagestyle{plain}{%
+  \fancyhf{}
+  \fancyhead[L]{\sffamily\scriptsize{\HeaderLeft}}
+  \fancyhead[R]{\sffamily\scriptsize{\HeaderRight}}
+  \renewcommand{\headrulewidth}{0.4pt}
+  \fancyfoot[L]{\sffamily\scriptsize{\FooterLeft}}
+  \fancyfoot[C]{\sffamily\scriptsize{\FooterCenter}}
+  \fancyfoot[R]{\sffamily\scriptsize{\FooterRight}}
+  \renewcommand{\footrulewidth}{0.2pt}
+}
+
+% Page style
 \pagestyle{fancy}
 \fancyhf{} % clear all header and footer fields
 

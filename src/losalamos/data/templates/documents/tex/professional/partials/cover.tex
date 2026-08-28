@@ -1,37 +1,77 @@
 % ==============================================================
-% cover.tex — Essay
-% Classic single-author cover with title block and abstract.
+% cover.tex — Professional
+% Top-anchored, ragged-right cover in the style of a 1990s
+% international agency report (World Bank / UNDP / OECD working
+% paper conventions): kicker line, flush-left title block, thin
+% accent rule, prepared-for/by block, project reference block,
+% generous lower white space, footer.
 % ==============================================================
 
 \thispagestyle{empty}
 
-\vspace*{\fill}
+\begingroup
+\raggedright
+
+% --------------------------------------------------------------
+% Kicker: field / type
+{\small\sffamily\bfseries\color{AccentColor}%
+    \MakeUppercase{\DocField}~\textbullet~\MakeUppercase{\DocType}}
+
+\vspace{10mm}
 
 % --------------------------------------------------------------
 % Title block
-\begin{center}
-    {\LARGE \sffamily\bfseries\color{AccentColor} \DocTitle}\\[4mm]
-    {\large \sffamily\color{AccentColor} \DocSubtitle}\\[10mm]
-    {\normalsize \rmfamily \DocAuthor \DocPartyAName}\\[2mm]
-    {\small \rmfamily \DocCity, \DocDate \DocID}
-\end{center}
+{\Huge\sffamily\bfseries\color{TextColor} \DocTitle}\\[3mm]
+{\Large\sffamily\color{AccentColor} \DocSubtitle}
 
-\vspace*{\fill}
+\vspace{8mm}
+{\color{AccentColor}\hrule height 1pt}
+\vspace{12mm}
 
-{\color{AccentColor}\hrule}
+% --------------------------------------------------------------
+% Addressed to / prepared by
+\begin{tabular}{@{}p{38mm}p{0.55\textwidth}@{}}
+{\small\sffamily\bfseries\color{AccentColor} \MakeUppercase{\trAddressedTo}} &
+    {\normalsize\rmfamily\color{TextColor} \DocPartyBName} \\[3mm]
+{\small\sffamily\bfseries\color{AccentColor} \MakeUppercase{\trPreparedBy}} &
+    {\normalsize\rmfamily\color{TextColor} \DocPartyAName} \\
+\end{tabular}
 
-\vspace*{\fill}
+\vspace{12mm}
+{\color{RuleColor}\hrule height 0.4pt}
+\vspace{5mm}
 
 % --------------------------------------------------------------
 % Abstract
-\begin{center}
-    {\small \sffamily\bfseries\color{AccentColor} \MakeUppercase{\trAbstract}}
-\end{center}
+{\small\sffamily\bfseries\color{AccentColor} \MakeUppercase{\trAbstract}}
 
 \vspace{2mm}
 
-\noindent {\small \rmfamily \DocAbstract}
+{\justifying\small\rmfamily\color{TextColor} \DocAbstract\par}
 
-\vspace*{\fill}
+\vspace{8mm}
+{\color{RuleColor}\hrule height 0.4pt}
+\vspace{5mm}
 
+% --------------------------------------------------------------
+% Project reference block
+\begin{tabular}{@{}p{38mm}l@{}}
+{\scriptsize\sffamily\color{midgray} \MakeUppercase{\trProjectID}} &
+    {\scriptsize\rmfamily\color{midgray} \DocProjectID} \\
+{\scriptsize\sffamily\color{midgray} \MakeUppercase{\trFileID}} &
+    {\scriptsize\rmfamily\color{midgray} \DocFileID} \\
+{\scriptsize\sffamily\color{midgray} \MakeUppercase{\trVersion}} &
+    {\scriptsize\rmfamily\color{midgray} \DocVersion} \\
+{\scriptsize\sffamily\color{midgray} \MakeUppercase{\trDocumentID}} &
+    {\scriptsize\rmfamily\color{midgray} \DocID} \\
+\end{tabular}
+
+\vfill
+
+% --------------------------------------------------------------
+% Footer: certifier, city, date
+{\small\rmfamily\color{TextColor} \trCertifiedBy~\DocCertifier~---~\DocCertifierID}\\[2mm]
+{\small\rmfamily\color{TextColor} \DocCity, \DocDate}
+
+\endgroup
 \newpage
