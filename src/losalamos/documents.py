@@ -142,9 +142,7 @@ class Document(DataSet):
 
         if n_lines <= 2 * n_preview:
             str_body = "".join(self.data).rstrip("\n")
-            str_out = "{}\nData ({} lines):\n{}\n".format(
-                str_super, n_lines, str_body
-            )
+            str_out = "{}\nData ({} lines):\n{}\n".format(str_super, n_lines, str_body)
         else:
             str_head = "".join(self.data[:n_preview]).rstrip("\n")
             str_tail = "".join(self.data[-n_preview:]).rstrip("\n")
@@ -360,6 +358,7 @@ class Document(DataSet):
         self.load_data(target / main_candidates[0])
 
         return None
+
 
 # CLASSES -- Module-level
 # =======================================================================
@@ -674,6 +673,7 @@ class DocumentTeX(Document):
             )
 
         return export_dir
+
     @staticmethod
     def split_preamble(
         input_tex, preamble_name="preamble", main_name="main", output_folder=None
@@ -894,9 +894,7 @@ class DocumentTeX(Document):
                 pattern_includegraphics = re.compile(
                     r"\\includegraphics\s*(?:\[[^\]]*\])?\s*\{\s*([^}]+)\s*\}"
                 )
-                _image_extensions = (
-                    ".pdf", ".png", ".jpg", ".jpeg", ".eps", ".gif"
-                )
+                _image_extensions = (".pdf", ".png", ".jpg", ".jpeg", ".eps", ".gif")
                 for m in pattern_includegraphics.finditer(content):
                     target = m.group(1).strip()
                     candidate = input_tex.parent / target
@@ -1846,6 +1844,7 @@ class Essay(DocumentTeX):
 class Professional(Essay):
 
     VARIANT_TEMPLATE = FOLDER_TEMPLATES_DOCUMENTS / "tex/professional"
+
 
 class ProposalCommercial(Professional):
 

@@ -109,6 +109,7 @@ CODE_PATTERN = re.compile(r"^F(\d{3})A(\d{3})$")
 # HELPERS
 # =======================================================================
 
+
 def _as_list(value) -> list:
     """
     Coerce a seed tags value to a list, handling str, list, and None.
@@ -292,6 +293,7 @@ def _build_twin_entry(
 # ENTRY POINT
 # =======================================================================
 
+
 def populate_canonical(
     seed_path: Path,
     vault_folder: Path,
@@ -366,7 +368,9 @@ def populate_canonical(
         tentative_code = _assign_code(theme, next_serial)
         merged["code"] = tentative_code
 
-        ok, serial_consumed = _write_entry(note_cls, merged, vault_folder, overwrite, label="write")
+        ok, serial_consumed = _write_entry(
+            note_cls, merged, vault_folder, overwrite, label="write"
+        )
         written += ok
         skipped += not ok
         if serial_consumed:
@@ -374,9 +378,15 @@ def populate_canonical(
 
         # Canonical code for twins is the one actually written (may differ
         # from tentative_code if the note was refreshed)
-        canonical_code = merged["code"] if not ok else (
-            tentative_code if serial_consumed
-            else _read_existing_code(vault_folder / _note_filename(merged["name"])) or tentative_code
+        canonical_code = (
+            merged["code"]
+            if not ok
+            else (
+                tentative_code
+                if serial_consumed
+                else _read_existing_code(vault_folder / _note_filename(merged["name"]))
+                or tentative_code
+            )
         )
 
         # Write twin notes immediately after, inheriting canonical's
@@ -390,7 +400,9 @@ def populate_canonical(
                 tags=merged["_tags"],
                 subject=merged["_subject"],
             )
-            ok, serial_consumed = _write_entry(note_cls, twin_entry, vault_folder, overwrite, label="twin ")
+            ok, serial_consumed = _write_entry(
+                note_cls, twin_entry, vault_folder, overwrite, label="twin "
+            )
             written += ok
             skipped += not ok
             if serial_consumed:
@@ -405,7 +417,9 @@ def populate_canonical(
 
 if __name__ == "__main__":
     if len(sys.argv) < 3:
-        print("Usage: python populate_canonical.py <seed.json> <vault_folder> [--overwrite]")
+        print(
+            "Usage: python populate_canonical.py <seed.json> <vault_folder> [--overwrite]"
+        )
         sys.exit(1)
 
     seed_path = Path(sys.argv[1])
