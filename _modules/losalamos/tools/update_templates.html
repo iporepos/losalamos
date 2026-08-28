@@ -26,18 +26,18 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=a95f357e85573c9b56d5" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=a95f357e85573c9b56d5" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
   
   <!-- So that users can add custom icons -->
-  <script defer src="../../../_static/scripts/fontawesome.js?digest=a95f357e85573c9b56d5"></script>
+  <script defer src="../../../_static/scripts/fontawesome.js?digest=cb8930eaaf36d9849b67"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=a95f357e85573c9b56d5" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=a95f357e85573c9b56d5" />
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
 
     <script src="../../../_static/documentation_options.js?v=d45e8c67"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
@@ -404,7 +404,7 @@
 <span class="c1"># Copyright (C) 2025 The Project Authors</span>
 <span class="c1"># See pyproject.toml for authors/maintainers.</span>
 <span class="c1"># See LICENSE for license details.</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 <span class="sd">Synchronise note templates to a target project folder.</span>
 
 <span class="sd">Copies all ``_*.md`` template files from the project-level templates</span>
@@ -419,7 +419,7 @@
 <span class="sd">    # Using short flag</span>
 <span class="sd">    python -m losalamos.tools.update_templates -n /path/to/notes</span>
 
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 <span class="c1"># IMPORTS</span>
 <span class="c1"># ***********************************************************************</span>
 
@@ -445,7 +445,7 @@
 <a class="viewcode-back" href="../../../generated/losalamos.tools.update_templates.html#losalamos.tools.update_templates.get_arguments">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">get_arguments</span><span class="p">():</span>
     <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">()</span>
-    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;-n&quot;</span><span class="p">,</span> <span class="s2">&quot;--notes&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Destination folder for note templates.&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">"-n"</span><span class="p">,</span> <span class="s2">"--notes"</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">"Destination folder for note templates."</span><span class="p">)</span>
     <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
     <span class="k">return</span> <span class="n">args</span></div>
 
@@ -454,31 +454,31 @@
 <div class="viewcode-block" id="main">
 <a class="viewcode-back" href="../../../generated/losalamos.tools.update_templates.html#losalamos.tools.update_templates.main">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">():</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Copy note templates from the project source into the target folder.</span>
 
 <span class="sd">    Templates are identified by the ``_*.md`` glob pattern. Missing</span>
 <span class="sd">    templates produce a warning; no error is raised.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">heading_section</span><span class="p">(</span><span class="s2">&quot;UPDATE TEMPLATES&quot;</span><span class="p">)</span>
+<span class="sd">    """</span>
+    <span class="n">heading_section</span><span class="p">(</span><span class="s2">"UPDATE TEMPLATES"</span><span class="p">)</span>
 
     <span class="n">args</span> <span class="o">=</span> <span class="n">get_arguments</span><span class="p">()</span>
 
     <span class="c1"># NOTES</span>
     <span class="c1"># -------------------------------------------------------------------</span>
-    <span class="n">heading_subsection</span><span class="p">(</span><span class="s2">&quot;[Notes]&quot;</span><span class="p">)</span>
+    <span class="n">heading_subsection</span><span class="p">(</span><span class="s2">"[Notes]"</span><span class="p">)</span>
 
     <span class="n">dst_notes</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">notes</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">get_message</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Source folder: </span><span class="si">{</span><span class="n">FOLDER_TEMPLATES_NOTES</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">))</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">get_message</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Target folder: </span><span class="si">{</span><span class="n">dst_notes</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">get_message</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Source folder: </span><span class="si">{</span><span class="n">FOLDER_TEMPLATES_NOTES</span><span class="si">}</span><span class="s2">"</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">get_message</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Target folder: </span><span class="si">{</span><span class="n">dst_notes</span><span class="si">}</span><span class="s2">"</span><span class="p">))</span>
 
-    <span class="n">st_pattern</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">FOLDER_TEMPLATES_NOTES</span><span class="si">}</span><span class="se">\\</span><span class="s2">_*.md&quot;</span>
+    <span class="n">st_pattern</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">FOLDER_TEMPLATES_NOTES</span><span class="si">}</span><span class="se">\\</span><span class="s2">_*.md"</span>
     <span class="n">ls_notes</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">st_pattern</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="n">ls_notes</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="n">get_warning</span><span class="p">(</span><span class="s2">&quot;No note templates found.&quot;</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">get_warning</span><span class="p">(</span><span class="s2">"No note templates found."</span><span class="p">))</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="n">get_message</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Found </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">ls_notes</span><span class="p">)</span><span class="si">}</span><span class="s2"> template(s):</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">get_message</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Found </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">ls_notes</span><span class="p">)</span><span class="si">}</span><span class="s2"> template(s):</span><span class="se">\n</span><span class="s2">"</span><span class="p">))</span>
 
         <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">ls_notes</span><span class="p">:</span>
             <span class="n">file_current</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
@@ -486,16 +486,16 @@
             <span class="n">file_new</span> <span class="o">=</span> <span class="n">dst_notes</span> <span class="o">/</span> <span class="n">name</span>
 
             <span class="n">shutil</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">src</span><span class="o">=</span><span class="n">file_current</span><span class="p">,</span> <span class="n">dst</span><span class="o">=</span><span class="n">file_new</span><span class="p">)</span>
-            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;    - </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"    - </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
     <span class="c1"># FIGURES (future)</span>
     <span class="c1"># -------------------------------------------------------------------</span>
-    <span class="c1"># heading_subsection(&quot;[Figures]&quot;)</span>
+    <span class="c1"># heading_subsection("[Figures]")</span>
     <span class="c1"># ...</span>
 
     <span class="c1"># DOCUMENTS (future)</span>
     <span class="c1"># -------------------------------------------------------------------</span>
-    <span class="c1"># heading_subsection(&quot;[Documents]&quot;)</span>
+    <span class="c1"># heading_subsection("[Documents]")</span>
     <span class="c1"># ...</span>
 
     <span class="n">heading_done</span><span class="p">()</span></div>
@@ -504,7 +504,7 @@
 
 <span class="c1"># SCRIPT</span>
 <span class="c1"># ***********************************************************************</span>
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
     <span class="n">main</span><span class="p">()</span>
 </pre></div>
 
@@ -535,8 +535,8 @@
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../../_static/scripts/bootstrap.js?digest=a95f357e85573c9b56d5"></script>
-<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=a95f357e85573c9b56d5"></script>
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -570,7 +570,7 @@
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.19.0.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.21.0.
 </p></div>
       
     </div>

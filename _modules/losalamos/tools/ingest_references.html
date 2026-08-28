@@ -26,18 +26,18 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=a95f357e85573c9b56d5" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=a95f357e85573c9b56d5" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
   
   <!-- So that users can add custom icons -->
-  <script defer src="../../../_static/scripts/fontawesome.js?digest=a95f357e85573c9b56d5"></script>
+  <script defer src="../../../_static/scripts/fontawesome.js?digest=cb8930eaaf36d9849b67"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=a95f357e85573c9b56d5" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=a95f357e85573c9b56d5" />
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
 
     <script src="../../../_static/documentation_options.js?v=d45e8c67"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
@@ -404,7 +404,7 @@
 <span class="c1"># Copyright (C) 2025 The Project Authors</span>
 <span class="c1"># See pyproject.toml for authors/maintainers.</span>
 <span class="c1"># See LICENSE for license details.</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 <span class="sd">Ingest reference files from a source directory into a target dataset structure.</span>
 
 <span class="sd">This CLI wraps the project Ingester, providing a minimal interface for</span>
@@ -427,11 +427,11 @@
 
 <span class="sd">.. code-block:: powershell</span>
 
-<span class="sd">    $SRC=&quot;C:\path\to\source&quot;</span>
-<span class="sd">    $DST=&quot;C:\path\to\destination&quot;</span>
+<span class="sd">    $SRC="C:\path\to\source"</span>
+<span class="sd">    $DST="C:\path\to\destination"</span>
 
 <span class="sd">    python -m losalamos.tools.ingest_references --src $SRC --dst $DST</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="c1"># IMPORTS</span>
 <span class="c1"># ***********************************************************************</span>
@@ -471,8 +471,8 @@
 <a class="viewcode-back" href="../../../generated/losalamos.tools.ingest_references.html#losalamos.tools.ingest_references.get_arguments">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">get_arguments</span><span class="p">():</span>
     <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">()</span>
-    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;-s&quot;</span><span class="p">,</span> <span class="s2">&quot;--src&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;source of incoming folder.&quot;</span><span class="p">)</span>
-    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;-d&quot;</span><span class="p">,</span> <span class="s2">&quot;--dst&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;destination folder.&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">"-s"</span><span class="p">,</span> <span class="s2">"--src"</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">"source of incoming folder."</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">"-d"</span><span class="p">,</span> <span class="s2">"--dst"</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">"destination folder."</span><span class="p">)</span>
     <span class="c1"># keep adding if more templates arise</span>
     <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
 
@@ -483,21 +483,21 @@
 <div class="viewcode-block" id="main">
 <a class="viewcode-back" href="../../../generated/losalamos.tools.ingest_references.html#losalamos.tools.ingest_references.main">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-    <span class="n">heading_section</span><span class="p">(</span><span class="s2">&quot;INGEST REFERENCES&quot;</span><span class="p">)</span>
+    <span class="n">heading_section</span><span class="p">(</span><span class="s2">"INGEST REFERENCES"</span><span class="p">)</span>
 
     <span class="n">args</span> <span class="o">=</span> <span class="n">get_arguments</span><span class="p">()</span>
     <span class="n">src_folder</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">src</span><span class="p">)</span>
     <span class="n">dst_folder</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">dst</span><span class="p">)</span>
 
-    <span class="n">heading_subsection</span><span class="p">(</span><span class="s2">&quot;Folders&quot;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">get_message</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Source folder: </span><span class="si">{</span><span class="n">src_folder</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">))</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">get_message</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Target folder: </span><span class="si">{</span><span class="n">dst_folder</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">))</span>
+    <span class="n">heading_subsection</span><span class="p">(</span><span class="s2">"Folders"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">get_message</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Source folder: </span><span class="si">{</span><span class="n">src_folder</span><span class="si">}</span><span class="s2">"</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">get_message</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Target folder: </span><span class="si">{</span><span class="n">dst_folder</span><span class="si">}</span><span class="s2">"</span><span class="p">))</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="n">dst_folder</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
-        <span class="nb">print</span><span class="p">(</span><span class="n">get_warning</span><span class="p">(</span><span class="s2">&quot;Target folder does not exist.&quot;</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">get_warning</span><span class="p">(</span><span class="s2">"Target folder does not exist."</span><span class="p">))</span>
         <span class="k">return</span>
 
-    <span class="n">heading_subsection</span><span class="p">(</span><span class="s2">&quot;Ingesting references&quot;</span><span class="p">)</span>
+    <span class="n">heading_subsection</span><span class="p">(</span><span class="s2">"Ingesting references"</span><span class="p">)</span>
 
     <span class="n">ingester</span> <span class="o">=</span> <span class="n">Ingester</span><span class="p">(</span><span class="n">src</span><span class="o">=</span><span class="n">src_folder</span><span class="p">,</span> <span class="n">dst</span><span class="o">=</span><span class="n">dst_folder</span><span class="p">)</span>
     <span class="n">ingester</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cleanup</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -509,7 +509,7 @@
 <span class="c1"># SCRIPT</span>
 <span class="c1"># ***********************************************************************</span>
 <span class="c1"># standalone behaviour as a script</span>
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
 
     <span class="c1"># Script section</span>
     <span class="c1"># ===================================================================</span>
@@ -544,8 +544,8 @@
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../../_static/scripts/bootstrap.js?digest=a95f357e85573c9b56d5"></script>
-<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=a95f357e85573c9b56d5"></script>
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -579,7 +579,7 @@
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.19.0.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.21.0.
 </p></div>
       
     </div>

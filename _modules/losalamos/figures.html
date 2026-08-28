@@ -26,18 +26,18 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../_static/styles/theme.css?digest=a95f357e85573c9b56d5" rel="stylesheet" />
-<link href="../../_static/styles/pydata-sphinx-theme.css?digest=a95f357e85573c9b56d5" rel="stylesheet" />
+  <link href="../../_static/styles/theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
   
   <!-- So that users can add custom icons -->
-  <script defer src="../../_static/scripts/fontawesome.js?digest=a95f357e85573c9b56d5"></script>
+  <script defer src="../../_static/scripts/fontawesome.js?digest=cb8930eaaf36d9849b67"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=a95f357e85573c9b56d5" />
-<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=a95f357e85573c9b56d5" />
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
 
     <script src="../../_static/documentation_options.js?v=d45e8c67"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
@@ -404,13 +404,13 @@
 <span class="c1"># Copyright (C) 2025 The Project Authors</span>
 <span class="c1"># See pyproject.toml for authors/maintainers.</span>
 <span class="c1"># See LICENSE for license details.</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 <span class="sd">SVG and raster figure handling for export pipelines.</span>
 
 <span class="sd">Provides classes for loading, manipulating, and exporting figures</span>
 <span class="sd">in SVG, PDF, PNG, and JPEG formats using Inkscape as the rendering backend.</span>
 
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 <span class="c1"># IMPORTS</span>
 <span class="c1"># ***********************************************************************</span>
 <span class="c1"># import modules from other libs</span>
@@ -474,15 +474,15 @@
 <div class="viewcode-block" id="Figure">
 <a class="viewcode-back" href="../../generated/losalamos.figures.html#losalamos.figures.Figure">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">Figure</span><span class="p">(</span><span class="n">DataSet</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 
 <span class="sd">    Base class for figure objects.</span>
 
 <span class="sd">    Extends :class:`~losalamos.root.DataSet` with image utility methods</span>
 <span class="sd">    for scaling, thumbnail generation, and format conversion.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;MyFig&quot;</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s2">&quot;Fig&quot;</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">"MyFig"</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s2">"Fig"</span><span class="p">):</span>
 
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="n">alias</span><span class="p">)</span>
 
@@ -497,7 +497,7 @@
 <a class="viewcode-back" href="../../generated/losalamos.figures.html#losalamos.figures.Figure.scale_image">[docs]</a>
     <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">scale_image</span><span class="p">(</span><span class="n">file_input</span><span class="p">,</span> <span class="n">file_output</span><span class="p">,</span> <span class="n">scale_factor</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Scale an image by a numerical factor while maintaining its original aspect ratio.</span>
 
 <span class="sd">        :param file_input: Path to the source image file.</span>
@@ -515,7 +515,7 @@
 
 <span class="sd">             The resizing process utilizes the ``Image.Resampling.LANCZOS`` filter to ensure high-quality downsampling or upsampling. The output is saved with a fixed quality compression of ``95``.</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">img</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">file_input</span><span class="p">)</span>
 
         <span class="c1"># Compute new dimensions while maintaining aspect ratio</span>
@@ -538,12 +538,12 @@
         <span class="n">file_output</span><span class="p">,</span>
         <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">512</span><span class="p">,</span> <span class="mi">512</span><span class="p">),</span>
         <span class="n">figure_ratio</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;crop&quot;</span><span class="p">,</span>
+        <span class="n">mode</span><span class="o">=</span><span class="s2">"crop"</span><span class="p">,</span>
         <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span>
         <span class="n">quality</span><span class="o">=</span><span class="mi">85</span><span class="p">,</span>
         <span class="n">background</span><span class="o">=</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">),</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Generate a lightweight JPEG thumbnail from an input image with resizing options.</span>
 
 <span class="sd">        :param file_input: Path to the source image file.</span>
@@ -571,13 +571,13 @@
 <span class="sd">             If ``figure_ratio`` is provided as ``(width, height)``,</span>
 <span class="sd">             it overrides the height specified in the ``size`` parameter.</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
 
         <span class="n">img</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">file_input</span><span class="p">)</span>
 
         <span class="c1"># Ensure compatibility with JPEG</span>
-        <span class="k">if</span> <span class="n">img</span><span class="o">.</span><span class="n">mode</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;RGB&quot;</span><span class="p">,</span> <span class="s2">&quot;L&quot;</span><span class="p">):</span>
-            <span class="n">img</span> <span class="o">=</span> <span class="n">img</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="s2">&quot;RGB&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">img</span><span class="o">.</span><span class="n">mode</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"RGB"</span><span class="p">,</span> <span class="s2">"L"</span><span class="p">):</span>
+            <span class="n">img</span> <span class="o">=</span> <span class="n">img</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="s2">"RGB"</span><span class="p">)</span>
 
         <span class="n">target_w</span><span class="p">,</span> <span class="n">target_h</span> <span class="o">=</span> <span class="n">size</span>
 
@@ -586,7 +586,7 @@
             <span class="n">rw</span><span class="p">,</span> <span class="n">rh</span> <span class="o">=</span> <span class="n">figure_ratio</span>
             <span class="n">target_h</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">target_w</span> <span class="o">*</span> <span class="n">rh</span> <span class="o">/</span> <span class="n">rw</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;crop&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">"crop"</span><span class="p">:</span>
             <span class="n">img</span> <span class="o">=</span> <span class="n">ImageOps</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span>
                 <span class="n">img</span><span class="p">,</span>
                 <span class="p">(</span><span class="n">target_w</span><span class="p">,</span> <span class="n">target_h</span><span class="p">),</span>
@@ -594,14 +594,14 @@
                 <span class="n">centering</span><span class="o">=</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">),</span>
             <span class="p">)</span>
 
-        <span class="k">elif</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;fit&quot;</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">"fit"</span><span class="p">:</span>
             <span class="n">img</span><span class="o">.</span><span class="n">thumbnail</span><span class="p">(</span>
                 <span class="p">(</span><span class="n">target_w</span><span class="p">,</span> <span class="n">target_h</span><span class="p">),</span>
                 <span class="n">resample</span><span class="o">=</span><span class="n">Image</span><span class="o">.</span><span class="n">Resampling</span><span class="o">.</span><span class="n">LANCZOS</span><span class="p">,</span>
             <span class="p">)</span>
 
             <span class="c1"># Optional padding to exact size</span>
-            <span class="n">canvas</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;RGB&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">target_w</span><span class="p">,</span> <span class="n">target_h</span><span class="p">),</span> <span class="n">background</span><span class="p">)</span>
+            <span class="n">canvas</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">"RGB"</span><span class="p">,</span> <span class="p">(</span><span class="n">target_w</span><span class="p">,</span> <span class="n">target_h</span><span class="p">),</span> <span class="n">background</span><span class="p">)</span>
             <span class="n">offset</span> <span class="o">=</span> <span class="p">(</span>
                 <span class="p">(</span><span class="n">target_w</span> <span class="o">-</span> <span class="n">img</span><span class="o">.</span><span class="n">width</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2</span><span class="p">,</span>
                 <span class="p">(</span><span class="n">target_h</span> <span class="o">-</span> <span class="n">img</span><span class="o">.</span><span class="n">height</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2</span><span class="p">,</span>
@@ -610,11 +610,11 @@
             <span class="n">img</span> <span class="o">=</span> <span class="n">canvas</span>
 
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;mode must be &#39;crop&#39; or &#39;fit&#39;&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"mode must be 'crop' or 'fit'"</span><span class="p">)</span>
 
         <span class="n">img</span><span class="o">.</span><span class="n">save</span><span class="p">(</span>
             <span class="n">file_output</span><span class="p">,</span>
-            <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;JPEG&quot;</span><span class="p">,</span>
+            <span class="nb">format</span><span class="o">=</span><span class="s2">"JPEG"</span><span class="p">,</span>
             <span class="n">quality</span><span class="o">=</span><span class="n">quality</span><span class="p">,</span>
             <span class="n">optimize</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
             <span class="n">dpi</span><span class="o">=</span><span class="p">(</span><span class="n">dpi</span><span class="p">,</span> <span class="n">dpi</span><span class="p">),</span>
@@ -627,7 +627,7 @@
 <a class="viewcode-back" href="../../generated/losalamos.figures.html#losalamos.figures.Figure.image_to_jpeg">[docs]</a>
     <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">image_to_jpeg</span><span class="p">(</span><span class="n">file_input</span><span class="p">,</span> <span class="n">file_output</span><span class="p">,</span> <span class="n">quality</span><span class="o">=</span><span class="mi">95</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Convert an image file to JPEG format with specified quality and resolution.</span>
 
 <span class="sd">        :param file_input: Path to the input image file.</span>
@@ -640,15 +640,15 @@
 <span class="sd">        :type dpi: int</span>
 <span class="sd">        :return: None</span>
 <span class="sd">        :rtype: NoneType</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">with</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">file_input</span><span class="p">)</span> <span class="k">as</span> <span class="n">img</span><span class="p">:</span>
             <span class="c1"># Convert to RGB if the image has an alpha channel</span>
-            <span class="k">if</span> <span class="n">img</span><span class="o">.</span><span class="n">mode</span> <span class="o">!=</span> <span class="s2">&quot;RGB&quot;</span><span class="p">:</span>
-                <span class="n">img</span> <span class="o">=</span> <span class="n">img</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="s2">&quot;RGB&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">img</span><span class="o">.</span><span class="n">mode</span> <span class="o">!=</span> <span class="s2">"RGB"</span><span class="p">:</span>
+                <span class="n">img</span> <span class="o">=</span> <span class="n">img</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="s2">"RGB"</span><span class="p">)</span>
             <span class="c1"># Save with specified quality and DPI</span>
-            <span class="n">save_params</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;format&quot;</span><span class="p">:</span> <span class="s2">&quot;JPEG&quot;</span><span class="p">,</span> <span class="s2">&quot;quality&quot;</span><span class="p">:</span> <span class="n">quality</span><span class="p">}</span>
+            <span class="n">save_params</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"format"</span><span class="p">:</span> <span class="s2">"JPEG"</span><span class="p">,</span> <span class="s2">"quality"</span><span class="p">:</span> <span class="n">quality</span><span class="p">}</span>
             <span class="k">if</span> <span class="n">dpi</span><span class="p">:</span>
-                <span class="n">save_params</span><span class="p">[</span><span class="s2">&quot;dpi&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">dpi</span><span class="p">,</span> <span class="n">dpi</span><span class="p">)</span>
+                <span class="n">save_params</span><span class="p">[</span><span class="s2">"dpi"</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">dpi</span><span class="p">,</span> <span class="n">dpi</span><span class="p">)</span>
             <span class="n">img</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">file_output</span><span class="p">,</span> <span class="o">**</span><span class="n">save_params</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span></div>
 </div>
@@ -658,7 +658,7 @@
 <div class="viewcode-block" id="FigureSVG">
 <a class="viewcode-back" href="../../generated/losalamos.figures.html#losalamos.figures.FigureSVG">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">FigureSVG</span><span class="p">(</span><span class="n">Figure</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    SVG figure with layer control and multi-format export.</span>
 
 <span class="sd">    Loads an Inkscape SVG file and exposes methods to manipulate layer</span>
@@ -679,9 +679,9 @@
 
 <span class="sd">        Requires ``inkscape`` to be installed and available in the system PATH.</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;MySVG&quot;</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s2">&quot;SVG&quot;</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">"MySVG"</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s2">"SVG"</span><span class="p">):</span>
 
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="n">alias</span><span class="p">)</span>
 
@@ -689,21 +689,21 @@
 
         <span class="c1"># set defaults</span>
         <span class="c1"># --------------------------------------------------</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">inkscape_src</span> <span class="o">=</span> <span class="s2">&quot;C:/Program Files/Inkscape/bin&quot;</span>  <span class="c1"># None # inkscape.exe folder in Windows (consider add to PATH).</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">inkscape_src</span> <span class="o">=</span> <span class="s2">"C:/Program Files/Inkscape/bin"</span>  <span class="c1"># None # inkscape.exe folder in Windows (consider add to PATH).</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name_spaces</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s2">&quot;svg&quot;</span><span class="p">:</span> <span class="s2">&quot;http://www.w3.org/2000/svg&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;inkscape&quot;</span><span class="p">:</span> <span class="s2">&quot;http://www.inkscape.org/namespaces/inkscape&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;sodipodi&quot;</span><span class="p">:</span> <span class="s2">&quot;http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd&quot;</span><span class="p">,</span>
+            <span class="s2">"svg"</span><span class="p">:</span> <span class="s2">"http://www.w3.org/2000/svg"</span><span class="p">,</span>
+            <span class="s2">"inkscape"</span><span class="p">:</span> <span class="s2">"http://www.inkscape.org/namespaces/inkscape"</span><span class="p">,</span>
+            <span class="s2">"sodipodi"</span><span class="p">:</span> <span class="s2">"http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"</span><span class="p">,</span>
         <span class="p">}</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_get_namedview</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">namedview</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;sodipodi:namedview&quot;</span><span class="p">,</span> <span class="n">namespaces</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">name_spaces</span><span class="p">)</span>
+        <span class="n">namedview</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">"sodipodi:namedview"</span><span class="p">,</span> <span class="n">namespaces</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">name_spaces</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">namedview</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">namedview</span> <span class="o">=</span> <span class="n">etree</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span>
-                <span class="sa">f</span><span class="s2">&quot;</span><span class="se">{{</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name_spaces</span><span class="p">[</span><span class="s1">&#39;sodipodi&#39;</span><span class="p">]</span><span class="si">}</span><span class="se">}}</span><span class="s2">namedview&quot;</span><span class="p">,</span>
-                <span class="nb">id</span><span class="o">=</span><span class="s2">&quot;namedview1&quot;</span><span class="p">,</span>
+                <span class="sa">f</span><span class="s2">"</span><span class="se">{{</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name_spaces</span><span class="p">[</span><span class="s1">'sodipodi'</span><span class="p">]</span><span class="si">}</span><span class="se">}}</span><span class="s2">namedview"</span><span class="p">,</span>
+                <span class="nb">id</span><span class="o">=</span><span class="s2">"namedview1"</span><span class="p">,</span>
             <span class="p">)</span>
 
         <span class="k">return</span> <span class="n">namedview</span>
@@ -711,7 +711,7 @@
 <div class="viewcode-block" id="FigureSVG.load_data">
 <a class="viewcode-back" href="../../generated/losalamos.figures.html#losalamos.figures.FigureSVG.load_data">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">load_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_data</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Load and parse SVG XML data from a file path into the object instance.</span>
 
 <span class="sd">        :param file_data: The file system path pointing to the source SVG data.</span>
@@ -725,7 +725,7 @@
 <span class="sd">             an ``etree.XMLParser`` with ``huge_tree`` enabled to handle large datasets.</span>
 <span class="sd">             It populates the ``tree`` and ``data`` attributes before triggering an internal ``update`` call.</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
 
         <span class="c1"># overwrite relative path input</span>
         <span class="c1"># --------------------------------------------------</span>
@@ -752,17 +752,17 @@
 <div class="viewcode-block" id="FigureSVG.save">
 <a class="viewcode-back" href="../../generated/losalamos.figures.html#losalamos.figures.FigureSVG.save">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Serializes the current XML tree and writes it to the local file system.</span>
 
 <span class="sd">        :return: Always returns ``None``</span>
 <span class="sd">        :rtype: None</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">xml_str</span> <span class="o">=</span> <span class="n">etree</span><span class="o">.</span><span class="n">tostring</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">tree</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">,</span> <span class="n">xml_declaration</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">pretty_print</span><span class="o">=</span><span class="kc">False</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tree</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">,</span> <span class="n">xml_declaration</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">pretty_print</span><span class="o">=</span><span class="kc">False</span>
         <span class="p">)</span>
 
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">file_data</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">file_data</span><span class="p">,</span> <span class="s2">"wb"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
             <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">xml_str</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="kc">None</span></div>
@@ -771,7 +771,7 @@
 <div class="viewcode-block" id="FigureSVG.export">
 <a class="viewcode-back" href="../../generated/losalamos.figures.html#losalamos.figures.FigureSVG.export">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">export</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">folder</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">data_suffix</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Saves the current SVG data to a specific directory with an optional filename suffix.</span>
 
 <span class="sd">        :param folder: The destination directory path</span>
@@ -787,10 +787,10 @@
 <span class="sd">             This method temporarily overrides the internal ``file_data`` path to execute the</span>
 <span class="sd">             save operation before restoring the original path.</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">if</span> <span class="n">data_suffix</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">data_suffix</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-        <span class="n">output_file</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">folder</span><span class="p">)</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">filename</span><span class="si">}{</span><span class="n">data_suffix</span><span class="si">}</span><span class="s2">.svg&quot;</span><span class="p">)</span>
+            <span class="n">data_suffix</span> <span class="o">=</span> <span class="s2">""</span>
+        <span class="n">output_file</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">folder</span><span class="p">)</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">filename</span><span class="si">}{</span><span class="n">data_suffix</span><span class="si">}</span><span class="s2">.svg"</span><span class="p">)</span>
         <span class="n">original_file</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">file_data</span><span class="p">)[:]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">file_data</span> <span class="o">=</span> <span class="n">output_file</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
@@ -800,33 +800,33 @@
 
 <div class="viewcode-block" id="FigureSVG.hide_layer">
 <a class="viewcode-back" href="../../generated/losalamos.figures.html#losalamos.figures.FigureSVG.hide_layer">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">hide_layer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;frames&quot;</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">hide_layer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">"frames"</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Modifies the style attribute of a specific layer to make it invisible.</span>
 
 <span class="sd">        :param label: The Inkscape label of the layer to hide. Default value = ``frames``</span>
 <span class="sd">        :type label: str</span>
 <span class="sd">        :return: Always returns ``None``</span>
 <span class="sd">        :rtype: None</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">layer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">find</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;.//svg:g[@inkscape:label=&#39;</span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2">&#39;]&quot;</span><span class="p">,</span> <span class="n">namespaces</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">name_spaces</span>
+            <span class="sa">f</span><span class="s2">".//svg:g[@inkscape:label='</span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2">']"</span><span class="p">,</span> <span class="n">namespaces</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">name_spaces</span>
         <span class="p">)</span>
-        <span class="n">layer</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;style&quot;</span><span class="p">,</span> <span class="s2">&quot;display:none&quot;</span><span class="p">)</span>  <span class="c1"># Hide the layer</span>
+        <span class="n">layer</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">"style"</span><span class="p">,</span> <span class="s2">"display:none"</span><span class="p">)</span>  <span class="c1"># Hide the layer</span>
         <span class="k">return</span> <span class="kc">None</span></div>
 
 
 <div class="viewcode-block" id="FigureSVG.hide_layers">
 <a class="viewcode-back" href="../../generated/losalamos.figures.html#losalamos.figures.FigureSVG.hide_layers">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">hide_layers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">labels</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Hide multiple layers based on a list of provided labels.</span>
 
 <span class="sd">        :param labels: A list of layer labels to be hidden.</span>
 <span class="sd">        :type labels: list</span>
 <span class="sd">        :return: None</span>
 <span class="sd">        :rtype: NoneType</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">for</span> <span class="n">lbl</span> <span class="ow">in</span> <span class="n">labels</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">hide_layer</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="n">lbl</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span></div>
@@ -834,26 +834,26 @@
 
 <div class="viewcode-block" id="FigureSVG.show_layer">
 <a class="viewcode-back" href="../../generated/losalamos.figures.html#losalamos.figures.FigureSVG.show_layer">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">show_layer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;frames&quot;</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">show_layer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">"frames"</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Modifies the style attribute of a specific layer to make it visible.</span>
 
 <span class="sd">        :param label: The Inkscape label of the layer to display. Default value = ``frames``</span>
 <span class="sd">        :type label: str</span>
 <span class="sd">        :return: Always returns ``None``</span>
 <span class="sd">        :rtype: None</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">layer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">find</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;.//svg:g[@inkscape:label=&#39;</span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2">&#39;]&quot;</span><span class="p">,</span> <span class="n">namespaces</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">name_spaces</span>
+            <span class="sa">f</span><span class="s2">".//svg:g[@inkscape:label='</span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2">']"</span><span class="p">,</span> <span class="n">namespaces</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">name_spaces</span>
         <span class="p">)</span>
-        <span class="n">layer</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;style&quot;</span><span class="p">,</span> <span class="s2">&quot;display:inline&quot;</span><span class="p">)</span>  <span class="c1"># Show the layer</span>
+        <span class="n">layer</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">"style"</span><span class="p">,</span> <span class="s2">"display:inline"</span><span class="p">)</span>  <span class="c1"># Show the layer</span>
         <span class="k">return</span> <span class="kc">None</span></div>
 
 
 <div class="viewcode-block" id="FigureSVG.show_layers">
 <a class="viewcode-back" href="../../generated/losalamos.figures.html#losalamos.figures.FigureSVG.show_layers">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">show_layers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">inclusive</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Show specified layers and optionally hide all others.</span>
 
 <span class="sd">        :param labels: A list of layer labels to be made visible.</span>
@@ -866,10 +866,10 @@
 <span class="sd">        .. note::</span>
 
 <span class="sd">            If ``inclusive`` is set to ``True``, the specified layers are made visible without</span>
-<span class="sd">            affecting others. If ``False``, the method performs a &quot;show only&quot; operation by</span>
+<span class="sd">            affecting others. If ``False``, the method performs a "show only" operation by</span>
 <span class="sd">            hiding any layer not present in the ``labels`` list.</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
 
         <span class="k">if</span> <span class="n">inclusive</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">lbl</span> <span class="ow">in</span> <span class="n">labels</span><span class="p">:</span>
@@ -887,7 +887,7 @@
 <div class="viewcode-block" id="FigureSVG.get_layers">
 <a class="viewcode-back" href="../../generated/losalamos.figures.html#losalamos.figures.FigureSVG.get_layers">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_layers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Return a dictionary of top-level Inkscape layers indexed by their label.</span>
 
 <span class="sd">        :return: Dictionary mapping layer labels to lxml Elements</span>
@@ -896,18 +896,18 @@
 <span class="sd">        .. note::</span>
 
 <span class="sd">            Only &lt;g&gt; elements that are direct children of the root &lt;svg&gt; element and</span>
-<span class="sd">            have inkscape:groupmode=&quot;layer&quot; are considered.</span>
+<span class="sd">            have inkscape:groupmode="layer" are considered.</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="p">{}</span>
 
         <span class="n">layers</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span>
-            <span class="s2">&quot;svg:g[@inkscape:groupmode=&#39;layer&#39;]&quot;</span><span class="p">,</span>
+            <span class="s2">"svg:g[@inkscape:groupmode='layer']"</span><span class="p">,</span>
             <span class="n">namespaces</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">name_spaces</span><span class="p">,</span>
         <span class="p">)</span>
 
-        <span class="n">label_attr</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="se">{{</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name_spaces</span><span class="p">[</span><span class="s1">&#39;inkscape&#39;</span><span class="p">]</span><span class="si">}</span><span class="se">}}</span><span class="s2">label&quot;</span>
+        <span class="n">label_attr</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="se">{{</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name_spaces</span><span class="p">[</span><span class="s1">'inkscape'</span><span class="p">]</span><span class="si">}</span><span class="se">}}</span><span class="s2">label"</span>
 
         <span class="n">layer_dc</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="n">layers</span><span class="p">:</span>
@@ -926,10 +926,10 @@
 <div class="viewcode-block" id="FigureSVG.get_layers_labels">
 <a class="viewcode-back" href="../../generated/losalamos.figures.html#losalamos.figures.FigureSVG.get_layers_labels">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_layers_labels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Return the list of layers labels</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">dc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_layers</span><span class="p">()</span>
         <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">dc</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span></div>
 
@@ -937,15 +937,15 @@
 <div class="viewcode-block" id="FigureSVG.get_property">
 <a class="viewcode-back" href="../../generated/losalamos.figures.html#losalamos.figures.FigureSVG.get_property">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_property</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Get a visual or geometric property from an SVG element.</span>
 
-<span class="sd">        Searches the element&#39;s ``style`` attribute first, then falls back</span>
+<span class="sd">        Searches the element's ``style`` attribute first, then falls back</span>
 <span class="sd">        to bare XML attributes.</span>
 
 <span class="sd">        :param element: The lxml SVG element to read.</span>
 <span class="sd">        :type element: etree.Element</span>
-<span class="sd">        :param key: Property name (e.g. ``&#39;fill&#39;``, ``&#39;width&#39;``, ``&#39;opacity&#39;``).</span>
+<span class="sd">        :param key: Property name (e.g. ``'fill'``, ``'width'``, ``'opacity'``).</span>
 <span class="sd">        :type key: str</span>
 <span class="sd">        :return: The property value, or ``None`` if not found in either location.</span>
 <span class="sd">        :rtype: str or None</span>
@@ -954,8 +954,8 @@
 
 <span class="sd">            :meth:`set_property`</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">style</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_style</span><span class="p">(</span><span class="n">element</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;style&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">))</span>
+<span class="sd">        """</span>
+        <span class="n">style</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_style</span><span class="p">(</span><span class="n">element</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"style"</span><span class="p">,</span> <span class="s2">""</span><span class="p">))</span>
 
         <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">style</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">style</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
@@ -966,12 +966,12 @@
 <div class="viewcode-block" id="FigureSVG.get_text">
 <a class="viewcode-back" href="../../generated/losalamos.figures.html#losalamos.figures.FigureSVG.get_text">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_text</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Get the text content of a SVG text element.</span>
 
 <span class="sd">        Reads from the first ``&lt;tspan&gt;`` descendant if present,</span>
 <span class="sd">        since Inkscape stores the actual string there rather than</span>
-<span class="sd">        directly on the ``&lt;text&gt;`` node. Falls back to the element&#39;s</span>
+<span class="sd">        directly on the ``&lt;text&gt;`` node. Falls back to the element's</span>
 <span class="sd">        own text if no tspan is found.</span>
 
 <span class="sd">        :param element: The lxml SVG text element to read.</span>
@@ -983,110 +983,110 @@
 
 <span class="sd">            :meth:`set_text`</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">element</span><span class="o">.</span><span class="n">iter</span><span class="p">():</span>
-            <span class="k">if</span> <span class="n">etree</span><span class="o">.</span><span class="n">QName</span><span class="p">(</span><span class="n">child</span><span class="p">)</span><span class="o">.</span><span class="n">localname</span> <span class="o">==</span> <span class="s2">&quot;tspan&quot;</span><span class="p">:</span>
-                <span class="k">return</span> <span class="n">child</span><span class="o">.</span><span class="n">text</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span>
+            <span class="k">if</span> <span class="n">etree</span><span class="o">.</span><span class="n">QName</span><span class="p">(</span><span class="n">child</span><span class="p">)</span><span class="o">.</span><span class="n">localname</span> <span class="o">==</span> <span class="s2">"tspan"</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">child</span><span class="o">.</span><span class="n">text</span> <span class="ow">or</span> <span class="s2">""</span>
 
-        <span class="k">return</span> <span class="n">element</span><span class="o">.</span><span class="n">text</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span></div>
+        <span class="k">return</span> <span class="n">element</span><span class="o">.</span><span class="n">text</span> <span class="ow">or</span> <span class="s2">""</span></div>
 
 
 <div class="viewcode-block" id="FigureSVG.get_text_lines">
 <a class="viewcode-back" href="../../generated/losalamos.figures.html#losalamos.figures.FigureSVG.get_text_lines">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_text_lines</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Return all text lines from a multi-line SVG text element.</span>
 
-<span class="sd">        Each ``&lt;tspan sodipodi:role=&#39;line&#39;&gt;`` is treated as one line.</span>
+<span class="sd">        Each ``&lt;tspan sodipodi:role='line'&gt;`` is treated as one line.</span>
 
 <span class="sd">        :param element: The lxml SVG text element to read.</span>
 <span class="sd">        :type element: etree.Element</span>
 <span class="sd">        :return: List of strings, one per tspan.</span>
 <span class="sd">        :rtype: list[str]</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">lines</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">element</span><span class="o">.</span><span class="n">iter</span><span class="p">():</span>
-            <span class="k">if</span> <span class="n">etree</span><span class="o">.</span><span class="n">QName</span><span class="p">(</span><span class="n">child</span><span class="p">)</span><span class="o">.</span><span class="n">localname</span> <span class="o">==</span> <span class="s2">&quot;tspan&quot;</span><span class="p">:</span>
-                <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">child</span><span class="o">.</span><span class="n">text</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">etree</span><span class="o">.</span><span class="n">QName</span><span class="p">(</span><span class="n">child</span><span class="p">)</span><span class="o">.</span><span class="n">localname</span> <span class="o">==</span> <span class="s2">"tspan"</span><span class="p">:</span>
+                <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">child</span><span class="o">.</span><span class="n">text</span> <span class="ow">or</span> <span class="s2">""</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">lines</span></div>
 
 
 <div class="viewcode-block" id="FigureSVG.set_page_opacity">
 <a class="viewcode-back" href="../../generated/losalamos.figures.html#losalamos.figures.FigureSVG.set_page_opacity">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">set_page_opacity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">opacity</span><span class="o">=</span><span class="mf">1.0</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Set the Inkscape page background opacity.</span>
 
 <span class="sd">        :param opacity: Opacity value in range [0.0, 1.0] (1=opaque)</span>
 <span class="sd">        :type opacity: float</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">opacity</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="nb">float</span><span class="p">(</span><span class="n">opacity</span><span class="p">)))</span>
 
         <span class="n">namedview</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_namedview</span><span class="p">()</span>
         <span class="n">namedview</span><span class="o">.</span><span class="n">set</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;</span><span class="se">{{</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name_spaces</span><span class="p">[</span><span class="s1">&#39;inkscape&#39;</span><span class="p">]</span><span class="si">}</span><span class="se">}}</span><span class="s2">pageopacity&quot;</span><span class="p">,</span>
-            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">opacity</span><span class="si">:</span><span class="s2">.6f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="sa">f</span><span class="s2">"</span><span class="se">{{</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name_spaces</span><span class="p">[</span><span class="s1">'inkscape'</span><span class="p">]</span><span class="si">}</span><span class="se">}}</span><span class="s2">pageopacity"</span><span class="p">,</span>
+            <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">opacity</span><span class="si">:</span><span class="s2">.6f</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span></div>
 
 
 <div class="viewcode-block" id="FigureSVG.set_page_color">
 <a class="viewcode-back" href="../../generated/losalamos.figures.html#losalamos.figures.FigureSVG.set_page_color">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">set_page_color</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#ffffff&quot;</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_page_color</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">"#ffffff"</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Set the Inkscape page background color.</span>
 
-<span class="sd">        :param color: Hex color string (e.g. &#39;#ffffff&#39;)</span>
+<span class="sd">        :param color: Hex color string (e.g. '#ffffff')</span>
 <span class="sd">        :type color: str</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">namedview</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_namedview</span><span class="p">()</span>
-        <span class="n">namedview</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;pagecolor&quot;</span><span class="p">,</span> <span class="n">color</span><span class="p">)</span>
+        <span class="n">namedview</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">"pagecolor"</span><span class="p">,</span> <span class="n">color</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span></div>
 
 
 <div class="viewcode-block" id="FigureSVG.get_layer_elements">
 <a class="viewcode-back" href="../../generated/losalamos.figures.html#losalamos.figures.FigureSVG.get_layer_elements">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_layer_elements</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">drawable_only</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Return drawable SVG elements from a layer, indexed by element ID.</span>
 
 <span class="sd">        :param label: Inkscape layer label</span>
 <span class="sd">        :param drawable_only: Exclude non-drawable tags (image, defs, etc.)</span>
 <span class="sd">        :return: dict[str, dict]</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">layer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_layers</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">label</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">layer</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Layer &#39;</span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2">&#39; not found&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Layer '</span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2">' not found"</span><span class="p">)</span>
 
         <span class="n">drawable_tags</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s2">&quot;rect&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;path&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;circle&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;ellipse&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;line&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;polyline&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;polygon&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;text&quot;</span><span class="p">,</span>
+            <span class="s2">"rect"</span><span class="p">,</span>
+            <span class="s2">"path"</span><span class="p">,</span>
+            <span class="s2">"circle"</span><span class="p">,</span>
+            <span class="s2">"ellipse"</span><span class="p">,</span>
+            <span class="s2">"line"</span><span class="p">,</span>
+            <span class="s2">"polyline"</span><span class="p">,</span>
+            <span class="s2">"polygon"</span><span class="p">,</span>
+            <span class="s2">"text"</span><span class="p">,</span>
         <span class="p">}</span>
 
         <span class="n">out</span> <span class="o">=</span> <span class="p">{}</span>
 
-        <span class="k">for</span> <span class="n">el</span> <span class="ow">in</span> <span class="n">layer</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="s2">&quot;.//*&quot;</span><span class="p">,</span> <span class="n">namespaces</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">name_spaces</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">el</span> <span class="ow">in</span> <span class="n">layer</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="s2">".//*"</span><span class="p">,</span> <span class="n">namespaces</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">name_spaces</span><span class="p">):</span>
             <span class="n">tag</span> <span class="o">=</span> <span class="n">etree</span><span class="o">.</span><span class="n">QName</span><span class="p">(</span><span class="n">el</span><span class="p">)</span><span class="o">.</span><span class="n">localname</span>
 
             <span class="k">if</span> <span class="n">drawable_only</span> <span class="ow">and</span> <span class="n">tag</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">drawable_tags</span><span class="p">:</span>
                 <span class="k">continue</span>
 
-            <span class="n">el_id</span> <span class="o">=</span> <span class="n">el</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">)</span>
+            <span class="n">el_id</span> <span class="o">=</span> <span class="n">el</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"id"</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">el_id</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="c1"># Skip elements without IDs (Inkscape usually assigns one)</span>
                 <span class="k">continue</span>
 
             <span class="c1"># Defensive: last one wins (should not happen in Inkscape)</span>
             <span class="n">out</span><span class="p">[</span><span class="n">el_id</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
-                <span class="s2">&quot;element&quot;</span><span class="p">:</span> <span class="n">el</span><span class="p">,</span>
-                <span class="s2">&quot;tag&quot;</span><span class="p">:</span> <span class="n">tag</span><span class="p">,</span>
+                <span class="s2">"element"</span><span class="p">:</span> <span class="n">el</span><span class="p">,</span>
+                <span class="s2">"tag"</span><span class="p">:</span> <span class="n">tag</span><span class="p">,</span>
             <span class="p">}</span>
 
         <span class="k">return</span> <span class="n">out</span></div>
@@ -1095,10 +1095,10 @@
 <div class="viewcode-block" id="FigureSVG.set_property">
 <a class="viewcode-back" href="../../generated/losalamos.figures.html#losalamos.figures.FigureSVG.set_property">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">set_property</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Set a visual or geometric property on an SVG element.</span>
 
-<span class="sd">        Searches for the key in the element&#39;s ``style`` attribute first,</span>
+<span class="sd">        Searches for the key in the element's ``style`` attribute first,</span>
 <span class="sd">        then in bare XML attributes. Writes to whichever location already</span>
 <span class="sd">        holds the key, falling back to the ``style`` string if the key is</span>
 <span class="sd">        not found in either. If the key exists in both locations, the bare</span>
@@ -1107,7 +1107,7 @@
 
 <span class="sd">        :param element: The lxml SVG element to modify.</span>
 <span class="sd">        :type element: etree.Element</span>
-<span class="sd">        :param key: Property name (e.g. ``&#39;fill&#39;``, ``&#39;width&#39;``, ``&#39;opacity&#39;``).</span>
+<span class="sd">        :param key: Property name (e.g. ``'fill'``, ``'width'``, ``'opacity'``).</span>
 <span class="sd">        :type key: str</span>
 <span class="sd">        :param value: New value to assign.</span>
 <span class="sd">        :type value: str</span>
@@ -1127,8 +1127,8 @@
 <span class="sd">            to resolve the ambiguity. This normalisation is intentional but</span>
 <span class="sd">            changes the element structure beyond the requested property.</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">style</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_style</span><span class="p">(</span><span class="n">element</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;style&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">))</span>
+<span class="sd">        """</span>
+        <span class="n">style</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_style</span><span class="p">(</span><span class="n">element</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"style"</span><span class="p">,</span> <span class="s2">""</span><span class="p">))</span>
         <span class="n">in_style</span> <span class="o">=</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">style</span>
         <span class="n">in_attr</span> <span class="o">=</span> <span class="n">element</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
 
@@ -1139,12 +1139,12 @@
 
         <span class="k">if</span> <span class="n">in_style</span><span class="p">:</span>
             <span class="n">style</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
-            <span class="n">element</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;style&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_style_to_string</span><span class="p">(</span><span class="n">style</span><span class="p">))</span>
+            <span class="n">element</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">"style"</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_style_to_string</span><span class="p">(</span><span class="n">style</span><span class="p">))</span>
         <span class="k">elif</span> <span class="n">in_attr</span><span class="p">:</span>
             <span class="n">element</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">style</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
-            <span class="n">element</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;style&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_style_to_string</span><span class="p">(</span><span class="n">style</span><span class="p">))</span>
+            <span class="n">element</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">"style"</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_style_to_string</span><span class="p">(</span><span class="n">style</span><span class="p">))</span>
 
         <span class="k">return</span> <span class="kc">None</span></div>
 
@@ -1152,41 +1152,41 @@
 <div class="viewcode-block" id="FigureSVG.set_color">
 <a class="viewcode-back" href="../../generated/losalamos.figures.html#losalamos.figures.FigureSVG.set_color">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">set_color</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">stroke</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Set fill and/or stroke color of an SVG element.</span>
 
 <span class="sd">        :param element: lxml SVG element</span>
-<span class="sd">        :param fill: Fill color (e.g. &#39;#00ff00&#39;) or None</span>
+<span class="sd">        :param fill: Fill color (e.g. '#00ff00') or None</span>
 <span class="sd">        :param stroke: Stroke color or None</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">style</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_style</span><span class="p">(</span><span class="n">element</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;style&quot;</span><span class="p">))</span>
+<span class="sd">        """</span>
+        <span class="n">style</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_style</span><span class="p">(</span><span class="n">element</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"style"</span><span class="p">))</span>
 
         <span class="k">if</span> <span class="n">fill</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">style</span><span class="p">[</span><span class="s2">&quot;fill&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fill</span>
+            <span class="n">style</span><span class="p">[</span><span class="s2">"fill"</span><span class="p">]</span> <span class="o">=</span> <span class="n">fill</span>
 
         <span class="k">if</span> <span class="n">stroke</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">style</span><span class="p">[</span><span class="s2">&quot;stroke&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">stroke</span>
+            <span class="n">style</span><span class="p">[</span><span class="s2">"stroke"</span><span class="p">]</span> <span class="o">=</span> <span class="n">stroke</span>
 
-        <span class="n">element</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;style&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_style_to_string</span><span class="p">(</span><span class="n">style</span><span class="p">))</span>
+        <span class="n">element</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">"style"</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_style_to_string</span><span class="p">(</span><span class="n">style</span><span class="p">))</span>
         <span class="k">return</span> <span class="kc">None</span></div>
 
 
 <div class="viewcode-block" id="FigureSVG.set_font">
 <a class="viewcode-back" href="../../generated/losalamos.figures.html#losalamos.figures.FigureSVG.set_font">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">set_font</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element</span><span class="p">,</span> <span class="n">font_family</span><span class="p">,</span> <span class="n">variant</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Set the font family on a text element and all its ``&lt;tspan&gt;`` descendants.</span>
 
 <span class="sd">        Updates both ``font-family`` and ``-inkscape-font-specification`` to</span>
-<span class="sd">        keep Inkscape&#39;s internal font state consistent with the rendered output.</span>
+<span class="sd">        keep Inkscape's internal font state consistent with the rendered output.</span>
 <span class="sd">        The method iterates over the element itself and all child nodes, applying</span>
 <span class="sd">        changes only to ``&lt;text&gt;`` and ``&lt;tspan&gt;`` tags.</span>
 
 <span class="sd">        :param element: The lxml SVG text element to modify.</span>
 <span class="sd">        :type element: etree.Element</span>
-<span class="sd">        :param font_family: Target font family name (e.g. ``&#39;Arial&#39;``, ``&#39;Georgia&#39;``).</span>
+<span class="sd">        :param font_family: Target font family name (e.g. ``'Arial'``, ``'Georgia'``).</span>
 <span class="sd">        :type font_family: str</span>
-<span class="sd">        :param variant: Font variant to apply (e.g. ``&#39;Normal&#39;``, ``&#39;Bold&#39;``, ``&#39;Italic&#39;``).</span>
+<span class="sd">        :param variant: Font variant to apply (e.g. ``'Normal'``, ``'Bold'``, ``'Italic'``).</span>
 <span class="sd">            If ``None``, the variant is read from the existing</span>
 <span class="sd">            ``-inkscape-font-specification`` of each node and preserved</span>
 <span class="sd">            individually, so mixed variants within the same text element</span>
@@ -1198,31 +1198,31 @@
 <span class="sd">        .. note::</span>
 
 <span class="sd">            When ``variant`` is ``None`` and no ``-inkscape-font-specification``</span>
-<span class="sd">            is present on a node, the variant defaults to ``&#39;Normal&#39;``.</span>
+<span class="sd">            is present on a node, the variant defaults to ``'Normal'``.</span>
 
 <span class="sd">        .. seealso::</span>
 
 <span class="sd">            :meth:`set_property`, :meth:`_extract_variant`</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="p">[</span><span class="n">element</span><span class="p">,</span> <span class="o">*</span><span class="n">element</span><span class="o">.</span><span class="n">iter</span><span class="p">()]:</span>
             <span class="n">tag</span> <span class="o">=</span> <span class="n">etree</span><span class="o">.</span><span class="n">QName</span><span class="p">(</span><span class="n">node</span><span class="p">)</span><span class="o">.</span><span class="n">localname</span>
-            <span class="k">if</span> <span class="n">tag</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;text&quot;</span><span class="p">,</span> <span class="s2">&quot;tspan&quot;</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">tag</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"text"</span><span class="p">,</span> <span class="s2">"tspan"</span><span class="p">):</span>
                 <span class="k">continue</span>
 
-            <span class="n">style</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_style</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;style&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">))</span>
+            <span class="n">style</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_style</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"style"</span><span class="p">,</span> <span class="s2">""</span><span class="p">))</span>
 
             <span class="k">if</span> <span class="n">variant</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">current_spec</span> <span class="o">=</span> <span class="n">style</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;-inkscape-font-specification&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+                <span class="n">current_spec</span> <span class="o">=</span> <span class="n">style</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"-inkscape-font-specification"</span><span class="p">,</span> <span class="s2">""</span><span class="p">)</span>
                 <span class="n">resolved_variant</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_extract_variant</span><span class="p">(</span><span class="n">current_spec</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">resolved_variant</span> <span class="o">=</span> <span class="n">variant</span>
 
-            <span class="bp">self</span><span class="o">.</span><span class="n">set_property</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="s2">&quot;font-family&quot;</span><span class="p">,</span> <span class="n">font_family</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">set_property</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="s2">"font-family"</span><span class="p">,</span> <span class="n">font_family</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">set_property</span><span class="p">(</span>
                 <span class="n">node</span><span class="p">,</span>
-                <span class="s2">&quot;-inkscape-font-specification&quot;</span><span class="p">,</span>
-                <span class="sa">f</span><span class="s2">&quot;&#39;</span><span class="si">{</span><span class="n">font_family</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">resolved_variant</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">,</span>
+                <span class="s2">"-inkscape-font-specification"</span><span class="p">,</span>
+                <span class="sa">f</span><span class="s2">"'</span><span class="si">{</span><span class="n">font_family</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">resolved_variant</span><span class="si">}</span><span class="s2">'"</span><span class="p">,</span>
             <span class="p">)</span>
 
         <span class="k">return</span> <span class="kc">None</span></div>
@@ -1231,7 +1231,7 @@
 <div class="viewcode-block" id="FigureSVG.set_text">
 <a class="viewcode-back" href="../../generated/losalamos.figures.html#losalamos.figures.FigureSVG.set_text">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">set_text</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element</span><span class="p">,</span> <span class="n">content</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Set the text content of a SVG text element.</span>
 
 <span class="sd">        Writes to the first ``&lt;tspan&gt;`` descendant if present,</span>
@@ -1245,9 +1245,9 @@
 <span class="sd">        :type content: str</span>
 <span class="sd">        :return: None</span>
 <span class="sd">        :rtype: NoneType</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">element</span><span class="o">.</span><span class="n">iter</span><span class="p">():</span>
-            <span class="k">if</span> <span class="n">etree</span><span class="o">.</span><span class="n">QName</span><span class="p">(</span><span class="n">child</span><span class="p">)</span><span class="o">.</span><span class="n">localname</span> <span class="o">==</span> <span class="s2">&quot;tspan&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">etree</span><span class="o">.</span><span class="n">QName</span><span class="p">(</span><span class="n">child</span><span class="p">)</span><span class="o">.</span><span class="n">localname</span> <span class="o">==</span> <span class="s2">"tspan"</span><span class="p">:</span>
                 <span class="n">child</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="n">content</span>
                 <span class="k">return</span> <span class="kc">None</span>
 
@@ -1259,16 +1259,16 @@
 <div class="viewcode-block" id="FigureSVG.set_font_layers">
 <a class="viewcode-back" href="../../generated/losalamos.figures.html#losalamos.figures.FigureSVG.set_font_layers">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">set_font_layers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">font_family</span><span class="p">,</span> <span class="n">variant</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">layers</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Set the font family on all text elements across specified layers.</span>
 
 <span class="sd">        Scans every specified layer in the document and applies :meth:`set_font`</span>
 <span class="sd">        to each ``&lt;text&gt;`` element found, preserving individual node</span>
 <span class="sd">        variants unless ``variant`` is explicitly provided.</span>
 
-<span class="sd">        :param font_family: Target font family name (e.g. ``&#39;Arial&#39;``, ``&#39;Georgia&#39;``).</span>
+<span class="sd">        :param font_family: Target font family name (e.g. ``'Arial'``, ``'Georgia'``).</span>
 <span class="sd">        :type font_family: str</span>
-<span class="sd">        :param variant: Font variant to apply (e.g. ``&#39;Normal&#39;``, ``&#39;Bold&#39;``, ``&#39;Italic&#39;``).</span>
+<span class="sd">        :param variant: Font variant to apply (e.g. ``'Normal'``, ``'Bold'``, ``'Italic'``).</span>
 <span class="sd">            If ``None``, the existing variant of each node is preserved.</span>
 <span class="sd">            Default value = ``None``</span>
 <span class="sd">        :type variant: str or None</span>
@@ -1282,7 +1282,7 @@
 
 <span class="sd">            :meth:`set_font`, :meth:`get_layers`, :meth:`get_layer_elements`</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">all_layers</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_layers</span><span class="p">()</span>
 
         <span class="k">if</span> <span class="n">layers</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -1293,8 +1293,8 @@
         <span class="k">for</span> <span class="n">label</span> <span class="ow">in</span> <span class="n">target_layers</span><span class="p">:</span>
             <span class="n">elements</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_layer_elements</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="n">drawable_only</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">el_id</span><span class="p">,</span> <span class="n">el_data</span> <span class="ow">in</span> <span class="n">elements</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-                <span class="k">if</span> <span class="n">el_data</span><span class="p">[</span><span class="s2">&quot;tag&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;text&quot;</span><span class="p">:</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">set_font</span><span class="p">(</span><span class="n">el_data</span><span class="p">[</span><span class="s2">&quot;element&quot;</span><span class="p">],</span> <span class="n">font_family</span><span class="p">,</span> <span class="n">variant</span><span class="o">=</span><span class="n">variant</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">el_data</span><span class="p">[</span><span class="s2">"tag"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"text"</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">set_font</span><span class="p">(</span><span class="n">el_data</span><span class="p">[</span><span class="s2">"element"</span><span class="p">],</span> <span class="n">font_family</span><span class="p">,</span> <span class="n">variant</span><span class="o">=</span><span class="n">variant</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="kc">None</span></div>
 
@@ -1302,7 +1302,7 @@
 <div class="viewcode-block" id="FigureSVG.rename_layer">
 <a class="viewcode-back" href="../../generated/losalamos.figures.html#losalamos.figures.FigureSVG.rename_layer">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">rename_layer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">new_label</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Rename an Inkscape layer by updating its label attribute.</span>
 
 <span class="sd">        :param label: Current label of the layer to rename.</span>
@@ -1324,13 +1324,13 @@
 
 <span class="sd">            :meth:`get_layers`, :meth:`get_layers_labels`</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">layers</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_layers</span><span class="p">()</span>
 
         <span class="k">if</span> <span class="n">label</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">layers</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Layer &#39;</span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2">&#39; not found in document.&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Layer '</span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2">' not found in document."</span><span class="p">)</span>
 
-        <span class="n">label_attr</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="se">{{</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name_spaces</span><span class="p">[</span><span class="s1">&#39;inkscape&#39;</span><span class="p">]</span><span class="si">}</span><span class="se">}}</span><span class="s2">label&quot;</span>
+        <span class="n">label_attr</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="se">{{</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name_spaces</span><span class="p">[</span><span class="s1">'inkscape'</span><span class="p">]</span><span class="si">}</span><span class="se">}}</span><span class="s2">label"</span>
         <span class="n">layers</span><span class="p">[</span><span class="n">label</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">label_attr</span><span class="p">,</span> <span class="n">new_label</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="kc">None</span></div>
@@ -1339,7 +1339,7 @@
 <div class="viewcode-block" id="FigureSVG.rename_element_id">
 <a class="viewcode-back" href="../../generated/losalamos.figures.html#losalamos.figures.FigureSVG.rename_element_id">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">rename_element_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">old_id</span><span class="p">,</span> <span class="n">new_id</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Rename an element ID and update all references to it within the document.</span>
 
 <span class="sd">        Updates the ``id`` attribute on the target element and scans the</span>
@@ -1360,7 +1360,7 @@
 
 <span class="sd">            This method is required when changing the target of the ``crop_id``</span>
 <span class="sd">            parameter in :meth:`to_image`, :meth:`to_pdf`, and :meth:`to_svg`,</span>
-<span class="sd">            since Inkscape&#39;s ``--export-id`` flag resolves elements by their</span>
+<span class="sd">            since Inkscape's ``--export-id`` flag resolves elements by their</span>
 <span class="sd">            ``id`` attribute.</span>
 
 <span class="sd">        .. warning::</span>
@@ -1374,22 +1374,22 @@
 
 <span class="sd">            :meth:`to_image`, :meth:`to_pdf`, :meth:`to_svg`</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="c1"># find the target element</span>
-        <span class="n">target</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;.//*[@id=&#39;</span><span class="si">{</span><span class="n">old_id</span><span class="si">}</span><span class="s2">&#39;]&quot;</span><span class="p">)</span>
+        <span class="n">target</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="sa">f</span><span class="s2">".//*[@id='</span><span class="si">{</span><span class="n">old_id</span><span class="si">}</span><span class="s2">']"</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">target</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Element with id &#39;</span><span class="si">{</span><span class="n">old_id</span><span class="si">}</span><span class="s2">&#39; not found in document.&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Element with id '</span><span class="si">{</span><span class="n">old_id</span><span class="si">}</span><span class="s2">' not found in document."</span><span class="p">)</span>
 
         <span class="c1"># rename the element id</span>
-        <span class="n">target</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="n">new_id</span><span class="p">)</span>
+        <span class="n">target</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">"id"</span><span class="p">,</span> <span class="n">new_id</span><span class="p">)</span>
 
         <span class="c1"># update all cross-references in the tree</span>
         <span class="n">ref_attrs</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s2">&quot;clip-path&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;url(#</span><span class="si">{</span><span class="n">old_id</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;mask&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;url(#</span><span class="si">{</span><span class="n">old_id</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;href&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;#</span><span class="si">{</span><span class="n">old_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
-            <span class="sa">f</span><span class="s2">&quot;</span><span class="se">{{</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name_spaces</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;xlink&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;http://www.w3.org/1999/xlink&#39;</span><span class="p">)</span><span class="si">}</span><span class="se">}}</span><span class="s2">href&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;#</span><span class="si">{</span><span class="n">old_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="s2">"clip-path"</span><span class="p">:</span> <span class="sa">f</span><span class="s2">"url(#</span><span class="si">{</span><span class="n">old_id</span><span class="si">}</span><span class="s2">)"</span><span class="p">,</span>
+            <span class="s2">"mask"</span><span class="p">:</span> <span class="sa">f</span><span class="s2">"url(#</span><span class="si">{</span><span class="n">old_id</span><span class="si">}</span><span class="s2">)"</span><span class="p">,</span>
+            <span class="s2">"href"</span><span class="p">:</span> <span class="sa">f</span><span class="s2">"#</span><span class="si">{</span><span class="n">old_id</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
+            <span class="sa">f</span><span class="s2">"</span><span class="se">{{</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name_spaces</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'xlink'</span><span class="p">,</span><span class="w"> </span><span class="s1">'http://www.w3.org/1999/xlink'</span><span class="p">)</span><span class="si">}</span><span class="se">}}</span><span class="s2">href"</span><span class="p">:</span> <span class="sa">f</span><span class="s2">"#</span><span class="si">{</span><span class="n">old_id</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
         <span class="p">}</span>
 
         <span class="k">for</span> <span class="n">element</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">iter</span><span class="p">():</span>
@@ -1403,8 +1403,8 @@
 <div class="viewcode-block" id="FigureSVG.rename_element_label">
 <a class="viewcode-back" href="../../generated/losalamos.figures.html#losalamos.figures.FigureSVG.rename_element_label">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">rename_element_label</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">old_label</span><span class="p">,</span> <span class="n">new_label</span><span class="p">,</span> <span class="n">tag</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Rename an element&#39;s ``inkscape:label`` attribute within the document.</span>
+<span class="w">        </span><span class="sd">"""</span>
+<span class="sd">        Rename an element's ``inkscape:label`` attribute within the document.</span>
 
 <span class="sd">        Searches the entire SVG tree for the first element whose</span>
 <span class="sd">        ``inkscape:label`` matches ``old_label`` and updates it to ``new_label``.</span>
@@ -1415,7 +1415,7 @@
 <span class="sd">        :param new_label: New label value to assign.</span>
 <span class="sd">        :type new_label: str</span>
 <span class="sd">        :param tag: [optional] Local tag name to restrict the search</span>
-<span class="sd">            (e.g. ``&#39;g&#39;``, ``&#39;rect&#39;``, ``&#39;text&#39;``). If ``None``, all</span>
+<span class="sd">            (e.g. ``'g'``, ``'rect'``, ``'text'``). If ``None``, all</span>
 <span class="sd">            element types are searched. Default value = ``None``</span>
 <span class="sd">        :type tag: str or None</span>
 <span class="sd">        :return: None</span>
@@ -1433,8 +1433,8 @@
 
 <span class="sd">            :meth:`rename_layer`, :meth:`rename_element_id`</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">label_attr</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="se">{{</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name_spaces</span><span class="p">[</span><span class="s1">&#39;inkscape&#39;</span><span class="p">]</span><span class="si">}</span><span class="se">}}</span><span class="s2">label&quot;</span>
+<span class="sd">        """</span>
+        <span class="n">label_attr</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="se">{{</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name_spaces</span><span class="p">[</span><span class="s1">'inkscape'</span><span class="p">]</span><span class="si">}</span><span class="se">}}</span><span class="s2">label"</span>
 
         <span class="k">for</span> <span class="n">element</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">iter</span><span class="p">():</span>
             <span class="k">if</span> <span class="n">tag</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">etree</span><span class="o">.</span><span class="n">QName</span><span class="p">(</span><span class="n">element</span><span class="p">)</span><span class="o">.</span><span class="n">localname</span> <span class="o">!=</span> <span class="n">tag</span><span class="p">:</span>
@@ -1444,19 +1444,19 @@
                 <span class="k">return</span> <span class="kc">None</span>
 
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;Element with inkscape:label &#39;</span><span class="si">{</span><span class="n">old_label</span><span class="si">}</span><span class="s2">&#39; not found in document.&quot;</span>
+            <span class="sa">f</span><span class="s2">"Element with inkscape:label '</span><span class="si">{</span><span class="n">old_label</span><span class="si">}</span><span class="s2">' not found in document."</span>
         <span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="FigureSVG.embed">
 <a class="viewcode-back" href="../../generated/losalamos.figures.html#losalamos.figures.FigureSVG.embed">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">embed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file</span><span class="p">,</span> <span class="n">layer</span><span class="p">,</span> <span class="n">group</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Embed an external SVG file as a new group, creating the target</span>
 <span class="sd">        layer if it does not already exist.</span>
 
 <span class="sd">        The entire content of ``file`` is wrapped in a single ``&lt;g id=group&gt;``</span>
-<span class="sd">        (itself wrapping a nested ``&lt;svg&gt;`` that preserves the source&#39;s own</span>
+<span class="sd">        (itself wrapping a nested ``&lt;svg&gt;`` that preserves the source's own</span>
 <span class="sd">        ``viewBox``/``width``/``height``, keeping its ``&lt;defs&gt;`` self-contained</span>
 <span class="sd">        and immune to id collisions), then appended to the named layer. If</span>
 <span class="sd">        the layer does not exist, it is created as an empty Inkscape layer</span>
@@ -1491,14 +1491,14 @@
 
 <span class="sd">            :meth:`get_layers`, :meth:`get_layer_elements`, :meth:`save`</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">file</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">file</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
-            <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Embed source not found: </span><span class="si">{</span><span class="n">file</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Embed source not found: </span><span class="si">{</span><span class="n">file</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
-        <span class="n">svg_ns</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">name_spaces</span><span class="p">[</span><span class="s2">&quot;svg&quot;</span><span class="p">]</span>
-        <span class="n">inkscape_ns</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">name_spaces</span><span class="p">[</span><span class="s2">&quot;inkscape&quot;</span><span class="p">]</span>
-        <span class="n">label_attr</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="se">{{</span><span class="si">{</span><span class="n">inkscape_ns</span><span class="si">}</span><span class="se">}}</span><span class="s2">label&quot;</span>
+        <span class="n">svg_ns</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">name_spaces</span><span class="p">[</span><span class="s2">"svg"</span><span class="p">]</span>
+        <span class="n">inkscape_ns</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">name_spaces</span><span class="p">[</span><span class="s2">"inkscape"</span><span class="p">]</span>
+        <span class="n">label_attr</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="se">{{</span><span class="si">{</span><span class="n">inkscape_ns</span><span class="si">}</span><span class="se">}}</span><span class="s2">label"</span>
 
         <span class="c1"># find or create the target layer</span>
         <span class="n">layers</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_layers</span><span class="p">()</span>
@@ -1507,78 +1507,78 @@
         <span class="k">if</span> <span class="n">target_layer</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">target_layer</span> <span class="o">=</span> <span class="n">etree</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span>
-                <span class="sa">f</span><span class="s2">&quot;</span><span class="se">{{</span><span class="si">{</span><span class="n">svg_ns</span><span class="si">}</span><span class="se">}}</span><span class="s2">g&quot;</span><span class="p">,</span>
-                <span class="n">nsmap</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;inkscape&quot;</span><span class="p">:</span> <span class="n">inkscape_ns</span><span class="p">},</span>
+                <span class="sa">f</span><span class="s2">"</span><span class="se">{{</span><span class="si">{</span><span class="n">svg_ns</span><span class="si">}</span><span class="se">}}</span><span class="s2">g"</span><span class="p">,</span>
+                <span class="n">nsmap</span><span class="o">=</span><span class="p">{</span><span class="s2">"inkscape"</span><span class="p">:</span> <span class="n">inkscape_ns</span><span class="p">},</span>
             <span class="p">)</span>
-            <span class="n">target_layer</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="n">layer</span><span class="p">)</span>
+            <span class="n">target_layer</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">"id"</span><span class="p">,</span> <span class="n">layer</span><span class="p">)</span>
             <span class="n">target_layer</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">label_attr</span><span class="p">,</span> <span class="n">layer</span><span class="p">)</span>
-            <span class="n">target_layer</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">{{</span><span class="si">{</span><span class="n">inkscape_ns</span><span class="si">}</span><span class="se">}}</span><span class="s2">groupmode&quot;</span><span class="p">,</span> <span class="s2">&quot;layer&quot;</span><span class="p">)</span>
+            <span class="n">target_layer</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="se">{{</span><span class="si">{</span><span class="n">inkscape_ns</span><span class="si">}</span><span class="se">}}</span><span class="s2">groupmode"</span><span class="p">,</span> <span class="s2">"layer"</span><span class="p">)</span>
 
         <span class="c1"># check for an existing group with this id anywhere in the document</span>
         <span class="n">existing</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;//svg:g[@id=&#39;</span><span class="si">{</span><span class="n">group</span><span class="si">}</span><span class="s2">&#39;]&quot;</span><span class="p">,</span> <span class="n">namespaces</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">name_spaces</span>
+            <span class="sa">f</span><span class="s2">"//svg:g[@id='</span><span class="si">{</span><span class="n">group</span><span class="si">}</span><span class="s2">']"</span><span class="p">,</span> <span class="n">namespaces</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">name_spaces</span>
         <span class="p">)</span>
         <span class="k">if</span> <span class="n">existing</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">overwrite</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Group id=&#39;</span><span class="si">{</span><span class="n">group</span><span class="si">}</span><span class="s2">&#39; already exists. Pass overwrite=True to replace it.&quot;</span>
+                <span class="sa">f</span><span class="s2">"Group id='</span><span class="si">{</span><span class="n">group</span><span class="si">}</span><span class="s2">' already exists. Pass overwrite=True to replace it."</span>
             <span class="p">)</span>
 
         <span class="c1"># parse the external SVG and pull its sizing attributes</span>
         <span class="n">source_tree</span> <span class="o">=</span> <span class="n">etree</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">file</span><span class="p">))</span>
         <span class="n">source_root</span> <span class="o">=</span> <span class="n">source_tree</span><span class="o">.</span><span class="n">getroot</span><span class="p">()</span>
-        <span class="n">viewbox</span> <span class="o">=</span> <span class="n">source_root</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;viewBox&quot;</span><span class="p">)</span>
-        <span class="n">width_str</span> <span class="o">=</span> <span class="n">source_root</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;width&quot;</span><span class="p">)</span>
-        <span class="n">height_str</span> <span class="o">=</span> <span class="n">source_root</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;height&quot;</span><span class="p">)</span>
+        <span class="n">viewbox</span> <span class="o">=</span> <span class="n">source_root</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"viewBox"</span><span class="p">)</span>
+        <span class="n">width_str</span> <span class="o">=</span> <span class="n">source_root</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"width"</span><span class="p">)</span>
+        <span class="n">height_str</span> <span class="o">=</span> <span class="n">source_root</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"height"</span><span class="p">)</span>
 
-        <span class="c1"># determine the scale factor needed to convert the source SVG&#39;s</span>
-        <span class="c1"># declared physical units into the master document&#39;s user-units.</span>
-        <span class="c1"># matplotlib exports width/height in points (&quot;pt&quot;); this document&#39;s</span>
+        <span class="c1"># determine the scale factor needed to convert the source SVG's</span>
+        <span class="c1"># declared physical units into the master document's user-units.</span>
+        <span class="c1"># matplotlib exports width/height in points ("pt"); this document's</span>
         <span class="c1"># user-units are mm (1 user-unit == 1mm, per its own viewBox/width</span>
         <span class="c1"># match). 1pt = 25.4/72 mm, which matches the scale Inkscape itself</span>
         <span class="c1"># applies on a manual SVG import.</span>
         <span class="n">PT_TO_MM</span> <span class="o">=</span> <span class="mf">25.4</span> <span class="o">/</span> <span class="mf">72.0</span>
 
         <span class="k">def</span><span class="w"> </span><span class="nf">_parse_length</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
-<span class="w">            </span><span class="sd">&quot;&quot;&quot;Split a numeric length string into (value, unit).&quot;&quot;&quot;</span>
+<span class="w">            </span><span class="sd">"""Split a numeric length string into (value, unit)."""</span>
             <span class="n">s</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
-            <span class="k">for</span> <span class="n">unit</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;pt&quot;</span><span class="p">,</span> <span class="s2">&quot;mm&quot;</span><span class="p">,</span> <span class="s2">&quot;cm&quot;</span><span class="p">,</span> <span class="s2">&quot;in&quot;</span><span class="p">,</span> <span class="s2">&quot;px&quot;</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">unit</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"pt"</span><span class="p">,</span> <span class="s2">"mm"</span><span class="p">,</span> <span class="s2">"cm"</span><span class="p">,</span> <span class="s2">"in"</span><span class="p">,</span> <span class="s2">"px"</span><span class="p">):</span>
                 <span class="k">if</span> <span class="n">s</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="n">unit</span><span class="p">):</span>
                     <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">s</span><span class="p">[:</span> <span class="o">-</span><span class="nb">len</span><span class="p">(</span><span class="n">unit</span><span class="p">)]),</span> <span class="n">unit</span>
-            <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">s</span><span class="p">),</span> <span class="s2">&quot;px&quot;</span>  <span class="c1"># bare number: SVG user-units, treat as px</span>
+            <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">s</span><span class="p">),</span> <span class="s2">"px"</span>  <span class="c1"># bare number: SVG user-units, treat as px</span>
 
         <span class="n">scale</span> <span class="o">=</span> <span class="mf">1.0</span>
         <span class="k">if</span> <span class="n">width_str</span><span class="p">:</span>
             <span class="n">value</span><span class="p">,</span> <span class="n">unit</span> <span class="o">=</span> <span class="n">_parse_length</span><span class="p">(</span><span class="n">width_str</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">unit</span> <span class="o">==</span> <span class="s2">&quot;pt&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">unit</span> <span class="o">==</span> <span class="s2">"pt"</span><span class="p">:</span>
                 <span class="n">scale</span> <span class="o">=</span> <span class="n">PT_TO_MM</span>
-            <span class="k">elif</span> <span class="n">unit</span> <span class="o">==</span> <span class="s2">&quot;mm&quot;</span><span class="p">:</span>
+            <span class="k">elif</span> <span class="n">unit</span> <span class="o">==</span> <span class="s2">"mm"</span><span class="p">:</span>
                 <span class="n">scale</span> <span class="o">=</span> <span class="mf">1.0</span>
-            <span class="k">elif</span> <span class="n">unit</span> <span class="o">==</span> <span class="s2">&quot;cm&quot;</span><span class="p">:</span>
+            <span class="k">elif</span> <span class="n">unit</span> <span class="o">==</span> <span class="s2">"cm"</span><span class="p">:</span>
                 <span class="n">scale</span> <span class="o">=</span> <span class="mf">10.0</span>
-            <span class="k">elif</span> <span class="n">unit</span> <span class="o">==</span> <span class="s2">&quot;in&quot;</span><span class="p">:</span>
+            <span class="k">elif</span> <span class="n">unit</span> <span class="o">==</span> <span class="s2">"in"</span><span class="p">:</span>
                 <span class="n">scale</span> <span class="o">=</span> <span class="mf">25.4</span>
-            <span class="c1"># &quot;px&quot;/bare: assume already in document user-units, scale = 1.0</span>
+            <span class="c1"># "px"/bare: assume already in document user-units, scale = 1.0</span>
 
         <span class="c1"># build the new group</span>
-        <span class="n">new_group</span> <span class="o">=</span> <span class="n">etree</span><span class="o">.</span><span class="n">Element</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">{{</span><span class="si">{</span><span class="n">svg_ns</span><span class="si">}</span><span class="se">}}</span><span class="s2">g&quot;</span><span class="p">)</span>
-        <span class="n">new_group</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="n">group</span><span class="p">)</span>
-        <span class="n">new_group</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;data-embedded-from&quot;</span><span class="p">,</span> <span class="n">file</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="n">new_group</span> <span class="o">=</span> <span class="n">etree</span><span class="o">.</span><span class="n">Element</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="se">{{</span><span class="si">{</span><span class="n">svg_ns</span><span class="si">}</span><span class="se">}}</span><span class="s2">g"</span><span class="p">)</span>
+        <span class="n">new_group</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">"id"</span><span class="p">,</span> <span class="n">group</span><span class="p">)</span>
+        <span class="n">new_group</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">"data-embedded-from"</span><span class="p">,</span> <span class="n">file</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">scale</span> <span class="o">!=</span> <span class="mf">1.0</span><span class="p">:</span>
-            <span class="n">new_group</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;transform&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;scale(</span><span class="si">{</span><span class="n">scale</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+            <span class="n">new_group</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">"transform"</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"scale(</span><span class="si">{</span><span class="n">scale</span><span class="si">}</span><span class="s2">)"</span><span class="p">)</span>
 
         <span class="c1"># nest the source content in its own &lt;svg&gt;, sized in raw viewBox</span>
         <span class="c1"># units (no pt/mm suffix) since the group-level transform above</span>
-        <span class="c1"># already converts those units into the master&#39;s coordinate space</span>
-        <span class="n">nested_svg</span> <span class="o">=</span> <span class="n">etree</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">new_group</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="se">{{</span><span class="si">{</span><span class="n">svg_ns</span><span class="si">}</span><span class="se">}}</span><span class="s2">svg&quot;</span><span class="p">)</span>
+        <span class="c1"># already converts those units into the master's coordinate space</span>
+        <span class="n">nested_svg</span> <span class="o">=</span> <span class="n">etree</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">new_group</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"</span><span class="se">{{</span><span class="si">{</span><span class="n">svg_ns</span><span class="si">}</span><span class="se">}}</span><span class="s2">svg"</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">viewbox</span><span class="p">:</span>
-            <span class="n">nested_svg</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;viewBox&quot;</span><span class="p">,</span> <span class="n">viewbox</span><span class="p">)</span>
+            <span class="n">nested_svg</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">"viewBox"</span><span class="p">,</span> <span class="n">viewbox</span><span class="p">)</span>
             <span class="c1"># width/height in bare viewBox units; the wrapping &lt;g&gt; transform</span>
             <span class="c1"># handles the physical-unit conversion, so no unit suffix here</span>
             <span class="n">vb_parts</span> <span class="o">=</span> <span class="n">viewbox</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">vb_parts</span><span class="p">)</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>
-                <span class="n">nested_svg</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;width&quot;</span><span class="p">,</span> <span class="n">vb_parts</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
-                <span class="n">nested_svg</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;height&quot;</span><span class="p">,</span> <span class="n">vb_parts</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
-        <span class="n">nested_svg</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;overflow&quot;</span><span class="p">,</span> <span class="s2">&quot;visible&quot;</span><span class="p">)</span>
+                <span class="n">nested_svg</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">"width"</span><span class="p">,</span> <span class="n">vb_parts</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+                <span class="n">nested_svg</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">"height"</span><span class="p">,</span> <span class="n">vb_parts</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+        <span class="n">nested_svg</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">"overflow"</span><span class="p">,</span> <span class="s2">"visible"</span><span class="p">)</span>
 
         <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">source_root</span><span class="p">):</span>
             <span class="n">nested_svg</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">child</span><span class="p">)</span>
@@ -1606,7 +1606,7 @@
         <span class="n">to_jpeg</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">remove_png</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Export the current drawing as an image file, optionally adjusting layers and format.</span>
 
 <span class="sd">        :param file_output: [optional] The destination path for the exported image. If None, it defaults to the source file name.</span>
@@ -1639,14 +1639,14 @@
 <span class="sd">            It saves the current state of the drawing to disk before calling Inkscape</span>
 <span class="sd">            via a subprocess to perform the rendering.</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="kn">import</span><span class="w"> </span><span class="nn">subprocess</span>
         <span class="kn">from</span><span class="w"> </span><span class="nn">losalamos.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">make_local_tempfile</span>
 
         <span class="c1"># handle output file</span>
         <span class="c1"># -----------------------------------------------------------------------</span>
         <span class="k">if</span> <span class="n">file_output</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">file_output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_data</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">file_data</span><span class="o">.</span><span class="n">stem</span> <span class="o">+</span> <span class="s2">&quot;.png&quot;</span><span class="p">)</span>
+            <span class="n">file_output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_data</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">file_data</span><span class="o">.</span><span class="n">stem</span> <span class="o">+</span> <span class="s2">".png"</span><span class="p">)</span>
 
         <span class="c1"># handle svg file copy</span>
         <span class="c1"># -----------------------------------------------------------------------</span>
@@ -1686,15 +1686,15 @@
         <span class="c1"># build command</span>
         <span class="c1"># -----------------------------------------------------------------------</span>
         <span class="n">cmd</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="s2">&quot;inkscape&quot;</span><span class="p">,</span>
+            <span class="s2">"inkscape"</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">file_data</span><span class="p">,</span>
-            <span class="s2">&quot;--export-type=png&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;--export-dpi=</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">dpi</span><span class="p">),</span>
-            <span class="s2">&quot;--export-filename=</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">file_output</span><span class="p">),</span>
+            <span class="s2">"--export-type=png"</span><span class="p">,</span>
+            <span class="s2">"--export-dpi=</span><span class="si">{}</span><span class="s2">"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">dpi</span><span class="p">),</span>
+            <span class="s2">"--export-filename=</span><span class="si">{}</span><span class="s2">"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">file_output</span><span class="p">),</span>
         <span class="p">]</span>
 
         <span class="k">if</span> <span class="n">crop_id</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">cmd</span> <span class="o">=</span> <span class="n">cmd</span> <span class="o">+</span> <span class="p">[</span><span class="s2">&quot;--export-id=</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">crop_id</span><span class="p">)]</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="n">cmd</span> <span class="o">+</span> <span class="p">[</span><span class="s2">"--export-id=</span><span class="si">{}</span><span class="s2">"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">crop_id</span><span class="p">)]</span>
 
         <span class="c1"># call inkscape process</span>
         <span class="c1"># -----------------------------------------------------------------------</span>
@@ -1703,7 +1703,7 @@
         <span class="c1"># handle jpg conversion</span>
         <span class="c1"># -----------------------------------------------------------------------</span>
         <span class="k">if</span> <span class="n">to_jpeg</span><span class="p">:</span>
-            <span class="n">new_name</span> <span class="o">=</span> <span class="n">file_output</span><span class="o">.</span><span class="n">stem</span> <span class="o">+</span> <span class="s2">&quot;.jpeg&quot;</span>
+            <span class="n">new_name</span> <span class="o">=</span> <span class="n">file_output</span><span class="o">.</span><span class="n">stem</span> <span class="o">+</span> <span class="s2">".jpeg"</span>
             <span class="n">new_file</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">file_output</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="n">new_name</span><span class="p">)</span>
 
             <span class="bp">self</span><span class="o">.</span><span class="n">image_to_jpeg</span><span class="p">(</span><span class="n">file_input</span><span class="o">=</span><span class="n">file_output</span><span class="p">,</span> <span class="n">file_output</span><span class="o">=</span><span class="n">new_file</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span><span class="p">)</span>
@@ -1732,7 +1732,7 @@
         <span class="n">show_layers</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">show_inclusive</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Export the current drawing as a PDF file.</span>
 
 <span class="sd">        This method uses a two-stage vector export pipeline when ``crop_id``</span>
@@ -1768,7 +1768,7 @@
 
 <span class="sd">            Requires ``inkscape`` available in system PATH.</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
         <span class="kn">import</span><span class="w"> </span><span class="nn">shutil</span>
         <span class="kn">import</span><span class="w"> </span><span class="nn">subprocess</span>
@@ -1779,14 +1779,14 @@
         <span class="c1"># handle output file</span>
         <span class="c1"># -------------------------------------------------------------------------</span>
         <span class="k">if</span> <span class="n">file_output</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">file_output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_data</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">file_data</span><span class="o">.</span><span class="n">stem</span> <span class="o">+</span> <span class="s2">&quot;.pdf&quot;</span><span class="p">)</span>
+            <span class="n">file_output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_data</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">file_data</span><span class="o">.</span><span class="n">stem</span> <span class="o">+</span> <span class="s2">".pdf"</span><span class="p">)</span>
 
         <span class="n">file_output</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">file_output</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
 
         <span class="c1"># enforce extension</span>
         <span class="c1"># -------------------------------------------------------------------------</span>
-        <span class="k">if</span> <span class="n">file_output</span><span class="o">.</span><span class="n">suffix</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">!=</span> <span class="s2">&quot;.pdf&quot;</span><span class="p">:</span>
-            <span class="n">file_output</span> <span class="o">=</span> <span class="n">file_output</span><span class="o">.</span><span class="n">with_suffix</span><span class="p">(</span><span class="s2">&quot;.pdf&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">file_output</span><span class="o">.</span><span class="n">suffix</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">!=</span> <span class="s2">".pdf"</span><span class="p">:</span>
+            <span class="n">file_output</span> <span class="o">=</span> <span class="n">file_output</span><span class="o">.</span><span class="n">with_suffix</span><span class="p">(</span><span class="s2">".pdf"</span><span class="p">)</span>
 
         <span class="c1"># create temporary working copy</span>
         <span class="c1"># -------------------------------------------------------------------------</span>
@@ -1822,18 +1822,18 @@
         <span class="c1"># -------------------------------------------------------------------------</span>
         <span class="k">if</span> <span class="n">crop_id</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
 
-            <span class="n">temp_svg</span> <span class="o">=</span> <span class="n">make_local_tempfile</span><span class="p">(</span><span class="n">src_file</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">file_data</span><span class="o">.</span><span class="n">with_suffix</span><span class="p">(</span><span class="s2">&quot;.svg&quot;</span><span class="p">))</span>
+            <span class="n">temp_svg</span> <span class="o">=</span> <span class="n">make_local_tempfile</span><span class="p">(</span><span class="n">src_file</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">file_data</span><span class="o">.</span><span class="n">with_suffix</span><span class="p">(</span><span class="s2">".svg"</span><span class="p">))</span>
 
             <span class="c1"># stage 1:</span>
             <span class="c1"># export cropped standalone svg</span>
             <span class="c1"># ---------------------------------------------------------------------</span>
             <span class="n">cmd_svg</span> <span class="o">=</span> <span class="p">[</span>
-                <span class="s2">&quot;inkscape&quot;</span><span class="p">,</span>
+                <span class="s2">"inkscape"</span><span class="p">,</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">file_data</span><span class="p">,</span>
-                <span class="s2">&quot;--export-type=svg&quot;</span><span class="p">,</span>
-                <span class="sa">f</span><span class="s2">&quot;--export-filename=</span><span class="si">{</span><span class="n">temp_svg</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
-                <span class="sa">f</span><span class="s2">&quot;--export-id=</span><span class="si">{</span><span class="n">crop_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
-                <span class="c1"># &quot;--export-id-only&quot;,</span>
+                <span class="s2">"--export-type=svg"</span><span class="p">,</span>
+                <span class="sa">f</span><span class="s2">"--export-filename=</span><span class="si">{</span><span class="n">temp_svg</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
+                <span class="sa">f</span><span class="s2">"--export-id=</span><span class="si">{</span><span class="n">crop_id</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
+                <span class="c1"># "--export-id-only",</span>
             <span class="p">]</span>
 
             <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd_svg</span><span class="p">,</span> <span class="n">check</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -1842,11 +1842,11 @@
             <span class="c1"># export svg -&gt; pdf</span>
             <span class="c1"># ---------------------------------------------------------------------</span>
             <span class="n">cmd_pdf</span> <span class="o">=</span> <span class="p">[</span>
-                <span class="s2">&quot;inkscape&quot;</span><span class="p">,</span>
+                <span class="s2">"inkscape"</span><span class="p">,</span>
                 <span class="n">temp_svg</span><span class="p">,</span>
-                <span class="s2">&quot;--export-type=pdf&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;--export-area-page&quot;</span><span class="p">,</span>
-                <span class="sa">f</span><span class="s2">&quot;--export-filename=</span><span class="si">{</span><span class="n">file_output</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="s2">"--export-type=pdf"</span><span class="p">,</span>
+                <span class="s2">"--export-area-page"</span><span class="p">,</span>
+                <span class="sa">f</span><span class="s2">"--export-filename=</span><span class="si">{</span><span class="n">file_output</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
             <span class="p">]</span>
 
             <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd_pdf</span><span class="p">,</span> <span class="n">check</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -1862,11 +1862,11 @@
         <span class="k">else</span><span class="p">:</span>
 
             <span class="n">cmd_pdf</span> <span class="o">=</span> <span class="p">[</span>
-                <span class="s2">&quot;inkscape&quot;</span><span class="p">,</span>
+                <span class="s2">"inkscape"</span><span class="p">,</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">file_data</span><span class="p">,</span>
-                <span class="s2">&quot;--export-type=pdf&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;--export-area-page&quot;</span><span class="p">,</span>
-                <span class="sa">f</span><span class="s2">&quot;--export-filename=</span><span class="si">{</span><span class="n">file_output</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="s2">"--export-type=pdf"</span><span class="p">,</span>
+                <span class="s2">"--export-area-page"</span><span class="p">,</span>
+                <span class="sa">f</span><span class="s2">"--export-filename=</span><span class="si">{</span><span class="n">file_output</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
             <span class="p">]</span>
 
             <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd_pdf</span><span class="p">,</span> <span class="n">check</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -1893,7 +1893,7 @@
         <span class="n">show_layers</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">show_inclusive</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Export the current drawing as an SVG file.</span>
 
 <span class="sd">        :param file_output: [optional] Destination SVG path. Defaults to the source file name.</span>
@@ -1915,26 +1915,26 @@
 
 <span class="sd">            This method requires ``inkscape`` to be installed and available in the system PATH.</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="kn">import</span><span class="w"> </span><span class="nn">subprocess</span>
         <span class="kn">from</span><span class="w"> </span><span class="nn">losalamos.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">make_local_tempfile</span>
 
         <span class="c1"># handle output file</span>
         <span class="c1"># -----------------------------------------------------------------------</span>
         <span class="k">if</span> <span class="n">file_output</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">file_output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_data</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">file_data</span><span class="o">.</span><span class="n">stem</span> <span class="o">+</span> <span class="s2">&quot;.svg&quot;</span><span class="p">)</span>
+            <span class="n">file_output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_data</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">file_data</span><span class="o">.</span><span class="n">stem</span> <span class="o">+</span> <span class="s2">".svg"</span><span class="p">)</span>
 
         <span class="n">file_output</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">file_output</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
 
-        <span class="k">if</span> <span class="n">file_output</span><span class="o">.</span><span class="n">suffix</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">!=</span> <span class="s2">&quot;.svg&quot;</span><span class="p">:</span>
-            <span class="n">file_output</span> <span class="o">=</span> <span class="n">file_output</span><span class="o">.</span><span class="n">with_suffix</span><span class="p">(</span><span class="s2">&quot;.svg&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">file_output</span><span class="o">.</span><span class="n">suffix</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">!=</span> <span class="s2">".svg"</span><span class="p">:</span>
+            <span class="n">file_output</span> <span class="o">=</span> <span class="n">file_output</span><span class="o">.</span><span class="n">with_suffix</span><span class="p">(</span><span class="s2">".svg"</span><span class="p">)</span>
 
         <span class="c1"># guard against overwriting the source file</span>
         <span class="c1"># -----------------------------------------------------------------------</span>
         <span class="k">if</span> <span class="n">file_output</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_data</span><span class="o">.</span><span class="n">resolve</span><span class="p">():</span>
             <span class="k">raise</span> <span class="ne">FileExistsError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;file_output resolves to the source file: </span><span class="si">{</span><span class="n">file_output</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;Provide an explicit destination path to avoid overwriting the master SVG.&quot;</span>
+                <span class="sa">f</span><span class="s2">"file_output resolves to the source file: </span><span class="si">{</span><span class="n">file_output</span><span class="si">}</span><span class="se">\n</span><span class="s2">"</span>
+                <span class="sa">f</span><span class="s2">"Provide an explicit destination path to avoid overwriting the master SVG."</span>
             <span class="p">)</span>
 
         <span class="c1"># create temporary working copy</span>
@@ -1962,14 +1962,14 @@
         <span class="c1"># build and run inkscape command</span>
         <span class="c1"># -----------------------------------------------------------------------</span>
         <span class="n">cmd</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="s2">&quot;inkscape&quot;</span><span class="p">,</span>
+            <span class="s2">"inkscape"</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">file_data</span><span class="p">,</span>
-            <span class="s2">&quot;--export-type=svg&quot;</span><span class="p">,</span>
-            <span class="sa">f</span><span class="s2">&quot;--export-filename=</span><span class="si">{</span><span class="n">file_output</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="s2">"--export-type=svg"</span><span class="p">,</span>
+            <span class="sa">f</span><span class="s2">"--export-filename=</span><span class="si">{</span><span class="n">file_output</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
         <span class="p">]</span>
 
         <span class="k">if</span> <span class="n">crop_id</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">cmd</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;--export-id=</span><span class="si">{</span><span class="n">crop_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">cmd</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">"--export-id=</span><span class="si">{</span><span class="n">crop_id</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
         <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">check</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
@@ -1985,35 +1985,35 @@
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">_extract_variant</span><span class="p">(</span><span class="n">spec</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Extract the variant portion from an inkscape font specification string.</span>
 
-<span class="sd">        e.g. &quot;&#39;Arial, Bold&#39;&quot;  -&gt; &quot;Bold&quot;</span>
-<span class="sd">             &quot;&#39;Arial, Normal&#39;&quot; -&gt; &quot;Normal&quot;</span>
-<span class="sd">             &quot;&quot; -&gt; &quot;Normal&quot;</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        e.g. "'Arial, Bold'"  -&gt; "Bold"</span>
+<span class="sd">             "'Arial, Normal'" -&gt; "Normal"</span>
+<span class="sd">             "" -&gt; "Normal"</span>
+<span class="sd">        """</span>
         <span class="c1"># strip quotes and whitespace</span>
-        <span class="n">spec</span> <span class="o">=</span> <span class="n">spec</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s2">&quot;&#39;</span><span class="se">\&quot;</span><span class="s2"> &quot;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="s2">&quot;,&quot;</span> <span class="ow">in</span> <span class="n">spec</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">spec</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
-        <span class="k">return</span> <span class="s2">&quot;Normal&quot;</span>
+        <span class="n">spec</span> <span class="o">=</span> <span class="n">spec</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s2">"'</span><span class="se">\"</span><span class="s2"> "</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">","</span> <span class="ow">in</span> <span class="n">spec</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">spec</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">","</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="k">return</span> <span class="s2">"Normal"</span>
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">_parse_style</span><span class="p">(</span><span class="n">style_str</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Parse an SVG style string into a dict.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">style_str</span><span class="p">:</span>
             <span class="k">return</span> <span class="p">{}</span>
 
-        <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">style_str</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;;&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="s2">&quot;:&quot;</span> <span class="ow">in</span> <span class="n">item</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">":"</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">style_str</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">";"</span><span class="p">)</span> <span class="k">if</span> <span class="s2">":"</span> <span class="ow">in</span> <span class="n">item</span><span class="p">)</span>
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">_style_to_string</span><span class="p">(</span><span class="n">style_dict</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Serialize a style dict back to a SVG style string.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="s2">&quot;;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">v</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">style_dict</span><span class="o">.</span><span class="n">items</span><span class="p">())</span></div>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="s2">";"</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">v</span><span class="si">}</span><span class="s2">"</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">style_dict</span><span class="o">.</span><span class="n">items</span><span class="p">())</span></div>
 
 
 
@@ -2023,11 +2023,11 @@
 <span class="c1"># SCRIPT</span>
 <span class="c1"># ***********************************************************************</span>
 <span class="c1"># standalone behaviour as a script</span>
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
 
     <span class="c1"># Script section</span>
     <span class="c1"># ===================================================================</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Hello world!&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"Hello world!"</span><span class="p">)</span>
     <span class="c1"># ... {develop}</span>
 
     <span class="c1"># Script subsection</span>
@@ -2062,8 +2062,8 @@
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../_static/scripts/bootstrap.js?digest=a95f357e85573c9b56d5"></script>
-<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=a95f357e85573c9b56d5"></script>
+  <script defer src="../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -2097,7 +2097,7 @@
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.19.0.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.21.0.
 </p></div>
       
     </div>

@@ -47,4 +47,5 @@ Tools
    losalamos.tools.search_references
    losalamos.tools.update_references
    losalamos.tools.update_templates
+   losalamos.tools.populate_attributes
    losalamos.tools.database

@@ -26,18 +26,18 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=a95f357e85573c9b56d5" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=a95f357e85573c9b56d5" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
   
   <!-- So that users can add custom icons -->
-  <script defer src="../../../_static/scripts/fontawesome.js?digest=a95f357e85573c9b56d5"></script>
+  <script defer src="../../../_static/scripts/fontawesome.js?digest=cb8930eaaf36d9849b67"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=a95f357e85573c9b56d5" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=a95f357e85573c9b56d5" />
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
 
     <script src="../../../_static/documentation_options.js?v=d45e8c67"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
@@ -400,7 +400,7 @@
                   
   <h1>Source code for losalamos.tools.database</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/env python3</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 <span class="sd">Database Manager</span>
 <span class="sd">================</span>
 
@@ -608,7 +608,7 @@
 <span class="sd">as ``tier=0`` (raw), their average entering as ``tier=1`` (consisted).</span>
 
 <span class="sd">The quality flag handles detection limits (value receives the limit, quality maps to</span>
-<span class="sd">&quot;less than&quot;) and super-large values (value as power of 10, quality encodes the exponent).</span>
+<span class="sd">"less than") and super-large values (value as power of 10, quality encodes the exponent).</span>
 
 <span class="sd">``samples`` — field collection catalog. Wide table.</span>
 
@@ -656,28 +656,28 @@
 
 <span class="sd">.. code-block:: json</span>
 
-<span class="sd">    &quot;initialize&quot;: [</span>
+<span class="sd">    "initialize": [</span>
 <span class="sd">      {</span>
-<span class="sd">        &quot;database&quot;: &quot;path/to/output.gpkg&quot;,</span>
-<span class="sd">        &quot;category&quot;: &quot;in-situ&quot;,</span>
-<span class="sd">        &quot;time&quot;: true,</span>
-<span class="sd">        &quot;sep&quot;: &quot;;&quot;,</span>
+<span class="sd">        "database": "path/to/output.gpkg",</span>
+<span class="sd">        "category": "in-situ",</span>
+<span class="sd">        "time": true,</span>
+<span class="sd">        "sep": ";",</span>
 
-<span class="sd">        &quot;tables&quot;: {</span>
-<span class="sd">          &quot;sites&quot;:      {&quot;file&quot;: &quot;path/to/sites.gpkg&quot;, &quot;layer&quot;: &quot;sites&quot;},</span>
-<span class="sd">          &quot;tier&quot;:       &quot;path/to/tier.csv&quot;,</span>
-<span class="sd">          &quot;quality&quot;:    {&quot;file&quot;: &quot;path/to/quality.csv&quot;, &quot;sep&quot;: &quot;,&quot;, &quot;header_lines&quot;: 2},</span>
-<span class="sd">          &quot;attributes&quot;: {&quot;file&quot;: &quot;path/to/attributes.csv&quot;, &quot;sep&quot;: &quot;\t&quot;},</span>
-<span class="sd">          &quot;storage&quot;:    null,</span>
+<span class="sd">        "tables": {</span>
+<span class="sd">          "sites":      {"file": "path/to/sites.gpkg", "layer": "sites"},</span>
+<span class="sd">          "tier":       "path/to/tier.csv",</span>
+<span class="sd">          "quality":    {"file": "path/to/quality.csv", "sep": ",", "header_lines": 2},</span>
+<span class="sd">          "attributes": {"file": "path/to/attributes.csv", "sep": "\t"},</span>
+<span class="sd">          "storage":    null,</span>
 
-<span class="sd">          &quot;measurements&quot;: &quot;path/to/seed_data.csv&quot;</span>
+<span class="sd">          "measurements": "path/to/seed_data.csv"</span>
 <span class="sd">        },</span>
 
-<span class="sd">        &quot;extra_sql&quot;: [&quot;path/to/extra_fields.sql&quot;]</span>
+<span class="sd">        "extra_sql": ["path/to/extra_fields.sql"]</span>
 <span class="sd">      }</span>
 <span class="sd">    ]</span>
 
-<span class="sd">- ``category``: ``&quot;in-situ&quot;`` or ``&quot;off-site&quot;``</span>
+<span class="sd">- ``category``: ``"in-situ"`` or ``"off-site"``</span>
 <span class="sd">- ``time``: ``true`` (default) → ``YYYY-MM-DD HH:MM:SS``; ``false`` → ``YYYY-MM-DD``</span>
 <span class="sd">- ``storage: null`` → table is created empty; scale=1, offset=0 assumed everywhere</span>
 <span class="sd">- ``measurements`` (and ``samples`` for off-site) at init time are optional</span>
@@ -694,13 +694,13 @@
 
 <span class="sd">.. code-block:: json</span>
 
-<span class="sd">    &quot;append&quot;: [</span>
+<span class="sd">    "append": [</span>
 <span class="sd">      {</span>
-<span class="sd">        &quot;database&quot;:     &quot;path/to/output.gpkg&quot;,</span>
-<span class="sd">        &quot;table&quot;:        &quot;measurements&quot;,</span>
-<span class="sd">        &quot;data_file&quot;:    &quot;path/to/new_data.csv&quot;,</span>
-<span class="sd">        &quot;sep&quot;:          &quot;;&quot;,</span>
-<span class="sd">        &quot;header_lines&quot;: 4</span>
+<span class="sd">        "database":     "path/to/output.gpkg",</span>
+<span class="sd">        "table":        "measurements",</span>
+<span class="sd">        "data_file":    "path/to/new_data.csv",</span>
+<span class="sd">        "sep":          ";",</span>
+<span class="sd">        "header_lines": 4</span>
 <span class="sd">      }</span>
 <span class="sd">    ]</span>
 
@@ -715,11 +715,11 @@
 
 <span class="sd">.. code-block:: json</span>
 
-<span class="sd">    &quot;update&quot;: [</span>
+<span class="sd">    "update": [</span>
 <span class="sd">      {</span>
-<span class="sd">        &quot;database&quot;:  &quot;path/to/output.gpkg&quot;,</span>
-<span class="sd">        &quot;table&quot;:     &quot;attributes&quot;,</span>
-<span class="sd">        &quot;data_file&quot;: &quot;path/to/revised_attributes.csv&quot;</span>
+<span class="sd">        "database":  "path/to/output.gpkg",</span>
+<span class="sd">        "table":     "attributes",</span>
+<span class="sd">        "data_file": "path/to/revised_attributes.csv"</span>
 <span class="sd">      }</span>
 <span class="sd">    ]</span>
 
@@ -738,7 +738,7 @@
 <span class="sd">     - description</span>
 <span class="sd">   * - ``sep``</span>
 <span class="sd">     - string</span>
-<span class="sd">     - field separator: ``&quot;;&quot;``, ``&quot;,&quot;``, ``&quot;\t&quot;``, ``&quot;|&quot;``, etc.</span>
+<span class="sd">     - field separator: ``";"``, ``","``, ``"\t"``, ``"|"``, etc.</span>
 <span class="sd">   * - ``header_lines``</span>
 <span class="sd">     - int</span>
 <span class="sd">     - number of preamble lines to skip before the header row</span>
@@ -750,7 +750,7 @@
 <span class="sd">   tables in that step</span>
 
 <span class="sd">A plain string path (no dict) always inherits from the procedure level. If neither</span>
-<span class="sd">level specifies a key, the built-in default applies (``sep=&quot;;&quot;``, ``header_lines=0``).</span>
+<span class="sd">level specifies a key, the built-in default applies (``sep=";"``, ``header_lines=0``).</span>
 
 <span class="sd">**Missing columns.** Incoming data does not need to supply every column in the target</span>
 <span class="sd">table. The assimilation engine handles absent columns as follows:</span>
@@ -831,11 +831,11 @@
 
 <span class="sd">SQLite stores ``TEXT`` and ``DATETIME`` identically at the storage level. Datetime</span>
 <span class="sd">columns are declared ``TEXT`` and formatted as ISO 8601 (``YYYY-MM-DD HH:MM:SS``),</span>
-<span class="sd">which guarantees correct lexicographic ordering and compatibility with SQLite&#39;s</span>
+<span class="sd">which guarantees correct lexicographic ordering and compatibility with SQLite's</span>
 <span class="sd">built-in date/time functions (``strftime``, ``date``, ``between``, etc.).</span>
 
 <span class="sd">The tool uses ``PRAGMA foreign_keys = ON`` and ``PRAGMA journal_mode = WAL``.</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 
@@ -851,14 +851,14 @@
 <span class="kn">import</span><span class="w"> </span><span class="nn">geopandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">gpd</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 
-<span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;losalamos&quot;</span><span class="p">)</span>
+<span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">"losalamos"</span><span class="p">)</span>
 
 <span class="c1"># =============================================================================</span>
 <span class="c1"># SQL SCHEMAS  (hard-coded, written to temp files on demand, deleted after use)</span>
 <span class="c1"># =============================================================================</span>
 
 <span class="c1"># Shared auxiliary tables — same for every schema category</span>
-<span class="n">_SQL_SHARED</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="n">_SQL_SHARED</span> <span class="o">=</span> <span class="s2">"""</span>
 <span class="s2">CREATE TABLE IF NOT EXISTS tier (</span>
 <span class="s2">    id       INTEGER PRIMARY KEY AUTOINCREMENT,</span>
 <span class="s2">    value    INTEGER NOT NULL UNIQUE,</span>
@@ -899,10 +899,10 @@
 <span class="s2">    scale        REAL NOT NULL DEFAULT 1.0,</span>
 <span class="s2">    offset       REAL NOT NULL DEFAULT 0.0</span>
 <span class="s2">);</span>
-<span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">"""</span>
 
 <span class="c1"># In-situ: measurements linked to sites</span>
-<span class="n">_SQL_INSITU_MEASUREMENTS</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="n">_SQL_INSITU_MEASUREMENTS</span> <span class="o">=</span> <span class="s2">"""</span>
 <span class="s2">CREATE TABLE IF NOT EXISTS measurements (</span>
 <span class="s2">    id           INTEGER PRIMARY KEY AUTOINCREMENT,</span>
 <span class="s2">    site_id      INTEGER NOT NULL REFERENCES sites(fid),</span>
@@ -915,10 +915,10 @@
 
 <span class="s2">CREATE UNIQUE INDEX IF NOT EXISTS idx_measurements_identity</span>
 <span class="s2">    ON measurements (site_id, attribute_id, datetime, tier, quality);</span>
-<span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">"""</span>
 
 <span class="c1"># Off-site: samples linked to sites, measurements linked to samples</span>
-<span class="n">_SQL_OFFSITE_SAMPLES_MEASUREMENTS</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="n">_SQL_OFFSITE_SAMPLES_MEASUREMENTS</span> <span class="o">=</span> <span class="s2">"""</span>
 <span class="s2">CREATE TABLE IF NOT EXISTS samples (</span>
 <span class="s2">    id       INTEGER PRIMARY KEY AUTOINCREMENT,</span>
 <span class="s2">    code     TEXT    NOT NULL,</span>
@@ -942,10 +942,10 @@
 
 <span class="s2">CREATE UNIQUE INDEX IF NOT EXISTS idx_measurements_identity</span>
 <span class="s2">    ON measurements (sample_id, attribute_id, datetime, tier, quality);</span>
-<span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">"""</span>
 
 <span class="c1"># GeoPackage bootstrap metadata tables (minimal spec-compliant)</span>
-<span class="n">_SQL_GPKG_BOOTSTRAP</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="n">_SQL_GPKG_BOOTSTRAP</span> <span class="o">=</span> <span class="s2">"""</span>
 <span class="s2">PRAGMA application_id = 1196444487;</span>
 <span class="s2">PRAGMA user_version   = 10300;</span>
 
@@ -962,8 +962,8 @@
 <span class="s2">    table_name  TEXT     NOT NULL PRIMARY KEY,</span>
 <span class="s2">    data_type   TEXT     NOT NULL,</span>
 <span class="s2">    identifier  TEXT,</span>
-<span class="s2">    description TEXT     DEFAULT &#39;&#39;,</span>
-<span class="s2">    last_change DATETIME DEFAULT (strftime(&#39;%Y-%m-</span><span class="si">%d</span><span class="s2">T%H:%M:</span><span class="si">%f</span><span class="s2">Z&#39;,&#39;now&#39;)),</span>
+<span class="s2">    description TEXT     DEFAULT '',</span>
+<span class="s2">    last_change DATETIME DEFAULT (strftime('%Y-%m-</span><span class="si">%d</span><span class="s2">T%H:%M:</span><span class="si">%f</span><span class="s2">Z','now')),</span>
 <span class="s2">    min_x       REAL,</span>
 <span class="s2">    min_y       REAL,</span>
 <span class="s2">    max_x       REAL,</span>
@@ -982,71 +982,71 @@
 <span class="s2">);</span>
 
 <span class="s2">INSERT OR IGNORE INTO gpkg_spatial_ref_sys VALUES</span>
-<span class="s2">    (&#39;Undefined Cartesian&#39;,   -1,   &#39;NONE&#39;, -1, &#39;undefined&#39;, &#39;undefined Cartesian&#39;),</span>
-<span class="s2">    (&#39;Undefined Geographic&#39;,   0,   &#39;NONE&#39;,  0, &#39;undefined&#39;, &#39;undefined geographic&#39;),</span>
-<span class="s2">    (&#39;WGS 84 Geographic 2D&#39;, 4326, &#39;EPSG&#39;, 4326,</span>
-<span class="s2">     &#39;GEOGCS[&quot;WGS 84&quot;,DATUM[&quot;WGS_1984&quot;,SPHEROID[&quot;WGS 84&quot;,6378137,298.257223563]],PRIMEM[&quot;Greenwich&quot;,0],UNIT[&quot;degree&quot;,0.0174532925199433,AUTHORITY[&quot;EPSG&quot;,&quot;9122&quot;]],AUTHORITY[&quot;EPSG&quot;,&quot;4326&quot;]]&#39;,</span>
-<span class="s2">     &#39;WGS 84&#39;)</span>
-<span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">    ('Undefined Cartesian',   -1,   'NONE', -1, 'undefined', 'undefined Cartesian'),</span>
+<span class="s2">    ('Undefined Geographic',   0,   'NONE',  0, 'undefined', 'undefined geographic'),</span>
+<span class="s2">    ('WGS 84 Geographic 2D', 4326, 'EPSG', 4326,</span>
+<span class="s2">     'GEOGCS["WGS 84",DATUM["WGS_1984",SPHEROID["WGS 84",6378137,298.257223563]],PRIMEM["Greenwich",0],UNIT["degree",0.0174532925199433,AUTHORITY["EPSG","9122"]],AUTHORITY["EPSG","4326"]]',</span>
+<span class="s2">     'WGS 84')</span>
+<span class="s2">"""</span>
 
 <span class="c1"># =============================================================================</span>
 <span class="c1"># SCHEMA REGISTRY</span>
 <span class="c1"># Each category entry defines:</span>
 <span class="c1">#   sql_blocks      : list of SQL strings to execute after Fiona writes the spatial layer</span>
-<span class="c1">#   spatial_tables  : {table_name: {&quot;crs&quot;: ...}} — written via geopandas/Fiona</span>
+<span class="c1">#   spatial_tables  : {table_name: {"crs": ...}} — written via geopandas/Fiona</span>
 <span class="c1">#   aux_tables      : tables loaded from CSV (in order)</span>
 <span class="c1">#   table_identity  : {table: [cols]} — uniqueness definition per table</span>
 <span class="c1">#   fk_resolution   : {table: {fk_col: {lookup_table, lookup_col}}}</span>
 <span class="c1"># =============================================================================</span>
 
 <span class="n">SCHEMAS</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">&quot;in-situ&quot;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s2">&quot;sql_blocks&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">_SQL_SHARED</span><span class="p">,</span> <span class="n">_SQL_INSITU_MEASUREMENTS</span><span class="p">],</span>
-        <span class="s2">&quot;spatial_tables&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;sites&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;crs&quot;</span><span class="p">:</span> <span class="s2">&quot;EPSG:4326&quot;</span><span class="p">},</span>
+    <span class="s2">"in-situ"</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">"sql_blocks"</span><span class="p">:</span> <span class="p">[</span><span class="n">_SQL_SHARED</span><span class="p">,</span> <span class="n">_SQL_INSITU_MEASUREMENTS</span><span class="p">],</span>
+        <span class="s2">"spatial_tables"</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">"sites"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"crs"</span><span class="p">:</span> <span class="s2">"EPSG:4326"</span><span class="p">},</span>
         <span class="p">},</span>
-        <span class="s2">&quot;aux_tables&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;tier&quot;</span><span class="p">,</span> <span class="s2">&quot;quality&quot;</span><span class="p">,</span> <span class="s2">&quot;attributes&quot;</span><span class="p">,</span> <span class="s2">&quot;storage&quot;</span><span class="p">],</span>
-        <span class="s2">&quot;table_identity&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;tier&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">],</span>
-            <span class="s2">&quot;quality&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">],</span>
-            <span class="s2">&quot;attributes&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;code&quot;</span><span class="p">],</span>
-            <span class="s2">&quot;storage&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;attribute_id&quot;</span><span class="p">],</span>
-            <span class="s2">&quot;measurements&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;site_id&quot;</span><span class="p">,</span> <span class="s2">&quot;attribute_id&quot;</span><span class="p">,</span> <span class="s2">&quot;datetime&quot;</span><span class="p">,</span> <span class="s2">&quot;tier&quot;</span><span class="p">,</span> <span class="s2">&quot;quality&quot;</span><span class="p">],</span>
+        <span class="s2">"aux_tables"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"tier"</span><span class="p">,</span> <span class="s2">"quality"</span><span class="p">,</span> <span class="s2">"attributes"</span><span class="p">,</span> <span class="s2">"storage"</span><span class="p">],</span>
+        <span class="s2">"table_identity"</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">"tier"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"value"</span><span class="p">],</span>
+            <span class="s2">"quality"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"value"</span><span class="p">],</span>
+            <span class="s2">"attributes"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"code"</span><span class="p">],</span>
+            <span class="s2">"storage"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"attribute_id"</span><span class="p">],</span>
+            <span class="s2">"measurements"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"site_id"</span><span class="p">,</span> <span class="s2">"attribute_id"</span><span class="p">,</span> <span class="s2">"datetime"</span><span class="p">,</span> <span class="s2">"tier"</span><span class="p">,</span> <span class="s2">"quality"</span><span class="p">],</span>
         <span class="p">},</span>
-        <span class="s2">&quot;fk_resolution&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;measurements&quot;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s2">&quot;site_id&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;lookup_table&quot;</span><span class="p">:</span> <span class="s2">&quot;sites&quot;</span><span class="p">,</span> <span class="s2">&quot;lookup_col&quot;</span><span class="p">:</span> <span class="s2">&quot;code&quot;</span><span class="p">},</span>
-                <span class="s2">&quot;attribute_id&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;lookup_table&quot;</span><span class="p">:</span> <span class="s2">&quot;attributes&quot;</span><span class="p">,</span> <span class="s2">&quot;lookup_col&quot;</span><span class="p">:</span> <span class="s2">&quot;code&quot;</span><span class="p">},</span>
+        <span class="s2">"fk_resolution"</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">"measurements"</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">"site_id"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"lookup_table"</span><span class="p">:</span> <span class="s2">"sites"</span><span class="p">,</span> <span class="s2">"lookup_col"</span><span class="p">:</span> <span class="s2">"code"</span><span class="p">},</span>
+                <span class="s2">"attribute_id"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"lookup_table"</span><span class="p">:</span> <span class="s2">"attributes"</span><span class="p">,</span> <span class="s2">"lookup_col"</span><span class="p">:</span> <span class="s2">"code"</span><span class="p">},</span>
             <span class="p">},</span>
         <span class="p">},</span>
     <span class="p">},</span>
-    <span class="s2">&quot;off-site&quot;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s2">&quot;sql_blocks&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">_SQL_SHARED</span><span class="p">,</span> <span class="n">_SQL_OFFSITE_SAMPLES_MEASUREMENTS</span><span class="p">],</span>
-        <span class="s2">&quot;spatial_tables&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;sites&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;crs&quot;</span><span class="p">:</span> <span class="s2">&quot;EPSG:4326&quot;</span><span class="p">},</span>
+    <span class="s2">"off-site"</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">"sql_blocks"</span><span class="p">:</span> <span class="p">[</span><span class="n">_SQL_SHARED</span><span class="p">,</span> <span class="n">_SQL_OFFSITE_SAMPLES_MEASUREMENTS</span><span class="p">],</span>
+        <span class="s2">"spatial_tables"</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">"sites"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"crs"</span><span class="p">:</span> <span class="s2">"EPSG:4326"</span><span class="p">},</span>
         <span class="p">},</span>
-        <span class="s2">&quot;aux_tables&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;tier&quot;</span><span class="p">,</span> <span class="s2">&quot;quality&quot;</span><span class="p">,</span> <span class="s2">&quot;attributes&quot;</span><span class="p">,</span> <span class="s2">&quot;storage&quot;</span><span class="p">],</span>
-        <span class="s2">&quot;table_identity&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;tier&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">],</span>
-            <span class="s2">&quot;quality&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">],</span>
-            <span class="s2">&quot;attributes&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;code&quot;</span><span class="p">],</span>
-            <span class="s2">&quot;storage&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;attribute_id&quot;</span><span class="p">],</span>
-            <span class="s2">&quot;samples&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;code&quot;</span><span class="p">,</span> <span class="s2">&quot;site_id&quot;</span><span class="p">,</span> <span class="s2">&quot;datetime&quot;</span><span class="p">],</span>
-            <span class="s2">&quot;measurements&quot;</span><span class="p">:</span> <span class="p">[</span>
-                <span class="s2">&quot;sample_id&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;attribute_id&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;datetime&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;tier&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;quality&quot;</span><span class="p">,</span>
+        <span class="s2">"aux_tables"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"tier"</span><span class="p">,</span> <span class="s2">"quality"</span><span class="p">,</span> <span class="s2">"attributes"</span><span class="p">,</span> <span class="s2">"storage"</span><span class="p">],</span>
+        <span class="s2">"table_identity"</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">"tier"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"value"</span><span class="p">],</span>
+            <span class="s2">"quality"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"value"</span><span class="p">],</span>
+            <span class="s2">"attributes"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"code"</span><span class="p">],</span>
+            <span class="s2">"storage"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"attribute_id"</span><span class="p">],</span>
+            <span class="s2">"samples"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"code"</span><span class="p">,</span> <span class="s2">"site_id"</span><span class="p">,</span> <span class="s2">"datetime"</span><span class="p">],</span>
+            <span class="s2">"measurements"</span><span class="p">:</span> <span class="p">[</span>
+                <span class="s2">"sample_id"</span><span class="p">,</span>
+                <span class="s2">"attribute_id"</span><span class="p">,</span>
+                <span class="s2">"datetime"</span><span class="p">,</span>
+                <span class="s2">"tier"</span><span class="p">,</span>
+                <span class="s2">"quality"</span><span class="p">,</span>
             <span class="p">],</span>
         <span class="p">},</span>
-        <span class="s2">&quot;fk_resolution&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;samples&quot;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s2">&quot;site_id&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;lookup_table&quot;</span><span class="p">:</span> <span class="s2">&quot;sites&quot;</span><span class="p">,</span> <span class="s2">&quot;lookup_col&quot;</span><span class="p">:</span> <span class="s2">&quot;code&quot;</span><span class="p">},</span>
+        <span class="s2">"fk_resolution"</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">"samples"</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">"site_id"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"lookup_table"</span><span class="p">:</span> <span class="s2">"sites"</span><span class="p">,</span> <span class="s2">"lookup_col"</span><span class="p">:</span> <span class="s2">"code"</span><span class="p">},</span>
             <span class="p">},</span>
-            <span class="s2">&quot;measurements&quot;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s2">&quot;sample_id&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;lookup_table&quot;</span><span class="p">:</span> <span class="s2">&quot;samples&quot;</span><span class="p">,</span> <span class="s2">&quot;lookup_col&quot;</span><span class="p">:</span> <span class="s2">&quot;code&quot;</span><span class="p">},</span>
-                <span class="s2">&quot;attribute_id&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;lookup_table&quot;</span><span class="p">:</span> <span class="s2">&quot;attributes&quot;</span><span class="p">,</span> <span class="s2">&quot;lookup_col&quot;</span><span class="p">:</span> <span class="s2">&quot;code&quot;</span><span class="p">},</span>
+            <span class="s2">"measurements"</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">"sample_id"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"lookup_table"</span><span class="p">:</span> <span class="s2">"samples"</span><span class="p">,</span> <span class="s2">"lookup_col"</span><span class="p">:</span> <span class="s2">"code"</span><span class="p">},</span>
+                <span class="s2">"attribute_id"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"lookup_table"</span><span class="p">:</span> <span class="s2">"attributes"</span><span class="p">,</span> <span class="s2">"lookup_col"</span><span class="p">:</span> <span class="s2">"code"</span><span class="p">},</span>
             <span class="p">},</span>
         <span class="p">},</span>
     <span class="p">},</span>
@@ -1058,8 +1058,8 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">get_schema</span><span class="p">(</span><span class="n">category</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
     <span class="n">key</span> <span class="o">=</span> <span class="n">category</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
     <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">SCHEMAS</span><span class="p">:</span>
-        <span class="n">valid</span> <span class="o">=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&#39;</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2">&#39;&quot;</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">SCHEMAS</span><span class="p">)</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unknown category &#39;</span><span class="si">{</span><span class="n">category</span><span class="si">}</span><span class="s2">&#39;. Valid options: </span><span class="si">{</span><span class="n">valid</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">valid</span> <span class="o">=</span> <span class="s2">", "</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="sa">f</span><span class="s2">"'</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2">'"</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">SCHEMAS</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Unknown category '</span><span class="si">{</span><span class="n">category</span><span class="si">}</span><span class="s2">'. Valid options: </span><span class="si">{</span><span class="n">valid</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">SCHEMAS</span><span class="p">[</span><span class="n">key</span><span class="p">]</span></div>
 
 
@@ -1072,12 +1072,12 @@
 <div class="viewcode-block" id="gpkg_connect">
 <a class="viewcode-back" href="../../../generated/losalamos.tools.database.html#losalamos.tools.database.gpkg_connect">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">gpkg_connect</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">Connection</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Open (or create) a GeoPackage file. Bootstraps metadata if new.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Open (or create) a GeoPackage file. Bootstraps metadata if new."""</span>
     <span class="n">is_new</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span>
     <span class="n">con</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
     <span class="n">con</span><span class="o">.</span><span class="n">row_factory</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">Row</span>
-    <span class="n">con</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;PRAGMA foreign_keys = ON;&quot;</span><span class="p">)</span>
-    <span class="n">con</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;PRAGMA journal_mode = WAL;&quot;</span><span class="p">)</span>
+    <span class="n">con</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">"PRAGMA foreign_keys = ON;"</span><span class="p">)</span>
+    <span class="n">con</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">"PRAGMA journal_mode = WAL;"</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">is_new</span><span class="p">:</span>
         <span class="n">gpkg_bootstrap</span><span class="p">(</span><span class="n">con</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">con</span></div>
@@ -1087,8 +1087,8 @@
 <div class="viewcode-block" id="gpkg_bootstrap">
 <a class="viewcode-back" href="../../../generated/losalamos.tools.database.html#losalamos.tools.database.gpkg_bootstrap">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">gpkg_bootstrap</span><span class="p">(</span><span class="n">con</span><span class="p">:</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">Connection</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Write minimal GeoPackage metadata tables into a fresh database.&quot;&quot;&quot;</span>
-    <span class="k">for</span> <span class="n">stmt</span> <span class="ow">in</span> <span class="n">_SQL_GPKG_BOOTSTRAP</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;;&quot;</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Write minimal GeoPackage metadata tables into a fresh database."""</span>
+    <span class="k">for</span> <span class="n">stmt</span> <span class="ow">in</span> <span class="n">_SQL_GPKG_BOOTSTRAP</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">";"</span><span class="p">):</span>
         <span class="n">s</span> <span class="o">=</span> <span class="n">stmt</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">s</span><span class="p">:</span>
             <span class="n">con</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
@@ -1099,19 +1099,19 @@
 <div class="viewcode-block" id="gpkg_exec_sql">
 <a class="viewcode-back" href="../../../generated/losalamos.tools.database.html#losalamos.tools.database.gpkg_exec_sql">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">gpkg_exec_sql</span><span class="p">(</span><span class="n">con</span><span class="p">:</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">Connection</span><span class="p">,</span> <span class="n">sql</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Execute a block of SQL statements against con.</span>
 <span class="sd">    Writes to a temp file in the module folder, executes, deletes.</span>
 <span class="sd">    The file stays on disk if execution crashes — useful for debugging.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">tmp_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;_tmp_</span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">getpid</span><span class="p">()</span><span class="si">}</span><span class="s2">.sql&quot;</span>
+<span class="sd">    """</span>
+    <span class="n">tmp_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">"_tmp_</span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">getpid</span><span class="p">()</span><span class="si">}</span><span class="s2">.sql"</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="n">tmp_path</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="n">sql</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
+        <span class="n">tmp_path</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="n">sql</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span>
         <span class="n">clean_lines</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="n">line</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">sql</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;--&quot;</span><span class="p">)</span>
+            <span class="n">line</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">sql</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">"--"</span><span class="p">)</span>
         <span class="p">]</span>
-        <span class="n">cleaned</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">clean_lines</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">stmt</span> <span class="ow">in</span> <span class="n">cleaned</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;;&quot;</span><span class="p">):</span>
+        <span class="n">cleaned</span> <span class="o">=</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">clean_lines</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">stmt</span> <span class="ow">in</span> <span class="n">cleaned</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">";"</span><span class="p">):</span>
             <span class="n">s</span> <span class="o">=</span> <span class="n">stmt</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
             <span class="k">if</span> <span class="n">s</span><span class="p">:</span>
                 <span class="n">con</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
@@ -1125,11 +1125,11 @@
 <div class="viewcode-block" id="gpkg_exec_file">
 <a class="viewcode-back" href="../../../generated/losalamos.tools.database.html#losalamos.tools.database.gpkg_exec_file">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">gpkg_exec_file</span><span class="p">(</span><span class="n">con</span><span class="p">:</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">Connection</span><span class="p">,</span> <span class="n">sql_path</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Execute an external SQL file (for extra_sql extensions).&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Execute an external SQL file (for extra_sql extensions)."""</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">sql_path</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
-        <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;SQL file not found: </span><span class="si">{</span><span class="n">sql_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-    <span class="n">gpkg_exec_sql</span><span class="p">(</span><span class="n">con</span><span class="p">,</span> <span class="n">sql_path</span><span class="o">.</span><span class="n">read_text</span><span class="p">(</span><span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">))</span>
-    <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Executed SQL file: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">sql_path</span><span class="p">)</span></div>
+        <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"SQL file not found: </span><span class="si">{</span><span class="n">sql_path</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="n">gpkg_exec_sql</span><span class="p">(</span><span class="n">con</span><span class="p">,</span> <span class="n">sql_path</span><span class="o">.</span><span class="n">read_text</span><span class="p">(</span><span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">))</span>
+    <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">"Executed SQL file: </span><span class="si">%s</span><span class="s2">"</span><span class="p">,</span> <span class="n">sql_path</span><span class="p">)</span></div>
 
 
 
@@ -1139,17 +1139,17 @@
     <span class="n">gdf</span><span class="p">:</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">,</span>
     <span class="n">gpkg_path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span>
     <span class="n">layer</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-    <span class="n">crs</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;EPSG:4326&quot;</span><span class="p">,</span>
+    <span class="n">crs</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"EPSG:4326"</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Write a GeoDataFrame as a GeoPackage spatial layer via geopandas/Fiona.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Write a GeoDataFrame as a GeoPackage spatial layer via geopandas/Fiona."""</span>
     <span class="k">if</span> <span class="n">gdf</span><span class="o">.</span><span class="n">crs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;GeoDataFrame has no CRS — assuming </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">crs</span><span class="p">)</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">"GeoDataFrame has no CRS — assuming </span><span class="si">%s</span><span class="s2">"</span><span class="p">,</span> <span class="n">crs</span><span class="p">)</span>
         <span class="n">gdf</span> <span class="o">=</span> <span class="n">gdf</span><span class="o">.</span><span class="n">set_crs</span><span class="p">(</span><span class="n">crs</span><span class="p">)</span>
     <span class="k">elif</span> <span class="nb">str</span><span class="p">(</span><span class="n">gdf</span><span class="o">.</span><span class="n">crs</span><span class="p">)</span> <span class="o">!=</span> <span class="n">crs</span><span class="p">:</span>
-        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Reprojecting from </span><span class="si">%s</span><span class="s2"> to </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">gdf</span><span class="o">.</span><span class="n">crs</span><span class="p">,</span> <span class="n">crs</span><span class="p">)</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">"Reprojecting from </span><span class="si">%s</span><span class="s2"> to </span><span class="si">%s</span><span class="s2">"</span><span class="p">,</span> <span class="n">gdf</span><span class="o">.</span><span class="n">crs</span><span class="p">,</span> <span class="n">crs</span><span class="p">)</span>
         <span class="n">gdf</span> <span class="o">=</span> <span class="n">gdf</span><span class="o">.</span><span class="n">to_crs</span><span class="p">(</span><span class="n">crs</span><span class="p">)</span>
-    <span class="n">gdf</span><span class="o">.</span><span class="n">to_file</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">gpkg_path</span><span class="p">),</span> <span class="n">layer</span><span class="o">=</span><span class="n">layer</span><span class="p">,</span> <span class="n">driver</span><span class="o">=</span><span class="s2">&quot;GPKG&quot;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;w&quot;</span><span class="p">)</span>
-    <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Spatial layer &#39;</span><span class="si">%s</span><span class="s2">&#39; → </span><span class="si">%s</span><span class="s2"> (</span><span class="si">%d</span><span class="s2"> features)&quot;</span><span class="p">,</span> <span class="n">layer</span><span class="p">,</span> <span class="n">gpkg_path</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">gdf</span><span class="p">))</span></div>
+    <span class="n">gdf</span><span class="o">.</span><span class="n">to_file</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">gpkg_path</span><span class="p">),</span> <span class="n">layer</span><span class="o">=</span><span class="n">layer</span><span class="p">,</span> <span class="n">driver</span><span class="o">=</span><span class="s2">"GPKG"</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">"w"</span><span class="p">)</span>
+    <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">"Spatial layer '</span><span class="si">%s</span><span class="s2">' → </span><span class="si">%s</span><span class="s2"> (</span><span class="si">%d</span><span class="s2"> features)"</span><span class="p">,</span> <span class="n">layer</span><span class="p">,</span> <span class="n">gpkg_path</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">gdf</span><span class="p">))</span></div>
 
 
 
@@ -1157,7 +1157,7 @@
 <a class="viewcode-back" href="../../../generated/losalamos.tools.database.html#losalamos.tools.database.gpkg_table_exists">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">gpkg_table_exists</span><span class="p">(</span><span class="n">con</span><span class="p">:</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">Connection</span><span class="p">,</span> <span class="n">table</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
     <span class="n">row</span> <span class="o">=</span> <span class="n">con</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
-        <span class="s2">&quot;SELECT name FROM sqlite_master WHERE type=&#39;table&#39; AND name=?&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">table</span><span class="p">,)</span>
+        <span class="s2">"SELECT name FROM sqlite_master WHERE type='table' AND name=?"</span><span class="p">,</span> <span class="p">(</span><span class="n">table</span><span class="p">,)</span>
     <span class="p">)</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()</span>
     <span class="k">return</span> <span class="n">row</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span></div>
 
@@ -1166,7 +1166,7 @@
 <div class="viewcode-block" id="gpkg_table_columns">
 <a class="viewcode-back" href="../../../generated/losalamos.tools.database.html#losalamos.tools.database.gpkg_table_columns">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">gpkg_table_columns</span><span class="p">(</span><span class="n">con</span><span class="p">:</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">Connection</span><span class="p">,</span> <span class="n">table</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
-    <span class="n">rows</span> <span class="o">=</span> <span class="n">con</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;PRAGMA table_info(</span><span class="si">{</span><span class="n">table</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
+    <span class="n">rows</span> <span class="o">=</span> <span class="n">con</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="sa">f</span><span class="s2">"PRAGMA table_info(</span><span class="si">{</span><span class="n">table</span><span class="si">}</span><span class="s2">)"</span><span class="p">)</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
     <span class="k">return</span> <span class="p">[</span><span class="n">row</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">rows</span><span class="p">]</span></div>
 
 
@@ -1174,13 +1174,13 @@
 <div class="viewcode-block" id="gpkg_table_info">
 <a class="viewcode-back" href="../../../generated/losalamos.tools.database.html#losalamos.tools.database.gpkg_table_info">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">gpkg_table_info</span><span class="p">(</span><span class="n">con</span><span class="p">:</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">Connection</span><span class="p">,</span> <span class="n">table</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Return column metadata keyed by column name.</span>
 <span class="sd">    Each value is a dict with keys: type, notnull, dflt_value.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">rows</span> <span class="o">=</span> <span class="n">con</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;PRAGMA table_info(</span><span class="si">{</span><span class="n">table</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
+<span class="sd">    """</span>
+    <span class="n">rows</span> <span class="o">=</span> <span class="n">con</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="sa">f</span><span class="s2">"PRAGMA table_info(</span><span class="si">{</span><span class="n">table</span><span class="si">}</span><span class="s2">)"</span><span class="p">)</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
     <span class="k">return</span> <span class="p">{</span>
-        <span class="n">row</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="n">row</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="s2">&quot;notnull&quot;</span><span class="p">:</span> <span class="nb">bool</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="mi">3</span><span class="p">]),</span> <span class="s2">&quot;dflt_value&quot;</span><span class="p">:</span> <span class="n">row</span><span class="p">[</span><span class="mi">4</span><span class="p">]}</span>
+        <span class="n">row</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span> <span class="p">{</span><span class="s2">"type"</span><span class="p">:</span> <span class="n">row</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="s2">"notnull"</span><span class="p">:</span> <span class="nb">bool</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="mi">3</span><span class="p">]),</span> <span class="s2">"dflt_value"</span><span class="p">:</span> <span class="n">row</span><span class="p">[</span><span class="mi">4</span><span class="p">]}</span>
         <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">rows</span>
     <span class="p">}</span></div>
 
@@ -1189,20 +1189,20 @@
 <div class="viewcode-block" id="gpkg_pk_col">
 <a class="viewcode-back" href="../../../generated/losalamos.tools.database.html#losalamos.tools.database.gpkg_pk_col">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">gpkg_pk_col</span><span class="p">(</span><span class="n">con</span><span class="p">:</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">Connection</span><span class="p">,</span> <span class="n">table</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the primary key column name — &#39;fid&#39; for Fiona tables, &#39;id&#39; otherwise.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Return the primary key column name — 'fid' for Fiona tables, 'id' otherwise."""</span>
     <span class="n">cols</span> <span class="o">=</span> <span class="n">gpkg_table_columns</span><span class="p">(</span><span class="n">con</span><span class="p">,</span> <span class="n">table</span><span class="p">)</span>
-    <span class="k">return</span> <span class="s2">&quot;fid&quot;</span> <span class="k">if</span> <span class="s2">&quot;fid&quot;</span> <span class="ow">in</span> <span class="n">cols</span> <span class="k">else</span> <span class="s2">&quot;id&quot;</span></div>
+    <span class="k">return</span> <span class="s2">"fid"</span> <span class="k">if</span> <span class="s2">"fid"</span> <span class="ow">in</span> <span class="n">cols</span> <span class="k">else</span> <span class="s2">"id"</span></div>
 
 
 
 <div class="viewcode-block" id="gpkg_code_id_map">
 <a class="viewcode-back" href="../../../generated/losalamos.tools.database.html#losalamos.tools.database.gpkg_code_id_map">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">gpkg_code_id_map</span><span class="p">(</span>
-    <span class="n">con</span><span class="p">:</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">Connection</span><span class="p">,</span> <span class="n">table</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">code_col</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;code&quot;</span>
+    <span class="n">con</span><span class="p">:</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">Connection</span><span class="p">,</span> <span class="n">table</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">code_col</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"code"</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return {code: pk_id} for any table with a code column.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Return {code: pk_id} for any table with a code column."""</span>
     <span class="n">pk</span> <span class="o">=</span> <span class="n">gpkg_pk_col</span><span class="p">(</span><span class="n">con</span><span class="p">,</span> <span class="n">table</span><span class="p">)</span>
-    <span class="n">rows</span> <span class="o">=</span> <span class="n">con</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;SELECT </span><span class="si">{</span><span class="n">code_col</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">pk</span><span class="si">}</span><span class="s2"> FROM </span><span class="si">{</span><span class="n">table</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
+    <span class="n">rows</span> <span class="o">=</span> <span class="n">con</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="sa">f</span><span class="s2">"SELECT </span><span class="si">{</span><span class="n">code_col</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">pk</span><span class="si">}</span><span class="s2"> FROM </span><span class="si">{</span><span class="n">table</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
     <span class="k">return</span> <span class="p">{</span><span class="n">row</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span> <span class="n">row</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">rows</span><span class="p">}</span></div>
 
 
@@ -1210,19 +1210,19 @@
 <div class="viewcode-block" id="detect_category">
 <a class="viewcode-back" href="../../../generated/losalamos.tools.database.html#losalamos.tools.database.detect_category">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">detect_category</span><span class="p">(</span><span class="n">con</span><span class="p">:</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">Connection</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Heuristic: off-site if &#39;samples&#39; table exists, else in-situ.&quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="s2">&quot;off-site&quot;</span> <span class="k">if</span> <span class="n">gpkg_table_exists</span><span class="p">(</span><span class="n">con</span><span class="p">,</span> <span class="s2">&quot;samples&quot;</span><span class="p">)</span> <span class="k">else</span> <span class="s2">&quot;in-situ&quot;</span></div>
+<span class="w">    </span><span class="sd">"""Heuristic: off-site if 'samples' table exists, else in-situ."""</span>
+    <span class="k">return</span> <span class="s2">"off-site"</span> <span class="k">if</span> <span class="n">gpkg_table_exists</span><span class="p">(</span><span class="n">con</span><span class="p">,</span> <span class="s2">"samples"</span><span class="p">)</span> <span class="k">else</span> <span class="s2">"in-situ"</span></div>
 
 
 
 <div class="viewcode-block" id="detect_has_time">
 <a class="viewcode-back" href="../../../generated/losalamos.tools.database.html#losalamos.tools.database.detect_has_time">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">detect_has_time</span><span class="p">(</span><span class="n">con</span><span class="p">:</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">Connection</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Infer datetime resolution from an existing measurements row.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Infer datetime resolution from an existing measurements row."""</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="n">row</span> <span class="o">=</span> <span class="n">con</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT datetime FROM measurements LIMIT 1&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()</span>
+        <span class="n">row</span> <span class="o">=</span> <span class="n">con</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">"SELECT datetime FROM measurements LIMIT 1"</span><span class="p">)</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">row</span> <span class="ow">and</span> <span class="n">row</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
-            <span class="k">return</span> <span class="s2">&quot;:&quot;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="k">return</span> <span class="s2">":"</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
     <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
         <span class="k">pass</span>
     <span class="k">return</span> <span class="kc">True</span>  <span class="c1"># default</span></div>
@@ -1236,87 +1236,87 @@
 
 <div class="viewcode-block" id="load_csv">
 <a class="viewcode-back" href="../../../generated/losalamos.tools.database.html#losalamos.tools.database.load_csv">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">load_csv</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Path</span><span class="p">,</span> <span class="n">sep</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;;&quot;</span><span class="p">,</span> <span class="n">skiprows</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">load_csv</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Path</span><span class="p">,</span> <span class="n">sep</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">";"</span><span class="p">,</span> <span class="n">skiprows</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Load a delimited text file into a DataFrame.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    sep      : field separator (default &quot;;&quot;)</span>
+<span class="sd">    sep      : field separator (default ";")</span>
 <span class="sd">    skiprows : number of preamble lines to skip before the header row</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">p</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">p</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
-        <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Data file not found: </span><span class="si">{</span><span class="n">p</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Data file not found: </span><span class="si">{</span><span class="n">p</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
     <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="n">sep</span><span class="p">,</span> <span class="n">skiprows</span><span class="o">=</span><span class="n">skiprows</span><span class="p">)</span>
     <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">]</span>
     <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
-        <span class="s2">&quot;Loaded </span><span class="si">%d</span><span class="s2"> rows from </span><span class="si">%s</span><span class="s2">  (sep=</span><span class="si">%r</span><span class="s2">  skiprows=</span><span class="si">%d</span><span class="s2">)&quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">),</span> <span class="n">p</span><span class="p">,</span> <span class="n">sep</span><span class="p">,</span> <span class="n">skiprows</span>
+        <span class="s2">"Loaded </span><span class="si">%d</span><span class="s2"> rows from </span><span class="si">%s</span><span class="s2">  (sep=</span><span class="si">%r</span><span class="s2">  skiprows=</span><span class="si">%d</span><span class="s2">)"</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">),</span> <span class="n">p</span><span class="p">,</span> <span class="n">sep</span><span class="p">,</span> <span class="n">skiprows</span>
     <span class="p">)</span>
     <span class="k">return</span> <span class="n">df</span></div>
 
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_read_opts</span><span class="p">(</span><span class="n">proc</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">table_spec</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Resolve CSV read options with a two-level fallback:</span>
 
 <span class="sd">        per-table spec  →  procedure-level  →  built-in defaults</span>
 
-<span class="sd">    table_spec is the raw value from specs[&quot;tables&quot;][table_name].</span>
-<span class="sd">    It may be a plain string path, or a dict carrying &quot;file&quot; plus optional</span>
-<span class="sd">    &quot;sep&quot; and &quot;header_lines&quot; keys alongside any other table-specific keys.</span>
+<span class="sd">    table_spec is the raw value from specs["tables"][table_name].</span>
+<span class="sd">    It may be a plain string path, or a dict carrying "file" plus optional</span>
+<span class="sd">    "sep" and "header_lines" keys alongside any other table-specific keys.</span>
 
 <span class="sd">    Absent or null values at every level are ignored so defaults apply silently.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">opts</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
 
     <span class="c1"># proc-level fallback (applies to all tables in this procedure unless overridden)</span>
-    <span class="k">if</span> <span class="n">proc</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;sep&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">opts</span><span class="p">[</span><span class="s2">&quot;sep&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">proc</span><span class="p">[</span><span class="s2">&quot;sep&quot;</span><span class="p">]</span>
-    <span class="k">if</span> <span class="n">proc</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;header_lines&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">opts</span><span class="p">[</span><span class="s2">&quot;skiprows&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">proc</span><span class="p">[</span><span class="s2">&quot;header_lines&quot;</span><span class="p">])</span>
+    <span class="k">if</span> <span class="n">proc</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"sep"</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">opts</span><span class="p">[</span><span class="s2">"sep"</span><span class="p">]</span> <span class="o">=</span> <span class="n">proc</span><span class="p">[</span><span class="s2">"sep"</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">proc</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"header_lines"</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">opts</span><span class="p">[</span><span class="s2">"skiprows"</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">proc</span><span class="p">[</span><span class="s2">"header_lines"</span><span class="p">])</span>
 
     <span class="c1"># per-table override (only available when table_spec is a dict)</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">table_spec</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">table_spec</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;sep&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">opts</span><span class="p">[</span><span class="s2">&quot;sep&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">table_spec</span><span class="p">[</span><span class="s2">&quot;sep&quot;</span><span class="p">]</span>
-        <span class="k">if</span> <span class="n">table_spec</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;header_lines&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">opts</span><span class="p">[</span><span class="s2">&quot;skiprows&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">table_spec</span><span class="p">[</span><span class="s2">&quot;header_lines&quot;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">table_spec</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"sep"</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">opts</span><span class="p">[</span><span class="s2">"sep"</span><span class="p">]</span> <span class="o">=</span> <span class="n">table_spec</span><span class="p">[</span><span class="s2">"sep"</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">table_spec</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"header_lines"</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">opts</span><span class="p">[</span><span class="s2">"skiprows"</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">table_spec</span><span class="p">[</span><span class="s2">"header_lines"</span><span class="p">])</span>
 
     <span class="k">return</span> <span class="n">opts</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_parse_csv_spec</span><span class="p">(</span><span class="n">spec</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Parse a table spec from the &#39;tables&#39; dict in an initialize procedure.</span>
+<span class="w">    </span><span class="sd">"""</span>
+<span class="sd">    Parse a table spec from the 'tables' dict in an initialize procedure.</span>
 
 <span class="sd">    Accepts two forms:</span>
-<span class="sd">        &quot;path/to/file.csv&quot;</span>
-<span class="sd">        {&quot;file&quot;: &quot;path/to/file.csv&quot;, &quot;sep&quot;: &quot;,&quot;, &quot;header_lines&quot;: 3}</span>
+<span class="sd">        "path/to/file.csv"</span>
+<span class="sd">        {"file": "path/to/file.csv", "sep": ",", "header_lines": 3}</span>
 
 <span class="sd">    Returns (file_path_str, raw_spec) so that _read_opts can inspect the dict.</span>
 <span class="sd">    The raw spec is passed through unchanged; _read_opts handles key extraction.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">spec</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
-        <span class="k">if</span> <span class="s2">&quot;file&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">spec</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Table spec dict is missing required &#39;file&#39; key: </span><span class="si">{</span><span class="n">spec</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">spec</span><span class="p">[</span><span class="s2">&quot;file&quot;</span><span class="p">],</span> <span class="n">spec</span>
+        <span class="k">if</span> <span class="s2">"file"</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">spec</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Table spec dict is missing required 'file' key: </span><span class="si">{</span><span class="n">spec</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">spec</span><span class="p">[</span><span class="s2">"file"</span><span class="p">],</span> <span class="n">spec</span>
     <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">spec</span><span class="p">),</span> <span class="p">{}</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_parse_spatial_spec</span><span class="p">(</span><span class="n">spec</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Parse a spatial table spec.  Accepts:</span>
-<span class="sd">        {&quot;file&quot;: &quot;path/to/sites.gpkg&quot;, &quot;layer&quot;: &quot;sites&quot;}</span>
-<span class="sd">        &quot;path/to/sites.gpkg&quot;</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">        {"file": "path/to/sites.gpkg", "layer": "sites"}</span>
+<span class="sd">        "path/to/sites.gpkg"</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">spec</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
-        <span class="k">if</span> <span class="s2">&quot;file&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">spec</span><span class="p">:</span>
+        <span class="k">if</span> <span class="s2">"file"</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">spec</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Spatial spec dict is missing required &#39;file&#39; key: </span><span class="si">{</span><span class="n">spec</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">"Spatial spec dict is missing required 'file' key: </span><span class="si">{</span><span class="n">spec</span><span class="si">}</span><span class="s2">"</span>
             <span class="p">)</span>
-        <span class="k">return</span> <span class="n">spec</span><span class="p">[</span><span class="s2">&quot;file&quot;</span><span class="p">],</span> <span class="n">spec</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;layer&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">spec</span><span class="p">[</span><span class="s2">"file"</span><span class="p">],</span> <span class="n">spec</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"layer"</span><span class="p">)</span>
     <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">spec</span><span class="p">),</span> <span class="kc">None</span>
 
 
@@ -1325,13 +1325,13 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">load_spatial</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Path</span><span class="p">,</span> <span class="n">layer</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">:</span>
     <span class="n">p</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">p</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
-        <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Spatial file not found: </span><span class="si">{</span><span class="n">p</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-    <span class="n">kwargs</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;filename&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">p</span><span class="p">)}</span>
+        <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Spatial file not found: </span><span class="si">{</span><span class="n">p</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="n">kwargs</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"filename"</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">p</span><span class="p">)}</span>
     <span class="k">if</span> <span class="n">layer</span><span class="p">:</span>
-        <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;layer&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">layer</span>
+        <span class="n">kwargs</span><span class="p">[</span><span class="s2">"layer"</span><span class="p">]</span> <span class="o">=</span> <span class="n">layer</span>
     <span class="n">gdf</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
     <span class="n">gdf</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">gdf</span><span class="o">.</span><span class="n">columns</span><span class="p">]</span>
-    <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Loaded </span><span class="si">%d</span><span class="s2"> features from </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">gdf</span><span class="p">),</span> <span class="n">p</span><span class="p">)</span>
+    <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">"Loaded </span><span class="si">%d</span><span class="s2"> features from </span><span class="si">%s</span><span class="s2">"</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">gdf</span><span class="p">),</span> <span class="n">p</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">gdf</span></div>
 
 
@@ -1343,24 +1343,24 @@
     <span class="n">con</span><span class="p">:</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">Connection</span><span class="p">,</span>
     <span class="n">fk_rules</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">],</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Replace code-based columns with integer FK ids.</span>
 
-<span class="sd">    Incoming CSV may use the FK column name (e.g. &#39;site_id&#39;) containing codes,</span>
-<span class="sd">    OR alternative names like &#39;sites_code&#39; or &#39;site_code&#39;. All candidates are tried.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    Incoming CSV may use the FK column name (e.g. 'site_id') containing codes,</span>
+<span class="sd">    OR alternative names like 'sites_code' or 'site_code'. All candidates are tried.</span>
+<span class="sd">    """</span>
     <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
     <span class="k">for</span> <span class="n">fk_col</span><span class="p">,</span> <span class="n">rule</span> <span class="ow">in</span> <span class="n">fk_rules</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-        <span class="n">lookup_table</span> <span class="o">=</span> <span class="n">rule</span><span class="p">[</span><span class="s2">&quot;lookup_table&quot;</span><span class="p">]</span>
-        <span class="n">lookup_col</span> <span class="o">=</span> <span class="n">rule</span><span class="p">[</span><span class="s2">&quot;lookup_col&quot;</span><span class="p">]</span>
+        <span class="n">lookup_table</span> <span class="o">=</span> <span class="n">rule</span><span class="p">[</span><span class="s2">"lookup_table"</span><span class="p">]</span>
+        <span class="n">lookup_col</span> <span class="o">=</span> <span class="n">rule</span><span class="p">[</span><span class="s2">"lookup_col"</span><span class="p">]</span>
         <span class="n">id_map</span> <span class="o">=</span> <span class="n">gpkg_code_id_map</span><span class="p">(</span><span class="n">con</span><span class="p">,</span> <span class="n">lookup_table</span><span class="p">,</span> <span class="n">code_col</span><span class="o">=</span><span class="n">lookup_col</span><span class="p">)</span>
         <span class="n">source_col</span> <span class="o">=</span> <span class="n">_find_fk_source_col</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">fk_col</span><span class="p">,</span> <span class="n">lookup_table</span><span class="p">,</span> <span class="n">lookup_col</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">source_col</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Cannot resolve FK &#39;</span><span class="si">{</span><span class="n">fk_col</span><span class="si">}</span><span class="s2">&#39;: no matching column found in data. &quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;Tried: &#39;</span><span class="si">{</span><span class="n">fk_col</span><span class="si">}</span><span class="s2">&#39;, &#39;</span><span class="si">{</span><span class="n">lookup_table</span><span class="si">}</span><span class="s2">_code&#39;, &quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;&#39;</span><span class="si">{</span><span class="n">lookup_table</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s1">&#39;s&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">_code&#39;, &#39;</span><span class="si">{</span><span class="n">lookup_col</span><span class="si">}</span><span class="s2">&#39;&quot;</span>
+                <span class="sa">f</span><span class="s2">"Cannot resolve FK '</span><span class="si">{</span><span class="n">fk_col</span><span class="si">}</span><span class="s2">': no matching column found in data. "</span>
+                <span class="sa">f</span><span class="s2">"Tried: '</span><span class="si">{</span><span class="n">fk_col</span><span class="si">}</span><span class="s2">', '</span><span class="si">{</span><span class="n">lookup_table</span><span class="si">}</span><span class="s2">_code', "</span>
+                <span class="sa">f</span><span class="s2">"'</span><span class="si">{</span><span class="n">lookup_table</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s1">'s'</span><span class="p">)</span><span class="si">}</span><span class="s2">_code', '</span><span class="si">{</span><span class="n">lookup_col</span><span class="si">}</span><span class="s2">'"</span>
             <span class="p">)</span>
 
         <span class="n">codes</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">source_col</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
@@ -1370,8 +1370,8 @@
         <span class="k">if</span> <span class="n">missing_mask</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
             <span class="n">bad</span> <span class="o">=</span> <span class="n">codes</span><span class="p">[</span><span class="n">missing_mask</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;FK resolution for &#39;</span><span class="si">{</span><span class="n">fk_col</span><span class="si">}</span><span class="s2">&#39;: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">bad</span><span class="p">)</span><span class="si">}</span><span class="s2"> code(s) not found &quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;in &#39;</span><span class="si">{</span><span class="n">lookup_table</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">lookup_col</span><span class="si">}</span><span class="s2">&#39;: </span><span class="si">{</span><span class="n">bad</span><span class="p">[:</span><span class="mi">10</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">"FK resolution for '</span><span class="si">{</span><span class="n">fk_col</span><span class="si">}</span><span class="s2">': </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">bad</span><span class="p">)</span><span class="si">}</span><span class="s2"> code(s) not found "</span>
+                <span class="sa">f</span><span class="s2">"in '</span><span class="si">{</span><span class="n">lookup_table</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">lookup_col</span><span class="si">}</span><span class="s2">': </span><span class="si">{</span><span class="n">bad</span><span class="p">[:</span><span class="mi">10</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span>
             <span class="p">)</span>
 
         <span class="n">df</span><span class="p">[</span><span class="n">fk_col</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">fk_col</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
@@ -1385,13 +1385,13 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">_find_fk_source_col</span><span class="p">(</span>
     <span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">fk_col</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">lookup_table</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">lookup_col</span><span class="p">:</span> <span class="nb">str</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-    <span class="c1"># fk_col stripped of _id suffix  e.g. &quot;site_id&quot; -&gt; &quot;site&quot;, &quot;attribute_id&quot; -&gt; &quot;attribute&quot;</span>
-    <span class="n">fk_bare</span> <span class="o">=</span> <span class="n">fk_col</span><span class="p">[:</span><span class="o">-</span><span class="mi">3</span><span class="p">]</span> <span class="k">if</span> <span class="n">fk_col</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;_id&quot;</span><span class="p">)</span> <span class="k">else</span> <span class="n">fk_col</span>
+    <span class="c1"># fk_col stripped of _id suffix  e.g. "site_id" -&gt; "site", "attribute_id" -&gt; "attribute"</span>
+    <span class="n">fk_bare</span> <span class="o">=</span> <span class="n">fk_col</span><span class="p">[:</span><span class="o">-</span><span class="mi">3</span><span class="p">]</span> <span class="k">if</span> <span class="n">fk_col</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">"_id"</span><span class="p">)</span> <span class="k">else</span> <span class="n">fk_col</span>
     <span class="n">candidates</span> <span class="o">=</span> <span class="p">[</span>
         <span class="n">fk_col</span><span class="p">,</span>  <span class="c1"># site_id</span>
         <span class="n">fk_bare</span><span class="p">,</span>  <span class="c1"># site</span>
-        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">lookup_table</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">lookup_col</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>  <span class="c1"># sites_code</span>
-        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">lookup_table</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s1">&#39;s&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">_code&quot;</span><span class="p">,</span>  <span class="c1"># site_code</span>
+        <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">lookup_table</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">lookup_col</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>  <span class="c1"># sites_code</span>
+        <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">lookup_table</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s1">'s'</span><span class="p">)</span><span class="si">}</span><span class="s2">_code"</span><span class="p">,</span>  <span class="c1"># site_code</span>
         <span class="n">lookup_col</span><span class="p">,</span>  <span class="c1"># code</span>
     <span class="p">]</span>
     <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">candidates</span><span class="p">:</span>
@@ -1403,14 +1403,14 @@
 <div class="viewcode-block" id="normalise_datetime">
 <a class="viewcode-back" href="../../../generated/losalamos.tools.database.html#losalamos.tools.database.normalise_datetime">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">normalise_datetime</span><span class="p">(</span><span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">has_time</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
-    <span class="k">if</span> <span class="s2">&quot;datetime&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+    <span class="k">if</span> <span class="s2">"datetime"</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">df</span>
     <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-    <span class="n">fmt</span> <span class="o">=</span> <span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M:%S&quot;</span> <span class="k">if</span> <span class="n">has_time</span> <span class="k">else</span> <span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">&quot;</span>
+    <span class="n">fmt</span> <span class="o">=</span> <span class="s2">"%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M:%S"</span> <span class="k">if</span> <span class="n">has_time</span> <span class="k">else</span> <span class="s2">"%Y-%m-</span><span class="si">%d</span><span class="s2">"</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="n">df</span><span class="p">[</span><span class="s2">&quot;datetime&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;datetime&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="n">fmt</span><span class="p">)</span>
+        <span class="n">df</span><span class="p">[</span><span class="s2">"datetime"</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">"datetime"</span><span class="p">])</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="n">fmt</span><span class="p">)</span>
     <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Could not parse &#39;datetime&#39; column: </span><span class="si">{</span><span class="n">exc</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">exc</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Could not parse 'datetime' column: </span><span class="si">{</span><span class="n">exc</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">exc</span>
     <span class="k">return</span> <span class="n">df</span></div>
 
 
@@ -1423,10 +1423,10 @@
     <span class="n">identity_cols</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
     <span class="n">col_info</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Align df to the target table&#39;s column set.</span>
+<span class="w">    </span><span class="sd">"""</span>
+<span class="sd">    Align df to the target table's column set.</span>
 
-<span class="sd">    - Columns in df that don&#39;t exist in the table are dropped (with a warning).</span>
+<span class="sd">    - Columns in df that don't exist in the table are dropped (with a warning).</span>
 <span class="sd">    - Missing identity columns are a hard error UNLESS the schema declares a</span>
 <span class="sd">      DEFAULT value for that column — in which case they are padded with it.</span>
 <span class="sd">      This covers tier/quality (DEFAULT 0) arriving without those columns.</span>
@@ -1436,35 +1436,35 @@
 
 <span class="sd">    col_info is the output of gpkg_table_info(). If None, missing columns are</span>
 <span class="sd">    always padded with NULL (no default awareness).</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">target</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">db_cols</span> <span class="k">if</span> <span class="n">c</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="s2">&quot;fid&quot;</span><span class="p">)]</span>
+<span class="sd">    """</span>
+    <span class="n">target</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">db_cols</span> <span class="k">if</span> <span class="n">c</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"id"</span><span class="p">,</span> <span class="s2">"fid"</span><span class="p">)]</span>
 
     <span class="c1"># Extra columns in incoming data — drop with a warning</span>
     <span class="n">extra</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="n">c</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">db_cols</span><span class="p">]</span>
     <span class="k">if</span> <span class="n">extra</span><span class="p">:</span>
-        <span class="n">log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Columns not in table schema — ignored: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">extra</span><span class="p">)</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">"Columns not in table schema — ignored: </span><span class="si">%s</span><span class="s2">"</span><span class="p">,</span> <span class="n">extra</span><span class="p">)</span>
 
     <span class="n">missing</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">target</span> <span class="k">if</span> <span class="n">c</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">]</span>
     <span class="k">if</span> <span class="n">missing</span><span class="p">:</span>
         <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
         <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">missing</span><span class="p">:</span>
             <span class="n">default</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="n">col_info</span><span class="p">[</span><span class="n">col</span><span class="p">][</span><span class="s2">&quot;dflt_value&quot;</span><span class="p">]</span> <span class="k">if</span> <span class="n">col_info</span> <span class="ow">and</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">col_info</span> <span class="k">else</span> <span class="kc">None</span>
+                <span class="n">col_info</span><span class="p">[</span><span class="n">col</span><span class="p">][</span><span class="s2">"dflt_value"</span><span class="p">]</span> <span class="k">if</span> <span class="n">col_info</span> <span class="ow">and</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">col_info</span> <span class="k">else</span> <span class="kc">None</span>
             <span class="p">)</span>
 
             <span class="k">if</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">identity_cols</span> <span class="ow">and</span> <span class="n">default</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;Identity column &#39;</span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s2">&#39; is missing from incoming data &quot;</span>
-                    <span class="s2">&quot;and has no schema default. This column is required.&quot;</span>
+                    <span class="sa">f</span><span class="s2">"Identity column '</span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s2">' is missing from incoming data "</span>
+                    <span class="s2">"and has no schema default. This column is required."</span>
                 <span class="p">)</span>
 
-            <span class="n">fill</span> <span class="o">=</span> <span class="n">default</span>  <span class="c1"># may be None (→ NULL) or a string like &#39;0&#39;</span>
+            <span class="n">fill</span> <span class="o">=</span> <span class="n">default</span>  <span class="c1"># may be None (→ NULL) or a string like '0'</span>
             <span class="k">if</span> <span class="n">fill</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
-                    <span class="s2">&quot;Column &#39;</span><span class="si">%s</span><span class="s2">&#39; absent — filled with schema default: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">col</span><span class="p">,</span> <span class="n">fill</span>
+                    <span class="s2">"Column '</span><span class="si">%s</span><span class="s2">' absent — filled with schema default: </span><span class="si">%s</span><span class="s2">"</span><span class="p">,</span> <span class="n">col</span><span class="p">,</span> <span class="n">fill</span>
                 <span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Column &#39;</span><span class="si">%s</span><span class="s2">&#39; absent — filled with NULL&quot;</span><span class="p">,</span> <span class="n">col</span><span class="p">)</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">"Column '</span><span class="si">%s</span><span class="s2">' absent — filled with NULL"</span><span class="p">,</span> <span class="n">col</span><span class="p">)</span>
             <span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="n">fill</span>
 
     <span class="k">return</span> <span class="n">df</span><span class="p">[</span><span class="n">target</span><span class="p">]</span></div>
@@ -1475,7 +1475,7 @@
 <span class="c1"># CORE INSERT / UPSERT ENGINE</span>
 <span class="c1"># =============================================================================</span>
 
-<span class="n">Mode</span> <span class="o">=</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;append&quot;</span><span class="p">,</span> <span class="s2">&quot;update&quot;</span><span class="p">]</span>
+<span class="n">Mode</span> <span class="o">=</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">"append"</span><span class="p">,</span> <span class="s2">"update"</span><span class="p">]</span>
 
 
 <div class="viewcode-block" id="insert_rows">
@@ -1485,59 +1485,59 @@
     <span class="n">table</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
     <span class="n">identity_cols</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
-    <span class="n">mode</span><span class="p">:</span> <span class="n">Mode</span> <span class="o">=</span> <span class="s2">&quot;append&quot;</span><span class="p">,</span>
+    <span class="n">mode</span><span class="p">:</span> <span class="n">Mode</span> <span class="o">=</span> <span class="s2">"append"</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Insert df into table with duplicate handling.</span>
 
 <span class="sd">    append : INSERT OR IGNORE  — duplicates skipped</span>
 <span class="sd">    update : INSERT OR IGNORE + targeted UPDATE for collisions (never DELETEs rows, so FK children are safe)</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="n">df</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
-        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;No rows to insert into &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span><span class="p">,</span> <span class="n">table</span><span class="p">)</span>
-        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;inserted&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;skipped&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">}</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">"No rows to insert into '</span><span class="si">%s</span><span class="s2">'"</span><span class="p">,</span> <span class="n">table</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s2">"inserted"</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">"skipped"</span><span class="p">:</span> <span class="mi">0</span><span class="p">}</span>
 
     <span class="n">db_cols</span> <span class="o">=</span> <span class="n">gpkg_table_columns</span><span class="p">(</span><span class="n">con</span><span class="p">,</span> <span class="n">table</span><span class="p">)</span>
     <span class="n">col_info</span> <span class="o">=</span> <span class="n">gpkg_table_info</span><span class="p">(</span><span class="n">con</span><span class="p">,</span> <span class="n">table</span><span class="p">)</span>
     <span class="n">df</span> <span class="o">=</span> <span class="n">align_columns</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">db_cols</span><span class="p">,</span> <span class="n">identity_cols</span><span class="p">,</span> <span class="n">col_info</span><span class="p">)</span>
     <span class="n">cols</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
     <span class="n">rows</span> <span class="o">=</span> <span class="p">[</span><span class="nb">tuple</span><span class="p">(</span><span class="n">r</span><span class="p">)</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">itertuples</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">)]</span>
-    <span class="n">placeholders</span> <span class="o">=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s2">&quot;?&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">cols</span><span class="p">))</span>
+    <span class="n">placeholders</span> <span class="o">=</span> <span class="s2">", "</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s2">"?"</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">cols</span><span class="p">))</span>
     <span class="n">insert_sql</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="sa">f</span><span class="s2">&quot;INSERT OR IGNORE INTO </span><span class="si">{</span><span class="n">table</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cols</span><span class="p">)</span><span class="si">}</span><span class="s2">) VALUES (</span><span class="si">{</span><span class="n">placeholders</span><span class="si">}</span><span class="s2">)&quot;</span>
+        <span class="sa">f</span><span class="s2">"INSERT OR IGNORE INTO </span><span class="si">{</span><span class="n">table</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="s1">', '</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cols</span><span class="p">)</span><span class="si">}</span><span class="s2">) VALUES (</span><span class="si">{</span><span class="n">placeholders</span><span class="si">}</span><span class="s2">)"</span>
     <span class="p">)</span>
 
     <span class="n">cursor</span> <span class="o">=</span> <span class="n">con</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
 
-    <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;append&quot;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">"append"</span><span class="p">:</span>
         <span class="n">cursor</span><span class="o">.</span><span class="n">executemany</span><span class="p">(</span><span class="n">insert_sql</span><span class="p">,</span> <span class="n">rows</span><span class="p">)</span>
         <span class="n">con</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
         <span class="n">inserted</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">cursor</span><span class="o">.</span><span class="n">rowcount</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
         <span class="n">skipped</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">rows</span><span class="p">)</span> <span class="o">-</span> <span class="n">inserted</span>
         <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
-            <span class="s2">&quot;Table &#39;</span><span class="si">%s</span><span class="s2">&#39;: </span><span class="si">%d</span><span class="s2"> rows → </span><span class="si">%d</span><span class="s2"> inserted, </span><span class="si">%d</span><span class="s2"> skipped&quot;</span><span class="p">,</span>
+            <span class="s2">"Table '</span><span class="si">%s</span><span class="s2">': </span><span class="si">%d</span><span class="s2"> rows → </span><span class="si">%d</span><span class="s2"> inserted, </span><span class="si">%d</span><span class="s2"> skipped"</span><span class="p">,</span>
             <span class="n">table</span><span class="p">,</span>
             <span class="nb">len</span><span class="p">(</span><span class="n">rows</span><span class="p">),</span>
             <span class="n">inserted</span><span class="p">,</span>
             <span class="n">skipped</span><span class="p">,</span>
         <span class="p">)</span>
-        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;inserted&quot;</span><span class="p">:</span> <span class="n">inserted</span><span class="p">,</span> <span class="s2">&quot;skipped&quot;</span><span class="p">:</span> <span class="n">skipped</span><span class="p">}</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s2">"inserted"</span><span class="p">:</span> <span class="n">inserted</span><span class="p">,</span> <span class="s2">"skipped"</span><span class="p">:</span> <span class="n">skipped</span><span class="p">}</span>
 
-    <span class="c1"># mode == &quot;update&quot;</span>
+    <span class="c1"># mode == "update"</span>
     <span class="n">update_cols</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">cols</span> <span class="k">if</span> <span class="n">c</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">identity_cols</span><span class="p">]</span>
     <span class="n">col_idx</span> <span class="o">=</span> <span class="p">{</span><span class="n">c</span><span class="p">:</span> <span class="n">i</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">cols</span><span class="p">)}</span>
     <span class="n">inserted</span> <span class="o">=</span> <span class="n">updated</span> <span class="o">=</span> <span class="mi">0</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="n">identity_cols</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">update_cols</span><span class="p">:</span>
         <span class="c1"># No safe upsert possible — use REPLACE (only for tables without FK children)</span>
-        <span class="n">replace_sql</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;INSERT OR REPLACE INTO </span><span class="si">{</span><span class="n">table</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cols</span><span class="p">)</span><span class="si">}</span><span class="s2">) VALUES (</span><span class="si">{</span><span class="n">placeholders</span><span class="si">}</span><span class="s2">)&quot;</span>
+        <span class="n">replace_sql</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"INSERT OR REPLACE INTO </span><span class="si">{</span><span class="n">table</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="s1">', '</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cols</span><span class="p">)</span><span class="si">}</span><span class="s2">) VALUES (</span><span class="si">{</span><span class="n">placeholders</span><span class="si">}</span><span class="s2">)"</span>
         <span class="n">cursor</span><span class="o">.</span><span class="n">executemany</span><span class="p">(</span><span class="n">replace_sql</span><span class="p">,</span> <span class="n">rows</span><span class="p">)</span>
         <span class="n">con</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
         <span class="n">inserted</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">cursor</span><span class="o">.</span><span class="n">rowcount</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">set_clause</span> <span class="o">=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">c</span><span class="si">}</span><span class="s2">=?&quot;</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">update_cols</span><span class="p">)</span>
-        <span class="n">where_clause</span> <span class="o">=</span> <span class="s2">&quot; AND &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">c</span><span class="si">}</span><span class="s2">=?&quot;</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">identity_cols</span><span class="p">)</span>
-        <span class="n">update_sql</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;UPDATE </span><span class="si">{</span><span class="n">table</span><span class="si">}</span><span class="s2"> SET </span><span class="si">{</span><span class="n">set_clause</span><span class="si">}</span><span class="s2"> WHERE </span><span class="si">{</span><span class="n">where_clause</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="n">set_clause</span> <span class="o">=</span> <span class="s2">", "</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">c</span><span class="si">}</span><span class="s2">=?"</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">update_cols</span><span class="p">)</span>
+        <span class="n">where_clause</span> <span class="o">=</span> <span class="s2">" AND "</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">c</span><span class="si">}</span><span class="s2">=?"</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">identity_cols</span><span class="p">)</span>
+        <span class="n">update_sql</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"UPDATE </span><span class="si">{</span><span class="n">table</span><span class="si">}</span><span class="s2"> SET </span><span class="si">{</span><span class="n">set_clause</span><span class="si">}</span><span class="s2"> WHERE </span><span class="si">{</span><span class="n">where_clause</span><span class="si">}</span><span class="s2">"</span>
 
         <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">rows</span><span class="p">:</span>
             <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">insert_sql</span><span class="p">,</span> <span class="n">row</span><span class="p">)</span>
@@ -1551,13 +1551,13 @@
         <span class="n">con</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
 
     <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
-        <span class="s2">&quot;Table &#39;</span><span class="si">%s</span><span class="s2">&#39;: </span><span class="si">%d</span><span class="s2"> rows → </span><span class="si">%d</span><span class="s2"> inserted, </span><span class="si">%d</span><span class="s2"> updated&quot;</span><span class="p">,</span>
+        <span class="s2">"Table '</span><span class="si">%s</span><span class="s2">': </span><span class="si">%d</span><span class="s2"> rows → </span><span class="si">%d</span><span class="s2"> inserted, </span><span class="si">%d</span><span class="s2"> updated"</span><span class="p">,</span>
         <span class="n">table</span><span class="p">,</span>
         <span class="nb">len</span><span class="p">(</span><span class="n">rows</span><span class="p">),</span>
         <span class="n">inserted</span><span class="p">,</span>
         <span class="n">updated</span><span class="p">,</span>
     <span class="p">)</span>
-    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;inserted&quot;</span><span class="p">:</span> <span class="n">inserted</span><span class="p">,</span> <span class="s2">&quot;updated&quot;</span><span class="p">:</span> <span class="n">updated</span><span class="p">}</span></div>
+    <span class="k">return</span> <span class="p">{</span><span class="s2">"inserted"</span><span class="p">:</span> <span class="n">inserted</span><span class="p">,</span> <span class="s2">"updated"</span><span class="p">:</span> <span class="n">updated</span><span class="p">}</span></div>
 
 
 
@@ -1571,7 +1571,7 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">cmd_initialize</span><span class="p">(</span><span class="n">procedures</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
     <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">proc</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">procedures</span><span class="p">):</span>
         <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
-            <span class="s2">&quot;── initialize [</span><span class="si">%d</span><span class="s2">/</span><span class="si">%d</span><span class="s2">] ──────────────────────────────&quot;</span><span class="p">,</span>
+            <span class="s2">"── initialize [</span><span class="si">%d</span><span class="s2">/</span><span class="si">%d</span><span class="s2">] ──────────────────────────────"</span><span class="p">,</span>
             <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
             <span class="nb">len</span><span class="p">(</span><span class="n">procedures</span><span class="p">),</span>
         <span class="p">)</span>
@@ -1580,76 +1580,76 @@
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_initialize_one</span><span class="p">(</span><span class="n">proc</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-    <span class="n">db_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">_req</span><span class="p">(</span><span class="n">proc</span><span class="p">,</span> <span class="s2">&quot;database&quot;</span><span class="p">))</span>
-    <span class="n">category</span> <span class="o">=</span> <span class="n">_req</span><span class="p">(</span><span class="n">proc</span><span class="p">,</span> <span class="s2">&quot;category&quot;</span><span class="p">)</span>
-    <span class="n">tables_spec</span> <span class="o">=</span> <span class="n">_req</span><span class="p">(</span><span class="n">proc</span><span class="p">,</span> <span class="s2">&quot;tables&quot;</span><span class="p">)</span>
-    <span class="n">has_time</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">proc</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;time&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">))</span>
-    <span class="n">extra_sql</span> <span class="o">=</span> <span class="n">proc</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;extra_sql&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">[]</span>
+    <span class="n">db_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">_req</span><span class="p">(</span><span class="n">proc</span><span class="p">,</span> <span class="s2">"database"</span><span class="p">))</span>
+    <span class="n">category</span> <span class="o">=</span> <span class="n">_req</span><span class="p">(</span><span class="n">proc</span><span class="p">,</span> <span class="s2">"category"</span><span class="p">)</span>
+    <span class="n">tables_spec</span> <span class="o">=</span> <span class="n">_req</span><span class="p">(</span><span class="n">proc</span><span class="p">,</span> <span class="s2">"tables"</span><span class="p">)</span>
+    <span class="n">has_time</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">proc</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"time"</span><span class="p">,</span> <span class="kc">True</span><span class="p">))</span>
+    <span class="n">extra_sql</span> <span class="o">=</span> <span class="n">proc</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"extra_sql"</span><span class="p">)</span> <span class="ow">or</span> <span class="p">[]</span>
 
     <span class="n">schema</span> <span class="o">=</span> <span class="n">get_schema</span><span class="p">(</span><span class="n">category</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">db_path</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
         <span class="k">raise</span> <span class="ne">FileExistsError</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;Database already exists: </span><span class="si">{</span><span class="n">db_path</span><span class="si">}</span><span class="s2">. &quot;</span>
-            <span class="s2">&quot;Delete it or use &#39;append&#39;/&#39;update&#39; to add data.&quot;</span>
+            <span class="sa">f</span><span class="s2">"Database already exists: </span><span class="si">{</span><span class="n">db_path</span><span class="si">}</span><span class="s2">. "</span>
+            <span class="s2">"Delete it or use 'append'/'update' to add data."</span>
         <span class="p">)</span>
     <span class="n">db_path</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-    <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Creating: </span><span class="si">%s</span><span class="s2">  [category=</span><span class="si">%s</span><span class="s2">  time=</span><span class="si">%s</span><span class="s2">]&quot;</span><span class="p">,</span> <span class="n">db_path</span><span class="p">,</span> <span class="n">category</span><span class="p">,</span> <span class="n">has_time</span><span class="p">)</span>
+    <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">"Creating: </span><span class="si">%s</span><span class="s2">  [category=</span><span class="si">%s</span><span class="s2">  time=</span><span class="si">%s</span><span class="s2">]"</span><span class="p">,</span> <span class="n">db_path</span><span class="p">,</span> <span class="n">category</span><span class="p">,</span> <span class="n">has_time</span><span class="p">)</span>
 
     <span class="c1"># ── Step 1: write spatial tables via Fiona (creates the .gpkg file) ──────</span>
-    <span class="k">for</span> <span class="n">table_name</span><span class="p">,</span> <span class="n">spatial_cfg</span> <span class="ow">in</span> <span class="n">schema</span><span class="p">[</span><span class="s2">&quot;spatial_tables&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="k">for</span> <span class="n">table_name</span><span class="p">,</span> <span class="n">spatial_cfg</span> <span class="ow">in</span> <span class="n">schema</span><span class="p">[</span><span class="s2">"spatial_tables"</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
         <span class="n">spec</span> <span class="o">=</span> <span class="n">tables_spec</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">table_name</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">spec</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Required spatial table &#39;</span><span class="si">{</span><span class="n">table_name</span><span class="si">}</span><span class="s2">&#39; missing from spec &#39;tables&#39;.&quot;</span>
+                <span class="sa">f</span><span class="s2">"Required spatial table '</span><span class="si">{</span><span class="n">table_name</span><span class="si">}</span><span class="s2">' missing from spec 'tables'."</span>
             <span class="p">)</span>
         <span class="n">file_path</span><span class="p">,</span> <span class="n">layer</span> <span class="o">=</span> <span class="n">_parse_spatial_spec</span><span class="p">(</span><span class="n">spec</span><span class="p">)</span>
         <span class="n">gdf</span> <span class="o">=</span> <span class="n">load_spatial</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="n">layer</span><span class="o">=</span><span class="n">layer</span><span class="p">)</span>
-        <span class="n">gpkg_write_spatial</span><span class="p">(</span><span class="n">gdf</span><span class="p">,</span> <span class="n">db_path</span><span class="p">,</span> <span class="n">layer</span><span class="o">=</span><span class="n">table_name</span><span class="p">,</span> <span class="n">crs</span><span class="o">=</span><span class="n">spatial_cfg</span><span class="p">[</span><span class="s2">&quot;crs&quot;</span><span class="p">])</span>
+        <span class="n">gpkg_write_spatial</span><span class="p">(</span><span class="n">gdf</span><span class="p">,</span> <span class="n">db_path</span><span class="p">,</span> <span class="n">layer</span><span class="o">=</span><span class="n">table_name</span><span class="p">,</span> <span class="n">crs</span><span class="o">=</span><span class="n">spatial_cfg</span><span class="p">[</span><span class="s2">"crs"</span><span class="p">])</span>
 
     <span class="c1"># ── Step 2: open connection, execute non-spatial DDL ─────────────────────</span>
     <span class="n">con</span> <span class="o">=</span> <span class="n">gpkg_connect</span><span class="p">(</span><span class="n">db_path</span><span class="p">)</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="k">for</span> <span class="n">sql_block</span> <span class="ow">in</span> <span class="n">schema</span><span class="p">[</span><span class="s2">&quot;sql_blocks&quot;</span><span class="p">]:</span>
+        <span class="k">for</span> <span class="n">sql_block</span> <span class="ow">in</span> <span class="n">schema</span><span class="p">[</span><span class="s2">"sql_blocks"</span><span class="p">]:</span>
             <span class="n">gpkg_exec_sql</span><span class="p">(</span><span class="n">con</span><span class="p">,</span> <span class="n">sql_block</span><span class="p">)</span>
 
         <span class="k">for</span> <span class="n">sql_path_str</span> <span class="ow">in</span> <span class="n">extra_sql</span><span class="p">:</span>
             <span class="n">gpkg_exec_file</span><span class="p">(</span><span class="n">con</span><span class="p">,</span> <span class="n">Path</span><span class="p">(</span><span class="n">sql_path_str</span><span class="p">))</span>
 
         <span class="c1"># ── Step 3: load auxiliary tables ────────────────────────────────────</span>
-        <span class="k">for</span> <span class="n">table_name</span> <span class="ow">in</span> <span class="n">schema</span><span class="p">[</span><span class="s2">&quot;aux_tables&quot;</span><span class="p">]:</span>
+        <span class="k">for</span> <span class="n">table_name</span> <span class="ow">in</span> <span class="n">schema</span><span class="p">[</span><span class="s2">"aux_tables"</span><span class="p">]:</span>
             <span class="n">raw_spec</span> <span class="o">=</span> <span class="n">tables_spec</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">table_name</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">raw_spec</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Table &#39;</span><span class="si">%s</span><span class="s2">&#39;: no source file — skipped (empty)&quot;</span><span class="p">,</span> <span class="n">table_name</span><span class="p">)</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">"Table '</span><span class="si">%s</span><span class="s2">': no source file — skipped (empty)"</span><span class="p">,</span> <span class="n">table_name</span><span class="p">)</span>
                 <span class="k">continue</span>
             <span class="n">file_path</span><span class="p">,</span> <span class="n">table_spec</span> <span class="o">=</span> <span class="n">_parse_csv_spec</span><span class="p">(</span><span class="n">raw_spec</span><span class="p">)</span>
             <span class="n">df</span> <span class="o">=</span> <span class="n">load_csv</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="o">**</span><span class="n">_read_opts</span><span class="p">(</span><span class="n">proc</span><span class="p">,</span> <span class="n">table_spec</span><span class="p">))</span>
-            <span class="n">fk_rules</span> <span class="o">=</span> <span class="n">schema</span><span class="p">[</span><span class="s2">&quot;fk_resolution&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">table_name</span><span class="p">,</span> <span class="p">{})</span>
+            <span class="n">fk_rules</span> <span class="o">=</span> <span class="n">schema</span><span class="p">[</span><span class="s2">"fk_resolution"</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">table_name</span><span class="p">,</span> <span class="p">{})</span>
             <span class="k">if</span> <span class="n">fk_rules</span><span class="p">:</span>
                 <span class="n">df</span> <span class="o">=</span> <span class="n">resolve_fk</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">con</span><span class="p">,</span> <span class="n">fk_rules</span><span class="p">)</span>
-            <span class="n">identity</span> <span class="o">=</span> <span class="n">schema</span><span class="p">[</span><span class="s2">&quot;table_identity&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">table_name</span><span class="p">,</span> <span class="p">[])</span>
-            <span class="n">insert_rows</span><span class="p">(</span><span class="n">con</span><span class="p">,</span> <span class="n">table_name</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">identity_cols</span><span class="o">=</span><span class="n">identity</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;append&quot;</span><span class="p">)</span>
+            <span class="n">identity</span> <span class="o">=</span> <span class="n">schema</span><span class="p">[</span><span class="s2">"table_identity"</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">table_name</span><span class="p">,</span> <span class="p">[])</span>
+            <span class="n">insert_rows</span><span class="p">(</span><span class="n">con</span><span class="p">,</span> <span class="n">table_name</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">identity_cols</span><span class="o">=</span><span class="n">identity</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">"append"</span><span class="p">)</span>
 
         <span class="c1"># ── Step 4: optional seed data for samples / measurements at init ─────</span>
-        <span class="k">for</span> <span class="n">opt_table</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;samples&quot;</span><span class="p">,</span> <span class="s2">&quot;measurements&quot;</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">opt_table</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"samples"</span><span class="p">,</span> <span class="s2">"measurements"</span><span class="p">):</span>
             <span class="n">raw_spec</span> <span class="o">=</span> <span class="n">tables_spec</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">opt_table</span><span class="p">)</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">raw_spec</span><span class="p">:</span>
                 <span class="k">continue</span>
-            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Loading optional &#39;</span><span class="si">%s</span><span class="s2">&#39; at init time&quot;</span><span class="p">,</span> <span class="n">opt_table</span><span class="p">)</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">"Loading optional '</span><span class="si">%s</span><span class="s2">' at init time"</span><span class="p">,</span> <span class="n">opt_table</span><span class="p">)</span>
             <span class="n">file_path</span><span class="p">,</span> <span class="n">table_spec</span> <span class="o">=</span> <span class="n">_parse_csv_spec</span><span class="p">(</span><span class="n">raw_spec</span><span class="p">)</span>
             <span class="n">df</span> <span class="o">=</span> <span class="n">load_csv</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="o">**</span><span class="n">_read_opts</span><span class="p">(</span><span class="n">proc</span><span class="p">,</span> <span class="n">table_spec</span><span class="p">))</span>
-            <span class="n">fk_rules</span> <span class="o">=</span> <span class="n">schema</span><span class="p">[</span><span class="s2">&quot;fk_resolution&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">opt_table</span><span class="p">,</span> <span class="p">{})</span>
+            <span class="n">fk_rules</span> <span class="o">=</span> <span class="n">schema</span><span class="p">[</span><span class="s2">"fk_resolution"</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">opt_table</span><span class="p">,</span> <span class="p">{})</span>
             <span class="k">if</span> <span class="n">fk_rules</span><span class="p">:</span>
                 <span class="n">df</span> <span class="o">=</span> <span class="n">resolve_fk</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">con</span><span class="p">,</span> <span class="n">fk_rules</span><span class="p">)</span>
             <span class="n">df</span> <span class="o">=</span> <span class="n">normalise_datetime</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">has_time</span><span class="p">)</span>
-            <span class="n">identity</span> <span class="o">=</span> <span class="n">schema</span><span class="p">[</span><span class="s2">&quot;table_identity&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">opt_table</span><span class="p">,</span> <span class="p">[])</span>
-            <span class="n">insert_rows</span><span class="p">(</span><span class="n">con</span><span class="p">,</span> <span class="n">opt_table</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">identity_cols</span><span class="o">=</span><span class="n">identity</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;append&quot;</span><span class="p">)</span>
+            <span class="n">identity</span> <span class="o">=</span> <span class="n">schema</span><span class="p">[</span><span class="s2">"table_identity"</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">opt_table</span><span class="p">,</span> <span class="p">[])</span>
+            <span class="n">insert_rows</span><span class="p">(</span><span class="n">con</span><span class="p">,</span> <span class="n">opt_table</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">identity_cols</span><span class="o">=</span><span class="n">identity</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">"append"</span><span class="p">)</span>
 
     <span class="k">finally</span><span class="p">:</span>
         <span class="n">con</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
-    <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Database ready: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">db_path</span><span class="p">)</span>
+    <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">"Database ready: </span><span class="si">%s</span><span class="s2">"</span><span class="p">,</span> <span class="n">db_path</span><span class="p">)</span>
 
 
 <span class="c1"># =============================================================================</span>
@@ -1662,11 +1662,11 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">cmd_append</span><span class="p">(</span><span class="n">procedures</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
     <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">proc</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">procedures</span><span class="p">):</span>
         <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
-            <span class="s2">&quot;── append [</span><span class="si">%d</span><span class="s2">/</span><span class="si">%d</span><span class="s2">] ──────────────────────────────────&quot;</span><span class="p">,</span>
+            <span class="s2">"── append [</span><span class="si">%d</span><span class="s2">/</span><span class="si">%d</span><span class="s2">] ──────────────────────────────────"</span><span class="p">,</span>
             <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
             <span class="nb">len</span><span class="p">(</span><span class="n">procedures</span><span class="p">),</span>
         <span class="p">)</span>
-        <span class="n">_assimilate_one</span><span class="p">(</span><span class="n">proc</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;append&quot;</span><span class="p">)</span></div>
+        <span class="n">_assimilate_one</span><span class="p">(</span><span class="n">proc</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">"append"</span><span class="p">)</span></div>
 
 
 
@@ -1680,11 +1680,11 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">cmd_update</span><span class="p">(</span><span class="n">procedures</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
     <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">proc</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">procedures</span><span class="p">):</span>
         <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
-            <span class="s2">&quot;── update [</span><span class="si">%d</span><span class="s2">/</span><span class="si">%d</span><span class="s2">] ──────────────────────────────────&quot;</span><span class="p">,</span>
+            <span class="s2">"── update [</span><span class="si">%d</span><span class="s2">/</span><span class="si">%d</span><span class="s2">] ──────────────────────────────────"</span><span class="p">,</span>
             <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
             <span class="nb">len</span><span class="p">(</span><span class="n">procedures</span><span class="p">),</span>
         <span class="p">)</span>
-        <span class="n">_assimilate_one</span><span class="p">(</span><span class="n">proc</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;update&quot;</span><span class="p">)</span></div>
+        <span class="n">_assimilate_one</span><span class="p">(</span><span class="n">proc</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">"update"</span><span class="p">)</span></div>
 
 
 
@@ -1694,12 +1694,12 @@
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_assimilate_one</span><span class="p">(</span><span class="n">proc</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">mode</span><span class="p">:</span> <span class="n">Mode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-    <span class="n">db_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">_req</span><span class="p">(</span><span class="n">proc</span><span class="p">,</span> <span class="s2">&quot;database&quot;</span><span class="p">))</span>
-    <span class="n">table</span> <span class="o">=</span> <span class="n">_req</span><span class="p">(</span><span class="n">proc</span><span class="p">,</span> <span class="s2">&quot;table&quot;</span><span class="p">)</span>
-    <span class="n">data_file</span> <span class="o">=</span> <span class="n">_req</span><span class="p">(</span><span class="n">proc</span><span class="p">,</span> <span class="s2">&quot;data_file&quot;</span><span class="p">)</span>
+    <span class="n">db_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">_req</span><span class="p">(</span><span class="n">proc</span><span class="p">,</span> <span class="s2">"database"</span><span class="p">))</span>
+    <span class="n">table</span> <span class="o">=</span> <span class="n">_req</span><span class="p">(</span><span class="n">proc</span><span class="p">,</span> <span class="s2">"table"</span><span class="p">)</span>
+    <span class="n">data_file</span> <span class="o">=</span> <span class="n">_req</span><span class="p">(</span><span class="n">proc</span><span class="p">,</span> <span class="s2">"data_file"</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="n">db_path</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
-        <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Database not found: </span><span class="si">{</span><span class="n">db_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Database not found: </span><span class="si">{</span><span class="n">db_path</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
     <span class="n">con</span> <span class="o">=</span> <span class="n">gpkg_connect</span><span class="p">(</span><span class="n">db_path</span><span class="p">)</span>
     <span class="k">try</span><span class="p">:</span>
@@ -1711,14 +1711,14 @@
         <span class="c1"># (there is no per-table spec dict here — the file is named directly)</span>
         <span class="n">df</span> <span class="o">=</span> <span class="n">load_csv</span><span class="p">(</span><span class="n">data_file</span><span class="p">,</span> <span class="o">**</span><span class="n">_read_opts</span><span class="p">(</span><span class="n">proc</span><span class="p">))</span>
 
-        <span class="n">fk_rules</span> <span class="o">=</span> <span class="n">schema</span><span class="p">[</span><span class="s2">&quot;fk_resolution&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">table</span><span class="p">,</span> <span class="p">{})</span>
+        <span class="n">fk_rules</span> <span class="o">=</span> <span class="n">schema</span><span class="p">[</span><span class="s2">"fk_resolution"</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">table</span><span class="p">,</span> <span class="p">{})</span>
         <span class="k">if</span> <span class="n">fk_rules</span><span class="p">:</span>
             <span class="n">df</span> <span class="o">=</span> <span class="n">resolve_fk</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">con</span><span class="p">,</span> <span class="n">fk_rules</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="s2">&quot;datetime&quot;</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+        <span class="k">if</span> <span class="s2">"datetime"</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
             <span class="n">df</span> <span class="o">=</span> <span class="n">normalise_datetime</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">has_time</span><span class="p">)</span>
 
-        <span class="n">identity</span> <span class="o">=</span> <span class="n">schema</span><span class="p">[</span><span class="s2">&quot;table_identity&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">table</span><span class="p">,</span> <span class="p">[])</span>
+        <span class="n">identity</span> <span class="o">=</span> <span class="n">schema</span><span class="p">[</span><span class="s2">"table_identity"</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">table</span><span class="p">,</span> <span class="p">[])</span>
         <span class="n">insert_rows</span><span class="p">(</span><span class="n">con</span><span class="p">,</span> <span class="n">table</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">identity_cols</span><span class="o">=</span><span class="n">identity</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">)</span>
 
     <span class="k">finally</span><span class="p">:</span>
@@ -1733,7 +1733,7 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">_req</span><span class="p">(</span><span class="n">d</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
     <span class="n">val</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">val</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Required key &#39;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">&#39; missing from procedure spec.&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Required key '</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">' missing from procedure spec."</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">val</span>
 
 
@@ -1742,9 +1742,9 @@
 <span class="c1"># =============================================================================</span>
 
 <span class="n">COMMANDS</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">&quot;initialize&quot;</span><span class="p">:</span> <span class="n">cmd_initialize</span><span class="p">,</span>
-    <span class="s2">&quot;append&quot;</span><span class="p">:</span> <span class="n">cmd_append</span><span class="p">,</span>
-    <span class="s2">&quot;update&quot;</span><span class="p">:</span> <span class="n">cmd_update</span><span class="p">,</span>
+    <span class="s2">"initialize"</span><span class="p">:</span> <span class="n">cmd_initialize</span><span class="p">,</span>
+    <span class="s2">"append"</span><span class="p">:</span> <span class="n">cmd_append</span><span class="p">,</span>
+    <span class="s2">"update"</span><span class="p">:</span> <span class="n">cmd_update</span><span class="p">,</span>
 <span class="p">}</span>
 
 
@@ -1753,16 +1753,16 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">dispatch</span><span class="p">(</span><span class="n">command</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">specs</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
     <span class="n">handler</span> <span class="o">=</span> <span class="n">COMMANDS</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">command</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">handler</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unknown command &#39;</span><span class="si">{</span><span class="n">command</span><span class="si">}</span><span class="s2">&#39;. Valid: </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">COMMANDS</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Unknown command '</span><span class="si">{</span><span class="n">command</span><span class="si">}</span><span class="s2">'. Valid: </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">COMMANDS</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
     <span class="n">procedures</span> <span class="o">=</span> <span class="n">specs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">command</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">procedures</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;Command &#39;</span><span class="si">{</span><span class="n">command</span><span class="si">}</span><span class="s2">&#39; not found in specs (or list is empty). &quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;Available keys: </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">specs</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">"Command '</span><span class="si">{</span><span class="n">command</span><span class="si">}</span><span class="s2">' not found in specs (or list is empty). "</span>
+            <span class="sa">f</span><span class="s2">"Available keys: </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">specs</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="si">}</span><span class="s2">"</span>
         <span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">procedures</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Specs key &#39;</span><span class="si">{</span><span class="n">command</span><span class="si">}</span><span class="s2">&#39; must be a list of procedure dicts.&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Specs key '</span><span class="si">{</span><span class="n">command</span><span class="si">}</span><span class="s2">' must be a list of procedure dicts."</span><span class="p">)</span>
 
     <span class="n">handler</span><span class="p">(</span><span class="n">procedures</span><span class="p">)</span></div>
 
@@ -1778,8 +1778,8 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">setup_logging</span><span class="p">(</span><span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
     <span class="n">level</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span> <span class="k">if</span> <span class="n">verbose</span> <span class="k">else</span> <span class="n">logging</span><span class="o">.</span><span class="n">INFO</span>
     <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span>
-        <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">%(asctime)s</span><span class="s2">  </span><span class="si">%(levelname)-8s</span><span class="s2">  </span><span class="si">%(message)s</span><span class="s2">&quot;</span><span class="p">,</span>
-        <span class="n">datefmt</span><span class="o">=</span><span class="s2">&quot;%H:%M:%S&quot;</span><span class="p">,</span>
+        <span class="nb">format</span><span class="o">=</span><span class="s2">"</span><span class="si">%(asctime)s</span><span class="s2">  </span><span class="si">%(levelname)-8s</span><span class="s2">  </span><span class="si">%(message)s</span><span class="s2">"</span><span class="p">,</span>
+        <span class="n">datefmt</span><span class="o">=</span><span class="s2">"%H:%M:%S"</span><span class="p">,</span>
         <span class="n">level</span><span class="o">=</span><span class="n">level</span><span class="p">,</span>
         <span class="n">stream</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">,</span>
     <span class="p">)</span></div>
@@ -1790,41 +1790,41 @@
 <a class="viewcode-back" href="../../../generated/losalamos.tools.database.html#losalamos.tools.database.main">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">argv</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
     <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span>
-        <span class="n">prog</span><span class="o">=</span><span class="s2">&quot;database.py&quot;</span><span class="p">,</span>
-        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;losalamos — GeoPackage database manager&quot;</span><span class="p">,</span>
+        <span class="n">prog</span><span class="o">=</span><span class="s2">"database.py"</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">"losalamos — GeoPackage database manager"</span><span class="p">,</span>
     <span class="p">)</span>
-    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--command&quot;</span><span class="p">,</span> <span class="s2">&quot;-c&quot;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">COMMANDS</span><span class="p">))</span>
-    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--parameters&quot;</span><span class="p">,</span> <span class="s2">&quot;-p&quot;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">metavar</span><span class="o">=</span><span class="s2">&quot;SPECS_JSON&quot;</span><span class="p">)</span>
-    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--verbose&quot;</span><span class="p">,</span> <span class="s2">&quot;-v&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">"--command"</span><span class="p">,</span> <span class="s2">"-c"</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">COMMANDS</span><span class="p">))</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">"--parameters"</span><span class="p">,</span> <span class="s2">"-p"</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">metavar</span><span class="o">=</span><span class="s2">"SPECS_JSON"</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">"--verbose"</span><span class="p">,</span> <span class="s2">"-v"</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">"store_true"</span><span class="p">)</span>
     <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">(</span><span class="n">argv</span><span class="p">)</span>
 
     <span class="n">setup_logging</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">verbose</span><span class="p">)</span>
 
     <span class="n">specs_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">parameters</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">specs_path</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
-        <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Specs file not found: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">specs_path</span><span class="p">)</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">"Specs file not found: </span><span class="si">%s</span><span class="s2">"</span><span class="p">,</span> <span class="n">specs_path</span><span class="p">)</span>
         <span class="k">return</span> <span class="mi">1</span>
 
     <span class="k">try</span><span class="p">:</span>
-        <span class="n">specs</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">specs_path</span><span class="o">.</span><span class="n">read_text</span><span class="p">(</span><span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">))</span>
+        <span class="n">specs</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">specs_path</span><span class="o">.</span><span class="n">read_text</span><span class="p">(</span><span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">))</span>
     <span class="k">except</span> <span class="n">json</span><span class="o">.</span><span class="n">JSONDecodeError</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
-        <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Invalid JSON in specs file: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">exc</span><span class="p">)</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">"Invalid JSON in specs file: </span><span class="si">%s</span><span class="s2">"</span><span class="p">,</span> <span class="n">exc</span><span class="p">)</span>
         <span class="k">return</span> <span class="mi">1</span>
 
     <span class="k">try</span><span class="p">:</span>
         <span class="n">dispatch</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">command</span><span class="p">,</span> <span class="n">specs</span><span class="p">)</span>
-        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Done.&quot;</span><span class="p">)</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">"Done."</span><span class="p">)</span>
         <span class="k">return</span> <span class="mi">0</span>
     <span class="k">except</span> <span class="p">(</span><span class="ne">FileNotFoundError</span><span class="p">,</span> <span class="ne">FileExistsError</span><span class="p">,</span> <span class="ne">ValueError</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">)</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
-        <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">exc</span><span class="p">)</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">"</span><span class="si">%s</span><span class="s2">"</span><span class="p">,</span> <span class="n">exc</span><span class="p">)</span>
         <span class="k">return</span> <span class="mi">1</span>
     <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
-        <span class="n">log</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s2">&quot;Unexpected error: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">exc</span><span class="p">)</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s2">"Unexpected error: </span><span class="si">%s</span><span class="s2">"</span><span class="p">,</span> <span class="n">exc</span><span class="p">)</span>
         <span class="k">return</span> <span class="mi">1</span></div>
 
 
 
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
     <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="n">main</span><span class="p">())</span>
 </pre></div>
 
@@ -1855,8 +1855,8 @@
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../../_static/scripts/bootstrap.js?digest=a95f357e85573c9b56d5"></script>
-<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=a95f357e85573c9b56d5"></script>
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -1890,7 +1890,7 @@
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.19.0.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.21.0.
 </p></div>
       
     </div>

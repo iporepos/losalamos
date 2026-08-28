@@ -26,18 +26,18 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=a95f357e85573c9b56d5" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=a95f357e85573c9b56d5" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
   
   <!-- So that users can add custom icons -->
-  <script defer src="../../../_static/scripts/fontawesome.js?digest=a95f357e85573c9b56d5"></script>
+  <script defer src="../../../_static/scripts/fontawesome.js?digest=cb8930eaaf36d9849b67"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=a95f357e85573c9b56d5" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=a95f357e85573c9b56d5" />
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
 
     <script src="../../../_static/documentation_options.js?v=d45e8c67"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
@@ -404,7 +404,7 @@
 <span class="c1"># Copyright (C) 2025 The Project Authors</span>
 <span class="c1"># See pyproject.toml for authors/maintainers.</span>
 <span class="c1"># See LICENSE for license details.</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 <span class="sd">Batch-extract bibliographic references from PDFs using a Gemini model.</span>
 
 <span class="sd">This tool scans a folder of PDF files, builds a prompt from the first N pages,</span>
@@ -427,7 +427,7 @@
 
 <span class="sd">.. code-block:: powershell</span>
 
-<span class="sd">    $SPEC=&quot;C:\\path\\to\\specs.json&quot;</span>
+<span class="sd">    $SPEC="C:\\path\\to\\specs.json"</span>
 
 <span class="sd">    python -m losalamos.tools.search_references `</span>
 <span class="sd">        --file $SPEC</span>
@@ -440,11 +440,11 @@
 <span class="sd">.. code-block:: json</span>
 
 <span class="sd">    {</span>
-<span class="sd">        &quot;folder&quot;: &quot;/path/to/pdf_dir&quot;,</span>
-<span class="sd">        &quot;api&quot;: &quot;YOUR_API_KEY&quot;,</span>
-<span class="sd">        &quot;model&quot;: &quot;gemini-3-flash-preview&quot;,</span>
-<span class="sd">        &quot;pages&quot;: 2,</span>
-<span class="sd">        &quot;prompt&quot;: &quot;path/to/prompt.txt or inline string&quot;</span>
+<span class="sd">        "folder": "/path/to/pdf_dir",</span>
+<span class="sd">        "api": "YOUR_API_KEY",</span>
+<span class="sd">        "model": "gemini-3-flash-preview",</span>
+<span class="sd">        "pages": 2,</span>
+<span class="sd">        "prompt": "path/to/prompt.txt or inline string"</span>
 <span class="sd">    }</span>
 
 <span class="sd">Side effects</span>
@@ -454,7 +454,7 @@
 <span class="sd">- Renames PDFs based on the generated BibTeX key</span>
 <span class="sd">- Skips files that already have a corresponding ``.bib``</span>
 
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="c1"># IMPORTS</span>
 <span class="c1"># ***********************************************************************</span>
@@ -489,7 +489,7 @@
 <div class="viewcode-block" id="get_auxiliary_context">
 <a class="viewcode-back" href="../../../generated/losalamos.tools.search_references.html#losalamos.tools.search_references.get_auxiliary_context">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">get_auxiliary_context</span><span class="p">(</span><span class="n">pdf_path</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Look for auxiliary ``.txt``, ``.ris``, and ``.md`` files alongside the PDF,</span>
 <span class="sd">    as well as a general ``context.txt`` file in the same folder.</span>
 
@@ -502,30 +502,30 @@
 <span class="sd">    :return: A formatted string containing the text from the auxiliary files,</span>
 <span class="sd">             or an empty string if no such files exist.</span>
 <span class="sd">    :rtype: str</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">aux_text</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+<span class="sd">    """</span>
+    <span class="n">aux_text</span> <span class="o">=</span> <span class="s2">""</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">read_file</span><span class="p">(</span><span class="n">file</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">label</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="n">content</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">read_text</span><span class="p">(</span><span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+            <span class="n">content</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">read_text</span><span class="p">(</span><span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
             <span class="k">if</span> <span class="n">content</span><span class="p">:</span>
-                <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">--- </span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2"> ---</span><span class="se">\n</span><span class="si">{</span><span class="n">content</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="k">return</span> <span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2">--- </span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2"> ---</span><span class="se">\n</span><span class="si">{</span><span class="n">content</span><span class="si">}</span><span class="se">\n</span><span class="s2">"</span>
         <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Warning: Could not read </span><span class="si">{</span><span class="n">file</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Warning: Could not read </span><span class="si">{</span><span class="n">file</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s2">""</span>
 
     <span class="c1"># General folder-level context (always context.txt, regardless of PDF name)</span>
-    <span class="n">general_context_file</span> <span class="o">=</span> <span class="n">pdf_path</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="s2">&quot;context.txt&quot;</span>
+    <span class="n">general_context_file</span> <span class="o">=</span> <span class="n">pdf_path</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="s2">"context.txt"</span>
     <span class="k">if</span> <span class="n">general_context_file</span><span class="o">.</span><span class="n">is_file</span><span class="p">()</span> <span class="ow">and</span> <span class="n">general_context_file</span> <span class="o">!=</span> <span class="n">pdf_path</span><span class="o">.</span><span class="n">with_suffix</span><span class="p">(</span>
-        <span class="s2">&quot;.txt&quot;</span>
+        <span class="s2">".txt"</span>
     <span class="p">):</span>
-        <span class="n">aux_text</span> <span class="o">+=</span> <span class="n">read_file</span><span class="p">(</span><span class="n">general_context_file</span><span class="p">,</span> <span class="s2">&quot;General context from context.txt&quot;</span><span class="p">)</span>
+        <span class="n">aux_text</span> <span class="o">+=</span> <span class="n">read_file</span><span class="p">(</span><span class="n">general_context_file</span><span class="p">,</span> <span class="s2">"General context from context.txt"</span><span class="p">)</span>
 
     <span class="c1"># PDF-specific auxiliary files (same stem as the PDF)</span>
-    <span class="k">for</span> <span class="n">ext</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;.txt&quot;</span><span class="p">,</span> <span class="s2">&quot;.ris&quot;</span><span class="p">,</span> <span class="s2">&quot;.md&quot;</span><span class="p">]:</span>
+    <span class="k">for</span> <span class="n">ext</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">".txt"</span><span class="p">,</span> <span class="s2">".ris"</span><span class="p">,</span> <span class="s2">".md"</span><span class="p">]:</span>
         <span class="n">aux_file</span> <span class="o">=</span> <span class="n">pdf_path</span><span class="o">.</span><span class="n">with_suffix</span><span class="p">(</span><span class="n">ext</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">aux_file</span><span class="o">.</span><span class="n">is_file</span><span class="p">():</span>
-            <span class="n">aux_text</span> <span class="o">+=</span> <span class="n">read_file</span><span class="p">(</span><span class="n">aux_file</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Specific context from </span><span class="si">{</span><span class="n">aux_file</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">aux_text</span> <span class="o">+=</span> <span class="n">read_file</span><span class="p">(</span><span class="n">aux_file</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"Specific context from </span><span class="si">{</span><span class="n">aux_file</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">aux_text</span></div>
 
@@ -535,7 +535,7 @@
 <a class="viewcode-back" href="../../../generated/losalamos.tools.search_references.html#losalamos.tools.search_references.get_arguments">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">get_arguments</span><span class="p">():</span>
     <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">()</span>
-    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;-f&quot;</span><span class="p">,</span> <span class="s2">&quot;--file&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;search json file.&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">"-f"</span><span class="p">,</span> <span class="s2">"--file"</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">"search json file."</span><span class="p">)</span>
     <span class="c1"># keep adding if more templates arise</span>
     <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
 
@@ -546,12 +546,12 @@
 <div class="viewcode-block" id="next_available_path">
 <a class="viewcode-back" href="../../../generated/losalamos.tools.search_references.html#losalamos.tools.search_references.next_available_path">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">next_available_path</span><span class="p">(</span><span class="n">base_path</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Return a non-colliding path by appending alphabetical suffixes.</span>
 
 <span class="sd">    Example:</span>
 <span class="sd">        file.pdf   -&gt; file_a.pdf -&gt; file_b.pdf -&gt; ... -&gt; file_aa.pdf</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">base_path</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
         <span class="k">return</span> <span class="n">base_path</span>
 
@@ -561,7 +561,7 @@
 
     <span class="k">def</span><span class="w"> </span><span class="nf">index_to_suffix</span><span class="p">(</span><span class="n">i</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="c1"># 0 -&gt; a, 1 -&gt; b, ..., 25 -&gt; z, 26 -&gt; aa, ...</span>
-        <span class="n">s</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="s2">""</span>
         <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
         <span class="k">while</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">i</span> <span class="o">-=</span> <span class="mi">1</span>
@@ -571,7 +571,7 @@
 
     <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
-        <span class="n">candidate</span> <span class="o">=</span> <span class="n">parent</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">stem</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">index_to_suffix</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="si">}{</span><span class="n">suffix</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="n">candidate</span> <span class="o">=</span> <span class="n">parent</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">stem</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">index_to_suffix</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="si">}{</span><span class="n">suffix</span><span class="si">}</span><span class="s2">"</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">candidate</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
             <span class="k">return</span> <span class="n">candidate</span>
         <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span></div>
@@ -587,18 +587,18 @@
             <span class="k">return</span> <span class="n">response</span><span class="o">.</span><span class="n">text</span>
 
         <span class="k">except</span> <span class="n">ServerError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-            <span class="k">if</span> <span class="s2">&quot;503&quot;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">):</span>
+            <span class="k">if</span> <span class="s2">"503"</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">):</span>
                 <span class="n">delay</span> <span class="o">=</span> <span class="n">base_delay</span> <span class="o">*</span> <span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="n">attempt</span><span class="p">)</span>
                 <span class="nb">print</span><span class="p">(</span>
                     <span class="n">get_warning</span><span class="p">(</span>
-                        <span class="sa">f</span><span class="s2">&quot;503 UNAVAILABLE. Retry </span><span class="si">{</span><span class="n">attempt</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">max_retries</span><span class="si">}</span><span class="s2"> in </span><span class="si">{</span><span class="n">delay</span><span class="si">}</span><span class="s2">s&quot;</span>
+                        <span class="sa">f</span><span class="s2">"503 UNAVAILABLE. Retry </span><span class="si">{</span><span class="n">attempt</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">max_retries</span><span class="si">}</span><span class="s2"> in </span><span class="si">{</span><span class="n">delay</span><span class="si">}</span><span class="s2">s"</span>
                     <span class="p">)</span>
                 <span class="p">)</span>
                 <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">delay</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">raise</span>  <span class="c1"># non-retryable server error</span>
 
-    <span class="nb">print</span><span class="p">(</span><span class="n">get_warning</span><span class="p">(</span><span class="s2">&quot;Max retries reached. Skipping.&quot;</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">get_warning</span><span class="p">(</span><span class="s2">"Max retries reached. Skipping."</span><span class="p">))</span>
     <span class="k">return</span> <span class="kc">None</span></div>
 
 
@@ -606,7 +606,7 @@
 <div class="viewcode-block" id="main">
 <a class="viewcode-back" href="../../../generated/losalamos.tools.search_references.html#losalamos.tools.search_references.main">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-    <span class="n">heading_section</span><span class="p">(</span><span class="s2">&quot;SEARCH REFERENCES&quot;</span><span class="p">)</span>
+    <span class="n">heading_section</span><span class="p">(</span><span class="s2">"SEARCH REFERENCES"</span><span class="p">)</span>
 
     <span class="n">args</span> <span class="o">=</span> <span class="n">get_arguments</span><span class="p">()</span>
     <span class="n">specs_file</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">file</span>
@@ -614,41 +614,41 @@
     <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">specs_file</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
         <span class="n">specs</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
 
-    <span class="n">folder</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">specs</span><span class="p">[</span><span class="s2">&quot;folder&quot;</span><span class="p">])</span>
+    <span class="n">folder</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">specs</span><span class="p">[</span><span class="s2">"folder"</span><span class="p">])</span>
 
-    <span class="nb">print</span><span class="p">(</span><span class="n">get_message</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Folder: </span><span class="si">{</span><span class="n">folder</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">get_message</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Folder: </span><span class="si">{</span><span class="n">folder</span><span class="si">}</span><span class="s2">"</span><span class="p">))</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="n">folder</span><span class="o">.</span><span class="n">is_dir</span><span class="p">():</span>
-        <span class="nb">print</span><span class="p">(</span><span class="n">get_warning</span><span class="p">(</span><span class="n">msg</span><span class="o">=</span><span class="s2">&quot;Folder not found&quot;</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">get_warning</span><span class="p">(</span><span class="n">msg</span><span class="o">=</span><span class="s2">"Folder not found"</span><span class="p">))</span>
         <span class="k">return</span> <span class="kc">None</span>
 
     <span class="c1"># Initialize the client</span>
-    <span class="n">client</span> <span class="o">=</span> <span class="n">genai</span><span class="o">.</span><span class="n">Client</span><span class="p">(</span><span class="n">api_key</span><span class="o">=</span><span class="n">specs</span><span class="p">[</span><span class="s2">&quot;api&quot;</span><span class="p">])</span>
+    <span class="n">client</span> <span class="o">=</span> <span class="n">genai</span><span class="o">.</span><span class="n">Client</span><span class="p">(</span><span class="n">api_key</span><span class="o">=</span><span class="n">specs</span><span class="p">[</span><span class="s2">"api"</span><span class="p">])</span>
 
-    <span class="n">n_pages</span> <span class="o">=</span> <span class="n">specs</span><span class="p">[</span><span class="s2">&quot;pages&quot;</span><span class="p">]</span>
-    <span class="n">prompt_head</span> <span class="o">=</span> <span class="n">specs</span><span class="p">[</span><span class="s2">&quot;prompt&quot;</span><span class="p">]</span>
-    <span class="n">model</span> <span class="o">=</span> <span class="n">specs</span><span class="p">[</span><span class="s2">&quot;model&quot;</span><span class="p">]</span>
+    <span class="n">n_pages</span> <span class="o">=</span> <span class="n">specs</span><span class="p">[</span><span class="s2">"pages"</span><span class="p">]</span>
+    <span class="n">prompt_head</span> <span class="o">=</span> <span class="n">specs</span><span class="p">[</span><span class="s2">"prompt"</span><span class="p">]</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">specs</span><span class="p">[</span><span class="s2">"model"</span><span class="p">]</span>
 
     <span class="k">if</span> <span class="n">Path</span><span class="p">(</span><span class="n">prompt_head</span><span class="p">)</span><span class="o">.</span><span class="n">is_file</span><span class="p">():</span>
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">prompt_head</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
             <span class="n">head</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
         <span class="n">prompt_head</span> <span class="o">=</span> <span class="n">head</span>
 
-    <span class="n">ls_pdfs</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">folder</span><span class="o">.</span><span class="n">rglob</span><span class="p">(</span><span class="s2">&quot;*.pdf&quot;</span><span class="p">))</span>
+    <span class="n">ls_pdfs</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">folder</span><span class="o">.</span><span class="n">rglob</span><span class="p">(</span><span class="s2">"*.pdf"</span><span class="p">))</span>
 
     <span class="k">for</span> <span class="n">pdf</span> <span class="ow">in</span> <span class="n">ls_pdfs</span><span class="p">:</span>
 
         <span class="n">nm</span> <span class="o">=</span> <span class="n">pdf</span><span class="o">.</span><span class="n">stem</span>
-        <span class="n">heading_subsection</span><span class="p">(</span><span class="n">msg</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;File search: </span><span class="si">{</span><span class="n">nm</span><span class="si">}</span><span class="s2">.pdf&quot;</span><span class="p">)</span>
+        <span class="n">heading_subsection</span><span class="p">(</span><span class="n">msg</span><span class="o">=</span><span class="sa">f</span><span class="s2">"File search: </span><span class="si">{</span><span class="n">nm</span><span class="si">}</span><span class="s2">.pdf"</span><span class="p">)</span>
 
-        <span class="n">fbib</span> <span class="o">=</span> <span class="n">pdf</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">nm</span><span class="si">}</span><span class="s2">.bib&quot;</span>
+        <span class="n">fbib</span> <span class="o">=</span> <span class="n">pdf</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">nm</span><span class="si">}</span><span class="s2">.bib"</span>
         <span class="k">if</span> <span class="n">fbib</span><span class="o">.</span><span class="n">is_file</span><span class="p">():</span>
-            <span class="nb">print</span><span class="p">(</span><span class="n">get_message</span><span class="p">(</span><span class="s2">&quot;File already searched (bib found)&quot;</span><span class="p">))</span>
-        <span class="k">elif</span> <span class="n">pdf</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;bkp&quot;</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="n">get_message</span><span class="p">(</span><span class="s2">&quot;Backup folder detected&quot;</span><span class="p">))</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">get_message</span><span class="p">(</span><span class="s2">"File already searched (bib found)"</span><span class="p">))</span>
+        <span class="k">elif</span> <span class="n">pdf</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">"bkp"</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">get_message</span><span class="p">(</span><span class="s2">"Backup folder detected"</span><span class="p">))</span>
         <span class="k">else</span><span class="p">:</span>
 
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Asking Gemini ...&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">"Asking Gemini ..."</span><span class="p">)</span>
             <span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 
             <span class="c1"># --------------------------------------------</span>
@@ -664,49 +664,49 @@
             <span class="n">filename</span> <span class="o">=</span> <span class="n">pdf</span><span class="o">.</span><span class="n">name</span>
 
             <span class="c1"># Start building the context block</span>
-            <span class="n">context_data</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&gt;&gt;&gt;&gt;&gt; Context </span><span class="se">\n</span><span class="s2">File name: </span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="n">context_data</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="se">\n\n</span><span class="s2">&gt;&gt;&gt;&gt;&gt; Context </span><span class="se">\n</span><span class="s2">File name: </span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="se">\n</span><span class="s2">"</span>
 
             <span class="c1"># Inject auxiliary data if it exists</span>
             <span class="k">if</span> <span class="n">aux_context</span><span class="p">:</span>
-                <span class="n">context_data</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&gt;&gt;&gt;&gt;&gt; Auxiliary File Data:</span><span class="si">{</span><span class="n">aux_context</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="n">context_data</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2">&gt;&gt;&gt;&gt;&gt; Auxiliary File Data:</span><span class="si">{</span><span class="n">aux_context</span><span class="si">}</span><span class="se">\n</span><span class="s2">"</span>
 
             <span class="c1"># Append the PDF pages</span>
-            <span class="n">context_data</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&gt;&gt;&gt;&gt;&gt; First </span><span class="si">{</span><span class="n">n_pages</span><span class="si">}</span><span class="s2"> pages content:</span><span class="se">\n\n</span><span class="si">{</span><span class="n">pages</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="n">context_data</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2">&gt;&gt;&gt;&gt;&gt; First </span><span class="si">{</span><span class="n">n_pages</span><span class="si">}</span><span class="s2"> pages content:</span><span class="se">\n\n</span><span class="si">{</span><span class="n">pages</span><span class="si">}</span><span class="s2">"</span>
 
-            <span class="n">prompt</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">prompt_head</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">context_data</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="n">prompt</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">prompt_head</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">context_data</span><span class="si">}</span><span class="s2">"</span>
 
             <span class="c1"># --------------------------------------------</span>
             <span class="c1"># Ask</span>
 
             <span class="n">answer</span> <span class="o">=</span> <span class="n">ask_gemini</span><span class="p">(</span><span class="n">prompt</span><span class="o">=</span><span class="n">prompt</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span> <span class="n">client</span><span class="o">=</span><span class="n">client</span><span class="p">)</span>
 
-            <span class="n">answer</span> <span class="o">=</span> <span class="n">answer</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;```bibtex</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
-            <span class="n">answer</span> <span class="o">=</span> <span class="n">answer</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;```&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+            <span class="n">answer</span> <span class="o">=</span> <span class="n">answer</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">"```bibtex</span><span class="se">\n</span><span class="s2">"</span><span class="p">,</span> <span class="s2">""</span><span class="p">)</span>
+            <span class="n">answer</span> <span class="o">=</span> <span class="n">answer</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">"```"</span><span class="p">,</span> <span class="s2">""</span><span class="p">)</span>
 
             <span class="nb">print</span><span class="p">(</span><span class="n">answer</span><span class="p">)</span>
 
             <span class="k">if</span> <span class="n">answer</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">heading_subsection</span><span class="p">(</span><span class="n">msg</span><span class="o">=</span><span class="s2">&quot;Saving ...&quot;</span><span class="p">)</span>
+                <span class="n">heading_subsection</span><span class="p">(</span><span class="n">msg</span><span class="o">=</span><span class="s2">"Saving ..."</span><span class="p">)</span>
                 <span class="c1"># --------------------------------------------</span>
                 <span class="c1"># get name</span>
-                <span class="n">fnm</span> <span class="o">=</span> <span class="n">answer</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;{&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">fnm</span> <span class="o">=</span> <span class="n">answer</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"{"</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">","</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
 
                 <span class="c1"># Base paths</span>
-                <span class="n">bib_base</span> <span class="o">=</span> <span class="n">pdf</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">fnm</span><span class="si">}</span><span class="s2">.bib&quot;</span>
-                <span class="n">pdf_base</span> <span class="o">=</span> <span class="n">pdf</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">fnm</span><span class="si">}</span><span class="s2">.pdf&quot;</span>
+                <span class="n">bib_base</span> <span class="o">=</span> <span class="n">pdf</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">fnm</span><span class="si">}</span><span class="s2">.bib"</span>
+                <span class="n">pdf_base</span> <span class="o">=</span> <span class="n">pdf</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">fnm</span><span class="si">}</span><span class="s2">.pdf"</span>
 
                 <span class="c1"># Resolve collisions</span>
                 <span class="n">bib_path</span> <span class="o">=</span> <span class="n">next_available_path</span><span class="p">(</span><span class="n">bib_base</span><span class="p">)</span>
                 <span class="n">pdf_path</span> <span class="o">=</span> <span class="n">next_available_path</span><span class="p">(</span><span class="n">pdf_base</span><span class="p">)</span>
 
                 <span class="c1"># Save Bib</span>
-                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">bib_path</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">bib_path</span><span class="p">,</span> <span class="s2">"w"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
                     <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">answer</span><span class="p">)</span>
 
                 <span class="c1"># Rename PDF</span>
                 <span class="n">os</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">src</span><span class="o">=</span><span class="n">pdf</span><span class="p">,</span> <span class="n">dst</span><span class="o">=</span><span class="n">pdf_path</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="n">get_warning</span><span class="p">(</span><span class="s2">&quot;Answer None&quot;</span><span class="p">))</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">get_warning</span><span class="p">(</span><span class="s2">"Answer None"</span><span class="p">))</span>
 
     <span class="n">heading_done</span><span class="p">()</span></div>
 
@@ -715,7 +715,7 @@
 <span class="c1"># SCRIPT</span>
 <span class="c1"># ***********************************************************************</span>
 <span class="c1"># standalone behaviour as a script</span>
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
 
     <span class="c1"># Script section</span>
     <span class="c1"># ===================================================================</span>
@@ -750,8 +750,8 @@
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../../_static/scripts/bootstrap.js?digest=a95f357e85573c9b56d5"></script>
-<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=a95f357e85573c9b56d5"></script>
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -785,7 +785,7 @@
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.19.0.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.21.0.
 </p></div>
       
     </div>

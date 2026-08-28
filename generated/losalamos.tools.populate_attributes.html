@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>losalamos.tools.build_figures &#8212; losalamos 0.0.1 documentation</title>
+    <title>losalamos.tools.populate_attributes &#8212; losalamos 0.0.1 documentation</title>
   
   
   
@@ -46,13 +46,13 @@
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../_static/copybutton.js?v=f281be69"></script>
     <script src="../_static/design-tabs.js?v=f930bc37"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'generated/losalamos.tools.build_figures';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'generated/losalamos.tools.populate_attributes';</script>
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <link rel="author" title="About these documents" href="../about.html" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="losalamos.tools.new_drawing" href="losalamos.tools.new_drawing.html" />
-    <link rel="prev" title="losalamos.documents" href="losalamos.documents.html" />
+    <link rel="next" title="losalamos.tools.database" href="losalamos.tools.database.html" />
+    <link rel="prev" title="losalamos.tools.update_templates" href="losalamos.tools.update_templates.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
@@ -374,13 +374,13 @@
 <li class="toctree-l1"><a class="reference internal" href="losalamos.documents.html">losalamos.documents</a></li>
 </ul>
 <ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">losalamos.tools.build_figures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="losalamos.tools.build_figures.html">losalamos.tools.build_figures</a></li>
 <li class="toctree-l1"><a class="reference internal" href="losalamos.tools.new_drawing.html">losalamos.tools.new_drawing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="losalamos.tools.ingest_references.html">losalamos.tools.ingest_references</a></li>
 <li class="toctree-l1"><a class="reference internal" href="losalamos.tools.search_references.html">losalamos.tools.search_references</a></li>
 <li class="toctree-l1"><a class="reference internal" href="losalamos.tools.update_references.html">losalamos.tools.update_references</a></li>
 <li class="toctree-l1"><a class="reference internal" href="losalamos.tools.update_templates.html">losalamos.tools.update_templates</a></li>
-<li class="toctree-l1"><a class="reference internal" href="losalamos.tools.populate_attributes.html">losalamos.tools.populate_attributes</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">losalamos.tools.populate_attributes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="losalamos.tools.database.html">losalamos.tools.database</a></li>
 </ul>
 </div>
@@ -425,7 +425,7 @@
     
     <li class="breadcrumb-item"><a href="../api.html" class="nav-link">API Reference</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">losalamos.tools.build_figures</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">losalamos.tools.populate_attributes</span></li>
   </ul>
 </nav>
 </div>
@@ -442,60 +442,116 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="module-losalamos.tools.build_figures">
-<span id="losalamos-tools-build-figures"></span><h1>losalamos.tools.build_figures<a class="headerlink" href="#module-losalamos.tools.build_figures" title="Link to this heading">#</a></h1>
-<p>Build image outputs from a folder of SVG files using a JSON parameter file.</p>
-<p>This tool iterates over all <code class="docutils literal notranslate"><span class="pre">.svg</span></code> files in a source folder and exports
-each one to the specified format (png, jpeg, pdf, svg) using Inkscape as
-the rendering backend.</p>
-<p><strong>Shell usage</strong></p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Export all SVGs in a folder to JPEG</span>
-python<span class="w"> </span>-m<span class="w"> </span>losalamos.tools.build_figures<span class="w"> </span><span class="se">\</span>
-<span class="w">    </span>--src<span class="w"> </span>/path/to/svgs<span class="w"> </span><span class="se">\</span>
-<span class="w">    </span>--dst<span class="w"> </span>/path/to/output<span class="w"> </span><span class="se">\</span>
-<span class="w">    </span>--par<span class="w"> </span>/path/to/params.json
-
-<span class="c1"># Using short flags</span>
-python<span class="w"> </span>-m<span class="w"> </span>losalamos.tools.build_figures<span class="w"> </span>-s<span class="w"> </span>./svgs<span class="w"> </span>-d<span class="w"> </span>./out<span class="w"> </span>-p<span class="w"> </span>./params.json
+  <section id="module-losalamos.tools.populate_attributes">
+<span id="losalamos-tools-populate-attributes"></span><h1>losalamos.tools.populate_attributes<a class="headerlink" href="#module-losalamos.tools.populate_attributes" title="Link to this heading">#</a></h1>
+<section id="populate-attributes-py">
+<h2>populate_attributes.py<a class="headerlink" href="#populate-attributes-py" title="Link to this heading">#</a></h2>
+<p>Batch-creation script for Flare canonical attribute registry notes.</p>
+<p>Reads a JSON seed file and writes one Obsidian <code class="docutils literal notranslate"><span class="pre">.md</span></code> note per entry into
+a target vault folder, using <a class="reference internal" href="losalamos.notes.html#losalamos.notes.NoteAttribute" title="losalamos.notes.NoteAttribute"><code class="xref py py-class docutils literal notranslate"><span class="pre">losalamos.notes.NoteAttribute</span></code></a>.</p>
+<p>Depends on <code class="docutils literal notranslate"><span class="pre">losalamos</span></code> being installed with <code class="docutils literal notranslate"><span class="pre">NoteAttribute</span></code> present in
+<code class="docutils literal notranslate"><span class="pre">losalamos.notes</span></code>. Run from any location.</p>
+</section>
+<section id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Link to this heading">#</a></h2>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>populate_attributes.py<span class="w"> </span>&lt;seed.json&gt;<span class="w"> </span>&lt;vault_folder&gt;<span class="w"> </span><span class="o">[</span>--overwrite<span class="o">]</span>
 </pre></div>
 </div>
-<p><strong>Parameter file format</strong></p>
+</section>
+<section id="seed-json-format">
+<h2>Seed JSON format<a class="headerlink" href="#seed-json-format" title="Link to this heading">#</a></h2>
 <div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
-<span class="w">    </span><span class="nt">"figure_format"</span><span class="p">:</span><span class="w"> </span><span class="s2">"jpeg"</span><span class="p">,</span>
-<span class="w">    </span><span class="nt">"crop_id"</span><span class="p">:</span><span class="w">       </span><span class="s2">"frame"</span><span class="p">,</span>
-<span class="w">    </span><span class="nt">"show_layers"</span><span class="p">:</span><span class="w">   </span><span class="p">[</span><span class="s2">"main"</span><span class="p">,</span><span class="w"> </span><span class="s2">"leader_lines"</span><span class="p">,</span><span class="w"> </span><span class="s2">"labels_en"</span><span class="p">],</span>
-<span class="w">    </span><span class="nt">"hide_layers"</span><span class="p">:</span><span class="w">   </span><span class="p">[</span><span class="s2">"frames"</span><span class="p">,</span><span class="w"> </span><span class="s2">"labels_pt"</span><span class="p">],</span>
-<span class="w">    </span><span class="nt">"suffix"</span><span class="p">:</span><span class="w">        </span><span class="s2">"en"</span>
+<span class="w">    </span><span class="nt">"defaults"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">"theme"</span><span class="p">:</span><span class="w"> </span><span class="s2">"101"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"R"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"category"</span><span class="p">:</span><span class="w"> </span><span class="s2">"variable"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"tags"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"hydrology"</span><span class="p">],</span>
+<span class="w">        </span><span class="nt">"subject"</span><span class="p">:</span><span class="w"> </span><span class="s2">"[[Surface Hydrology]]"</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="nt">"entries"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Streamflow"</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Volumetric flow rate of water in a channel cross-section"</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">"units_ref"</span><span class="p">:</span><span class="w"> </span><span class="s2">"m^3/s"</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">"domain"</span><span class="p">:</span><span class="w"> </span><span class="s2">"[0U)"</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">"symbol"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Q"</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">"alias"</span><span class="p">:</span><span class="w"> </span><span class="s2">"streamflow"</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">"dimension"</span><span class="p">:</span><span class="w"> </span><span class="s2">"L^{3}/T"</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">"source"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Chow et al. (1988) Applied Hydrology"</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">"synonyms"</span><span class="p">:</span><span class="w"> </span><span class="s2">"discharge, river flow"</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">"abstract"</span><span class="p">:</span><span class="w"> </span><span class="s2">"..."</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">"tags"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"surface-water"</span><span class="p">],</span>
+<span class="w">            </span><span class="nt">"twin_notes"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"Discharge"</span><span class="p">,</span><span class="w"> </span><span class="s2">"River Flow"</span><span class="p">]</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">]</span>
 <span class="p">}</span>
 </pre></div>
 </div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p><code class="docutils literal notranslate"><span class="pre">figure_format</span></code> accepts <code class="docutils literal notranslate"><span class="pre">&quot;png&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;jpeg&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;pdf&quot;</span></code>, or <code class="docutils literal notranslate"><span class="pre">&quot;svg&quot;</span></code>.
-<code class="docutils literal notranslate"><span class="pre">crop_id</span></code> may be <code class="docutils literal notranslate"><span class="pre">null</span></code> to export the full page.
-<code class="docutils literal notranslate"><span class="pre">suffix</span></code> is optional — when provided it is appended to the output filename stem.</p>
-</div>
+</section>
+<section id="defaults-and-entries">
+<h2>Defaults and entries<a class="headerlink" href="#defaults-and-entries" title="Link to this heading">#</a></h2>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">theme</span></code></dt><dd><p>Required in <code class="docutils literal notranslate"><span class="pre">defaults</span></code>. Determines the <code class="docutils literal notranslate"><span class="pre">TTT</span></code> segment of all codes
+in this batch. One seed file = one theme.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">tags</span></code></dt><dd><p>Additive. <code class="docutils literal notranslate"><span class="pre">defaults</span></code> tags apply to every entry; entry-level tags
+extend them. The base tag <code class="docutils literal notranslate"><span class="pre">attribute-note</span></code> is always present.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">subject</span></code></dt><dd><p>Override. Entry-level subject replaces the default for that entry.
+Write as Obsidian wiki-link notation: <code class="docutils literal notranslate"><span class="pre">[[Note</span> <span class="pre">Name]]</span></code>.
+Missing or null at either level is ignored.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">twin_notes</span></code></dt><dd><p>Population directive (not written to frontmatter). List of synonym
+names that receive their own note with a serial code and <code class="docutils literal notranslate"><span class="pre">twin_code</span></code>
+pointing to the canonical. Twins inherit the canonical’s resolved tags
+and subject.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">code</span></code></dt><dd><p>Never written in the seed — always auto-assigned by scanning existing
+notes in the vault folder and incrementing from the highest serial.</p>
+</dd>
+</dl>
+</section>
+<section id="field-conventions">
+<h2>Field conventions<a class="headerlink" href="#field-conventions" title="Link to this heading">#</a></h2>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">symbol</span></code></dt><dd><p>LaTeX raw, no <code class="docutils literal notranslate"><span class="pre">$</span></code> delimiters. Stripped automatically if present.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">dimension</span></code></dt><dd><p>Plain exponent notation, no <code class="docutils literal notranslate"><span class="pre">[]</span></code> brackets. Stripped automatically.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">units_ref</span></code></dt><dd><p>Plain readable text, no LaTeX. Rendered downstream.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">domain</span></code></dt><dd><p>Interval notation using <code class="docutils literal notranslate"><span class="pre">U</span></code> in place of <code class="docutils literal notranslate"><span class="pre">:</span></code> to avoid YAML conflicts.
+Examples: <code class="docutils literal notranslate"><span class="pre">[0U)</span></code>, <code class="docutils literal notranslate"><span class="pre">(U)</span></code>, <code class="docutils literal notranslate"><span class="pre">(0U)</span></code>, <code class="docutils literal notranslate"><span class="pre">[0U1]</span></code>, <code class="docutils literal notranslate"><span class="pre">(-273.15U)</span></code>.</p>
+</dd>
+</dl>
 <p class="rubric">Functions</p>
 <div class="pst-scrollable-table-container"><table class="autosummary longtable table">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#losalamos.tools.build_figures.get_arguments" title="losalamos.tools.build_figures.get_arguments"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_arguments</span></code></a>()</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#losalamos.tools.build_figures.main" title="losalamos.tools.build_figures.main"><code class="xref py py-obj docutils literal notranslate"><span class="pre">main</span></code></a>()</p></td>
-<td><p></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#losalamos.tools.populate_attributes.populate_canonical" title="losalamos.tools.populate_attributes.populate_canonical"><code class="xref py py-obj docutils literal notranslate"><span class="pre">populate_canonical</span></code></a>(seed_path, vault_folder)</p></td>
+<td><p>Read a JSON seed file and write one Obsidian attribute note per entry, followed immediately by any twin notes declared under <code class="docutils literal notranslate"><span class="pre">twin_notes</span></code>.</p></td>
 </tr>
 </tbody>
 </table>
 </div>
+</section>
 <dl class="py function">
-<dt class="sig sig-object py" id="losalamos.tools.build_figures.get_arguments">
-<span class="sig-prename descclassname"><span class="pre">losalamos.tools.build_figures.</span></span><span class="sig-name descname"><span class="pre">get_arguments</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/tools/build_figures.html#get_arguments"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.tools.build_figures.get_arguments" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="losalamos.tools.build_figures.main">
-<span class="sig-prename descclassname"><span class="pre">losalamos.tools.build_figures.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../_modules/losalamos/tools/build_figures.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.tools.build_figures.main" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dt class="sig sig-object py" id="losalamos.tools.populate_attributes.populate_canonical">
+<span class="sig-prename descclassname"><span class="pre">losalamos.tools.populate_attributes.</span></span><span class="sig-name descname"><span class="pre">populate_canonical</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">seed_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vault_folder</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overwrite</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../_modules/losalamos/tools/populate_attributes.html#populate_canonical"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.tools.populate_attributes.populate_canonical" title="Link to this definition">#</a></dt>
+<dd><p>Read a JSON seed file and write one Obsidian attribute note per entry,
+followed immediately by any twin notes declared under <code class="docutils literal notranslate"><span class="pre">twin_notes</span></code>.</p>
+<p>Codes are auto-assigned sequentially within the theme for both canonical
+entries and twins, in the order they appear in the seed file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>seed_path</strong> – Path to the JSON seed file.</p></li>
+<li><p><strong>vault_folder</strong> – Destination folder for note files.</p></li>
+<li><p><strong>overwrite</strong> – If <code class="docutils literal notranslate"><span class="pre">False</span></code> (default), skip existing files.
+If <code class="docutils literal notranslate"><span class="pre">True</span></code>, overwrite them.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 
 </section>
 
@@ -510,20 +566,20 @@ python<span class="w"> </span>-m<span class="w"> </span>losalamos.tools.build_fi
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="losalamos.documents.html"
+       href="losalamos.tools.update_templates.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">losalamos.documents</p>
+        <p class="prev-next-title">losalamos.tools.update_templates</p>
       </div>
     </a>
     <a class="right-next"
-       href="losalamos.tools.new_drawing.html"
+       href="losalamos.tools.database.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">losalamos.tools.new_drawing</p>
+        <p class="prev-next-title">losalamos.tools.database</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -546,15 +602,19 @@ python<span class="w"> </span>-m<span class="w"> </span>losalamos.tools.build_fi
   </div>
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="pst-show_toc_level nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.tools.build_figures.get_arguments"><code class="docutils literal notranslate"><span class="pre">get_arguments()</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.tools.build_figures.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#populate-attributes-py">populate_attributes.py</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#usage">Usage</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#seed-json-format">Seed JSON format</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#defaults-and-entries">Defaults and entries</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#field-conventions">Field conventions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.tools.populate_attributes.populate_canonical"><code class="docutils literal notranslate"><span class="pre">populate_canonical()</span></code></a></li>
 </ul>
   </nav></div>
 
   <div class="sidebar-secondary-item">
 
   <div class="tocsection sourcelink">
-    <a href="../_sources/generated/losalamos.tools.build_figures.rst.txt">
+    <a href="../_sources/generated/losalamos.tools.populate_attributes.rst.txt">
       <i class="fa-solid fa-file-lines"></i> Show Source
     </a>
   </div>

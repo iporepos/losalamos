@@ -26,18 +26,18 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../_static/styles/theme.css?digest=a95f357e85573c9b56d5" rel="stylesheet" />
-<link href="../../_static/styles/pydata-sphinx-theme.css?digest=a95f357e85573c9b56d5" rel="stylesheet" />
+  <link href="../../_static/styles/theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
   
   <!-- So that users can add custom icons -->
-  <script defer src="../../_static/scripts/fontawesome.js?digest=a95f357e85573c9b56d5"></script>
+  <script defer src="../../_static/scripts/fontawesome.js?digest=cb8930eaaf36d9849b67"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=a95f357e85573c9b56d5" />
-<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=a95f357e85573c9b56d5" />
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
 
     <script src="../../_static/documentation_options.js?v=d45e8c67"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
@@ -404,7 +404,7 @@
 <span class="c1"># Copyright (C) 2025 The Project Authors</span>
 <span class="c1"># See pyproject.toml for authors/maintainers.</span>
 <span class="c1"># See LICENSE for license details.</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 <span class="sd">Handle Documents editing, managing and builds.</span>
 
 <span class="sd">Class hierarchy</span>
@@ -438,7 +438,7 @@
 <span class="sd">Each layer wins over the one to its left. Files absent from a layer are</span>
 <span class="sd">inherited transparently from the layer below.</span>
 
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="c1"># ***********************************************************************</span>
 <span class="c1"># IMPORTS</span>
@@ -488,7 +488,7 @@
 <a class="viewcode-back" href="../../generated/losalamos.documents.html#losalamos.documents.escape_percent_latex">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">escape_percent_latex</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
     <span class="c1"># Replace % not preceded by an odd number of backslashes</span>
-    <span class="k">return</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;(?&lt;!</span><span class="se">\\</span><span class="s2">)%&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;\%&quot;</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">"(?&lt;!</span><span class="se">\\</span><span class="s2">)%"</span><span class="p">,</span> <span class="sa">r</span><span class="s2">"\%"</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span></div>
 
 
 
@@ -508,19 +508,55 @@
 <div class="viewcode-block" id="Document">
 <a class="viewcode-back" href="../../generated/losalamos.documents.html#losalamos.documents.Document">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">Document</span><span class="p">(</span><span class="n">DataSet</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Base class for all document types.</span>
 
 <span class="sd">    Handles generic file loading and the three-layer template merge</span>
 <span class="sd">    used by :meth:`new`. Subclasses specialise behaviour by overriding</span>
 <span class="sd">    :attr:`BASE_TEMPLATE` and :attr:`VARIANT_TEMPLATE`.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
-    <span class="n">BASE_TEMPLATE</span> <span class="o">=</span> <span class="n">FOLDER_TEMPLATES_DOCUMENTS</span> <span class="o">/</span> <span class="s2">&quot;txt/demo&quot;</span>
+    <span class="n">BASE_TEMPLATE</span> <span class="o">=</span> <span class="n">FOLDER_TEMPLATES_DOCUMENTS</span> <span class="o">/</span> <span class="s2">"txt/demo"</span>
     <span class="n">VARIANT_TEMPLATE</span> <span class="o">=</span> <span class="kc">None</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;MyDocument&quot;</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s2">&quot;Doc&quot;</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">"MyDocument"</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s2">"Doc"</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="n">alias</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""</span>
+<span class="sd">        String representation of a text-based :class:`Document`.</span>
+
+<span class="sd">        :class:`DataSet` (the parent class) assumes ``self.data`` is a</span>
+<span class="sd">        :class:`pandas.DataFrame` and previews it with ``.head()``/``.tail()``.</span>
+<span class="sd">        :class:`Document` overrides ``self.data`` to hold a plain list of</span>
+<span class="sd">        text lines (from :meth:`load_data`), so this override previews the</span>
+<span class="sd">        first and last lines instead, and skips straight to :class:`MbaE`'s</span>
+<span class="sd">        header (bypassing :meth:`DataSet.__str__`, which would otherwise</span>
+<span class="sd">        raise ``AttributeError`` on a list).</span>
+
+<span class="sd">        :returns: Formatted string with the object header plus a line-based</span>
+<span class="sd">            preview of :attr:`data`.</span>
+<span class="sd">        :rtype: str</span>
+<span class="sd">        """</span>
+        <span class="n">str_super</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">DataSet</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__str__</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">"</span><span class="si">{}</span><span class="se">\n</span><span class="s2">Data:</span><span class="se">\n</span><span class="s2">None</span><span class="se">\n</span><span class="s2">"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">str_super</span><span class="p">)</span>
+
+        <span class="n">n_lines</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">n_preview</span> <span class="o">=</span> <span class="mi">5</span>
+
+        <span class="k">if</span> <span class="n">n_lines</span> <span class="o">&lt;=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">n_preview</span><span class="p">:</span>
+            <span class="n">str_body</span> <span class="o">=</span> <span class="s2">""</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">)</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
+            <span class="n">str_out</span> <span class="o">=</span> <span class="s2">"</span><span class="si">{}</span><span class="se">\n</span><span class="s2">Data (</span><span class="si">{}</span><span class="s2"> lines):</span><span class="se">\n</span><span class="si">{}</span><span class="se">\n</span><span class="s2">"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">str_super</span><span class="p">,</span> <span class="n">n_lines</span><span class="p">,</span> <span class="n">str_body</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">str_head</span> <span class="o">=</span> <span class="s2">""</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[:</span><span class="n">n_preview</span><span class="p">])</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
+            <span class="n">str_tail</span> <span class="o">=</span> <span class="s2">""</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="o">-</span><span class="n">n_preview</span><span class="p">:])</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
+            <span class="n">str_out</span> <span class="o">=</span> <span class="s2">"</span><span class="si">{}</span><span class="se">\n</span><span class="s2">Data (</span><span class="si">{}</span><span class="s2"> lines):</span><span class="se">\n</span><span class="si">{}</span><span class="se">\n</span><span class="s2"> ... </span><span class="se">\n</span><span class="si">{}</span><span class="se">\n</span><span class="s2">"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">str_super</span><span class="p">,</span> <span class="n">n_lines</span><span class="p">,</span> <span class="n">str_head</span><span class="p">,</span> <span class="n">str_tail</span>
+            <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">str_out</span>
 
 <div class="viewcode-block" id="Document.load_data">
 <a class="viewcode-back" href="../../generated/losalamos.documents.html#losalamos.documents.Document.load_data">[docs]</a>
@@ -530,7 +566,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">file_data</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">file_data</span><span class="p">)</span><span class="o">.</span><span class="n">absolute</span><span class="p">()</span>
 
         <span class="c1"># Open and extract lines (assuming utf-8 encoding for standard TeX)</span>
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">file_data</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">file_data</span><span class="p">,</span> <span class="s2">"r"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
             <span class="n">lines</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
 
         <span class="c1"># load all the text by a readlines method. self.data is a list.</span>
@@ -543,8 +579,8 @@
 
 <div class="viewcode-block" id="Document.new">
 <a class="viewcode-back" href="../../generated/losalamos.documents.html#losalamos.documents.Document.new">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">new</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">folder</span><span class="p">,</span> <span class="n">template_overlay</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">new</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">folder</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">template_overlay</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Create a new document folder by materializing template files into a target location.</span>
 
 <span class="sd">        This method creates a folder named ``name`` inside ``folder`` and populates it</span>
@@ -615,9 +651,15 @@
 <span class="sd">            No files are created or modified in this case.</span>
 <span class="sd">        :raises NotADirectoryError: If ``template_overlay`` is provided but does not</span>
 <span class="sd">            point to a valid directory. Validated before any files are written.</span>
+<span class="sd">        :raises FileNotFoundError: If the merged template does not contain exactly</span>
+<span class="sd">            one top-level ``main.*`` file to load as the document's entry point.</span>
 
-<span class="sd">        :returns: Absolute path to the newly created document folder.</span>
-<span class="sd">        :rtype: pathlib.Path</span>
+<span class="sd">        :returns: None. Acts in place: locates the merged tree's top-level</span>
+<span class="sd">            ``main.*`` file and calls :meth:`load_data` on it, which updates</span>
+<span class="sd">            :attr:`file_data`, :attr:`data`, and (for subclasses such as</span>
+<span class="sd">            :class:`DocumentTeX`) :attr:`is_main` to reflect the newly created</span>
+<span class="sd">            document.</span>
+<span class="sd">        :rtype: None</span>
 
 <span class="sd">        .. dropdown:: Usage example</span>
 <span class="sd">            :icon: code-square</span>
@@ -626,20 +668,24 @@
 <span class="sd">            .. code-block:: python</span>
 
 <span class="sd">                # Single-layer: base template only (Document base class)</span>
-<span class="sd">                doc = Document(name=&quot;MyDoc&quot;, alias=&quot;D&quot;)</span>
-<span class="sd">                target = doc.new(&quot;my_doc&quot;, &quot;/home/user/documents&quot;)</span>
+<span class="sd">                doc = Document(name="MyDoc", alias="D")</span>
+<span class="sd">                doc.new("my_doc", "/home/user/documents")</span>
+<span class="sd">                # doc.file_data now points at the new document's main file</span>
 
 <span class="sd">                # Two-layer: base + variant (subclass sets VARIANT_TEMPLATE)</span>
-<span class="sd">                report = Report(name=&quot;AnnualReport&quot;, alias=&quot;AR&quot;)</span>
-<span class="sd">                target = report.new(&quot;annual_report&quot;, &quot;/home/user/documents&quot;)</span>
+<span class="sd">                report = Report(name="AnnualReport", alias="AR")</span>
+<span class="sd">                report.new("annual_report", "/home/user/documents")</span>
 
 <span class="sd">                # Three-layer: base + variant + private user overlay</span>
-<span class="sd">                target = report.new(</span>
-<span class="sd">                    &quot;client_report&quot;,</span>
-<span class="sd">                    &quot;/home/user/documents&quot;,</span>
-<span class="sd">                    template_overlay=&quot;/home/user/private/client_x&quot;,</span>
+<span class="sd">                report.new(</span>
+<span class="sd">                    "client_report",</span>
+<span class="sd">                    "/home/user/documents",</span>
+<span class="sd">                    template_overlay="/home/user/private/client_x",</span>
 <span class="sd">                )</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
+
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
 
         <span class="c1"># Resolve paths</span>
         <span class="c1"># --------------------------------------------------</span>
@@ -650,8 +696,8 @@
         <span class="c1"># --------------------------------------------------</span>
         <span class="k">if</span> <span class="n">target</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
             <span class="k">raise</span> <span class="ne">FileExistsError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Target folder already exists: &#39;</span><span class="si">{</span><span class="n">target</span><span class="si">}</span><span class="s2">&#39;. &quot;</span>
-                <span class="s2">&quot;Please provide a new document name or a different folder.&quot;</span>
+                <span class="sa">f</span><span class="s2">"Target folder already exists: '</span><span class="si">{</span><span class="n">target</span><span class="si">}</span><span class="s2">'. "</span>
+                <span class="s2">"Please provide a new document name or a different folder."</span>
             <span class="p">)</span>
 
         <span class="c1"># Validate template_overlay early, before doing any work</span>
@@ -660,14 +706,31 @@
             <span class="n">template_overlay</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">template_overlay</span><span class="p">)</span><span class="o">.</span><span class="n">absolute</span><span class="p">()</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">template_overlay</span><span class="o">.</span><span class="n">is_dir</span><span class="p">():</span>
                 <span class="k">raise</span> <span class="ne">NotADirectoryError</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;&#39;template_overlay&#39; is not a valid directory: &#39;</span><span class="si">{</span><span class="n">template_overlay</span><span class="si">}</span><span class="s2">&#39;&quot;</span>
+                    <span class="sa">f</span><span class="s2">"'template_overlay' is not a valid directory: '</span><span class="si">{</span><span class="n">template_overlay</span><span class="si">}</span><span class="s2">'"</span>
                 <span class="p">)</span>
 
         <span class="c1"># Collect relative files from a template root</span>
         <span class="c1"># --------------------------------------------------</span>
         <span class="k">def</span><span class="w"> </span><span class="nf">relative_files</span><span class="p">(</span><span class="n">root</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
-<span class="w">            </span><span class="sd">&quot;&quot;&quot;Returns {relative_path: absolute_path} for every file under root.&quot;&quot;&quot;</span>
-            <span class="k">return</span> <span class="p">{</span><span class="n">f</span><span class="o">.</span><span class="n">relative_to</span><span class="p">(</span><span class="n">root</span><span class="p">):</span> <span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">root</span><span class="o">.</span><span class="n">rglob</span><span class="p">(</span><span class="s2">&quot;*&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">is_file</span><span class="p">()}</span>
+<span class="w">            </span><span class="sd">"""Returns {relative_path: absolute_path} for every file under root."""</span>
+            <span class="k">return</span> <span class="p">{</span><span class="n">f</span><span class="o">.</span><span class="n">relative_to</span><span class="p">(</span><span class="n">root</span><span class="p">):</span> <span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">root</span><span class="o">.</span><span class="n">rglob</span><span class="p">(</span><span class="s2">"*"</span><span class="p">)</span> <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">is_file</span><span class="p">()}</span>
+
+        <span class="c1"># Walk the class's MRO base-to-derived, collecting every distinct</span>
+        <span class="c1"># VARIANT_TEMPLATE set directly on each ancestor (via __dict__, not</span>
+        <span class="c1"># inherited attribute resolution). Plain attribute lookup on</span>
+        <span class="c1"># self.VARIANT_TEMPLATE would only ever see the single value set by</span>
+        <span class="c1"># the most-derived class -- e.g. ProposalCommercial(Professional)</span>
+        <span class="c1"># would silently shadow Professional's own VARIANT_TEMPLATE instead</span>
+        <span class="c1"># of layering on top of it, breaking the base -&gt; variant -&gt; variant</span>
+        <span class="c1"># inheritance chain this method is meant to support.</span>
+        <span class="c1"># --------------------------------------------------</span>
+        <span class="n">variant_templates</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">seen</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">klass</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__mro__</span><span class="p">):</span>
+            <span class="n">variant</span> <span class="o">=</span> <span class="n">klass</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"VARIANT_TEMPLATE"</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">variant</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">variant</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">seen</span><span class="p">:</span>
+                <span class="n">variant_templates</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">variant</span><span class="p">)</span>
+                <span class="n">seen</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">variant</span><span class="p">)</span>
 
         <span class="c1"># Build each active layer; higher layers overwrite lower ones</span>
         <span class="c1"># --------------------------------------------------</span>
@@ -675,8 +738,8 @@
 
         <span class="n">merged</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">relative_files</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">BASE_TEMPLATE</span><span class="p">))</span>
 
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">VARIANT_TEMPLATE</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">merged</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">relative_files</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">VARIANT_TEMPLATE</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">variant_template</span> <span class="ow">in</span> <span class="n">variant_templates</span><span class="p">:</span>
+            <span class="n">merged</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">relative_files</span><span class="p">(</span><span class="n">variant_template</span><span class="p">))</span>
 
         <span class="k">if</span> <span class="n">template_overlay</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">merged</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">relative_files</span><span class="p">(</span><span class="n">template_overlay</span><span class="p">))</span>
@@ -688,7 +751,24 @@
             <span class="n">dest</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
             <span class="n">shutil</span><span class="o">.</span><span class="n">copy2</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">dest</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">target</span></div>
+        <span class="c1"># Locate the merged tree's entry file and load it in place</span>
+        <span class="c1"># --------------------------------------------------</span>
+        <span class="n">main_candidates</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">rel_path</span>
+            <span class="k">for</span> <span class="n">rel_path</span> <span class="ow">in</span> <span class="n">merged</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">rel_path</span><span class="o">.</span><span class="n">parts</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">rel_path</span><span class="o">.</span><span class="n">stem</span> <span class="o">==</span> <span class="s2">"main"</span>
+        <span class="p">]</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">main_candidates</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span>
+                <span class="s2">"Expected exactly one top-level 'main.*' file in the merged "</span>
+                <span class="sa">f</span><span class="s2">"template, found </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">main_candidates</span><span class="p">)</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">main_candidates</span><span class="si">}</span><span class="s2">. "</span>
+                <span class="s2">"Cannot determine which file to load."</span>
+            <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">load_data</span><span class="p">(</span><span class="n">target</span> <span class="o">/</span> <span class="n">main_candidates</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+        <span class="k">return</span> <span class="kc">None</span></div>
 </div>
 
 
@@ -700,25 +780,25 @@
 <div class="viewcode-block" id="DocumentTeX">
 <a class="viewcode-back" href="../../generated/losalamos.documents.html#losalamos.documents.DocumentTeX">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">DocumentTeX</span><span class="p">(</span><span class="n">Document</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Base class for all TeX-based document types.</span>
 
 <span class="sd">    Extends :class:`Document` with TeX-specific behaviour: main-file</span>
 <span class="sd">    detection, PDF compilation via ``latexmk``, and document flattening.</span>
 <span class="sd">    Subclasses set :attr:`VARIANT_TEMPLATE` to select their template layer.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
-    <span class="n">BASE_TEMPLATE</span> <span class="o">=</span> <span class="n">FOLDER_TEMPLATES_DOCUMENTS</span> <span class="o">/</span> <span class="s2">&quot;tex/base&quot;</span>
+    <span class="n">BASE_TEMPLATE</span> <span class="o">=</span> <span class="n">FOLDER_TEMPLATES_DOCUMENTS</span> <span class="o">/</span> <span class="s2">"tex/base"</span>
     <span class="n">VARIANT_TEMPLATE</span> <span class="o">=</span> <span class="kc">None</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;MyDocTeX&quot;</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s2">&quot;TeX&quot;</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">"MyDocTeX"</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s2">"TeX"</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="n">alias</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">is_main</span> <span class="o">=</span> <span class="kc">True</span>
 
 <div class="viewcode-block" id="DocumentTeX.load_data">
 <a class="viewcode-back" href="../../generated/losalamos.documents.html#losalamos.documents.DocumentTeX.load_data">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">load_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_data</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Load data from a TeX file and detect whether it is a main document.</span>
 
 <span class="sd">        A file is considered a main document if it contains a</span>
@@ -730,13 +810,13 @@
 <span class="sd">        :type file_data: str or pathlib.Path</span>
 <span class="sd">        :returns: None</span>
 <span class="sd">        :rtype: None</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">load_data</span><span class="p">(</span><span class="n">file_data</span><span class="p">)</span>
 
         <span class="c1"># Check if it is a main tex file (not a part)</span>
-        <span class="c1"># Using &#39;\documentclass&#39; as the standard marker for a main LaTeX file</span>
+        <span class="c1"># Using '\documentclass' as the standard marker for a main LaTeX file</span>
         <span class="c1"># --------------------------------------------------</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">is_main</span> <span class="o">=</span> <span class="nb">any</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\documentclass&quot;</span> <span class="ow">in</span> <span class="n">line</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">is_main</span> <span class="o">=</span> <span class="nb">any</span><span class="p">(</span><span class="sa">r</span><span class="s2">"\documentclass"</span> <span class="ow">in</span> <span class="n">line</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
 
         <span class="c1"># update</span>
         <span class="c1"># --------------------------------------------------</span>
@@ -747,15 +827,15 @@
 
 <div class="viewcode-block" id="DocumentTeX.to_pdf">
 <a class="viewcode-back" href="../../generated/losalamos.documents.html#losalamos.documents.DocumentTeX.to_pdf">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">to_pdf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_output</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cleanup</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">command</span><span class="o">=</span><span class="s2">&quot;pdf&quot;</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">to_pdf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_output</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cleanup</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">command</span><span class="o">=</span><span class="s2">"pdf"</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Compile the TeX document into a PDF using ``latexmk``.</span>
 
 <span class="sd">        Only executes when :attr:`is_main` is ``True``; partial files are</span>
 <span class="sd">        silently skipped.</span>
 
 <span class="sd">        The method temporarily switches the working directory to the source</span>
-<span class="sd">        file&#39;s parent folder before invoking ``latexmk``, ensuring that all</span>
+<span class="sd">        file's parent folder before invoking ``latexmk``, ensuring that all</span>
 <span class="sd">        relative paths in the document (``\\input``, ``\\include``, figures,</span>
 <span class="sd">        etc.) resolve correctly regardless of where the Python process was</span>
 <span class="sd">        launched from. The original working directory is always restored,</span>
@@ -775,12 +855,12 @@
 <span class="sd">            (equivalent to ``latexmk -c``).</span>
 <span class="sd">        :type cleanup: bool</span>
 <span class="sd">        :param command: ``latexmk`` engine flag controlling the PDF backend.</span>
-<span class="sd">            Common values: ``&quot;pdf&quot;`` (pdflatex), ``&quot;pdflua&quot;`` (lualatex),</span>
-<span class="sd">            ``&quot;pdfxe&quot;`` (xelatex).</span>
+<span class="sd">            Common values: ``"pdf"`` (pdflatex), ``"pdflua"`` (lualatex),</span>
+<span class="sd">            ``"pdfxe"`` (xelatex).</span>
 <span class="sd">        :type command: str</span>
 <span class="sd">        :returns: None</span>
 <span class="sd">        :rtype: None</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_main</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">None</span>
 
@@ -788,7 +868,7 @@
 
         <span class="n">source</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_data</span><span class="o">.</span><span class="n">absolute</span><span class="p">()</span>
         <span class="n">source_dir</span> <span class="o">=</span> <span class="n">source</span><span class="o">.</span><span class="n">parent</span>
-        <span class="n">latexmkrc</span> <span class="o">=</span> <span class="n">source_dir</span> <span class="o">/</span> <span class="s2">&quot;latexmkrc&quot;</span>
+        <span class="n">latexmkrc</span> <span class="o">=</span> <span class="n">source_dir</span> <span class="o">/</span> <span class="s2">"latexmkrc"</span>
         <span class="n">original_dir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">())</span>
 
         <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">source_dir</span><span class="p">)</span>
@@ -796,11 +876,11 @@
         <span class="k">try</span><span class="p">:</span>
             <span class="c1"># Compile</span>
             <span class="c1"># --------------------------------------------------</span>
-            <span class="n">compile_cmd</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;latexmk&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;-</span><span class="si">{</span><span class="n">command</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span>
+            <span class="n">compile_cmd</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"latexmk"</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"-</span><span class="si">{</span><span class="n">command</span><span class="si">}</span><span class="s2">"</span><span class="p">]</span>
 
             <span class="c1"># Use project-local latexmkrc if present</span>
             <span class="k">if</span> <span class="n">latexmkrc</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
-                <span class="n">compile_cmd</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;-r&quot;</span><span class="p">,</span> <span class="s2">&quot;latexmkrc&quot;</span><span class="p">]</span>
+                <span class="n">compile_cmd</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">"-r"</span><span class="p">,</span> <span class="s2">"latexmkrc"</span><span class="p">]</span>
 
             <span class="n">compile_cmd</span> <span class="o">+=</span> <span class="p">[</span><span class="n">source</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>
 
@@ -808,7 +888,7 @@
 
             <span class="c1"># Handle output destination</span>
             <span class="c1"># --------------------------------------------------</span>
-            <span class="n">default_pdf</span> <span class="o">=</span> <span class="n">source</span><span class="o">.</span><span class="n">with_suffix</span><span class="p">(</span><span class="s2">&quot;.pdf&quot;</span><span class="p">)</span>
+            <span class="n">default_pdf</span> <span class="o">=</span> <span class="n">source</span><span class="o">.</span><span class="n">with_suffix</span><span class="p">(</span><span class="s2">".pdf"</span><span class="p">)</span>
 
             <span class="k">if</span> <span class="n">file_output</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">target_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">file_output</span><span class="p">)</span><span class="o">.</span><span class="n">absolute</span><span class="p">()</span>
@@ -818,32 +898,32 @@
             <span class="c1"># Cleanup auxiliary files</span>
             <span class="c1"># --------------------------------------------------</span>
             <span class="k">if</span> <span class="n">cleanup</span><span class="p">:</span>
-                <span class="n">cleanup_cmd</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;latexmk&quot;</span><span class="p">,</span> <span class="s2">&quot;-c&quot;</span><span class="p">]</span>
+                <span class="n">cleanup_cmd</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"latexmk"</span><span class="p">,</span> <span class="s2">"-c"</span><span class="p">]</span>
                 <span class="k">if</span> <span class="n">latexmkrc</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
-                    <span class="n">cleanup_cmd</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;-r&quot;</span><span class="p">,</span> <span class="s2">&quot;latexmkrc&quot;</span><span class="p">]</span>
+                    <span class="n">cleanup_cmd</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">"-r"</span><span class="p">,</span> <span class="s2">"latexmkrc"</span><span class="p">]</span>
                 <span class="n">cleanup_cmd</span> <span class="o">+=</span> <span class="p">[</span><span class="n">source</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>
                 <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cleanup_cmd</span><span class="p">,</span> <span class="n">check</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
                 <span class="c1"># Manual sweep for files latexmk -c never tracks</span>
                 <span class="n">_extra_suffixes</span> <span class="o">=</span> <span class="p">{</span>
-                    <span class="s2">&quot;.bbl&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;.bcf&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;.run.xml&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;.glo&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;.gls&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;.glg&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;.acn&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;.acr&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;.alg&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;.nlo&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;.nls&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;.nlg&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;.ist&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;.maf&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;.mtc&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;.mtc0&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;.lol&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;.lob&quot;</span><span class="p">,</span>
+                    <span class="s2">".bbl"</span><span class="p">,</span>
+                    <span class="s2">".bcf"</span><span class="p">,</span>
+                    <span class="s2">".run.xml"</span><span class="p">,</span>
+                    <span class="s2">".glo"</span><span class="p">,</span>
+                    <span class="s2">".gls"</span><span class="p">,</span>
+                    <span class="s2">".glg"</span><span class="p">,</span>
+                    <span class="s2">".acn"</span><span class="p">,</span>
+                    <span class="s2">".acr"</span><span class="p">,</span>
+                    <span class="s2">".alg"</span><span class="p">,</span>
+                    <span class="s2">".nlo"</span><span class="p">,</span>
+                    <span class="s2">".nls"</span><span class="p">,</span>
+                    <span class="s2">".nlg"</span><span class="p">,</span>
+                    <span class="s2">".ist"</span><span class="p">,</span>
+                    <span class="s2">".maf"</span><span class="p">,</span>
+                    <span class="s2">".mtc"</span><span class="p">,</span>
+                    <span class="s2">".mtc0"</span><span class="p">,</span>
+                    <span class="s2">".lol"</span><span class="p">,</span>
+                    <span class="s2">".lob"</span><span class="p">,</span>
                 <span class="p">}</span>
                 <span class="n">stem</span> <span class="o">=</span> <span class="n">source</span><span class="o">.</span><span class="n">stem</span>
                 <span class="k">for</span> <span class="n">suffix</span> <span class="ow">in</span> <span class="n">_extra_suffixes</span><span class="p">:</span>
@@ -859,8 +939,8 @@
 
 <div class="viewcode-block" id="DocumentTeX.to_flat">
 <a class="viewcode-back" href="../../generated/losalamos.documents.html#losalamos.documents.DocumentTeX.to_flat">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">to_flat</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_output</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">compile_first</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">command</span><span class="o">=</span><span class="s2">&quot;pdf&quot;</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">to_flat</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_output</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">compile_first</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">command</span><span class="o">=</span><span class="s2">"pdf"</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Flatten the TeX document by recursively resolving ``\\input`` /</span>
 <span class="sd">        ``\\include`` directives and embedding the compiled bibliography.</span>
 
@@ -879,10 +959,9 @@
 <span class="sd">        :param command: ``latexmk`` engine flag passed to :meth:`to_pdf` when</span>
 <span class="sd">            ``compile_first=True``.</span>
 <span class="sd">        :type command: str</span>
-<span class="sd">        :returns: The fully flattened LaTeX document as a string, or ``None``</span>
-<span class="sd">            if :attr:`is_main` is ``False``.</span>
+<span class="sd">        :returns: ``None``</span>
 <span class="sd">        :rtype: str or None</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_main</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">None</span>
 
@@ -893,21 +972,21 @@
             <span class="n">Path</span><span class="p">(</span><span class="n">file_output</span><span class="p">)</span><span class="o">.</span><span class="n">absolute</span><span class="p">()</span> <span class="k">if</span> <span class="n">file_output</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_data</span>
         <span class="p">)</span>
 
-        <span class="n">flat_content</span> <span class="o">=</span> <span class="n">DocumentTeX</span><span class="o">.</span><span class="n">make_flat</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">file_data</span><span class="p">,</span> <span class="n">output_tex</span><span class="o">=</span><span class="n">output_tex</span><span class="p">)</span>
+        <span class="n">DocumentTeX</span><span class="o">.</span><span class="n">make_flat</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">file_data</span><span class="p">,</span> <span class="n">output_tex</span><span class="o">=</span><span class="n">output_tex</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">compile_first</span><span class="p">:</span>
-            <span class="k">for</span> <span class="n">suffix</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;.bbl&quot;</span><span class="p">,</span> <span class="s2">&quot;.pdf&quot;</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">suffix</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">".bbl"</span><span class="p">,</span> <span class="s2">".pdf"</span><span class="p">):</span>
                 <span class="n">p</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_data</span><span class="o">.</span><span class="n">with_suffix</span><span class="p">(</span><span class="n">suffix</span><span class="p">)</span>
                 <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
                     <span class="n">p</span><span class="o">.</span><span class="n">unlink</span><span class="p">()</span>
 
-        <span class="k">return</span> <span class="n">flat_content</span></div>
+        <span class="k">return</span> <span class="kc">None</span></div>
 
 
 <div class="viewcode-block" id="DocumentTeX.export">
 <a class="viewcode-back" href="../../generated/losalamos.documents.html#losalamos.documents.DocumentTeX.export">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">export</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">folder_root</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">flatten</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">split</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">export</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">folder_root</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">flatten</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">split</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">zip_export</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Export the TeX document to a self-contained folder.</span>
 
 <span class="sd">        Creates ``folder_root/name/`` and writes the document into it</span>
@@ -917,11 +996,17 @@
 <span class="sd">          copied as-is, retaining its original filename.</span>
 <span class="sd">        - **Flatten** (``flatten=True``, ``split=False``): ``\\input`` /</span>
 <span class="sd">          ``\\include`` directives are resolved recursively and the result is</span>
-<span class="sd">          written as a single file named ``&lt;name&gt;.tex``.</span>
-<span class="sd">        - **Split** (``split=True``): implies flattening. The document is</span>
-<span class="sd">          first flattened into a temporary file, then split into</span>
-<span class="sd">          ``preamble.tex`` and ``main.tex``. The intermediate flat file is</span>
-<span class="sd">          removed after splitting.</span>
+<span class="sd">          written as a single file named ``&lt;name&gt;.tex``. Every image</span>
+<span class="sd">          (``\\includegraphics``) and bibliography resource</span>
+<span class="sd">          (``\\addbibresource``) referenced anywhere in the document tree</span>
+<span class="sd">          is also copied alongside, preserving its path relative to the</span>
+<span class="sd">          original project root so the (unmodified) references in the</span>
+<span class="sd">          flattened text keep resolving correctly.</span>
+<span class="sd">        - **Split** (``split=True``): implies flattening, with the same</span>
+<span class="sd">          image/bibliography-resource copying described above. The</span>
+<span class="sd">          document is first flattened into a temporary file, then split</span>
+<span class="sd">          into ``preamble.tex`` and ``main.tex``. The intermediate flat</span>
+<span class="sd">          file is removed after splitting.</span>
 
 <span class="sd">        :param folder_root: Parent directory under which the export folder</span>
 <span class="sd">            is created.</span>
@@ -937,22 +1022,33 @@
 <span class="sd">            into ``preamble.tex`` and ``main.tex``. Takes precedence over</span>
 <span class="sd">            ``flatten``.</span>
 <span class="sd">        :type split: bool</span>
-<span class="sd">        :returns: Path to the created export folder.</span>
+<span class="sd">        :param zip_export: If ``True``, additionally packages the export</span>
+<span class="sd">            folder's contents into a ``.zip`` archive at</span>
+<span class="sd">            ``folder_root/&lt;name&gt;.zip``. Files are placed at the archive's</span>
+<span class="sd">            root -- not nested inside a ``&lt;name&gt;/`` folder -- so the zip</span>
+<span class="sd">            can be dropped directly into Overleaf's "Upload Project" (or</span>
+<span class="sd">            any other single-archive project import) without any manual</span>
+<span class="sd">            restructuring first. The uncompressed export folder is left</span>
+<span class="sd">            in place alongside it either way.</span>
+<span class="sd">        :type zip_export: bool</span>
+<span class="sd">        :returns: Path to the created export folder. When ``zip_export``</span>
+<span class="sd">            is ``True``, the archive sits alongside it at</span>
+<span class="sd">            ``folder_root/&lt;name&gt;.zip``.</span>
 <span class="sd">        :rtype: pathlib.Path</span>
 <span class="sd">        :raises RuntimeError: If the document is not a main file (i.e.</span>
 <span class="sd">            ``\\documentclass`` is absent). The ``is_main`` attribute is</span>
 <span class="sd">            re-evaluated from ``file_data`` before the check so stale state</span>
 <span class="sd">            does not produce a false negative.</span>
 <span class="sd">        :raises FileExistsError: If ``folder_root/name`` already exists.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="c1"># Re-evaluate is_main from file_data to avoid stale state</span>
         <span class="c1"># --------------------------------------------------</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">is_main</span> <span class="o">=</span> <span class="nb">any</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\documentclass&quot;</span> <span class="ow">in</span> <span class="n">line</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">is_main</span> <span class="o">=</span> <span class="nb">any</span><span class="p">(</span><span class="sa">r</span><span class="s2">"\documentclass"</span> <span class="ow">in</span> <span class="n">line</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_main</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Cannot export &#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">file_data</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39;: file has no &quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">documentclass declaration and is not a main TeX document.&quot;</span>
+                <span class="sa">f</span><span class="s2">"Cannot export '</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">file_data</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">': file has no "</span>
+                <span class="sa">f</span><span class="s2">"</span><span class="se">\\</span><span class="s2">documentclass declaration and is not a main TeX document."</span>
             <span class="p">)</span>
 
         <span class="c1"># Resolve and guard the export folder</span>
@@ -962,8 +1058,8 @@
 
         <span class="k">if</span> <span class="n">export_dir</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
             <span class="k">raise</span> <span class="ne">FileExistsError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Export folder already exists: &#39;</span><span class="si">{</span><span class="n">export_dir</span><span class="si">}</span><span class="s2">&#39;. &quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;Provide a different name or remove the existing folder.&quot;</span>
+                <span class="sa">f</span><span class="s2">"Export folder already exists: '</span><span class="si">{</span><span class="n">export_dir</span><span class="si">}</span><span class="s2">'. "</span>
+                <span class="sa">f</span><span class="s2">"Provide a different name or remove the existing folder."</span>
             <span class="p">)</span>
 
         <span class="n">export_dir</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -973,19 +1069,34 @@
         <span class="k">if</span> <span class="n">split</span><span class="p">:</span>
             <span class="c1"># Flatten to a temp file inside the export folder, then split</span>
             <span class="c1"># and remove the intermediate flat file</span>
-            <span class="n">flat_file</span> <span class="o">=</span> <span class="n">export_dir</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;_</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">_flat.tex&quot;</span>
-            <span class="n">DocumentTeX</span><span class="o">.</span><span class="n">make_flat</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">file_data</span><span class="p">,</span> <span class="n">output_tex</span><span class="o">=</span><span class="n">flat_file</span><span class="p">)</span>
+            <span class="n">flat_file</span> <span class="o">=</span> <span class="n">export_dir</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">"_</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">_flat.tex"</span>
+            <span class="n">assets</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+            <span class="n">DocumentTeX</span><span class="o">.</span><span class="n">make_flat</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">file_data</span><span class="p">,</span> <span class="n">output_tex</span><span class="o">=</span><span class="n">flat_file</span><span class="p">,</span> <span class="n">assets</span><span class="o">=</span><span class="n">assets</span><span class="p">)</span>
             <span class="n">DocumentTeX</span><span class="o">.</span><span class="n">split_preamble</span><span class="p">(</span><span class="n">flat_file</span><span class="p">,</span> <span class="n">output_folder</span><span class="o">=</span><span class="n">export_dir</span><span class="p">)</span>
             <span class="n">flat_file</span><span class="o">.</span><span class="n">unlink</span><span class="p">()</span>
+            <span class="n">DocumentTeX</span><span class="o">.</span><span class="n">_copy_assets</span><span class="p">(</span><span class="n">assets</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_data</span><span class="o">.</span><span class="n">parent</span><span class="p">,</span> <span class="n">export_dir</span><span class="p">)</span>
 
         <span class="k">elif</span> <span class="n">flatten</span><span class="p">:</span>
             <span class="c1"># Single merged file named after the export folder</span>
-            <span class="n">output_tex</span> <span class="o">=</span> <span class="n">export_dir</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">.tex&quot;</span>
-            <span class="n">DocumentTeX</span><span class="o">.</span><span class="n">make_flat</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">file_data</span><span class="p">,</span> <span class="n">output_tex</span><span class="o">=</span><span class="n">output_tex</span><span class="p">)</span>
+            <span class="n">output_tex</span> <span class="o">=</span> <span class="n">export_dir</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">.tex"</span>
+            <span class="n">assets</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+            <span class="n">DocumentTeX</span><span class="o">.</span><span class="n">make_flat</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">file_data</span><span class="p">,</span> <span class="n">output_tex</span><span class="o">=</span><span class="n">output_tex</span><span class="p">,</span> <span class="n">assets</span><span class="o">=</span><span class="n">assets</span><span class="p">)</span>
+            <span class="n">DocumentTeX</span><span class="o">.</span><span class="n">_copy_assets</span><span class="p">(</span><span class="n">assets</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_data</span><span class="o">.</span><span class="n">parent</span><span class="p">,</span> <span class="n">export_dir</span><span class="p">)</span>
 
         <span class="k">else</span><span class="p">:</span>
             <span class="c1"># Plain copy, original filename retained</span>
             <span class="n">shutil</span><span class="o">.</span><span class="n">copy2</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">file_data</span><span class="p">,</span> <span class="n">export_dir</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_data</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+
+        <span class="c1"># Optional zip archive, contents at the archive root (no wrapping</span>
+        <span class="c1"># folder) so it can be dropped straight into Overleaf's project</span>
+        <span class="c1"># importer or similar</span>
+        <span class="c1"># --------------------------------------------------</span>
+        <span class="k">if</span> <span class="n">zip_export</span><span class="p">:</span>
+            <span class="n">shutil</span><span class="o">.</span><span class="n">make_archive</span><span class="p">(</span>
+                <span class="n">base_name</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">folder_root</span> <span class="o">/</span> <span class="n">name</span><span class="p">),</span>
+                <span class="nb">format</span><span class="o">=</span><span class="s2">"zip"</span><span class="p">,</span>
+                <span class="n">root_dir</span><span class="o">=</span><span class="n">export_dir</span><span class="p">,</span>
+            <span class="p">)</span>
 
         <span class="k">return</span> <span class="n">export_dir</span></div>
 
@@ -994,9 +1105,9 @@
 <a class="viewcode-back" href="../../generated/losalamos.documents.html#losalamos.documents.DocumentTeX.split_preamble">[docs]</a>
     <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">split_preamble</span><span class="p">(</span>
-        <span class="n">input_tex</span><span class="p">,</span> <span class="n">preamble_name</span><span class="o">=</span><span class="s2">&quot;preamble&quot;</span><span class="p">,</span> <span class="n">main_name</span><span class="o">=</span><span class="s2">&quot;main&quot;</span><span class="p">,</span> <span class="n">output_folder</span><span class="o">=</span><span class="kc">None</span>
+        <span class="n">input_tex</span><span class="p">,</span> <span class="n">preamble_name</span><span class="o">=</span><span class="s2">"preamble"</span><span class="p">,</span> <span class="n">main_name</span><span class="o">=</span><span class="s2">"main"</span><span class="p">,</span> <span class="n">output_folder</span><span class="o">=</span><span class="kc">None</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Split a main TeX file into a preamble fragment and a stub main file.</span>
 
 <span class="sd">        The preamble fragment receives everything between the</span>
@@ -1026,10 +1137,10 @@
 <span class="sd">            ``\\begin{document}``.</span>
 <span class="sd">        :type input_tex: str or pathlib.Path</span>
 <span class="sd">        :param preamble_name: Stem for the preamble output file, without</span>
-<span class="sd">            extension. Defaults to ``&quot;preamble&quot;``.</span>
+<span class="sd">            extension. Defaults to ``"preamble"``.</span>
 <span class="sd">        :type preamble_name: str</span>
 <span class="sd">        :param main_name: Stem for the stub main output file, without</span>
-<span class="sd">            extension. Defaults to ``&quot;main&quot;``.</span>
+<span class="sd">            extension. Defaults to ``"main"``.</span>
 <span class="sd">        :type main_name: str</span>
 <span class="sd">        :param output_folder: Directory where both output files are written.</span>
 <span class="sd">            When ``None`` (default), the parent directory of ``input_tex``</span>
@@ -1042,7 +1153,7 @@
 <span class="sd">            ``\\documentclass`` declaration (i.e. is not a main TeX file),</span>
 <span class="sd">            if ``\\begin{document}`` is not found, or if the input file stem</span>
 <span class="sd">            matches an output stem when both resolve to the same directory.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">input_tex</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">input_tex</span><span class="p">)</span><span class="o">.</span><span class="n">absolute</span><span class="p">()</span>
         <span class="n">output_folder</span> <span class="o">=</span> <span class="p">(</span>
             <span class="n">Path</span><span class="p">(</span><span class="n">output_folder</span><span class="p">)</span><span class="o">.</span><span class="n">absolute</span><span class="p">()</span>
@@ -1056,17 +1167,17 @@
             <span class="k">for</span> <span class="n">candidate</span> <span class="ow">in</span> <span class="p">(</span><span class="n">preamble_name</span><span class="p">,</span> <span class="n">main_name</span><span class="p">):</span>
                 <span class="k">if</span> <span class="n">input_tex</span><span class="o">.</span><span class="n">stem</span> <span class="o">==</span> <span class="n">candidate</span><span class="p">:</span>
                     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                        <span class="sa">f</span><span class="s2">&quot;Input file stem &#39;</span><span class="si">{</span><span class="n">input_tex</span><span class="o">.</span><span class="n">stem</span><span class="si">}</span><span class="s2">&#39; matches output name &quot;</span>
-                        <span class="sa">f</span><span class="s2">&quot;&#39;</span><span class="si">{</span><span class="n">candidate</span><span class="si">}</span><span class="s2">&#39; in the same directory &#39;</span><span class="si">{</span><span class="n">output_folder</span><span class="si">}</span><span class="s2">&#39;. &quot;</span>
-                        <span class="sa">f</span><span class="s2">&quot;Provide a different output_folder or rename the output.&quot;</span>
+                        <span class="sa">f</span><span class="s2">"Input file stem '</span><span class="si">{</span><span class="n">input_tex</span><span class="o">.</span><span class="n">stem</span><span class="si">}</span><span class="s2">' matches output name "</span>
+                        <span class="sa">f</span><span class="s2">"'</span><span class="si">{</span><span class="n">candidate</span><span class="si">}</span><span class="s2">' in the same directory '</span><span class="si">{</span><span class="n">output_folder</span><span class="si">}</span><span class="s2">'. "</span>
+                        <span class="sa">f</span><span class="s2">"Provide a different output_folder or rename the output."</span>
                     <span class="p">)</span>
 
-        <span class="n">preamble_path</span> <span class="o">=</span> <span class="n">output_folder</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">preamble_name</span><span class="si">}</span><span class="s2">.tex&quot;</span>
-        <span class="n">main_path</span> <span class="o">=</span> <span class="n">output_folder</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">main_name</span><span class="si">}</span><span class="s2">.tex&quot;</span>
+        <span class="n">preamble_path</span> <span class="o">=</span> <span class="n">output_folder</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">preamble_name</span><span class="si">}</span><span class="s2">.tex"</span>
+        <span class="n">main_path</span> <span class="o">=</span> <span class="n">output_folder</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">main_name</span><span class="si">}</span><span class="s2">.tex"</span>
 
         <span class="c1"># Parse the source file</span>
         <span class="c1"># --------------------------------------------------</span>
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">input_tex</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">input_tex</span><span class="p">,</span> <span class="s2">"r"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
             <span class="n">lines</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
 
         <span class="c1"># Locate structural boundaries</span>
@@ -1076,21 +1187,21 @@
 
         <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">lines</span><span class="p">):</span>
             <span class="n">stripped</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
-            <span class="k">if</span> <span class="n">stripped</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;%&quot;</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">stripped</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">"%"</span><span class="p">):</span>
                 <span class="k">continue</span>
-            <span class="k">if</span> <span class="n">idx_documentclass</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">stripped</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\documentclass&quot;</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">idx_documentclass</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">stripped</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="sa">r</span><span class="s2">"\documentclass"</span><span class="p">):</span>
                 <span class="n">idx_documentclass</span> <span class="o">=</span> <span class="n">i</span>
-            <span class="k">if</span> <span class="n">stripped</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\begin</span><span class="si">{document}</span><span class="s2">&quot;</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">stripped</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="sa">r</span><span class="s2">"\begin</span><span class="si">{document}</span><span class="s2">"</span><span class="p">):</span>
                 <span class="n">idx_begin_document</span> <span class="o">=</span> <span class="n">i</span>
                 <span class="k">break</span>
 
         <span class="k">if</span> <span class="n">idx_documentclass</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;No </span><span class="se">\\</span><span class="s2">documentclass declaration found in &#39;</span><span class="si">{</span><span class="n">input_tex</span><span class="si">}</span><span class="s2">&#39;. &quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;Only main TeX files can be split.&quot;</span>
+                <span class="sa">f</span><span class="s2">"No </span><span class="se">\\</span><span class="s2">documentclass declaration found in '</span><span class="si">{</span><span class="n">input_tex</span><span class="si">}</span><span class="s2">'. "</span>
+                <span class="sa">f</span><span class="s2">"Only main TeX files can be split."</span>
             <span class="p">)</span>
         <span class="k">if</span> <span class="n">idx_begin_document</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No </span><span class="se">\\</span><span class="s2">begin</span><span class="se">{{</span><span class="s2">document</span><span class="se">}}</span><span class="s2"> found in &#39;</span><span class="si">{</span><span class="n">input_tex</span><span class="si">}</span><span class="s2">&#39;.&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"No </span><span class="se">\\</span><span class="s2">begin</span><span class="se">{{</span><span class="s2">document</span><span class="se">}}</span><span class="s2"> found in '</span><span class="si">{</span><span class="n">input_tex</span><span class="si">}</span><span class="s2">'."</span><span class="p">)</span>
 
         <span class="c1"># Slice into regions</span>
         <span class="c1"># --------------------------------------------------</span>
@@ -1104,24 +1215,24 @@
 
         <span class="c1"># Build preamble file: raw block, stripped of leading/trailing blank lines</span>
         <span class="c1"># --------------------------------------------------</span>
-        <span class="n">preamble_content</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">preamble_lines</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="n">preamble_content</span> <span class="o">=</span> <span class="s2">""</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">preamble_lines</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="o">+</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span>
 
         <span class="c1"># Build main file: documentclass + blank + \input{preamble} + blank + body</span>
         <span class="c1"># --------------------------------------------------</span>
         <span class="n">main_content</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">before_preamble</span><span class="p">)</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-            <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span>
-            <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">input</span><span class="se">{{</span><span class="si">{</span><span class="n">preamble_name</span><span class="si">}</span><span class="se">}}</span><span class="s2">&quot;</span>
-            <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span>
-            <span class="o">+</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">after_preamble</span><span class="p">)</span>
+            <span class="s2">""</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">before_preamble</span><span class="p">)</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
+            <span class="o">+</span> <span class="s2">"</span><span class="se">\n\n</span><span class="s2">"</span>
+            <span class="o">+</span> <span class="sa">f</span><span class="s2">"</span><span class="se">\\</span><span class="s2">input</span><span class="se">{{</span><span class="si">{</span><span class="n">preamble_name</span><span class="si">}</span><span class="se">}}</span><span class="s2">"</span>
+            <span class="o">+</span> <span class="s2">"</span><span class="se">\n\n</span><span class="s2">"</span>
+            <span class="o">+</span> <span class="s2">""</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">after_preamble</span><span class="p">)</span>
         <span class="p">)</span>
 
         <span class="c1"># Write outputs</span>
         <span class="c1"># --------------------------------------------------</span>
         <span class="n">output_folder</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-        <span class="n">preamble_path</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="n">preamble_content</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
-        <span class="n">main_path</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="n">main_content</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
+        <span class="n">preamble_path</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="n">preamble_content</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span>
+        <span class="n">main_path</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="n">main_content</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">preamble_path</span><span class="p">,</span> <span class="n">main_path</span></div>
 
@@ -1129,8 +1240,8 @@
 <div class="viewcode-block" id="DocumentTeX.make_flat">
 <a class="viewcode-back" href="../../generated/losalamos.documents.html#losalamos.documents.DocumentTeX.make_flat">[docs]</a>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">make_flat</span><span class="p">(</span><span class="n">input_tex</span><span class="p">,</span> <span class="n">output_tex</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">make_flat</span><span class="p">(</span><span class="n">input_tex</span><span class="p">,</span> <span class="n">output_tex</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">assets</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Flatten a TeX document by recursively resolving ``\\input`` /</span>
 <span class="sd">        ``\\include`` directives and embedding the compiled bibliography.</span>
 
@@ -1144,54 +1255,133 @@
 <span class="sd">            ``None`` (default), the result is written back over the source</span>
 <span class="sd">            file in-place.</span>
 <span class="sd">        :type output_tex: str or pathlib.Path or None</span>
+<span class="sd">        :param assets: Optional set, populated as a side effect with the</span>
+<span class="sd">            resolved absolute paths of every image (``\\includegraphics``)</span>
+<span class="sd">            and bibliography resource (``\\addbibresource``) referenced</span>
+<span class="sd">            anywhere in the document tree. Unlike ``\\bibliography``</span>
+<span class="sd">            (see below), ``\\addbibresource`` references are left</span>
+<span class="sd">            untouched in the flattened text -- biblatex/biber still needs</span>
+<span class="sd">            to read the raw ``.bib`` file after flattening -- so this is</span>
+<span class="sd">            the only way to learn which files must travel alongside the</span>
+<span class="sd">            flattened output. When ``None`` (default), no collection is</span>
+<span class="sd">            performed. Paths that can't be found on disk (e.g. images</span>
+<span class="sd">            resolved via TeX's own search path rather than the project</span>
+<span class="sd">            tree, such as the ``example-image-*`` placeholders) are never</span>
+<span class="sd">            added.</span>
+<span class="sd">        :type assets: set or None</span>
 <span class="sd">        :returns: The fully flattened LaTeX source as a string.</span>
 <span class="sd">        :rtype: str</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">input_tex</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">input_tex</span><span class="p">)</span><span class="o">.</span><span class="n">absolute</span><span class="p">()</span>
         <span class="n">output_tex</span> <span class="o">=</span> <span class="p">(</span>
             <span class="n">Path</span><span class="p">(</span><span class="n">output_tex</span><span class="p">)</span><span class="o">.</span><span class="n">absolute</span><span class="p">()</span> <span class="k">if</span> <span class="n">output_tex</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">input_tex</span>
         <span class="p">)</span>
 
         <span class="k">def</span><span class="w"> </span><span class="nf">_flatten_recursive</span><span class="p">(</span><span class="n">current_path</span><span class="p">):</span>
-            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">current_path</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">current_path</span><span class="p">,</span> <span class="s2">"r"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
                 <span class="n">content</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
 
-            <span class="n">pattern_input</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">(?:input|include)\s*\{\s*([^}]+)\s*\}&quot;</span><span class="p">)</span>
+            <span class="n">pattern_input</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">"</span><span class="se">\\</span><span class="s2">(?:input|include)\s*\{\s*([^}]+)\s*\}"</span><span class="p">)</span>
 
             <span class="k">def</span><span class="w"> </span><span class="nf">replace_input</span><span class="p">(</span><span class="n">match</span><span class="p">):</span>
                 <span class="n">target_file</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
-                <span class="k">if</span> <span class="ow">not</span> <span class="n">target_file</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.tex&quot;</span><span class="p">):</span>
-                    <span class="n">target_file</span> <span class="o">+=</span> <span class="s2">&quot;.tex&quot;</span>
-                <span class="k">return</span> <span class="n">_flatten_recursive</span><span class="p">(</span><span class="n">current_path</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="n">target_file</span><span class="p">)</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">target_file</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">".tex"</span><span class="p">):</span>
+                    <span class="n">target_file</span> <span class="o">+=</span> <span class="s2">".tex"</span>
+                <span class="c1"># \input/\include paths in LaTeX always resolve relative to the</span>
+                <span class="c1"># root document's directory, regardless of nesting depth -- so</span>
+                <span class="c1"># this must anchor on input_tex.parent, not current_path.parent.</span>
+                <span class="k">return</span> <span class="n">_flatten_recursive</span><span class="p">(</span><span class="n">input_tex</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="n">target_file</span><span class="p">)</span>
 
             <span class="n">content</span> <span class="o">=</span> <span class="n">pattern_input</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="n">replace_input</span><span class="p">,</span> <span class="n">content</span><span class="p">)</span>
 
-            <span class="n">pattern_bib</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">bibliography\s*\{\s*([^}]+)\s*\}&quot;</span><span class="p">)</span>
+            <span class="n">pattern_bib</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">"</span><span class="se">\\</span><span class="s2">bibliography\s*\{\s*([^}]+)\s*\}"</span><span class="p">)</span>
 
             <span class="k">def</span><span class="w"> </span><span class="nf">replace_bib</span><span class="p">(</span><span class="n">match</span><span class="p">):</span>
-                <span class="n">bbl_path</span> <span class="o">=</span> <span class="n">input_tex</span><span class="o">.</span><span class="n">with_suffix</span><span class="p">(</span><span class="s2">&quot;.bbl&quot;</span><span class="p">)</span>
+                <span class="n">bbl_path</span> <span class="o">=</span> <span class="n">input_tex</span><span class="o">.</span><span class="n">with_suffix</span><span class="p">(</span><span class="s2">".bbl"</span><span class="p">)</span>
                 <span class="k">if</span> <span class="n">bbl_path</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
-                    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">bbl_path</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">bbl_file</span><span class="p">:</span>
+                    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">bbl_path</span><span class="p">,</span> <span class="s2">"r"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span> <span class="k">as</span> <span class="n">bbl_file</span><span class="p">:</span>
                         <span class="k">return</span> <span class="n">bbl_file</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
                 <span class="k">return</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
 
             <span class="n">content</span> <span class="o">=</span> <span class="n">pattern_bib</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="n">replace_bib</span><span class="p">,</span> <span class="n">content</span><span class="p">)</span>
 
+            <span class="k">if</span> <span class="n">assets</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="c1"># \addbibresource{...} (biblatex) -- left in place in the</span>
+                <span class="c1"># flattened text (biber still needs the raw .bib file after</span>
+                <span class="c1"># flattening), so only the path is collected here.</span>
+                <span class="n">pattern_addbibresource</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
+                    <span class="sa">r</span><span class="s2">"</span><span class="se">\\</span><span class="s2">addbibresource\s*\{\s*([^}]+)\s*\}"</span>
+                <span class="p">)</span>
+                <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">pattern_addbibresource</span><span class="o">.</span><span class="n">finditer</span><span class="p">(</span><span class="n">content</span><span class="p">):</span>
+                    <span class="n">target</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="n">target</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">".bib"</span><span class="p">):</span>
+                        <span class="n">target</span> <span class="o">+=</span> <span class="s2">".bib"</span>
+                    <span class="n">candidate</span> <span class="o">=</span> <span class="n">input_tex</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="n">target</span>
+                    <span class="k">if</span> <span class="n">candidate</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+                        <span class="n">assets</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">candidate</span><span class="p">)</span>
+
+                <span class="c1"># \includegraphics[...]{...} -- the extension is frequently</span>
+                <span class="c1"># omitted (LaTeX searches \Gin@extensions at compile time),</span>
+                <span class="c1"># so every existing file matching that stem is collected.</span>
+                <span class="n">pattern_includegraphics</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
+                    <span class="sa">r</span><span class="s2">"</span><span class="se">\\</span><span class="s2">includegraphics\s*(?:\[[^\]]*\])?\s*\{\s*([^}]+)\s*\}"</span>
+                <span class="p">)</span>
+                <span class="n">_image_extensions</span> <span class="o">=</span> <span class="p">(</span><span class="s2">".pdf"</span><span class="p">,</span> <span class="s2">".png"</span><span class="p">,</span> <span class="s2">".jpg"</span><span class="p">,</span> <span class="s2">".jpeg"</span><span class="p">,</span> <span class="s2">".eps"</span><span class="p">,</span> <span class="s2">".gif"</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">pattern_includegraphics</span><span class="o">.</span><span class="n">finditer</span><span class="p">(</span><span class="n">content</span><span class="p">):</span>
+                    <span class="n">target</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                    <span class="n">candidate</span> <span class="o">=</span> <span class="n">input_tex</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="n">target</span>
+                    <span class="k">if</span> <span class="n">candidate</span><span class="o">.</span><span class="n">suffix</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">candidate</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+                            <span class="n">assets</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">candidate</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="k">for</span> <span class="n">ext</span> <span class="ow">in</span> <span class="n">_image_extensions</span><span class="p">:</span>
+                            <span class="n">found</span> <span class="o">=</span> <span class="n">input_tex</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="p">(</span><span class="n">target</span> <span class="o">+</span> <span class="n">ext</span><span class="p">)</span>
+                            <span class="k">if</span> <span class="n">found</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+                                <span class="n">assets</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">found</span><span class="p">)</span>
+
             <span class="k">return</span> <span class="n">content</span>
 
         <span class="n">flat_content</span> <span class="o">=</span> <span class="n">_flatten_recursive</span><span class="p">(</span><span class="n">input_tex</span><span class="p">)</span>
 
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">output_tex</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f_out</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">output_tex</span><span class="p">,</span> <span class="s2">"w"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f_out</span><span class="p">:</span>
             <span class="n">f_out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">flat_content</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">flat_content</span></div>
 
 
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_copy_assets</span><span class="p">(</span><span class="n">assets</span><span class="p">,</span> <span class="n">source_root</span><span class="p">,</span> <span class="n">export_dir</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""</span>
+<span class="sd">        Copy every resolved asset path into ``export_dir``, preserving its</span>
+<span class="sd">        path relative to ``source_root`` so that the unmodified</span>
+<span class="sd">        ``\\includegraphics``/``\\addbibresource`` references already</span>
+<span class="sd">        present in the flattened output continue to resolve correctly</span>
+<span class="sd">        without any text rewriting.</span>
+
+<span class="sd">        :param assets: Absolute asset paths, as collected by</span>
+<span class="sd">            :meth:`make_flat`.</span>
+<span class="sd">        :type assets: set of pathlib.Path</span>
+<span class="sd">        :param source_root: The document's original project root</span>
+<span class="sd">            (typically ``self.file_data.parent``), used to compute each</span>
+<span class="sd">            asset's relative destination inside ``export_dir``.</span>
+<span class="sd">        :type source_root: pathlib.Path</span>
+<span class="sd">        :param export_dir: The export folder assets are copied into.</span>
+<span class="sd">        :type export_dir: pathlib.Path</span>
+<span class="sd">        """</span>
+        <span class="k">for</span> <span class="n">asset_path</span> <span class="ow">in</span> <span class="n">assets</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">rel_path</span> <span class="o">=</span> <span class="n">asset_path</span><span class="o">.</span><span class="n">relative_to</span><span class="p">(</span><span class="n">source_root</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+                <span class="n">rel_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">asset_path</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+            <span class="n">dest</span> <span class="o">=</span> <span class="n">export_dir</span> <span class="o">/</span> <span class="n">rel_path</span>
+            <span class="n">dest</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">shutil</span><span class="o">.</span><span class="n">copy2</span><span class="p">(</span><span class="n">asset_path</span><span class="p">,</span> <span class="n">dest</span><span class="p">)</span>
+
 <div class="viewcode-block" id="DocumentTeX.lint_paragraphs">
 <a class="viewcode-back" href="../../generated/losalamos.documents.html#losalamos.documents.DocumentTeX.lint_paragraphs">[docs]</a>
     <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">lint_paragraphs</span><span class="p">(</span><span class="n">input_tex</span><span class="p">,</span> <span class="n">output_tex</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Join wrapped prose paragraphs in a LaTeX file into single lines.</span>
 
 <span class="sd">        Reads ``input_tex``, joins each wrapped prose paragraph in the document</span>
@@ -1220,10 +1410,10 @@
 <span class="sd">        ---------</span>
 <span class="sd">        1. Everything up to and including ``\\begin{document}``, and everything</span>
 <span class="sd">           from ``\\end{document}`` onward, is passed through unchanged. (The</span>
-<span class="sd">           preamble&#39;s ``\\newcommand`` shorthand definitions are one-per-line by</span>
+<span class="sd">           preamble's ``\\newcommand`` shorthand definitions are one-per-line by</span>
 <span class="sd">           convention and must stay that way.)</span>
 <span class="sd">        2. Within the document body, consecutive lines are grouped into</span>
-<span class="sd">           &quot;paragraphs&quot;: maximal runs of lines that are not blank, not</span>
+<span class="sd">           "paragraphs": maximal runs of lines that are not blank, not</span>
 <span class="sd">           ``\\begin{...}``/``\\end{...}``, not comment-only, and not inside a</span>
 <span class="sd">           non-reflowable environment. Each run is joined into a single line:</span>
 <span class="sd">           every line is stripped of leading/trailing whitespace, joined with a</span>
@@ -1243,9 +1433,9 @@
 <span class="sd">           comment-only line with real content already buffered, or a trailing</span>
 <span class="sd">           ``% ...`` after real content -- does **not** split the paragraph.</span>
 <span class="sd">           The real content (if any) is kept in the paragraph, and the comment</span>
-<span class="sd">           text is deferred and appended to the end of the paragraph&#39;s joined</span>
+<span class="sd">           text is deferred and appended to the end of the paragraph's joined</span>
 <span class="sd">           line once it is flushed. This avoids an editorial comment in the</span>
-<span class="sd">           middle of a sentence cutting it into two &quot;paragraphs&quot;, the second</span>
+<span class="sd">           middle of a sentence cutting it into two "paragraphs", the second</span>
 <span class="sd">           starting mid-sentence (lower-case).</span>
 <span class="sd">        5. ``\\item`` always starts a new paragraph (flush before it), but its</span>
 <span class="sd">           own wrapped continuation lines still join onto it -- so consecutive</span>
@@ -1275,74 +1465,74 @@
 <span class="sd">        .. code-block:: python</span>
 
 <span class="sd">            from pathlib import Path</span>
-<span class="sd">            lint_paragraphs(Path(&quot;chapter07_T12.tex&quot;))  # overwrite in place</span>
-<span class="sd">            lint_paragraphs(&quot;chapter07_T12.tex&quot;, &quot;chapter07_T12_linted.tex&quot;)</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">            lint_paragraphs(Path("chapter07_T12.tex"))  # overwrite in place</span>
+<span class="sd">            lint_paragraphs("chapter07_T12.tex", "chapter07_T12_linted.tex")</span>
+<span class="sd">        """</span>
         <span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
 
         <span class="n">NO_REFLOW_ENVS</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s2">&quot;equation&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;equation*&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;align&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;align*&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;alignat&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;alignat*&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;gather&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;gather*&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;multline&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;multline*&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;eqnarray&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;eqnarray*&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;array&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;matrix&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;pmatrix&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;bmatrix&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;vmatrix&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;Vmatrix&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;cases&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;tabular&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;tabular*&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;tabularx&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;longtable&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;verbatim&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;verbatim*&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;lstlisting&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;minted&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;Verbatim&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;$$displaymath$$&quot;</span><span class="p">,</span>  <span class="c1"># pseudo-name for \[ ... \]</span>
+            <span class="s2">"equation"</span><span class="p">,</span>
+            <span class="s2">"equation*"</span><span class="p">,</span>
+            <span class="s2">"align"</span><span class="p">,</span>
+            <span class="s2">"align*"</span><span class="p">,</span>
+            <span class="s2">"alignat"</span><span class="p">,</span>
+            <span class="s2">"alignat*"</span><span class="p">,</span>
+            <span class="s2">"gather"</span><span class="p">,</span>
+            <span class="s2">"gather*"</span><span class="p">,</span>
+            <span class="s2">"multline"</span><span class="p">,</span>
+            <span class="s2">"multline*"</span><span class="p">,</span>
+            <span class="s2">"eqnarray"</span><span class="p">,</span>
+            <span class="s2">"eqnarray*"</span><span class="p">,</span>
+            <span class="s2">"array"</span><span class="p">,</span>
+            <span class="s2">"matrix"</span><span class="p">,</span>
+            <span class="s2">"pmatrix"</span><span class="p">,</span>
+            <span class="s2">"bmatrix"</span><span class="p">,</span>
+            <span class="s2">"vmatrix"</span><span class="p">,</span>
+            <span class="s2">"Vmatrix"</span><span class="p">,</span>
+            <span class="s2">"cases"</span><span class="p">,</span>
+            <span class="s2">"tabular"</span><span class="p">,</span>
+            <span class="s2">"tabular*"</span><span class="p">,</span>
+            <span class="s2">"tabularx"</span><span class="p">,</span>
+            <span class="s2">"longtable"</span><span class="p">,</span>
+            <span class="s2">"verbatim"</span><span class="p">,</span>
+            <span class="s2">"verbatim*"</span><span class="p">,</span>
+            <span class="s2">"lstlisting"</span><span class="p">,</span>
+            <span class="s2">"minted"</span><span class="p">,</span>
+            <span class="s2">"Verbatim"</span><span class="p">,</span>
+            <span class="s2">"$$displaymath$$"</span><span class="p">,</span>  <span class="c1"># pseudo-name for \[ ... \]</span>
         <span class="p">}</span>
 
-        <span class="n">BEGIN_RE</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;^\s*</span><span class="se">\\</span><span class="s2">begin\{([^}]+)\}&quot;</span><span class="p">)</span>
-        <span class="n">END_RE</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;^\s*</span><span class="se">\\</span><span class="s2">end\{([^}]+)\}&quot;</span><span class="p">)</span>
-        <span class="n">TOKEN_RE</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">(begin|end)\{([^}]+)\}&quot;</span><span class="p">)</span>
-        <span class="n">DISPLAY_OPEN_RE</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;^\s*</span><span class="se">\\</span><span class="s2">\[\s*$&quot;</span><span class="p">)</span>
-        <span class="n">DISPLAY_CLOSE_RE</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;^\s*</span><span class="se">\\</span><span class="s2">\]\s*$&quot;</span><span class="p">)</span>
-        <span class="n">DISPLAY_INLINE_RE</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;^\s*</span><span class="se">\\</span><span class="s2">\[.*</span><span class="se">\\</span><span class="s2">\]\s*$&quot;</span><span class="p">)</span>
+        <span class="n">BEGIN_RE</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">"^\s*</span><span class="se">\\</span><span class="s2">begin\{([^}]+)\}"</span><span class="p">)</span>
+        <span class="n">END_RE</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">"^\s*</span><span class="se">\\</span><span class="s2">end\{([^}]+)\}"</span><span class="p">)</span>
+        <span class="n">TOKEN_RE</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">"</span><span class="se">\\</span><span class="s2">(begin|end)\{([^}]+)\}"</span><span class="p">)</span>
+        <span class="n">DISPLAY_OPEN_RE</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">"^\s*</span><span class="se">\\</span><span class="s2">\[\s*$"</span><span class="p">)</span>
+        <span class="n">DISPLAY_CLOSE_RE</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">"^\s*</span><span class="se">\\</span><span class="s2">\]\s*$"</span><span class="p">)</span>
+        <span class="n">DISPLAY_INLINE_RE</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">"^\s*</span><span class="se">\\</span><span class="s2">\[.*</span><span class="se">\\</span><span class="s2">\]\s*$"</span><span class="p">)</span>
 
         <span class="c1"># Commands that always stand alone on their own output line -- never</span>
         <span class="c1"># merged with the paragraph before or after them, even without a blank</span>
         <span class="c1"># line in the source. These are one-shot structural commands</span>
         <span class="c1"># (placeholders, page breaks, pure headings) rather than prose.</span>
         <span class="n">STANDALONE_RE</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
-            <span class="sa">r</span><span class="s2">&quot;^\s*</span><span class="se">\\</span><span class="s2">(tcblower|newpage|clearpage|cleardoublepage|pagebreak|newline&quot;</span>
-            <span class="sa">r</span><span class="s2">&quot;|figplaceholder|boxfigplaceholder|boxbiofigplaceholder&quot;</span>
-            <span class="sa">r</span><span class="s2">&quot;|chapter\*?|section\*?|subsection\*?|subsubsection\*?)\b&quot;</span>
+            <span class="sa">r</span><span class="s2">"^\s*</span><span class="se">\\</span><span class="s2">(tcblower|newpage|clearpage|cleardoublepage|pagebreak|newline"</span>
+            <span class="sa">r</span><span class="s2">"|figplaceholder|boxfigplaceholder|boxbiofigplaceholder"</span>
+            <span class="sa">r</span><span class="s2">"|chapter\*?|section\*?|subsection\*?|subsubsection\*?)\b"</span>
         <span class="p">)</span>
 
         <span class="c1"># \item always starts a new paragraph (flush before it), but its own</span>
         <span class="c1"># wrapped continuation lines still join onto it.</span>
-        <span class="n">ITEM_RE</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;^\s*</span><span class="se">\\</span><span class="s2">item\b&quot;</span><span class="p">)</span>
+        <span class="n">ITEM_RE</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">"^\s*</span><span class="se">\\</span><span class="s2">item\b"</span><span class="p">)</span>
 
         <span class="k">def</span><span class="w"> </span><span class="nf">find_comment_pos</span><span class="p">(</span><span class="n">line</span><span class="p">):</span>
-<span class="w">            </span><span class="sd">&quot;&quot;&quot;Return the index of the first un-escaped &#39;%&#39; in line, or -1.&quot;&quot;&quot;</span>
+<span class="w">            </span><span class="sd">"""Return the index of the first un-escaped '%' in line, or -1."""</span>
             <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
             <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
-                <span class="n">idx</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;%&quot;</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+                <span class="n">idx</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">"%"</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
                 <span class="k">if</span> <span class="n">idx</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
                     <span class="k">return</span> <span class="o">-</span><span class="mi">1</span>
                 <span class="n">j</span> <span class="o">=</span> <span class="n">idx</span> <span class="o">-</span> <span class="mi">1</span>
                 <span class="n">nbs</span> <span class="o">=</span> <span class="mi">0</span>
-                <span class="k">while</span> <span class="n">j</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">line</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;</span><span class="se">\\</span><span class="s2">&quot;</span><span class="p">:</span>
+                <span class="k">while</span> <span class="n">j</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">line</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"</span><span class="se">\\</span><span class="s2">"</span><span class="p">:</span>
                     <span class="n">nbs</span> <span class="o">+=</span> <span class="mi">1</span>
                     <span class="n">j</span> <span class="o">-=</span> <span class="mi">1</span>
                 <span class="k">if</span> <span class="n">nbs</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
@@ -1350,19 +1540,19 @@
                 <span class="n">i</span> <span class="o">=</span> <span class="n">idx</span> <span class="o">+</span> <span class="mi">1</span>
 
         <span class="k">def</span><span class="w"> </span><span class="nf">process_tokens</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="n">env_stack</span><span class="p">,</span> <span class="n">no_reflow</span><span class="p">):</span>
-<span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">            </span><span class="sd">"""</span>
 <span class="sd">            Scan the (non-comment part of the) line for every</span>
 <span class="sd">            \\begin{name}/\\end{name} token, in order, and update env_stack /</span>
 <span class="sd">            no_reflow for each. A \\begin{X}...\\end{X} pair on the same line</span>
 <span class="sd">            (e.g. a pmatrix inside an equation) therefore nets to zero, instead</span>
 <span class="sd">            of leaking a permanently elevated no_reflow count. Returns the</span>
 <span class="sd">            updated no_reflow.</span>
-<span class="sd">            &quot;&quot;&quot;</span>
+<span class="sd">            """</span>
             <span class="n">pos</span> <span class="o">=</span> <span class="n">find_comment_pos</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
             <span class="n">scan_part</span> <span class="o">=</span> <span class="n">line</span> <span class="k">if</span> <span class="n">pos</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span> <span class="k">else</span> <span class="n">line</span><span class="p">[:</span><span class="n">pos</span><span class="p">]</span>
             <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">TOKEN_RE</span><span class="o">.</span><span class="n">finditer</span><span class="p">(</span><span class="n">scan_part</span><span class="p">):</span>
                 <span class="n">kind</span><span class="p">,</span> <span class="n">env</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-                <span class="k">if</span> <span class="n">kind</span> <span class="o">==</span> <span class="s2">&quot;begin&quot;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">kind</span> <span class="o">==</span> <span class="s2">"begin"</span><span class="p">:</span>
                     <span class="n">env_stack</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
                     <span class="k">if</span> <span class="n">env</span> <span class="ow">in</span> <span class="n">NO_REFLOW_ENVS</span><span class="p">:</span>
                         <span class="n">no_reflow</span> <span class="o">+=</span> <span class="mi">1</span>
@@ -1374,8 +1564,8 @@
             <span class="k">return</span> <span class="n">no_reflow</span>
 
         <span class="k">def</span><span class="w"> </span><span class="nf">join_paragraphs</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
-<span class="w">            </span><span class="sd">&quot;&quot;&quot;Join wrapped prose lines into one line per paragraph. Returns new text.&quot;&quot;&quot;</span>
-            <span class="n">lines</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="w">            </span><span class="sd">"""Join wrapped prose lines into one line per paragraph. Returns new text."""</span>
+            <span class="n">lines</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
             <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="n">buf</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="n">env_stack</span> <span class="o">=</span> <span class="p">[]</span>
@@ -1386,11 +1576,11 @@
 
             <span class="k">def</span><span class="w"> </span><span class="nf">flush</span><span class="p">():</span>
                 <span class="k">if</span> <span class="n">buf</span> <span class="ow">or</span> <span class="n">pending_comments</span><span class="p">:</span>
-                    <span class="n">joined</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">buf</span><span class="p">)</span>
-                    <span class="n">joined</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot; {2,}&quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="n">joined</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                    <span class="n">joined</span> <span class="o">=</span> <span class="s2">" "</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">buf</span><span class="p">)</span>
+                    <span class="n">joined</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">" {2,}"</span><span class="p">,</span> <span class="s2">" "</span><span class="p">,</span> <span class="n">joined</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
                     <span class="k">if</span> <span class="n">pending_comments</span><span class="p">:</span>
-                        <span class="n">extra</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">pending_comments</span><span class="p">)</span>
-                        <span class="n">joined</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">joined</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">extra</span><span class="si">}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                        <span class="n">extra</span> <span class="o">=</span> <span class="s2">" "</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">pending_comments</span><span class="p">)</span>
+                        <span class="n">joined</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">joined</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">extra</span><span class="si">}</span><span class="s2">"</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
                     <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">joined</span><span class="p">)</span>
                     <span class="n">buf</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
                     <span class="n">pending_comments</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
@@ -1399,7 +1589,7 @@
                 <span class="k">if</span> <span class="ow">not</span> <span class="n">seen_begin_document</span> <span class="ow">or</span> <span class="n">seen_end_document</span><span class="p">:</span>
                     <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
                     <span class="n">m</span> <span class="o">=</span> <span class="n">BEGIN_RE</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
-                    <span class="k">if</span> <span class="n">m</span> <span class="ow">and</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;document&quot;</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">m</span> <span class="ow">and</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="s2">"document"</span><span class="p">:</span>
                         <span class="n">seen_begin_document</span> <span class="o">=</span> <span class="kc">True</span>
                     <span class="k">continue</span>
 
@@ -1413,15 +1603,15 @@
                     <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">rstrip</span><span class="p">())</span>
                     <span class="n">no_reflow</span> <span class="o">=</span> <span class="n">process_tokens</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="n">env_stack</span><span class="p">,</span> <span class="n">no_reflow</span><span class="p">)</span>
                     <span class="k">if</span> <span class="n">DISPLAY_CLOSE_RE</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">line</span><span class="p">):</span>
-                        <span class="k">if</span> <span class="n">env_stack</span> <span class="ow">and</span> <span class="n">env_stack</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;$$displaymath$$&quot;</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">env_stack</span> <span class="ow">and</span> <span class="n">env_stack</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"$$displaymath$$"</span><span class="p">:</span>
                             <span class="n">env_stack</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
                             <span class="n">no_reflow</span> <span class="o">-=</span> <span class="mi">1</span>
                     <span class="k">continue</span>
 
                 <span class="c1"># not currently inside a non-reflowable environment</span>
-                <span class="k">if</span> <span class="n">stripped</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">stripped</span> <span class="o">==</span> <span class="s2">""</span><span class="p">:</span>
                     <span class="n">flush</span><span class="p">()</span>
-                    <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+                    <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">""</span><span class="p">)</span>
                     <span class="k">continue</span>
 
                 <span class="k">if</span> <span class="n">m_end</span><span class="p">:</span>
@@ -1429,7 +1619,7 @@
                     <span class="n">flush</span><span class="p">()</span>
                     <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">rstrip</span><span class="p">())</span>
                     <span class="n">no_reflow</span> <span class="o">=</span> <span class="n">process_tokens</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="n">env_stack</span><span class="p">,</span> <span class="n">no_reflow</span><span class="p">)</span>
-                    <span class="k">if</span> <span class="n">env</span> <span class="o">==</span> <span class="s2">&quot;document&quot;</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">env</span> <span class="o">==</span> <span class="s2">"document"</span><span class="p">:</span>
                         <span class="n">seen_end_document</span> <span class="o">=</span> <span class="kc">True</span>
                     <span class="k">continue</span>
 
@@ -1447,7 +1637,7 @@
                 <span class="k">if</span> <span class="n">DISPLAY_OPEN_RE</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">line</span><span class="p">):</span>
                     <span class="n">flush</span><span class="p">()</span>
                     <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">rstrip</span><span class="p">())</span>
-                    <span class="n">env_stack</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;$$displaymath$$&quot;</span><span class="p">)</span>
+                    <span class="n">env_stack</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"$$displaymath$$"</span><span class="p">)</span>
                     <span class="n">no_reflow</span> <span class="o">+=</span> <span class="mi">1</span>
                     <span class="k">continue</span>
 
@@ -1464,10 +1654,10 @@
                 <span class="n">comment_pos</span> <span class="o">=</span> <span class="n">find_comment_pos</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
                 <span class="k">if</span> <span class="n">comment_pos</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
                     <span class="n">before</span> <span class="o">=</span> <span class="n">line</span><span class="p">[:</span><span class="n">comment_pos</span><span class="p">]</span>
-                    <span class="k">if</span> <span class="n">before</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">before</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="o">==</span> <span class="s2">""</span><span class="p">:</span>
                         <span class="k">if</span> <span class="n">buf</span><span class="p">:</span>
                             <span class="c1"># comment-only line in the middle of a paragraph:</span>
-                            <span class="c1"># defer it to the end of this paragraph&#39;s joined</span>
+                            <span class="c1"># defer it to the end of this paragraph's joined</span>
                             <span class="c1"># line rather than splitting the paragraph here</span>
                             <span class="n">pending_comments</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
                         <span class="k">else</span><span class="p">:</span>
@@ -1486,15 +1676,15 @@
                 <span class="n">buf</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
 
             <span class="n">flush</span><span class="p">()</span>
-            <span class="k">return</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+            <span class="k">return</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
 
         <span class="n">input_tex</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">input_tex</span><span class="p">)</span>
         <span class="n">output_tex</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">output_tex</span><span class="p">)</span> <span class="k">if</span> <span class="n">output_tex</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">input_tex</span>
 
-        <span class="n">text</span> <span class="o">=</span> <span class="n">input_tex</span><span class="o">.</span><span class="n">read_text</span><span class="p">(</span><span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="n">input_tex</span><span class="o">.</span><span class="n">read_text</span><span class="p">(</span><span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span>
         <span class="n">new_text</span> <span class="o">=</span> <span class="n">join_paragraphs</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
 
-        <span class="n">output_tex</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="n">new_text</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
+        <span class="n">output_tex</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="n">new_text</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">output_tex</span></div>
 
 
@@ -1504,7 +1694,7 @@
     <span class="k">def</span><span class="w"> </span><span class="nf">lint_decorations_remove</span><span class="p">(</span>
         <span class="n">input_tex</span><span class="p">,</span> <span class="n">output_tex</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">document_only</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">except_chars</span><span class="o">=</span><span class="kc">None</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Remove decoration comments/rulers (no letter characters after ``%``) from a</span>
 <span class="sd">        LaTeX file.</span>
 
@@ -1531,7 +1721,7 @@
 <span class="sd">            comment (one whose text after ``%`` contains no ASCII letter) is</span>
 <span class="sd">            nonetheless **kept** if its text contains at least one character from</span>
 <span class="sd">            this list. Use this to preserve specific ruler styles, e.g.</span>
-<span class="sd">            ``except_chars=[&#39;#&#39;]`` keeps ``% ####`` lines.  ``None`` (the</span>
+<span class="sd">            ``except_chars=['#']`` keeps ``% ####`` lines.  ``None`` (the</span>
 <span class="sd">            default) means no exceptions -- all decoration comments are removed.</span>
 <span class="sd">        :type except_chars: list[str] or None</span>
 
@@ -1551,7 +1741,7 @@
 <span class="sd">        2. Within the processed region each line is classified as one of:</span>
 
 <span class="sd">           a. **Blank** – passed through unchanged.</span>
-<span class="sd">           b. **Comment-only decoration** – the entire line&#39;s non-whitespace</span>
+<span class="sd">           b. **Comment-only decoration** – the entire line's non-whitespace</span>
 <span class="sd">              content is a ``%`` whose following text (stripped) contains no</span>
 <span class="sd">              ASCII letter and no ``except_chars`` character.  The line is</span>
 <span class="sd">              *dropped*; if the previous output line was blank, that blank is</span>
@@ -1575,23 +1765,23 @@
 <span class="sd">           Only comment text is removed; no other characters are altered, so</span>
 <span class="sd">           the rendered PDF is unaffected.</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
 
-        <span class="n">BEGIN_DOCUMENT_RE</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;^\s*</span><span class="se">\\</span><span class="s2">begin\{document\}&quot;</span><span class="p">)</span>
-        <span class="n">END_DOCUMENT_RE</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;^\s*</span><span class="se">\\</span><span class="s2">end\{document\}&quot;</span><span class="p">)</span>
+        <span class="n">BEGIN_DOCUMENT_RE</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">"^\s*</span><span class="se">\\</span><span class="s2">begin\{document\}"</span><span class="p">)</span>
+        <span class="n">END_DOCUMENT_RE</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">"^\s*</span><span class="se">\\</span><span class="s2">end\{document\}"</span><span class="p">)</span>
 
         <span class="k">def</span><span class="w"> </span><span class="nf">_find_comment_pos</span><span class="p">(</span><span class="n">line</span><span class="p">):</span>
-<span class="w">            </span><span class="sd">&quot;&quot;&quot;Return the index of the first un-escaped &#39;%&#39; in *line*, or -1.&quot;&quot;&quot;</span>
+<span class="w">            </span><span class="sd">"""Return the index of the first un-escaped '%' in *line*, or -1."""</span>
             <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
             <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
-                <span class="n">idx</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;%&quot;</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+                <span class="n">idx</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">"%"</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
                 <span class="k">if</span> <span class="n">idx</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
                     <span class="k">return</span> <span class="o">-</span><span class="mi">1</span>
                 <span class="c1"># count immediately preceding backslashes</span>
                 <span class="n">j</span> <span class="o">=</span> <span class="n">idx</span> <span class="o">-</span> <span class="mi">1</span>
                 <span class="n">nbs</span> <span class="o">=</span> <span class="mi">0</span>
-                <span class="k">while</span> <span class="n">j</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">line</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;</span><span class="se">\\</span><span class="s2">&quot;</span><span class="p">:</span>
+                <span class="k">while</span> <span class="n">j</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">line</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"</span><span class="se">\\</span><span class="s2">"</span><span class="p">:</span>
                     <span class="n">nbs</span> <span class="o">+=</span> <span class="mi">1</span>
                     <span class="n">j</span> <span class="o">-=</span> <span class="mi">1</span>
                 <span class="k">if</span> <span class="n">nbs</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>  <span class="c1"># even number of backslashes -&gt; real %</span>
@@ -1599,25 +1789,25 @@
                 <span class="n">i</span> <span class="o">=</span> <span class="n">idx</span> <span class="o">+</span> <span class="mi">1</span>
 
         <span class="k">def</span><span class="w"> </span><span class="nf">_is_decoration</span><span class="p">(</span><span class="n">comment_text</span><span class="p">):</span>
-<span class="w">            </span><span class="sd">&quot;&quot;&quot;True when *comment_text* (text after the leading &#39;%&#39;) should be removed.</span>
+<span class="w">            </span><span class="sd">"""True when *comment_text* (text after the leading '%') should be removed.</span>
 
 <span class="sd">            A comment qualifies as decoration when it contains no ASCII letter AND</span>
 <span class="sd">            none of the characters in *except_chars* (captured from the outer</span>
 <span class="sd">            scope).</span>
-<span class="sd">            &quot;&quot;&quot;</span>
-            <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;[A-Za-z]&quot;</span><span class="p">,</span> <span class="n">comment_text</span><span class="p">):</span>
+<span class="sd">            """</span>
+            <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">"[A-Za-z]"</span><span class="p">,</span> <span class="n">comment_text</span><span class="p">):</span>
                 <span class="k">return</span> <span class="kc">False</span>
             <span class="k">if</span> <span class="n">except_chars</span> <span class="ow">and</span> <span class="nb">any</span><span class="p">(</span><span class="n">ch</span> <span class="ow">in</span> <span class="n">comment_text</span> <span class="k">for</span> <span class="n">ch</span> <span class="ow">in</span> <span class="n">except_chars</span><span class="p">):</span>
                 <span class="k">return</span> <span class="kc">False</span>
             <span class="k">return</span> <span class="kc">True</span>
 
         <span class="k">def</span><span class="w"> </span><span class="nf">_process_body</span><span class="p">(</span><span class="n">lines</span><span class="p">):</span>
-<span class="w">            </span><span class="sd">&quot;&quot;&quot;Apply decoration-comment purge to *lines*. Returns list of lines.&quot;&quot;&quot;</span>
+<span class="w">            </span><span class="sd">"""Apply decoration-comment purge to *lines*. Returns list of lines."""</span>
             <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
 
             <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">:</span>
                 <span class="c1"># preserve blank lines as-is</span>
-                <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="o">==</span> <span class="s2">""</span><span class="p">:</span>
                     <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
                     <span class="k">continue</span>
 
@@ -1631,11 +1821,11 @@
                 <span class="n">before</span> <span class="o">=</span> <span class="n">line</span><span class="p">[:</span><span class="n">comment_pos</span><span class="p">]</span>  <span class="c1"># prose part (may be empty)</span>
                 <span class="n">comment_text</span> <span class="o">=</span> <span class="n">line</span><span class="p">[</span><span class="n">comment_pos</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">:]</span>  <span class="c1"># everything after the %</span>
 
-                <span class="k">if</span> <span class="n">before</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">before</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="o">==</span> <span class="s2">""</span><span class="p">:</span>
                     <span class="c1"># ---- comment-only line ----</span>
                     <span class="k">if</span> <span class="n">_is_decoration</span><span class="p">(</span><span class="n">comment_text</span><span class="p">):</span>
                         <span class="c1"># drop this line; also collapse the preceding blank if present</span>
-                        <span class="k">if</span> <span class="n">out</span> <span class="ow">and</span> <span class="n">out</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">out</span> <span class="ow">and</span> <span class="n">out</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="o">==</span> <span class="s2">""</span><span class="p">:</span>
                             <span class="n">out</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
                         <span class="c1"># do NOT append anything</span>
                     <span class="k">else</span><span class="p">:</span>
@@ -1656,12 +1846,12 @@
         <span class="n">input_tex</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">input_tex</span><span class="p">)</span>
         <span class="n">output_tex</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">output_tex</span><span class="p">)</span> <span class="k">if</span> <span class="n">output_tex</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">input_tex</span>
 
-        <span class="n">raw</span> <span class="o">=</span> <span class="n">input_tex</span><span class="o">.</span><span class="n">read_text</span><span class="p">(</span><span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
-        <span class="n">lines</span> <span class="o">=</span> <span class="n">raw</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">raw</span> <span class="o">=</span> <span class="n">input_tex</span><span class="o">.</span><span class="n">read_text</span><span class="p">(</span><span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span>
+        <span class="n">lines</span> <span class="o">=</span> <span class="n">raw</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="n">document_only</span><span class="p">:</span>
             <span class="c1"># Process the entire file uniformly -- no preamble/postamble split.</span>
-            <span class="n">result</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">_process_body</span><span class="p">(</span><span class="n">lines</span><span class="p">))</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">_process_body</span><span class="p">(</span><span class="n">lines</span><span class="p">))</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="c1"># Restrict processing to the body between \begin{document} and</span>
             <span class="c1"># \end{document}; preamble and postamble pass through unchanged.</span>
@@ -1687,9 +1877,9 @@
                         <span class="n">body_raw</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
 
             <span class="n">body_clean</span> <span class="o">=</span> <span class="n">_process_body</span><span class="p">(</span><span class="n">body_raw</span><span class="p">)</span>
-            <span class="n">result</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">preamble</span> <span class="o">+</span> <span class="n">body_clean</span> <span class="o">+</span> <span class="n">postamble</span><span class="p">)</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">preamble</span> <span class="o">+</span> <span class="n">body_clean</span> <span class="o">+</span> <span class="n">postamble</span><span class="p">)</span>
 
-        <span class="n">output_tex</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
+        <span class="n">output_tex</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">output_tex</span></div>
 
 
@@ -1699,7 +1889,7 @@
     <span class="k">def</span><span class="w"> </span><span class="nf">lint_decorations_add</span><span class="p">(</span>
         <span class="n">input_tex</span><span class="p">,</span> <span class="n">output_tex</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ruler_chars</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ruler_len</span><span class="o">=</span><span class="mi">60</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Inject decoration rulers above section headings in a LaTeX file.</span>
 
 <span class="sd">        Reads ``input_tex``, inserts a comment ruler (``% `` + N repetitions of</span>
@@ -1730,7 +1920,7 @@
 <span class="sd">        :type output_tex: str or pathlib.Path or None</span>
 <span class="sd">        :param ruler_chars: Sequence of up to four characters, one per heading</span>
 <span class="sd">            level (chapter, section, subsection, subsubsection).  Missing</span>
-<span class="sd">            positions fall back to the defaults ``(&#39;#&#39;, &#39;*&#39;, &#39;=&#39;, &#39;-&#39;)``.</span>
+<span class="sd">            positions fall back to the defaults ``('#', '*', '=', '-')``.</span>
 <span class="sd">            May be a string (each character is used positionally) or any</span>
 <span class="sd">            sequence of single characters.  ``None`` uses all defaults.</span>
 <span class="sd">        :type ruler_chars: str or list[str] or None</span>
@@ -1755,25 +1945,25 @@
 <span class="sd">           previous output line:</span>
 
 <span class="sd">           - If it is already a ruler whose dominant character matches the</span>
-<span class="sd">             current level&#39;s character, **replace** it with the freshly built</span>
+<span class="sd">             current level's character, **replace** it with the freshly built</span>
 <span class="sd">             ruler (normalises length on re-runs).</span>
 <span class="sd">           - Otherwise **insert** the ruler as a new line before the heading.</span>
 
 <span class="sd">        4. Reassemble preamble + processed body + postamble and write.</span>
 
 <span class="sd">        .. note::</span>
-<span class="sd">           A &quot;ruler line&quot; for replacement detection is defined as a line whose</span>
+<span class="sd">           A "ruler line" for replacement detection is defined as a line whose</span>
 <span class="sd">           stripped content matches ``% &lt;char&gt;&lt;char&gt;...`` with at least one</span>
 <span class="sd">           repetition of *char* -- the same format this function produces.</span>
 <span class="sd">           Any other comment line is left untouched even if it precedes a</span>
 <span class="sd">           heading.</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">if</span> <span class="n">ruler_len</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;ruler_len must be &gt;= 1, got </span><span class="si">{</span><span class="n">ruler_len</span><span class="si">!r}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"ruler_len must be &gt;= 1, got </span><span class="si">{</span><span class="n">ruler_len</span><span class="si">!r}</span><span class="s2">"</span><span class="p">)</span>
 
-        <span class="n">DEFAULTS</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;#&quot;</span><span class="p">,</span> <span class="s2">&quot;*&quot;</span><span class="p">,</span> <span class="s2">&quot;=&quot;</span><span class="p">,</span> <span class="s2">&quot;-&quot;</span><span class="p">)</span>
-        <span class="n">LEVELS</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;chapter&quot;</span><span class="p">,</span> <span class="s2">&quot;section&quot;</span><span class="p">,</span> <span class="s2">&quot;subsection&quot;</span><span class="p">,</span> <span class="s2">&quot;subsubsection&quot;</span><span class="p">)</span>
+        <span class="n">DEFAULTS</span> <span class="o">=</span> <span class="p">(</span><span class="s2">"#"</span><span class="p">,</span> <span class="s2">"*"</span><span class="p">,</span> <span class="s2">"="</span><span class="p">,</span> <span class="s2">"-"</span><span class="p">)</span>
+        <span class="n">LEVELS</span> <span class="o">=</span> <span class="p">(</span><span class="s2">"chapter"</span><span class="p">,</span> <span class="s2">"section"</span><span class="p">,</span> <span class="s2">"subsection"</span><span class="p">,</span> <span class="s2">"subsubsection"</span><span class="p">)</span>
 
         <span class="c1"># Resolve ruler characters: positional override, fall back to defaults.</span>
         <span class="n">resolved_chars</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">DEFAULTS</span><span class="p">)</span>
@@ -1789,26 +1979,26 @@
             <span class="p">{}</span>
         <span class="p">)</span>  <span class="c1"># level_name -&gt; compiled regex that matches any ruler for that level</span>
         <span class="k">for</span> <span class="n">level</span><span class="p">,</span> <span class="n">ch</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">LEVELS</span><span class="p">,</span> <span class="n">resolved_chars</span><span class="p">):</span>
-            <span class="n">rulers</span><span class="p">[</span><span class="n">level</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;% </span><span class="si">{</span><span class="n">ch</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">ruler_len</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="n">rulers</span><span class="p">[</span><span class="n">level</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"% </span><span class="si">{</span><span class="n">ch</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">ruler_len</span><span class="si">}</span><span class="s2">"</span>
             <span class="n">escaped</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">escape</span><span class="p">(</span><span class="n">ch</span><span class="p">)</span>
-            <span class="n">ruler_res</span><span class="p">[</span><span class="n">level</span><span class="p">]</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">rf</span><span class="s2">&quot;^\s*%\s*</span><span class="si">{</span><span class="n">escaped</span><span class="si">}</span><span class="s2">+\s*$&quot;</span><span class="p">)</span>
+            <span class="n">ruler_res</span><span class="p">[</span><span class="n">level</span><span class="p">]</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">rf</span><span class="s2">"^\s*%\s*</span><span class="si">{</span><span class="n">escaped</span><span class="si">}</span><span class="s2">+\s*$"</span><span class="p">)</span>
 
         <span class="c1"># Heading detection: \chapter, \section, \subsection, \subsubsection</span>
         <span class="c1"># (starred or unstarred), optionally followed by [] optional arg or {}.</span>
         <span class="n">HEADING_RE</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
-            <span class="sa">r</span><span class="s2">&quot;^\s*</span><span class="se">\\</span><span class="s2">(chapter|section|subsection|subsubsection)\*?\s*[\[{]&quot;</span>
+            <span class="sa">r</span><span class="s2">"^\s*</span><span class="se">\\</span><span class="s2">(chapter|section|subsection|subsubsection)\*?\s*[\[{]"</span>
         <span class="p">)</span>
 
-        <span class="n">BEGIN_DOCUMENT_RE</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;^\s*</span><span class="se">\\</span><span class="s2">begin\{document\}&quot;</span><span class="p">)</span>
-        <span class="n">END_DOCUMENT_RE</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;^\s*</span><span class="se">\\</span><span class="s2">end\{document\}&quot;</span><span class="p">)</span>
+        <span class="n">BEGIN_DOCUMENT_RE</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">"^\s*</span><span class="se">\\</span><span class="s2">begin\{document\}"</span><span class="p">)</span>
+        <span class="n">END_DOCUMENT_RE</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">"^\s*</span><span class="se">\\</span><span class="s2">end\{document\}"</span><span class="p">)</span>
 
         <span class="k">def</span><span class="w"> </span><span class="nf">_level_of</span><span class="p">(</span><span class="n">line</span><span class="p">):</span>
-<span class="w">            </span><span class="sd">&quot;&quot;&quot;Return the heading level name if *line* is a heading, else None.&quot;&quot;&quot;</span>
+<span class="w">            </span><span class="sd">"""Return the heading level name if *line* is a heading, else None."""</span>
             <span class="n">m</span> <span class="o">=</span> <span class="n">HEADING_RE</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="k">if</span> <span class="n">m</span> <span class="k">else</span> <span class="kc">None</span>
 
         <span class="k">def</span><span class="w"> </span><span class="nf">_process_body</span><span class="p">(</span><span class="n">lines</span><span class="p">):</span>
-<span class="w">            </span><span class="sd">&quot;&quot;&quot;Inject rulers above headings. Returns new list of lines.&quot;&quot;&quot;</span>
+<span class="w">            </span><span class="sd">"""Inject rulers above headings. Returns new list of lines."""</span>
             <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">:</span>
                 <span class="n">level</span> <span class="o">=</span> <span class="n">_level_of</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
@@ -1836,8 +2026,8 @@
         <span class="n">input_tex</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">input_tex</span><span class="p">)</span>
         <span class="n">output_tex</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">output_tex</span><span class="p">)</span> <span class="k">if</span> <span class="n">output_tex</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">input_tex</span>
 
-        <span class="n">raw</span> <span class="o">=</span> <span class="n">input_tex</span><span class="o">.</span><span class="n">read_text</span><span class="p">(</span><span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
-        <span class="n">lines</span> <span class="o">=</span> <span class="n">raw</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">raw</span> <span class="o">=</span> <span class="n">input_tex</span><span class="o">.</span><span class="n">read_text</span><span class="p">(</span><span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span>
+        <span class="n">lines</span> <span class="o">=</span> <span class="n">raw</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
 
         <span class="n">preamble</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">body_raw</span> <span class="o">=</span> <span class="p">[]</span>
@@ -1862,8 +2052,8 @@
 
         <span class="n">body_clean</span> <span class="o">=</span> <span class="n">_process_body</span><span class="p">(</span><span class="n">body_raw</span><span class="p">)</span>
 
-        <span class="n">result</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">preamble</span> <span class="o">+</span> <span class="n">body_clean</span> <span class="o">+</span> <span class="n">postamble</span><span class="p">)</span>
-        <span class="n">output_tex</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">preamble</span> <span class="o">+</span> <span class="n">body_clean</span> <span class="o">+</span> <span class="n">postamble</span><span class="p">)</span>
+        <span class="n">output_tex</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">output_tex</span></div>
 
 
@@ -1871,7 +2061,7 @@
 <a class="viewcode-back" href="../../generated/losalamos.documents.html#losalamos.documents.DocumentTeX.lint_blank_lines">[docs]</a>
     <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">lint_blank_lines</span><span class="p">(</span><span class="n">input_tex</span><span class="p">,</span> <span class="n">output_tex</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Normalize blank-line spacing in a LaTeX file.</span>
 
 <span class="sd">        Reads ``input_tex`` and enforces two rules throughout the document body:</span>
@@ -1955,22 +2145,22 @@
 <span class="sd">        the next content are discarded (replaced by the controlled padding).</span>
 
 
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
 
         <span class="n">PAD</span> <span class="o">=</span> <span class="mi">2</span>  <span class="c1"># blank lines required before \begin and after \end</span>
 
         <span class="c1"># Environments exempt from padding (structural wrappers)</span>
-        <span class="n">NO_PAD_ENVS</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;document&quot;</span><span class="p">}</span>
+        <span class="n">NO_PAD_ENVS</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"document"</span><span class="p">}</span>
 
-        <span class="n">BEGIN_RE</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;^\s*</span><span class="se">\\</span><span class="s2">begin\{([^}]+)\}&quot;</span><span class="p">)</span>
-        <span class="n">END_RE</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;^\s*</span><span class="se">\\</span><span class="s2">end\{([^}]+)\}&quot;</span><span class="p">)</span>
+        <span class="n">BEGIN_RE</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">"^\s*</span><span class="se">\\</span><span class="s2">begin\{([^}]+)\}"</span><span class="p">)</span>
+        <span class="n">END_RE</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">"^\s*</span><span class="se">\\</span><span class="s2">end\{([^}]+)\}"</span><span class="p">)</span>
 
         <span class="k">def</span><span class="w"> </span><span class="nf">is_blank</span><span class="p">(</span><span class="n">line</span><span class="p">):</span>
-            <span class="k">return</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span>
+            <span class="k">return</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="o">==</span> <span class="s2">""</span>
 
         <span class="k">def</span><span class="w"> </span><span class="nf">strip_trailing_blanks</span><span class="p">(</span><span class="n">lst</span><span class="p">):</span>
-<span class="w">            </span><span class="sd">&quot;&quot;&quot;Remove trailing blank lines from lst; return count removed.&quot;&quot;&quot;</span>
+<span class="w">            </span><span class="sd">"""Remove trailing blank lines from lst; return count removed."""</span>
             <span class="n">n</span> <span class="o">=</span> <span class="mi">0</span>
             <span class="k">while</span> <span class="n">lst</span> <span class="ow">and</span> <span class="n">is_blank</span><span class="p">(</span><span class="n">lst</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]):</span>
                 <span class="n">lst</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
@@ -1981,7 +2171,7 @@
         <span class="n">input_tex</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">input_tex</span><span class="p">)</span>
         <span class="n">output_tex</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">output_tex</span><span class="p">)</span> <span class="k">if</span> <span class="n">output_tex</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">input_tex</span>
 
-        <span class="n">lines</span> <span class="o">=</span> <span class="n">input_tex</span><span class="o">.</span><span class="n">read_text</span><span class="p">(</span><span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">lines</span> <span class="o">=</span> <span class="n">input_tex</span><span class="o">.</span><span class="n">read_text</span><span class="p">(</span><span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
 
         <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">n_collapsed</span> <span class="o">=</span> <span class="mi">0</span>
@@ -2008,7 +2198,7 @@
             <span class="k">if</span> <span class="ow">not</span> <span class="n">seen_begin_doc</span> <span class="ow">or</span> <span class="n">seen_end_doc</span><span class="p">:</span>
                 <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
                 <span class="n">m</span> <span class="o">=</span> <span class="n">BEGIN_RE</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
-                <span class="k">if</span> <span class="n">m</span> <span class="ow">and</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;document&quot;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">m</span> <span class="ow">and</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="s2">"document"</span><span class="p">:</span>
                     <span class="n">seen_begin_doc</span> <span class="o">=</span> <span class="kc">True</span>
                 <span class="k">continue</span>
 
@@ -2026,7 +2216,7 @@
                         <span class="c1"># (we will emit our own controlled padding instead)</span>
                         <span class="n">pending_pad</span> <span class="o">=</span> <span class="n">PAD</span>
                         <span class="n">prose_blanks</span> <span class="o">=</span> <span class="mi">0</span>
-                    <span class="k">if</span> <span class="n">env_name</span> <span class="o">==</span> <span class="s2">&quot;document&quot;</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">env_name</span> <span class="o">==</span> <span class="s2">"document"</span><span class="p">:</span>
                         <span class="n">seen_end_doc</span> <span class="o">=</span> <span class="kc">True</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="c1"># Check for nested \begin inside the environment</span>
@@ -2055,7 +2245,7 @@
                     <span class="c1"># Enforce PAD blank lines before \begin</span>
                     <span class="n">n_removed</span> <span class="o">=</span> <span class="n">strip_trailing_blanks</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
                     <span class="n">n_collapsed</span> <span class="o">+=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">n_removed</span> <span class="o">-</span> <span class="n">PAD</span><span class="p">)</span>  <span class="c1"># excess that were there</span>
-                    <span class="n">out</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s2">&quot;&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">PAD</span><span class="p">)</span>
+                    <span class="n">out</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s2">""</span><span class="p">]</span> <span class="o">*</span> <span class="n">PAD</span><span class="p">)</span>
                     <span class="n">n_padded</span> <span class="o">+=</span> <span class="n">PAD</span>
                     <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
                     <span class="n">env_stack</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">env_name</span><span class="p">)</span>
@@ -2080,14 +2270,14 @@
             <span class="c1"># Non-blank, non-begin line in prose</span>
             <span class="k">if</span> <span class="n">pending_pad</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
                 <span class="c1"># Emit the controlled post-\end padding then this line</span>
-                <span class="n">out</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s2">&quot;&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">pending_pad</span><span class="p">)</span>
+                <span class="n">out</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s2">""</span><span class="p">]</span> <span class="o">*</span> <span class="n">pending_pad</span><span class="p">)</span>
                 <span class="n">n_padded</span> <span class="o">+=</span> <span class="n">pending_pad</span>
                 <span class="n">pending_pad</span> <span class="o">=</span> <span class="mi">0</span>
             <span class="n">prose_blanks</span> <span class="o">=</span> <span class="mi">0</span>
             <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
 
-        <span class="n">output_tex</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">out</span><span class="p">),</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">output_tex</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;collapsed&quot;</span><span class="p">:</span> <span class="n">n_collapsed</span><span class="p">,</span> <span class="s2">&quot;padded&quot;</span><span class="p">:</span> <span class="n">n_padded</span><span class="p">}</span></div>
+        <span class="n">output_tex</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">out</span><span class="p">),</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">output_tex</span><span class="p">,</span> <span class="p">{</span><span class="s2">"collapsed"</span><span class="p">:</span> <span class="n">n_collapsed</span><span class="p">,</span> <span class="s2">"padded"</span><span class="p">:</span> <span class="n">n_padded</span><span class="p">}</span></div>
 </div>
 
 
@@ -2096,7 +2286,7 @@
 <a class="viewcode-back" href="../../generated/losalamos.documents.html#losalamos.documents.Essay">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">Essay</span><span class="p">(</span><span class="n">DocumentTeX</span><span class="p">):</span>
 
-    <span class="k">pass</span></div>
+    <span class="n">VARIANT_TEMPLATE</span> <span class="o">=</span> <span class="n">FOLDER_TEMPLATES_DOCUMENTS</span> <span class="o">/</span> <span class="s2">"tex/essay"</span></div>
 
 
 
@@ -2104,15 +2294,23 @@
 <a class="viewcode-back" href="../../generated/losalamos.documents.html#losalamos.documents.Professional">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">Professional</span><span class="p">(</span><span class="n">Essay</span><span class="p">):</span>
 
-    <span class="n">VARIANT_TEMPLATE</span> <span class="o">=</span> <span class="n">FOLDER_TEMPLATES_DOCUMENTS</span> <span class="o">/</span> <span class="s2">&quot;tex/professional&quot;</span></div>
+    <span class="n">VARIANT_TEMPLATE</span> <span class="o">=</span> <span class="n">FOLDER_TEMPLATES_DOCUMENTS</span> <span class="o">/</span> <span class="s2">"tex/professional"</span></div>
+
+
+
+<div class="viewcode-block" id="ProposalCommercial">
+<a class="viewcode-back" href="../../generated/losalamos.documents.html#losalamos.documents.ProposalCommercial">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">ProposalCommercial</span><span class="p">(</span><span class="n">Professional</span><span class="p">):</span>
+
+    <span class="n">VARIANT_TEMPLATE</span> <span class="o">=</span> <span class="n">FOLDER_TEMPLATES_DOCUMENTS</span> <span class="o">/</span> <span class="s2">"tex/proposal-commercial"</span></div>
 
 
 
 <span class="c1"># ***********************************************************************</span>
 <span class="c1"># SCRIPT</span>
 <span class="c1"># ***********************************************************************</span>
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Hello world!&quot;</span><span class="p">)</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"Hello world!"</span><span class="p">)</span>
     <span class="c1"># ... {develop}</span>
 </pre></div>
 
@@ -2143,8 +2341,8 @@
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../_static/scripts/bootstrap.js?digest=a95f357e85573c9b56d5"></script>
-<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=a95f357e85573c9b56d5"></script>
+  <script defer src="../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -2178,7 +2376,7 @@
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.19.0.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.21.0.
 </p></div>
       
     </div>

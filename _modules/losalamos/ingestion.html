@@ -26,18 +26,18 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../_static/styles/theme.css?digest=a95f357e85573c9b56d5" rel="stylesheet" />
-<link href="../../_static/styles/pydata-sphinx-theme.css?digest=a95f357e85573c9b56d5" rel="stylesheet" />
+  <link href="../../_static/styles/theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
   
   <!-- So that users can add custom icons -->
-  <script defer src="../../_static/scripts/fontawesome.js?digest=a95f357e85573c9b56d5"></script>
+  <script defer src="../../_static/scripts/fontawesome.js?digest=cb8930eaaf36d9849b67"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=a95f357e85573c9b56d5" />
-<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=a95f357e85573c9b56d5" />
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
 
     <script src="../../_static/documentation_options.js?v=d45e8c67"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
@@ -404,7 +404,7 @@
 <span class="c1"># Copyright (C) 2025 The Project Authors</span>
 <span class="c1"># See pyproject.toml for authors/maintainers.</span>
 <span class="c1"># See LICENSE for license details.</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 <span class="sd">Automated ingestion utilities for bibliographic files.</span>
 
 <span class="sd">This module provides tools for processing incoming collections of PDF and</span>
@@ -426,8 +426,8 @@
 <span class="sd">    from losalamos.ingestion import Ingester</span>
 
 <span class="sd">    ing = Ingester(</span>
-<span class="sd">        src=&quot;path/to/incoming/article&quot;,</span>
-<span class="sd">        dst=&quot;path/to/library/papers&quot;</span>
+<span class="sd">        src="path/to/incoming/article",</span>
+<span class="sd">        dst="path/to/library/papers"</span>
 <span class="sd">    )</span>
 
 <span class="sd">    ing.run()</span>
@@ -440,7 +440,7 @@
 <span class="sd">- create Markdown reference notes</span>
 <span class="sd">- copy PDFs into the destination library</span>
 
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">shutil</span>
 
@@ -516,7 +516,7 @@
 <div class="viewcode-block" id="Ingester.run">
 <a class="viewcode-back" href="../../generated/losalamos.ingestion.html#losalamos.ingestion.Ingester.run">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cleanup</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Executes the processing pipeline to convert incoming PDF and BibTeX files into standardized note references.</span>
 
 <span class="sd">        .. note::</span>
@@ -532,7 +532,7 @@
 <span class="sd">        :type cleanup: bool</span>
 <span class="sd">        :return: No value is returned.</span>
 <span class="sd">        :rtype: None</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="kn">from</span><span class="w"> </span><span class="nn">losalamos.notes</span><span class="w"> </span><span class="kn">import</span> <span class="n">NoteReference</span>
 
         <span class="c1"># Explode bib files</span>
@@ -544,34 +544,34 @@
         <span class="n">ref</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_reference_object</span><span class="p">()</span>
         <span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_incoming_files</span><span class="p">()</span>
 
-        <span class="n">records</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">to_dict</span><span class="p">(</span><span class="n">orient</span><span class="o">=</span><span class="s2">&quot;records&quot;</span><span class="p">)</span>
+        <span class="n">records</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">to_dict</span><span class="p">(</span><span class="n">orient</span><span class="o">=</span><span class="s2">"records"</span><span class="p">)</span>
 
-        <span class="k">for</span> <span class="n">row_dict</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">records</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Ingesting refs&quot;</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="s2">&quot;file&quot;</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">row_dict</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">records</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s2">"Ingesting refs"</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="s2">"file"</span><span class="p">):</span>
 
-            <span class="n">file_pdf</span> <span class="o">=</span> <span class="n">row_dict</span><span class="p">[</span><span class="s2">&quot;file&quot;</span><span class="p">]</span>
-            <span class="n">subject</span> <span class="o">=</span> <span class="n">row_dict</span><span class="p">[</span><span class="s2">&quot;subject&quot;</span><span class="p">]</span>
+            <span class="n">file_pdf</span> <span class="o">=</span> <span class="n">row_dict</span><span class="p">[</span><span class="s2">"file"</span><span class="p">]</span>
+            <span class="n">subject</span> <span class="o">=</span> <span class="n">row_dict</span><span class="p">[</span><span class="s2">"subject"</span><span class="p">]</span>
 
             <span class="c1"># get data from BIB file</span>
-            <span class="n">file_bib</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">file_pdf</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">Path</span><span class="p">(</span><span class="n">file_pdf</span><span class="p">)</span><span class="o">.</span><span class="n">stem</span><span class="si">}</span><span class="s2">.bib&quot;</span>
+            <span class="n">file_bib</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">file_pdf</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">Path</span><span class="p">(</span><span class="n">file_pdf</span><span class="p">)</span><span class="o">.</span><span class="n">stem</span><span class="si">}</span><span class="s2">.bib"</span>
 
             <span class="k">if</span> <span class="n">file_bib</span><span class="o">.</span><span class="n">is_file</span><span class="p">():</span>
                 <span class="c1"># create reference</span>
                 <span class="n">ref</span><span class="o">.</span><span class="n">load_data</span><span class="p">(</span><span class="n">file_data</span><span class="o">=</span><span class="n">file_bib</span><span class="p">)</span>
                 <span class="n">name</span> <span class="o">=</span> <span class="n">ref</span><span class="o">.</span><span class="n">define_file_name</span><span class="p">(</span>
-                    <span class="n">library_folder</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dst_folder</span><span class="p">,</span> <span class="n">extension</span><span class="o">=</span><span class="s2">&quot;md&quot;</span>
+                    <span class="n">library_folder</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dst_folder</span><span class="p">,</span> <span class="n">extension</span><span class="o">=</span><span class="s2">"md"</span>
                 <span class="p">)</span>
 
                 <span class="c1"># create the note</span>
                 <span class="n">note</span> <span class="o">=</span> <span class="n">NoteReference</span><span class="p">()</span>
-                <span class="n">file_note</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dst_folder</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">.md&quot;</span>
+                <span class="n">file_note</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dst_folder</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">.md"</span>
                 <span class="n">note</span><span class="o">.</span><span class="n">load_new</span><span class="p">(</span><span class="n">file_note</span><span class="o">=</span><span class="n">file_note</span><span class="p">,</span> <span class="n">metadata</span><span class="o">=</span><span class="n">ref</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
 
                 <span class="c1"># include subject</span>
-                <span class="n">note</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;subject&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;&quot;[[</span><span class="si">{</span><span class="n">subject</span><span class="si">}</span><span class="s1">]]&quot;&#39;</span>
+                <span class="n">note</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">"subject"</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">'"[[</span><span class="si">{</span><span class="n">subject</span><span class="si">}</span><span class="s1">]]"'</span>
                 <span class="n">note</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
 
                 <span class="c1"># copy the PDF</span>
-                <span class="n">file_pdf_new</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dst_folder</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">.pdf&quot;</span>
+                <span class="n">file_pdf_new</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dst_folder</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">.pdf"</span>
                 <span class="n">shutil</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">src</span><span class="o">=</span><span class="n">file_pdf</span><span class="p">,</span> <span class="n">dst</span><span class="o">=</span><span class="n">file_pdf_new</span><span class="p">)</span>
 
                 <span class="c1"># cleanup</span>
@@ -589,12 +589,12 @@
 <div class="viewcode-block" id="Ingester.explode_bib_files">
 <a class="viewcode-back" href="../../generated/losalamos.ingestion.html#losalamos.ingestion.Ingester.explode_bib_files">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">explode_bib_files</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Splits multi-entry BibTeX files into individual ``.bib`` files named after each reference.</span>
 
 <span class="sd">        :return: No value is returned.</span>
 <span class="sd">        :rtype: None</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">ls</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">list_bibs</span><span class="p">()</span>
 
         <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">ls</span><span class="p">:</span>
@@ -604,10 +604,10 @@
             <span class="c1"># explode file into subfiles</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ls_bibs</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
                 <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">ls_bibs</span><span class="p">:</span>
-                    <span class="n">ref</span> <span class="o">=</span> <span class="n">Reference</span><span class="o">.</span><span class="n">get_by_entry</span><span class="p">(</span><span class="n">entry_type</span><span class="o">=</span><span class="n">b</span><span class="p">[</span><span class="s2">&quot;entry_type&quot;</span><span class="p">])</span>
+                    <span class="n">ref</span> <span class="o">=</span> <span class="n">Reference</span><span class="o">.</span><span class="n">get_by_entry</span><span class="p">(</span><span class="n">entry_type</span><span class="o">=</span><span class="n">b</span><span class="p">[</span><span class="s2">"entry_type"</span><span class="p">])</span>
                     <span class="n">ref</span><span class="o">.</span><span class="n">setup_data</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">b</span><span class="p">)</span>
-                    <span class="n">name</span> <span class="o">=</span> <span class="n">ref</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span>
-                    <span class="n">fo</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">.bib&quot;</span>
+                    <span class="n">name</span> <span class="o">=</span> <span class="n">ref</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">"name"</span><span class="p">]</span>
+                    <span class="n">fo</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">.bib"</span>
                     <span class="n">ref</span><span class="o">.</span><span class="n">to_bib</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="n">fo</span><span class="p">)</span>
                 <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span></div>
@@ -616,15 +616,15 @@
 <div class="viewcode-block" id="Ingester.get_incoming_files">
 <a class="viewcode-back" href="../../generated/losalamos.ingestion.html#losalamos.ingestion.Ingester.get_incoming_files">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_incoming_files</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Retrieves a DataFrame mapping all PDF files in the source folder to their respective subjects.</span>
 
 <span class="sd">        :return: A DataFrame with columns ``file`` and ``subject``.</span>
 <span class="sd">        :rtype: :class:`pandas.DataFrame`</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">ls_pdfs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">list_pdfs</span><span class="p">()</span>
         <span class="n">ls_subs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">list_subjects</span><span class="p">(</span><span class="n">list_paths</span><span class="o">=</span><span class="n">ls_pdfs</span><span class="p">)</span>
-        <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;file&quot;</span><span class="p">:</span> <span class="n">ls_pdfs</span><span class="p">,</span> <span class="s2">&quot;subject&quot;</span><span class="p">:</span> <span class="n">ls_subs</span><span class="p">})</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">"file"</span><span class="p">:</span> <span class="n">ls_pdfs</span><span class="p">,</span> <span class="s2">"subject"</span><span class="p">:</span> <span class="n">ls_subs</span><span class="p">})</span>
 
         <span class="k">return</span> <span class="n">df</span></div>
 
@@ -632,73 +632,73 @@
 <div class="viewcode-block" id="Ingester.get_reference_object">
 <a class="viewcode-back" href="../../generated/losalamos.ingestion.html#losalamos.ingestion.Ingester.get_reference_object">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_reference_object</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Identifies the entry type from the source folder name and</span>
 <span class="sd">        returns the corresponding reference class instance.</span>
 
-<span class="sd">        :return: An instance of the reference class associated with the folder&#39;s name.</span>
+<span class="sd">        :return: An instance of the reference class associated with the folder's name.</span>
 <span class="sd">        :rtype: :class:`Reference`</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">entry</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">src_folder</span><span class="p">)</span><span class="o">.</span><span class="n">stem</span>
         <span class="k">return</span> <span class="n">Reference</span><span class="o">.</span><span class="n">get_by_entry</span><span class="p">(</span><span class="n">entry_type</span><span class="o">=</span><span class="n">entry</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="Ingester.list_files">
 <a class="viewcode-back" href="../../generated/losalamos.ingestion.html#losalamos.ingestion.Ingester.list_files">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">list_files</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">extension</span><span class="o">=</span><span class="s2">&quot;*&quot;</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">list_files</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">extension</span><span class="o">=</span><span class="s2">"*"</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Lists all files within the source directory and subdirectories that match a specific extension.</span>
 
 <span class="sd">        :param extension: The file extension to filter by. Default value = ``*``</span>
 <span class="sd">        :type extension: str</span>
 <span class="sd">        :return: A list of paths to the discovered files.</span>
 <span class="sd">        :rtype: list[:class:`pathlib.Path`]</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">root</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">src_folder</span><span class="p">)</span>
-        <span class="k">return</span> <span class="p">[</span><span class="n">p</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">root</span><span class="o">.</span><span class="n">rglob</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;*.</span><span class="si">{</span><span class="n">extension</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">is_file</span><span class="p">()]</span></div>
+        <span class="k">return</span> <span class="p">[</span><span class="n">p</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">root</span><span class="o">.</span><span class="n">rglob</span><span class="p">(</span><span class="sa">f</span><span class="s2">"*.</span><span class="si">{</span><span class="n">extension</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span> <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">is_file</span><span class="p">()]</span></div>
 
 
 <div class="viewcode-block" id="Ingester.list_bibs">
 <a class="viewcode-back" href="../../generated/losalamos.ingestion.html#losalamos.ingestion.Ingester.list_bibs">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">list_bibs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Recursively lists all BibTeX (``.bib``) files found within the source directory.</span>
 
 <span class="sd">        :return: A list of paths to the discovered BibTeX files.</span>
 <span class="sd">        :rtype: list[:class:`pathlib.Path`]</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">list_files</span><span class="p">(</span><span class="n">extension</span><span class="o">=</span><span class="s2">&quot;bib&quot;</span><span class="p">)</span></div>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">list_files</span><span class="p">(</span><span class="n">extension</span><span class="o">=</span><span class="s2">"bib"</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="Ingester.list_pdfs">
 <a class="viewcode-back" href="../../generated/losalamos.ingestion.html#losalamos.ingestion.Ingester.list_pdfs">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">list_pdfs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Recursively lists all PDF files found within the source directory.</span>
 
 <span class="sd">        :return: A list of paths to the discovered PDF files.</span>
 <span class="sd">        :rtype: list[:class:`pathlib.Path`]</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">list_files</span><span class="p">(</span><span class="n">extension</span><span class="o">=</span><span class="s2">&quot;pdf&quot;</span><span class="p">)</span></div>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">list_files</span><span class="p">(</span><span class="n">extension</span><span class="o">=</span><span class="s2">"pdf"</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="Ingester.list_subjects">
 <a class="viewcode-back" href="../../generated/losalamos.ingestion.html#losalamos.ingestion.Ingester.list_subjects">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">list_subjects</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">list_paths</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Extracts the parent directory names for a list of file paths to serve as subject labels.</span>
 
 <span class="sd">        :param list_paths: A list of file paths to analyze for subject extraction.</span>
 <span class="sd">        :type list_paths: list[:class:`pathlib.Path`]</span>
-<span class="sd">        :return: A list of strings containing the stem of each file&#39;s parent directory.</span>
+<span class="sd">        :return: A list of strings containing the stem of each file's parent directory.</span>
 <span class="sd">        :rtype: list[str]</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">root_name</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">src_folder</span><span class="p">)</span><span class="o">.</span><span class="n">stem</span>
         <span class="n">ls</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">list_paths</span><span class="p">:</span>
             <span class="n">subject</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">p</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">stem</span>
             <span class="k">if</span> <span class="n">subject</span> <span class="o">==</span> <span class="n">root_name</span><span class="p">:</span>
-                <span class="n">subject</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+                <span class="n">subject</span> <span class="o">=</span> <span class="s2">""</span>
             <span class="n">ls</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">subject</span><span class="p">[:])</span>
         <span class="k">return</span> <span class="n">ls</span></div>
 
@@ -707,48 +707,48 @@
 <a class="viewcode-back" href="../../generated/losalamos.ingestion.html#losalamos.ingestion.Ingester.parse_pdf_metadata">[docs]</a>
     <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">parse_pdf_metadata</span><span class="p">(</span><span class="n">file_parse</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Extracts standard metadata fields from a PDF file using the ``pymupdf`` library.</span>
 
 <span class="sd">        :param file_parse: The path to the PDF file to be processed.</span>
 <span class="sd">        :type file_parse: str | :class:`pathlib.Path`</span>
 <span class="sd">        :return: A dictionary containing extracted metadata such as DOI, title, author, and dates.</span>
 <span class="sd">        :rtype: dict</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="kn">import</span><span class="w"> </span><span class="nn">pymupdf</span>
 
         <span class="n">pdf_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">file_parse</span><span class="p">)</span>
 
         <span class="n">metadata</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s2">&quot;doi&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-            <span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-            <span class="s2">&quot;author&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-            <span class="s2">&quot;subject&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-            <span class="s2">&quot;keywords&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-            <span class="s2">&quot;creator&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-            <span class="s2">&quot;producer&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-            <span class="s2">&quot;creation_date&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-            <span class="s2">&quot;modification_date&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-            <span class="s2">&quot;source&quot;</span><span class="p">:</span> <span class="s2">&quot;pdf_metadata&quot;</span><span class="p">,</span>
+            <span class="s2">"doi"</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="s2">"url"</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="s2">"title"</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="s2">"author"</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="s2">"subject"</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="s2">"keywords"</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="s2">"creator"</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="s2">"producer"</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="s2">"creation_date"</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="s2">"modification_date"</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="s2">"source"</span><span class="p">:</span> <span class="s2">"pdf_metadata"</span><span class="p">,</span>
         <span class="p">}</span>
 
         <span class="k">try</span><span class="p">:</span>
             <span class="k">with</span> <span class="n">pymupdf</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">pdf_path</span><span class="p">)</span> <span class="k">as</span> <span class="n">doc</span><span class="p">:</span>
                 <span class="n">info</span> <span class="o">=</span> <span class="n">doc</span><span class="o">.</span><span class="n">metadata</span>
-                <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;doi&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;doi&quot;</span><span class="p">)</span>
-                <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;url&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;url&quot;</span><span class="p">)</span>
-                <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;title&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;title&quot;</span><span class="p">)</span>
-                <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;author&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;author&quot;</span><span class="p">)</span>
-                <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;subject&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;subject&quot;</span><span class="p">)</span>
-                <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;keywords&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;keywords&quot;</span><span class="p">)</span>
-                <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;creator&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;creator&quot;</span><span class="p">)</span>
-                <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;producer&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;producer&quot;</span><span class="p">)</span>
-                <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;creation_date&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;creationDate&quot;</span><span class="p">)</span>
-                <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;modification_date&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;modDate&quot;</span><span class="p">)</span>
+                <span class="n">metadata</span><span class="p">[</span><span class="s2">"doi"</span><span class="p">]</span> <span class="o">=</span> <span class="n">info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"doi"</span><span class="p">)</span>
+                <span class="n">metadata</span><span class="p">[</span><span class="s2">"url"</span><span class="p">]</span> <span class="o">=</span> <span class="n">info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"url"</span><span class="p">)</span>
+                <span class="n">metadata</span><span class="p">[</span><span class="s2">"title"</span><span class="p">]</span> <span class="o">=</span> <span class="n">info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"title"</span><span class="p">)</span>
+                <span class="n">metadata</span><span class="p">[</span><span class="s2">"author"</span><span class="p">]</span> <span class="o">=</span> <span class="n">info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"author"</span><span class="p">)</span>
+                <span class="n">metadata</span><span class="p">[</span><span class="s2">"subject"</span><span class="p">]</span> <span class="o">=</span> <span class="n">info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"subject"</span><span class="p">)</span>
+                <span class="n">metadata</span><span class="p">[</span><span class="s2">"keywords"</span><span class="p">]</span> <span class="o">=</span> <span class="n">info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"keywords"</span><span class="p">)</span>
+                <span class="n">metadata</span><span class="p">[</span><span class="s2">"creator"</span><span class="p">]</span> <span class="o">=</span> <span class="n">info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"creator"</span><span class="p">)</span>
+                <span class="n">metadata</span><span class="p">[</span><span class="s2">"producer"</span><span class="p">]</span> <span class="o">=</span> <span class="n">info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"producer"</span><span class="p">)</span>
+                <span class="n">metadata</span><span class="p">[</span><span class="s2">"creation_date"</span><span class="p">]</span> <span class="o">=</span> <span class="n">info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"creationDate"</span><span class="p">)</span>
+                <span class="n">metadata</span><span class="p">[</span><span class="s2">"modification_date"</span><span class="p">]</span> <span class="o">=</span> <span class="n">info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"modDate"</span><span class="p">)</span>
 
         <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-            <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;error&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+            <span class="n">metadata</span><span class="p">[</span><span class="s2">"error"</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">metadata</span></div>
 
@@ -757,7 +757,7 @@
 <a class="viewcode-back" href="../../generated/losalamos.ingestion.html#losalamos.ingestion.Ingester.parse_pdf_pages">[docs]</a>
     <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">parse_pdf_pages</span><span class="p">(</span><span class="n">file_parse</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">n_pages</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">3</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Reads and concatenates text content from the first few pages of a PDF document.</span>
 
 <span class="sd">        :param file_parse: The path to the PDF file to be read.</span>
@@ -766,7 +766,7 @@
 <span class="sd">        :type n_pages: int</span>
 <span class="sd">        :return: A single string containing the combined text of the extracted pages.</span>
 <span class="sd">        :rtype: str</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="kn">import</span><span class="w"> </span><span class="nn">pymupdf</span>
 
         <span class="n">file_parse</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">file_parse</span><span class="p">)</span>
@@ -779,21 +779,21 @@
                 <span class="n">page</span> <span class="o">=</span> <span class="n">doc</span><span class="o">.</span><span class="n">load_page</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
                 <span class="n">text_chunks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">page</span><span class="o">.</span><span class="n">get_text</span><span class="p">())</span>
 
-        <span class="k">return</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">text_chunks</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">text_chunks</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="Ingester.parse_bib">
 <a class="viewcode-back" href="../../generated/losalamos.ingestion.html#losalamos.ingestion.Ingester.parse_bib">[docs]</a>
     <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">parse_bib</span><span class="p">(</span><span class="n">file_parse</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Parses a BibTeX file and returns the metadata of the first entry found.</span>
 
 <span class="sd">        :param file_parse: The path to the BibTeX file to be parsed.</span>
 <span class="sd">        :type file_parse: str | :class:`pathlib.Path`</span>
 <span class="sd">        :return: A dictionary representing the first bibliographic entry in the file.</span>
 <span class="sd">        :rtype: dict</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">ls</span> <span class="o">=</span> <span class="n">Reference</span><span class="o">.</span><span class="n">parse_bib</span><span class="p">(</span><span class="n">file_parse</span><span class="o">=</span><span class="n">file_parse</span><span class="p">)</span>
         <span class="n">dc</span> <span class="o">=</span> <span class="n">ls</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># always the first item</span>
         <span class="k">return</span> <span class="n">dc</span></div>
@@ -804,13 +804,13 @@
 <span class="c1"># SCRIPT</span>
 <span class="c1"># ***********************************************************************</span>
 <span class="c1"># standalone behaviour as a script</span>
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">tests.conftest</span><span class="w"> </span><span class="kn">import</span> <span class="n">DATA_DIR</span><span class="p">,</span> <span class="n">OUTPUT_DIR</span>
 
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Hello World!&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"Hello World!"</span><span class="p">)</span>
 
-    <span class="n">inp</span> <span class="o">=</span> <span class="n">DATA_DIR</span> <span class="o">/</span> <span class="s2">&quot;incoming/article&quot;</span>
-    <span class="n">out</span> <span class="o">=</span> <span class="n">OUTPUT_DIR</span> <span class="o">/</span> <span class="s2">&quot;library/papers&quot;</span>
+    <span class="n">inp</span> <span class="o">=</span> <span class="n">DATA_DIR</span> <span class="o">/</span> <span class="s2">"incoming/article"</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">OUTPUT_DIR</span> <span class="o">/</span> <span class="s2">"library/papers"</span>
 
     <span class="n">ingester</span> <span class="o">=</span> <span class="n">Ingester</span><span class="p">(</span><span class="n">src</span><span class="o">=</span><span class="n">inp</span><span class="p">,</span> <span class="n">dst</span><span class="o">=</span><span class="n">out</span><span class="p">)</span>
     <span class="n">ingester</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
@@ -843,8 +843,8 @@
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../_static/scripts/bootstrap.js?digest=a95f357e85573c9b56d5"></script>
-<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=a95f357e85573c9b56d5"></script>
+  <script defer src="../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -878,7 +878,7 @@
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.19.0.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.21.0.
 </p></div>
       
     </div>

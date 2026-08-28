@@ -1,0 +1,12 @@
+﻿losalamos.tools.populate\_attributes
+====================================
+
+.. automodule:: losalamos.tools.populate_attributes
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      populate_canonical
+   

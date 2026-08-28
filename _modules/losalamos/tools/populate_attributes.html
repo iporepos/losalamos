@@ -1,0 +1,911 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" data-theme="light">
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>losalamos.tools.populate_attributes &#8212; losalamos 0.0.1 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../../../_static/scripts/fontawesome.js?digest=cb8930eaaf36d9849b67"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
+
+    <script src="../../../_static/documentation_options.js?v=d45e8c67"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/losalamos/tools/populate_attributes';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="author" title="About these documents" href="../../../about.html" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="../../../_static/searchtools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <script src="../../../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="light">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+    
+    
+    
+    <img src="https://github.com/iporepos/losalamos/blob/main/docs/figs/logo.png?raw=true" class="logo__image only-light" alt="losalamos 0.0.1 documentation - Home"/>
+    <img src="https://github.com/iporepos/losalamos/blob/main/docs/figs/logo.png?raw=true" class="logo__image only-dark pst-js-only" alt="losalamos 0.0.1 documentation - Home"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../index.html">
+    Home
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../about.html">
+    About
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../usage.html">
+    Usage
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../api.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../development.html">
+    Development
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/iporepos/losalamos" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../index.html">
+    Home
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../about.html">
+    About
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../usage.html">
+    Usage
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../api.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../development.html">
+    Development
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/iporepos/losalamos" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../index.html" class="nav-link">Module code</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">losalamos.tools.populate_attributes</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for losalamos.tools.populate_attributes</h1><div class="highlight"><pre>
+<span></span><span class="sd">"""</span>
+<span class="sd">populate_attributes.py</span>
+<span class="sd">---------------------</span>
+<span class="sd">Batch-creation script for Flare canonical attribute registry notes.</span>
+
+<span class="sd">Reads a JSON seed file and writes one Obsidian ``.md`` note per entry into</span>
+<span class="sd">a target vault folder, using :class:`losalamos.notes.NoteAttribute`.</span>
+
+<span class="sd">Depends on ``losalamos`` being installed with ``NoteAttribute`` present in</span>
+<span class="sd">``losalamos.notes``. Run from any location.</span>
+
+<span class="sd">Usage</span>
+<span class="sd">-----</span>
+
+<span class="sd">.. code-block:: shell</span>
+
+<span class="sd">    python populate_attributes.py &lt;seed.json&gt; &lt;vault_folder&gt; [--overwrite]</span>
+
+<span class="sd">Seed JSON format</span>
+<span class="sd">----------------</span>
+
+<span class="sd">.. code-block:: json</span>
+
+<span class="sd">    {</span>
+<span class="sd">        "defaults": {</span>
+<span class="sd">            "theme": "101",</span>
+<span class="sd">            "type": "R",</span>
+<span class="sd">            "category": "variable",</span>
+<span class="sd">            "tags": ["hydrology"],</span>
+<span class="sd">            "subject": "[[Surface Hydrology]]"</span>
+<span class="sd">        },</span>
+<span class="sd">        "entries": [</span>
+<span class="sd">            {</span>
+<span class="sd">                "name": "Streamflow",</span>
+<span class="sd">                "title": "Volumetric flow rate of water in a channel cross-section",</span>
+<span class="sd">                "units_ref": "m^3/s",</span>
+<span class="sd">                "domain": "[0U)",</span>
+<span class="sd">                "symbol": "Q",</span>
+<span class="sd">                "alias": "streamflow",</span>
+<span class="sd">                "dimension": "L^{3}/T",</span>
+<span class="sd">                "source": "Chow et al. (1988) Applied Hydrology",</span>
+<span class="sd">                "synonyms": "discharge, river flow",</span>
+<span class="sd">                "abstract": "...",</span>
+<span class="sd">                "tags": ["surface-water"],</span>
+<span class="sd">                "twin_notes": ["Discharge", "River Flow"]</span>
+<span class="sd">            }</span>
+<span class="sd">        ]</span>
+<span class="sd">    }</span>
+
+<span class="sd">Defaults and entries</span>
+<span class="sd">--------------------</span>
+<span class="sd">``theme``</span>
+<span class="sd">    Required in ``defaults``. Determines the ``TTT`` segment of all codes</span>
+<span class="sd">    in this batch. One seed file = one theme.</span>
+
+<span class="sd">``tags``</span>
+<span class="sd">    Additive. ``defaults`` tags apply to every entry; entry-level tags</span>
+<span class="sd">    extend them. The base tag ``attribute-note`` is always present.</span>
+
+<span class="sd">``subject``</span>
+<span class="sd">    Override. Entry-level subject replaces the default for that entry.</span>
+<span class="sd">    Write as Obsidian wiki-link notation: ``[[Note Name]]``.</span>
+<span class="sd">    Missing or null at either level is ignored.</span>
+
+<span class="sd">``twin_notes``</span>
+<span class="sd">    Population directive (not written to frontmatter). List of synonym</span>
+<span class="sd">    names that receive their own note with a serial code and ``twin_code``</span>
+<span class="sd">    pointing to the canonical. Twins inherit the canonical's resolved tags</span>
+<span class="sd">    and subject.</span>
+
+<span class="sd">``code``</span>
+<span class="sd">    Never written in the seed — always auto-assigned by scanning existing</span>
+<span class="sd">    notes in the vault folder and incrementing from the highest serial.</span>
+
+<span class="sd">Field conventions</span>
+<span class="sd">-----------------</span>
+<span class="sd">``symbol``</span>
+<span class="sd">    LaTeX raw, no ``$`` delimiters. Stripped automatically if present.</span>
+
+<span class="sd">``dimension``</span>
+<span class="sd">    Plain exponent notation, no ``[]`` brackets. Stripped automatically.</span>
+
+<span class="sd">``units_ref``</span>
+<span class="sd">    Plain readable text, no LaTeX. Rendered downstream.</span>
+
+<span class="sd">``domain``</span>
+<span class="sd">    Interval notation using ``U`` in place of ``:`` to avoid YAML conflicts.</span>
+<span class="sd">    Examples: ``[0U)``, ``(U)``, ``(0U)``, ``[0U1]``, ``(-273.15U)``.</span>
+<span class="sd">"""</span>
+
+<span class="c1"># IMPORTS</span>
+<span class="c1"># =======================================================================</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">losalamos.notes</span><span class="w"> </span><span class="kn">import</span> <span class="n">Note</span><span class="p">,</span> <span class="n">NoteAttribute</span>
+
+
+<span class="c1"># CONSTANTS</span>
+<span class="c1"># =======================================================================</span>
+
+<span class="c1"># Regex to match a Flare attribute code — F101A007 etc.</span>
+<span class="n">CODE_PATTERN</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">"^F(\d</span><span class="si">{3}</span><span class="s2">)A(\d</span><span class="si">{3}</span><span class="s2">)$"</span><span class="p">)</span>
+
+
+<span class="c1"># HELPERS</span>
+<span class="c1"># =======================================================================</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_as_list</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""</span>
+<span class="sd">    Coerce a seed tags value to a list, handling str, list, and None.</span>
+
+<span class="sd">    :param value: Raw tags value — str, list, or None.</span>
+<span class="sd">    :return: List of tag strings, empty list for missing/null.</span>
+<span class="sd">    """</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">value</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">value</span><span class="p">]</span>
+    <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_scan_next_serial</span><span class="p">(</span><span class="n">vault_folder</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">theme</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""</span>
+<span class="sd">    Scan existing ``.md`` notes in ``vault_folder`` by reading each file's</span>
+<span class="sd">    ``code`` frontmatter field, and return the next available serial for</span>
+<span class="sd">    the given theme.</span>
+
+<span class="sd">    Note files are named by attribute name (not code), so frontmatter</span>
+<span class="sd">    scanning is required rather than filename globbing.</span>
+
+<span class="sd">    :param vault_folder: Path to the vault folder to scan.</span>
+<span class="sd">    :param theme: Three-digit theme string, e.g. ``"101"``.</span>
+<span class="sd">    :return: Next available serial as an integer (1-indexed).</span>
+<span class="sd">    """</span>
+    <span class="n">max_serial</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">for</span> <span class="n">md_file</span> <span class="ow">in</span> <span class="n">vault_folder</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s2">"*.md"</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">metadata</span> <span class="o">=</span> <span class="n">Note</span><span class="o">.</span><span class="n">parse_metadata</span><span class="p">(</span><span class="n">md_file</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">metadata</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="n">code</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">metadata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"code"</span><span class="p">,</span> <span class="s2">""</span><span class="p">))</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="n">match</span> <span class="o">=</span> <span class="n">CODE_PATTERN</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">code</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">match</span> <span class="ow">and</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="n">theme</span><span class="p">:</span>
+            <span class="n">serial</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">serial</span> <span class="o">&gt;</span> <span class="n">max_serial</span><span class="p">:</span>
+                <span class="n">max_serial</span> <span class="o">=</span> <span class="n">serial</span>
+
+    <span class="k">return</span> <span class="n">max_serial</span> <span class="o">+</span> <span class="mi">1</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_merge</span><span class="p">(</span><span class="n">defaults</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">entry</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Merge defaults with entry overrides. Entry values take precedence."""</span>
+    <span class="n">merged</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">defaults</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+    <span class="n">merged</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">entry</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">merged</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_validate</span><span class="p">(</span><span class="n">entry</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">required_fields</span><span class="p">:</span> <span class="nb">set</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""</span>
+<span class="sd">    Raise ValueError if any required field is missing from the entry.</span>
+
+<span class="sd">    :param entry: Merged entry dict.</span>
+<span class="sd">    :param required_fields: Set of field names that must be present.</span>
+<span class="sd">    """</span>
+    <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">required_fields</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">entry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">field</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">"Entry missing required field '</span><span class="si">{</span><span class="n">field</span><span class="si">}</span><span class="s2">': "</span>
+                <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">entry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'name'</span><span class="p">,</span><span class="w"> </span><span class="s1">'&lt;unnamed&gt;'</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span>
+            <span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_assign_code</span><span class="p">(</span><span class="n">theme</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">serial</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Build a Flare attribute code, e.g. ``F101A007``."""</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">"F</span><span class="si">{</span><span class="n">theme</span><span class="si">}</span><span class="s2">A</span><span class="si">{</span><span class="n">serial</span><span class="si">:</span><span class="s2">03d</span><span class="si">}</span><span class="s2">"</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_note_filename</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Build the ``.md`` filename from the attribute name, preserving spaces."""</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">.md"</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_read_existing_code</span><span class="p">(</span><span class="n">file_path</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""</span>
+<span class="sd">    Read the ``code`` field from the frontmatter of an existing note.</span>
+
+<span class="sd">    Returns ``None`` if the file does not exist, has no frontmatter, or</span>
+<span class="sd">    the ``code`` field is absent or empty.</span>
+
+<span class="sd">    :param file_path: Path to the ``.md`` file.</span>
+<span class="sd">    :return: Existing code string, e.g. ``"F101A003"``, or ``None``.</span>
+<span class="sd">    """</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">file_path</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">metadata</span> <span class="o">=</span> <span class="n">Note</span><span class="o">.</span><span class="n">parse_metadata</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">metadata</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="n">code</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">metadata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"code"</span><span class="p">,</span> <span class="s2">""</span><span class="p">))</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">code</span> <span class="k">if</span> <span class="n">code</span> <span class="k">else</span> <span class="kc">None</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_write_entry</span><span class="p">(</span>
+    <span class="n">note_cls</span><span class="p">:</span> <span class="n">NoteAttribute</span><span class="p">,</span>
+    <span class="n">entry</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
+    <span class="n">vault_folder</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span>
+    <span class="n">overwrite</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+    <span class="n">label</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"write"</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">bool</span><span class="p">,</span> <span class="nb">bool</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">"""</span>
+<span class="sd">    Write a single note to disk.</span>
+
+<span class="sd">    On refresh (``overwrite=True``, file already exists), the existing</span>
+<span class="sd">    ``code`` is read from frontmatter and reused — the serial counter is</span>
+<span class="sd">    not consumed. All other content is updated from the entry dict.</span>
+
+<span class="sd">    On create (file does not exist), the code must already be assigned in</span>
+<span class="sd">    ``entry`` by the caller.</span>
+
+<span class="sd">    :param note_cls: Shared ``NoteAttribute`` instance.</span>
+<span class="sd">    :param entry: Fully resolved entry dict — code and ``_tags`` /</span>
+<span class="sd">        ``_subject`` already assigned for new entries; for existing entries</span>
+<span class="sd">        the code will be overwritten by the value read from disk.</span>
+<span class="sd">    :param vault_folder: Destination folder.</span>
+<span class="sd">    :param overwrite: If ``False``, skip existing files. If ``True``,</span>
+<span class="sd">        refresh them keeping their existing code.</span>
+<span class="sd">    :param label: Display label for console output.</span>
+<span class="sd">    :return: Tuple ``(written, serial_consumed)`` — both booleans.</span>
+<span class="sd">        ``serial_consumed`` is ``False`` when an existing code was reused.</span>
+<span class="sd">    """</span>
+    <span class="n">filename</span> <span class="o">=</span> <span class="n">_note_filename</span><span class="p">(</span><span class="n">entry</span><span class="p">[</span><span class="s2">"name"</span><span class="p">])</span>
+    <span class="n">file_path</span> <span class="o">=</span> <span class="n">vault_folder</span> <span class="o">/</span> <span class="n">filename</span>
+    <span class="n">existing_code</span> <span class="o">=</span> <span class="n">_read_existing_code</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">existing_code</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">overwrite</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  [skip]   </span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2"> — already exists"</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span>
+
+    <span class="k">if</span> <span class="n">existing_code</span><span class="p">:</span>
+        <span class="c1"># Refresh: reuse existing code, do not consume a serial</span>
+        <span class="n">entry</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="n">entry</span><span class="p">,</span> <span class="s2">"code"</span><span class="p">:</span> <span class="n">existing_code</span><span class="p">}</span>
+        <span class="n">action</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"refresh"</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">action</span> <span class="o">=</span> <span class="n">label</span>
+
+    <span class="n">note_cls</span><span class="o">.</span><span class="n">load_new</span><span class="p">(</span><span class="n">file_note</span><span class="o">=</span><span class="n">file_path</span><span class="p">,</span> <span class="n">entry</span><span class="o">=</span><span class="n">entry</span><span class="p">)</span>
+    <span class="n">note_cls</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  [</span><span class="si">{</span><span class="n">action</span><span class="si">}</span><span class="s2">] </span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">  →  </span><span class="si">{</span><span class="n">entry</span><span class="p">[</span><span class="s1">'code'</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="n">serial_consumed</span> <span class="o">=</span> <span class="n">existing_code</span> <span class="ow">is</span> <span class="kc">None</span>
+    <span class="k">return</span> <span class="kc">True</span><span class="p">,</span> <span class="n">serial_consumed</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_build_twin_entry</span><span class="p">(</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">code</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">twin_code</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">tags</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span>
+    <span class="n">subject</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""</span>
+<span class="sd">    Build a minimal entry dict for a twin note.</span>
+
+<span class="sd">    Twin notes carry only ``name``, ``code``, ``twin_code``, and the</span>
+<span class="sd">    resolved ``_tags`` and ``_subject`` inherited from their canonical.</span>
+<span class="sd">    All other fields are left empty.</span>
+
+<span class="sd">    :param name: Display name of the twin, e.g. ``"Rainfall"``.</span>
+<span class="sd">    :param code: Auto-assigned Flare code for the twin.</span>
+<span class="sd">    :param twin_code: Flare code of the canonical entry this twin points to.</span>
+<span class="sd">    :param tags: Resolved tag list inherited from the canonical entry.</span>
+<span class="sd">    :param subject: Resolved subject string inherited from the canonical.</span>
+<span class="sd">    :return: Minimal entry dict.</span>
+<span class="sd">    """</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s2">"name"</span><span class="p">:</span> <span class="n">name</span><span class="p">,</span>
+        <span class="s2">"code"</span><span class="p">:</span> <span class="n">code</span><span class="p">,</span>
+        <span class="s2">"twin_code"</span><span class="p">:</span> <span class="n">twin_code</span><span class="p">,</span>
+        <span class="s2">"_tags"</span><span class="p">:</span> <span class="n">tags</span><span class="p">,</span>
+        <span class="s2">"_subject"</span><span class="p">:</span> <span class="n">subject</span><span class="p">,</span>
+    <span class="p">}</span>
+
+
+<span class="c1"># ENTRY POINT</span>
+<span class="c1"># =======================================================================</span>
+
+
+<div class="viewcode-block" id="populate_canonical">
+<a class="viewcode-back" href="../../../generated/losalamos.tools.populate_attributes.html#losalamos.tools.populate_attributes.populate_canonical">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">populate_canonical</span><span class="p">(</span>
+    <span class="n">seed_path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span>
+    <span class="n">vault_folder</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span>
+    <span class="n">overwrite</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""</span>
+<span class="sd">    Read a JSON seed file and write one Obsidian attribute note per entry,</span>
+<span class="sd">    followed immediately by any twin notes declared under ``twin_notes``.</span>
+
+<span class="sd">    Codes are auto-assigned sequentially within the theme for both canonical</span>
+<span class="sd">    entries and twins, in the order they appear in the seed file.</span>
+
+<span class="sd">    :param seed_path: Path to the JSON seed file.</span>
+<span class="sd">    :param vault_folder: Destination folder for note files.</span>
+<span class="sd">    :param overwrite: If ``False`` (default), skip existing files.</span>
+<span class="sd">        If ``True``, overwrite them.</span>
+<span class="sd">    """</span>
+    <span class="n">vault_folder</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">seed_path</span><span class="p">,</span> <span class="s2">"r"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">seed</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+
+    <span class="n">defaults</span> <span class="o">=</span> <span class="n">seed</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"defaults"</span><span class="p">,</span> <span class="p">{})</span>
+    <span class="n">entries</span> <span class="o">=</span> <span class="n">seed</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"entries"</span><span class="p">,</span> <span class="p">[])</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">entries</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"No entries found in seed file."</span><span class="p">)</span>
+        <span class="k">return</span>
+
+    <span class="n">theme</span> <span class="o">=</span> <span class="n">defaults</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"theme"</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">theme</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"'theme' must be defined in 'defaults'."</span><span class="p">)</span>
+    <span class="n">theme</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">theme</span><span class="p">)</span><span class="o">.</span><span class="n">zfill</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Seed  : </span><span class="si">{</span><span class="n">seed_path</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> — </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">entries</span><span class="p">)</span><span class="si">}</span><span class="s2"> entries"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Theme : </span><span class="si">{</span><span class="n">theme</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Vault : </span><span class="si">{</span><span class="n">vault_folder</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">()</span>
+
+    <span class="n">next_serial</span> <span class="o">=</span> <span class="n">_scan_next_serial</span><span class="p">(</span><span class="n">vault_folder</span><span class="p">,</span> <span class="n">theme</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Next serial : </span><span class="si">{</span><span class="n">next_serial</span><span class="si">:</span><span class="s2">03d</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">()</span>
+
+    <span class="n">note_cls</span> <span class="o">=</span> <span class="n">NoteAttribute</span><span class="p">()</span>
+    <span class="n">written</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">skipped</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="c1"># Extract default-level tags and subject once</span>
+    <span class="n">default_tags</span> <span class="o">=</span> <span class="n">_as_list</span><span class="p">(</span><span class="n">defaults</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"tags"</span><span class="p">))</span>
+    <span class="n">default_subject</span> <span class="o">=</span> <span class="n">defaults</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"subject"</span><span class="p">)</span> <span class="ow">or</span> <span class="s2">""</span>
+
+    <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">entries</span><span class="p">:</span>
+        <span class="n">merged</span> <span class="o">=</span> <span class="n">_merge</span><span class="p">(</span><span class="n">defaults</span><span class="p">,</span> <span class="n">entry</span><span class="p">)</span>
+        <span class="n">_validate</span><span class="p">(</span><span class="n">merged</span><span class="p">,</span> <span class="n">note_cls</span><span class="o">.</span><span class="n">REQUIRED_FIELDS</span><span class="p">)</span>
+
+        <span class="c1"># Population directives — strip before passing to note</span>
+        <span class="n">twin_names</span> <span class="o">=</span> <span class="n">merged</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">"twin_notes"</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="p">[]</span>
+        <span class="n">merged</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">"code"</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+        <span class="c1"># Resolve tags (additive) and subject (local override)</span>
+        <span class="n">merged</span><span class="p">[</span><span class="s2">"_tags"</span><span class="p">]</span> <span class="o">=</span> <span class="n">NoteAttribute</span><span class="o">.</span><span class="n">_resolve_tags</span><span class="p">(</span>
+            <span class="n">default_tags</span><span class="o">=</span><span class="n">default_tags</span><span class="p">,</span>
+            <span class="n">entry_tags</span><span class="o">=</span><span class="n">_as_list</span><span class="p">(</span><span class="n">entry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"tags"</span><span class="p">)),</span>
+        <span class="p">)</span>
+        <span class="n">merged</span><span class="p">[</span><span class="s2">"_subject"</span><span class="p">]</span> <span class="o">=</span> <span class="n">NoteAttribute</span><span class="o">.</span><span class="n">_resolve_subject</span><span class="p">(</span>
+            <span class="n">default_subject</span><span class="o">=</span><span class="n">default_subject</span><span class="p">,</span>
+            <span class="n">entry_subject</span><span class="o">=</span><span class="n">entry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"subject"</span><span class="p">)</span> <span class="ow">or</span> <span class="s2">""</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Assign a tentative code — reused or consumed depending on whether</span>
+        <span class="c1"># the file already exists (resolved inside _write_entry)</span>
+        <span class="n">tentative_code</span> <span class="o">=</span> <span class="n">_assign_code</span><span class="p">(</span><span class="n">theme</span><span class="p">,</span> <span class="n">next_serial</span><span class="p">)</span>
+        <span class="n">merged</span><span class="p">[</span><span class="s2">"code"</span><span class="p">]</span> <span class="o">=</span> <span class="n">tentative_code</span>
+
+        <span class="n">ok</span><span class="p">,</span> <span class="n">serial_consumed</span> <span class="o">=</span> <span class="n">_write_entry</span><span class="p">(</span>
+            <span class="n">note_cls</span><span class="p">,</span> <span class="n">merged</span><span class="p">,</span> <span class="n">vault_folder</span><span class="p">,</span> <span class="n">overwrite</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">"write"</span>
+        <span class="p">)</span>
+        <span class="n">written</span> <span class="o">+=</span> <span class="n">ok</span>
+        <span class="n">skipped</span> <span class="o">+=</span> <span class="ow">not</span> <span class="n">ok</span>
+        <span class="k">if</span> <span class="n">serial_consumed</span><span class="p">:</span>
+            <span class="n">next_serial</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="c1"># Canonical code for twins is the one actually written (may differ</span>
+        <span class="c1"># from tentative_code if the note was refreshed)</span>
+        <span class="n">canonical_code</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">merged</span><span class="p">[</span><span class="s2">"code"</span><span class="p">]</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">ok</span>
+            <span class="k">else</span> <span class="p">(</span>
+                <span class="n">tentative_code</span>
+                <span class="k">if</span> <span class="n">serial_consumed</span>
+                <span class="k">else</span> <span class="n">_read_existing_code</span><span class="p">(</span><span class="n">vault_folder</span> <span class="o">/</span> <span class="n">_note_filename</span><span class="p">(</span><span class="n">merged</span><span class="p">[</span><span class="s2">"name"</span><span class="p">]))</span>
+                <span class="ow">or</span> <span class="n">tentative_code</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Write twin notes immediately after, inheriting canonical's</span>
+        <span class="c1"># resolved tags and subject</span>
+        <span class="k">for</span> <span class="n">twin_name</span> <span class="ow">in</span> <span class="n">twin_names</span><span class="p">:</span>
+            <span class="n">twin_code</span> <span class="o">=</span> <span class="n">_assign_code</span><span class="p">(</span><span class="n">theme</span><span class="p">,</span> <span class="n">next_serial</span><span class="p">)</span>
+            <span class="n">twin_entry</span> <span class="o">=</span> <span class="n">_build_twin_entry</span><span class="p">(</span>
+                <span class="n">name</span><span class="o">=</span><span class="n">twin_name</span><span class="p">,</span>
+                <span class="n">code</span><span class="o">=</span><span class="n">twin_code</span><span class="p">,</span>
+                <span class="n">twin_code</span><span class="o">=</span><span class="n">canonical_code</span><span class="p">,</span>
+                <span class="n">tags</span><span class="o">=</span><span class="n">merged</span><span class="p">[</span><span class="s2">"_tags"</span><span class="p">],</span>
+                <span class="n">subject</span><span class="o">=</span><span class="n">merged</span><span class="p">[</span><span class="s2">"_subject"</span><span class="p">],</span>
+            <span class="p">)</span>
+            <span class="n">ok</span><span class="p">,</span> <span class="n">serial_consumed</span> <span class="o">=</span> <span class="n">_write_entry</span><span class="p">(</span>
+                <span class="n">note_cls</span><span class="p">,</span> <span class="n">twin_entry</span><span class="p">,</span> <span class="n">vault_folder</span><span class="p">,</span> <span class="n">overwrite</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">"twin "</span>
+            <span class="p">)</span>
+            <span class="n">written</span> <span class="o">+=</span> <span class="n">ok</span>
+            <span class="n">skipped</span> <span class="o">+=</span> <span class="ow">not</span> <span class="n">ok</span>
+            <span class="k">if</span> <span class="n">serial_consumed</span><span class="p">:</span>
+                <span class="n">next_serial</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="nb">print</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Done — </span><span class="si">{</span><span class="n">written</span><span class="si">}</span><span class="s2"> written, </span><span class="si">{</span><span class="n">skipped</span><span class="si">}</span><span class="s2"> skipped."</span><span class="p">)</span></div>
+
+
+
+<span class="c1"># CLI</span>
+<span class="c1"># =======================================================================</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span>
+            <span class="s2">"Usage: python populate_canonical.py &lt;seed.json&gt; &lt;vault_folder&gt; [--overwrite]"</span>
+        <span class="p">)</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="n">seed_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">vault_folder</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+    <span class="n">overwrite</span> <span class="o">=</span> <span class="s2">"--overwrite"</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">seed_path</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Seed file not found: </span><span class="si">{</span><span class="n">seed_path</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="n">populate_canonical</span><span class="p">(</span><span class="n">seed_path</span><span class="p">,</span> <span class="n">vault_folder</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="n">overwrite</span><span class="p">)</span>
+</pre></div>
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2026, Iporã Possantti.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.0.4.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.21.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>
