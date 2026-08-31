@@ -8,25 +8,17 @@ Unit tests for losalamos Project creation and loading utilities.
 
 Features
 --------
- - Test project creation via `new_project`
- - Test loading existing projects via `load_project`
- - Validate Project internal data initialization
- - Validate filesystem side effects
+ - Test project creation via ``new_project`` (dict and file-based config)
+ - Test loading existing projects via ``load_project``
+ - Validate main note creation and metadata defaults
+ - Validate sources config file installation
+ - Validate Project internal data initialization and filesystem side effects
 
-Overview
---------
-This test suite validates the behavioral contract of the Project API,
-ensuring correct error handling, filesystem setup, and internal data
-structures.
-
-Examples
---------
 From the terminal, run:
 
 .. code-block:: bash
 
     python ./tests/unit/test_project.py
-
 
 """
 
@@ -54,7 +46,7 @@ from losalamos.project import (
     Project,
     SUBFOLDERS,
 )
-from losalamos.notes import NoteProject, NoteOrganization, NoteSapiens
+from losalamos.notes import NoteProject, NoteOrganization, NoteSapiens, NoteBasic
 
 # ***********************************************************************
 # CLASSES
@@ -99,16 +91,16 @@ class TestProject(unittest.TestCase):
         new_project should fail if required keys are missing.
         """
         with self.assertRaises(ValueError):
-            new_project(specs={"name": "TestProject"})
+            new_project(config={"name": "TestProject"})
 
         with self.assertRaises(ValueError):
-            new_project(specs={"folder_base": str(self.base_dir)})
+            new_project(config={"folder_base": str(self.base_dir)})
 
     def test_new_project_success(self):
         """
         new_project should create a project and initialize folders.
         """
-        specs = {
+        config = {
             "folder_base": str(self.base_dir),
             "name": "MyProject",
             "alias": "MP",
@@ -116,7 +108,7 @@ class TestProject(unittest.TestCase):
             "description": "test project",
         }
 
-        p = new_project(specs)
+        p = new_project(config)
 
         # type & attributes
         self.assertIsInstance(p, Project)
@@ -129,6 +121,98 @@ class TestProject(unittest.TestCase):
         project_root = self.base_dir / "MyProject"
         self.assertTrue(project_root.is_dir())
 
+    def test_new_project_creates_main_note(self):
+        """
+        new_project should create the main Markdown note file.
+        """
+        config = {
+            "folder_base": str(self.base_dir),
+            "name": "NoteProject",
+        }
+        p = new_project(config)
+
+        note_path = Path(p.folder_root) / "NoteProject.md"
+        self.assertTrue(note_path.is_file())
+        self.assertIsNotNone(p.main_note)
+
+    def test_new_project_note_metadata_defaults(self):
+        """
+        new_project should set default status and aliases in the main note.
+        """
+        config = {
+            "folder_base": str(self.base_dir),
+            "name": "DefaultsProject",
+        }
+        p = new_project(config)
+
+        status = p.get_attribute(entry_key="status", clean_cref=False)
+        self.assertEqual(status, "on going")
+
+        aliases = p.main_note.metadata.get("aliases")
+        self.assertIsInstance(aliases, list)
+        self.assertTrue(any("DefaultsProject" in str(a) for a in aliases))
+
+    def test_new_project_note_metadata_from_config(self):
+        """
+        new_project should write note metadata fields supplied in config.
+        """
+        config = {
+            "folder_base": str(self.base_dir),
+            "name": "MetaProject",
+            "title": "My Survey",
+            "status": "planning",
+        }
+        p = new_project(config)
+
+        title = p.get_attribute(entry_key="title", clean_cref=False)
+        self.assertIn("My Survey", title)
+
+        status = p.get_attribute(entry_key="status", clean_cref=False)
+        self.assertEqual(status, "planning")
+
+    def test_new_project_with_sources_file(self):
+        """
+        new_project should copy a sources file into admin/config/ when
+        the 'sources' key is provided.
+        """
+        # write a minimal sources.yaml to a temp location
+        import yaml
+
+        sources_content = {"organizations": [], "sapiens": [], "services": []}
+        src_file = Path(self._tmp_root) / "sources_fixture.yaml"
+        src_file.write_text(yaml.dump(sources_content), encoding="utf-8")
+
+        config = {
+            "folder_base": str(self.base_dir),
+            "name": "SourcesProject",
+            "sources": str(src_file),
+        }
+        p = new_project(config)
+
+        dst = Path(p.folder_root) / "admin/config" / f"sources{src_file.suffix}"
+        self.assertTrue(dst.is_file())
+
+    def test_new_project_from_yaml_file(self):
+        """
+        new_project should accept a YAML file path as config.
+        """
+        import yaml
+
+        cfg = {
+            "folder_base": str(self.base_dir),
+            "name": "YamlProject",
+            "title": "From YAML",
+        }
+        cfg_file = Path(self._tmp_root) / "project_config.yaml"
+        cfg_file.write_text(yaml.dump(cfg), encoding="utf-8")
+
+        p = new_project(config=str(cfg_file))
+
+        self.assertIsInstance(p, Project)
+        self.assertEqual(p.name, "YamlProject")
+        title = p.get_attribute(entry_key="title", clean_cref=False)
+        self.assertIn("From YAML", title)
+
     def test_new_project_existing_folder_raises(self):
         """
         new_project should raise if project folder already exists.
@@ -136,13 +220,13 @@ class TestProject(unittest.TestCase):
         project_root = self.base_dir / "ExistingProject"
         project_root.mkdir(parents=True)
 
-        specs = {
-            "folder_base": str(self.base_dir),
-            "name": "ExistingProject",
-        }
-
         with self.assertRaises(ValueError):
-            new_project(specs)
+            new_project(
+                config={
+                    "folder_base": str(self.base_dir),
+                    "name": "ExistingProject",
+                }
+            )
 
     # -------------------------------------------------------------------
     # load_project
@@ -152,12 +236,12 @@ class TestProject(unittest.TestCase):
         """
         load_project should load an existing project folder.
         """
-        # create project first
-        specs = {
-            "folder_base": str(self.base_dir),
-            "name": "LoadableProject",
-        }
-        new_project(specs)
+        new_project(
+            config={
+                "folder_base": str(self.base_dir),
+                "name": "LoadableProject",
+            }
+        )
 
         project_root = self.base_dir / "LoadableProject"
 

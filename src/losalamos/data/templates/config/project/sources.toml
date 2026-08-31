@@ -1,0 +1,20 @@
+# Source directories for project note lookups.
+#
+# Each key maps to a list of directory paths. On project load, these
+# directories are scanned for .md files whose stem matches the name
+# referenced in the project's main note metadata.
+#
+# Paths may be absolute or relative to the working directory.
+
+# NoteOrganization notes — companies, institutes, government bodies.
+# Matched against the 'contractor' and 'client' metadata fields.
+organizations = []
+
+# NoteSapiens notes — individual persons.
+# Matched against 'contractor', 'contractor_sapiens', and 'client' fields.
+sapiens = []
+
+# NoteBasic notes for services, each file named by its service_id.
+# The service display name is read from the note's 'abstract' field.
+# Matched against the 'service_id' metadata field.
+services = []

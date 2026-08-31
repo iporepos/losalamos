@@ -49,3 +49,5 @@ Tools
    losalamos.tools.update_templates
    losalamos.tools.populate_attributes
    losalamos.tools.database
+   losalamos.tools.add_new_project
+   losalamos.tools.manage_documents

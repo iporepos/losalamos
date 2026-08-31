@@ -783,6 +783,7 @@ class Note(MbaE):
     def clean_cref(entry_key):
         return str(entry_key).replace("[[", "").replace("]]", "")
 
+
 class NoteBasic(Note):
 
     TEMPLATE_FILE = FOLDER_TEMPLATES_NOTES / "_basic.md"
@@ -1093,6 +1094,20 @@ class NoteSapiens(NoteBasic):
     TEMPLATE_FILE = FOLDER_TEMPLATES_NOTES / "_sapiens.md"
     THUMBNAIL_SIZE = 200
     PATTERN_ABSTRACT = "[!Info]"
+
+
+class NoteAsset(NoteBasic):
+    """
+    Note for a project asset (document, deliverable, database, etc.).
+
+    Inherits from :class:`NoteBasic`. Maps to the ``_asset.md`` template
+    which records the asset's project ID, type, file ID, and file reference.
+    Asset notes act as sidecar files placed alongside the asset they describe,
+    giving every significant project file a globally unique, human-readable code.
+    """
+
+    TEMPLATE_FILE = FOLDER_TEMPLATES_NOTES / "_asset.md"
+    THUMBNAIL_SIZE = None
 
 
 class NoteReference(NoteBasic):

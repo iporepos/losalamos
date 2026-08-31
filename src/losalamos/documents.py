@@ -47,6 +47,7 @@ inherited transparently from the layer below.
 # =======================================================================
 import os
 import re
+import json
 import shutil
 from pathlib import Path
 
@@ -90,7 +91,61 @@ def escape_percent_latex(text: str) -> str:
 
 # FUNCTIONS -- Module-level
 # =======================================================================
-# ... {develop}
+
+
+def _load_files_overlay(source):
+    """
+    Parse a ``files_overlay`` config file into a dict.
+
+    :param source: Path to a ``.json``, ``.yaml``/``.yml``, or ``.toml`` file
+        whose contents map destination-relative paths to source file paths.
+    :type source: str or pathlib.Path
+    :raises FileNotFoundError: If ``source`` does not exist on the filesystem.
+    :raises ValueError: If the file extension is not a supported format.
+    :raises ImportError: If the required third-party parser (PyYAML, tomli)
+        is not installed.
+    :returns: Mapping of destination-relative paths to source file paths.
+    :rtype: dict
+    """
+    path = Path(source).absolute()
+    if not path.is_file():
+        raise FileNotFoundError(f"files_overlay config not found: '{path}'")
+
+    suffix = path.suffix.lower()
+
+    if suffix == ".json":
+        with open(path, "r", encoding="utf-8") as f:
+            return json.load(f)
+
+    if suffix in (".yaml", ".yml"):
+        try:
+            import yaml
+        except ImportError:
+            raise ImportError(
+                "PyYAML is required to load .yaml/.yml files. "
+                "Install it with: pip install pyyaml"
+            )
+        with open(path, "r", encoding="utf-8") as f:
+            return yaml.safe_load(f)
+
+    if suffix == ".toml":
+        try:
+            import tomllib
+        except ImportError:
+            try:
+                import tomli as tomllib
+            except ImportError:
+                raise ImportError(
+                    "TOML support requires Python 3.11+ (tomllib) or 'tomli'. "
+                    "Install it with: pip install tomli"
+                )
+        with open(path, "rb") as f:
+            return tomllib.load(f)
+
+    raise ValueError(
+        f"Unsupported files_overlay format: '{suffix}'. "
+        "Supported: .json, .yaml, .yml, .toml"
+    )
 
 
 # ***********************************************************************
@@ -168,7 +223,7 @@ class Document(DataSet):
         # --------------------------------------------------
         self.update()
 
-    def new(self, folder, name=None, template_overlay=None):
+    def new(self, folder, name=None, template_overlay=None, files_overlay=None):
         """
         Create a new document folder by materializing template files into a target location.
 
@@ -235,12 +290,21 @@ class Document(DataSet):
             When provided, must be a valid existing directory; otherwise
             :exc:`NotADirectoryError` is raised before any files are written.
         :type template_overlay: str, pathlib.Path, or None
+        :param files_overlay: Optional file-level overlay applied after all template
+            layers. Can be a ``dict`` mapping destination-relative paths to source file
+            paths, or a path to a ``.json``, ``.yaml``/``.yml``, or ``.toml`` config
+            file with the same structure. Keys are paths relative to the document root
+            (e.g. ``"definitions/party_b.tex"``); values are the source files to copy
+            from (the destination filename is taken from the key, not the source).
+            All source files are validated before any copying begins.
+        :type files_overlay: dict, str, pathlib.Path, or None
 
         :raises FileExistsError: If the target folder ``folder/name`` already exists.
             No files are created or modified in this case.
         :raises NotADirectoryError: If ``template_overlay`` is provided but does not
             point to a valid directory. Validated before any files are written.
-        :raises FileNotFoundError: If the merged template does not contain exactly
+        :raises FileNotFoundError: If a source path in ``files_overlay`` does not exist
+            or is not a file. Also raised if the merged template does not contain exactly
             one top-level ``main.*`` file to load as the document's entry point.
 
         :returns: None. Acts in place: locates the merged tree's top-level
@@ -276,6 +340,11 @@ class Document(DataSet):
         if name is None:
             name = self.name
 
+        # Resolve files_overlay from config file if a path is given
+        # --------------------------------------------------
+        if isinstance(files_overlay, (str, Path)):
+            files_overlay = _load_files_overlay(files_overlay)
+
         # Resolve paths
         # --------------------------------------------------
         folder = Path(folder).absolute()
@@ -297,6 +366,16 @@ class Document(DataSet):
                 raise NotADirectoryError(
                     f"'template_overlay' is not a valid directory: '{template_overlay}'"
                 )
+
+        # Validate files_overlay sources before doing any work
+        # --------------------------------------------------
+        if files_overlay is not None:
+            for dst_rel, src_path in files_overlay.items():
+                src = Path(src_path).absolute()
+                if not src.is_file():
+                    raise FileNotFoundError(
+                        f"'files_overlay' source does not exist or is not a file: '{src}'"
+                    )
 
         # Collect relative files from a template root
         # --------------------------------------------------
@@ -339,6 +418,14 @@ class Document(DataSet):
             dest = target / rel_path
             dest.parent.mkdir(parents=True, exist_ok=True)
             shutil.copy2(src, dest)
+
+        # Apply file-level overlays last; can overwrite any template file
+        # --------------------------------------------------
+        if files_overlay is not None:
+            for dst_rel, src_path in files_overlay.items():
+                dest = target / dst_rel
+                dest.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copy2(Path(src_path).absolute(), dest)
 
         # Locate the merged tree's entry file and load it in place
         # --------------------------------------------------
@@ -1888,7 +1975,6 @@ DOCUMENT_TYPES = {
     "receipt": Receipt,
     "agreement": Agreement,
     "contract": Contract,
-
 }
 
 # ***********************************************************************

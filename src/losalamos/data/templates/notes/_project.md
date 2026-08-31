@@ -15,10 +15,12 @@ title:
 subtitle:
 alias:
 category:
+activity_id:
+activity_id_type: CNAE
 service_id:
-service_id_type:
+service_id_type: NFS-e
 professional_id:
-professional_id_type:
+professional_id_type: CREA
 contractor:
 contractor_sapiens:
 client:
@@ -29,6 +31,7 @@ revenue:
 expenses:
 date_start:
 date_end:
+language: en
 ---
 # <% tp.file.title %>
 

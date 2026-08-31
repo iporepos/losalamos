@@ -121,10 +121,20 @@ class TestNoteOrganization(unittest.TestCase):
     """
 
     EXPECTED_FIELDS = {
-        "note_type", "timestamp", "name", "acronym",
-        "org_domain", "org_type", "email", "phone",
-        "affiliation", "place", "address", "cnpj",
-        "website", "abstract",
+        "note_type",
+        "timestamp",
+        "name",
+        "acronym",
+        "org_domain",
+        "org_type",
+        "email",
+        "phone",
+        "affiliation",
+        "place",
+        "address",
+        "cnpj",
+        "website",
+        "abstract",
     }
 
     @classmethod
@@ -186,11 +196,27 @@ class TestNoteSapiens(unittest.TestCase):
     """
 
     EXPECTED_FIELDS = {
-        "note_type", "timestamp", "name", "email", "email_pro",
-        "phone", "place", "abstract", "edu_background", "degree",
-        "profession", "affiliation_edu", "affiliation_pro", "address",
-        "lattes", "orcid", "website", "cpf", "rg",
-        "github", "linkedin",
+        "note_type",
+        "timestamp",
+        "name",
+        "email",
+        "email_pro",
+        "phone",
+        "place",
+        "abstract",
+        "edu_background",
+        "degree",
+        "profession",
+        "affiliation_edu",
+        "affiliation_pro",
+        "address",
+        "lattes",
+        "orcid",
+        "website",
+        "cpf",
+        "rg",
+        "github",
+        "linkedin",
     }
 
     @classmethod
