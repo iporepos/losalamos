@@ -24,7 +24,8 @@
 # Local configs [CHECK THIS]
 # -----------------------------------------------------------------------
 .pre-commit-config.yaml
-MEMORY.md
+CLAUDE.md
+prompt.md
 # ... [ADD MORE IF NEEDED]
 
 # Non-sense script files
@@ -66,7 +67,17 @@ scripts/
 _scripts/
 old/
 _incoming/
+
+# Non-sense folders
+# -----------------------------------------------------------------------
+private/
+
+
 # ... [ADD MORE IF NEEDED]
+
+# Claude folders
+# -----------------------------------------------------------------------
+.claude/
 
 # PyCharm folders
 # -----------------------------------------------------------------------

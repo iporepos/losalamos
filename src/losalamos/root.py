@@ -1137,7 +1137,7 @@ class FileSys(DataSet):
             src_file = df["file_template"].values[i]
             src_file = os.path.abspath(src_file)
             dst_file = (
-                self.folder_root
+                str(self.folder_root)
                 + "/"
                 + df["folder"].values[i]
                 + "/"

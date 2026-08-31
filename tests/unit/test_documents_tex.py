@@ -13,6 +13,7 @@ import tempfile
 import unittest
 import zipfile
 from pathlib import Path
+from unittest import mock
 
 from losalamos.documents import DocumentTeX
 
@@ -248,9 +249,14 @@ class TestDocumentTeXExport(unittest.TestCase):
         self.assertTrue((result / "images" / "logo.png").exists())
 
     def test_zip_export_places_files_at_archive_root(self):
-        self.doc.export(self.out_root, "zip_export", split=True, zip_export=True)
+        result = self.doc.export(
+            self.out_root, "zip_export", split=True, zip_export=True
+        )
         zip_path = self.out_root / "zip_export.zip"
         self.assertTrue(zip_path.exists())
+
+        # export() now returns the zip's path, not the export folder's
+        self.assertEqual(result, zip_path)
 
         with zipfile.ZipFile(zip_path) as zf:
             names = set(zf.namelist())
@@ -260,8 +266,25 @@ class TestDocumentTeXExport(unittest.TestCase):
         self.assertIn("refs.bib", names)
         self.assertFalse(any(n.startswith("zip_export/") for n in names))
 
-        # uncompressed folder still left in place alongside the zip
-        self.assertTrue((self.out_root / "zip_export").is_dir())
+        # the uncompressed export folder is removed once the zip is
+        # written -- only the archive should remain on disk
+        self.assertFalse((self.out_root / "zip_export").exists())
+
+    def test_zip_export_folder_preserved_if_archiving_fails(self):
+        """If shutil.make_archive raises, the uncompressed export folder
+        must survive -- the rmtree cleanup only runs after a successful
+        archive write, so a failed zip never costs the caller their data."""
+        with mock.patch(
+            "losalamos.documents.shutil.make_archive",
+            side_effect=OSError("disk full"),
+        ):
+            with self.assertRaises(OSError):
+                self.doc.export(
+                    self.out_root, "zip_fail_export", split=True, zip_export=True
+                )
+
+        self.assertTrue((self.out_root / "zip_fail_export").is_dir())
+        self.assertFalse((self.out_root / "zip_fail_export.zip").exists())
 
     def test_raises_runtime_error_when_not_main(self):
         partial = self.project_dir / "partial.tex"

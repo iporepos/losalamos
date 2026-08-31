@@ -663,14 +663,18 @@ class DocumentTeX(Document):
 
         # Optional zip archive, contents at the archive root (no wrapping
         # folder) so it can be dropped straight into Overleaf's project
-        # importer or similar
+        # importer or similar. Only the zip is meant to survive here --
+        # the uncompressed export folder is removed once the archive is
+        # safely written, so callers never end up with both copies.
         # --------------------------------------------------
         if zip_export:
-            shutil.make_archive(
+            zip_path = shutil.make_archive(
                 base_name=str(folder_root / name),
                 format="zip",
                 root_dir=export_dir,
             )
+            shutil.rmtree(export_dir)
+            return Path(zip_path)
 
         return export_dir
 
@@ -1843,13 +1847,49 @@ class Essay(DocumentTeX):
 
 class Professional(Essay):
 
-    VARIANT_TEMPLATE = FOLDER_TEMPLATES_DOCUMENTS / "tex/professional"
+    VARIANT_TEMPLATE = FOLDER_TEMPLATES_DOCUMENTS / "tex/professional/base"
 
 
-class ProposalCommercial(Professional):
+class Invoice(Professional):
 
-    VARIANT_TEMPLATE = FOLDER_TEMPLATES_DOCUMENTS / "tex/proposal-commercial"
+    VARIANT_TEMPLATE = FOLDER_TEMPLATES_DOCUMENTS / "tex/professional/invoice"
 
+
+class Receipt(Invoice):
+
+    VARIANT_TEMPLATE = FOLDER_TEMPLATES_DOCUMENTS / "tex/professional/receipt"
+
+
+class Proposal(Invoice):
+
+    VARIANT_TEMPLATE = FOLDER_TEMPLATES_DOCUMENTS / "tex/professional/proposal"
+
+
+class Agreement(Proposal):
+
+    VARIANT_TEMPLATE = FOLDER_TEMPLATES_DOCUMENTS / "tex/professional/agreement"
+
+
+class Contract(Agreement):
+
+    VARIANT_TEMPLATE = FOLDER_TEMPLATES_DOCUMENTS / "tex/professional/contract"
+
+
+# CONSTANTS -- Module-level
+# =======================================================================
+# Registry of document type keys consumed by Project.add_document(). Add
+# new DocumentTeX subclasses here to make them available through that
+# string-based interface.
+DOCUMENT_TYPES = {
+    "essay": Essay,
+    "professional": Professional,
+    "proposal": Proposal,
+    "invoice": Invoice,
+    "receipt": Receipt,
+    "agreement": Agreement,
+    "contract": Contract,
+
+}
 
 # ***********************************************************************
 # SCRIPT

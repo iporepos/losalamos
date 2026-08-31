@@ -11,9 +11,6 @@ loading, and managing projects organized around a predefined filesystem
 structure. It defines the core :class:`Project` class and convenience
 functions for initializing new projects or restoring existing ones
 from disk.
-
-The module is designed to evolve as a central coordination layer between
-project metadata, filesystem layout, and downstream processing workflows.
 """
 
 # IMPORTS
@@ -44,6 +41,8 @@ from tqdm import tqdm
 # Project-level imports
 # =======================================================================
 from losalamos.root import FileSys
+from losalamos.documents import DOCUMENT_TYPES
+from losalamos.notes import NoteProject
 
 # ... {develop}
 
@@ -124,26 +123,36 @@ def new_project(specs):
 
     :type specs: dict
     :raises ValueError: If any required key is missing.
-    :returns: A new `:class:`losalamos.Project` instance initialized with the given specifications.
+    :returns: A new :class:`losalamos.Project` instance initialized with the given specifications.
     :rtype: :class:`losalamos.Project`
 
 
-    .. dropdown:: Script example
+    .. dropdown:: Example
         :icon: code-square
         :open:
+
+        Import the package.
 
         .. code-block:: python
 
             import losalamos
 
-            # [CHANGE THIS] setup specs dictionary
+        Define the specification dictionary. ``folder_base`` and ``name`` are required;
+        all other keys are optional.
+
+        .. code-block:: python
+
             project_specs = {
-                "folder_base": "C:/to/losalamos", # change this path
+                "folder_base": "C:/path/to/base",
                 "name": "newProject",
                 "alias": "NPrj",
                 "source": "Me",
-                "description": "Just a test"
+                "description": "Just a test",
             }
+
+        Create the project.
+
+        .. code-block:: python
 
             pj = losalamos.new_project(specs=project_specs)
 
@@ -179,27 +188,28 @@ def new_project(specs):
 
 def load_project(project_folder):
     """
-    Loads a Project from folder
+    Load a Project from a folder path.
 
-    :param project_folder: path to project root folder
+    :param project_folder: Path to the project root folder.
     :type project_folder: str or Path
-    :returns: A new `:class:`losalamos.Project` instance.
+    :returns: A new :class:`losalamos.Project` instance.
     :rtype: :class:`losalamos.Project`
 
-    .. dropdown:: Script example
+    .. dropdown:: Example
         :icon: code-square
         :open:
 
-        Load an existing ``losalamos.Project``
+        Import the package.
 
         .. code-block:: python
 
-            # import the package
             import losalamos
 
-            # get project instance
-            pj = losalamos.load_project(project_folder="path/to/project/folder")
+        Load an existing project by pointing to its root folder.
 
+        .. code-block:: python
+
+            pj = losalamos.load_project(project_folder="path/to/project/folder")
 
     """
     if os.path.isdir(project_folder):
@@ -263,6 +273,37 @@ def archive(
         in the merged tree (conflicting file).
     :returns: Absolute path to the created zip file.
     :rtype: pathlib.Path
+
+    .. dropdown:: Example
+        :icon: code-square
+        :open:
+
+        Import the package.
+
+        .. code-block:: python
+
+            import losalamos
+
+        Archive two source folders into a single zip, skipping temporary files
+        and a cache subfolder.
+
+        .. code-block:: python
+
+            zip_path = losalamos.archive(
+                sources=["path/to/data", "path/to/figures"],
+                folder="path/to/output",
+                name="myArchive",
+                ignore_names=["cache"],
+                ignore_patterns=["*.tmp", "~*"],
+            )
+
+        The returned path points to the timestamped zip file.
+
+        .. code-block:: python
+
+            print(zip_path)
+            # path/to/output/myArchive_20260101T120000.zip
+
     """
     ignore_names = set(ignore_names or [])
     ignore_patterns = ignore_patterns or []
@@ -387,6 +428,37 @@ def publish(
         in the merged tree (conflicting file).
     :returns: Absolute path to the newly published zip file inside ``latest``.
     :rtype: pathlib.Path
+
+    .. dropdown:: Example
+        :icon: code-square
+        :open:
+
+        Import the package.
+
+        .. code-block:: python
+
+            import losalamos
+
+        Publish two source folders to a managed output location. On the first
+        call the ``latest`` subfolder is created; on subsequent calls the
+        previous zip is rotated into ``history`` before the new one is written.
+
+        .. code-block:: python
+
+            zip_path = losalamos.publish(
+                sources=["path/to/data", "path/to/figures"],
+                folder="path/to/output",
+                name="myDeliverable",
+                ignore_patterns=["*.tmp"],
+            )
+
+        The returned path points to the new zip inside ``latest``.
+
+        .. code-block:: python
+
+            print(zip_path)
+            # path/to/output/myDeliverable/latest/myDeliverable_20260101T120000.zip
+
     """
     folder = Path(folder).absolute()
     if not folder.is_dir():
@@ -465,6 +537,11 @@ class Project(FileSys):
         self.publish_force = False
         self.publish_delta = 1  # hour
 
+        self.main_note_path = None
+        self.main_note = None
+
+        self.documents = {}
+
     def load_data(self):
         """
         Initialize internal project data.
@@ -476,6 +553,153 @@ class Project(FileSys):
         df["file"] = ""
         df["file_template"] = ""
         self.data = df.copy()
+
+        return None
+
+    def update(self):
+        """
+        Refresh derived attributes from the current configuration.
+
+        Calls the parent :meth:`FileSys.update` and then resolves
+        ``folder_base``, ``folder_root``, and ``main_note_path`` as
+        :class:`pathlib.Path` objects when ``folder_base`` is set.
+        """
+        super().update()
+        if self.folder_base is not None:
+            self.folder_base = Path(self.folder_base)
+            self.folder_root = Path(self.folder_root)
+            self.main_note_path = self.folder_base / f"{self.name}.md"
+
+
+
+    def add_document(
+            self,
+            document_type,
+            name=None,
+            template_overlay=None,
+            condensed=True,
+            zip_export=False,
+            compile_pdf=True,
+            subfolder="inputs/documents",
+            force_new=False,
+    ):
+        """
+        Create a new document inside the project, optionally condensed
+        into a flattened+split pair of files and/or compiled to PDF.
+
+        :param document_type: Key into :data:`losalamos.documents.DOCUMENT_TYPES`.
+        :type document_type: str
+        :param name: Folder/registry name. Defaults to ``document_type``.
+            Must be non-empty and free of path separators.
+        :type name: str or None
+        :param template_overlay: Forwarded to :meth:`Document.new`.
+        :type template_overlay: str, pathlib.Path, or None
+        :param condensed: If True, flatten+split into main.tex/preamble.tex
+            via a temp staging dir. If False, keep the live template tree.
+        :type condensed: bool
+        :param zip_export: Zip the condensed export (deletes the folder).
+            Requires condensed=True; mutually exclusive with compile_pdf.
+        :type zip_export: bool
+        :param compile_pdf: Compile to PDF via :meth:`DocumentTeX.to_pdf`.
+        :type compile_pdf: bool
+        :param subfolder: Project-relative target folder.
+        :type subfolder: str
+        :param force_new: If True, force the new folder even if it already exists.
+        :type force_new: bool
+        :raises ValueError: Unknown document_type; invalid name; or
+            zip_export combined with condensed=False or compile_pdf=True.
+        :raises FileExistsError: Target folder already exists.
+        :returns: The reloaded document instance, or the zip Path when
+            zip_export=True.
+        :rtype: losalamos.documents.Document or pathlib.Path
+
+        .. dropdown:: Example
+            :icon: code-square
+            :open:
+
+            Load an existing project.
+
+            .. code-block:: python
+
+                import losalamos
+
+                pj = losalamos.load_project("path/to/myProject")
+
+            Add an invoice document. The template is condensed into a flat
+            ``main.tex`` / ``preamble.tex`` pair and compiled to PDF.
+
+            .. code-block:: python
+
+                doc = pj.add_document(
+                    document_type="invoice",
+                    name="invoice_client_2026",
+                    condensed=True,
+                    compile_pdf=True,
+                )
+
+            The returned instance is also registered in ``pj.documents``.
+
+            .. code-block:: python
+
+                print(pj.documents["invoice"])
+
+        """
+        if document_type not in DOCUMENT_TYPES:
+            raise ValueError(
+                f"Unknown document type: '{doc}'. "
+                f"Available types: {sorted(DOCUMENT_TYPES)}"
+            )
+
+        if name is None:
+            name = document_type
+
+        documents_folder = Path(self.folder_root) / subfolder
+        documents_folder.mkdir(parents=True, exist_ok=True)
+
+        target_folder = documents_folder
+
+        if force_new:
+            dst_folder = target_folder / name
+            if dst_folder.exists():
+                shutil.rmtree(str(target_folder / name))
+
+        klass = DOCUMENT_TYPES[document_type]
+
+        if condensed:
+            target_folder = Path(tempfile.mkdtemp(prefix="losalamos_add_doc_"))
+
+        instance = klass(name=name)
+
+        instance.new(
+            folder=target_folder,
+            name=name,
+            template_overlay=template_overlay
+        )
+
+        if condensed:
+            instance.export(name=name, folder_root=documents_folder, flatten=True, split=True, zip_export=zip_export)
+            shutil.rmtree(target_folder)
+            target_folder = documents_folder / name
+
+        return_instance = klass(name=name)
+        return_instance.load_data(file_data=target_folder / name / "main.tex")
+
+        if compile_pdf:
+            return_instance.to_pdf()
+
+        self.documents[document_type] = return_instance
+
+        return return_instance
+
+    def load_main_note(self):
+        """
+        Load the project's main Markdown note from disk.
+
+        Reads ``self.main_note_path`` and stores the resulting
+        :class:`~losalamos.notes.NoteProject` in ``self.main_note``.
+        """
+        self.main_note = NoteProject(name=self.name, alias=self.alias)
+        self.main_note.load(file_note=self.main_note)
         return None
 
     def publish(
@@ -501,9 +725,44 @@ class Project(FileSys):
 
         .. note::
 
-             The function performs directory validation, checks for publish frequency constraints
+             The method performs directory validation, checks for publish frequency constraints
              based on ``self.publish_delta``, and handles the rotation of the previous 'latest'
              archive into a history folder before promoting the new build.
+
+        .. dropdown:: Example
+            :icon: code-square
+            :open:
+
+            Load an existing project.
+
+            .. code-block:: python
+
+                import losalamos
+
+                pj = losalamos.load_project("path/to/myProject")
+
+            Select the output folders to snapshot and trigger the publish. By
+            default the archive lands under ``<project_root>/outputs/``.
+
+            .. code-block:: python
+
+                result = pj.publish(
+                    targets=[
+                        pj.folder_root / "outputs/public",
+                        pj.folder_root / "inputs/figures",
+                    ],
+                    prefix="myProject_delivery",
+                )
+
+            Inspect the result dictionary to confirm publication and retrieve
+            the archive path.
+
+            .. code-block:: python
+
+                if result["published"]:
+                    print(result["archive"])
+                else:
+                    print("Skipped:", result["reason"])
 
         """
 
@@ -586,11 +845,13 @@ class Project(FileSys):
         }
 
     def _iter_files(self, root: Path):
+        """Yield all files under ``root`` recursively."""
         for path in root.rglob("*"):
             if path.is_file():
                 yield path
 
     def _zip_with_tqdm(self, src_root: Path, dst_zip: Path):
+        """Write all files from ``src_root`` into ``dst_zip`` with a progress bar."""
         files = list(self._iter_files(src_root))
         total_bytes = sum(f.stat().st_size for f in files)
 
@@ -601,6 +862,7 @@ class Project(FileSys):
                     bar.update(f.stat().st_size)
 
     def _ensure_publish_dirs(self, output_folder: Path):
+        """Create and return the ``latest`` and ``history`` subdirectories under ``output_folder``."""
         output_folder = Path(output_folder)
         latest = output_folder / "latest"
         history = output_folder / "history"
@@ -611,6 +873,7 @@ class Project(FileSys):
         return latest, history
 
     def _find_latest(self, latest_dir: Path, prefix: str):
+        """Return the single versioned zip matching ``prefix`` in ``latest_dir``, or ``None``."""
         files = list(latest_dir.glob(f"{prefix}_V*.zip"))
 
         if len(files) > 1:
