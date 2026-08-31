@@ -114,7 +114,8 @@ dependencies = [
     "lxml",        # XML manipulation
     "PyMuPDF",     # PDF handler
     "tdqm",        # UX progress bars
-    "google-genai" # LLM tools
+    "google-genai", # LLM tools
+    "pyyaml",       # YAML parsing
     # [EXAMPLE] custom dependency directly from GitHub:
     # "my-package @ git+https://github.com/username/my-package.git@main",
     # ... [ADD MORE IF NEDDED]

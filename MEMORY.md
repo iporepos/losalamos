@@ -1,5 +1,6 @@
 # Memory Log
 
+- 2026-08-31 — CI fixes: added pyyaml to pyproject.toml dependencies; corrected test_tools_templates.py subprocess call from losalamos.tools.templates to losalamos.tools.update_templates
 - 2026-08-31 — manage_documents: added delete action; removes TeX folder + PDFs but keeps sidecar note as tombstone; home listing filtered to active documents only via _active_documents(); _next_asset_id() naturally skips tombstone IDs
 - 2026-08-31 — created tools/manage_documents.py: terminal document manager; project picker from collection, per-project home (add/edit/build); _load_projects reads titles without full project load; _open_in_explorer cross-platform; receipt links to invoice optionally
 - 2026-08-31 — added Project.get_assets(): scans project tree for asset notes, returns DataFrame with asset_id/asset_type/name/asset_file sorted by asset_id

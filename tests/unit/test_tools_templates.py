@@ -91,7 +91,7 @@ class TestToolsTemplates(unittest.TestCase):
         cmd = [
             sys.executable,
             "-m",
-            "losalamos.tools.templates",
+            "losalamos.tools.update_templates",
             # arguments
             "--notes",
             self.notes_dir,
