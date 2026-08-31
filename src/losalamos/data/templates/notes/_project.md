@@ -12,12 +12,17 @@ url:
 abstract:
 name: <% tp.file.title %>
 title:
+subtitle:
 alias:
 category:
 service_id:
-crea_id:
-contract:
+service_id_type:
+professional_id:
+professional_id_type:
+contractor:
+contractor_sapiens:
 client:
+client_sapiens:
 status: on going
 revenue_expected:
 revenue:

@@ -167,9 +167,10 @@ HARMONIZE_TEXT_FIELDS = [
     "name",
     "title",
     "subtitle",
+    "subtitle",
     "subject",
     "abstract",
-    "contract",
+    "contractor",
     "client",
     "project",
     "comment",
@@ -778,6 +779,9 @@ class Note(MbaE):
 
         return patts
 
+    @staticmethod
+    def clean_cref(entry_key):
+        return str(entry_key).replace("[[", "").replace("]]", "")
 
 class NoteBasic(Note):
 
@@ -958,17 +962,21 @@ class NoteBasic(Note):
 
     def update_name(self):
         """
-        Updates the note metadata and the first line of the Head segment with the current file stem.
+        Updates the note metadata and the first H1 line of the Head segment with the current file stem.
 
-        .. warning::
+        .. note::
 
-            This method assumes the first item in the ``Head`` data segment is the title and will overwrite it.
+            The method searches for the first line starting with ``# `` in the ``Head``
+            segment rather than assuming a fixed index, so templates that place an image
+            embed before the title are handled correctly.
 
         """
         current_name = Path(self.file_note).stem
         self.metadata["name"] = current_name
-        # always the first item
-        self.data[self.STR_HEAD][0] = f"# {current_name}"
+        for i, line in enumerate(self.data[self.STR_HEAD]):
+            if line.startswith("# "):
+                self.data[self.STR_HEAD][i] = f"# {current_name}"
+                break
 
     def update_abstract(self):
         """
@@ -1007,13 +1015,10 @@ class NoteBasic(Note):
             image_name = self.file_note.stem
 
         if size is not None:
-            n = 0
-            for line in self.data[self.STR_HEAD]:
+            for n, line in enumerate(self.data[self.STR_HEAD]):
                 if "![[" in line[:3]:
+                    self.data[self.STR_HEAD][n] = f"![[{image_name}.jpeg|{size}]]"
                     break
-                n = n + 1
-            if n > 0:
-                self.data[self.STR_HEAD][n] = f"![[{image_name}.jpeg|{size}]]"
 
     def update_timestamp(self):
         """
@@ -1061,6 +1066,33 @@ class NoteFigure(NoteBasic):
 
     TEMPLATE_FILE = FOLDER_TEMPLATES_NOTES / "_figure.md"
     THUMBNAIL_SIZE = 500
+
+
+class NoteOrganization(NoteBasic):
+    """
+    Note for an organization entry.
+
+    Inherits from :class:`NoteBasic`. Maps to the ``_organization.md``
+    template which tracks identity, contact, and affiliation fields.
+    """
+
+    TEMPLATE_FILE = FOLDER_TEMPLATES_NOTES / "_organization.md"
+    THUMBNAIL_SIZE = 200
+    PATTERN_ABSTRACT = "[!Info]"
+
+
+class NoteSapiens(NoteBasic):
+    """
+    Note for a person (homo sapiens) entry.
+
+    Inherits from :class:`NoteBasic`. Maps to the ``_sapiens.md``
+    template which tracks contact, academic, professional, and
+    identification fields.
+    """
+
+    TEMPLATE_FILE = FOLDER_TEMPLATES_NOTES / "_sapiens.md"
+    THUMBNAIL_SIZE = 200
+    PATTERN_ABSTRACT = "[!Info]"
 
 
 class NoteReference(NoteBasic):
@@ -1701,6 +1733,16 @@ class NoteCollJournal(NoteCollection):
 class NoteCollFigure(NoteCollection):
 
     BASE_OBJECT = NoteFigure
+
+
+class NoteCollOrganization(NoteCollection):
+
+    BASE_OBJECT = NoteOrganization
+
+
+class NoteCollSapiens(NoteCollection):
+
+    BASE_OBJECT = NoteSapiens
 
 
 class NoteCollAttribute(NoteCollection):

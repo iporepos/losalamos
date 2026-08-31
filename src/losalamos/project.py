@@ -42,7 +42,7 @@ from tqdm import tqdm
 # =======================================================================
 from losalamos.root import FileSys
 from losalamos.documents import DOCUMENT_TYPES
-from losalamos.notes import NoteProject
+from losalamos.notes import NoteProject, NoteOrganization, NoteSapiens
 
 # ... {develop}
 
@@ -215,7 +215,7 @@ def load_project(project_folder):
     if os.path.isdir(project_folder):
         name = os.path.basename(project_folder)
         folder_base = os.path.abspath(Path(project_folder).parent)
-        p = Project(name=name, alias=None)
+        p = Project(name=name, alias=name)
         p.name = name
         p.folder_base = folder_base
 
@@ -540,7 +540,15 @@ class Project(FileSys):
         self.main_note_path = None
         self.main_note = None
 
+        self.contractor_path = None
+        self.contractor = None
+        self.contractor_note_path = None
+        self.contractor_note = None
+
         self.documents = {}
+
+        self.sources = {}
+
 
     def load_data(self):
         """
@@ -563,13 +571,127 @@ class Project(FileSys):
         Calls the parent :meth:`FileSys.update` and then resolves
         ``folder_base``, ``folder_root``, and ``main_note_path`` as
         :class:`pathlib.Path` objects when ``folder_base`` is set.
+        Loads the main project note only if the file already exists on disk.
         """
         super().update()
         if self.folder_base is not None:
             self.folder_base = Path(self.folder_base)
             self.folder_root = Path(self.folder_root)
-            self.main_note_path = self.folder_base / f"{self.name}.md"
+            self.main_note_path = self.folder_base / self.name / f"{self.name}.md"
+            if self.main_note_path.exists():
+                self.load_main_note()
 
+
+    def load_main_note(self):
+        """
+        Load the project's main Markdown note from disk.
+
+        Reads ``self.main_note_path`` and stores the resulting
+        :class:`~losalamos.notes.NoteProject` in ``self.main_note``.
+        """
+        self.main_note = NoteProject(name=self.name, alias=self.alias)
+        self.main_note.load(file_note=self.main_note_path)
+        return None
+
+    def get_title(self):
+
+        return self.get_attribute(entry_key="title",  clean_cref=True)
+
+    def get_subtitle(self):
+        return self.get_attribute(entry_key="subtitle", clean_cref=True)
+
+    def get_contractor(self):
+        return self.get_attribute(entry_key="contractor", clean_cref=True)
+
+    def get_contractor_sapiens(self):
+        return self.get_attribute(entry_key="contractor_sapiens", clean_cref=True)
+
+    def _collect_md_files(self, sources):
+        """Scan directories and return a stem-to-path map of Markdown files."""
+        if sources is None:
+            return {}
+        file_map = {}
+        for source in sources:
+            for f in Path(source).glob("*.md"):
+                file_map[f.stem] = f
+        return file_map
+
+    def load_contractor(self):
+        """
+        Load the contractor note from ``self.sources``.
+
+        Reads the contractor name from the project's main note metadata and
+        searches for a matching ``.md`` file in ``self.sources["organizations"]``
+        first, then in ``self.sources["sapiens"]``. On success, stores the loaded
+        note in ``self.contractor`` and the resolved path in ``self.contractor_path``.
+
+        :raises FileNotFoundError: If no note matching the contractor name is found
+            in any configured source.
+        :returns: None
+        :rtype: None
+        """
+        contractor = self.get_contractor()
+
+        sources_organizations = self.sources.get("organizations", None)
+        sources_sapiens = self.sources.get("sapiens", None)
+
+        # organizations take precedence in the search over individuals
+        path = self._collect_md_files(sources_organizations).get(contractor)
+        if path is not None:
+            note = NoteOrganization(name=contractor, alias=contractor)
+            note.load(file_note=path)
+            self.contractor_path = path
+            self.contractor = note
+            return None
+
+        # case for a sapiens contractor
+        path = self._collect_md_files(sources_sapiens).get(contractor)
+        if path is not None:
+            note = NoteSapiens(name=contractor, alias=contractor)
+            note.load(file_note=path)
+            self.contractor_path = path
+            self.contractor = note
+            return None
+
+        raise FileNotFoundError(f"No contractor found for '{contractor}'")
+
+    def load_contractor_sapiens(self):
+        """
+        Load the individual (sapiens) contractor note from ``self.sources``.
+
+        Reads the ``contractor_sapiens`` name from the project's main note
+        metadata and searches ``self.sources["sapiens"]`` for a matching
+        ``.md`` file. If ``self.contractor`` has not been loaded yet, calls
+        :meth:`load_contractor` first. On success, stores the loaded note in
+        ``self.contractor_sapiens`` and the resolved path in
+        ``self.contractor_sapiens_path``.
+
+        :raises FileNotFoundError: If no note matching the contractor_sapiens
+            name is found in the configured sapiens sources.
+        :returns: None
+        :rtype: None
+        """
+        contractor_sapiens = self.get_contractor_sapiens()
+        sources_sapiens = self.sources.get("sapiens", None)
+        if self.contractor is None:
+            self.load_contractor()
+
+        path = self._collect_md_files(sources_sapiens).get(contractor_sapiens)
+        if path is not None:
+            note = NoteSapiens(name=contractor_sapiens, alias=contractor_sapiens)
+            note.load(file_note=path)
+            self.contractor_sapiens_path = path
+            self.contractor_sapiens = note
+            return None
+
+        raise FileNotFoundError(f"No sapiens found for '{contractor_sapiens}'")
+
+    def get_attribute(self, entry_key, clean_cref=True):
+        s = self.main_note.metadata.get(entry_key, f"[{entry_key.upper()}]")
+        s = s.strip("\"'")  # YAML frontmatter sometimes preserves surrounding quotes
+        if clean_cref:
+            s = NoteProject.clean_cref(entry_key=s)
+        return s
 
 
     def add_document(
@@ -691,16 +813,9 @@ class Project(FileSys):
 
         return return_instance
 
-    def load_main_note(self):
-        """
-        Load the project's main Markdown note from disk.
 
-        Reads ``self.main_note_path`` and stores the resulting
-        :class:`~losalamos.notes.NoteProject` in ``self.main_note``.
-        """
-        self.main_note = NoteProject(name=self.name, alias=self.alias)
-        self.main_note.load(file_note=self.main_note)
-        return None
+
+
 
     def publish(
         self,
@@ -843,6 +958,7 @@ class Project(FileSys):
             "timestamp": now,
             "rotated": latest_file.name if latest_file else None,
         }
+
 
     def _iter_files(self, root: Path):
         """Yield all files under ``root`` recursively."""
