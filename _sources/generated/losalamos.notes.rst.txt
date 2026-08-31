@@ -15,17 +15,22 @@
    .. autosummary::
    
       Note
+      NoteAsset
       NoteAttribute
       NoteBasic
       NoteCollAttribute
       NoteCollBasic
       NoteCollFigure
       NoteCollJournal
+      NoteCollOrganization
       NoteCollProject
+      NoteCollSapiens
       NoteCollection
       NoteDataset
       NoteFigure
       NoteJournal
+      NoteOrganization
       NoteProject
       NoteReference
+      NoteSapiens
    

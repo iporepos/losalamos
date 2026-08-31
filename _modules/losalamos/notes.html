@@ -568,9 +568,10 @@
     <span class="s2">"name"</span><span class="p">,</span>
     <span class="s2">"title"</span><span class="p">,</span>
     <span class="s2">"subtitle"</span><span class="p">,</span>
+    <span class="s2">"subtitle"</span><span class="p">,</span>
     <span class="s2">"subject"</span><span class="p">,</span>
     <span class="s2">"abstract"</span><span class="p">,</span>
-    <span class="s2">"contract"</span><span class="p">,</span>
+    <span class="s2">"contractor"</span><span class="p">,</span>
     <span class="s2">"client"</span><span class="p">,</span>
     <span class="s2">"project"</span><span class="p">,</span>
     <span class="s2">"comment"</span><span class="p">,</span>
@@ -1239,6 +1240,13 @@
             <span class="n">patts</span> <span class="o">=</span> <span class="kc">None</span>
 
         <span class="k">return</span> <span class="n">patts</span></div>
+
+
+<div class="viewcode-block" id="Note.clean_cref">
+<a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.Note.clean_cref">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">clean_cref</span><span class="p">(</span><span class="n">entry_key</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">entry_key</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">"[["</span><span class="p">,</span> <span class="s2">""</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">"]]"</span><span class="p">,</span> <span class="s2">""</span><span class="p">)</span></div>
 </div>
 
 
@@ -1462,17 +1470,21 @@
 <a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.NoteBasic.update_name">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">update_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">"""</span>
-<span class="sd">        Updates the note metadata and the first line of the Head segment with the current file stem.</span>
+<span class="sd">        Updates the note metadata and the first H1 line of the Head segment with the current file stem.</span>
 
-<span class="sd">        .. warning::</span>
+<span class="sd">        .. note::</span>
 
-<span class="sd">            This method assumes the first item in the ``Head`` data segment is the title and will overwrite it.</span>
+<span class="sd">            The method searches for the first line starting with ``# `` in the ``Head``</span>
+<span class="sd">            segment rather than assuming a fixed index, so templates that place an image</span>
+<span class="sd">            embed before the title are handled correctly.</span>
 
 <span class="sd">        """</span>
         <span class="n">current_name</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">file_note</span><span class="p">)</span><span class="o">.</span><span class="n">stem</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">"name"</span><span class="p">]</span> <span class="o">=</span> <span class="n">current_name</span>
-        <span class="c1"># always the first item</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">STR_HEAD</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"# </span><span class="si">{</span><span class="n">current_name</span><span class="si">}</span><span class="s2">"</span></div>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">STR_HEAD</span><span class="p">]):</span>
+            <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">"# "</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">STR_HEAD</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"# </span><span class="si">{</span><span class="n">current_name</span><span class="si">}</span><span class="s2">"</span>
+                <span class="k">break</span></div>
 
 
 <div class="viewcode-block" id="NoteBasic.update_abstract">
@@ -1517,13 +1529,10 @@
             <span class="n">image_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_note</span><span class="o">.</span><span class="n">stem</span>
 
         <span class="k">if</span> <span class="n">size</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">n</span> <span class="o">=</span> <span class="mi">0</span>
-            <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">STR_HEAD</span><span class="p">]:</span>
+            <span class="k">for</span> <span class="n">n</span><span class="p">,</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">STR_HEAD</span><span class="p">]):</span>
                 <span class="k">if</span> <span class="s2">"![["</span> <span class="ow">in</span> <span class="n">line</span><span class="p">[:</span><span class="mi">3</span><span class="p">]:</span>
-                    <span class="k">break</span>
-                <span class="n">n</span> <span class="o">=</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span>
-            <span class="k">if</span> <span class="n">n</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">STR_HEAD</span><span class="p">][</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"![[</span><span class="si">{</span><span class="n">image_name</span><span class="si">}</span><span class="s2">.jpeg|</span><span class="si">{</span><span class="n">size</span><span class="si">}</span><span class="s2">]]"</span></div>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">STR_HEAD</span><span class="p">][</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"![[</span><span class="si">{</span><span class="n">image_name</span><span class="si">}</span><span class="s2">.jpeg|</span><span class="si">{</span><span class="n">size</span><span class="si">}</span><span class="s2">]]"</span>
+                    <span class="k">break</span></div>
 
 
 <div class="viewcode-block" id="NoteBasic.update_timestamp">
@@ -1593,6 +1602,56 @@
 
     <span class="n">TEMPLATE_FILE</span> <span class="o">=</span> <span class="n">FOLDER_TEMPLATES_NOTES</span> <span class="o">/</span> <span class="s2">"_figure.md"</span>
     <span class="n">THUMBNAIL_SIZE</span> <span class="o">=</span> <span class="mi">500</span></div>
+
+
+
+<div class="viewcode-block" id="NoteOrganization">
+<a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.NoteOrganization">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">NoteOrganization</span><span class="p">(</span><span class="n">NoteBasic</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""</span>
+<span class="sd">    Note for an organization entry.</span>
+
+<span class="sd">    Inherits from :class:`NoteBasic`. Maps to the ``_organization.md``</span>
+<span class="sd">    template which tracks identity, contact, and affiliation fields.</span>
+<span class="sd">    """</span>
+
+    <span class="n">TEMPLATE_FILE</span> <span class="o">=</span> <span class="n">FOLDER_TEMPLATES_NOTES</span> <span class="o">/</span> <span class="s2">"_organization.md"</span>
+    <span class="n">THUMBNAIL_SIZE</span> <span class="o">=</span> <span class="mi">200</span>
+    <span class="n">PATTERN_ABSTRACT</span> <span class="o">=</span> <span class="s2">"[!Info]"</span></div>
+
+
+
+<div class="viewcode-block" id="NoteSapiens">
+<a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.NoteSapiens">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">NoteSapiens</span><span class="p">(</span><span class="n">NoteBasic</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""</span>
+<span class="sd">    Note for a person (homo sapiens) entry.</span>
+
+<span class="sd">    Inherits from :class:`NoteBasic`. Maps to the ``_sapiens.md``</span>
+<span class="sd">    template which tracks contact, academic, professional, and</span>
+<span class="sd">    identification fields.</span>
+<span class="sd">    """</span>
+
+    <span class="n">TEMPLATE_FILE</span> <span class="o">=</span> <span class="n">FOLDER_TEMPLATES_NOTES</span> <span class="o">/</span> <span class="s2">"_sapiens.md"</span>
+    <span class="n">THUMBNAIL_SIZE</span> <span class="o">=</span> <span class="mi">200</span>
+    <span class="n">PATTERN_ABSTRACT</span> <span class="o">=</span> <span class="s2">"[!Info]"</span></div>
+
+
+
+<div class="viewcode-block" id="NoteAsset">
+<a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.NoteAsset">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">NoteAsset</span><span class="p">(</span><span class="n">NoteBasic</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""</span>
+<span class="sd">    Note for a project asset (document, deliverable, database, etc.).</span>
+
+<span class="sd">    Inherits from :class:`NoteBasic`. Maps to the ``_asset.md`` template</span>
+<span class="sd">    which records the asset's project ID, type, file ID, and file reference.</span>
+<span class="sd">    Asset notes act as sidecar files placed alongside the asset they describe,</span>
+<span class="sd">    giving every significant project file a globally unique, human-readable code.</span>
+<span class="sd">    """</span>
+
+    <span class="n">TEMPLATE_FILE</span> <span class="o">=</span> <span class="n">FOLDER_TEMPLATES_NOTES</span> <span class="o">/</span> <span class="s2">"_asset.md"</span>
+    <span class="n">THUMBNAIL_SIZE</span> <span class="o">=</span> <span class="kc">None</span></div>
 
 
 
@@ -2320,6 +2379,22 @@
 <span class="k">class</span><span class="w"> </span><span class="nc">NoteCollFigure</span><span class="p">(</span><span class="n">NoteCollection</span><span class="p">):</span>
 
     <span class="n">BASE_OBJECT</span> <span class="o">=</span> <span class="n">NoteFigure</span></div>
+
+
+
+<div class="viewcode-block" id="NoteCollOrganization">
+<a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.NoteCollOrganization">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">NoteCollOrganization</span><span class="p">(</span><span class="n">NoteCollection</span><span class="p">):</span>
+
+    <span class="n">BASE_OBJECT</span> <span class="o">=</span> <span class="n">NoteOrganization</span></div>
+
+
+
+<div class="viewcode-block" id="NoteCollSapiens">
+<a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.NoteCollSapiens">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">NoteCollSapiens</span><span class="p">(</span><span class="n">NoteCollection</span><span class="p">):</span>
+
+    <span class="n">BASE_OBJECT</span> <span class="o">=</span> <span class="n">NoteSapiens</span></div>
 
 
 

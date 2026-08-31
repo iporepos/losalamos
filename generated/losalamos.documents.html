@@ -382,6 +382,8 @@
 <li class="toctree-l1"><a class="reference internal" href="losalamos.tools.update_templates.html">losalamos.tools.update_templates</a></li>
 <li class="toctree-l1"><a class="reference internal" href="losalamos.tools.populate_attributes.html">losalamos.tools.populate_attributes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="losalamos.tools.database.html">losalamos.tools.database</a></li>
+<li class="toctree-l1"><a class="reference internal" href="losalamos.tools.add_new_project.html">losalamos.tools.add_new_project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="losalamos.tools.manage_documents.html">losalamos.tools.manage_documents</a></li>
 </ul>
 </div>
 </nav></div>
@@ -494,6 +496,12 @@ inherited transparently from the layer below.</p>
 <p class="rubric">Classes</p>
 <div class="pst-scrollable-table-container"><table class="autosummary longtable table">
 <tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#losalamos.documents.Agreement" title="losalamos.documents.Agreement"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Agreement</span></code></a>([name, alias])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#losalamos.documents.Contract" title="losalamos.documents.Contract"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Contract</span></code></a>([name, alias])</p></td>
+<td><p></p></td>
+</tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#losalamos.documents.Document" title="losalamos.documents.Document"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Document</span></code></a>([name, alias])</p></td>
 <td><p>Base class for all document types.</p></td>
 </tr>
@@ -503,10 +511,16 @@ inherited transparently from the layer below.</p>
 <tr class="row-odd"><td><p><a class="reference internal" href="#losalamos.documents.Essay" title="losalamos.documents.Essay"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Essay</span></code></a>([name, alias])</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#losalamos.documents.Professional" title="losalamos.documents.Professional"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Professional</span></code></a>([name, alias])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#losalamos.documents.Invoice" title="losalamos.documents.Invoice"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Invoice</span></code></a>([name, alias])</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#losalamos.documents.ProposalCommercial" title="losalamos.documents.ProposalCommercial"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ProposalCommercial</span></code></a>([name, alias])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#losalamos.documents.Professional" title="losalamos.documents.Professional"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Professional</span></code></a>([name, alias])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#losalamos.documents.Proposal" title="losalamos.documents.Proposal"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Proposal</span></code></a>([name, alias])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#losalamos.documents.Receipt" title="losalamos.documents.Receipt"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Receipt</span></code></a>([name, alias])</p></td>
 <td><p></p></td>
 </tr>
 </tbody>
@@ -549,7 +563,7 @@ used by <a class="reference internal" href="#losalamos.documents.Document.new" t
 
 <dl class="py method">
 <dt class="sig sig-object py" id="losalamos.documents.Document.new">
-<span class="sig-name descname"><span class="pre">new</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">folder</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">template_overlay</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/documents.html#Document.new"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.documents.Document.new" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">new</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">folder</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">template_overlay</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">files_overlay</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/documents.html#Document.new"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.documents.Document.new" title="Link to this definition">#</a></dt>
 <dd><p>Create a new document folder by materializing template files into a target location.</p>
 <p>This method creates a folder named <code class="docutils literal notranslate"><span class="pre">name</span></code> inside <code class="docutils literal notranslate"><span class="pre">folder</span></code> and populates it
 by merging up to three template layers in the following priority order:</p>
@@ -607,6 +621,13 @@ Intended for private or client-specific files (logos, confidential covers,
 etc.). When <code class="docutils literal notranslate"><span class="pre">None</span></code> (default), only the class-level templates are used.
 When provided, must be a valid existing directory; otherwise
 <code class="xref py py-exc docutils literal notranslate"><span class="pre">NotADirectoryError</span></code> is raised before any files are written.</p></li>
+<li><p><strong>files_overlay</strong> (<em>dict</em><em>, </em><em>str</em><em>, </em><em>pathlib.Path</em><em>, or </em><em>None</em>) – Optional file-level overlay applied after all template
+layers. Can be a <code class="docutils literal notranslate"><span class="pre">dict</span></code> mapping destination-relative paths to source file
+paths, or a path to a <code class="docutils literal notranslate"><span class="pre">.json</span></code>, <code class="docutils literal notranslate"><span class="pre">.yaml</span></code>/<code class="docutils literal notranslate"><span class="pre">.yml</span></code>, or <code class="docutils literal notranslate"><span class="pre">.toml</span></code> config
+file with the same structure. Keys are paths relative to the document root
+(e.g. <code class="docutils literal notranslate"><span class="pre">&quot;definitions/party_b.tex&quot;</span></code>); values are the source files to copy
+from (the destination filename is taken from the key, not the source).
+All source files are validated before any copying begins.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
@@ -615,7 +636,8 @@ When provided, must be a valid existing directory; otherwise
 No files are created or modified in this case.</p></li>
 <li><p><strong>NotADirectoryError</strong> – If <code class="docutils literal notranslate"><span class="pre">template_overlay</span></code> is provided but does not
 point to a valid directory. Validated before any files are written.</p></li>
-<li><p><strong>FileNotFoundError</strong> – If the merged template does not contain exactly
+<li><p><strong>FileNotFoundError</strong> – If a source path in <code class="docutils literal notranslate"><span class="pre">files_overlay</span></code> does not exist
+or is not a file. Also raised if the merged template does not contain exactly
 one top-level <code class="docutils literal notranslate"><span class="pre">main.*</span></code> file to load as the document’s entry point.</p></li>
 </ul>
 </dd>
@@ -1298,18 +1320,62 @@ the next content are discarded (replaced by the controlled padding).</p>
 <dd><p>Bases: <a class="reference internal" href="#losalamos.documents.Essay" title="losalamos.documents.Essay"><code class="xref py py-class docutils literal notranslate"><span class="pre">Essay</span></code></a></p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="losalamos.documents.Professional.VARIANT_TEMPLATE">
-<span class="sig-name descname"><span class="pre">VARIANT_TEMPLATE</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">PosixPath('/home/runner/work/losalamos/losalamos/src/losalamos/data/templates/documents/tex/professional')</span></span><a class="headerlink" href="#losalamos.documents.Professional.VARIANT_TEMPLATE" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">VARIANT_TEMPLATE</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">PosixPath('/home/runner/work/losalamos/losalamos/src/losalamos/data/templates/documents/tex/professional/base')</span></span><a class="headerlink" href="#losalamos.documents.Professional.VARIANT_TEMPLATE" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
-<dt class="sig sig-object py" id="losalamos.documents.ProposalCommercial">
-<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">losalamos.documents.</span></span><span class="sig-name descname"><span class="pre">ProposalCommercial</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'MyDocTeX'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alias</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'TeX'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/documents.html#ProposalCommercial"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.documents.ProposalCommercial" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="losalamos.documents.Invoice">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">losalamos.documents.</span></span><span class="sig-name descname"><span class="pre">Invoice</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'MyDocTeX'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alias</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'TeX'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/documents.html#Invoice"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.documents.Invoice" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#losalamos.documents.Professional" title="losalamos.documents.Professional"><code class="xref py py-class docutils literal notranslate"><span class="pre">Professional</span></code></a></p>
 <dl class="py attribute">
-<dt class="sig sig-object py" id="losalamos.documents.ProposalCommercial.VARIANT_TEMPLATE">
-<span class="sig-name descname"><span class="pre">VARIANT_TEMPLATE</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">PosixPath('/home/runner/work/losalamos/losalamos/src/losalamos/data/templates/documents/tex/proposal-commercial')</span></span><a class="headerlink" href="#losalamos.documents.ProposalCommercial.VARIANT_TEMPLATE" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="losalamos.documents.Invoice.VARIANT_TEMPLATE">
+<span class="sig-name descname"><span class="pre">VARIANT_TEMPLATE</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">PosixPath('/home/runner/work/losalamos/losalamos/src/losalamos/data/templates/documents/tex/professional/invoice')</span></span><a class="headerlink" href="#losalamos.documents.Invoice.VARIANT_TEMPLATE" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="losalamos.documents.Receipt">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">losalamos.documents.</span></span><span class="sig-name descname"><span class="pre">Receipt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'MyDocTeX'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alias</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'TeX'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/documents.html#Receipt"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.documents.Receipt" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#losalamos.documents.Invoice" title="losalamos.documents.Invoice"><code class="xref py py-class docutils literal notranslate"><span class="pre">Invoice</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="losalamos.documents.Receipt.VARIANT_TEMPLATE">
+<span class="sig-name descname"><span class="pre">VARIANT_TEMPLATE</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">PosixPath('/home/runner/work/losalamos/losalamos/src/losalamos/data/templates/documents/tex/professional/receipt')</span></span><a class="headerlink" href="#losalamos.documents.Receipt.VARIANT_TEMPLATE" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="losalamos.documents.Proposal">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">losalamos.documents.</span></span><span class="sig-name descname"><span class="pre">Proposal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'MyDocTeX'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alias</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'TeX'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/documents.html#Proposal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.documents.Proposal" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#losalamos.documents.Invoice" title="losalamos.documents.Invoice"><code class="xref py py-class docutils literal notranslate"><span class="pre">Invoice</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="losalamos.documents.Proposal.VARIANT_TEMPLATE">
+<span class="sig-name descname"><span class="pre">VARIANT_TEMPLATE</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">PosixPath('/home/runner/work/losalamos/losalamos/src/losalamos/data/templates/documents/tex/professional/proposal')</span></span><a class="headerlink" href="#losalamos.documents.Proposal.VARIANT_TEMPLATE" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="losalamos.documents.Agreement">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">losalamos.documents.</span></span><span class="sig-name descname"><span class="pre">Agreement</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'MyDocTeX'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alias</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'TeX'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/documents.html#Agreement"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.documents.Agreement" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#losalamos.documents.Proposal" title="losalamos.documents.Proposal"><code class="xref py py-class docutils literal notranslate"><span class="pre">Proposal</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="losalamos.documents.Agreement.VARIANT_TEMPLATE">
+<span class="sig-name descname"><span class="pre">VARIANT_TEMPLATE</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">PosixPath('/home/runner/work/losalamos/losalamos/src/losalamos/data/templates/documents/tex/professional/agreement')</span></span><a class="headerlink" href="#losalamos.documents.Agreement.VARIANT_TEMPLATE" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="losalamos.documents.Contract">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">losalamos.documents.</span></span><span class="sig-name descname"><span class="pre">Contract</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'MyDocTeX'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alias</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'TeX'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/documents.html#Contract"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.documents.Contract" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#losalamos.documents.Agreement" title="losalamos.documents.Agreement"><code class="xref py py-class docutils literal notranslate"><span class="pre">Agreement</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="losalamos.documents.Contract.VARIANT_TEMPLATE">
+<span class="sig-name descname"><span class="pre">VARIANT_TEMPLATE</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">PosixPath('/home/runner/work/losalamos/losalamos/src/losalamos/data/templates/documents/tex/professional/contract')</span></span><a class="headerlink" href="#losalamos.documents.Contract.VARIANT_TEMPLATE" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -1396,8 +1462,24 @@ the next content are discarded (replaced by the controlled padding).</p>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.documents.Professional.VARIANT_TEMPLATE"><code class="docutils literal notranslate"><span class="pre">Professional.VARIANT_TEMPLATE</span></code></a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.documents.ProposalCommercial"><code class="docutils literal notranslate"><span class="pre">ProposalCommercial</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.documents.ProposalCommercial.VARIANT_TEMPLATE"><code class="docutils literal notranslate"><span class="pre">ProposalCommercial.VARIANT_TEMPLATE</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.documents.Invoice"><code class="docutils literal notranslate"><span class="pre">Invoice</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.documents.Invoice.VARIANT_TEMPLATE"><code class="docutils literal notranslate"><span class="pre">Invoice.VARIANT_TEMPLATE</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.documents.Receipt"><code class="docutils literal notranslate"><span class="pre">Receipt</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.documents.Receipt.VARIANT_TEMPLATE"><code class="docutils literal notranslate"><span class="pre">Receipt.VARIANT_TEMPLATE</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.documents.Proposal"><code class="docutils literal notranslate"><span class="pre">Proposal</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.documents.Proposal.VARIANT_TEMPLATE"><code class="docutils literal notranslate"><span class="pre">Proposal.VARIANT_TEMPLATE</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.documents.Agreement"><code class="docutils literal notranslate"><span class="pre">Agreement</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.documents.Agreement.VARIANT_TEMPLATE"><code class="docutils literal notranslate"><span class="pre">Agreement.VARIANT_TEMPLATE</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.documents.Contract"><code class="docutils literal notranslate"><span class="pre">Contract</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.documents.Contract.VARIANT_TEMPLATE"><code class="docutils literal notranslate"><span class="pre">Contract.VARIANT_TEMPLATE</span></code></a></li>
 </ul>
 </li>
 </ul>

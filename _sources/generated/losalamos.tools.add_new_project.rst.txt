@@ -1,0 +1,13 @@
+﻿losalamos.tools.add\_new\_project
+=================================
+
+.. automodule:: losalamos.tools.add_new_project
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      get_arguments
+      main
+   

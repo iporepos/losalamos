@@ -1,0 +1,1014 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" data-theme="light">
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>losalamos.tools.manage_documents &#8212; losalamos 0.0.1 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../../../_static/scripts/fontawesome.js?digest=cb8930eaaf36d9849b67"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
+
+    <script src="../../../_static/documentation_options.js?v=d45e8c67"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/losalamos/tools/manage_documents';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="author" title="About these documents" href="../../../about.html" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="../../../_static/searchtools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <script src="../../../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="light">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+    
+    
+    
+    <img src="https://github.com/iporepos/losalamos/blob/main/docs/figs/logo.png?raw=true" class="logo__image only-light" alt="losalamos 0.0.1 documentation - Home"/>
+    <img src="https://github.com/iporepos/losalamos/blob/main/docs/figs/logo.png?raw=true" class="logo__image only-dark pst-js-only" alt="losalamos 0.0.1 documentation - Home"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../index.html">
+    Home
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../about.html">
+    About
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../usage.html">
+    Usage
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../api.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../development.html">
+    Development
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/iporepos/losalamos" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../index.html">
+    Home
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../about.html">
+    About
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../usage.html">
+    Usage
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../api.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../development.html">
+    Development
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/iporepos/losalamos" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../index.html" class="nav-link">Module code</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">losalamos.tools.manage_documents</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for losalamos.tools.manage_documents</h1><div class="highlight"><pre>
+<span></span><span class="c1"># SPDX-License-Identifier: GPL-3.0-or-later</span>
+<span class="c1">#</span>
+<span class="c1"># Copyright (C) 2025 The Project Authors</span>
+<span class="c1"># See pyproject.toml for authors/maintainers.</span>
+<span class="c1"># See LICENSE for license details.</span>
+<span class="sd">"""</span>
+<span class="sd">Terminal document manager for a project collection.</span>
+
+<span class="sd">Reads a tool config file (YAML, TOML, or JSON) that sets the base folder</span>
+<span class="sd">and collection prefix. Presents an interactive project picker, then a</span>
+<span class="sd">per-project home page to add, edit, or build asset documents (invoices,</span>
+<span class="sd">receipts, proposals).</span>
+
+<span class="sd">**Shell usage**</span>
+
+<span class="sd">.. code-block:: bash</span>
+
+<span class="sd">    python -m losalamos.tools.manage_documents --config path/to/config.yaml</span>
+
+<span class="sd">**Tool config keys**</span>
+
+<span class="sd">- ``basefolder`` (*str*, required) — root directory where collection folders live.</span>
+<span class="sd">- ``collection`` (*str*, required) — single-letter prefix, e.g. ``C``.</span>
+
+<span class="sd">**Navigation**</span>
+
+<span class="sd">- Project list: enter a number to open, ``q`` to quit.</span>
+<span class="sd">- Home page: ``A`` add / ``E`` edit / ``B`` build / ``P`` back to projects / ``Q`` quit.</span>
+<span class="sd">- Confirmation: ``ENTER`` or ``y`` to confirm, ``c`` to cancel, ``q`` to quit the tool.</span>
+
+<span class="sd">.. dropdown:: Example — tool config file</span>
+<span class="sd">    :icon: code-square</span>
+<span class="sd">    :open:</span>
+
+<span class="sd">    TOML and JSON are also accepted.</span>
+
+<span class="sd">    .. code-block:: yaml</span>
+
+<span class="sd">        # Root directory that holds all collection folders.</span>
+<span class="sd">        basefolder: "C:/My Drive/projects"</span>
+
+<span class="sd">        # Single-letter prefix that identifies the collection (case-insensitive).</span>
+<span class="sd">        collection: C</span>
+
+<span class="sd">"""</span>
+
+<span class="c1"># IMPORTS</span>
+<span class="c1"># ***********************************************************************</span>
+
+<span class="c1"># Native imports</span>
+<span class="c1"># =======================================================================</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">shutil</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">argparse</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">platform</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">subprocess</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">webbrowser</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+
+<span class="c1"># Project-level imports</span>
+<span class="c1"># =======================================================================</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">losalamos</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">losalamos.notes</span><span class="w"> </span><span class="kn">import</span> <span class="n">NoteBasic</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">losalamos.project</span><span class="w"> </span><span class="kn">import</span> <span class="n">_load_config</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">losalamos.tools.core</span><span class="w"> </span><span class="kn">import</span> <span class="o">*</span>
+
+
+<span class="c1"># CONSTANTS</span>
+<span class="c1"># ***********************************************************************</span>
+
+<span class="c1"># Document asset types handled by this tool (uppercase)</span>
+<span class="n">_ASSET_TYPES</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"INVOICE"</span><span class="p">,</span> <span class="s2">"RECEIPT"</span><span class="p">,</span> <span class="s2">"PROPOSAL"</span><span class="p">]</span>
+
+<span class="c1"># Project-relative subfolder for each asset type</span>
+<span class="n">_SUBFOLDER</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">"INVOICE"</span><span class="p">:</span> <span class="s2">"budget/documents"</span><span class="p">,</span>
+    <span class="s2">"RECEIPT"</span><span class="p">:</span> <span class="s2">"budget/documents"</span><span class="p">,</span>
+    <span class="s2">"PROPOSAL"</span><span class="p">:</span> <span class="s2">"admin/proposals"</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="c1"># Add-method names on Project, keyed by asset type</span>
+<span class="n">_ADD_METHOD</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">"INVOICE"</span><span class="p">:</span> <span class="s2">"add_invoice"</span><span class="p">,</span>
+    <span class="s2">"RECEIPT"</span><span class="p">:</span> <span class="s2">"add_receipt"</span><span class="p">,</span>
+    <span class="s2">"PROPOSAL"</span><span class="p">:</span> <span class="s2">"add_proposal"</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="c1"># Build-method names on Project, keyed by asset type</span>
+<span class="n">_BUILD_METHOD</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">"INVOICE"</span><span class="p">:</span> <span class="s2">"build_invoice"</span><span class="p">,</span>
+    <span class="s2">"RECEIPT"</span><span class="p">:</span> <span class="s2">"build_receipt"</span><span class="p">,</span>
+    <span class="s2">"PROPOSAL"</span><span class="p">:</span> <span class="s2">"build_proposal"</span><span class="p">,</span>
+<span class="p">}</span>
+
+
+<span class="c1"># EXCEPTIONS</span>
+<span class="c1"># ***********************************************************************</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">_Quit</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Raised when the user chooses to exit the tool."""</span>
+
+    <span class="k">pass</span>
+
+
+<span class="c1"># FUNCTIONS</span>
+<span class="c1"># ***********************************************************************</span>
+
+
+<div class="viewcode-block" id="get_arguments">
+<a class="viewcode-back" href="../../../generated/losalamos.tools.manage_documents.html#losalamos.tools.manage_documents.get_arguments">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_arguments</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">"""</span>
+<span class="sd">    Parse command-line arguments.</span>
+
+<span class="sd">    :returns: Parsed argument namespace with a ``config`` attribute.</span>
+<span class="sd">    """</span>
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">"Terminal document manager for a project collection."</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">"-c"</span><span class="p">,</span>
+        <span class="s2">"--config"</span><span class="p">,</span>
+        <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">"Path to the tool config file (.yaml, .toml, or .json)."</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_load_projects</span><span class="p">(</span><span class="n">collection_path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">prefix</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">"""</span>
+<span class="sd">    Scan *collection_path* and return project info dicts sorted by name.</span>
+
+<span class="sd">    :param collection_path: Directory containing sibling project folders.</span>
+<span class="sd">    :param prefix: Folder name prefix, e.g. ``"C"``.</span>
+<span class="sd">    :returns: List of dicts with keys ``name``, ``path``, ``title``.</span>
+<span class="sd">    :rtype: list[dict]</span>
+<span class="sd">    """</span>
+    <span class="n">projects</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">collection_path</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+        <span class="k">return</span> <span class="n">projects</span>
+    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">collection_path</span><span class="o">.</span><span class="n">iterdir</span><span class="p">()):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">item</span><span class="o">.</span><span class="n">is_dir</span><span class="p">():</span>
+            <span class="k">continue</span>
+        <span class="n">tail</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">name</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">prefix</span><span class="p">)</span> <span class="p">:]</span>
+        <span class="k">if</span> <span class="n">item</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">prefix</span><span class="o">.</span><span class="n">upper</span><span class="p">())</span> <span class="ow">and</span> <span class="n">tail</span><span class="o">.</span><span class="n">isdigit</span><span class="p">():</span>
+            <span class="n">title</span> <span class="o">=</span> <span class="n">_read_project_title</span><span class="p">(</span><span class="n">project_path</span><span class="o">=</span><span class="n">item</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">item</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+            <span class="n">projects</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">"name"</span><span class="p">:</span> <span class="n">item</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s2">"path"</span><span class="p">:</span> <span class="n">item</span><span class="p">,</span> <span class="s2">"title"</span><span class="p">:</span> <span class="n">title</span><span class="p">})</span>
+    <span class="k">return</span> <span class="n">projects</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_read_project_title</span><span class="p">(</span><span class="n">project_path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Read the title from a project's main note without loading the full project."""</span>
+    <span class="n">note_file</span> <span class="o">=</span> <span class="n">project_path</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">.md"</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">note_file</span><span class="o">.</span><span class="n">is_file</span><span class="p">():</span>
+        <span class="k">return</span> <span class="s2">"—"</span>
+    <span class="n">meta</span> <span class="o">=</span> <span class="n">NoteBasic</span><span class="o">.</span><span class="n">parse_metadata</span><span class="p">(</span><span class="n">note_file</span><span class="o">=</span><span class="n">note_file</span><span class="p">)</span>
+    <span class="n">title</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">meta</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"title"</span><span class="p">)</span> <span class="ow">or</span> <span class="s2">""</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s2">"</span><span class="se">\"</span><span class="s2">'"</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">title</span> <span class="k">if</span> <span class="n">title</span> <span class="k">else</span> <span class="s2">"—"</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_print_projects</span><span class="p">(</span><span class="n">projects</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Print a numbered project list."""</span>
+    <span class="nb">print</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">projects</span><span class="p">):</span>
+        <span class="n">idx</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"[</span><span class="si">{</span><span class="n">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">:</span><span class="s2">2d</span><span class="si">}</span><span class="s2">]"</span>
+        <span class="n">title</span> <span class="o">=</span> <span class="n">p</span><span class="p">[</span><span class="s2">"title"</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">title</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">45</span><span class="p">:</span>
+            <span class="n">title</span> <span class="o">=</span> <span class="n">title</span><span class="p">[:</span><span class="mi">42</span><span class="p">]</span> <span class="o">+</span> <span class="s2">"..."</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  </span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="n">p</span><span class="p">[</span><span class="s1">'name'</span><span class="p">]</span><span class="si">:</span><span class="s2">&lt;10</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="n">title</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">()</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_print_documents</span><span class="p">(</span><span class="n">doc_df</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Print a numbered document list with name and relative folder path."""</span>
+    <span class="k">if</span> <span class="n">doc_df</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">get_message</span><span class="p">(</span><span class="s2">"No documents found."</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">()</span>
+        <span class="k">return</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">doc_df</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+        <span class="n">idx</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"[</span><span class="si">{</span><span class="n">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">:</span><span class="s2">2d</span><span class="si">}</span><span class="s2">]"</span>
+        <span class="n">asset_type</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">"asset_type"</span><span class="p">])</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+        <span class="n">subfolder</span> <span class="o">=</span> <span class="n">_SUBFOLDER</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">asset_type</span><span class="p">,</span> <span class="s2">"?"</span><span class="p">)</span>
+        <span class="n">rel_path</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">subfolder</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">row</span><span class="p">[</span><span class="s1">'name'</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  </span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="n">row</span><span class="p">[</span><span class="s1">'asset_id'</span><span class="p">]</span><span class="si">:</span><span class="s2">&lt;6</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="n">row</span><span class="p">[</span><span class="s1">'name'</span><span class="p">]</span><span class="si">:</span><span class="s2">&lt;32</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="n">rel_path</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">()</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_active_documents</span><span class="p">(</span><span class="n">doc_df</span><span class="p">,</span> <span class="n">folder_root</span><span class="p">:</span> <span class="n">Path</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""</span>
+<span class="sd">    Filter *doc_df* to rows whose document folder still exists on disk.</span>
+
+<span class="sd">    Tombstone asset notes (folder deleted, note kept for numbering) are</span>
+<span class="sd">    excluded so they never appear in the UI.</span>
+
+<span class="sd">    :param doc_df: DataFrame from :meth:`~losalamos.Project.get_assets`.</span>
+<span class="sd">    :param folder_root: Project root path.</span>
+<span class="sd">    :returns: Filtered and re-indexed DataFrame.</span>
+<span class="sd">    """</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_exists</span><span class="p">(</span><span class="n">row</span><span class="p">):</span>
+        <span class="n">subfolder</span> <span class="o">=</span> <span class="n">_SUBFOLDER</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">"asset_type"</span><span class="p">])</span><span class="o">.</span><span class="n">upper</span><span class="p">(),</span> <span class="s2">""</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">folder_root</span><span class="p">)</span> <span class="o">/</span> <span class="n">subfolder</span> <span class="o">/</span> <span class="nb">str</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">"name"</span><span class="p">]))</span><span class="o">.</span><span class="n">is_dir</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">doc_df</span><span class="p">[</span><span class="n">doc_df</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">_exists</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)]</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_pick_document</span><span class="p">(</span><span class="n">doc_df</span><span class="p">,</span> <span class="n">label</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"Select document"</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""</span>
+<span class="sd">    Prompt the user to select a document from *doc_df*.</span>
+
+<span class="sd">    :param doc_df: DataFrame returned by :meth:`~losalamos.Project.get_assets`.</span>
+<span class="sd">    :param label: Prompt label.</span>
+<span class="sd">    :returns: Row dict of the selected document, or ``None`` to cancel.</span>
+<span class="sd">    :raises _Quit: When the user enters ``q``.</span>
+<span class="sd">    """</span>
+    <span class="k">if</span> <span class="n">doc_df</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">get_message</span><span class="p">(</span><span class="s2">"No documents available."</span><span class="p">))</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">choice</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">"  </span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2">  [1-</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">doc_df</span><span class="p">)</span><span class="si">}</span><span class="s2"> / ENTER=cancel / q=quit]: "</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">choice</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">"q"</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">_Quit</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">choice</span> <span class="o">==</span> <span class="s2">""</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">idx</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">choice</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">idx</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">doc_df</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">doc_df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  Out of range (1–</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">doc_df</span><span class="p">)</span><span class="si">}</span><span class="s2">). Try again.</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">"  Enter a number.</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_confirm</span><span class="p">(</span><span class="n">prompt</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"Confirm?"</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""</span>
+<span class="sd">    Ask for a yes/cancel/quit confirmation.</span>
+
+<span class="sd">    :returns: ``True`` when confirmed, ``False`` when cancelled.</span>
+<span class="sd">    :raises _Quit: When the user enters ``q``.</span>
+<span class="sd">    """</span>
+    <span class="n">answer</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  </span><span class="si">{</span><span class="n">prompt</span><span class="si">}</span><span class="s2">  [ENTER=confirm / c=cancel / q=quit]: "</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">answer</span> <span class="o">==</span> <span class="s2">"q"</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">_Quit</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">answer</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">""</span><span class="p">,</span> <span class="s2">"y"</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_open_in_explorer</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Open *path* in the OS file explorer."""</span>
+    <span class="n">system</span> <span class="o">=</span> <span class="n">platform</span><span class="o">.</span><span class="n">system</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">system</span> <span class="o">==</span> <span class="s2">"Windows"</span><span class="p">:</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">startfile</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">path</span><span class="p">))</span>
+    <span class="k">elif</span> <span class="n">system</span> <span class="o">==</span> <span class="s2">"Darwin"</span><span class="p">:</span>
+        <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">([</span><span class="s2">"open"</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">path</span><span class="p">)],</span> <span class="n">check</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">([</span><span class="s2">"xdg-open"</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">path</span><span class="p">)],</span> <span class="n">check</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_action_add</span><span class="p">(</span><span class="n">pj</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Interactive add-document flow."""</span>
+    <span class="n">heading_subsection</span><span class="p">(</span><span class="s2">"Add document"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"  [I] Invoice   [R] Receipt   [P] Proposal"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">()</span>
+    <span class="n">choice</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">"  Select type  [I/R/P / ENTER=cancel / q=quit]: "</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">choice</span> <span class="o">==</span> <span class="s2">"q"</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">_Quit</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">choice</span> <span class="o">==</span> <span class="s2">""</span><span class="p">:</span>
+        <span class="k">return</span>
+
+    <span class="n">type_map</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"i"</span><span class="p">:</span> <span class="s2">"INVOICE"</span><span class="p">,</span> <span class="s2">"r"</span><span class="p">:</span> <span class="s2">"RECEIPT"</span><span class="p">,</span> <span class="s2">"p"</span><span class="p">:</span> <span class="s2">"PROPOSAL"</span><span class="p">}</span>
+    <span class="k">if</span> <span class="n">choice</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">type_map</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">get_warning</span><span class="p">(</span><span class="s2">"Invalid choice."</span><span class="p">))</span>
+        <span class="k">return</span>
+
+    <span class="n">asset_type</span> <span class="o">=</span> <span class="n">type_map</span><span class="p">[</span><span class="n">choice</span><span class="p">]</span>
+    <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="c1"># For receipts, offer an optional invoice link</span>
+    <span class="k">if</span> <span class="n">asset_type</span> <span class="o">==</span> <span class="s2">"RECEIPT"</span><span class="p">:</span>
+        <span class="n">all_df</span> <span class="o">=</span> <span class="n">pj</span><span class="o">.</span><span class="n">get_assets</span><span class="p">()</span>
+        <span class="n">inv_df</span> <span class="o">=</span> <span class="n">all_df</span><span class="p">[</span><span class="n">all_df</span><span class="p">[</span><span class="s2">"asset_type"</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">==</span> <span class="s2">"INVOICE"</span><span class="p">]</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span>
+            <span class="n">drop</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">inv_df</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">()</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">"  Link to an existing invoice? (optional)"</span><span class="p">)</span>
+            <span class="n">_print_documents</span><span class="p">(</span><span class="n">inv_df</span><span class="p">)</span>
+            <span class="n">sel</span> <span class="o">=</span> <span class="n">_pick_document</span><span class="p">(</span><span class="n">doc_df</span><span class="o">=</span><span class="n">inv_df</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">"Select invoice"</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">sel</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">kwargs</span><span class="p">[</span><span class="s2">"invoice_id"</span><span class="p">]</span> <span class="o">=</span> <span class="n">sel</span><span class="p">[</span><span class="s2">"asset_id"</span><span class="p">]</span>
+
+    <span class="nb">print</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">get_message</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Action  : add </span><span class="si">{</span><span class="n">asset_type</span><span class="si">}</span><span class="s2">"</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"invoice_id"</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">get_message</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Linked  : </span><span class="si">{</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">'invoice_id'</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">_confirm</span><span class="p">():</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">get_message</span><span class="p">(</span><span class="s2">"Cancelled."</span><span class="p">))</span>
+        <span class="k">return</span>
+
+    <span class="n">method</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">pj</span><span class="p">,</span> <span class="n">_ADD_METHOD</span><span class="p">[</span><span class="n">asset_type</span><span class="p">])</span>
+    <span class="n">method</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">get_message</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">asset_type</span><span class="si">}</span><span class="s2"> created."</span><span class="p">))</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_action_edit</span><span class="p">(</span><span class="n">pj</span><span class="p">,</span> <span class="n">doc_df</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Interactive edit-document flow: open the TeX folder in the file explorer."""</span>
+    <span class="n">heading_subsection</span><span class="p">(</span><span class="s2">"Edit document"</span><span class="p">)</span>
+    <span class="n">_print_documents</span><span class="p">(</span><span class="n">doc_df</span><span class="p">)</span>
+    <span class="n">row</span> <span class="o">=</span> <span class="n">_pick_document</span><span class="p">(</span><span class="n">doc_df</span><span class="o">=</span><span class="n">doc_df</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">row</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span>
+
+    <span class="n">asset_type</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">"asset_type"</span><span class="p">])</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s2">"name"</span><span class="p">]</span>
+    <span class="n">subfolder</span> <span class="o">=</span> <span class="n">_SUBFOLDER</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">asset_type</span><span class="p">,</span> <span class="s2">"inputs/documents"</span><span class="p">)</span>
+    <span class="n">doc_folder</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">pj</span><span class="o">.</span><span class="n">folder_root</span><span class="p">)</span> <span class="o">/</span> <span class="n">subfolder</span> <span class="o">/</span> <span class="n">name</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">doc_folder</span><span class="o">.</span><span class="n">is_dir</span><span class="p">():</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">get_warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Folder not found: '</span><span class="si">{</span><span class="n">doc_folder</span><span class="si">}</span><span class="s2">'"</span><span class="p">))</span>
+        <span class="k">return</span>
+
+    <span class="nb">print</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">get_message</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Opening : </span><span class="si">{</span><span class="n">doc_folder</span><span class="si">}</span><span class="s2">"</span><span class="p">))</span>
+    <span class="n">_open_in_explorer</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">doc_folder</span><span class="p">)</span>
+    <span class="nb">input</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">  Press ENTER when done editing... "</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_action_view</span><span class="p">(</span><span class="n">pj</span><span class="p">,</span> <span class="n">doc_df</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Interactive view-PDF flow: open the latest compiled PDF in the default viewer."""</span>
+    <span class="n">heading_subsection</span><span class="p">(</span><span class="s2">"View PDF"</span><span class="p">)</span>
+    <span class="n">_print_documents</span><span class="p">(</span><span class="n">doc_df</span><span class="p">)</span>
+    <span class="n">row</span> <span class="o">=</span> <span class="n">_pick_document</span><span class="p">(</span><span class="n">doc_df</span><span class="o">=</span><span class="n">doc_df</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">row</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span>
+
+    <span class="n">asset_type</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">"asset_type"</span><span class="p">])</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s2">"name"</span><span class="p">]</span>
+    <span class="n">subfolder</span> <span class="o">=</span> <span class="n">_SUBFOLDER</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">asset_type</span><span class="p">,</span> <span class="s2">"inputs/documents"</span><span class="p">)</span>
+    <span class="n">doc_dir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">pj</span><span class="o">.</span><span class="n">folder_root</span><span class="p">)</span> <span class="o">/</span> <span class="n">subfolder</span>
+
+    <span class="n">candidates</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span>
+        <span class="n">doc_dir</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">_V*.pdf"</span><span class="p">),</span>
+        <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">p</span><span class="p">:</span> <span class="n">p</span><span class="o">.</span><span class="n">stat</span><span class="p">()</span><span class="o">.</span><span class="n">st_mtime</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">candidates</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">get_warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">"No PDF found for '</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">'. Build it first."</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">()</span>
+        <span class="k">return</span>
+
+    <span class="n">pdf</span> <span class="o">=</span> <span class="n">candidates</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="nb">print</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">get_message</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Opening : </span><span class="si">{</span><span class="n">pdf</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">"</span><span class="p">))</span>
+    <span class="n">webbrowser</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">pdf</span><span class="o">.</span><span class="n">as_uri</span><span class="p">())</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_action_build</span><span class="p">(</span><span class="n">pj</span><span class="p">,</span> <span class="n">doc_df</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Interactive build-document flow: compile to PDF."""</span>
+    <span class="n">heading_subsection</span><span class="p">(</span><span class="s2">"Build document"</span><span class="p">)</span>
+    <span class="n">_print_documents</span><span class="p">(</span><span class="n">doc_df</span><span class="p">)</span>
+    <span class="n">row</span> <span class="o">=</span> <span class="n">_pick_document</span><span class="p">(</span><span class="n">doc_df</span><span class="o">=</span><span class="n">doc_df</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">row</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span>
+
+    <span class="n">asset_type</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">"asset_type"</span><span class="p">])</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+    <span class="n">file_id</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s2">"asset_id"</span><span class="p">]</span>
+
+    <span class="nb">print</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">get_message</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Action  : build </span><span class="si">{</span><span class="n">asset_type</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="n">file_id</span><span class="si">}</span><span class="s2">"</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">_confirm</span><span class="p">():</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">get_message</span><span class="p">(</span><span class="s2">"Cancelled."</span><span class="p">))</span>
+        <span class="k">return</span>
+
+    <span class="n">method</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">pj</span><span class="p">,</span> <span class="n">_BUILD_METHOD</span><span class="p">[</span><span class="n">asset_type</span><span class="p">])</span>
+    <span class="n">pdf</span> <span class="o">=</span> <span class="n">method</span><span class="p">(</span><span class="n">file_id</span><span class="o">=</span><span class="n">file_id</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">get_message</span><span class="p">(</span><span class="sa">f</span><span class="s2">"PDF     : </span><span class="si">{</span><span class="n">pdf</span><span class="si">}</span><span class="s2">"</span><span class="p">))</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_action_delete</span><span class="p">(</span><span class="n">pj</span><span class="p">,</span> <span class="n">doc_df</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""</span>
+<span class="sd">    Interactive delete-document flow.</span>
+
+<span class="sd">    Removes the document TeX folder and any compiled PDFs. The sidecar</span>
+<span class="sd">    asset note is kept as a tombstone so the asset ID is never reused.</span>
+<span class="sd">    """</span>
+    <span class="n">heading_subsection</span><span class="p">(</span><span class="s2">"Delete document"</span><span class="p">)</span>
+    <span class="n">_print_documents</span><span class="p">(</span><span class="n">doc_df</span><span class="p">)</span>
+    <span class="n">row</span> <span class="o">=</span> <span class="n">_pick_document</span><span class="p">(</span><span class="n">doc_df</span><span class="o">=</span><span class="n">doc_df</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">row</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span>
+
+    <span class="n">asset_type</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">"asset_type"</span><span class="p">])</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s2">"name"</span><span class="p">]</span>
+    <span class="n">subfolder</span> <span class="o">=</span> <span class="n">_SUBFOLDER</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">asset_type</span><span class="p">,</span> <span class="s2">"inputs/documents"</span><span class="p">)</span>
+    <span class="n">doc_dir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">pj</span><span class="o">.</span><span class="n">folder_root</span><span class="p">)</span> <span class="o">/</span> <span class="n">subfolder</span>
+    <span class="n">doc_folder</span> <span class="o">=</span> <span class="n">doc_dir</span> <span class="o">/</span> <span class="n">name</span>
+    <span class="n">pdfs</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">doc_dir</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">_V*.pdf"</span><span class="p">))</span>
+
+    <span class="nb">print</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">get_message</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Delete  : </span><span class="si">{</span><span class="n">doc_folder</span><span class="si">}</span><span class="s2">"</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">pdf</span> <span class="ow">in</span> <span class="n">pdfs</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">get_message</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Delete  : </span><span class="si">{</span><span class="n">pdf</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">"</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">get_message</span><span class="p">(</span><span class="s2">"Keep    : sidecar note (legacy for ID numbering)"</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">_confirm</span><span class="p">(</span><span class="n">prompt</span><span class="o">=</span><span class="s2">"Confirm delete? This cannot be undone."</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">get_message</span><span class="p">(</span><span class="s2">"Cancelled."</span><span class="p">))</span>
+        <span class="k">return</span>
+
+    <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">doc_folder</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">pdf</span> <span class="ow">in</span> <span class="n">pdfs</span><span class="p">:</span>
+        <span class="n">pdf</span><span class="o">.</span><span class="n">unlink</span><span class="p">()</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="n">get_message</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Deleted : </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">"</span><span class="p">))</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_home</span><span class="p">(</span><span class="n">pj</span><span class="p">,</span> <span class="n">project_info</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""</span>
+<span class="sd">    Home page loop for a selected project.</span>
+
+<span class="sd">    Reloads the project on each iteration so the document list is always</span>
+<span class="sd">    current after an add or build action.</span>
+
+<span class="sd">    :returns: ``"quit"`` to exit the tool or ``"projects"`` to return to the list.</span>
+<span class="sd">    """</span>
+    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">pj</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+        <span class="n">all_df</span> <span class="o">=</span> <span class="n">pj</span><span class="o">.</span><span class="n">get_assets</span><span class="p">()</span>
+        <span class="n">doc_df</span> <span class="o">=</span> <span class="n">_active_documents</span><span class="p">(</span>
+            <span class="n">doc_df</span><span class="o">=</span><span class="n">all_df</span><span class="p">[</span>
+                <span class="n">all_df</span><span class="p">[</span><span class="s2">"asset_type"</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">_ASSET_TYPES</span><span class="p">)</span>
+            <span class="p">]</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+            <span class="n">folder_root</span><span class="o">=</span><span class="n">pj</span><span class="o">.</span><span class="n">folder_root</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="n">heading_subsection</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">project_info</span><span class="p">[</span><span class="s1">'name'</span><span class="p">]</span><span class="si">}</span><span class="s2">  —  </span><span class="si">{</span><span class="n">project_info</span><span class="p">[</span><span class="s1">'title'</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="n">_print_documents</span><span class="p">(</span><span class="n">doc_df</span><span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span>
+            <span class="s2">"  [A] Add document    [E] Edit document    [B] Build document    [V] View PDF"</span>
+        <span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span>
+            <span class="s2">"  [D] Delete document [P] Back to projects                      [Q] Quit"</span>
+        <span class="p">)</span>
+        <span class="nb">print</span><span class="p">()</span>
+
+        <span class="n">choice</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">"  Select: "</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">choice</span> <span class="o">==</span> <span class="s2">"q"</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">"quit"</span>
+        <span class="k">if</span> <span class="n">choice</span> <span class="o">==</span> <span class="s2">"p"</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">"projects"</span>
+        <span class="k">if</span> <span class="n">choice</span> <span class="o">==</span> <span class="s2">"a"</span><span class="p">:</span>
+            <span class="n">_action_add</span><span class="p">(</span><span class="n">pj</span><span class="o">=</span><span class="n">pj</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">choice</span> <span class="o">==</span> <span class="s2">"e"</span><span class="p">:</span>
+            <span class="n">_action_edit</span><span class="p">(</span><span class="n">pj</span><span class="o">=</span><span class="n">pj</span><span class="p">,</span> <span class="n">doc_df</span><span class="o">=</span><span class="n">doc_df</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">choice</span> <span class="o">==</span> <span class="s2">"b"</span><span class="p">:</span>
+            <span class="n">_action_build</span><span class="p">(</span><span class="n">pj</span><span class="o">=</span><span class="n">pj</span><span class="p">,</span> <span class="n">doc_df</span><span class="o">=</span><span class="n">doc_df</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">choice</span> <span class="o">==</span> <span class="s2">"v"</span><span class="p">:</span>
+            <span class="n">_action_view</span><span class="p">(</span><span class="n">pj</span><span class="o">=</span><span class="n">pj</span><span class="p">,</span> <span class="n">doc_df</span><span class="o">=</span><span class="n">doc_df</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">choice</span> <span class="o">==</span> <span class="s2">"d"</span><span class="p">:</span>
+            <span class="n">_action_delete</span><span class="p">(</span><span class="n">pj</span><span class="o">=</span><span class="n">pj</span><span class="p">,</span> <span class="n">doc_df</span><span class="o">=</span><span class="n">doc_df</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="main">
+<a class="viewcode-back" href="../../../generated/losalamos.tools.manage_documents.html#losalamos.tools.manage_documents.main">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">heading_section</span><span class="p">(</span><span class="s2">"DOCUMENT MANAGER"</span><span class="p">)</span>
+
+    <span class="n">args</span> <span class="o">=</span> <span class="n">get_arguments</span><span class="p">()</span>
+    <span class="n">tool_cfg</span> <span class="o">=</span> <span class="n">_load_config</span><span class="p">(</span><span class="n">source</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">config</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"basefolder"</span><span class="p">,</span> <span class="s2">"collection"</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">tool_cfg</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Tool config missing required key: '</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">'"</span><span class="p">)</span>
+
+    <span class="n">basefolder</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">tool_cfg</span><span class="p">[</span><span class="s2">"basefolder"</span><span class="p">])</span>
+    <span class="n">collection</span> <span class="o">=</span> <span class="n">tool_cfg</span><span class="p">[</span><span class="s2">"collection"</span><span class="p">]</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+    <span class="n">collection_path</span> <span class="o">=</span> <span class="n">basefolder</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">collection</span><span class="si">}</span><span class="s2">000"</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="n">projects</span> <span class="o">=</span> <span class="n">_load_projects</span><span class="p">(</span>
+                <span class="n">collection_path</span><span class="o">=</span><span class="n">collection_path</span><span class="p">,</span>
+                <span class="n">prefix</span><span class="o">=</span><span class="n">collection</span><span class="p">,</span>
+            <span class="p">)</span>
+
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">projects</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">get_warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">"No projects found in '</span><span class="si">{</span><span class="n">collection_path</span><span class="si">}</span><span class="s2">'."</span><span class="p">))</span>
+                <span class="k">break</span>
+
+            <span class="n">heading_subsection</span><span class="p">(</span><span class="s2">"Projects"</span><span class="p">)</span>
+            <span class="n">_print_projects</span><span class="p">(</span><span class="n">projects</span><span class="o">=</span><span class="n">projects</span><span class="p">)</span>
+
+            <span class="n">choice</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  Select project  [1-</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">projects</span><span class="p">)</span><span class="si">}</span><span class="s2"> / q=quit]: "</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+            <span class="k">if</span> <span class="n">choice</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">"q"</span><span class="p">:</span>
+                <span class="k">break</span>
+
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">idx</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">choice</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">idx</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">projects</span><span class="p">)):</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  Out of range (1–</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">projects</span><span class="p">)</span><span class="si">}</span><span class="s2">).</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
+                    <span class="k">continue</span>
+            <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">"  Enter a number.</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
+                <span class="k">continue</span>
+
+            <span class="n">selected</span> <span class="o">=</span> <span class="n">projects</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+            <span class="n">pj</span> <span class="o">=</span> <span class="n">losalamos</span><span class="o">.</span><span class="n">load_project</span><span class="p">(</span><span class="n">project_folder</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">selected</span><span class="p">[</span><span class="s2">"path"</span><span class="p">]))</span>
+
+            <span class="n">result</span> <span class="o">=</span> <span class="n">_home</span><span class="p">(</span><span class="n">pj</span><span class="o">=</span><span class="n">pj</span><span class="p">,</span> <span class="n">project_info</span><span class="o">=</span><span class="n">selected</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">result</span> <span class="o">==</span> <span class="s2">"quit"</span><span class="p">:</span>
+                <span class="k">break</span>
+            <span class="c1"># "projects" → loop back to project list</span>
+
+    <span class="k">except</span> <span class="n">_Quit</span><span class="p">:</span>
+        <span class="k">pass</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">  Goodbye.</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span></div>
+
+
+
+<span class="c1"># SCRIPT</span>
+<span class="c1"># ***********************************************************************</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2026, Iporã Possantti.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.0.4.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.21.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

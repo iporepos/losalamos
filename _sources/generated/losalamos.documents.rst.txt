@@ -14,9 +14,13 @@
 
    .. autosummary::
    
+      Agreement
+      Contract
       Document
       DocumentTeX
       Essay
+      Invoice
       Professional
-      ProposalCommercial
+      Proposal
+      Receipt
    

@@ -1,0 +1,13 @@
+﻿losalamos.tools.manage\_documents
+=================================
+
+.. automodule:: losalamos.tools.manage_documents
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      get_arguments
+      main
+   

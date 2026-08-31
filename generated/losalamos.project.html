@@ -382,6 +382,8 @@
 <li class="toctree-l1"><a class="reference internal" href="losalamos.tools.update_templates.html">losalamos.tools.update_templates</a></li>
 <li class="toctree-l1"><a class="reference internal" href="losalamos.tools.populate_attributes.html">losalamos.tools.populate_attributes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="losalamos.tools.database.html">losalamos.tools.database</a></li>
+<li class="toctree-l1"><a class="reference internal" href="losalamos.tools.add_new_project.html">losalamos.tools.add_new_project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="losalamos.tools.manage_documents.html">losalamos.tools.manage_documents</a></li>
 </ul>
 </div>
 </nav></div>
@@ -445,13 +447,14 @@
   <section id="module-losalamos.project">
 <span id="losalamos-project"></span><h1>losalamos.project<a class="headerlink" href="#module-losalamos.project" title="Link to this heading">#</a></h1>
 <p>Project management and filesystem initialization utilities.</p>
-<p>This module provides high-level helpers and abstractions for creating,
-loading, and managing projects organized around a predefined filesystem
-structure. It defines the core <a class="reference internal" href="#losalamos.project.Project" title="losalamos.project.Project"><code class="xref py py-class docutils literal notranslate"><span class="pre">Project</span></code></a> class and convenience
-functions for initializing new projects or restoring existing ones
-from disk.</p>
-<p>The module is designed to evolve as a central coordination layer between
-project metadata, filesystem layout, and downstream processing workflows.</p>
+<p>Defines <a class="reference internal" href="#losalamos.project.Project" title="losalamos.project.Project"><code class="xref py py-class docutils literal notranslate"><span class="pre">Project</span></code></a> and the convenience functions <a class="reference internal" href="#losalamos.project.new_project" title="losalamos.project.new_project"><code class="xref py py-func docutils literal notranslate"><span class="pre">new_project()</span></code></a>
+and <a class="reference internal" href="#losalamos.project.load_project" title="losalamos.project.load_project"><code class="xref py py-func docutils literal notranslate"><span class="pre">load_project()</span></code></a> for working with projects organized around a fixed
+folder layout (<code class="docutils literal notranslate"><span class="pre">admin/</span></code>, <code class="docutils literal notranslate"><span class="pre">inputs/</span></code>, <code class="docutils literal notranslate"><span class="pre">outputs/</span></code>, <code class="docutils literal notranslate"><span class="pre">budget/</span></code>).</p>
+<p>Each project carries a main Markdown note with metadata (title, client,
+contractor, service, etc.). An optional <em>sources</em> configuration connects
+the project to external note libraries and drives automatic generation of
+the TeX definition overlays (<code class="docutils literal notranslate"><span class="pre">party_a.tex</span></code>, <code class="docutils literal notranslate"><span class="pre">party_b.tex</span></code>,
+<code class="docutils literal notranslate"><span class="pre">project.tex</span></code>, <code class="docutils literal notranslate"><span class="pre">service.tex</span></code>) consumed by document templates.</p>
 <p class="rubric">Functions</p>
 <div class="pst-scrollable-table-container"><table class="autosummary longtable table">
 <tbody>
@@ -459,10 +462,10 @@ project metadata, filesystem layout, and downstream processing workflows.</p>
 <td><p>Archive one or more files/folders into a single timestamped zip file.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#losalamos.project.load_project" title="losalamos.project.load_project"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_project</span></code></a>(project_folder)</p></td>
-<td><p>Loads a Project from folder</p></td>
+<td><p>Load a Project from a folder path.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#losalamos.project.new_project" title="losalamos.project.new_project"><code class="xref py py-obj docutils literal notranslate"><span class="pre">new_project</span></code></a>(specs)</p></td>
-<td><p>Create a new Project from a specification dictionary.</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#losalamos.project.new_project" title="losalamos.project.new_project"><code class="xref py py-obj docutils literal notranslate"><span class="pre">new_project</span></code></a>(config)</p></td>
+<td><p>Create a new Project from a configuration dictionary or file.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#losalamos.project.publish" title="losalamos.project.publish"><code class="xref py py-obj docutils literal notranslate"><span class="pre">publish</span></code></a>(sources, folder, name[, ...])</p></td>
 <td><p>Archive <code class="docutils literal notranslate"><span class="pre">sources</span></code> and publish the result under a managed <code class="docutils literal notranslate"><span class="pre">history</span></code>/<code class="docutils literal notranslate"><span class="pre">latest</span></code> structure.</p></td>
@@ -481,33 +484,55 @@ project metadata, filesystem layout, and downstream processing workflows.</p>
 </div>
 <dl class="py function">
 <dt class="sig sig-object py" id="losalamos.project.new_project">
-<span class="sig-prename descclassname"><span class="pre">losalamos.project.</span></span><span class="sig-name descname"><span class="pre">new_project</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">specs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/project.html#new_project"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.project.new_project" title="Link to this definition">#</a></dt>
-<dd><p>Create a new Project from a specification dictionary.</p>
+<span class="sig-prename descclassname"><span class="pre">losalamos.project.</span></span><span class="sig-name descname"><span class="pre">new_project</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/project.html#new_project"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.project.new_project" title="Link to this definition">#</a></dt>
+<dd><p>Create a new Project from a configuration dictionary or file.</p>
+<p>Builds the project folder structure, installs the main Markdown note
+populated from <code class="docutils literal notranslate"><span class="pre">config</span></code>, copies the sources config file if one is
+provided, then reloads the project so that all metadata and overlays
+are current on return.</p>
 <div class="admonition danger">
 <p class="admonition-title">Danger</p>
 <p>This method overwrites all existing default files.</p>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>specs</strong> (<em>dict</em>) – <p>Dictionary containing project specifications.</p>
+<dd class="field-odd"><p><strong>config</strong> (<em>dict</em><em>, </em><em>str</em><em>, or </em><em>pathlib.Path</em>) – <p>Project configuration. Either a mapping or a path to a
+<code class="docutils literal notranslate"><span class="pre">.yaml</span></code>/<code class="docutils literal notranslate"><span class="pre">.toml</span></code>/<code class="docutils literal notranslate"><span class="pre">.json</span></code> file.</p>
 <p><strong>Required keys</strong>:</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">folder_base</span></code> (<em>str</em>): Path where the project folder will be created.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">name</span></code> (<em>str</em>): Name of the project.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">folder_base</span></code> (<em>str</em>): Directory in which the project folder is created.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">name</span></code> (<em>str</em>): Project folder name.</p></li>
 </ul>
-<p><strong>Optional keys</strong>:</p>
+<p><strong>Filesystem keys</strong> (not written to the note):</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">alias</span></code> (<em>str</em>): Alternative identifier. Defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">alias</span></code> (<em>str</em>): Short identifier. Defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">source</span></code> (<em>str</em>): Source reference. Defaults to empty string.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">description</span></code> (<em>str</em>): Project description. Defaults to empty string.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sources</span></code> (<em>str</em>): Path to a <code class="docutils literal notranslate"><span class="pre">.yaml</span></code>/<code class="docutils literal notranslate"><span class="pre">.toml</span></code>/<code class="docutils literal notranslate"><span class="pre">.json</span></code> sources
+config to copy into <code class="docutils literal notranslate"><span class="pre">admin/config/</span></code>. Defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
+</ul>
+<p><strong>Note metadata keys</strong> (any field accepted by the project note template):</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">title</span></code>, <code class="docutils literal notranslate"><span class="pre">subtitle</span></code>, <code class="docutils literal notranslate"><span class="pre">subject</span></code>, <code class="docutils literal notranslate"><span class="pre">category</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">status</span></code> — defaults to <code class="docutils literal notranslate"><span class="pre">&quot;on</span> <span class="pre">going&quot;</span></code> if not provided</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">aliases</span></code> — defaults to <code class="docutils literal notranslate"><span class="pre">[&quot;{name}</span> <span class="pre">project&quot;,</span> <span class="pre">&quot;Project</span> <span class="pre">{name}&quot;]</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">activity_id</span></code>, <code class="docutils literal notranslate"><span class="pre">service_id</span></code>, <code class="docutils literal notranslate"><span class="pre">professional_id</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">contractor</span></code>, <code class="docutils literal notranslate"><span class="pre">contractor_sapiens</span></code>, <code class="docutils literal notranslate"><span class="pre">client</span></code>, <code class="docutils literal notranslate"><span class="pre">client_sapiens</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">date_start</span></code>, <code class="docutils literal notranslate"><span class="pre">date_end</span></code>, <code class="docutils literal notranslate"><span class="pre">revenue_expected</span></code></p></li>
 </ul>
 </p>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>ValueError</strong> – If any required key is missing.</p>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>FileNotFoundError</strong> – If a file path is given for <code class="docutils literal notranslate"><span class="pre">config</span></code> or
+<code class="docutils literal notranslate"><span class="pre">sources</span></code> and the file does not exist.</p></li>
+<li><p><strong>ValueError</strong> – If any required key is missing or the project folder
+already exists.</p></li>
+</ul>
 </dd>
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>A new <cite>:class:`losalamos.Project</cite> instance initialized with the given specifications.</p>
+<dd class="field-odd"><p>A new <code class="xref py py-class docutils literal notranslate"><span class="pre">losalamos.Project</span></code> instance with the main note
+and sources config installed.</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">losalamos.Project</span></code></p>
@@ -515,19 +540,36 @@ project metadata, filesystem layout, and downstream processing workflows.</p>
 </dl>
 <details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3" open="open">
 <summary class="sd-summary-title sd-card-header">
-<span class="sd-summary-icon"><svg version="1.1" width="1.0em" height="1.0em" class="sd-octicon sd-octicon-code-square" viewBox="0 0 16 16" aria-hidden="true"><path d="M0 1.75C0 .784.784 0 1.75 0h12.5C15.216 0 16 .784 16 1.75v12.5A1.75 1.75 0 0 1 14.25 16H1.75A1.75 1.75 0 0 1 0 14.25Zm1.75-.25a.25.25 0 0 0-.25.25v12.5c0 .138.112.25.25.25h12.5a.25.25 0 0 0 .25-.25V1.75a.25.25 0 0 0-.25-.25Zm7.47 3.97a.75.75 0 0 1 1.06 0l2 2a.75.75 0 0 1 0 1.06l-2 2a.749.749 0 0 1-1.275-.326.749.749 0 0 1 .215-.734L10.69 8 9.22 6.53a.75.75 0 0 1 0-1.06ZM6.78 6.53 5.31 8l1.47 1.47a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215l-2-2a.75.75 0 0 1 0-1.06l2-2a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042Z"></path></svg></span><span class="sd-summary-text">Script example</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<span class="sd-summary-icon"><svg version="1.1" width="1.0em" height="1.0em" class="sd-octicon sd-octicon-code-square" viewBox="0 0 16 16" aria-hidden="true"><path d="M0 1.75C0 .784.784 0 1.75 0h12.5C15.216 0 16 .784 16 1.75v12.5A1.75 1.75 0 0 1 14.25 16H1.75A1.75 1.75 0 0 1 0 14.25Zm1.75-.25a.25.25 0 0 0-.25.25v12.5c0 .138.112.25.25.25h12.5a.25.25 0 0 0 .25-.25V1.75a.25.25 0 0 0-.25-.25Zm7.47 3.97a.75.75 0 0 1 1.06 0l2 2a.75.75 0 0 1 0 1.06l-2 2a.749.749 0 0 1-1.275-.326.749.749 0 0 1 .215-.734L10.69 8 9.22 6.53a.75.75 0 0 1 0-1.06ZM6.78 6.53 5.31 8l1.47 1.47a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215l-2-2a.75.75 0 0 1 0-1.06l2-2a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042Z"></path></svg></span><span class="sd-summary-text">Example — inline dict</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">losalamos</span>
 
-<span class="c1"># [CHANGE THIS] setup specs dictionary</span>
-<span class="n">project_specs</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">"folder_base"</span><span class="p">:</span> <span class="s2">"C:/to/losalamos"</span><span class="p">,</span> <span class="c1"># change this path</span>
-    <span class="s2">"name"</span><span class="p">:</span> <span class="s2">"newProject"</span><span class="p">,</span>
-    <span class="s2">"alias"</span><span class="p">:</span> <span class="s2">"NPrj"</span><span class="p">,</span>
-    <span class="s2">"source"</span><span class="p">:</span> <span class="s2">"Me"</span><span class="p">,</span>
-    <span class="s2">"description"</span><span class="p">:</span> <span class="s2">"Just a test"</span>
-<span class="p">}</span>
+<span class="n">pj</span> <span class="o">=</span> <span class="n">losalamos</span><span class="o">.</span><span class="n">new_project</span><span class="p">(</span><span class="n">config</span><span class="o">=</span><span class="p">{</span>
+    <span class="s2">"folder_base"</span><span class="p">:</span> <span class="s2">"C:/projects"</span><span class="p">,</span>
+    <span class="s2">"name"</span><span class="p">:</span> <span class="s2">"Survey2026"</span><span class="p">,</span>
+    <span class="s2">"alias"</span><span class="p">:</span> <span class="s2">"SV26"</span><span class="p">,</span>
+    <span class="s2">"title"</span><span class="p">:</span> <span class="s2">"Environmental Survey 2026"</span><span class="p">,</span>
+    <span class="s2">"status"</span><span class="p">:</span> <span class="s2">"planning"</span><span class="p">,</span>
+    <span class="s2">"sources"</span><span class="p">:</span> <span class="s2">"/vault/sources.yaml"</span><span class="p">,</span>
+<span class="p">})</span>
+</pre></div>
+</div>
+</div>
+</details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3" open="open">
+<summary class="sd-summary-title sd-card-header">
+<span class="sd-summary-icon"><svg version="1.1" width="1.0em" height="1.0em" class="sd-octicon sd-octicon-code-square" viewBox="0 0 16 16" aria-hidden="true"><path d="M0 1.75C0 .784.784 0 1.75 0h12.5C15.216 0 16 .784 16 1.75v12.5A1.75 1.75 0 0 1 14.25 16H1.75A1.75 1.75 0 0 1 0 14.25Zm1.75-.25a.25.25 0 0 0-.25.25v12.5c0 .138.112.25.25.25h12.5a.25.25 0 0 0 .25-.25V1.75a.25.25 0 0 0-.25-.25Zm7.47 3.97a.75.75 0 0 1 1.06 0l2 2a.75.75 0 0 1 0 1.06l-2 2a.749.749 0 0 1-1.275-.326.749.749 0 0 1 .215-.734L10.69 8 9.22 6.53a.75.75 0 0 1 0-1.06ZM6.78 6.53 5.31 8l1.47 1.47a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215l-2-2a.75.75 0 0 1 0-1.06l2-2a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042Z"></path></svg></span><span class="sd-summary-text">Example — YAML config file</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<p class="sd-card-text">Save a <code class="docutils literal notranslate"><span class="pre">project-config.yaml</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">folder_base</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/home/user/projects</span>
+<span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Survey2026</span>
+<span class="nt">alias</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SV26</span>
+<span class="nt">title</span><span class="p">:</span><span class="w"> </span><span class="s">"Environmental</span><span class="nv"> </span><span class="s">Survey</span><span class="nv"> </span><span class="s">2026"</span>
+<span class="nt">status</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">planning</span>
+<span class="nt">sources</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/vault/sources.yaml</span>
+</pre></div>
+</div>
+<p class="sd-card-text">Then create the project:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">losalamos</span>
 
-<span class="n">pj</span> <span class="o">=</span> <span class="n">losalamos</span><span class="o">.</span><span class="n">new_project</span><span class="p">(</span><span class="n">specs</span><span class="o">=</span><span class="n">project_specs</span><span class="p">)</span>
+<span class="n">pj</span> <span class="o">=</span> <span class="n">losalamos</span><span class="o">.</span><span class="n">new_project</span><span class="p">(</span><span class="n">config</span><span class="o">=</span><span class="s2">"project-config.yaml"</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -536,13 +578,17 @@ project metadata, filesystem layout, and downstream processing workflows.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="losalamos.project.load_project">
 <span class="sig-prename descclassname"><span class="pre">losalamos.project.</span></span><span class="sig-name descname"><span class="pre">load_project</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">project_folder</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/project.html#load_project"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.project.load_project" title="Link to this definition">#</a></dt>
-<dd><p>Loads a Project from folder</p>
+<dd><p>Load a Project from a folder path.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">admin/config/sources.yaml</span></code> (or <code class="docutils literal notranslate"><span class="pre">.toml</span></code>/<code class="docutils literal notranslate"><span class="pre">.json</span></code>) exists in the
+project, it is parsed and merged into <code class="xref py py-attr docutils literal notranslate"><span class="pre">sources</span></code>
+automatically. Overlay files in <code class="docutils literal notranslate"><span class="pre">admin/config/overlays/</span></code> are then
+regenerated from the loaded metadata.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>project_folder</strong> (<em>str</em><em> or </em><em>Path</em>) – path to project root folder</p>
+<dd class="field-odd"><p><strong>project_folder</strong> (<em>str</em><em> or </em><em>Path</em>) – Path to the project root folder.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A new <cite>:class:`losalamos.Project</cite> instance.</p>
+<dd class="field-even"><p>A new <code class="xref py py-class docutils literal notranslate"><span class="pre">losalamos.Project</span></code> instance.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">losalamos.Project</span></code></p>
@@ -550,13 +596,14 @@ project metadata, filesystem layout, and downstream processing workflows.</p>
 </dl>
 <details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3" open="open">
 <summary class="sd-summary-title sd-card-header">
-<span class="sd-summary-icon"><svg version="1.1" width="1.0em" height="1.0em" class="sd-octicon sd-octicon-code-square" viewBox="0 0 16 16" aria-hidden="true"><path d="M0 1.75C0 .784.784 0 1.75 0h12.5C15.216 0 16 .784 16 1.75v12.5A1.75 1.75 0 0 1 14.25 16H1.75A1.75 1.75 0 0 1 0 14.25Zm1.75-.25a.25.25 0 0 0-.25.25v12.5c0 .138.112.25.25.25h12.5a.25.25 0 0 0 .25-.25V1.75a.25.25 0 0 0-.25-.25Zm7.47 3.97a.75.75 0 0 1 1.06 0l2 2a.75.75 0 0 1 0 1.06l-2 2a.749.749 0 0 1-1.275-.326.749.749 0 0 1 .215-.734L10.69 8 9.22 6.53a.75.75 0 0 1 0-1.06ZM6.78 6.53 5.31 8l1.47 1.47a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215l-2-2a.75.75 0 0 1 0-1.06l2-2a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042Z"></path></svg></span><span class="sd-summary-text">Script example</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
-<p class="sd-card-text">Load an existing <code class="docutils literal notranslate"><span class="pre">losalamos.Project</span></code></p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># import the package</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">losalamos</span>
-
-<span class="c1"># get project instance</span>
-<span class="n">pj</span> <span class="o">=</span> <span class="n">losalamos</span><span class="o">.</span><span class="n">load_project</span><span class="p">(</span><span class="n">project_folder</span><span class="o">=</span><span class="s2">"path/to/project/folder"</span><span class="p">)</span>
+<span class="sd-summary-icon"><svg version="1.1" width="1.0em" height="1.0em" class="sd-octicon sd-octicon-code-square" viewBox="0 0 16 16" aria-hidden="true"><path d="M0 1.75C0 .784.784 0 1.75 0h12.5C15.216 0 16 .784 16 1.75v12.5A1.75 1.75 0 0 1 14.25 16H1.75A1.75 1.75 0 0 1 0 14.25Zm1.75-.25a.25.25 0 0 0-.25.25v12.5c0 .138.112.25.25.25h12.5a.25.25 0 0 0 .25-.25V1.75a.25.25 0 0 0-.25-.25Zm7.47 3.97a.75.75 0 0 1 1.06 0l2 2a.75.75 0 0 1 0 1.06l-2 2a.749.749 0 0 1-1.275-.326.749.749 0 0 1 .215-.734L10.69 8 9.22 6.53a.75.75 0 0 1 0-1.06ZM6.78 6.53 5.31 8l1.47 1.47a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215l-2-2a.75.75 0 0 1 0-1.06l2-2a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042Z"></path></svg></span><span class="sd-summary-text">Example</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<p class="sd-card-text">Import the package.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">losalamos</span>
+</pre></div>
+</div>
+<p class="sd-card-text">Load an existing project. Sources and overlays are resolved
+automatically if <code class="docutils literal notranslate"><span class="pre">admin/config/sources.yaml</span></code> is present.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pj</span> <span class="o">=</span> <span class="n">losalamos</span><span class="o">.</span><span class="n">load_project</span><span class="p">(</span><span class="n">project_folder</span><span class="o">=</span><span class="s2">"path/to/project/folder"</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -605,7 +652,31 @@ in the merged tree (conflicting file).</p></li>
 <dd class="field-even"><p>pathlib.Path</p>
 </dd>
 </dl>
-</dd></dl>
+<details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3" open="open">
+<summary class="sd-summary-title sd-card-header">
+<span class="sd-summary-icon"><svg version="1.1" width="1.0em" height="1.0em" class="sd-octicon sd-octicon-code-square" viewBox="0 0 16 16" aria-hidden="true"><path d="M0 1.75C0 .784.784 0 1.75 0h12.5C15.216 0 16 .784 16 1.75v12.5A1.75 1.75 0 0 1 14.25 16H1.75A1.75 1.75 0 0 1 0 14.25Zm1.75-.25a.25.25 0 0 0-.25.25v12.5c0 .138.112.25.25.25h12.5a.25.25 0 0 0 .25-.25V1.75a.25.25 0 0 0-.25-.25Zm7.47 3.97a.75.75 0 0 1 1.06 0l2 2a.75.75 0 0 1 0 1.06l-2 2a.749.749 0 0 1-1.275-.326.749.749 0 0 1 .215-.734L10.69 8 9.22 6.53a.75.75 0 0 1 0-1.06ZM6.78 6.53 5.31 8l1.47 1.47a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215l-2-2a.75.75 0 0 1 0-1.06l2-2a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042Z"></path></svg></span><span class="sd-summary-text">Example</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<p class="sd-card-text">Import the package.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">losalamos</span>
+</pre></div>
+</div>
+<p class="sd-card-text">Archive two source folders into a single zip, skipping temporary files
+and a cache subfolder.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">zip_path</span> <span class="o">=</span> <span class="n">losalamos</span><span class="o">.</span><span class="n">archive</span><span class="p">(</span>
+    <span class="n">sources</span><span class="o">=</span><span class="p">[</span><span class="s2">"path/to/data"</span><span class="p">,</span> <span class="s2">"path/to/figures"</span><span class="p">],</span>
+    <span class="n">folder</span><span class="o">=</span><span class="s2">"path/to/output"</span><span class="p">,</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">"myArchive"</span><span class="p">,</span>
+    <span class="n">ignore_names</span><span class="o">=</span><span class="p">[</span><span class="s2">"cache"</span><span class="p">],</span>
+    <span class="n">ignore_patterns</span><span class="o">=</span><span class="p">[</span><span class="s2">"*.tmp"</span><span class="p">,</span> <span class="s2">"~*"</span><span class="p">],</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p class="sd-card-text">The returned path points to the timestamped zip file.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">zip_path</span><span class="p">)</span>
+<span class="c1"># path/to/output/myArchive_20260101T120000.zip</span>
+</pre></div>
+</div>
+</div>
+</details></dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="losalamos.project.publish">
@@ -648,22 +719,740 @@ in the merged tree (conflicting file).</p></li>
 <dd class="field-even"><p>pathlib.Path</p>
 </dd>
 </dl>
-</dd></dl>
+<details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3" open="open">
+<summary class="sd-summary-title sd-card-header">
+<span class="sd-summary-icon"><svg version="1.1" width="1.0em" height="1.0em" class="sd-octicon sd-octicon-code-square" viewBox="0 0 16 16" aria-hidden="true"><path d="M0 1.75C0 .784.784 0 1.75 0h12.5C15.216 0 16 .784 16 1.75v12.5A1.75 1.75 0 0 1 14.25 16H1.75A1.75 1.75 0 0 1 0 14.25Zm1.75-.25a.25.25 0 0 0-.25.25v12.5c0 .138.112.25.25.25h12.5a.25.25 0 0 0 .25-.25V1.75a.25.25 0 0 0-.25-.25Zm7.47 3.97a.75.75 0 0 1 1.06 0l2 2a.75.75 0 0 1 0 1.06l-2 2a.749.749 0 0 1-1.275-.326.749.749 0 0 1 .215-.734L10.69 8 9.22 6.53a.75.75 0 0 1 0-1.06ZM6.78 6.53 5.31 8l1.47 1.47a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215l-2-2a.75.75 0 0 1 0-1.06l2-2a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042Z"></path></svg></span><span class="sd-summary-text">Example</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<p class="sd-card-text">Import the package.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">losalamos</span>
+</pre></div>
+</div>
+<p class="sd-card-text">Publish two source folders to a managed output location. On the first
+call the <code class="docutils literal notranslate"><span class="pre">latest</span></code> subfolder is created; on subsequent calls the
+previous zip is rotated into <code class="docutils literal notranslate"><span class="pre">history</span></code> before the new one is written.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">zip_path</span> <span class="o">=</span> <span class="n">losalamos</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span>
+    <span class="n">sources</span><span class="o">=</span><span class="p">[</span><span class="s2">"path/to/data"</span><span class="p">,</span> <span class="s2">"path/to/figures"</span><span class="p">],</span>
+    <span class="n">folder</span><span class="o">=</span><span class="s2">"path/to/output"</span><span class="p">,</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">"myDeliverable"</span><span class="p">,</span>
+    <span class="n">ignore_patterns</span><span class="o">=</span><span class="p">[</span><span class="s2">"*.tmp"</span><span class="p">],</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p class="sd-card-text">The returned path points to the new zip inside <code class="docutils literal notranslate"><span class="pre">latest</span></code>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">zip_path</span><span class="p">)</span>
+<span class="c1"># path/to/output/myDeliverable/latest/myDeliverable_20260101T120000.zip</span>
+</pre></div>
+</div>
+</div>
+</details></dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="losalamos.project.Project">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">losalamos.project.</span></span><span class="sig-name descname"><span class="pre">Project</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'LosAlamosProject'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alias</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'LAProj'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/project.html#Project"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.project.Project" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference internal" href="losalamos.root.html#losalamos.root.FileSys" title="losalamos.root.FileSys"><code class="xref py py-class docutils literal notranslate"><span class="pre">FileSys</span></code></a></p>
 <p>Project filesystem abstraction.</p>
-<p>This class represents a project rooted in a filesystem structure and
-extends <a class="reference internal" href="losalamos.root.html#losalamos.root.FileSys" title="losalamos.root.FileSys"><code class="xref py py-class docutils literal notranslate"><span class="pre">losalamos.root.FileSys</span></code></a>. It initializes and manages
-project metadata and default folder definitions.</p>
+<p>Extends <a class="reference internal" href="losalamos.root.html#losalamos.root.FileSys" title="losalamos.root.FileSys"><code class="xref py py-class docutils literal notranslate"><span class="pre">FileSys</span></code></a> with metadata loading, external
+note resolution, and TeX overlay generation.</p>
+<p>The <code class="xref py py-attr docutils literal notranslate"><span class="pre">sources</span></code> dict maps note categories to lists of directory paths
+scanned when resolving contractors, clients, and services. It is
+auto-populated from <code class="docutils literal notranslate"><span class="pre">admin/config/sources.yaml</span></code> (also <code class="docutils literal notranslate"><span class="pre">.toml</span></code> or
+<code class="docutils literal notranslate"><span class="pre">.json</span></code>) each time the project is opened:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># admin/config/sources.yaml</span>
+<span class="nt">organizations</span><span class="p">:</span><span class="w">     </span><span class="c1"># NoteOrganization notes</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/vault/organizations</span>
+<span class="nt">sapiens</span><span class="p">:</span><span class="w">           </span><span class="c1"># NoteSapiens notes</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/vault/people</span>
+<span class="nt">services</span><span class="p">:</span><span class="w">          </span><span class="c1"># NoteBasic notes, matched by service_id</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/vault/services</span>
+<span class="nt">templates</span><span class="p">:</span><span class="w">         </span><span class="c1"># document template directories</span>
+<span class="w">  </span><span class="nt">documents</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">invoice</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/vault/templates/invoice</span>
+<span class="w">    </span><span class="nt">proposal</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/vault/templates/proposal</span>
+</pre></div>
+</div>
+<p>Overlays are written to <code class="docutils literal notranslate"><span class="pre">admin/config/overlays/</span></code> and applied to
+document templates via the <code class="docutils literal notranslate"><span class="pre">files_overlay</span></code> parameter of
+<a class="reference internal" href="#losalamos.project.Project.add_document" title="losalamos.project.Project.add_document"><code class="xref py py-meth docutils literal notranslate"><span class="pre">add_document()</span></code></a>.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="losalamos.project.Project.load_data">
 <span class="sig-name descname"><span class="pre">load_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/project.html#Project.load_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.project.Project.load_data" title="Link to this definition">#</a></dt>
 <dd><p>Initialize internal project data.</p>
 <p>Creates a dataframe describing the default project folder structure
 based on <code class="docutils literal notranslate"><span class="pre">SUBFOLDERS</span></code> and assigns it to <code class="docutils literal notranslate"><span class="pre">self.data</span></code>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.project.Project.setup">
+<span class="sig-name descname"><span class="pre">setup</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/project.html#Project.setup"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.project.Project.setup" title="Link to this definition">#</a></dt>
+<dd><p>Set up the project folder structure and install default config templates.</p>
+<p>Delegates folder and file setup to the parent <code class="xref py py-meth docutils literal notranslate"><span class="pre">FileSys.setup()</span></code>,
+then copies any missing config templates into <code class="docutils literal notranslate"><span class="pre">admin/config/</span></code> via
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">_install_config_templates()</span></code>.</p>
+<div class="admonition danger">
+<p class="admonition-title">Danger</p>
+<p>This method overwrites all existing default files (parent behaviour).</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.project.Project.update">
+<span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/project.html#Project.update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.project.Project.update" title="Link to this definition">#</a></dt>
+<dd><p>Refresh derived attributes from the current configuration.</p>
+<p>Calls the parent <code class="xref py py-meth docutils literal notranslate"><span class="pre">FileSys.update()</span></code> and then resolves
+<code class="docutils literal notranslate"><span class="pre">folder_base</span></code>, <code class="docutils literal notranslate"><span class="pre">folder_root</span></code>, and <code class="docutils literal notranslate"><span class="pre">main_note_path</span></code> as
+<code class="xref py py-class docutils literal notranslate"><span class="pre">pathlib.Path</span></code> objects when <code class="docutils literal notranslate"><span class="pre">folder_base</span></code> is set.
+Loads the main project note only if the file already exists on disk,
+then attempts to regenerate overlay files via <code class="xref py py-meth docutils literal notranslate"><span class="pre">_update_overlays()</span></code>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.project.Project.load_main_note">
+<span class="sig-name descname"><span class="pre">load_main_note</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/project.html#Project.load_main_note"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.project.Project.load_main_note" title="Link to this definition">#</a></dt>
+<dd><p>Load the project’s main Markdown note from disk.</p>
+<p>Reads <code class="docutils literal notranslate"><span class="pre">self.main_note_path</span></code> and stores the resulting
+<a class="reference internal" href="losalamos.notes.html#losalamos.notes.NoteProject" title="losalamos.notes.NoteProject"><code class="xref py py-class docutils literal notranslate"><span class="pre">NoteProject</span></code></a> in <code class="docutils literal notranslate"><span class="pre">self.main_note</span></code>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.project.Project.get_title">
+<span class="sig-name descname"><span class="pre">get_title</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/project.html#Project.get_title"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.project.Project.get_title" title="Link to this definition">#</a></dt>
+<dd><p>Return the project title from the main note metadata.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.project.Project.get_subtitle">
+<span class="sig-name descname"><span class="pre">get_subtitle</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/project.html#Project.get_subtitle"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.project.Project.get_subtitle" title="Link to this definition">#</a></dt>
+<dd><p>Return the project subtitle from the main note metadata.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.project.Project.get_contractor">
+<span class="sig-name descname"><span class="pre">get_contractor</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/project.html#Project.get_contractor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.project.Project.get_contractor" title="Link to this definition">#</a></dt>
+<dd><p>Return the contractor name from the main note metadata.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.project.Project.get_contractor_sapiens">
+<span class="sig-name descname"><span class="pre">get_contractor_sapiens</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/project.html#Project.get_contractor_sapiens"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.project.Project.get_contractor_sapiens" title="Link to this definition">#</a></dt>
+<dd><p>Return the contractor’s individual representative name from the main note metadata.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.project.Project.get_client">
+<span class="sig-name descname"><span class="pre">get_client</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/project.html#Project.get_client"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.project.Project.get_client" title="Link to this definition">#</a></dt>
+<dd><p>Return the client name from the main note metadata.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.project.Project.load_contractor">
+<span class="sig-name descname"><span class="pre">load_contractor</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/project.html#Project.load_contractor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.project.Project.load_contractor" title="Link to this definition">#</a></dt>
+<dd><p>Load the contractor note from <code class="docutils literal notranslate"><span class="pre">self.sources</span></code>.</p>
+<p>Reads the contractor name from the project’s main note metadata and
+searches for a matching <code class="docutils literal notranslate"><span class="pre">.md</span></code> file in <code class="docutils literal notranslate"><span class="pre">self.sources[&quot;organizations&quot;]</span></code>
+first, then in <code class="docutils literal notranslate"><span class="pre">self.sources[&quot;sapiens&quot;]</span></code>. On success, stores the loaded
+note in <code class="docutils literal notranslate"><span class="pre">self.contractor</span></code> and the resolved path in <code class="docutils literal notranslate"><span class="pre">self.contractor_path</span></code>.</p>
+<p><code class="xref py py-attr docutils literal notranslate"><span class="pre">sources</span></code> is populated automatically from
+<code class="docutils literal notranslate"><span class="pre">admin/config/sources.yaml</span></code> on project load; it can also be set
+manually before calling this method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>FileNotFoundError</strong> – If no note matching the contractor name is found
+in any configured source.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.project.Project.load_contractor_sapiens">
+<span class="sig-name descname"><span class="pre">load_contractor_sapiens</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/project.html#Project.load_contractor_sapiens"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.project.Project.load_contractor_sapiens" title="Link to this definition">#</a></dt>
+<dd><p>Load the individual (sapiens) contractor note from <code class="docutils literal notranslate"><span class="pre">self.sources</span></code>.</p>
+<p>Reads the <code class="docutils literal notranslate"><span class="pre">contractor_sapiens</span></code> name from the project’s main note
+metadata and searches <code class="docutils literal notranslate"><span class="pre">self.sources[&quot;sapiens&quot;]</span></code> for a matching
+<code class="docutils literal notranslate"><span class="pre">.md</span></code> file. If <code class="docutils literal notranslate"><span class="pre">self.contractor</span></code> has not been loaded yet, calls
+<a class="reference internal" href="#losalamos.project.Project.load_contractor" title="losalamos.project.Project.load_contractor"><code class="xref py py-meth docutils literal notranslate"><span class="pre">load_contractor()</span></code></a> first. On success, stores the loaded note in
+<code class="docutils literal notranslate"><span class="pre">self.contractor_sapiens</span></code> and the resolved path in
+<code class="docutils literal notranslate"><span class="pre">self.contractor_sapiens_path</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>FileNotFoundError</strong> – If no note matching the contractor_sapiens
+name is found in the configured sapiens sources.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.project.Project.load_client">
+<span class="sig-name descname"><span class="pre">load_client</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/project.html#Project.load_client"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.project.Project.load_client" title="Link to this definition">#</a></dt>
+<dd><p>Load the client note from <code class="docutils literal notranslate"><span class="pre">self.sources</span></code>.</p>
+<p>Reads the client name from the project’s main note metadata and
+searches for a matching <code class="docutils literal notranslate"><span class="pre">.md</span></code> file in <code class="docutils literal notranslate"><span class="pre">self.sources[&quot;organizations&quot;]</span></code>
+first, then in <code class="docutils literal notranslate"><span class="pre">self.sources[&quot;sapiens&quot;]</span></code>. On success, stores the loaded
+note in <code class="docutils literal notranslate"><span class="pre">self.client</span></code> and the resolved path in <code class="docutils literal notranslate"><span class="pre">self.client_path</span></code>.</p>
+<p><code class="xref py py-attr docutils literal notranslate"><span class="pre">sources</span></code> is populated automatically from
+<code class="docutils literal notranslate"><span class="pre">admin/config/sources.yaml</span></code> on project load; it can also be set
+manually before calling this method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>FileNotFoundError</strong> – If no note matching the client name is found
+in any configured source.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.project.Project.load_service">
+<span class="sig-name descname"><span class="pre">load_service</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/project.html#Project.load_service"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.project.Project.load_service" title="Link to this definition">#</a></dt>
+<dd><p>Load the service note from <code class="docutils literal notranslate"><span class="pre">self.sources</span></code>.</p>
+<p>Reads <code class="docutils literal notranslate"><span class="pre">service_id</span></code> from the project’s main note metadata and
+searches <code class="docutils literal notranslate"><span class="pre">self.sources[&quot;services&quot;]</span></code> for a matching <code class="docutils literal notranslate"><span class="pre">.md</span></code> file.
+The service name is expected in the note’s <code class="docutils literal notranslate"><span class="pre">abstract</span></code> field. On
+success, stores the loaded note in <code class="docutils literal notranslate"><span class="pre">self.service</span></code> and the resolved
+path in <code class="docutils literal notranslate"><span class="pre">self.service_path</span></code>.</p>
+<p><code class="xref py py-attr docutils literal notranslate"><span class="pre">sources</span></code> is populated automatically from
+<code class="docutils literal notranslate"><span class="pre">admin/config/sources.yaml</span></code> on project load; it can also be set
+manually before calling this method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>FileNotFoundError</strong> – If no note matching the service_id is found
+in the configured services sources.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.project.Project.make_overlay_service">
+<span class="sig-name descname"><span class="pre">make_overlay_service</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/project.html#Project.make_overlay_service"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.project.Project.make_overlay_service" title="Link to this definition">#</a></dt>
+<dd><p>Create a <code class="docutils literal notranslate"><span class="pre">service.tex</span></code> overlay from the project’s service data.</p>
+<p>Loads <code class="xref py py-attr docutils literal notranslate"><span class="pre">service</span></code> if not yet set. The service ID is read from the
+project note’s <code class="docutils literal notranslate"><span class="pre">service_id</span></code> field; the service name is read from
+the <code class="xref py py-attr docutils literal notranslate"><span class="pre">service</span></code> note’s <code class="docutils literal notranslate"><span class="pre">abstract</span></code> field.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>FileNotFoundError</strong> – If the service note cannot be found in
+<code class="docutils literal notranslate"><span class="pre">self.sources</span></code>.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Path to the written overlay file.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pathlib.Path</p>
+</dd>
+</dl>
+<details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3" open="open">
+<summary class="sd-summary-title sd-card-header">
+<span class="sd-summary-icon"><svg version="1.1" width="1.0em" height="1.0em" class="sd-octicon sd-octicon-code-square" viewBox="0 0 16 16" aria-hidden="true"><path d="M0 1.75C0 .784.784 0 1.75 0h12.5C15.216 0 16 .784 16 1.75v12.5A1.75 1.75 0 0 1 14.25 16H1.75A1.75 1.75 0 0 1 0 14.25Zm1.75-.25a.25.25 0 0 0-.25.25v12.5c0 .138.112.25.25.25h12.5a.25.25 0 0 0 .25-.25V1.75a.25.25 0 0 0-.25-.25Zm7.47 3.97a.75.75 0 0 1 1.06 0l2 2a.75.75 0 0 1 0 1.06l-2 2a.749.749 0 0 1-1.275-.326.749.749 0 0 1 .215-.734L10.69 8 9.22 6.53a.75.75 0 0 1 0-1.06ZM6.78 6.53 5.31 8l1.47 1.47a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215l-2-2a.75.75 0 0 1 0-1.06l2-2a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042Z"></path></svg></span><span class="sd-summary-text">Example — sources via config file</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<p class="sd-card-text">Place <code class="docutils literal notranslate"><span class="pre">sources.yaml</span></code> in the project’s <code class="docutils literal notranslate"><span class="pre">admin/config/</span></code> folder:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">services</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/vault/services</span><span class="w">   </span><span class="c1"># folder containing &lt;service_id&gt;.md files</span>
+</pre></div>
+</div>
+<p class="sd-card-text">The file is read automatically on project load. Each service note
+must have an <code class="docutils literal notranslate"><span class="pre">abstract</span></code> metadata field with the display name:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># /vault/services/7891.md (front-matter excerpt)</span>
+<span class="nt">abstract</span><span class="p">:</span><span class="w"> </span><span class="s">"Environmental</span><span class="nv"> </span><span class="s">Assessment"</span>
+</pre></div>
+</div>
+<p class="sd-card-text">Then generate the overlay:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">losalamos</span>
+
+<span class="n">pj</span> <span class="o">=</span> <span class="n">losalamos</span><span class="o">.</span><span class="n">load_project</span><span class="p">(</span><span class="s2">"path/to/myProject"</span><span class="p">)</span>
+<span class="n">path</span> <span class="o">=</span> <span class="n">pj</span><span class="o">.</span><span class="n">make_overlay_service</span><span class="p">()</span>
+<span class="c1"># → &lt;project&gt;/admin/config/overlays/service.tex</span>
+</pre></div>
+</div>
+</div>
+</details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3" open="open">
+<summary class="sd-summary-title sd-card-header">
+<span class="sd-summary-icon"><svg version="1.1" width="1.0em" height="1.0em" class="sd-octicon sd-octicon-code-square" viewBox="0 0 16 16" aria-hidden="true"><path d="M0 1.75C0 .784.784 0 1.75 0h12.5C15.216 0 16 .784 16 1.75v12.5A1.75 1.75 0 0 1 14.25 16H1.75A1.75 1.75 0 0 1 0 14.25Zm1.75-.25a.25.25 0 0 0-.25.25v12.5c0 .138.112.25.25.25h12.5a.25.25 0 0 0 .25-.25V1.75a.25.25 0 0 0-.25-.25Zm7.47 3.97a.75.75 0 0 1 1.06 0l2 2a.75.75 0 0 1 0 1.06l-2 2a.749.749 0 0 1-1.275-.326.749.749 0 0 1 .215-.734L10.69 8 9.22 6.53a.75.75 0 0 1 0-1.06ZM6.78 6.53 5.31 8l1.47 1.47a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215l-2-2a.75.75 0 0 1 0-1.06l2-2a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042Z"></path></svg></span><span class="sd-summary-text">Example — sources set manually</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">losalamos</span>
+
+<span class="n">pj</span> <span class="o">=</span> <span class="n">losalamos</span><span class="o">.</span><span class="n">load_project</span><span class="p">(</span><span class="s2">"path/to/myProject"</span><span class="p">)</span>
+<span class="n">pj</span><span class="o">.</span><span class="n">sources</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"services"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"path/to/service/notes"</span><span class="p">]}</span>
+
+<span class="n">path</span> <span class="o">=</span> <span class="n">pj</span><span class="o">.</span><span class="n">make_overlay_service</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</details></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.project.Project.make_overlay_file">
+<span class="sig-name descname"><span class="pre">make_overlay_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">placeholders</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/project.html#Project.make_overlay_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.project.Project.make_overlay_file" title="Link to this definition">#</a></dt>
+<dd><p>Create a populated overlay file from a template.</p>
+<p>Reads <code class="docutils literal notranslate"><span class="pre">source_file</span></code>, replaces every key in <code class="docutils literal notranslate"><span class="pre">placeholders</span></code> with its
+corresponding value, and writes the result to the project’s overlay
+folder (<code class="docutils literal notranslate"><span class="pre">admin/config/overlays/</span></code>).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>) – Base name for the output file, without extension. The
+extension is taken from <code class="docutils literal notranslate"><span class="pre">source_file</span></code>. If <code class="docutils literal notranslate"><span class="pre">name</span></code> already carries
+the correct extension it is used as-is.</p></li>
+<li><p><strong>source_file</strong> (<em>str</em><em> or </em><em>pathlib.Path</em>) – Template to use as the source. An absolute path is
+used directly; a relative path is resolved from the package’s
+<code class="docutils literal notranslate"><span class="pre">data/templates</span></code> folder.</p></li>
+<li><p><strong>placeholders</strong> (<em>dict</em><em> or </em><em>None</em>) – Mapping of literal strings to find in the template
+to their replacement values. Each key is replaced everywhere it
+appears. Defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code> (file copied verbatim).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>FileNotFoundError</strong> – If the resolved <code class="docutils literal notranslate"><span class="pre">source_file</span></code> does not exist.</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Path to the written overlay file.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>pathlib.Path</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.project.Project.make_overlay_project">
+<span class="sig-name descname"><span class="pre">make_overlay_project</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/project.html#Project.make_overlay_project"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.project.Project.make_overlay_project" title="Link to this definition">#</a></dt>
+<dd><p>Create a <code class="docutils literal notranslate"><span class="pre">project.tex</span></code> overlay populated from the project’s main note.</p>
+<p>Fills only the fields that are known at the project level:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">[Document</span> <span class="pre">Field]</span></code> — the <code class="docutils literal notranslate"><span class="pre">subject</span></code> metadata field, with surrounding
+quotes and wiki-link brackets stripped automatically.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">[Project</span> <span class="pre">ID]</span></code> — the project name (<code class="docutils literal notranslate"><span class="pre">self.name</span></code>).</p></li>
+</ul>
+<p>All remaining placeholders (<code class="docutils literal notranslate"><span class="pre">[Document</span> <span class="pre">Type]</span></code>, <code class="docutils literal notranslate"><span class="pre">[Certifier]</span></code>, etc.)
+are left unchanged in the output file for downstream overlays or manual
+editing.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>FileNotFoundError</strong> – If the built-in <code class="docutils literal notranslate"><span class="pre">project.tex</span></code> template is
+missing.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Path to the written overlay file.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pathlib.Path</p>
+</dd>
+</dl>
+<details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3" open="open">
+<summary class="sd-summary-title sd-card-header">
+<span class="sd-summary-icon"><svg version="1.1" width="1.0em" height="1.0em" class="sd-octicon sd-octicon-code-square" viewBox="0 0 16 16" aria-hidden="true"><path d="M0 1.75C0 .784.784 0 1.75 0h12.5C15.216 0 16 .784 16 1.75v12.5A1.75 1.75 0 0 1 14.25 16H1.75A1.75 1.75 0 0 1 0 14.25Zm1.75-.25a.25.25 0 0 0-.25.25v12.5c0 .138.112.25.25.25h12.5a.25.25 0 0 0 .25-.25V1.75a.25.25 0 0 0-.25-.25Zm7.47 3.97a.75.75 0 0 1 1.06 0l2 2a.75.75 0 0 1 0 1.06l-2 2a.749.749 0 0 1-1.275-.326.749.749 0 0 1 .215-.734L10.69 8 9.22 6.53a.75.75 0 0 1 0-1.06ZM6.78 6.53 5.31 8l1.47 1.47a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215l-2-2a.75.75 0 0 1 0-1.06l2-2a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042Z"></path></svg></span><span class="sd-summary-text">Example</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">losalamos</span>
+
+<span class="n">pj</span> <span class="o">=</span> <span class="n">losalamos</span><span class="o">.</span><span class="n">load_project</span><span class="p">(</span><span class="s2">"path/to/myProject"</span><span class="p">)</span>
+
+<span class="n">path</span> <span class="o">=</span> <span class="n">pj</span><span class="o">.</span><span class="n">make_overlay_project</span><span class="p">()</span>
+<span class="c1"># → &lt;project&gt;/admin/config/overlays/project.tex</span>
+</pre></div>
+</div>
+<p class="sd-card-text">The file can then be passed to <a class="reference internal" href="#losalamos.project.Project.add_document" title="losalamos.project.Project.add_document"><code class="xref py py-meth docutils literal notranslate"><span class="pre">add_document()</span></code></a>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pj</span><span class="o">.</span><span class="n">add_document</span><span class="p">(</span>
+    <span class="n">document_type</span><span class="o">=</span><span class="s2">"invoice"</span><span class="p">,</span>
+    <span class="n">files_overlay</span><span class="o">=</span><span class="p">{</span><span class="s2">"definitions/project.tex"</span><span class="p">:</span> <span class="n">path</span><span class="p">},</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</details></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.project.Project.make_overlay_party_b_contractor">
+<span class="sig-name descname"><span class="pre">make_overlay_party_b_contractor</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/project.html#Project.make_overlay_party_b_contractor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.project.Project.make_overlay_party_b_contractor" title="Link to this definition">#</a></dt>
+<dd><p>Create a <code class="docutils literal notranslate"><span class="pre">party_b_contractor.tex</span></code> overlay from the project’s contractor data.</p>
+<p>Loads <code class="xref py py-attr docutils literal notranslate"><span class="pre">contractor</span></code> if not yet set. When the contractor is an
+organization, also loads <code class="xref py py-attr docutils literal notranslate"><span class="pre">contractor_sapiens</span></code> as the representative.
+Delegates to <a class="reference internal" href="#losalamos.project.Project.make_overlay_file" title="losalamos.project.Project.make_overlay_file"><code class="xref py py-meth docutils literal notranslate"><span class="pre">make_overlay_file()</span></code></a> using the built-in <code class="docutils literal notranslate"><span class="pre">party_b.tex</span></code>
+template.</p>
+<p>Two scenarios are handled automatically:</p>
+<p><strong>Contractor is an organization</strong> — <code class="xref py py-attr docutils literal notranslate"><span class="pre">contractor</span></code> is a
+<a class="reference internal" href="losalamos.notes.html#losalamos.notes.NoteOrganization" title="losalamos.notes.NoteOrganization"><code class="xref py py-class docutils literal notranslate"><span class="pre">NoteOrganization</span></code></a>; <code class="xref py py-attr docutils literal notranslate"><span class="pre">contractor_sapiens</span></code>
+provides the representative’s fields. Both must be resolvable from
+<code class="docutils literal notranslate"><span class="pre">self.sources</span></code>.</p>
+<p><strong>Contractor is an individual</strong> — <code class="xref py py-attr docutils literal notranslate"><span class="pre">contractor</span></code> is a
+<a class="reference internal" href="losalamos.notes.html#losalamos.notes.NoteSapiens" title="losalamos.notes.NoteSapiens"><code class="xref py py-class docutils literal notranslate"><span class="pre">NoteSapiens</span></code></a>; all party-B fields (entity and
+representative) are derived from the same note.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>FileNotFoundError</strong> – If the contractor or sapiens representative
+cannot be found in <code class="docutils literal notranslate"><span class="pre">self.sources</span></code>.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Path to the written overlay file.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pathlib.Path</p>
+</dd>
+</dl>
+<details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3" open="open">
+<summary class="sd-summary-title sd-card-header">
+<span class="sd-summary-icon"><svg version="1.1" width="1.0em" height="1.0em" class="sd-octicon sd-octicon-code-square" viewBox="0 0 16 16" aria-hidden="true"><path d="M0 1.75C0 .784.784 0 1.75 0h12.5C15.216 0 16 .784 16 1.75v12.5A1.75 1.75 0 0 1 14.25 16H1.75A1.75 1.75 0 0 1 0 14.25Zm1.75-.25a.25.25 0 0 0-.25.25v12.5c0 .138.112.25.25.25h12.5a.25.25 0 0 0 .25-.25V1.75a.25.25 0 0 0-.25-.25Zm7.47 3.97a.75.75 0 0 1 1.06 0l2 2a.75.75 0 0 1 0 1.06l-2 2a.749.749 0 0 1-1.275-.326.749.749 0 0 1 .215-.734L10.69 8 9.22 6.53a.75.75 0 0 1 0-1.06ZM6.78 6.53 5.31 8l1.47 1.47a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215l-2-2a.75.75 0 0 1 0-1.06l2-2a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042Z"></path></svg></span><span class="sd-summary-text">Example — organization contractor with representative</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<p class="sd-card-text">The project note has <code class="docutils literal notranslate"><span class="pre">contractor:</span> <span class="pre">AMA</span> <span class="pre">Consultoria</span></code> and
+<code class="docutils literal notranslate"><span class="pre">contractor_sapiens:</span> <span class="pre">John</span> <span class="pre">Doe</span></code>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">losalamos</span>
+
+<span class="n">pj</span> <span class="o">=</span> <span class="n">losalamos</span><span class="o">.</span><span class="n">load_project</span><span class="p">(</span><span class="s2">"path/to/myProject"</span><span class="p">)</span>
+<span class="n">pj</span><span class="o">.</span><span class="n">sources</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">"organizations"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"path/to/org/notes"</span><span class="p">],</span>
+    <span class="s2">"sapiens"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"path/to/people/notes"</span><span class="p">],</span>
+<span class="p">}</span>
+
+<span class="n">path</span> <span class="o">=</span> <span class="n">pj</span><span class="o">.</span><span class="n">make_overlay_party_b_contractor</span><span class="p">()</span>
+<span class="c1"># → &lt;project&gt;/admin/config/overlays/party_b_contractor.tex</span>
+<span class="c1"># org fields from "AMA Consultoria.md", rep fields from "John Doe.md"</span>
+</pre></div>
+</div>
+<p class="sd-card-text">The resulting file can be passed directly to <a class="reference internal" href="#losalamos.project.Project.add_document" title="losalamos.project.Project.add_document"><code class="xref py py-meth docutils literal notranslate"><span class="pre">add_document()</span></code></a>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pj</span><span class="o">.</span><span class="n">add_document</span><span class="p">(</span>
+    <span class="n">document_type</span><span class="o">=</span><span class="s2">"contract"</span><span class="p">,</span>
+    <span class="n">files_overlay</span><span class="o">=</span><span class="p">{</span><span class="s2">"definitions/party_b.tex"</span><span class="p">:</span> <span class="n">path</span><span class="p">},</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3" open="open">
+<summary class="sd-summary-title sd-card-header">
+<span class="sd-summary-icon"><svg version="1.1" width="1.0em" height="1.0em" class="sd-octicon sd-octicon-code-square" viewBox="0 0 16 16" aria-hidden="true"><path d="M0 1.75C0 .784.784 0 1.75 0h12.5C15.216 0 16 .784 16 1.75v12.5A1.75 1.75 0 0 1 14.25 16H1.75A1.75 1.75 0 0 1 0 14.25Zm1.75-.25a.25.25 0 0 0-.25.25v12.5c0 .138.112.25.25.25h12.5a.25.25 0 0 0 .25-.25V1.75a.25.25 0 0 0-.25-.25Zm7.47 3.97a.75.75 0 0 1 1.06 0l2 2a.75.75 0 0 1 0 1.06l-2 2a.749.749 0 0 1-1.275-.326.749.749 0 0 1 .215-.734L10.69 8 9.22 6.53a.75.75 0 0 1 0-1.06ZM6.78 6.53 5.31 8l1.47 1.47a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215l-2-2a.75.75 0 0 1 0-1.06l2-2a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042Z"></path></svg></span><span class="sd-summary-text">Example — individual contractor</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<p class="sd-card-text">The project note has <code class="docutils literal notranslate"><span class="pre">contractor:</span> <span class="pre">John</span> <span class="pre">Doe</span></code> (no <code class="docutils literal notranslate"><span class="pre">contractor_sapiens</span></code>).</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pj</span><span class="o">.</span><span class="n">sources</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"sapiens"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"path/to/people/notes"</span><span class="p">]}</span>
+
+<span class="n">path</span> <span class="o">=</span> <span class="n">pj</span><span class="o">.</span><span class="n">make_overlay_party_b_contractor</span><span class="p">()</span>
+<span class="c1"># entity and representative fields both come from "John Doe.md"</span>
+</pre></div>
+</div>
+</div>
+</details></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.project.Project.make_overlay_party_b_client">
+<span class="sig-name descname"><span class="pre">make_overlay_party_b_client</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/project.html#Project.make_overlay_party_b_client"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.project.Project.make_overlay_party_b_client" title="Link to this definition">#</a></dt>
+<dd><p>Create a <code class="docutils literal notranslate"><span class="pre">party_b_client.tex</span></code> overlay from the project’s client data.</p>
+<p>Loads <code class="xref py py-attr docutils literal notranslate"><span class="pre">client</span></code> if not yet set. The client note can be either an
+organization or an individual — the mapping follows the same rules as
+<a class="reference internal" href="#losalamos.project.Project.make_overlay_party_b_contractor" title="losalamos.project.Project.make_overlay_party_b_contractor"><code class="xref py py-meth docutils literal notranslate"><span class="pre">make_overlay_party_b_contractor()</span></code></a>. No separate client representative
+note is loaded; if the client is an organization and representative fields
+are needed, populate them manually via <a class="reference internal" href="#losalamos.project.Project.make_overlay_file" title="losalamos.project.Project.make_overlay_file"><code class="xref py py-meth docutils literal notranslate"><span class="pre">make_overlay_file()</span></code></a> with a
+custom placeholder dict built from <code class="xref py py-meth docutils literal notranslate"><span class="pre">_build_party_b_placeholders()</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>FileNotFoundError</strong> – If the client cannot be found in <code class="docutils literal notranslate"><span class="pre">self.sources</span></code>.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Path to the written overlay file.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pathlib.Path</p>
+</dd>
+</dl>
+<details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3" open="open">
+<summary class="sd-summary-title sd-card-header">
+<span class="sd-summary-icon"><svg version="1.1" width="1.0em" height="1.0em" class="sd-octicon sd-octicon-code-square" viewBox="0 0 16 16" aria-hidden="true"><path d="M0 1.75C0 .784.784 0 1.75 0h12.5C15.216 0 16 .784 16 1.75v12.5A1.75 1.75 0 0 1 14.25 16H1.75A1.75 1.75 0 0 1 0 14.25Zm1.75-.25a.25.25 0 0 0-.25.25v12.5c0 .138.112.25.25.25h12.5a.25.25 0 0 0 .25-.25V1.75a.25.25 0 0 0-.25-.25Zm7.47 3.97a.75.75 0 0 1 1.06 0l2 2a.75.75 0 0 1 0 1.06l-2 2a.749.749 0 0 1-1.275-.326.749.749 0 0 1 .215-.734L10.69 8 9.22 6.53a.75.75 0 0 1 0-1.06ZM6.78 6.53 5.31 8l1.47 1.47a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215l-2-2a.75.75 0 0 1 0-1.06l2-2a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042Z"></path></svg></span><span class="sd-summary-text">Example — organization client</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<p class="sd-card-text">The project note has <code class="docutils literal notranslate"><span class="pre">client:</span> <span class="pre">Big</span> <span class="pre">Boss</span> <span class="pre">Inc.</span></code></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">losalamos</span>
+
+<span class="n">pj</span> <span class="o">=</span> <span class="n">losalamos</span><span class="o">.</span><span class="n">load_project</span><span class="p">(</span><span class="s2">"path/to/myProject"</span><span class="p">)</span>
+<span class="n">pj</span><span class="o">.</span><span class="n">sources</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">"organizations"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"path/to/org/notes"</span><span class="p">],</span>
+    <span class="s2">"sapiens"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"path/to/people/notes"</span><span class="p">],</span>
+<span class="p">}</span>
+
+<span class="n">path</span> <span class="o">=</span> <span class="n">pj</span><span class="o">.</span><span class="n">make_overlay_party_b_client</span><span class="p">()</span>
+<span class="c1"># → &lt;project&gt;/admin/config/overlays/party_b_client.tex</span>
+<span class="c1"># org fields from "Big Boss Inc..md"; representative fields are empty</span>
+</pre></div>
+</div>
+</div>
+</details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3" open="open">
+<summary class="sd-summary-title sd-card-header">
+<span class="sd-summary-icon"><svg version="1.1" width="1.0em" height="1.0em" class="sd-octicon sd-octicon-code-square" viewBox="0 0 16 16" aria-hidden="true"><path d="M0 1.75C0 .784.784 0 1.75 0h12.5C15.216 0 16 .784 16 1.75v12.5A1.75 1.75 0 0 1 14.25 16H1.75A1.75 1.75 0 0 1 0 14.25Zm1.75-.25a.25.25 0 0 0-.25.25v12.5c0 .138.112.25.25.25h12.5a.25.25 0 0 0 .25-.25V1.75a.25.25 0 0 0-.25-.25Zm7.47 3.97a.75.75 0 0 1 1.06 0l2 2a.75.75 0 0 1 0 1.06l-2 2a.749.749 0 0 1-1.275-.326.749.749 0 0 1 .215-.734L10.69 8 9.22 6.53a.75.75 0 0 1 0-1.06ZM6.78 6.53 5.31 8l1.47 1.47a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215l-2-2a.75.75 0 0 1 0-1.06l2-2a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042Z"></path></svg></span><span class="sd-summary-text">Example — invoice targeting the contractor as party B</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<p class="sd-card-text">For an invoice, party B is typically the contractor, not the project
+client. Use <a class="reference internal" href="#losalamos.project.Project.make_overlay_party_b_contractor" title="losalamos.project.Project.make_overlay_party_b_contractor"><code class="xref py py-meth docutils literal notranslate"><span class="pre">make_overlay_party_b_contractor()</span></code></a> and pass the
+result to <a class="reference internal" href="#losalamos.project.Project.add_document" title="losalamos.project.Project.add_document"><code class="xref py py-meth docutils literal notranslate"><span class="pre">add_document()</span></code></a>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">path</span> <span class="o">=</span> <span class="n">pj</span><span class="o">.</span><span class="n">make_overlay_party_b_contractor</span><span class="p">()</span>
+
+<span class="n">pj</span><span class="o">.</span><span class="n">add_document</span><span class="p">(</span>
+    <span class="n">document_type</span><span class="o">=</span><span class="s2">"invoice"</span><span class="p">,</span>
+    <span class="n">files_overlay</span><span class="o">=</span><span class="p">{</span><span class="s2">"definitions/party_b.tex"</span><span class="p">:</span> <span class="n">path</span><span class="p">},</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</details></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.project.Project.get_attribute">
+<span class="sig-name descname"><span class="pre">get_attribute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">entry_key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clean_cref</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/project.html#Project.get_attribute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.project.Project.get_attribute" title="Link to this definition">#</a></dt>
+<dd><p>Read a metadata field from the project’s main note.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>entry_key</strong> (<em>str</em>) – Metadata field name (e.g. <code class="docutils literal notranslate"><span class="pre">&quot;title&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;client&quot;</span></code>).</p></li>
+<li><p><strong>clean_cref</strong> (<em>bool</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code> (default), strip Obsidian wiki-link
+brackets from the returned value.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Field value with surrounding YAML quote characters stripped.
+Returns a bracketed placeholder (e.g. <code class="docutils literal notranslate"><span class="pre">[TITLE]</span></code>) when the field
+is absent or has a <code class="docutils literal notranslate"><span class="pre">None</span></code> value (empty YAML field).</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.project.Project.add_document">
+<span class="sig-name descname"><span class="pre">add_document</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">document_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">template_overlay</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">files_overlay</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">condensed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zip_export</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compile_pdf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subfolder</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'inputs/documents'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force_new</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/project.html#Project.add_document"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.project.Project.add_document" title="Link to this definition">#</a></dt>
+<dd><p>Create a new document inside the project, optionally condensed
+into a flattened+split pair of files and/or compiled to PDF.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>document_type</strong> (<em>str</em>) – Key into <code class="xref py py-data docutils literal notranslate"><span class="pre">losalamos.documents.DOCUMENT_TYPES</span></code>.</p></li>
+<li><p><strong>name</strong> (<em>str</em><em> or </em><em>None</em>) – Folder/registry name. Defaults to <code class="docutils literal notranslate"><span class="pre">document_type</span></code>.
+Must be non-empty and free of path separators.</p></li>
+<li><p><strong>template_overlay</strong> (<em>str</em><em>, </em><em>pathlib.Path</em><em>, or </em><em>None</em>) – Forwarded to <code class="xref py py-meth docutils literal notranslate"><span class="pre">Document.new()</span></code>.</p></li>
+<li><p><strong>files_overlay</strong> (<em>dict</em><em> or </em><em>None</em>) – Forwarded to <code class="xref py py-meth docutils literal notranslate"><span class="pre">Document.new()</span></code>.</p></li>
+<li><p><strong>condensed</strong> (<em>bool</em>) – If True, flatten+split into main.tex/preamble.tex
+via a temp staging dir. If False, keep the live template tree.</p></li>
+<li><p><strong>zip_export</strong> (<em>bool</em>) – Zip the condensed export (deletes the folder).
+Requires condensed=True; mutually exclusive with compile_pdf.</p></li>
+<li><p><strong>compile_pdf</strong> (<em>bool</em>) – Compile to PDF via <code class="xref py py-meth docutils literal notranslate"><span class="pre">DocumentTeX.to_pdf()</span></code>.</p></li>
+<li><p><strong>subfolder</strong> (<em>str</em>) – Project-relative target folder.</p></li>
+<li><p><strong>force_new</strong> (<em>bool</em>) – If True, force the new folder even if it already exists.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>ValueError</strong> – Unknown document_type; invalid name; or
+zip_export combined with condensed=False or compile_pdf=True.</p></li>
+<li><p><strong>FileExistsError</strong> – Target folder already exists.</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The reloaded document instance, or the zip Path when
+zip_export=True.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="losalamos.documents.html#losalamos.documents.Document" title="losalamos.documents.Document">losalamos.documents.Document</a> or pathlib.Path</p>
+</dd>
+</dl>
+<details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3" open="open">
+<summary class="sd-summary-title sd-card-header">
+<span class="sd-summary-icon"><svg version="1.1" width="1.0em" height="1.0em" class="sd-octicon sd-octicon-code-square" viewBox="0 0 16 16" aria-hidden="true"><path d="M0 1.75C0 .784.784 0 1.75 0h12.5C15.216 0 16 .784 16 1.75v12.5A1.75 1.75 0 0 1 14.25 16H1.75A1.75 1.75 0 0 1 0 14.25Zm1.75-.25a.25.25 0 0 0-.25.25v12.5c0 .138.112.25.25.25h12.5a.25.25 0 0 0 .25-.25V1.75a.25.25 0 0 0-.25-.25Zm7.47 3.97a.75.75 0 0 1 1.06 0l2 2a.75.75 0 0 1 0 1.06l-2 2a.749.749 0 0 1-1.275-.326.749.749 0 0 1 .215-.734L10.69 8 9.22 6.53a.75.75 0 0 1 0-1.06ZM6.78 6.53 5.31 8l1.47 1.47a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215l-2-2a.75.75 0 0 1 0-1.06l2-2a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042Z"></path></svg></span><span class="sd-summary-text">Example</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<p class="sd-card-text">Load an existing project.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">losalamos</span>
+
+<span class="n">pj</span> <span class="o">=</span> <span class="n">losalamos</span><span class="o">.</span><span class="n">load_project</span><span class="p">(</span><span class="s2">"path/to/myProject"</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="sd-card-text">Add an invoice document. The template is condensed into a flat
+<code class="docutils literal notranslate"><span class="pre">main.tex</span></code> / <code class="docutils literal notranslate"><span class="pre">preamble.tex</span></code> pair and compiled to PDF.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">doc</span> <span class="o">=</span> <span class="n">pj</span><span class="o">.</span><span class="n">add_document</span><span class="p">(</span>
+    <span class="n">document_type</span><span class="o">=</span><span class="s2">"invoice"</span><span class="p">,</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">"invoice_client_2026"</span><span class="p">,</span>
+    <span class="n">condensed</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">compile_pdf</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p class="sd-card-text">The returned instance is also registered in <code class="docutils literal notranslate"><span class="pre">pj.documents</span></code>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">pj</span><span class="o">.</span><span class="n">documents</span><span class="p">[</span><span class="s2">"invoice"</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+</details></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.project.Project.get_assets">
+<span class="sig-name descname"><span class="pre">get_assets</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pandas.DataFrame</span></span></span><a class="reference internal" href="../_modules/losalamos/project.html#Project.get_assets"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.project.Project.get_assets" title="Link to this definition">#</a></dt>
+<dd><p>Return a DataFrame of all asset notes found under the project root.</p>
+<p>Scans every <code class="docutils literal notranslate"><span class="pre">.md</span></code> file for <code class="docutils literal notranslate"><span class="pre">note_type:</span> <span class="pre">asset</span></code> front-matter and
+collects <code class="docutils literal notranslate"><span class="pre">asset_id</span></code>, <code class="docutils literal notranslate"><span class="pre">asset_type</span></code>, <code class="docutils literal notranslate"><span class="pre">name</span></code>, and <code class="docutils literal notranslate"><span class="pre">asset_file</span></code>
+(with wiki-link and quote wrappers stripped). Rows are sorted by
+<code class="docutils literal notranslate"><span class="pre">asset_id</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>DataFrame with columns <code class="docutils literal notranslate"><span class="pre">asset_id</span></code>, <code class="docutils literal notranslate"><span class="pre">asset_type</span></code>, <code class="docutils literal notranslate"><span class="pre">name</span></code>,
+<code class="docutils literal notranslate"><span class="pre">asset_file</span></code>. Empty DataFrame when no assets exist.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>pandas.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.project.Project.add_invoice">
+<span class="sig-name descname"><span class="pre">add_invoice</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/project.html#Project.add_invoice"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.project.Project.add_invoice" title="Link to this definition">#</a></dt>
+<dd><p>Create a new invoice document inside <code class="docutils literal notranslate"><span class="pre">budget/documents/</span></code>.</p>
+<p>The folder and sidecar note are named <code class="docutils literal notranslate"><span class="pre">INVOICE_{project}_{file_id}</span></code>,
+e.g. <code class="docutils literal notranslate"><span class="pre">INVOICE_C034_F003</span></code>. No compilation or condensing is performed.</p>
+<p>The template directory is read from
+<code class="docutils literal notranslate"><span class="pre">sources[&quot;templates&quot;][&quot;documents&quot;][&quot;invoice&quot;]</span></code> in the project’s
+<code class="docutils literal notranslate"><span class="pre">admin/config/sources.yaml</span></code>. The following overlays are applied
+when present in <code class="docutils literal notranslate"><span class="pre">admin/config/overlays/</span></code>:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">project.tex</span></code> → <code class="docutils literal notranslate"><span class="pre">definitions/project.tex</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">party_b_contractor.tex</span></code> → <code class="docutils literal notranslate"><span class="pre">definitions/party_b.tex</span></code></p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The newly created invoice document instance.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="losalamos.documents.html#losalamos.documents.Document" title="losalamos.documents.Document">losalamos.documents.Document</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.project.Project.add_receipt">
+<span class="sig-name descname"><span class="pre">add_receipt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">invoice_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/project.html#Project.add_receipt"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.project.Project.add_receipt" title="Link to this definition">#</a></dt>
+<dd><p>Create a new receipt document inside <code class="docutils literal notranslate"><span class="pre">budget/documents/</span></code>.</p>
+<p>When <em>invoice_id</em> is provided, all files from the linked invoice
+folder (except <code class="docutils literal notranslate"><span class="pre">main.tex</span></code>) become file overlays, so the receipt
+inherits the invoice’s project definitions, party files, and any
+other configured assets. Without <em>invoice_id</em>, the standard
+<code class="docutils literal notranslate"><span class="pre">admin/config/overlays/</span></code> files are applied instead.</p>
+<p>The asset ID counter is shared with invoices, so IDs never collide
+across document types within the same project.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>invoice_id</strong> (<em>str</em><em> or </em><em>None</em>) – Asset file ID of a previously created invoice,
+e.g. <code class="docutils literal notranslate"><span class="pre">&quot;F003&quot;</span></code>. When provided, the invoice folder’s files
+(excluding <code class="docutils literal notranslate"><span class="pre">main.tex</span></code>) become file overlays on the receipt.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>FileNotFoundError</strong> – If <em>invoice_id</em> is given but the
+corresponding invoice folder does not exist.</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The newly created receipt document instance.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="losalamos.documents.html#losalamos.documents.Document" title="losalamos.documents.Document">losalamos.documents.Document</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.project.Project.build_invoice">
+<span class="sig-name descname"><span class="pre">build_invoice</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/project.html#Project.build_invoice"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.project.Project.build_invoice" title="Link to this definition">#</a></dt>
+<dd><p>Compile a previously created invoice to PDF.</p>
+<p>Reads <code class="docutils literal notranslate"><span class="pre">\DocVersion</span></code> from <code class="docutils literal notranslate"><span class="pre">definitions/project.tex</span></code>, compiles
+via <code class="docutils literal notranslate"><span class="pre">latexmk</span></code> with cleanup, and places the result at
+<code class="docutils literal notranslate"><span class="pre">budget/documents/INVOICE_{project}_{file_id}_{version}.pdf</span></code>.
+Updates the <code class="docutils literal notranslate"><span class="pre">asset_file</span></code> field in the sidecar note.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>file_id</strong> (<em>str</em>) – Asset file ID assigned at creation, e.g. <code class="docutils literal notranslate"><span class="pre">&quot;F003&quot;</span></code>.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>FileNotFoundError</strong> – If the invoice folder or <code class="docutils literal notranslate"><span class="pre">main.tex</span></code> is not found.</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Path to the compiled PDF.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>pathlib.Path</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.project.Project.build_receipt">
+<span class="sig-name descname"><span class="pre">build_receipt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/project.html#Project.build_receipt"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.project.Project.build_receipt" title="Link to this definition">#</a></dt>
+<dd><p>Compile a previously created receipt to PDF.</p>
+<p>Reads <code class="docutils literal notranslate"><span class="pre">\DocVersion</span></code> from <code class="docutils literal notranslate"><span class="pre">definitions/project.tex</span></code>, compiles
+via <code class="docutils literal notranslate"><span class="pre">latexmk</span></code> with cleanup, and places the result at
+<code class="docutils literal notranslate"><span class="pre">budget/documents/RECEIPT_{project}_{file_id}_{version}.pdf</span></code>.
+Updates the <code class="docutils literal notranslate"><span class="pre">asset_file</span></code> field in the sidecar note.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>file_id</strong> (<em>str</em>) – Asset file ID assigned at creation, e.g. <code class="docutils literal notranslate"><span class="pre">&quot;F003&quot;</span></code>.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>FileNotFoundError</strong> – If the receipt folder or <code class="docutils literal notranslate"><span class="pre">main.tex</span></code> is not found.</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Path to the compiled PDF.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>pathlib.Path</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.project.Project.add_proposal">
+<span class="sig-name descname"><span class="pre">add_proposal</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/project.html#Project.add_proposal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.project.Project.add_proposal" title="Link to this definition">#</a></dt>
+<dd><p>Create a new proposal document inside <code class="docutils literal notranslate"><span class="pre">admin/proposals/</span></code>.</p>
+<p>The folder and sidecar note are named <code class="docutils literal notranslate"><span class="pre">PROPOSAL_{project}_{file_id}</span></code>,
+e.g. <code class="docutils literal notranslate"><span class="pre">PROPOSAL_C034_F005</span></code>. No compilation or condensing is performed.</p>
+<p>The template directory is read from
+<code class="docutils literal notranslate"><span class="pre">sources[&quot;templates&quot;][&quot;documents&quot;][&quot;proposal&quot;]</span></code> in the project’s
+<code class="docutils literal notranslate"><span class="pre">admin/config/sources.yaml</span></code>. The following overlays are applied
+when present in <code class="docutils literal notranslate"><span class="pre">admin/config/overlays/</span></code>:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">project.tex</span></code> → <code class="docutils literal notranslate"><span class="pre">definitions/project.tex</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">party_b_contractor.tex</span></code> → <code class="docutils literal notranslate"><span class="pre">definitions/party_b.tex</span></code></p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The newly created proposal document instance.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="losalamos.documents.html#losalamos.documents.Document" title="losalamos.documents.Document">losalamos.documents.Document</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.project.Project.build_proposal">
+<span class="sig-name descname"><span class="pre">build_proposal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/project.html#Project.build_proposal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.project.Project.build_proposal" title="Link to this definition">#</a></dt>
+<dd><p>Compile a previously created proposal to PDF.</p>
+<p>Reads <code class="docutils literal notranslate"><span class="pre">\DocVersion</span></code> from <code class="docutils literal notranslate"><span class="pre">definitions/project.tex</span></code>, compiles
+via <code class="docutils literal notranslate"><span class="pre">latexmk</span></code> with cleanup, and places the result at
+<code class="docutils literal notranslate"><span class="pre">admin/proposals/PROPOSAL_{project}_{file_id}_{version}.pdf</span></code>.
+Updates the <code class="docutils literal notranslate"><span class="pre">asset_file</span></code> field in the sidecar note.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>file_id</strong> (<em>str</em>) – Asset file ID assigned at creation, e.g. <code class="docutils literal notranslate"><span class="pre">&quot;F005&quot;</span></code>.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>FileNotFoundError</strong> – If the proposal folder or <code class="docutils literal notranslate"><span class="pre">main.tex</span></code> is not found.</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Path to the compiled PDF.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>pathlib.Path</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
@@ -688,11 +1477,40 @@ based on <code class="docutils literal notranslate"><span class="pre">SUBFOLDERS
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The function performs directory validation, checks for publish frequency constraints
+<p>The method performs directory validation, checks for publish frequency constraints
 based on <code class="docutils literal notranslate"><span class="pre">self.publish_delta</span></code>, and handles the rotation of the previous ‘latest’
 archive into a history folder before promoting the new build.</p>
 </div>
-</dd></dl>
+<details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3" open="open">
+<summary class="sd-summary-title sd-card-header">
+<span class="sd-summary-icon"><svg version="1.1" width="1.0em" height="1.0em" class="sd-octicon sd-octicon-code-square" viewBox="0 0 16 16" aria-hidden="true"><path d="M0 1.75C0 .784.784 0 1.75 0h12.5C15.216 0 16 .784 16 1.75v12.5A1.75 1.75 0 0 1 14.25 16H1.75A1.75 1.75 0 0 1 0 14.25Zm1.75-.25a.25.25 0 0 0-.25.25v12.5c0 .138.112.25.25.25h12.5a.25.25 0 0 0 .25-.25V1.75a.25.25 0 0 0-.25-.25Zm7.47 3.97a.75.75 0 0 1 1.06 0l2 2a.75.75 0 0 1 0 1.06l-2 2a.749.749 0 0 1-1.275-.326.749.749 0 0 1 .215-.734L10.69 8 9.22 6.53a.75.75 0 0 1 0-1.06ZM6.78 6.53 5.31 8l1.47 1.47a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215l-2-2a.75.75 0 0 1 0-1.06l2-2a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042Z"></path></svg></span><span class="sd-summary-text">Example</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<p class="sd-card-text">Load an existing project.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">losalamos</span>
+
+<span class="n">pj</span> <span class="o">=</span> <span class="n">losalamos</span><span class="o">.</span><span class="n">load_project</span><span class="p">(</span><span class="s2">"path/to/myProject"</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="sd-card-text">Select the output folders to snapshot and trigger the publish. By
+default the archive lands under <code class="docutils literal notranslate"><span class="pre">&lt;project_root&gt;/outputs/</span></code>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">result</span> <span class="o">=</span> <span class="n">pj</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span>
+    <span class="n">targets</span><span class="o">=</span><span class="p">[</span>
+        <span class="n">pj</span><span class="o">.</span><span class="n">folder_root</span> <span class="o">/</span> <span class="s2">"outputs/public"</span><span class="p">,</span>
+        <span class="n">pj</span><span class="o">.</span><span class="n">folder_root</span> <span class="o">/</span> <span class="s2">"inputs/figures"</span><span class="p">,</span>
+    <span class="p">],</span>
+    <span class="n">prefix</span><span class="o">=</span><span class="s2">"myProject_delivery"</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p class="sd-card-text">Inspect the result dictionary to confirm publication and retrieve
+the archive path.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="n">result</span><span class="p">[</span><span class="s2">"published"</span><span class="p">]:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="s2">"archive"</span><span class="p">])</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"Skipped:"</span><span class="p">,</span> <span class="n">result</span><span class="p">[</span><span class="s2">"reason"</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+</details></dd></dl>
 
 </dd></dl>
 
@@ -751,6 +1569,32 @@ archive into a history folder before promoting the new build.</p>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.project.publish"><code class="docutils literal notranslate"><span class="pre">publish()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.project.Project"><code class="docutils literal notranslate"><span class="pre">Project</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.project.Project.load_data"><code class="docutils literal notranslate"><span class="pre">Project.load_data()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.project.Project.setup"><code class="docutils literal notranslate"><span class="pre">Project.setup()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.project.Project.update"><code class="docutils literal notranslate"><span class="pre">Project.update()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.project.Project.load_main_note"><code class="docutils literal notranslate"><span class="pre">Project.load_main_note()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.project.Project.get_title"><code class="docutils literal notranslate"><span class="pre">Project.get_title()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.project.Project.get_subtitle"><code class="docutils literal notranslate"><span class="pre">Project.get_subtitle()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.project.Project.get_contractor"><code class="docutils literal notranslate"><span class="pre">Project.get_contractor()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.project.Project.get_contractor_sapiens"><code class="docutils literal notranslate"><span class="pre">Project.get_contractor_sapiens()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.project.Project.get_client"><code class="docutils literal notranslate"><span class="pre">Project.get_client()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.project.Project.load_contractor"><code class="docutils literal notranslate"><span class="pre">Project.load_contractor()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.project.Project.load_contractor_sapiens"><code class="docutils literal notranslate"><span class="pre">Project.load_contractor_sapiens()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.project.Project.load_client"><code class="docutils literal notranslate"><span class="pre">Project.load_client()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.project.Project.load_service"><code class="docutils literal notranslate"><span class="pre">Project.load_service()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.project.Project.make_overlay_service"><code class="docutils literal notranslate"><span class="pre">Project.make_overlay_service()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.project.Project.make_overlay_file"><code class="docutils literal notranslate"><span class="pre">Project.make_overlay_file()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.project.Project.make_overlay_project"><code class="docutils literal notranslate"><span class="pre">Project.make_overlay_project()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.project.Project.make_overlay_party_b_contractor"><code class="docutils literal notranslate"><span class="pre">Project.make_overlay_party_b_contractor()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.project.Project.make_overlay_party_b_client"><code class="docutils literal notranslate"><span class="pre">Project.make_overlay_party_b_client()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.project.Project.get_attribute"><code class="docutils literal notranslate"><span class="pre">Project.get_attribute()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.project.Project.add_document"><code class="docutils literal notranslate"><span class="pre">Project.add_document()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.project.Project.get_assets"><code class="docutils literal notranslate"><span class="pre">Project.get_assets()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.project.Project.add_invoice"><code class="docutils literal notranslate"><span class="pre">Project.add_invoice()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.project.Project.add_receipt"><code class="docutils literal notranslate"><span class="pre">Project.add_receipt()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.project.Project.build_invoice"><code class="docutils literal notranslate"><span class="pre">Project.build_invoice()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.project.Project.build_receipt"><code class="docutils literal notranslate"><span class="pre">Project.build_receipt()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.project.Project.add_proposal"><code class="docutils literal notranslate"><span class="pre">Project.add_proposal()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.project.Project.build_proposal"><code class="docutils literal notranslate"><span class="pre">Project.build_proposal()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.project.Project.publish"><code class="docutils literal notranslate"><span class="pre">Project.publish()</span></code></a></li>
 </ul>
 </li>
