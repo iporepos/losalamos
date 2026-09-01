@@ -4,10 +4,10 @@
 # See pyproject.toml for authors/maintainers.
 # See LICENSE for license details.
 """
-Terminal document manager for a project collection.
+Terminal document manager for a project folder group.
 
 Reads a tool config file (YAML, TOML, or JSON) that sets the base folder
-and collection prefix. Presents an interactive project picker, then a
+and folder prefix. Presents an interactive project picker, then a
 per-project home page to add, edit, or build asset documents (invoices,
 receipts, proposals).
 
@@ -19,8 +19,8 @@ receipts, proposals).
 
 **Tool config keys**
 
-- ``basefolder`` (*str*, required) — root directory where collection folders live.
-- ``collection`` (*str*, required) — single-letter prefix, e.g. ``C``.
+- ``basefolder`` (*str*, required) — root directory where project group folders live.
+- ``prefix`` (*str*, required) — string prefix for project folders, e.g. ``C`` or ``Projects-Consulting-``.
 
 **Navigation**
 
@@ -36,11 +36,12 @@ receipts, proposals).
 
     .. code-block:: yaml
 
-        # Root directory that holds all collection folders.
+        # Root directory that holds all project group folders.
         basefolder: "C:/My Drive/projects"
 
-        # Single-letter prefix that identifies the collection (case-insensitive).
-        collection: C
+        # Prefix that identifies the project folder group.
+        # Can be a single letter (e.g. C) or any string (e.g. Projects-Consulting-).
+        prefix: C
 
 """
 
@@ -114,7 +115,7 @@ def get_arguments():
     :returns: Parsed argument namespace with a ``config`` attribute.
     """
     parser = argparse.ArgumentParser(
-        description="Terminal document manager for a project collection.",
+        description="Terminal document manager for a project folder group.",
     )
     parser.add_argument(
         "-c",
@@ -130,7 +131,7 @@ def _load_projects(collection_path: Path, prefix: str) -> list[dict]:
     Scan *collection_path* and return project info dicts sorted by name.
 
     :param collection_path: Directory containing sibling project folders.
-    :param prefix: Folder name prefix, e.g. ``"C"``.
+    :param prefix: Folder name prefix, e.g. ``"C"`` or ``"Projects-Consulting-"``.
     :returns: List of dicts with keys ``name``, ``path``, ``title``.
     :rtype: list[dict]
     """
@@ -477,19 +478,19 @@ def main() -> None:
     args = get_arguments()
     tool_cfg = _load_config(source=args.config)
 
-    for key in ("basefolder", "collection"):
+    for key in ("basefolder", "prefix"):
         if key not in tool_cfg:
             raise ValueError(f"Tool config missing required key: '{key}'")
 
     basefolder = Path(tool_cfg["basefolder"])
-    collection = tool_cfg["collection"].upper()
-    collection_path = basefolder / f"{collection}000"
+    prefix = tool_cfg["prefix"]
+    collection_path = basefolder / f"{prefix}000"
 
     try:
         while True:
             projects = _load_projects(
                 collection_path=collection_path,
-                prefix=collection,
+                prefix=prefix,
             )
 
             if not projects:

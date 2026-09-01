@@ -4,10 +4,10 @@
 # See pyproject.toml for authors/maintainers.
 # See LICENSE for license details.
 """
-Create a new numbered project inside a collection folder.
+Create a new numbered project inside a project folder group.
 
 Reads a tool config file (YAML, TOML, or JSON) that sets the base folder,
-collection prefix, and optional path to a shared sources config. Presents an
+folder prefix, and optional path to a shared sources config. Presents an
 interactive terminal session to fill in project metadata fields, then calls
 :func:`losalamos.new_project`.
 
@@ -19,8 +19,8 @@ interactive terminal session to fill in project metadata fields, then calls
 
 **Tool config keys**
 
-- ``basefolder`` (*str*, required) — root directory where collection folders live.
-- ``collection`` (*str*, required) — single-letter prefix, e.g. ``C``.
+- ``basefolder`` (*str*, required) — root directory where project group folders live.
+- ``prefix`` (*str*, required) — string prefix for project folders, e.g. ``C`` or ``Projects-Consulting-``.
 - ``sources`` (*str*, optional) — path to a shared sources config file
   (copied into each new project's ``admin/config/``).
 
@@ -39,13 +39,14 @@ interactive terminal session to fill in project metadata fields, then calls
 
     .. code-block:: yaml
 
-        # Root directory that holds all collection folders.
-        # The tool resolves the collection folder as <basefolder>/<collection>000.
+        # Root directory that holds all project group folders.
+        # The tool resolves the group folder as <basefolder>/<prefix>000.
         # Quote paths that contain spaces or a literal '#'.
         basefolder: "C:/My Drive/projects"
 
-        # Single-letter prefix that identifies the collection (case-insensitive).
-        collection: C
+        # Prefix that identifies the project folder group.
+        # Can be a single letter (e.g. C) or any string (e.g. Projects-Consulting-).
+        prefix: C
 
         # Path to the shared sources config file.
         # The file is copied into admin/config/ of every new project so that
@@ -103,7 +104,7 @@ def get_arguments():
     :returns: Parsed argument namespace with a ``config`` attribute.
     """
     parser = argparse.ArgumentParser(
-        description="Create a new numbered project inside a collection folder.",
+        description="Create a new numbered project inside a project folder group.",
     )
     parser.add_argument(
         "-c",
@@ -119,7 +120,7 @@ def _next_increment(collection_path: Path, prefix: str, width: int = 3) -> str:
     Scan *collection_path* and return the next available project name.
 
     :param collection_path: Directory containing sibling project folders.
-    :param prefix: Folder name prefix, e.g. ``"C"``.
+    :param prefix: Folder name prefix, e.g. ``"C"`` or ``"Projects-Consulting-"``.
     :param width: Zero-pad width for the numeric suffix.
     :returns: Next project name, e.g. ``"C003"``.
     :rtype: str
@@ -127,7 +128,7 @@ def _next_increment(collection_path: Path, prefix: str, width: int = 3) -> str:
     numbers = []
     if collection_path.exists():
         for item in collection_path.iterdir():
-            if item.is_dir() and item.name.startswith(prefix):
+            if item.is_dir() and item.name.lower().startswith(prefix.lower()):
                 suffix = item.name[len(prefix) :]
                 if suffix.isdigit():
                     numbers.append(int(suffix))
@@ -298,20 +299,20 @@ def main() -> None:
     args = get_arguments()
     tool_cfg = _load_config(source=args.config)
 
-    for key in ("basefolder", "collection"):
+    for key in ("basefolder", "prefix"):
         if key not in tool_cfg:
             raise ValueError(f"Tool config missing required key: '{key}'")
 
     basefolder = Path(tool_cfg["basefolder"])
-    collection = tool_cfg["collection"].upper()
+    prefix = tool_cfg["prefix"]
     sources_file = tool_cfg.get("sources", None)
 
-    # Resolve collection folder and next project name
+    # Resolve group folder and next project name
     # ----------------------------------------------------------------
-    collection_path = basefolder / f"{collection}000"
+    collection_path = basefolder / f"{prefix}000"
     project_name = _next_increment(
         collection_path=collection_path,
-        prefix=collection,
+        prefix=prefix,
     )
 
     # Load available names from sources for interactive pickers
@@ -337,9 +338,9 @@ def main() -> None:
     # Show next project info
     # ----------------------------------------------------------------
     heading_subsection("Next project")
-    print(get_message(f"Collection : {collection}"))
-    print(get_message(f"Name       : {project_name}"))
-    print(get_message(f"Location   : {collection_path / project_name}"))
+    print(get_message(f"Prefix   : {prefix}"))
+    print(get_message(f"Name     : {project_name}"))
+    print(get_message(f"Location : {collection_path / project_name}"))
     print()
 
     try:

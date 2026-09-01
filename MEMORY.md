@@ -1,5 +1,6 @@
 # Memory Log
 
+- 2026-08-31 — generalized tools prefix: renamed config key collection→prefix in add_new_project and manage_documents; removed .upper() coercion; fixed _next_increment to use case-insensitive matching; updated all docs/examples
 - 2026-08-31 — CI fixes: added pyyaml to pyproject.toml dependencies; corrected test_tools_templates.py subprocess call from losalamos.tools.templates to losalamos.tools.update_templates
 - 2026-08-31 — manage_documents: added delete action; removes TeX folder + PDFs but keeps sidecar note as tombstone; home listing filtered to active documents only via _active_documents(); _next_asset_id() naturally skips tombstone IDs
 - 2026-08-31 — created tools/manage_documents.py: terminal document manager; project picker from collection, per-project home (add/edit/build); _load_projects reads titles without full project load; _open_in_explorer cross-platform; receipt links to invoice optionally
