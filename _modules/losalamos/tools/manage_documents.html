@@ -405,10 +405,10 @@
 <span class="c1"># See pyproject.toml for authors/maintainers.</span>
 <span class="c1"># See LICENSE for license details.</span>
 <span class="sd">"""</span>
-<span class="sd">Terminal document manager for a project collection.</span>
+<span class="sd">Terminal document manager for a project folder group.</span>
 
 <span class="sd">Reads a tool config file (YAML, TOML, or JSON) that sets the base folder</span>
-<span class="sd">and collection prefix. Presents an interactive project picker, then a</span>
+<span class="sd">and folder prefix. Presents an interactive project picker, then a</span>
 <span class="sd">per-project home page to add, edit, or build asset documents (invoices,</span>
 <span class="sd">receipts, proposals).</span>
 
@@ -420,8 +420,8 @@
 
 <span class="sd">**Tool config keys**</span>
 
-<span class="sd">- ``basefolder`` (*str*, required) — root directory where collection folders live.</span>
-<span class="sd">- ``collection`` (*str*, required) — single-letter prefix, e.g. ``C``.</span>
+<span class="sd">- ``basefolder`` (*str*, required) — root directory where project group folders live.</span>
+<span class="sd">- ``prefix`` (*str*, required) — string prefix for project folders, e.g. ``C`` or ``Projects-Consulting-``.</span>
 
 <span class="sd">**Navigation**</span>
 
@@ -437,11 +437,12 @@
 
 <span class="sd">    .. code-block:: yaml</span>
 
-<span class="sd">        # Root directory that holds all collection folders.</span>
+<span class="sd">        # Root directory that holds all project group folders.</span>
 <span class="sd">        basefolder: "C:/My Drive/projects"</span>
 
-<span class="sd">        # Single-letter prefix that identifies the collection (case-insensitive).</span>
-<span class="sd">        collection: C</span>
+<span class="sd">        # Prefix that identifies the project folder group.</span>
+<span class="sd">        # Can be a single letter (e.g. C) or any string (e.g. Projects-Consulting-).</span>
+<span class="sd">        prefix: C</span>
 
 <span class="sd">"""</span>
 
@@ -517,7 +518,7 @@
 <span class="sd">    :returns: Parsed argument namespace with a ``config`` attribute.</span>
 <span class="sd">    """</span>
     <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span>
-        <span class="n">description</span><span class="o">=</span><span class="s2">"Terminal document manager for a project collection."</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">"Terminal document manager for a project folder group."</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
         <span class="s2">"-c"</span><span class="p">,</span>
@@ -534,7 +535,7 @@
 <span class="sd">    Scan *collection_path* and return project info dicts sorted by name.</span>
 
 <span class="sd">    :param collection_path: Directory containing sibling project folders.</span>
-<span class="sd">    :param prefix: Folder name prefix, e.g. ``"C"``.</span>
+<span class="sd">    :param prefix: Folder name prefix, e.g. ``"C"`` or ``"Projects-Consulting-"``.</span>
 <span class="sd">    :returns: List of dicts with keys ``name``, ``path``, ``title``.</span>
 <span class="sd">    :rtype: list[dict]</span>
 <span class="sd">    """</span>
@@ -883,19 +884,19 @@
     <span class="n">args</span> <span class="o">=</span> <span class="n">get_arguments</span><span class="p">()</span>
     <span class="n">tool_cfg</span> <span class="o">=</span> <span class="n">_load_config</span><span class="p">(</span><span class="n">source</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">config</span><span class="p">)</span>
 
-    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"basefolder"</span><span class="p">,</span> <span class="s2">"collection"</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"basefolder"</span><span class="p">,</span> <span class="s2">"prefix"</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">tool_cfg</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Tool config missing required key: '</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">'"</span><span class="p">)</span>
 
     <span class="n">basefolder</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">tool_cfg</span><span class="p">[</span><span class="s2">"basefolder"</span><span class="p">])</span>
-    <span class="n">collection</span> <span class="o">=</span> <span class="n">tool_cfg</span><span class="p">[</span><span class="s2">"collection"</span><span class="p">]</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
-    <span class="n">collection_path</span> <span class="o">=</span> <span class="n">basefolder</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">collection</span><span class="si">}</span><span class="s2">000"</span>
+    <span class="n">prefix</span> <span class="o">=</span> <span class="n">tool_cfg</span><span class="p">[</span><span class="s2">"prefix"</span><span class="p">]</span>
+    <span class="n">collection_path</span> <span class="o">=</span> <span class="n">basefolder</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">prefix</span><span class="si">}</span><span class="s2">000"</span>
 
     <span class="k">try</span><span class="p">:</span>
         <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
             <span class="n">projects</span> <span class="o">=</span> <span class="n">_load_projects</span><span class="p">(</span>
                 <span class="n">collection_path</span><span class="o">=</span><span class="n">collection_path</span><span class="p">,</span>
-                <span class="n">prefix</span><span class="o">=</span><span class="n">collection</span><span class="p">,</span>
+                <span class="n">prefix</span><span class="o">=</span><span class="n">prefix</span><span class="p">,</span>
             <span class="p">)</span>
 
             <span class="k">if</span> <span class="ow">not</span> <span class="n">projects</span><span class="p">:</span>
