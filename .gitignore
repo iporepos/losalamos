@@ -26,6 +26,7 @@
 .pre-commit-config.yaml
 CLAUDE.md
 prompt.md
+prompts/
 # ... [ADD MORE IF NEEDED]
 
 # Non-sense script files
