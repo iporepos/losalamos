@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>losalamos.tools.search_references &#8212; losalamos 0.0.1 documentation</title>
+    <title>losalamos.tools.manage_vault &#8212; losalamos 0.0.1 documentation</title>
   
   
   
@@ -46,13 +46,13 @@
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../_static/copybutton.js?v=f281be69"></script>
     <script src="../_static/design-tabs.js?v=f930bc37"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'generated/losalamos.tools.search_references';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'generated/losalamos.tools.manage_vault';</script>
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <link rel="author" title="About these documents" href="../about.html" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="losalamos.tools.update_references" href="losalamos.tools.update_references.html" />
-    <link rel="prev" title="losalamos.tools.ingest_references" href="losalamos.tools.ingest_references.html" />
+    <link rel="next" title="Development" href="../development.html" />
+    <link rel="prev" title="losalamos.tools.manage_documents" href="losalamos.tools.manage_documents.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
@@ -377,14 +377,14 @@
 <li class="toctree-l1"><a class="reference internal" href="losalamos.tools.build_figures.html">losalamos.tools.build_figures</a></li>
 <li class="toctree-l1"><a class="reference internal" href="losalamos.tools.new_drawing.html">losalamos.tools.new_drawing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="losalamos.tools.ingest_references.html">losalamos.tools.ingest_references</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">losalamos.tools.search_references</a></li>
+<li class="toctree-l1"><a class="reference internal" href="losalamos.tools.search_references.html">losalamos.tools.search_references</a></li>
 <li class="toctree-l1"><a class="reference internal" href="losalamos.tools.update_references.html">losalamos.tools.update_references</a></li>
 <li class="toctree-l1"><a class="reference internal" href="losalamos.tools.update_templates.html">losalamos.tools.update_templates</a></li>
 <li class="toctree-l1"><a class="reference internal" href="losalamos.tools.populate_attributes.html">losalamos.tools.populate_attributes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="losalamos.tools.database.html">losalamos.tools.database</a></li>
 <li class="toctree-l1"><a class="reference internal" href="losalamos.tools.add_new_project.html">losalamos.tools.add_new_project</a></li>
 <li class="toctree-l1"><a class="reference internal" href="losalamos.tools.manage_documents.html">losalamos.tools.manage_documents</a></li>
-<li class="toctree-l1"><a class="reference internal" href="losalamos.tools.manage_vault.html">losalamos.tools.manage_vault</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">losalamos.tools.manage_vault</a></li>
 </ul>
 </div>
 </nav></div>
@@ -428,7 +428,7 @@
     
     <li class="breadcrumb-item"><a href="../api.html" class="nav-link">API Reference</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">losalamos.tools.search_references</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">losalamos.tools.manage_vault</span></li>
   </ul>
 </nav>
 </div>
@@ -445,114 +445,87 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="module-losalamos.tools.search_references">
-<span id="losalamos-tools-search-references"></span><h1>losalamos.tools.search_references<a class="headerlink" href="#module-losalamos.tools.search_references" title="Link to this heading">#</a></h1>
-<p>Batch-extract bibliographic references from PDFs using a Gemini model.</p>
-<p>This tool scans a folder of PDF files, builds a prompt from the first N pages,
-and queries a generative model to produce BibTeX entries. Results are saved
-as <code class="docutils literal notranslate"><span class="pre">.bib</span></code> files and the corresponding PDFs are renamed accordingly.</p>
-<section id="usage">
-<h2>Usage<a class="headerlink" href="#usage" title="Link to this heading">#</a></h2>
-<p>Module execution (recommended):</p>
-<p>Shell (bash/zsh):</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>losalamos.tools.search_references<span class="w">         </span>--file<span class="w"> </span>specs.json
+  <section id="module-losalamos.tools.manage_vault">
+<span id="losalamos-tools-manage-vault"></span><h1>losalamos.tools.manage_vault<a class="headerlink" href="#module-losalamos.tools.manage_vault" title="Link to this heading">#</a></h1>
+<p>Top-level vault manager with three-level navigation.</p>
+<p>Reads a tool config file (YAML, TOML, or JSON) listing one or more vaults.
+Navigation flows from vault → branch → project → document management.
+Adding a project writes a temporary config file and delegates to
+<a class="reference internal" href="losalamos.tools.add_new_project.html#losalamos.tools.add_new_project.run" title="losalamos.tools.add_new_project.run"><code class="xref py py-func docutils literal notranslate"><span class="pre">losalamos.tools.add_new_project.run()</span></code></a>.</p>
+<p><strong>Shell usage</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>losalamos.tools.manage_vault<span class="w"> </span>--config<span class="w"> </span>path/to/config.toml
 </pre></div>
 </div>
-<p>PowerShell (ps1):</p>
-<div class="highlight-powershell notranslate"><div class="highlight"><pre><span></span><span class="nv">$SPEC</span><span class="p">=</span><span class="s2">"C:\path\to\specs.json"</span>
-
-<span class="n">python</span> <span class="n">-m</span> <span class="n">losalamos</span><span class="p">.</span><span class="n">tools</span><span class="p">.</span><span class="n">search_references</span> <span class="p">`</span>
-    <span class="p">-</span><span class="o">-file</span> <span class="nv">$SPEC</span>
-</pre></div>
-</div>
-</section>
-<section id="specification-json">
-<h2>Specification (JSON)<a class="headerlink" href="#specification-json" title="Link to this heading">#</a></h2>
-<p>The input file must define:</p>
-<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
-<span class="w">    </span><span class="nt">"folder"</span><span class="p">:</span><span class="w"> </span><span class="s2">"/path/to/pdf_dir"</span><span class="p">,</span>
-<span class="w">    </span><span class="nt">"api"</span><span class="p">:</span><span class="w"> </span><span class="s2">"YOUR_API_KEY"</span><span class="p">,</span>
-<span class="w">    </span><span class="nt">"model"</span><span class="p">:</span><span class="w"> </span><span class="s2">"gemini-3-flash-preview"</span><span class="p">,</span>
-<span class="w">    </span><span class="nt">"pages"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span>
-<span class="w">    </span><span class="nt">"prompt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"path/to/prompt.txt or inline string"</span>
-<span class="p">}</span>
-</pre></div>
-</div>
-</section>
-<section id="side-effects">
-<h2>Side effects<a class="headerlink" href="#side-effects" title="Link to this heading">#</a></h2>
+<p><strong>Tool config keys</strong></p>
+<p>Each entry in the <code class="docutils literal notranslate"><span class="pre">vaults</span></code> array supports:</p>
 <ul class="simple">
-<li><p>Creates <code class="docutils literal notranslate"><span class="pre">.bib</span></code> files alongside each PDF</p></li>
-<li><p>Renames PDFs based on the generated BibTeX key</p></li>
-<li><p>Skips files that already have a corresponding <code class="docutils literal notranslate"><span class="pre">.bib</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">name</span></code> (<em>str</em>, required) — display name shown in the vault list.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">path</span></code> (<em>str</em>, required) — root directory where branch folders live.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">folder_system</span></code> (<em>str</em>, optional) — <code class="docutils literal notranslate"><span class="pre">&quot;default&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;alphanumerical&quot;</span></code>.
+Defaults to <code class="docutils literal notranslate"><span class="pre">&quot;default&quot;</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">separator</span></code> (<em>str</em>, optional) — string between branch name and number in
+the default system. Defaults to <code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sources</span></code> (<em>str</em>, optional) — path to a shared sources config file.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">language</span></code> (<em>str</em>, optional) — language tag (e.g. <code class="docutils literal notranslate"><span class="pre">&quot;pt-br&quot;</span></code>).</p></li>
 </ul>
-<p class="rubric">Functions</p>
+<details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3" open="open">
+<summary class="sd-summary-title sd-card-header">
+<span class="sd-summary-icon"><svg version="1.1" width="1.0em" height="1.0em" class="sd-octicon sd-octicon-code-square" viewBox="0 0 16 16" aria-hidden="true"><path d="M0 1.75C0 .784.784 0 1.75 0h12.5C15.216 0 16 .784 16 1.75v12.5A1.75 1.75 0 0 1 14.25 16H1.75A1.75 1.75 0 0 1 0 14.25Zm1.75-.25a.25.25 0 0 0-.25.25v12.5c0 .138.112.25.25.25h12.5a.25.25 0 0 0 .25-.25V1.75a.25.25 0 0 0-.25-.25Zm7.47 3.97a.75.75 0 0 1 1.06 0l2 2a.75.75 0 0 1 0 1.06l-2 2a.749.749 0 0 1-1.275-.326.749.749 0 0 1 .215-.734L10.69 8 9.22 6.53a.75.75 0 0 1 0-1.06ZM6.78 6.53 5.31 8l1.47 1.47a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215l-2-2a.75.75 0 0 1 0-1.06l2-2a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042Z"></path></svg></span><span class="sd-summary-text">Example — tool config file</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<div class="highlight-toml notranslate"><div class="highlight"><pre><span></span><span class="k">[[vaults]]</span>
+<span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Client Projects"</span>
+<span class="n">path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"C:/My Drive/projects"</span>
+<span class="n">folder_system</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"default"</span>
+<span class="n">separator</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"_"</span>
+<span class="n">sources</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"C:/vault/sources.toml"</span>
+<span class="n">language</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"pt-br"</span>
+
+<span class="k">[[vaults]]</span>
+<span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Research"</span>
+<span class="n">path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"C:/research"</span>
+<span class="n">folder_system</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"alphanumerical"</span>
+</pre></div>
+</div>
+</div>
+</details><p class="rubric">Functions</p>
 <div class="pst-scrollable-table-container"><table class="autosummary longtable table">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#losalamos.tools.search_references.ask_gemini" title="losalamos.tools.search_references.ask_gemini"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ask_gemini</span></code></a>(prompt, model, client[, ...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#losalamos.tools.manage_vault.get_arguments" title="losalamos.tools.manage_vault.get_arguments"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_arguments</span></code></a>()</p></td>
+<td><p>Parse command-line arguments.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#losalamos.tools.manage_vault.main" title="losalamos.tools.manage_vault.main"><code class="xref py py-obj docutils literal notranslate"><span class="pre">main</span></code></a>()</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#losalamos.tools.search_references.get_arguments" title="losalamos.tools.search_references.get_arguments"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_arguments</span></code></a>()</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#losalamos.tools.search_references.get_auxiliary_context" title="losalamos.tools.search_references.get_auxiliary_context"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_auxiliary_context</span></code></a>(pdf_path)</p></td>
-<td><p>Look for auxiliary <code class="docutils literal notranslate"><span class="pre">.txt</span></code>, <code class="docutils literal notranslate"><span class="pre">.ris</span></code>, and <code class="docutils literal notranslate"><span class="pre">.md</span></code> files alongside the PDF, as well as a general <code class="docutils literal notranslate"><span class="pre">context.txt</span></code> file in the same folder.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#losalamos.tools.search_references.main" title="losalamos.tools.search_references.main"><code class="xref py py-obj docutils literal notranslate"><span class="pre">main</span></code></a>()</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#losalamos.tools.search_references.next_available_path" title="losalamos.tools.search_references.next_available_path"><code class="xref py py-obj docutils literal notranslate"><span class="pre">next_available_path</span></code></a>(base_path)</p></td>
-<td><p>Return a non-colliding path by appending alphabetical suffixes.</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#losalamos.tools.manage_vault.run" title="losalamos.tools.manage_vault.run"><code class="xref py py-obj docutils literal notranslate"><span class="pre">run</span></code></a>(config_path)</p></td>
+<td><p>Start the vault manager.</p></td>
 </tr>
 </tbody>
 </table>
 </div>
-</section>
 <dl class="py function">
-<dt class="sig sig-object py" id="losalamos.tools.search_references.get_auxiliary_context">
-<span class="sig-prename descclassname"><span class="pre">losalamos.tools.search_references.</span></span><span class="sig-name descname"><span class="pre">get_auxiliary_context</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pdf_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../_modules/losalamos/tools/search_references.html#get_auxiliary_context"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.tools.search_references.get_auxiliary_context" title="Link to this definition">#</a></dt>
-<dd><p>Look for auxiliary <code class="docutils literal notranslate"><span class="pre">.txt</span></code>, <code class="docutils literal notranslate"><span class="pre">.ris</span></code>, and <code class="docutils literal notranslate"><span class="pre">.md</span></code> files alongside the PDF,
-as well as a general <code class="docutils literal notranslate"><span class="pre">context.txt</span></code> file in the same folder.</p>
-<p>Reads the contents of any matching auxiliary files (sharing the same stem
-as the PDF) and a standard <code class="docutils literal notranslate"><span class="pre">context.txt</span></code> file if present, returning them
-as a formatted string to be injected into the LLM prompt context.</p>
+<dt class="sig sig-object py" id="losalamos.tools.manage_vault.get_arguments">
+<span class="sig-prename descclassname"><span class="pre">losalamos.tools.manage_vault.</span></span><span class="sig-name descname"><span class="pre">get_arguments</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/tools/manage_vault.html#get_arguments"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.tools.manage_vault.get_arguments" title="Link to this definition">#</a></dt>
+<dd><p>Parse command-line arguments.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Parsed argument namespace with a <code class="docutils literal notranslate"><span class="pre">config</span></code> attribute.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="losalamos.tools.manage_vault.run">
+<span class="sig-prename descclassname"><span class="pre">losalamos.tools.manage_vault.</span></span><span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../_modules/losalamos/tools/manage_vault.html#run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.tools.manage_vault.run" title="Link to this definition">#</a></dt>
+<dd><p>Start the vault manager.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>pdf_path</strong> (<em>pathlib.Path</em>) – The file path to the target PDF document.</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A formatted string containing the text from the auxiliary files,
-or an empty string if no such files exist.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>str</p>
+<dd class="field-odd"><p><strong>config_path</strong> (<em>str</em>) – Path to the tool config file.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="losalamos.tools.search_references.get_arguments">
-<span class="sig-prename descclassname"><span class="pre">losalamos.tools.search_references.</span></span><span class="sig-name descname"><span class="pre">get_arguments</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/tools/search_references.html#get_arguments"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.tools.search_references.get_arguments" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="losalamos.tools.search_references.next_available_path">
-<span class="sig-prename descclassname"><span class="pre">losalamos.tools.search_references.</span></span><span class="sig-name descname"><span class="pre">next_available_path</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">base_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Path</span></span></span><a class="reference internal" href="../_modules/losalamos/tools/search_references.html#next_available_path"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.tools.search_references.next_available_path" title="Link to this definition">#</a></dt>
-<dd><p>Return a non-colliding path by appending alphabetical suffixes.</p>
-<dl class="simple">
-<dt>Example:</dt><dd><p>file.pdf   -&gt; file_a.pdf -&gt; file_b.pdf -&gt; … -&gt; file_aa.pdf</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="losalamos.tools.search_references.ask_gemini">
-<span class="sig-prename descclassname"><span class="pre">losalamos.tools.search_references.</span></span><span class="sig-name descname"><span class="pre">ask_gemini</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prompt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">client</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_retries</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">base_delay</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/tools/search_references.html#ask_gemini"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.tools.search_references.ask_gemini" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="losalamos.tools.search_references.main">
-<span class="sig-prename descclassname"><span class="pre">losalamos.tools.search_references.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../_modules/losalamos/tools/search_references.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.tools.search_references.main" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="losalamos.tools.manage_vault.main">
+<span class="sig-prename descclassname"><span class="pre">losalamos.tools.manage_vault.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../_modules/losalamos/tools/manage_vault.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.tools.manage_vault.main" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 </section>
@@ -568,20 +541,20 @@ or an empty string if no such files exist.</p>
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="losalamos.tools.ingest_references.html"
+       href="losalamos.tools.manage_documents.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">losalamos.tools.ingest_references</p>
+        <p class="prev-next-title">losalamos.tools.manage_documents</p>
       </div>
     </a>
     <a class="right-next"
-       href="losalamos.tools.update_references.html"
+       href="../development.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">losalamos.tools.update_references</p>
+        <p class="prev-next-title">Development</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -604,21 +577,16 @@ or an empty string if no such files exist.</p>
   </div>
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="pst-show_toc_level nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#usage">Usage</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#specification-json">Specification (JSON)</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#side-effects">Side effects</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.tools.search_references.get_auxiliary_context"><code class="docutils literal notranslate"><span class="pre">get_auxiliary_context()</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.tools.search_references.get_arguments"><code class="docutils literal notranslate"><span class="pre">get_arguments()</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.tools.search_references.next_available_path"><code class="docutils literal notranslate"><span class="pre">next_available_path()</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.tools.search_references.ask_gemini"><code class="docutils literal notranslate"><span class="pre">ask_gemini()</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.tools.search_references.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.tools.manage_vault.get_arguments"><code class="docutils literal notranslate"><span class="pre">get_arguments()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.tools.manage_vault.run"><code class="docutils literal notranslate"><span class="pre">run()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.tools.manage_vault.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
 </ul>
   </nav></div>
 
   <div class="sidebar-secondary-item">
 
   <div class="tocsection sourcelink">
-    <a href="../_sources/generated/losalamos.tools.search_references.rst.txt">
+    <a href="../_sources/generated/losalamos.tools.manage_vault.rst.txt">
       <i class="fa-solid fa-file-lines"></i> Show Source
     </a>
   </div>

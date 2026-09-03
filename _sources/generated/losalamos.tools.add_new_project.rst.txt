@@ -10,4 +10,5 @@
    
       get_arguments
       main
+      run
    

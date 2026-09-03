@@ -1,0 +1,14 @@
+﻿losalamos.tools.manage\_vault
+=============================
+
+.. automodule:: losalamos.tools.manage_vault
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      get_arguments
+      main
+      run
+   

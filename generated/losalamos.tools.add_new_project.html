@@ -384,6 +384,7 @@
 <li class="toctree-l1"><a class="reference internal" href="losalamos.tools.database.html">losalamos.tools.database</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">losalamos.tools.add_new_project</a></li>
 <li class="toctree-l1"><a class="reference internal" href="losalamos.tools.manage_documents.html">losalamos.tools.manage_documents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="losalamos.tools.manage_vault.html">losalamos.tools.manage_vault</a></li>
 </ul>
 </div>
 </nav></div>
@@ -446,43 +447,38 @@
                   
   <section id="module-losalamos.tools.add_new_project">
 <span id="losalamos-tools-add-new-project"></span><h1>losalamos.tools.add_new_project<a class="headerlink" href="#module-losalamos.tools.add_new_project" title="Link to this heading">#</a></h1>
-<p>Create a new numbered project inside a vault.</p>
-<p>Reads a tool config file (YAML, TOML, or JSON) that sets the vault root and
-folder system. The first interactive screen lists existing branches so the
-user can pick one or create a new one. Metadata fields are then filled in
-interactively, and <code class="xref py py-func docutils literal notranslate"><span class="pre">losalamos.new_project()</span></code> is called.</p>
+<p>Create a new numbered project inside a branch folder.</p>
+<p>Accepts a branch folder path directly, or a config file whose <code class="docutils literal notranslate"><span class="pre">folder</span></code> key
+points to the branch folder. Metadata fields are filled in interactively,
+and <code class="xref py py-func docutils literal notranslate"><span class="pre">losalamos.new_project()</span></code> is called. Branch and vault navigation is
+handled by the higher-level <a class="reference internal" href="losalamos.tools.manage_vault.html#module-losalamos.tools.manage_vault" title="losalamos.tools.manage_vault"><code class="xref py py-mod docutils literal notranslate"><span class="pre">losalamos.tools.manage_vault</span></code></a> tool.</p>
 <p><strong>Shell usage</strong></p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>losalamos.tools.add_new_project<span class="w"> </span>--config<span class="w"> </span>path/to/config.toml
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>losalamos.tools.add_new_project<span class="w"> </span>path/to/branch/folder
+python<span class="w"> </span>-m<span class="w"> </span>losalamos.tools.add_new_project<span class="w"> </span>path/to/config.toml
 </pre></div>
 </div>
-<p><strong>Tool config keys</strong></p>
+<p><strong>Config file keys</strong> (when passing a config file)</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">vault</span></code> (<em>str</em>, required) — root directory where branch folders live.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">folder_system</span></code> (<em>str</em>, optional) — <code class="docutils literal notranslate"><span class="pre">&quot;default&quot;</span></code> (branch folder is
-<code class="docutils literal notranslate"><span class="pre">&lt;branch&gt;/</span></code>, project names are <code class="docutils literal notranslate"><span class="pre">&lt;branch&gt;&lt;separator&gt;&lt;NNN&gt;</span></code>) or
-<code class="docutils literal notranslate"><span class="pre">&quot;alphanumerical&quot;</span></code> (branch folder is <code class="docutils literal notranslate"><span class="pre">&lt;branch&gt;000/</span></code>, project names
-are <code class="docutils literal notranslate"><span class="pre">&lt;branch&gt;&lt;NNN&gt;</span></code>). Defaults to <code class="docutils literal notranslate"><span class="pre">&quot;default&quot;</span></code>.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">separator</span></code> (<em>str</em>, optional) — string inserted between the branch name
-and the number in the default folder system, e.g. <code class="docutils literal notranslate"><span class="pre">&quot;_&quot;</span></code> → <code class="docutils literal notranslate"><span class="pre">Research_001</span></code>.
-Absent or <code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code> means no separator, e.g. <code class="docutils literal notranslate"><span class="pre">Research001</span></code>. Ignored for
-<code class="docutils literal notranslate"><span class="pre">alphanumerical</span></code>.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">sources</span></code> (<em>str</em>, optional) — path to a shared sources config file
-(copied into each new project’s <code class="docutils literal notranslate"><span class="pre">admin/config/</span></code>).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">folder</span></code> (<em>str</em>, required) — path to the branch folder.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">folder_system</span></code> (<em>str</em>, optional) — <code class="docutils literal notranslate"><span class="pre">&quot;default&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;alphanumerical&quot;</span></code>.
+Defaults to <code class="docutils literal notranslate"><span class="pre">&quot;default&quot;</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">separator</span></code> (<em>str</em>, optional) — string between branch name and number,
+e.g. <code class="docutils literal notranslate"><span class="pre">&quot;_&quot;</span></code> → <code class="docutils literal notranslate"><span class="pre">Research_001</span></code>. Ignored for <code class="docutils literal notranslate"><span class="pre">alphanumerical</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sources</span></code> (<em>str</em>, optional) — path to a shared sources config file.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">language</span></code> (<em>str</em>, optional) — language tag (e.g. <code class="docutils literal notranslate"><span class="pre">&quot;pt-br&quot;</span></code>).</p></li>
 </ul>
 <p><strong>Interaction keys</strong></p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">0</span></code> at the letter filter or at the numbered list — skip the current field.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">ENTER</span></code> at the letter filter — show all entries.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">+</span></code> at the branch picker — create a new branch.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">s</span></code> at the project confirmation — skip all optional fields and create immediately.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">b</span></code> after a filtered list — go back to the letter filter.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">q</span></code> at any prompt — abort and exit.</p></li>
 </ul>
 <details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3" open="open">
 <summary class="sd-summary-title sd-card-header">
-<span class="sd-summary-icon"><svg version="1.1" width="1.0em" height="1.0em" class="sd-octicon sd-octicon-code-square" viewBox="0 0 16 16" aria-hidden="true"><path d="M0 1.75C0 .784.784 0 1.75 0h12.5C15.216 0 16 .784 16 1.75v12.5A1.75 1.75 0 0 1 14.25 16H1.75A1.75 1.75 0 0 1 0 14.25Zm1.75-.25a.25.25 0 0 0-.25.25v12.5c0 .138.112.25.25.25h12.5a.25.25 0 0 0 .25-.25V1.75a.25.25 0 0 0-.25-.25Zm7.47 3.97a.75.75 0 0 1 1.06 0l2 2a.75.75 0 0 1 0 1.06l-2 2a.749.749 0 0 1-1.275-.326.749.749 0 0 1 .215-.734L10.69 8 9.22 6.53a.75.75 0 0 1 0-1.06ZM6.78 6.53 5.31 8l1.47 1.47a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215l-2-2a.75.75 0 0 1 0-1.06l2-2a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042Z"></path></svg></span><span class="sd-summary-text">Example — tool config file (default system)</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
-<p class="sd-card-text">Save an <code class="docutils literal notranslate"><span class="pre">add_project.toml</span></code> and pass it with <code class="docutils literal notranslate"><span class="pre">--config</span></code>:</p>
-<div class="highlight-toml notranslate"><div class="highlight"><pre><span></span><span class="n">vault</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"C:/My Drive/projects"</span>
+<span class="sd-summary-icon"><svg version="1.1" width="1.0em" height="1.0em" class="sd-octicon sd-octicon-code-square" viewBox="0 0 16 16" aria-hidden="true"><path d="M0 1.75C0 .784.784 0 1.75 0h12.5C15.216 0 16 .784 16 1.75v12.5A1.75 1.75 0 0 1 14.25 16H1.75A1.75 1.75 0 0 1 0 14.25Zm1.75-.25a.25.25 0 0 0-.25.25v12.5c0 .138.112.25.25.25h12.5a.25.25 0 0 0 .25-.25V1.75a.25.25 0 0 0-.25-.25Zm7.47 3.97a.75.75 0 0 1 1.06 0l2 2a.75.75 0 0 1 0 1.06l-2 2a.749.749 0 0 1-1.275-.326.749.749 0 0 1 .215-.734L10.69 8 9.22 6.53a.75.75 0 0 1 0-1.06ZM6.78 6.53 5.31 8l1.47 1.47a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215l-2-2a.75.75 0 0 1 0-1.06l2-2a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042Z"></path></svg></span><span class="sd-summary-text">Example — config file (default system)</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<div class="highlight-toml notranslate"><div class="highlight"><pre><span></span><span class="n">folder</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"C:/My Drive/projects/Research"</span>
 <span class="n">folder_system</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"default"</span>
 <span class="n">separator</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"_"</span>
 <span class="n">sources</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"C:/vault/sources.toml"</span>
@@ -492,8 +488,8 @@ Absent or <code class="docutils literal notranslate"><span class="pre">&quot;&qu
 </div>
 </details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
 <summary class="sd-summary-title sd-card-header">
-<span class="sd-summary-icon"><svg version="1.1" width="1.0em" height="1.0em" class="sd-octicon sd-octicon-code-square" viewBox="0 0 16 16" aria-hidden="true"><path d="M0 1.75C0 .784.784 0 1.75 0h12.5C15.216 0 16 .784 16 1.75v12.5A1.75 1.75 0 0 1 14.25 16H1.75A1.75 1.75 0 0 1 0 14.25Zm1.75-.25a.25.25 0 0 0-.25.25v12.5c0 .138.112.25.25.25h12.5a.25.25 0 0 0 .25-.25V1.75a.25.25 0 0 0-.25-.25Zm7.47 3.97a.75.75 0 0 1 1.06 0l2 2a.75.75 0 0 1 0 1.06l-2 2a.749.749 0 0 1-1.275-.326.749.749 0 0 1 .215-.734L10.69 8 9.22 6.53a.75.75 0 0 1 0-1.06ZM6.78 6.53 5.31 8l1.47 1.47a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215l-2-2a.75.75 0 0 1 0-1.06l2-2a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042Z"></path></svg></span><span class="sd-summary-text">Example — tool config file (alphanumerical system)</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
-<div class="highlight-toml notranslate"><div class="highlight"><pre><span></span><span class="n">vault</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"C:/My Drive/projects"</span>
+<span class="sd-summary-icon"><svg version="1.1" width="1.0em" height="1.0em" class="sd-octicon sd-octicon-code-square" viewBox="0 0 16 16" aria-hidden="true"><path d="M0 1.75C0 .784.784 0 1.75 0h12.5C15.216 0 16 .784 16 1.75v12.5A1.75 1.75 0 0 1 14.25 16H1.75A1.75 1.75 0 0 1 0 14.25Zm1.75-.25a.25.25 0 0 0-.25.25v12.5c0 .138.112.25.25.25h12.5a.25.25 0 0 0 .25-.25V1.75a.25.25 0 0 0-.25-.25Zm7.47 3.97a.75.75 0 0 1 1.06 0l2 2a.75.75 0 0 1 0 1.06l-2 2a.749.749 0 0 1-1.275-.326.749.749 0 0 1 .215-.734L10.69 8 9.22 6.53a.75.75 0 0 1 0-1.06ZM6.78 6.53 5.31 8l1.47 1.47a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215l-2-2a.75.75 0 0 1 0-1.06l2-2a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042Z"></path></svg></span><span class="sd-summary-text">Example — config file (alphanumerical system)</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<div class="highlight-toml notranslate"><div class="highlight"><pre><span></span><span class="n">folder</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"C:/My Drive/projects/C000"</span>
 <span class="n">folder_system</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"alphanumerical"</span>
 <span class="n">sources</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"C:/vault/sources.toml"</span>
 </pre></div>
@@ -508,6 +504,9 @@ Absent or <code class="docutils literal notranslate"><span class="pre">&quot;&qu
 <tr class="row-even"><td><p><a class="reference internal" href="#losalamos.tools.add_new_project.main" title="losalamos.tools.add_new_project.main"><code class="xref py py-obj docutils literal notranslate"><span class="pre">main</span></code></a>()</p></td>
 <td><p></p></td>
 </tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#losalamos.tools.add_new_project.run" title="losalamos.tools.add_new_project.run"><code class="xref py py-obj docutils literal notranslate"><span class="pre">run</span></code></a>(source)</p></td>
+<td><p>Create a new numbered project inside a branch folder.</p></td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -517,7 +516,23 @@ Absent or <code class="docutils literal notranslate"><span class="pre">&quot;&qu
 <dd><p>Parse command-line arguments.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Parsed argument namespace with a <code class="docutils literal notranslate"><span class="pre">config</span></code> attribute.</p>
+<dd class="field-odd"><p>Parsed argument namespace with a <code class="docutils literal notranslate"><span class="pre">source</span></code> attribute.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="losalamos.tools.add_new_project.run">
+<span class="sig-prename descclassname"><span class="pre">losalamos.tools.add_new_project.</span></span><span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../_modules/losalamos/tools/add_new_project.html#run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.tools.add_new_project.run" title="Link to this definition">#</a></dt>
+<dd><p>Create a new numbered project inside a branch folder.</p>
+<p>Can be called directly (e.g. from <a class="reference internal" href="losalamos.tools.manage_vault.html#module-losalamos.tools.manage_vault" title="losalamos.tools.manage_vault"><code class="xref py py-mod docutils literal notranslate"><span class="pre">losalamos.tools.manage_vault</span></code></a>)
+or via <a class="reference internal" href="#losalamos.tools.add_new_project.main" title="losalamos.tools.add_new_project.main"><code class="xref py py-func docutils literal notranslate"><span class="pre">main()</span></code></a> when invoked from the command line.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>source</strong> (<em>str</em>) – Path to the branch folder, or path to a config file
+(<code class="docutils literal notranslate"><span class="pre">.yaml</span></code>/<code class="docutils literal notranslate"><span class="pre">.toml</span></code>/<code class="docutils literal notranslate"><span class="pre">.json</span></code>) with at minimum a <code class="docutils literal notranslate"><span class="pre">folder</span></code> key
+pointing to the branch folder. Optional config keys:
+<code class="docutils literal notranslate"><span class="pre">folder_system</span></code>, <code class="docutils literal notranslate"><span class="pre">separator</span></code>, <code class="docutils literal notranslate"><span class="pre">sources</span></code>, <code class="docutils literal notranslate"><span class="pre">language</span></code>.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -577,6 +592,7 @@ Absent or <code class="docutils literal notranslate"><span class="pre">&quot;&qu
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.tools.add_new_project.get_arguments"><code class="docutils literal notranslate"><span class="pre">get_arguments()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.tools.add_new_project.run"><code class="docutils literal notranslate"><span class="pre">run()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.tools.add_new_project.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
 </ul>
   </nav></div>
