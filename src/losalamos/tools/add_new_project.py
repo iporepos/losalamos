@@ -4,62 +4,56 @@
 # See pyproject.toml for authors/maintainers.
 # See LICENSE for license details.
 """
-Create a new numbered project inside a vault.
+Create a new numbered project inside a branch folder.
 
-Reads a tool config file (YAML, TOML, or JSON) that sets the vault root and
-folder system. The first interactive screen lists existing branches so the
-user can pick one or create a new one. Metadata fields are then filled in
-interactively, and :func:`losalamos.new_project` is called.
+Accepts a branch folder path directly, or a config file whose ``folder`` key
+points to the branch folder. Metadata fields are filled in interactively,
+and :func:`losalamos.new_project` is called. Branch and vault navigation is
+handled by the higher-level :mod:`losalamos.tools.manage_vault` tool.
 
 **Shell usage**
 
 .. code-block:: bash
 
-    python -m losalamos.tools.add_new_project --config path/to/config.toml
+    python -m losalamos.tools.add_new_project path/to/branch/folder
+    python -m losalamos.tools.add_new_project path/to/config.toml
 
-**Tool config keys**
+**Config file keys** (when passing a config file)
 
-- ``vault`` (*str*, required) — root directory where branch folders live.
-- ``folder_system`` (*str*, optional) — ``"default"`` (branch folder is
-  ``<branch>/``, project names are ``<branch><separator><NNN>``) or
-  ``"alphanumerical"`` (branch folder is ``<branch>000/``, project names
-  are ``<branch><NNN>``). Defaults to ``"default"``.
-- ``separator`` (*str*, optional) — string inserted between the branch name
-  and the number in the default folder system, e.g. ``"_"`` → ``Research_001``.
-  Absent or ``""`` means no separator, e.g. ``Research001``. Ignored for
-  ``alphanumerical``.
-- ``sources`` (*str*, optional) — path to a shared sources config file
-  (copied into each new project's ``admin/config/``).
+- ``folder`` (*str*, required) — path to the branch folder.
+- ``folder_system`` (*str*, optional) — ``"default"`` or ``"alphanumerical"``.
+  Defaults to ``"default"``.
+- ``separator`` (*str*, optional) — string between branch name and number,
+  e.g. ``"_"`` → ``Research_001``. Ignored for ``alphanumerical``.
+- ``sources`` (*str*, optional) — path to a shared sources config file.
+- ``language`` (*str*, optional) — language tag (e.g. ``"pt-br"``).
 
 **Interaction keys**
 
 - ``0`` at the letter filter or at the numbered list — skip the current field.
 - ``ENTER`` at the letter filter — show all entries.
-- ``+`` at the branch picker — create a new branch.
 - ``s`` at the project confirmation — skip all optional fields and create immediately.
 - ``b`` after a filtered list — go back to the letter filter.
 - ``q`` at any prompt — abort and exit.
 
-.. dropdown:: Example — tool config file (default system)
+.. dropdown:: Example — config file (default system)
     :icon: code-square
     :open:
 
-    Save an ``add_project.toml`` and pass it with ``--config``:
-
     .. code-block:: toml
 
-        vault = "C:/My Drive/projects"
+        folder = "C:/My Drive/projects/Research"
         folder_system = "default"
         separator = "_"
         sources = "C:/vault/sources.toml"
         language = "pt-br"
 
-.. dropdown:: Example — tool config file (alphanumerical system)
+.. dropdown:: Example — config file (alphanumerical system)
     :icon: code-square
 
     .. code-block:: toml
 
-        vault = "C:/My Drive/projects"
+        folder = "C:/My Drive/projects/C000"
         folder_system = "alphanumerical"
         sources = "C:/vault/sources.toml"
 
@@ -107,16 +101,17 @@ def get_arguments():
     """
     Parse command-line arguments.
 
-    :returns: Parsed argument namespace with a ``config`` attribute.
+    :returns: Parsed argument namespace with a ``source`` attribute.
     """
     parser = argparse.ArgumentParser(
-        description="Create a new numbered project inside a project folder group.",
+        description="Create a new numbered project inside a branch folder.",
     )
     parser.add_argument(
-        "-c",
-        "--config",
-        required=True,
-        help="Path to the tool config file (.yaml, .toml, or .json).",
+        "source",
+        help=(
+            "Path to a branch folder, or a config file (.yaml/.toml/.json) "
+            "containing at minimum a 'folder' key pointing to the branch folder."
+        ),
     )
     return parser.parse_args()
 
@@ -503,23 +498,49 @@ def _pick_branch(
             print("  Enter a number, +, or q.\n")
 
 
-def main() -> None:
+def run(source: str) -> None:
+    """
+    Create a new numbered project inside a branch folder.
+
+    Can be called directly (e.g. from :mod:`losalamos.tools.manage_vault`)
+    or via :func:`main` when invoked from the command line.
+
+    :param source: Path to the branch folder, or path to a config file
+        (``.yaml``/``.toml``/``.json``) with at minimum a ``folder`` key
+        pointing to the branch folder. Optional config keys:
+        ``folder_system``, ``separator``, ``sources``, ``language``.
+    :type source: str
+    """
     heading_section("ADD NEW PROJECT")
 
-    args = get_arguments()
-    tool_cfg = _load_config(source=args.config)
+    source_path = Path(source)
 
-    if "vault" not in tool_cfg:
-        raise ValueError(
-            f"Tool config missing required key: 'vault'. "
-            f"Keys found: {list(tool_cfg.keys())}. "
-            "If using TOML, ensure these keys are not nested under a [section] header."
-        )
+    if source_path.is_file():
+        tool_cfg = _load_config(source=source_path)
+        if "folder" not in tool_cfg:
+            raise ValueError(
+                f"Config missing required key: 'folder'. "
+                f"Keys found: {list(tool_cfg.keys())}."
+            )
+        branch_path = Path(tool_cfg["folder"])
+    elif source_path.is_dir():
+        tool_cfg = {}
+        branch_path = source_path
+    else:
+        raise ValueError(f"Source not found: '{source}'")
 
-    vault = Path(tool_cfg["vault"])
     folder_system = tool_cfg.get("folder_system", "default")
     separator = tool_cfg.get("separator", "") or ""
     sources_file = tool_cfg.get("sources", None)
+
+    # Infer branch name and vault from branch_path
+    # ----------------------------------------------------------------
+    branch_folder = branch_path.name
+    if folder_system == "alphanumerical":
+        branch = branch_folder[:-3]  # strip trailing "000"
+    else:
+        branch = branch_folder
+    vault = branch_path.parent
 
     # Load available names from sources for interactive pickers
     # ----------------------------------------------------------------
@@ -543,14 +564,7 @@ def main() -> None:
             )
 
     try:
-        # Pick branch
-        # ----------------------------------------------------------------
-        branch, branch_folder, branch_path = _pick_branch(
-            vault=vault,
-            folder_system=folder_system,
-        )
-
-        # Compute next project name for chosen branch
+        # Compute next project name
         # ----------------------------------------------------------------
         eff_separator = "" if folder_system == "alphanumerical" else separator
         project_name = _next_increment(
@@ -650,6 +664,11 @@ def main() -> None:
 
     except _Quit:
         print("\n  Aborted.\n")
+
+
+def main() -> None:
+    args = get_arguments()
+    run(source=args.source)
 
 
 # SCRIPT

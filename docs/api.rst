@@ -51,3 +51,4 @@ Tools
    losalamos.tools.database
    losalamos.tools.add_new_project
    losalamos.tools.manage_documents
+   losalamos.tools.manage_vault

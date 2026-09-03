@@ -1,5 +1,9 @@
 # Memory Log
 
+- 2026-09-03 — new manage_vault.py tool: three-level vault→branch→project→documents navigation; config uses [[vaults]] array; add_new_project simplified to accept folder or config with 'folder' key (no branch picker); manage_documents simplified to accept project folder directly; manage_vault writes temp JSON to pass vault context to add_new_project; imports _home from manage_documents
+
+- 2026-09-03 — manage_documents: _active_documents now accepts folder_remote_documents and checks both local and remote paths; _action_edit/_action_delete use pj._locate_document_source() instead of hardcoded folder_root; _add_asset_document routes TeX tree to remote when configured; sidecar note stays local
+
 - 2026-09-03 — moved TestLatexCompileErrorReal from tests/unit/test_documents_tex.py to tests/bcmk/test_documents_tex.py as BCMKTestDocumentTeXLatex; gated with @unittest.skipUnless(RUN_BENCHMARKS); keeps unit suite fast by not invoking real latexmk/pdflatex
 
 - 2026-09-03 — add_new_project: removed branch from required config keys; first screen is now an interactive branch picker (_pick_branch/_list_branches); user picks existing branch or creates new one with [+]; branch prefix computed from selection

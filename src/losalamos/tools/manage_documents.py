@@ -4,43 +4,23 @@
 # See pyproject.toml for authors/maintainers.
 # See LICENSE for license details.
 """
-Terminal document manager for a branch folder.
+Terminal document manager for a single project.
 
-Reads a tool config file (YAML, TOML, or JSON) that sets the vault, branch
-name, and folder system. Presents an interactive project picker, then a
-per-project home page to add, edit, or build asset documents (invoices,
-receipts, proposals).
+Accepts a project folder path and presents the document home page for that
+project directly. Project and branch navigation is handled by the higher-level
+:mod:`losalamos.tools.manage_vault` tool.
 
 **Shell usage**
 
 .. code-block:: bash
 
-    python -m losalamos.tools.manage_documents --config path/to/config.toml
-
-**Tool config keys**
-
-- ``vault`` (*str*, required) — root directory where branch folders live.
-- ``branch`` (*str*, required) — branch name, e.g. ``"Research"`` or ``"C"``.
-- ``folder_system`` (*str*, optional) — ``"default"`` (branch folder is ``<branch>/``)
-  or ``"alphanumerical"`` (branch folder is ``<branch>000/``). Defaults to ``"default"``.
+    python -m losalamos.tools.manage_documents path/to/project/folder
 
 **Navigation**
 
-- Project list: enter a number to open, ``q`` to quit.
-- Home page: ``A`` add / ``E`` edit / ``B`` build / ``P`` back to projects / ``Q`` quit.
-- Confirmation: ``ENTER`` or ``y`` to confirm, ``c`` to cancel, ``q`` to quit the tool.
-
-.. dropdown:: Example — tool config file
-    :icon: code-square
-    :open:
-
-    Save a ``manage_documents.toml`` and pass it with ``--config``:
-
-    .. code-block:: toml
-
-        vault = "C:/My Drive/projects"
-        branch = "Research"
-        folder_system = "default"
+- Home page: ``A`` add / ``E`` edit / ``B`` build / ``V`` view PDF /
+  ``D`` delete / ``P`` back / ``Q`` quit.
+- Confirmation: ``ENTER`` or ``y`` to confirm, ``c`` to cancel, ``q`` to quit.
 
 """
 
@@ -112,16 +92,14 @@ def get_arguments():
     """
     Parse command-line arguments.
 
-    :returns: Parsed argument namespace with a ``config`` attribute.
+    :returns: Parsed argument namespace with a ``source`` attribute.
     """
     parser = argparse.ArgumentParser(
-        description="Terminal document manager for a project folder group.",
+        description="Terminal document manager for a single project.",
     )
     parser.add_argument(
-        "-c",
-        "--config",
-        required=True,
-        help="Path to the tool config file (.yaml, .toml, or .json).",
+        "source",
+        help="Path to the project folder.",
     )
     return parser.parse_args()
 
@@ -188,23 +166,54 @@ def _print_documents(doc_df) -> None:
     print()
 
 
-def _active_documents(doc_df, folder_root: Path):
+def _active_documents(doc_df, folder_root: Path, folder_remote_documents=None):
     """
     Filter *doc_df* to rows whose document folder still exists on disk.
 
     Tombstone asset notes (folder deleted, note kept for numbering) are
-    excluded so they never appear in the UI.
+    excluded so they never appear in the UI. Checks both the local project
+    root and, when provided, the remote documents folder.
 
     :param doc_df: DataFrame from :meth:`~losalamos.Project.get_assets`.
     :param folder_root: Project root path.
+    :param folder_remote_documents: Optional remote documents root path.
     :returns: Filtered and re-indexed DataFrame.
     """
 
     def _exists(row):
         subfolder = _SUBFOLDER.get(str(row["asset_type"]).upper(), "")
-        return (Path(folder_root) / subfolder / str(row["name"])).is_dir()
+        name = str(row["name"])
+        if (Path(folder_root) / subfolder / name).is_dir():
+            return True
+        if folder_remote_documents is not None:
+            if (Path(folder_remote_documents) / subfolder / name).is_dir():
+                return True
+        return False
 
     return doc_df[doc_df.apply(_exists, axis=1)].reset_index(drop=True)
+
+
+def _print_project_info(pj) -> None:
+    """Print a compact metadata summary for the project."""
+
+    def _get(key):
+        val = pj.get_attribute(entry_key=key, clean_cref=True)
+        return "" if val == f"[{key.upper()}]" else val
+
+    fields = [
+        ("Status", _get("status")),
+        ("Alias", _get("alias")),
+        ("Contractor", _get("contractor")),
+        ("Client", _get("client")),
+        ("Service", _get("service_id")),
+        ("Revenue", _get("revenue_expected")),
+        ("Start", _get("date_start")),
+        ("End", _get("date_end")),
+    ]
+    for label, value in fields:
+        if value:
+            print(f"  {label:<12}: {value}")
+    print()
 
 
 def _pick_document(doc_df, label: str = "Select document") -> dict | None:
@@ -319,13 +328,11 @@ def _action_edit(pj, doc_df) -> None:
     if row is None:
         return
 
-    asset_type = str(row["asset_type"]).upper()
     name = row["name"]
-    subfolder = _SUBFOLDER.get(asset_type, "inputs/documents")
-    doc_folder = Path(pj.folder_root) / subfolder / name
-
-    if not doc_folder.is_dir():
-        print(get_warning(f"Folder not found: '{doc_folder}'"))
+    try:
+        doc_folder = pj._locate_document_source(name=name)
+    except FileNotFoundError:
+        print(get_warning(f"Folder not found for '{name}'"))
         return
 
     print()
@@ -401,12 +408,16 @@ def _action_delete(pj, doc_df) -> None:
     if row is None:
         return
 
-    asset_type = str(row["asset_type"]).upper()
     name = row["name"]
-    subfolder = _SUBFOLDER.get(asset_type, "inputs/documents")
-    doc_dir = Path(pj.folder_root) / subfolder
-    doc_folder = doc_dir / name
-    pdfs = sorted(doc_dir.glob(f"{name}_V*.pdf"))
+    try:
+        doc_folder = pj._locate_document_source(name=name)
+    except FileNotFoundError:
+        print(get_warning(f"Folder not found for '{name}'"))
+        return
+
+    # PDFs are always compiled to the local project root
+    local_doc_dir = Path(pj.folder_root) / "inputs/documents"
+    pdfs = sorted(local_doc_dir.glob(f"{name}_V*.pdf"))
 
     print()
     print(get_message(f"Delete  : {doc_folder}"))
@@ -443,9 +454,11 @@ def _home(pj, project_info: dict) -> str:
                 all_df["asset_type"].str.upper().isin(_ASSET_TYPES)
             ].reset_index(drop=True),
             folder_root=pj.folder_root,
+            folder_remote_documents=pj.folder_remote_documents,
         )
 
         heading_subsection(f"{project_info['name']}  —  {project_info['title']}")
+        _print_project_info(pj=pj)
         _print_documents(doc_df)
 
         print(
@@ -475,71 +488,42 @@ def _home(pj, project_info: dict) -> str:
             _action_delete(pj=pj, doc_df=doc_df)
 
 
-def main() -> None:
+def run(project_folder: str, vault: str = None) -> None:
+    """
+    Open the document manager home page for a single project.
+
+    Can be called directly (e.g. from :mod:`losalamos.tools.manage_vault`)
+    or via :func:`main` when invoked from the command line.
+
+    :param project_folder: Path to the project root folder.
+    :type project_folder: str
+    :param vault: Optional path to the vault root, passed to
+        :func:`losalamos.load_project` for branch detection.
+    :type vault: str or None
+    """
     heading_section("DOCUMENT MANAGER")
 
-    args = get_arguments()
-    tool_cfg = _load_config(source=args.config)
-
-    for key in ("vault", "branch"):
-        if key not in tool_cfg:
-            raise ValueError(
-                f"Tool config missing required key: '{key}'. "
-                f"Keys found: {list(tool_cfg.keys())}. "
-                "If using TOML, ensure these keys are not nested under a [section] header."
-            )
-
-    vault = Path(tool_cfg["vault"])
-    branch = tool_cfg["branch"]
-    folder_system = tool_cfg.get("folder_system", "default")
-
-    if folder_system == "alphanumerical":
-        branch_path = vault / f"{branch}000"
-    else:
-        branch_path = vault / branch
+    project_path = Path(project_folder)
+    pj = losalamos.load_project(
+        project_folder=str(project_path),
+        vault=vault,
+    )
+    project_info = {
+        "name": project_path.name,
+        "title": _read_project_title(project_path=project_path, name=project_path.name),
+    }
 
     try:
-        while True:
-            projects = _load_projects(
-                branch_path=branch_path,
-                branch=branch,
-            )
-
-            if not projects:
-                print(get_warning(f"No projects found in '{branch_path}'."))
-                break
-
-            heading_subsection("Projects")
-            _print_projects(projects=projects)
-
-            choice = input(f"  Select project  [1-{len(projects)} / q=quit]: ").strip()
-
-            if choice.lower() == "q":
-                break
-
-            try:
-                idx = int(choice) - 1
-                if not (0 <= idx < len(projects)):
-                    print(f"  Out of range (1–{len(projects)}).\n")
-                    continue
-            except ValueError:
-                print("  Enter a number.\n")
-                continue
-
-            selected = projects[idx]
-            pj = losalamos.load_project(
-                project_folder=str(selected["path"]), vault=str(vault)
-            )
-
-            result = _home(pj=pj, project_info=selected)
-            if result == "quit":
-                break
-            # "projects" → loop back to project list
-
+        _home(pj=pj, project_info=project_info)
     except _Quit:
         pass
 
     print("\n  Goodbye.\n")
+
+
+def main() -> None:
+    args = get_arguments()
+    run(project_folder=args.source)
 
 
 # SCRIPT

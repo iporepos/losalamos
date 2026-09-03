@@ -1960,11 +1960,14 @@ class Project(FileSys):
         """
         Core creation logic for asset documents (invoice, receipt, proposal, etc.).
 
-        Creates the document working tree at ``inputs/documents/{name}/``, registers
-        the document via :meth:`add_document`, patches ``definitions/project.tex``
-        with the asset identity fields, writes the sidecar asset note at
-        ``inputs/documents/{name}.md`` (always local, visible to Obsidian), and
-        optionally rewrites the services table via :meth:`~losalamos.documents.Document.apply_config`.
+        Creates the document working tree at ``inputs/documents/{name}/``. When
+        ``folder_remote_documents`` is configured, the TeX tree is placed there
+        instead of the local project root. The sidecar asset note is always
+        written locally (``inputs/documents/{name}.md``) so it remains visible
+        to Obsidian. Registers the document via :meth:`add_document`, patches
+        ``definitions/project.tex`` with the asset identity fields, and
+        optionally rewrites the services table via
+        :meth:`~losalamos.documents.Document.apply_config`.
 
         :param asset_type: Asset type string in uppercase, e.g. ``"INVOICE"``.
         :type asset_type: str
@@ -1985,17 +1988,26 @@ class Project(FileSys):
             .get(asset_type.lower(), None)
         )
 
+        # Route TeX tree to remote documents folder when configured
+        if (
+            self.folder_remote_documents is not None
+            and self.folder_remote_documents != self.folder_root
+        ):
+            doc_root = self.folder_remote_documents / "inputs/documents"
+        else:
+            doc_root = Path(self.folder_root) / "inputs/documents"
+
         doc = self.add_document(
             document_type=asset_type.lower(),
             name=name,
             template_overlay=template_overlay,
             files_overlay=files_overlay or None,
-            subfolder="inputs/documents",
+            subfolder=str(doc_root),
             condensed=False,
             compile_pdf=False,
         )
 
-        source_folder = Path(self.folder_root) / "inputs/documents" / name
+        source_folder = doc_root / name
         self._patch_project_tex(
             doc_folder=source_folder,
             file_id=asset_id,
