@@ -28,7 +28,7 @@ import pandas as pd
 
 # Project-level imports
 # =======================================================================
-from losalamos.notes import NoteCollection, NoteOrganization, NoteSapiens
+from losalamos.notes import NoteCollection, NoteOrganization, NoteSapiens, NoteTransfer
 from tests.conftest import DATA_DIR
 from tests.conftest import OUTPUT_DIR, RUN_BENCHMARKS
 
@@ -273,6 +273,73 @@ class TestNoteSapiens(unittest.TestCase):
 
 
 # ***********************************************************************
+class TestNoteTransfer(unittest.TestCase):
+    """
+    Tests for ``losalamos.notes.NoteTransfer``.
+    """
+
+    EXPECTED_FIELDS = {
+        "note_type",
+        "timestamp",
+        "name",
+        "abstract",
+        "date",
+        "transfer_type",
+        "status",
+        "account",
+        "value",
+        "commitment",
+        "recurrence",
+        "method",
+        "protocol",
+        "related_asset",
+    }
+
+    @classmethod
+    def setUpClass(cls):
+        if RUN_BENCHMARKS:
+            cls._tmp_root = OUTPUT_DIR / "notes_transfer"
+            cls._tmp_root.mkdir(parents=True, exist_ok=True)
+        else:
+            cls._tmp_root = Path(tempfile.mkdtemp(prefix="losalamos_test_transfer_"))
+
+    @classmethod
+    def tearDownClass(cls):
+        if not RUN_BENCHMARKS:
+            shutil.rmtree(cls._tmp_root, ignore_errors=True)
+
+    def setUp(self):
+        self.note = NoteTransfer()
+        self.file = self._tmp_root / "TestTransfer.md"
+
+    def test_load_new(self):
+        """load_new creates the file and populates metadata."""
+        self.note.load_new(file_note=self.file)
+        self.assertIsNotNone(self.note.metadata)
+        self.assertIsNotNone(self.note.data)
+
+    def test_note_type(self):
+        """note_type field must be 'transfer'."""
+        self.note.load_new(file_note=self.file)
+        self.assertEqual(self.note.metadata.get("note_type"), "transfer")
+
+    def test_metadata_fields(self):
+        """All template fields must be present after load_new."""
+        self.note.load_new(file_note=self.file)
+        missing = self.EXPECTED_FIELDS - set(self.note.metadata.keys())
+        self.assertSetEqual(missing, set(), msg=f"Missing fields: {missing}")
+
+    def test_save_roundtrip(self):
+        """Save then reload preserves note_type and name."""
+        self.note.load_new(file_note=self.file)
+        self.note.save()
+
+        reloaded = NoteTransfer()
+        reloaded.load(file_note=self.file)
+        self.assertEqual(reloaded.metadata.get("note_type"), "transfer")
+        self.assertIn(self.file.stem, reloaded.metadata.get("name", ""))
+
+
 # SCRIPT
 # ***********************************************************************
 

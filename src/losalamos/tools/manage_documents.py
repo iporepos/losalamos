@@ -4,10 +4,10 @@
 # See pyproject.toml for authors/maintainers.
 # See LICENSE for license details.
 """
-Terminal document manager for a project folder group.
+Terminal document manager for a branch folder.
 
-Reads a tool config file (YAML, TOML, or JSON) that sets the base folder
-and folder prefix. Presents an interactive project picker, then a
+Reads a tool config file (YAML, TOML, or JSON) that sets the vault, branch
+name, and folder system. Presents an interactive project picker, then a
 per-project home page to add, edit, or build asset documents (invoices,
 receipts, proposals).
 
@@ -15,12 +15,14 @@ receipts, proposals).
 
 .. code-block:: bash
 
-    python -m losalamos.tools.manage_documents --config path/to/config.yaml
+    python -m losalamos.tools.manage_documents --config path/to/config.toml
 
 **Tool config keys**
 
-- ``basefolder`` (*str*, required) — root directory where project group folders live.
-- ``prefix`` (*str*, required) — string prefix for project folders, e.g. ``C`` or ``Projects-Consulting-``.
+- ``vault`` (*str*, required) — root directory where branch folders live.
+- ``branch`` (*str*, required) — branch name, e.g. ``"Research"`` or ``"C"``.
+- ``folder_system`` (*str*, optional) — ``"default"`` (branch folder is ``<branch>/``)
+  or ``"alphanumerical"`` (branch folder is ``<branch>000/``). Defaults to ``"default"``.
 
 **Navigation**
 
@@ -32,16 +34,13 @@ receipts, proposals).
     :icon: code-square
     :open:
 
-    TOML and JSON are also accepted.
+    Save a ``manage_documents.toml`` and pass it with ``--config``:
 
-    .. code-block:: yaml
+    .. code-block:: toml
 
-        # Root directory that holds all project group folders.
-        basefolder: "C:/My Drive/projects"
-
-        # Prefix that identifies the project folder group.
-        # Can be a single letter (e.g. C) or any string (e.g. Projects-Consulting-).
-        prefix: C
+        vault = "C:/My Drive/projects"
+        branch = "Research"
+        folder_system = "default"
 
 """
 
@@ -50,6 +49,7 @@ receipts, proposals).
 
 # Native imports
 # =======================================================================
+import re
 import os
 import shutil
 import argparse
@@ -74,9 +74,9 @@ _ASSET_TYPES = ["INVOICE", "RECEIPT", "PROPOSAL"]
 
 # Project-relative subfolder for each asset type
 _SUBFOLDER = {
-    "INVOICE": "budget/documents",
-    "RECEIPT": "budget/documents",
-    "PROPOSAL": "admin/proposals",
+    "INVOICE": "inputs/documents",
+    "RECEIPT": "inputs/documents",
+    "PROPOSAL": "inputs/documents",
 }
 
 # Add-method names on Project, keyed by asset type
@@ -126,23 +126,26 @@ def get_arguments():
     return parser.parse_args()
 
 
-def _load_projects(collection_path: Path, prefix: str) -> list[dict]:
+def _load_projects(branch_path: Path, branch: str) -> list[dict]:
     """
-    Scan *collection_path* and return project info dicts sorted by name.
+    Scan *branch_path* and return project info dicts sorted by name.
 
-    :param collection_path: Directory containing sibling project folders.
-    :param prefix: Folder name prefix, e.g. ``"C"`` or ``"Projects-Consulting-"``.
+    :param branch_path: Directory containing sibling project folders.
+    :param branch: Branch name prefix, e.g. ``"Research"`` or ``"C"``.
     :returns: List of dicts with keys ``name``, ``path``, ``title``.
     :rtype: list[dict]
     """
     projects = []
-    if not collection_path.exists():
+    if not branch_path.exists():
         return projects
-    for item in sorted(collection_path.iterdir()):
+    for item in sorted(branch_path.iterdir()):
         if not item.is_dir():
             continue
-        tail = item.name[len(prefix) :]
-        if item.name.upper().startswith(prefix.upper()) and tail.isdigit():
+        if not item.name.lower().startswith(branch.lower()):
+            continue
+        tail = item.name[len(branch) :]
+        digits = re.sub(r"^\D*", "", tail)
+        if digits:
             title = _read_project_title(project_path=item, name=item.name)
             projects.append({"name": item.name, "path": item, "title": title})
     return projects
@@ -478,23 +481,32 @@ def main() -> None:
     args = get_arguments()
     tool_cfg = _load_config(source=args.config)
 
-    for key in ("basefolder", "prefix"):
+    for key in ("vault", "branch"):
         if key not in tool_cfg:
-            raise ValueError(f"Tool config missing required key: '{key}'")
+            raise ValueError(
+                f"Tool config missing required key: '{key}'. "
+                f"Keys found: {list(tool_cfg.keys())}. "
+                "If using TOML, ensure these keys are not nested under a [section] header."
+            )
 
-    basefolder = Path(tool_cfg["basefolder"])
-    prefix = tool_cfg["prefix"]
-    collection_path = basefolder / f"{prefix}000"
+    vault = Path(tool_cfg["vault"])
+    branch = tool_cfg["branch"]
+    folder_system = tool_cfg.get("folder_system", "default")
+
+    if folder_system == "alphanumerical":
+        branch_path = vault / f"{branch}000"
+    else:
+        branch_path = vault / branch
 
     try:
         while True:
             projects = _load_projects(
-                collection_path=collection_path,
-                prefix=prefix,
+                branch_path=branch_path,
+                branch=branch,
             )
 
             if not projects:
-                print(get_warning(f"No projects found in '{collection_path}'."))
+                print(get_warning(f"No projects found in '{branch_path}'."))
                 break
 
             heading_subsection("Projects")
@@ -515,7 +527,9 @@ def main() -> None:
                 continue
 
             selected = projects[idx]
-            pj = losalamos.load_project(project_folder=str(selected["path"]))
+            pj = losalamos.load_project(
+                project_folder=str(selected["path"]), vault=str(vault)
+            )
 
             result = _home(pj=pj, project_info=selected)
             if result == "quit":

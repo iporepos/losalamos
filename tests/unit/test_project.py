@@ -170,6 +170,59 @@ class TestProject(unittest.TestCase):
         status = p.get_attribute(entry_key="status", clean_cref=False)
         self.assertEqual(status, "planning")
 
+    def test_new_project_alias_written_to_note(self):
+        """alias supplied in config must appear as a field in the project note."""
+        p = new_project(
+            config={
+                "folder_base": str(self.base_dir),
+                "name": "AliasProject",
+                "alias": "APJ",
+            }
+        )
+        alias_val = p.main_note.metadata.get("alias", "")
+        self.assertIn("APJ", str(alias_val))
+
+    def test_new_project_contractor_wiki_link(self):
+        """contractor and client fields must be stored as Obsidian wiki-links."""
+        p = new_project(
+            config={
+                "folder_base": str(self.base_dir),
+                "name": "LinkProject",
+                "contractor": "Acme Corp",
+                "client": "Beta Ltd",
+                "contractor_sapiens": "John Doe",
+                "client_sapiens": "Jane Doe",
+            }
+        )
+        for field, expected in [
+            ("contractor", '"[[Acme Corp]]"'),
+            ("client", '"[[Beta Ltd]]"'),
+            ("contractor_sapiens", '"[[John Doe]]"'),
+            ("client_sapiens", '"[[Jane Doe]]"'),
+        ]:
+            val = str(p.main_note.metadata.get(field, ""))
+            self.assertIn(expected, val, f"{field} missing wiki-link")
+
+    def test_new_project_no_budget_documents_folder(self):
+        """budget/documents must not be auto-created by new_project."""
+        p = new_project(
+            config={
+                "folder_base": str(self.base_dir),
+                "name": "NoBudgetDocs",
+            }
+        )
+        self.assertFalse((Path(p.folder_root) / "budget" / "documents").exists())
+
+    def test_new_project_no_admin_documents_folder(self):
+        """admin/documents must not be auto-created by new_project."""
+        p = new_project(
+            config={
+                "folder_base": str(self.base_dir),
+                "name": "NoAdminDocs",
+            }
+        )
+        self.assertFalse((Path(p.folder_root) / "admin" / "documents").exists())
+
     def test_new_project_with_sources_file(self):
         """
         new_project should copy a sources file into admin/config/ when
@@ -365,10 +418,11 @@ class TestProjectContractor(unittest.TestCase):
         p = Project(name="TestProject", alias="TP")
         p.main_note = NoteProject(name="TestProject", alias="TP")
         p.main_note.load(file_note=note_path)
+        search = p.sources.setdefault("folders", {}).setdefault("search", {})
         if org_sources is not None:
-            p.sources["organizations"] = org_sources
+            search["organizations"] = org_sources
         if sapiens_sources is not None:
-            p.sources["sapiens"] = sapiens_sources
+            search["sapiens"] = sapiens_sources
         return p
 
     # -------------------------------------------------------------------
@@ -512,9 +566,509 @@ class TestProjectContractor(unittest.TestCase):
             p.load_contractor_sapiens()
 
 
+class TestRemoteFolders(unittest.TestCase):
+    """Tests for Phase 3: remote folder resolution and creation."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls._tmp = Path(tempfile.mkdtemp(prefix="losalamos_remote_"))
+        cls._remote_docs = cls._tmp / "remote_docs"
+        cls._remote_data = cls._tmp / "remote_data"
+        cls._remote_docs.mkdir()
+        cls._remote_data.mkdir()
+
+    @classmethod
+    def tearDownClass(cls):
+        shutil.rmtree(cls._tmp, ignore_errors=True)
+
+    def _make_project(self, name, branch=None):
+        p = Project(name=name, alias=name)
+        p.folder_base = str(self._tmp)
+        p.branch = branch
+        p.update()
+        return p
+
+    # --- _resolve_remote_folders ---
+
+    def test_no_remote_falls_back_to_folder_root(self):
+        """When sources has no documents/data keys, remote folders equal folder_root."""
+        p = self._make_project("FlatProj")
+        self.assertEqual(p.folder_remote_documents, p.folder_root)
+        self.assertEqual(p.folder_remote_data, p.folder_root)
+
+    def test_documents_remote_mirrors_flat_layout(self):
+        """documents key in sources sets folder_remote_documents to remote/name."""
+        p = self._make_project("FlatProj2")
+        p.sources.setdefault("folders", {}).setdefault("remote", {})["documents"] = str(
+            self._remote_docs
+        )
+        p._resolve_remote_folders()
+        expected = self._remote_docs / "FlatProj2"
+        self.assertEqual(p.folder_remote_documents, expected)
+
+    def test_documents_remote_mirrors_branch_layout(self):
+        """With a branch, remote mirrors vault/branch/name structure."""
+        p = self._make_project("C001", branch="Consulting")
+        p.sources.setdefault("folders", {}).setdefault("remote", {})["documents"] = str(
+            self._remote_docs
+        )
+        p._resolve_remote_folders()
+        expected = self._remote_docs / "Consulting" / "C001"
+        self.assertEqual(p.folder_remote_documents, expected)
+
+    def test_data_remote_resolved_independently(self):
+        """data key resolves folder_remote_data separately from documents."""
+        p = self._make_project("DataProj")
+        p.sources.setdefault("folders", {}).setdefault("remote", {})["data"] = str(
+            self._remote_data
+        )
+        p._resolve_remote_folders()
+        expected = self._remote_data / "DataProj"
+        self.assertEqual(p.folder_remote_data, expected)
+
+    # --- _setup_remote_folders ---
+
+    def test_setup_remote_creates_inputs_documents(self):
+        """_setup_remote_folders creates inputs/documents under the remote docs root."""
+        p = self._make_project("SetupProj")
+        p.sources.setdefault("folders", {}).setdefault("remote", {})["documents"] = str(
+            self._remote_docs
+        )
+        p._resolve_remote_folders()
+        p._setup_remote_folders()
+        self.assertTrue((p.folder_remote_documents / "inputs" / "documents").is_dir())
+
+    def test_setup_remote_creates_inputs_data(self):
+        """_setup_remote_folders creates inputs/data under the remote data root."""
+        p = self._make_project("SetupProj2")
+        p.sources.setdefault("folders", {}).setdefault("remote", {})["data"] = str(
+            self._remote_data
+        )
+        p._resolve_remote_folders()
+        p._setup_remote_folders()
+        self.assertTrue((p.folder_remote_data / "inputs" / "data").is_dir())
+
+    def test_setup_remote_no_op_when_no_remote(self):
+        """_setup_remote_folders is a no-op when remote equals folder_root."""
+        p = self._make_project("NoRemoteProj")
+        # should not raise
+        try:
+            p._setup_remote_folders()
+        except Exception as exc:
+            self.fail(f"_setup_remote_folders raised unexpectedly: {exc}")
+
+    # --- _locate_document_source remote fallback ---
+
+    def test_locate_finds_source_in_remote_when_local_missing(self):
+        """_locate_document_source falls back to remote when local is absent."""
+        p = self._make_project("LocProj")
+        p.folder_root = Path(self._tmp) / "LocProj"
+        p.sources.setdefault("folders", {}).setdefault("remote", {})["documents"] = str(
+            self._remote_docs
+        )
+        p._resolve_remote_folders()
+
+        # plant the source in the remote location
+        remote_src = (
+            p.folder_remote_documents / "inputs" / "documents" / "INVOICE_LocProj_F001"
+        )
+        remote_src.mkdir(parents=True)
+
+        result = p._locate_document_source(name="INVOICE_LocProj_F001")
+        self.assertEqual(result, remote_src)
+
+    def test_locate_raises_with_both_paths_when_neither_exists(self):
+        """FileNotFoundError message includes both local and remote paths."""
+        p = self._make_project("LocProj2")
+        p.folder_root = Path(self._tmp) / "LocProj2"
+        p.sources.setdefault("folders", {}).setdefault("remote", {})["documents"] = str(
+            self._remote_docs
+        )
+        p._resolve_remote_folders()
+
+        with self.assertRaises(FileNotFoundError) as ctx:
+            p._locate_document_source(name="RECEIPT_LocProj2_F999")
+        msg = str(ctx.exception)
+        self.assertIn("RECEIPT_LocProj2_F999", msg)
+        self.assertIn("inputs/documents", msg.replace("\\", "/"))
+
+
+class TestProjectBranch(unittest.TestCase):
+    """Tests for the branch tier in folder_root."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls._tmp = Path(tempfile.mkdtemp(prefix="losalamos_branch_"))
+
+    @classmethod
+    def tearDownClass(cls):
+        shutil.rmtree(cls._tmp, ignore_errors=True)
+
+    def test_new_project_with_branch_creates_nested_folder(self):
+        """new_project with branch should create folder_base/branch/name."""
+        p = new_project(
+            config={
+                "folder_base": str(self._tmp),
+                "name": "C001",
+                "branch": "Consulting",
+            }
+        )
+        expected = self._tmp / "Consulting" / "C001"
+        self.assertTrue(expected.is_dir())
+        self.assertEqual(Path(p.folder_root), expected)
+
+    def test_new_project_without_branch_flat_layout_unchanged(self):
+        """new_project without branch keeps the flat folder_base/name layout."""
+        p = new_project(
+            config={
+                "folder_base": str(self._tmp),
+                "name": "FlatProject",
+            }
+        )
+        expected = self._tmp / "FlatProject"
+        self.assertTrue(expected.is_dir())
+        self.assertEqual(Path(p.folder_root), expected)
+
+    def test_branch_attribute_set_on_project(self):
+        """Project.branch should reflect the value passed in config."""
+        p = new_project(
+            config={
+                "folder_base": str(self._tmp),
+                "name": "C002",
+                "branch": "Research",
+            }
+        )
+        self.assertEqual(p.branch, "Research")
+
+    def test_branch_none_by_default(self):
+        """Project.branch should be None when not supplied."""
+        p = Project(name="X", alias="x")
+        self.assertIsNone(p.branch)
+
+    def test_main_note_inside_folder_root(self):
+        """main_note_path must sit directly inside folder_root regardless of branch."""
+        p = new_project(
+            config={
+                "folder_base": str(self._tmp),
+                "name": "C003",
+                "branch": "Admin",
+            }
+        )
+        self.assertEqual(p.main_note_path, p.folder_root / "C003.md")
+
+    def test_load_project_branch_folder_works(self):
+        """load_project should load a project that lives inside a branch sub-folder."""
+        new_project(
+            config={
+                "folder_base": str(self._tmp),
+                "name": "C004",
+                "branch": "Consulting",
+            }
+        )
+        project_root = self._tmp / "Consulting" / "C004"
+        p = load_project(project_folder=project_root)
+        self.assertIsInstance(p, Project)
+        self.assertEqual(p.name, "C004")
+
+    def test_load_project_with_vault_sets_branch(self):
+        """load_project with vault should set branch so folder_root is vault/branch/name."""
+        new_project(
+            config={
+                "folder_base": str(self._tmp),
+                "name": "C007",
+                "branch": "Consulting",
+            }
+        )
+        project_root = self._tmp / "Consulting" / "C007"
+        p = load_project(project_folder=project_root, vault=str(self._tmp))
+        self.assertEqual(p.branch, "Consulting")
+        self.assertEqual(Path(p.folder_base), self._tmp)
+        self.assertEqual(Path(p.folder_root), project_root)
+
+    def test_branch_not_written_to_note(self):
+        """branch must not appear as a metadata field in the project note."""
+        p = new_project(
+            config={
+                "folder_base": str(self._tmp),
+                "name": "C005",
+                "branch": "Consulting",
+            }
+        )
+        self.assertNotIn("branch", p.main_note.metadata)
+
+    def test_existing_branch_folder_raises(self):
+        """new_project should raise if the project folder already exists inside the branch."""
+        new_project(
+            config={
+                "folder_base": str(self._tmp),
+                "name": "C006",
+                "branch": "Consulting",
+            }
+        )
+        with self.assertRaises(ValueError):
+            new_project(
+                config={
+                    "folder_base": str(self._tmp),
+                    "name": "C006",
+                    "branch": "Consulting",
+                }
+            )
+
+
+class TestAssetDocumentPaths(unittest.TestCase):
+    """
+    Tests for Phase 1 path layout: source at inputs/documents/{name}/,
+    note at inputs/documents/{name}.md, old type-specific folder untouched.
+    """
+
+    @classmethod
+    def setUpClass(cls):
+        cls._tmp = Path(tempfile.mkdtemp(prefix="losalamos_assetpaths_"))
+        cls._project = new_project(
+            config={
+                "folder_base": str(cls._tmp),
+                "name": "PathProject",
+                "alias": "PP",
+            }
+        )
+        cls._invoice = cls._project.add_invoice()
+        cls._invoice_name = cls._invoice.name
+        cls._receipt = cls._project.add_receipt()
+        cls._receipt_name = cls._receipt.name
+
+    @classmethod
+    def tearDownClass(cls):
+        shutil.rmtree(cls._tmp, ignore_errors=True)
+
+    def test_add_invoice_source_in_inputs_documents(self):
+        """add_invoice should create the working tree under inputs/documents/."""
+        source = (
+            Path(self._project.folder_root)
+            / "inputs"
+            / "documents"
+            / self._invoice_name
+        )
+        self.assertTrue(source.is_dir(), f"Source folder missing: {source}")
+
+    def test_add_invoice_note_in_inputs_documents(self):
+        """add_invoice should place the sidecar note at inputs/documents/{name}.md."""
+        note = (
+            Path(self._project.folder_root)
+            / "inputs"
+            / "documents"
+            / f"{self._invoice_name}.md"
+        )
+        self.assertTrue(note.is_file(), f"Invoice note missing: {note}")
+
+    def test_budget_documents_folder_not_created(self):
+        """budget/documents/ must not be auto-created by new_project or add_invoice."""
+        self.assertFalse(
+            (Path(self._project.folder_root) / "budget" / "documents").exists()
+        )
+
+    def test_add_receipt_note_in_inputs_documents(self):
+        """add_receipt() should place its note at inputs/documents/{name}.md."""
+        note = (
+            Path(self._project.folder_root)
+            / "inputs"
+            / "documents"
+            / f"{self._receipt_name}.md"
+        )
+        self.assertTrue(note.is_file(), f"Receipt note missing: {note}")
+
+    def test_add_receipt_with_missing_invoice_raises(self):
+        """add_receipt(invoice_id=...) should raise FileNotFoundError when the invoice source is absent."""
+        with self.assertRaises(FileNotFoundError):
+            self._project.add_receipt(invoice_id="F999")
+
+
+class TestLocateDocumentSource(unittest.TestCase):
+    """Tests for Project._locate_document_source."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls._tmp = Path(tempfile.mkdtemp(prefix="losalamos_locdoc_"))
+        cls._inputs_docs = cls._tmp / "MyProject" / "inputs" / "documents"
+        cls._inputs_docs.mkdir(parents=True)
+
+    @classmethod
+    def tearDownClass(cls):
+        shutil.rmtree(cls._tmp, ignore_errors=True)
+
+    def _make_project(self):
+        p = Project(name="MyProject", alias="MP")
+        p.folder_root = str(self._tmp / "MyProject")
+        return p
+
+    def test_finds_existing_source_folder(self):
+        """_locate_document_source should return the path when the folder exists."""
+        (self._inputs_docs / "INVOICE_MyProject_F001").mkdir(exist_ok=True)
+        p = self._make_project()
+        result = p._locate_document_source(name="INVOICE_MyProject_F001")
+        self.assertTrue(result.is_dir())
+        self.assertEqual(result.name, "INVOICE_MyProject_F001")
+
+    def test_missing_folder_raises_file_not_found(self):
+        """_locate_document_source should raise FileNotFoundError when absent."""
+        p = self._make_project()
+        with self.assertRaises(FileNotFoundError):
+            p._locate_document_source(name="INVOICE_MyProject_F999")
+
+    def test_error_message_contains_name(self):
+        """FileNotFoundError message should include the document name."""
+        p = self._make_project()
+        with self.assertRaises(FileNotFoundError) as ctx:
+            p._locate_document_source(name="RECEIPT_MyProject_F042")
+        self.assertIn("RECEIPT_MyProject_F042", str(ctx.exception))
+
+    def test_returns_path_object(self):
+        """_locate_document_source should return a pathlib.Path."""
+        (self._inputs_docs / "PROPOSAL_MyProject_F002").mkdir(exist_ok=True)
+        p = self._make_project()
+        result = p._locate_document_source(name="PROPOSAL_MyProject_F002")
+        self.assertIsInstance(result, Path)
+
+
 # ***********************************************************************
 # SCRIPT
 # ***********************************************************************
+
+
+def _make_bare_project(tmp_root, name="testproj"):
+    """Create a minimal project folder with the required subfolder tree."""
+    folder_base = tmp_root / "base"
+    folder_base.mkdir(parents=True, exist_ok=True)
+    pj = Project(name=name, alias="TP")
+    pj.folder_base = str(folder_base)
+    pj.update()
+    pj.setup()
+    return pj
+
+
+class TestAddTransfer(unittest.TestCase):
+    """Project.add_transfer() creates a NoteTransfer in the right subfolder."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls._tmp = Path(tempfile.mkdtemp(prefix="transfer_add_"))
+        cls._pj = _make_bare_project(cls._tmp)
+        cls._note = cls._pj.add_transfer(
+            transfer_type="inflow",
+            date="2026-09-02",
+            account="main-account",
+            value=1500.0,
+            status="Executed",
+            protocol="Transfer",
+        )
+
+    @classmethod
+    def tearDownClass(cls):
+        shutil.rmtree(cls._tmp, ignore_errors=True)
+
+    def test_note_file_exists_in_inflows(self):
+        inflows = Path(self._pj.folder_root) / "budget" / "inflows"
+        md_files = list(inflows.glob("*.md"))
+        self.assertEqual(len(md_files), 1)
+
+    def test_note_type_is_transfer(self):
+        self.assertEqual(self._note.metadata.get("note_type"), "transfer")
+
+    def test_transfer_type_stored(self):
+        self.assertEqual(self._note.metadata.get("transfer_type"), "inflow")
+
+    def test_account_stored(self):
+        self.assertEqual(self._note.metadata.get("account"), "main-account")
+
+    def test_value_stored(self):
+        self.assertEqual(self._note.metadata.get("value"), 1500.0)
+
+    def test_method_defaults_to_manual(self):
+        self.assertEqual(self._note.metadata.get("method"), "Manual")
+
+    def test_outflow_goes_to_outflows_folder(self):
+        pj = _make_bare_project(self._tmp, name="outproj")
+        pj.add_transfer(
+            transfer_type="outflow",
+            date="2026-09-02",
+            account="expenses",
+            value=200.0,
+        )
+        outflows = Path(pj.folder_root) / "budget" / "outflows"
+        self.assertTrue(any(outflows.glob("*.md")))
+
+    def test_invalid_transfer_type_raises(self):
+        with self.assertRaises(ValueError):
+            self._pj.add_transfer(
+                transfer_type="sideways",
+                date="2026-09-02",
+                account="x",
+                value=0,
+            )
+
+    def test_transfer_id_increments(self):
+        pj = _make_bare_project(self._tmp, name="incproj")
+        n1 = pj.add_transfer(
+            transfer_type="inflow", date="2026-09-02", account="a", value=10
+        )
+        n2 = pj.add_transfer(
+            transfer_type="inflow", date="2026-09-02", account="b", value=20
+        )
+        id1 = n1.metadata.get("name", "").split("_")[-1]
+        id2 = n2.metadata.get("name", "").split("_")[-1]
+        self.assertNotEqual(id1, id2)
+
+
+class TestGetTransfers(unittest.TestCase):
+    """Project.get_transfers() returns a DataFrame of all transfer notes."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls._tmp = Path(tempfile.mkdtemp(prefix="transfer_get_"))
+        cls._pj = _make_bare_project(cls._tmp)
+        cls._pj.add_transfer(
+            transfer_type="inflow", date="2026-09-01", account="a", value=100
+        )
+        cls._pj.add_transfer(
+            transfer_type="outflow", date="2026-09-02", account="b", value=50
+        )
+        cls._df = cls._pj.get_transfers()
+
+    @classmethod
+    def tearDownClass(cls):
+        shutil.rmtree(cls._tmp, ignore_errors=True)
+
+    def test_returns_dataframe(self):
+        self.assertIsInstance(self._df, pd.DataFrame)
+
+    def test_row_count_matches(self):
+        self.assertEqual(len(self._df), 2)
+
+    def test_expected_columns_present(self):
+        expected = {
+            "name",
+            "date",
+            "transfer_type",
+            "status",
+            "account",
+            "value",
+            "commitment",
+            "recurrence",
+            "method",
+            "protocol",
+            "related_asset",
+        }
+        self.assertTrue(expected.issubset(set(self._df.columns)))
+
+    def test_both_transfer_types_present(self):
+        types = set(self._df["transfer_type"].tolist())
+        self.assertIn("inflow", types)
+        self.assertIn("outflow", types)
+
+    def test_empty_when_no_transfers(self):
+        pj = _make_bare_project(self._tmp, name="emptyproj")
+        df = pj.get_transfers()
+        self.assertEqual(len(df), 0)
+
 
 if __name__ == "__main__":
     unittest.main()

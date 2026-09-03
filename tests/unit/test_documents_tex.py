@@ -15,7 +15,7 @@ import zipfile
 from pathlib import Path
 from unittest import mock
 
-from losalamos.documents import DocumentTeX
+from losalamos.documents import DocumentTeX, LatexCompileError
 
 
 class TestDocumentTeXLoadData(unittest.TestCase):
@@ -353,6 +353,154 @@ class TestDocumentTeXSplitPreamble(unittest.TestCase):
             # input stem "main" collides with the default main_name "main"
             # in the same directory
             DocumentTeX.split_preamble(main, output_folder=self.tmp_root)
+
+
+class TestDocumentTeXClean(unittest.TestCase):
+    """DocumentTeX.clean() removes aux files and delegates to latexmk -c."""
+
+    def setUp(self):
+        self.tmp_root = Path(tempfile.mkdtemp(prefix="clean_test_"))
+        main = self.tmp_root / "main.tex"
+        main.write_text("\\documentclass{article}\\begin{document}hi\\end{document}\n")
+        self.doc = DocumentTeX(name="CleanDoc", alias="CD")
+        self.doc.load_data(file_data=main)
+
+    def tearDown(self):
+        shutil.rmtree(self.tmp_root, ignore_errors=True)
+
+    def test_clean_skips_when_not_main(self):
+        self.doc.is_main = False
+        result = self.doc.clean()
+        self.assertIsNone(result)
+
+    def test_clean_calls_latexmk_c(self):
+        calls = []
+        with mock.patch(
+            "subprocess.run", side_effect=lambda cmd, **kw: calls.append(list(cmd))
+        ):
+            self.doc.clean()
+        self.assertTrue(any("-c" in cmd for cmd in calls))
+
+    def test_clean_includes_latexmkrc_when_present(self):
+        (self.tmp_root / "latexmkrc").write_text("")
+        calls = []
+        with mock.patch(
+            "subprocess.run", side_effect=lambda cmd, **kw: calls.append(list(cmd))
+        ):
+            self.doc.clean()
+        self.assertTrue(any("-r" in cmd for cmd in calls))
+
+    def test_clean_omits_latexmkrc_when_absent(self):
+        calls = []
+        with mock.patch(
+            "subprocess.run", side_effect=lambda cmd, **kw: calls.append(list(cmd))
+        ):
+            self.doc.clean()
+        self.assertFalse(any("-r" in cmd for cmd in calls))
+
+    def test_clean_removes_extra_suffix_files(self):
+        # Create dummy aux files that latexmk -c never tracks
+        stem = self.doc.file_data.stem
+        extras = [".bbl", ".bcf", ".glg", ".ist", ".lob"]
+        for ext in extras:
+            (self.tmp_root / (stem + ext)).write_text("dummy")
+
+        with mock.patch("subprocess.run"):  # no-op latexmk -c
+            self.doc.clean()
+
+        for ext in extras:
+            self.assertFalse(
+                (self.tmp_root / (stem + ext)).exists(),
+                f"{ext} file was not removed by clean()",
+            )
+
+    def test_clean_restores_working_directory_on_success(self):
+        import os
+
+        original = Path(os.getcwd())
+        with mock.patch("subprocess.run"):
+            self.doc.clean()
+        self.assertEqual(Path(os.getcwd()), original)
+
+    def test_clean_restores_working_directory_on_failure(self):
+        import os
+
+        original = Path(os.getcwd())
+        with mock.patch("subprocess.run", side_effect=Exception("boom")):
+            try:
+                self.doc.clean()
+            except Exception:
+                pass
+        self.assertEqual(Path(os.getcwd()), original)
+
+
+class TestLatexCompileError(unittest.TestCase):
+    """
+    to_pdf() error handling: cases that cannot be tested with real tools.
+
+    - FileNotFoundError path: latexmk IS installed in CI, so the only way
+      to simulate a missing executable is via a mock.
+    - Cleanup structure: verifies that the ``latexmk -c`` subprocess call
+      is never issued when the compile step raises — a code-path assertion,
+      not a latexmk-behaviour assertion.
+    - is_main=False: pure Python guard, no subprocess involved.
+    """
+
+    def setUp(self):
+        self.tmp_root = Path(tempfile.mkdtemp(prefix="latex_err_mock_"))
+        main = self.tmp_root / "main.tex"
+        main.write_text("\\documentclass{article}\\begin{document}hi\\end{document}\n")
+        self.doc = DocumentTeX(name="ErrDoc", alias="ED")
+        self.doc.load_data(file_data=main)
+
+    def tearDown(self):
+        shutil.rmtree(self.tmp_root, ignore_errors=True)
+
+    def test_file_not_found_raises_latex_compile_error(self):
+        with mock.patch("subprocess.run", side_effect=FileNotFoundError):
+            with self.assertRaises(LatexCompileError):
+                self.doc.to_pdf()
+
+    def test_file_not_found_message_mentions_latexmk(self):
+        with mock.patch("subprocess.run", side_effect=FileNotFoundError):
+            try:
+                self.doc.to_pdf()
+            except LatexCompileError as exc:
+                self.assertIn("latexmk", str(exc))
+
+    def test_file_not_found_returncode_is_minus_one(self):
+        with mock.patch("subprocess.run", side_effect=FileNotFoundError):
+            try:
+                self.doc.to_pdf()
+            except LatexCompileError as exc:
+                self.assertEqual(exc.returncode, -1)
+
+    def test_cleanup_not_called_on_compile_failure(self):
+        """latexmk -c must never be issued when the compile step raises."""
+        import subprocess
+
+        err = subprocess.CalledProcessError(returncode=1, cmd=["latexmk"])
+        calls = []
+
+        def fake_run(cmd, **kwargs):
+            calls.append(list(cmd))
+            raise err
+
+        with mock.patch("subprocess.run", side_effect=fake_run):
+            try:
+                self.doc.to_pdf(cleanup=True)
+            except LatexCompileError:
+                pass
+
+        self.assertEqual(len(calls), 1, "only the compile call should fire")
+        self.assertNotIn(
+            "-c", calls[0], "cleanup flag must not appear in a failed compile"
+        )
+
+    def test_is_not_main_skips_without_raising(self):
+        self.doc.is_main = False
+        result = self.doc.to_pdf()
+        self.assertIsNone(result)
 
 
 if __name__ == "__main__":

@@ -209,16 +209,67 @@ class MbaE:
 
         # ... continues in downstream objects ... #
 
+    @staticmethod
+    def load_config_file(path):
+        """
+        Parse a ``.json``, ``.yaml``/``.yml``, or ``.toml`` file into a dict.
+
+        :param path: path to the config file.
+        :type path: str or pathlib.Path
+        :raises FileNotFoundError: If the file does not exist.
+        :raises ValueError: If the file extension is not supported.
+        :raises ImportError: If the required parser (PyYAML, tomli) is not installed.
+        :returns: Parsed configuration dict.
+        :rtype: dict
+        """
+        path = Path(path).absolute()
+        if not path.is_file():
+            raise FileNotFoundError(f"Config file not found: '{path}'")
+        suffix = path.suffix.lower()
+        if suffix == ".json":
+            import json
+
+            with open(path, "r", encoding="utf-8") as f:
+                return json.load(f)
+        if suffix in (".yaml", ".yml"):
+            try:
+                import yaml
+            except ImportError:
+                raise ImportError(
+                    "PyYAML is required to load .yaml/.yml files. "
+                    "Install it with: pip install pyyaml"
+                )
+            with open(path, "r", encoding="utf-8") as f:
+                return yaml.safe_load(f)
+        if suffix == ".toml":
+            try:
+                import tomllib
+            except ImportError:
+                try:
+                    import tomli as tomllib
+                except ImportError:
+                    raise ImportError(
+                        "TOML support requires Python 3.11+ (tomllib) or 'tomli'. "
+                        "Install it with: pip install tomli"
+                    )
+            with open(path, "rb") as f:
+                return tomllib.load(f)
+        raise ValueError(
+            f"Unsupported config format: '{suffix}'. Use .json, .yaml/.yml, or .toml"
+        )
+
     def boot(self, bootfile):
         """
-        Boot basic attributes from a ``csv`` table.
+        Boot basic attributes from a file.
 
-        :param bootfile: file path to ``csv`` table with booting information.
-        :type bootfile: str
+        :param bootfile: path to a ``.csv`` boot table or a ``.json``/``.yaml``/``.toml``
+            config file. CSV files use the canonical ``field;value`` format.
+            Other supported formats are parsed via :meth:`load_config_file`.
+        :type bootfile: str or pathlib.Path
 
         **Notes**
 
-        Expected ``bootfile`` format:
+        Expected ``.csv`` ``bootfile`` format:
 
         .. code-block:: text
 
@@ -232,24 +283,19 @@ class MbaE:
         self.bootfile = Path(bootfile)
         self.folder_bootfile = os.path.dirname(bootfile)
 
-        # get expected fields
-        list_columns = [self.field_bootfile_attribute, self.field_bootfile_value]
+        if self.bootfile.suffix.lower() == ".csv":
+            # canonical CSV path — unchanged
+            list_columns = [self.field_bootfile_attribute, self.field_bootfile_value]
+            df_boot_table = pd.read_csv(bootfile, sep=";", usecols=list_columns)
+            dict_setter = {}
+            for i in range(len(df_boot_table)):
+                dict_setter[df_boot_table[self.field_bootfile_attribute].values[i]] = (
+                    df_boot_table[self.field_bootfile_value].values[i]
+                )
+        else:
+            dict_setter = self.load_config_file(path=bootfile)
 
-        # read info table from ``csv`` file. metadata keys are the expected fields
-        df_boot_table = pd.read_csv(bootfile, sep=";", usecols=list_columns)
-
-        # setter loop
-        dict_setter = {}
-        for i in range(len(df_boot_table)):
-            # build setter from row
-            dict_setter[df_boot_table[self.field_bootfile_attribute].values[i]] = (
-                df_boot_table[self.field_bootfile_value].values[i]
-            )
-
-        # pass setter to set() method
-        # pprint.pprint(dict_setter)
         self.setter(dict_setter=dict_setter)
-
         return None
 
     def export_metadata(self, folder, filename):
@@ -1109,16 +1155,25 @@ class FileSys(DataSet):
         os.makedirs(self.folder_root, exist_ok=True)
         return None
 
-    def setup_subfolders(self):
+    def setup_subfolders(self, root=None, folder_list=None):
         """
         Make all subfolders expected in the file system. Skip if exists.
+
+        :param root: root directory to create folders under. Defaults to
+            ``self.folder_root``.
+        :type root: str or pathlib.Path or None
+        :param folder_list: iterable of subfolder stems to create. Defaults to
+            ``self.data["folder"]``.
+        :type folder_list: iterable or None
         """
-        # fill folders
-        for i in range(len(self.data)):
-            folder_sub_stem = self.data["folder"].values[i]
+        if root is None:
+            root = self.folder_root
+        if folder_list is None:
+            folder_list = self.data["folder"].values
+        for folder_sub_stem in folder_list:
             if folder_sub_stem[0] == "/":
                 folder_sub_stem = folder_sub_stem[1:]
-            folder_sub = Path(self.folder_root) / folder_sub_stem
+            folder_sub = Path(root) / folder_sub_stem
             os.makedirs(folder_sub, exist_ok=True)
         return None
 

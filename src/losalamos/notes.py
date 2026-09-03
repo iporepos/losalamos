@@ -171,7 +171,10 @@ HARMONIZE_TEXT_FIELDS = [
     "subject",
     "abstract",
     "contractor",
+    "contractor_sapiens",
     "client",
+    "client_sapiens",
+    "service_id",
     "project",
     "comment",
     "caption",
@@ -184,6 +187,11 @@ HARMONIZE_TEXT_FIELDS = [
     "publisher",
     "booktitle",
     "cite_bibli",
+    "place",
+    "edu_background",
+    "affiliation_pro",
+    "affiliation_edu",
+    "address",
 ]
 HARMONIZE_DATE_FIELDS = [
     "timestamp",
@@ -302,7 +310,10 @@ class Note(MbaE):
         # ---------------------
         for k in dc:
             if k in HARMONIZE_TEXT_FIELDS:
-                dc[k] = Note.harmonize_entry_text(dc[k])
+                if dc[k] == '""' or dc[k] is None:
+                    pass
+                else:
+                    dc[k] = Note.harmonize_entry_text(dc[k])
 
         # DATE
         # ---------------------
@@ -469,19 +480,19 @@ class Note(MbaE):
 
     @staticmethod
     def harmonize_entry_text(entry):
-        if entry is not None:
-            new_entry_bulk = entry[:]
-            new_entry_bulk = new_entry_bulk.replace("'", "`")
-            new_entry_bulk = new_entry_bulk.replace('"', "``")
-
-            new_entry = '"' + new_entry_bulk + '"'
-            s_start = new_entry[:2].replace("`", "")
-            s_end = new_entry[-2:].replace("`", "")
-            s_bulk = new_entry[2:-2]
-
-            return s_start + s_bulk + s_end
-        else:
+        if entry is None or entry == "":
             return None
+
+        new_entry_bulk = entry[:]
+        new_entry_bulk = new_entry_bulk.replace("'", "`")
+        new_entry_bulk = new_entry_bulk.replace('"', "``")
+
+        new_entry = '"' + new_entry_bulk + '"'
+        s_start = new_entry[:2].replace("`", "")
+        s_end = new_entry[-2:].replace("`", "")
+        s_bulk = new_entry[2:-2]
+
+        return s_start + s_bulk + s_end
 
     @staticmethod
     def harmonize_entry_date(entry, key="date"):
@@ -1107,6 +1118,19 @@ class NoteAsset(NoteBasic):
     """
 
     TEMPLATE_FILE = FOLDER_TEMPLATES_NOTES / "_asset.md"
+    THUMBNAIL_SIZE = None
+
+
+class NoteTransfer(NoteBasic):
+    """
+    Note for a financial transfer (inflow or outflow).
+
+    Inherits from :class:`NoteBasic`. Maps to the ``_transfer.md`` template
+    which records the transfer date, type, account, value, and optional
+    scheduling and protocol fields.
+    """
+
+    TEMPLATE_FILE = FOLDER_TEMPLATES_NOTES / "_transfer.md"
     THUMBNAIL_SIZE = None
 
 

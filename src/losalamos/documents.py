@@ -57,7 +57,7 @@ from pathlib import Path
 
 # Project-level imports
 # =======================================================================
-from losalamos.root import DataSet
+from losalamos.root import DataSet, MbaE
 from losalamos.paths import FOLDER_TEMPLATES_DOCUMENTS
 
 # ... {develop}
@@ -107,45 +107,7 @@ def _load_files_overlay(source):
     :returns: Mapping of destination-relative paths to source file paths.
     :rtype: dict
     """
-    path = Path(source).absolute()
-    if not path.is_file():
-        raise FileNotFoundError(f"files_overlay config not found: '{path}'")
-
-    suffix = path.suffix.lower()
-
-    if suffix == ".json":
-        with open(path, "r", encoding="utf-8") as f:
-            return json.load(f)
-
-    if suffix in (".yaml", ".yml"):
-        try:
-            import yaml
-        except ImportError:
-            raise ImportError(
-                "PyYAML is required to load .yaml/.yml files. "
-                "Install it with: pip install pyyaml"
-            )
-        with open(path, "r", encoding="utf-8") as f:
-            return yaml.safe_load(f)
-
-    if suffix == ".toml":
-        try:
-            import tomllib
-        except ImportError:
-            try:
-                import tomli as tomllib
-            except ImportError:
-                raise ImportError(
-                    "TOML support requires Python 3.11+ (tomllib) or 'tomli'. "
-                    "Install it with: pip install tomli"
-                )
-        with open(path, "rb") as f:
-            return tomllib.load(f)
-
-    raise ValueError(
-        f"Unsupported files_overlay format: '{suffix}'. "
-        "Supported: .json, .yaml, .yml, .toml"
-    )
+    return MbaE.load_config_file(path=source)
 
 
 # ***********************************************************************
@@ -446,9 +408,46 @@ class Document(DataSet):
 
         return None
 
+    def apply_config(self, config):
+        """
+        Apply document configuration. No-op in the base class.
+
+        Subclasses such as :class:`Invoice` and :class:`Receipt` override
+        this to rewrite their services table partial from ``config``.
+
+        :param config: Configuration dict. Subclasses interpret the contents.
+        :type config: dict or None
+        :returns: None
+        :rtype: None
+        """
+        return None
+
 
 # CLASSES -- Module-level
 # =======================================================================
+
+
+class LatexCompileError(RuntimeError):
+    """
+    Raised when ``latexmk`` fails or cannot be found on ``PATH``.
+
+    :param message: Human-readable error description.
+    :type message: str
+    :param source: Path to the ``.tex`` file being compiled, or ``None``.
+    :type source: pathlib.Path or None
+    :param returncode: Exit code returned by ``latexmk``. ``-1`` when
+        ``latexmk`` was not found.
+    :type returncode: int
+    :param log_path: Path to the ``.log`` file produced by the failed run,
+        or ``None`` if unavailable.
+    :type log_path: pathlib.Path or None
+    """
+
+    def __init__(self, message, source=None, returncode=-1, log_path=None):
+        super().__init__(message)
+        self.source = source
+        self.returncode = returncode
+        self.log_path = log_path
 
 
 class DocumentTeX(Document):
@@ -525,6 +524,9 @@ class DocumentTeX(Document):
             Common values: ``"pdf"`` (pdflatex), ``"pdflua"`` (lualatex),
             ``"pdfxe"`` (xelatex).
         :type command: str
+        :raises LatexCompileError: If ``latexmk`` exits with a non-zero
+            return code or is not found on ``PATH``. The exception carries
+            ``source``, ``returncode``, and ``log_path`` attributes.
         :returns: None
         :rtype: None
         """
@@ -551,7 +553,23 @@ class DocumentTeX(Document):
 
             compile_cmd += [source.name]
 
-            subprocess.run(compile_cmd, check=True)
+            try:
+                subprocess.run(compile_cmd, check=True)
+            except subprocess.CalledProcessError as exc:
+                log = source.with_suffix(".log")
+                raise LatexCompileError(
+                    f"latexmk failed (exit {exc.returncode}): '{source}'",
+                    source=source,
+                    returncode=exc.returncode,
+                    log_path=log if log.exists() else None,
+                ) from exc
+            except FileNotFoundError:
+                raise LatexCompileError(
+                    "latexmk not found — is a LaTeX distribution installed?",
+                    source=source,
+                    returncode=-1,
+                    log_path=None,
+                ) from None
 
             # Handle output destination
             # --------------------------------------------------
@@ -562,41 +580,77 @@ class DocumentTeX(Document):
                 shutil.copy2(default_pdf, target_path)
                 default_pdf.unlink()
 
-            # Cleanup auxiliary files
+            # Cleanup auxiliary files — intentionally only reachable after a
+            # successful compile so that .log and aux files survive on failure.
             # --------------------------------------------------
             if cleanup:
-                cleanup_cmd = ["latexmk", "-c"]
-                if latexmkrc.exists():
-                    cleanup_cmd += ["-r", "latexmkrc"]
-                cleanup_cmd += [source.name]
-                subprocess.run(cleanup_cmd, check=True)
+                self.clean()
 
-                # Manual sweep for files latexmk -c never tracks
-                _extra_suffixes = {
-                    ".bbl",
-                    ".bcf",
-                    ".run.xml",
-                    ".glo",
-                    ".gls",
-                    ".glg",
-                    ".acn",
-                    ".acr",
-                    ".alg",
-                    ".nlo",
-                    ".nls",
-                    ".nlg",
-                    ".ist",
-                    ".maf",
-                    ".mtc",
-                    ".mtc0",
-                    ".lol",
-                    ".lob",
-                }
-                stem = source.stem
-                for suffix in _extra_suffixes:
-                    leftover = source_dir / (stem + suffix)
-                    if leftover.exists():
-                        leftover.unlink()
+        finally:
+            os.chdir(original_dir)
+
+        return None
+
+    def clean(self):
+        """
+        Remove auxiliary files left by a previous ``latexmk`` run.
+
+        Runs ``latexmk -c`` and then sweeps for extra suffixes that
+        ``latexmk -c`` does not track. The working directory is temporarily
+        switched to the source file's parent folder (matching :meth:`to_pdf`)
+        and is always restored in a ``finally`` block.
+
+        Only executes when :attr:`is_main` is ``True``; partial files are
+        silently skipped.
+
+        :returns: None
+        :rtype: None
+        """
+        if not self.is_main:
+            return None
+
+        import subprocess
+
+        source = self.file_data.absolute()
+        source_dir = source.parent
+        latexmkrc = source_dir / "latexmkrc"
+        original_dir = Path(os.getcwd())
+
+        os.chdir(source_dir)
+
+        try:
+            cleanup_cmd = ["latexmk", "-c"]
+            if latexmkrc.exists():
+                cleanup_cmd += ["-r", "latexmkrc"]
+            cleanup_cmd += [source.name]
+            subprocess.run(cleanup_cmd, check=True)
+
+            # Manual sweep for files latexmk -c never tracks
+            _extra_suffixes = {
+                ".bbl",
+                ".bcf",
+                ".run.xml",
+                ".glo",
+                ".gls",
+                ".glg",
+                ".acn",
+                ".acr",
+                ".alg",
+                ".nlo",
+                ".nls",
+                ".nlg",
+                ".ist",
+                ".maf",
+                ".mtc",
+                ".mtc0",
+                ".lol",
+                ".lob",
+            }
+            stem = source.stem
+            for suffix in _extra_suffixes:
+                leftover = source_dir / (stem + suffix)
+                if leftover.exists():
+                    leftover.unlink()
 
         finally:
             os.chdir(original_dir)
@@ -1941,10 +1995,142 @@ class Invoice(Professional):
 
     VARIANT_TEMPLATE = FOLDER_TEMPLATES_DOCUMENTS / "tex/professional/invoice"
 
+    @staticmethod
+    def _build_services_tex(config, paid=False):
+        """
+        Build the LaTeX services table string from a config dict.
+
+        :param config: Dict with a ``services`` list (each entry has
+            ``description``, ``quantity``, ``unit_price``) and an optional
+            ``invoice`` sub-dict (``currency_symbol``, ``tax_rate``).
+        :type config: dict
+        :param paid: Append a ``PAID`` row when ``True`` (used by receipts).
+        :type paid: bool
+        :returns: Complete LaTeX fragment for the services table.
+        :rtype: str
+        """
+        services = config.get("services", [])
+        invoice_cfg = config.get("invoice", {})
+        currency = invoice_cfg.get("currency_symbol", r"\texteuro\;")
+        tax_rate = float(invoice_cfg.get("tax_rate", 0.0))
+
+        def fmt_currency(value):
+            return currency + f"{value:,.2f}"
+
+        service_rows = []
+        subtotal = 0.0
+        for svc in services:
+            desc = str(svc.get("description", ""))
+            desc = desc.replace("&", r"\&")
+            desc = escape_percent_latex(desc)
+            qty = float(svc.get("quantity", 1.0))
+            unit_price = float(svc.get("unit_price", 0.0))
+            row_total = qty * unit_price
+            subtotal += row_total
+            service_rows.append(
+                "    "
+                + desc
+                + " & "
+                + f"{qty:.1f}"
+                + " & "
+                + fmt_currency(unit_price)
+                + " & "
+                + fmt_currency(row_total)
+                + " \\\\ [1mm]"
+            )
+
+        tax = subtotal * tax_rate
+        grand_total = subtotal + tax
+
+        lines = [
+            r"\noindent {\sf\textbf{Services}}",
+            "",
+            r"\noindent The provided services are listed below:",
+            "",
+            "",
+            r"% start the table",
+            r"\begin{table}[h!]",
+            r"\centering",
+            r"\footnotesize % table font size",
+            r"\sffamily % table font style",
+            r"\label{tbl:services}",
+            r"\begin{tabular}{",
+            r">{\raggedright\arraybackslash}p{7cm}",
+            r">{\raggedright\arraybackslash}p{2cm}",
+            r">{\raggedright\arraybackslash}p{2cm}",
+            r">{\raggedright\arraybackslash}p{2cm}",
+            r"}",
+            r"    \toprule",
+            r"    \textbf{Description} & \textbf{Quantity} & \textbf{Unit price} & \textbf{Total} \\ [1mm]",
+            r"    \midrule",
+        ]
+        lines.extend(service_rows)
+        lines += [
+            r"    & & & \\ [1mm]",
+            r"    \midrule",
+            "    & & Subtotal & " + fmt_currency(subtotal) + " \\\\ [1mm]",
+            "    & & Tax & " + fmt_currency(tax) + " \\\\ [1mm]",
+            "    & & \\textbf{Total} & \\textbf{"
+            + fmt_currency(grand_total)
+            + "} \\\\ [1mm]",
+        ]
+
+        if paid:
+            lines.append(r"    & & & \textcolor{OliveGreen}{\textbf{PAID}} \\ [1mm]")
+
+        lines.append(r"    \end{tabular}")
+        lines.append(r"\end{table}")
+
+        return "\n".join(lines)
+
+    def apply_config(self, config):
+        """
+        Rewrite ``partials/services-invoice.tex`` from a config dict.
+
+        :param config: Dict with a ``services`` list and optional ``invoice``
+            settings. Keys:
+
+            - ``services``: list of dicts with ``description`` (str),
+              ``quantity`` (float), and ``unit_price`` (float).
+            - ``invoice.currency_symbol``: LaTeX currency prefix
+              (default ``r"\\texteuro\\;"``).
+            - ``invoice.tax_rate``: fraction applied to the subtotal
+              (default ``0.0``).
+
+        :type config: dict or None
+        :returns: None
+        :rtype: None
+        """
+        if config is None:
+            return None
+        content = Invoice._build_services_tex(config=config, paid=False)
+        out_file = self.file_data.parent / "partials" / "services-invoice.tex"
+        out_file.write_text(content, encoding="utf-8")
+        return None
+
 
 class Receipt(Invoice):
 
     VARIANT_TEMPLATE = FOLDER_TEMPLATES_DOCUMENTS / "tex/professional/receipt"
+
+    def apply_config(self, config):
+        """
+        Rewrite ``partials/services-receipt.tex`` from a config dict.
+
+        Identical structure to :meth:`Invoice.apply_config`, but appends
+        a ``PAID`` row to the table.
+
+        :param config: Same structure as :meth:`Invoice.apply_config`.
+        :type config: dict or None
+        :returns: None
+        :rtype: None
+        """
+        if config is None:
+            return None
+        content = Invoice._build_services_tex(config=config, paid=True)
+        out_file = self.file_data.parent / "partials" / "services-receipt.tex"
+        out_file.write_text(content, encoding="utf-8")
+        return None
 
 
 class Proposal(Invoice):

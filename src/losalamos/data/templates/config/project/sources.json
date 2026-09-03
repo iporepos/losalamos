@@ -1,5 +1,20 @@
 {
-    "organizations": [],
-    "sapiens": [],
-    "services": []
+    "folders": {
+        "search": {
+            "organizations": [],
+            "sapiens": [],
+            "services": []
+        },
+        "remote": {
+            "documents": "",
+            "data": ""
+        }
+    },
+    "templates": {
+        "documents": {
+            "invoice": "",
+            "receipt": "",
+            "proposal": ""
+        }
+    }
 }

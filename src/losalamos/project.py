@@ -45,7 +45,7 @@ from tqdm import tqdm
 
 # Project-level imports
 # =======================================================================
-from losalamos.root import FileSys
+from losalamos.root import FileSys, MbaE
 from losalamos.documents import DOCUMENT_TYPES
 from losalamos.notes import (
     NoteProject,
@@ -53,6 +53,7 @@ from losalamos.notes import (
     NoteSapiens,
     NoteBasic,
     NoteAsset,
+    NoteTransfer,
 )
 from losalamos.paths import FOLDER_TEMPLATES, FOLDER_TEMPLATES_CONFIG_PROJECT
 
@@ -80,7 +81,6 @@ SUBFOLDERS = {
         "admin/contracts",
         "admin/contracts/main",
         "admin/proposals",
-        "admin/documents",
         "admin/paperwork",
         "admin/meetings",
         "admin/received",
@@ -89,7 +89,6 @@ SUBFOLDERS = {
         "admin/config/overlays",
         # Accounting
         # --------------------------------
-        "budget/documents",
         "budget/inflows",
         "budget/outflows",
         # Inputs
@@ -138,33 +137,11 @@ def _load_config(source):
     :type source: str or pathlib.Path
     :raises FileNotFoundError: If the file does not exist.
     :raises ValueError: If the file extension is not supported.
+    :raises ImportError: If the required parser is not installed.
     :returns: Parsed configuration dict.
     :rtype: dict
     """
-    path = Path(source).absolute()
-    if not path.is_file():
-        raise FileNotFoundError(f"Config file not found: '{path}'")
-    suffix = path.suffix.lower()
-    if suffix == ".json":
-        import json
-
-        with open(path, "r", encoding="utf-8") as f:
-            return json.load(f)
-    if suffix in (".yaml", ".yml"):
-        import yaml
-
-        with open(path, "r", encoding="utf-8") as f:
-            return yaml.safe_load(f)
-    if suffix == ".toml":
-        try:
-            import tomllib
-        except ImportError:
-            import tomli as tomllib
-        with open(path, "rb") as f:
-            return tomllib.load(f)
-    raise ValueError(
-        f"Unsupported config format: '{suffix}'. Use .json, .yaml, or .toml"
-    )
+    return MbaE.load_config_file(path=source)
 
 
 def new_project(config):
@@ -228,23 +205,23 @@ def new_project(config):
                 "alias": "SV26",
                 "title": "Environmental Survey 2026",
                 "status": "planning",
-                "sources": "/vault/sources.yaml",
+                "sources": "/vault/sources.toml",
             })
 
-    .. dropdown:: Example — YAML config file
+    .. dropdown:: Example — TOML config file
         :icon: code-square
         :open:
 
-        Save a ``project-config.yaml``:
+        Save a ``project-config.toml``:
 
-        .. code-block:: yaml
+        .. code-block:: toml
 
-            folder_base: /home/user/projects
-            name: Survey2026
-            alias: SV26
-            title: "Environmental Survey 2026"
-            status: planning
-            sources: /vault/sources.yaml
+            folder_base = "/home/user/projects"
+            name = "Survey2026"
+            alias = "SV26"
+            title = "Environmental Survey 2026"
+            status = "planning"
+            sources = "/vault/sources.toml"
 
         Then create the project:
 
@@ -252,7 +229,7 @@ def new_project(config):
 
             import losalamos
 
-            pj = losalamos.new_project(config="project-config.yaml")
+            pj = losalamos.new_project(config="project-config.toml")
 
     """
     # Parse config from file if a path was given
@@ -266,33 +243,49 @@ def new_project(config):
             raise ValueError(f"Missing required key: '{key}'")
 
     # System-level keys — applied to the Project object, not the note
-    _SYSTEM_KEYS = {"folder_base", "name", "alias", "source", "description", "sources"}
+    _SYSTEM_KEYS = {"folder_base", "name", "source", "description", "sources", "branch"}
+    # Note fields that store cross-note references and need Obsidian wiki-link syntax
+    _LINK_FIELDS = {
+        "contractor",
+        "contractor_sapiens",
+        "client",
+        "client_sapiens",
+        "service_id",
+    }
 
     name = config["name"]
     alias = config.get("alias", None)
     sources_file = config.get("sources", None)
+    branch = config.get("branch", None)
 
     # Create project folder structure
     os.makedirs(config["folder_base"], exist_ok=True)
-    folder_root = Path(config["folder_base"]) / name
+    if branch is not None:
+        folder_root = Path(config["folder_base"]) / branch / name
+    else:
+        folder_root = Path(config["folder_base"]) / name
     if os.path.isdir(folder_root):
         raise ValueError(f"Project folder already exists '{folder_root}'")
 
     p = Project(name=name, alias=alias)
+    p.branch = branch
     p.source = config.get("source", "")
     p.description = config.get("description", "")
     p.folder_base = config["folder_base"]
     p.update()
-    p.setup()
 
-    # Copy sources config file after setup() so admin/config/ already exists.
-    # The user-provided file overwrites the blank template installed by setup().
+    # Pre-place sources file before setup() so _install_config_templates sees
+    # it and skips creating a blank template of a different format.
     if sources_file is not None:
         src = Path(sources_file)
         if not src.is_file():
             raise FileNotFoundError(f"Sources config file not found: '{src}'")
-        dst = Path(p.folder_root) / "admin/config" / f"sources{src.suffix}"
+        config_dir = Path(p.folder_root) / "admin/config"
+        config_dir.mkdir(parents=True, exist_ok=True)
+        dst = config_dir / f"sources{src.suffix}"
         shutil.copy2(str(src), str(dst))
+
+    p.setup()
 
     # Create main project note
     note_file = Path(p.folder_root) / f"{name}.md"
@@ -309,28 +302,34 @@ def new_project(config):
     note_fields = {k: v for k, v in config.items() if k not in _SYSTEM_KEYS}
     for k, v in note_fields.items():
         if k in n.metadata:
-            n.metadata[k] = v
+            n.metadata[k] = f'"[[{v}]]"' if k in _LINK_FIELDS else v
 
     n.update()
     n.save()
 
     # Reload so main_note, sources, and overlays are current on return
     p.update()
+    p._setup_remote_folders()
 
     return p
 
 
-def load_project(project_folder):
+def load_project(project_folder, vault=None):
     """
     Load a Project from a folder path.
 
-    If ``admin/config/sources.yaml`` (or ``.toml``/``.json``) exists in the
+    If ``admin/config/sources.toml`` (or ``.yaml``/``.json``) exists in the
     project, it is parsed and merged into :attr:`~Project.sources`
     automatically. Overlay files in ``admin/config/overlays/`` are then
     regenerated from the loaded metadata.
 
     :param project_folder: Path to the project root folder.
     :type project_folder: str or Path
+    :param vault: Optional path to the vault root. When provided and the
+        project sits one level below *vault*, :attr:`~Project.branch` is set
+        to the intermediate folder name so that remote-folder mirroring
+        preserves the full ``vault/branch/name`` layout.
+    :type vault: str or Path or None
     :returns: A new :class:`losalamos.Project` instance.
     :rtype: :class:`losalamos.Project`
 
@@ -338,26 +337,33 @@ def load_project(project_folder):
         :icon: code-square
         :open:
 
-        Import the package.
-
         .. code-block:: python
 
             import losalamos
-
-        Load an existing project. Sources and overlays are resolved
-        automatically if ``admin/config/sources.yaml`` is present.
-
-        .. code-block:: python
 
             pj = losalamos.load_project(project_folder="path/to/project/folder")
 
     """
     if os.path.isdir(project_folder):
-        name = os.path.basename(project_folder)
-        folder_base = os.path.abspath(Path(project_folder).parent)
+        project_path = Path(project_folder).resolve()
+        name = project_path.name
+
+        if vault is not None:
+            vault_path = Path(vault).resolve()
+            branch_folder = project_path.parent
+            if branch_folder != vault_path:
+                folder_base = str(vault_path)
+                branch = branch_folder.name
+            else:
+                folder_base = str(vault_path)
+                branch = None
+        else:
+            folder_base = str(project_path.parent)
+            branch = None
+
         p = Project(name=name, alias=name)
-        p.name = name
         p.folder_base = folder_base
+        p.branch = branch
 
         # update project
         p.update()
@@ -662,22 +668,24 @@ class Project(FileSys):
 
     The :attr:`sources` dict maps note categories to lists of directory paths
     scanned when resolving contractors, clients, and services. It is
-    auto-populated from ``admin/config/sources.yaml`` (also ``.toml`` or
+    auto-populated from ``admin/config/sources.toml`` (also ``.yaml`` or
     ``.json``) each time the project is opened:
 
-    .. code-block:: yaml
+    .. code-block:: toml
 
-        # admin/config/sources.yaml
-        organizations:     # NoteOrganization notes
-          - /vault/organizations
-        sapiens:           # NoteSapiens notes
-          - /vault/people
-        services:          # NoteBasic notes, matched by service_id
-          - /vault/services
-        templates:         # document template directories
-          documents:
-            invoice: /vault/templates/invoice
-            proposal: /vault/templates/proposal
+        # admin/config/sources.toml
+        [folders.search]
+        organizations = ["/vault/organizations"]   # NoteOrganization notes
+        sapiens       = ["/vault/people"]          # NoteSapiens notes
+        services      = ["/vault/services"]        # NoteBasic notes, matched by service_id
+
+        [folders.remote]                           # optional remote vault roots
+        documents = "/vault/documents"
+        data      = "/vault/data"
+
+        [templates.documents]                      # document template directories
+        invoice  = "/vault/templates/invoice"
+        proposal = "/vault/templates/proposal"
 
     Overlays are written to ``admin/config/overlays/`` and applied to
     document templates via the ``files_overlay`` parameter of
@@ -693,6 +701,10 @@ class Project(FileSys):
         :param alias: Optional short identifier.
         :type alias: str
         """
+        # must precede super().__init__() — update() is called during init chain
+        self.branch = None
+        self.folder_remote_documents = None
+        self.folder_remote_data = None
         super().__init__(name=name, alias=alias)
         self.load_data()
 
@@ -746,12 +758,13 @@ class Project(FileSys):
         """
         super().setup()
         self._install_config_templates()
+        self._setup_remote_folders()
 
     def _install_config_templates(self):
-        """Copy missing config templates into ``admin/config/``, preferring YAML over TOML over JSON."""
+        """Copy missing config templates into ``admin/config/``, preferring TOML over YAML over JSON."""
         config_dir = Path(self.folder_root) / "admin/config"
         # rank by preferred format; lower rank wins
-        rank = {".yaml": 0, ".yml": 1, ".toml": 2, ".json": 3}
+        rank = {".toml": 0, ".yaml": 1, ".yml": 2, ".json": 3}
         best = {}
         for src in FOLDER_TEMPLATES_CONFIG_PROJECT.iterdir():
             ext = Path(src.name).suffix.lower()
@@ -780,12 +793,69 @@ class Project(FileSys):
         super().update()
         if self.folder_base is not None:
             self.folder_base = Path(self.folder_base)
-            self.folder_root = Path(self.folder_root)
-            self.main_note_path = self.folder_base / self.name / f"{self.name}.md"
+            if self.branch is not None:
+                self.folder_root = Path(self.folder_base) / self.branch / self.name
+            else:
+                self.folder_root = Path(self.folder_base) / self.name
+            self.main_note_path = self.folder_root / f"{self.name}.md"
             if self.main_note_path.exists():
                 self.load_main_note()
                 self._load_sources_config()
                 self._update_overlays()
+            self._resolve_remote_folders()
+
+    def _resolve_remote_folders(self):
+        """
+        Resolve ``folder_remote_documents`` and ``folder_remote_data`` from
+        ``self.sources``.
+
+        Uses the relative offset of ``folder_root`` from ``folder_base`` to
+        mirror the vault layout (including any branch tier) into the remote
+        root. Falls back to ``folder_root`` when the key is absent or blank.
+        """
+        try:
+            rel = self.folder_root.relative_to(self.folder_base)
+        except (ValueError, TypeError):
+            rel = Path(self.name)
+
+        remote = self.sources.get("folders", {}).get("remote", {})
+
+        docs_root = remote.get("documents", "")
+        if docs_root:
+            self.folder_remote_documents = Path(docs_root) / rel
+        else:
+            self.folder_remote_documents = self.folder_root
+
+        data_root = remote.get("data", "")
+        if data_root:
+            self.folder_remote_data = Path(data_root) / rel
+        else:
+            self.folder_remote_data = self.folder_root
+
+    def _setup_remote_folders(self):
+        """
+        Create curated remote-vault subfolders when a remote root is configured.
+
+        Only acts when the resolved remote path differs from ``folder_root``
+        (i.e. a remote root was actually set in sources). Safe to call multiple
+        times; existing folders are skipped.
+        """
+        if (
+            self.folder_remote_documents is not None
+            and self.folder_remote_documents != self.folder_root
+        ):
+            self.setup_subfolders(
+                root=self.folder_remote_documents,
+                folder_list=["inputs/documents"],
+            )
+        if (
+            self.folder_remote_data is not None
+            and self.folder_remote_data != self.folder_root
+        ):
+            self.setup_subfolders(
+                root=self.folder_remote_data,
+                folder_list=["inputs/data"],
+            )
 
     def _update_overlays(self):
         """Regenerate overlay files; party_b and service overlays skip silently if sources are not configured."""
@@ -811,35 +881,18 @@ class Project(FileSys):
         """
         Load ``self.sources`` from ``admin/config/sources.*`` if present.
 
-        Checks for ``sources.yaml``, ``sources.yml``, ``sources.toml``, and
+        Checks for ``sources.toml``, ``sources.yaml``, ``sources.yml``, and
         ``sources.json`` in that order; the first match is parsed and merged
         into :attr:`sources`. Parse errors and missing files are silently
         ignored.
         """
         config_dir = Path(self.folder_root) / "admin/config"
-        for fname in ("sources.json", "sources.yaml", "sources.yml", "sources.toml"):
+        for fname in ("sources.toml", "sources.yaml", "sources.yml", "sources.json"):
             path = config_dir / fname
             if not path.is_file():
                 continue
             try:
-                suffix = path.suffix.lower()
-                if suffix == ".json":
-                    import json
-
-                    with open(path, "r", encoding="utf-8") as f:
-                        data = json.load(f)
-                elif suffix in (".yaml", ".yml"):
-                    import yaml
-
-                    with open(path, "r", encoding="utf-8") as f:
-                        data = yaml.safe_load(f)
-                else:
-                    try:
-                        import tomllib
-                    except ImportError:
-                        import tomli as tomllib
-                    with open(path, "rb") as f:
-                        data = tomllib.load(f)
+                data = self.load_config_file(path=path)
                 if isinstance(data, dict):
                     self.sources.update(data)
             except Exception:
@@ -897,7 +950,7 @@ class Project(FileSys):
         note in ``self.contractor`` and the resolved path in ``self.contractor_path``.
 
         :attr:`sources` is populated automatically from
-        ``admin/config/sources.yaml`` on project load; it can also be set
+        ``admin/config/sources.toml`` on project load; it can also be set
         manually before calling this method.
 
         :raises FileNotFoundError: If no note matching the contractor name is found
@@ -907,8 +960,9 @@ class Project(FileSys):
         """
         contractor = self.get_contractor()
 
-        sources_organizations = self.sources.get("organizations", None)
-        sources_sapiens = self.sources.get("sapiens", None)
+        search = self.sources.get("folders", {}).get("search", {})
+        sources_organizations = search.get("organizations", None)
+        sources_sapiens = search.get("sapiens", None)
 
         # organizations take precedence in the search over individuals
         path = self._collect_md_files(sources_organizations).get(contractor)
@@ -947,7 +1001,9 @@ class Project(FileSys):
         :rtype: None
         """
         contractor_sapiens = self.get_contractor_sapiens()
-        sources_sapiens = self.sources.get("sapiens", None)
+        sources_sapiens = (
+            self.sources.get("folders", {}).get("search", {}).get("sapiens", None)
+        )
         if self.contractor is None:
             self.load_contractor()
 
@@ -971,7 +1027,7 @@ class Project(FileSys):
         note in ``self.client`` and the resolved path in ``self.client_path``.
 
         :attr:`sources` is populated automatically from
-        ``admin/config/sources.yaml`` on project load; it can also be set
+        ``admin/config/sources.toml`` on project load; it can also be set
         manually before calling this method.
 
         :raises FileNotFoundError: If no note matching the client name is found
@@ -981,8 +1037,9 @@ class Project(FileSys):
         """
         client = self.get_client()
 
-        sources_organizations = self.sources.get("organizations", None)
-        sources_sapiens = self.sources.get("sapiens", None)
+        search = self.sources.get("folders", {}).get("search", {})
+        sources_organizations = search.get("organizations", None)
+        sources_sapiens = search.get("sapiens", None)
 
         # organizations take precedence in the search over individuals
         path = self._collect_md_files(sources_organizations).get(client)
@@ -1014,7 +1071,7 @@ class Project(FileSys):
         path in ``self.service_path``.
 
         :attr:`sources` is populated automatically from
-        ``admin/config/sources.yaml`` on project load; it can also be set
+        ``admin/config/sources.toml`` on project load; it can also be set
         manually before calling this method.
 
         :raises FileNotFoundError: If no note matching the service_id is found
@@ -1023,7 +1080,9 @@ class Project(FileSys):
         :rtype: None
         """
         service_id = self.get_attribute(entry_key="service_id", clean_cref=True)
-        sources_services = self.sources.get("services", None)
+        sources_services = (
+            self.sources.get("folders", {}).get("search", {}).get("services", None)
+        )
 
         path = self._collect_md_files(sources_services).get(service_id)
         if path is not None:
@@ -1052,12 +1111,12 @@ class Project(FileSys):
             :icon: code-square
             :open:
 
-            Place ``sources.yaml`` in the project's ``admin/config/`` folder:
+            Place ``sources.toml`` in the project's ``admin/config/`` folder:
 
-            .. code-block:: yaml
+            .. code-block:: toml
 
-                services:
-                  - /vault/services   # folder containing <service_id>.md files
+                [folders.search]
+                services = ["/vault/services"]   # folder containing <service_id>.md files
 
             The file is read automatically on project load. Each service note
             must have an ``abstract`` metadata field with the display name:
@@ -1086,7 +1145,7 @@ class Project(FileSys):
                 import losalamos
 
                 pj = losalamos.load_project("path/to/myProject")
-                pj.sources = {"services": ["path/to/service/notes"]}
+                pj.sources = {"folders": {"search": {"services": ["path/to/service/notes"]}}}
 
                 path = pj.make_overlay_service()
         """
@@ -1323,8 +1382,12 @@ class Project(FileSys):
 
                 pj = losalamos.load_project("path/to/myProject")
                 pj.sources = {
-                    "organizations": ["path/to/org/notes"],
-                    "sapiens": ["path/to/people/notes"],
+                    "folders": {
+                        "search": {
+                            "organizations": ["path/to/org/notes"],
+                            "sapiens": ["path/to/people/notes"],
+                        }
+                    }
                 }
 
                 path = pj.make_overlay_party_b_contractor()
@@ -1399,8 +1462,12 @@ class Project(FileSys):
 
                 pj = losalamos.load_project("path/to/myProject")
                 pj.sources = {
-                    "organizations": ["path/to/org/notes"],
-                    "sapiens": ["path/to/people/notes"],
+                    "folders": {
+                        "search": {
+                            "organizations": ["path/to/org/notes"],
+                            "sapiens": ["path/to/people/notes"],
+                        }
+                    }
                 }
 
                 path = pj.make_overlay_party_b_client()
@@ -1603,7 +1670,7 @@ class Project(FileSys):
         numbers = []
         for md_file in Path(self.folder_root).rglob("*.md"):
             meta = NoteBasic.parse_metadata(note_file=md_file)
-            if meta.get("note_type") != "asset":
+            if not meta or meta.get("note_type") != "asset":
                 continue
             asset_id = meta.get("asset_id", "")
             if (
@@ -1631,7 +1698,7 @@ class Project(FileSys):
         rows = []
         for md_file in Path(self.folder_root).rglob("*.md"):
             meta = NoteBasic.parse_metadata(note_file=md_file)
-            if meta.get("note_type") != "asset":
+            if not meta or meta.get("note_type") != "asset":
                 continue
             raw_file = str(meta.get("asset_file") or "")
             # strip surrounding quotes and [[...]] wiki-link brackets
@@ -1648,6 +1715,147 @@ class Project(FileSys):
         return pd.DataFrame(
             rows, columns=["asset_id", "asset_type", "name", "asset_file"]
         )
+
+    def _next_transfer_id(self):
+        """
+        Return the next available transfer ID as a zero-padded string.
+
+        Globs all ``.md`` files under the project root, reads front-matter
+        for those whose ``note_type`` is ``transfer``, and collects the
+        numeric part of each ``name`` field that ends with a ``T``-prefixed
+        ID (e.g. ``INFLOW_proj_T003`` → ``3``). Returns the next available
+        zero-padded identifier.
+
+        :returns: Next transfer ID, e.g. ``"T004"``.
+        :rtype: str
+        """
+        pattern = re.compile(r"T(\d+)$", re.IGNORECASE)
+        numbers = []
+        for md_file in Path(self.folder_root).rglob("*.md"):
+            meta = NoteBasic.parse_metadata(note_file=md_file)
+            if not meta or meta.get("note_type") != "transfer":
+                continue
+            name = str(meta.get("name", ""))
+            m = pattern.search(name)
+            if m:
+                numbers.append(int(m.group(1)))
+        n = max(numbers) + 1 if numbers else 1
+        return f"T{n:03d}"
+
+    def add_transfer(
+        self,
+        transfer_type,
+        date,
+        account,
+        value,
+        status=None,
+        commitment=None,
+        recurrence=None,
+        method=None,
+        protocol=None,
+        related_asset=None,
+    ):
+        """
+        Create a new transfer note under ``budget/inflows/`` or ``budget/outflows/``.
+
+        The target folder is chosen from *transfer_type*: ``"inflow"`` writes
+        to ``budget/inflows/`` and ``"outflow"`` to ``budget/outflows/``.
+
+        :param transfer_type: Direction of the transfer. Must be ``"inflow"``
+            or ``"outflow"``.
+        :type transfer_type: str
+        :param date: Date of the transfer, e.g. ``"2026-09-02"``.
+        :type date: str
+        :param account: Account name or identifier.
+        :type account: str
+        :param value: Monetary value of the transfer.
+        :type value: float or str
+        :param status: Execution status. One of ``"Executed"``,
+            ``"Cancelled"``, or ``"Prospected"``.
+        :type status: str or None
+        :param commitment: Financial commitment type. One of
+            ``"Contracted"`` or ``"Optional"``.
+        :type commitment: str or None
+        :param recurrence: Recurrence period. One of ``"Monthly"`` or
+            ``"Yearly"``.
+        :type recurrence: str or None
+        :param method: Payment method. Defaults to ``"Manual"`` when
+            ``None``.
+        :type method: str or None
+        :param protocol: Payment protocol. One of ``"Bill"`` or
+            ``"Transfer"``.
+        :type protocol: str or None
+        :param related_asset: Optional reference to a related asset note.
+        :type related_asset: str or None
+        :raises ValueError: If *transfer_type* is not ``"inflow"`` or
+            ``"outflow"``.
+        :returns: The newly created transfer note.
+        :rtype: losalamos.notes.NoteTransfer
+        """
+        transfer_type = transfer_type.lower()
+        if transfer_type not in ("inflow", "outflow"):
+            raise ValueError(
+                f"transfer_type must be 'inflow' or 'outflow', got '{transfer_type}'"
+            )
+
+        transfer_id = self._next_transfer_id()
+        name = f"{transfer_type.upper()}_{self.name}_{transfer_id}"
+        target_folder = Path(self.folder_root) / f"budget/{transfer_type}s"
+        target_folder.mkdir(parents=True, exist_ok=True)
+
+        note_file = target_folder / f"{name}.md"
+        note = NoteTransfer(name=name, alias=name)
+        note.load_new(file_note=note_file)
+        note.metadata["name"] = name
+        note.metadata["date"] = date
+        note.metadata["transfer_type"] = transfer_type
+        note.metadata["account"] = account
+        note.metadata["value"] = value
+        note.metadata["status"] = status
+        note.metadata["commitment"] = commitment
+        note.metadata["recurrence"] = recurrence
+        note.metadata["method"] = method if method is not None else "Manual"
+        note.metadata["protocol"] = protocol
+        note.metadata["related_asset"] = related_asset
+        note.update()
+        note.save()
+
+        return note
+
+    def get_transfers(self) -> pd.DataFrame:
+        """
+        Return a DataFrame of all transfer notes found under the project root.
+
+        Scans every ``.md`` file for ``note_type: transfer`` front-matter and
+        collects the transfer schema fields. Rows are sorted by ``name``.
+
+        :returns: DataFrame with columns ``name``, ``date``, ``transfer_type``,
+            ``status``, ``account``, ``value``, ``commitment``, ``recurrence``,
+            ``method``, ``protocol``, ``related_asset``. Empty DataFrame when
+            no transfers exist.
+        :rtype: pandas.DataFrame
+        """
+        _cols = [
+            "name",
+            "date",
+            "transfer_type",
+            "status",
+            "account",
+            "value",
+            "commitment",
+            "recurrence",
+            "method",
+            "protocol",
+            "related_asset",
+        ]
+        rows = []
+        for md_file in Path(self.folder_root).rglob("*.md"):
+            meta = NoteBasic.parse_metadata(note_file=md_file)
+            if not meta or meta.get("note_type") != "transfer":
+                continue
+            rows.append({col: meta.get(col, "") for col in _cols})
+        rows.sort(key=lambda r: r["name"])
+        return pd.DataFrame(rows, columns=_cols)
 
     def _localize_doc_type(self, asset_type) -> str:
         """
@@ -1715,28 +1923,59 @@ class Project(FileSys):
         }
         return {dst: str(src) for dst, src in _map.items() if src.is_file()}
 
-    def _add_asset_document(self, asset_type, files_overlay, subfolder):
+    def _locate_document_source(self, name) -> Path:
+        """
+        Locate the working source folder for a document by name.
+
+        Checks ``inputs/documents/{name}/`` under the local project root first,
+        then under ``folder_remote_documents`` if a remote documents root is
+        configured.
+
+        :param name: Document folder name, e.g. ``"INVOICE_C034_F003"``.
+        :type name: str
+        :raises FileNotFoundError: If the source folder is not found in either
+            the local or (when configured) the remote location.
+        :returns: Path to the document source folder.
+        :rtype: pathlib.Path
+        """
+        local = Path(self.folder_root) / "inputs/documents" / name
+        if local.is_dir():
+            return local
+        if (
+            self.folder_remote_documents is not None
+            and self.folder_remote_documents != self.folder_root
+        ):
+            remote = self.folder_remote_documents / "inputs/documents" / name
+            if remote.is_dir():
+                return remote
+            raise FileNotFoundError(
+                f"Document source not found for '{name}'. "
+                f"Checked: '{local}', '{remote}'"
+            )
+        raise FileNotFoundError(
+            f"Document source not found for '{name}'. Checked: '{local}'"
+        )
+
+    def _add_asset_document(self, asset_type, files_overlay, config=None):
         """
         Core creation logic for asset documents (invoice, receipt, proposal, etc.).
 
-        Creates the document folder under *subfolder*, registers the document
-        via :meth:`add_document`, patches ``definitions/project.tex`` with the
-        asset identity fields, and writes the sidecar asset note. The document
-        type key and template overlay are resolved from *asset_type* (lowercased)
-        and ``sources["templates"]["documents"]``.
+        Creates the document working tree at ``inputs/documents/{name}/``, registers
+        the document via :meth:`add_document`, patches ``definitions/project.tex``
+        with the asset identity fields, writes the sidecar asset note at
+        ``inputs/documents/{name}.md`` (always local, visible to Obsidian), and
+        optionally rewrites the services table via :meth:`~losalamos.documents.Document.apply_config`.
 
         :param asset_type: Asset type string in uppercase, e.g. ``"INVOICE"``.
         :type asset_type: str
         :param files_overlay: File overlay dict passed to :meth:`add_document`.
         :type files_overlay: dict or None
-        :param subfolder: Project-relative target folder, e.g. ``"budget/documents"``.
-        :type subfolder: str
+        :param config: Optional config dict forwarded to :meth:`~losalamos.documents.Document.apply_config`.
+            When provided, rewrites the document's services table.
+        :type config: dict or None
         :returns: The newly created document instance.
         :rtype: losalamos.documents.Document
         """
-        doc_dir = Path(self.folder_root) / subfolder
-        doc_dir.mkdir(parents=True, exist_ok=True)
-
         asset_id = self._next_asset_id()
         name = f"{asset_type}_{self.name}_{asset_id}"
 
@@ -1751,18 +1990,22 @@ class Project(FileSys):
             name=name,
             template_overlay=template_overlay,
             files_overlay=files_overlay or None,
-            subfolder=subfolder,
+            subfolder="inputs/documents",
             condensed=False,
             compile_pdf=False,
         )
 
+        source_folder = Path(self.folder_root) / "inputs/documents" / name
         self._patch_project_tex(
-            doc_folder=doc_dir / name,
+            doc_folder=source_folder,
             file_id=asset_id,
             asset_type=asset_type,
         )
 
-        note_file = doc_dir / f"{name}.md"
+        if config is not None:
+            doc.apply_config(config=config)
+
+        note_file = Path(self.folder_root) / "inputs/documents" / f"{name}.md"
         asset_note = NoteAsset(name=name, alias=name)
         asset_note.load_new(file_note=note_file)
         asset_note.metadata["name"] = name
@@ -1779,28 +2022,24 @@ class Project(FileSys):
         """
         Core build logic for asset documents (invoice, receipt, proposal, etc.).
 
-        Locates ``{asset_type}_{project}_{file_id}`` under *subfolder*, reads
+        Locates the source via :meth:`_locate_document_source`, reads
         ``\\DocVersion`` from ``definitions/project.tex`` (dots removed, ``V``
-        prefix added), compiles via ``latexmk`` with cleanup, moves the PDF to
+        prefix added), compiles via ``latexmk`` with cleanup, ships the PDF to
         ``{subfolder}/{asset_type}_{project}_{file_id}_{version}.pdf``, and
-        updates ``asset_file`` in the sidecar note.
+        updates ``asset_file`` in the sidecar note at ``inputs/documents/{name}.md``.
 
         :param asset_type: Asset type string in uppercase, e.g. ``"INVOICE"``.
         :type asset_type: str
         :param file_id: Asset file ID assigned at creation, e.g. ``"F003"``.
         :type file_id: str
-        :param subfolder: Project-relative folder containing the document, e.g. ``"budget/documents"``.
+        :param subfolder: Project-relative target folder for the PDF, e.g. ``"budget/documents"``.
         :type subfolder: str
-        :raises FileNotFoundError: If the document folder or ``main.tex`` is not found.
+        :raises FileNotFoundError: If the document source folder or ``main.tex`` is not found.
         :returns: Path to the compiled PDF.
         :rtype: pathlib.Path
         """
-        doc_dir = Path(self.folder_root) / subfolder
         name = f"{asset_type}_{self.name}_{file_id}"
-        doc_folder = doc_dir / name
-
-        if not doc_folder.is_dir():
-            raise FileNotFoundError(f"{asset_type} folder not found: '{doc_folder}'")
+        doc_folder = self._locate_document_source(name=name)
 
         main_tex = doc_folder / "main.tex"
         if not main_tex.is_file():
@@ -1818,15 +2057,17 @@ class Project(FileSys):
                 version_raw = m.group(1)
         version_tag = "V" + version_raw.replace(".", "")
 
+        target_dir = Path(self.folder_root) / subfolder
+        target_dir.mkdir(parents=True, exist_ok=True)
         pdf_name = f"{asset_type}_{self.name}_{file_id}_{version_tag}.pdf"
-        pdf_output = doc_dir / pdf_name
+        pdf_output = target_dir / pdf_name
 
         klass = DOCUMENT_TYPES[asset_type.lower()]
         doc = klass(name=name)
         doc.load_data(file_data=main_tex)
         doc.to_pdf(file_output=pdf_output, cleanup=True)
 
-        note_file = doc_dir / f"{name}.md"
+        note_file = Path(self.folder_root) / "inputs/documents" / f"{name}.md"
         if note_file.is_file():
             asset_note = NoteAsset(name=name, alias=name)
             asset_note.load(file_note=note_file)
@@ -1836,31 +2077,37 @@ class Project(FileSys):
 
         return pdf_output
 
-    def add_invoice(self):
+    def add_invoice(self, config=None):
         """
-        Create a new invoice document inside ``budget/documents/``.
+        Create a new invoice document.
 
-        The folder and sidecar note are named ``INVOICE_{project}_{file_id}``,
-        e.g. ``INVOICE_C034_F003``. No compilation or condensing is performed.
+        The working tree is created at ``inputs/documents/INVOICE_{project}_{file_id}/``
+        and the sidecar note at ``inputs/documents/INVOICE_{project}_{file_id}.md``.
+        No compilation or condensing is performed.
 
         The template directory is read from
         ``sources["templates"]["documents"]["invoice"]`` in the project's
-        ``admin/config/sources.yaml``. The following overlays are applied
+        ``admin/config/sources.toml``. The following overlays are applied
         when present in ``admin/config/overlays/``:
 
         - ``project.tex`` → ``definitions/project.tex``
         - ``party_b_contractor.tex`` → ``definitions/party_b.tex``
 
+        :param config: Optional config dict forwarded to
+            :meth:`~losalamos.documents.Invoice.apply_config`. When provided,
+            rewrites ``partials/services-invoice.tex`` from the services list
+            and invoice settings in the dict.
+        :type config: dict or None
         :returns: The newly created invoice document instance.
         :rtype: losalamos.documents.Document
         """
         return self._add_asset_document(
             asset_type="INVOICE",
             files_overlay=self._standard_files_overlay(),
-            subfolder="budget/documents",
+            config=config,
         )
 
-    def add_receipt(self, invoice_id=None):
+    def add_receipt(self, invoice_id=None, config=None):
         """
         Create a new receipt document inside ``budget/documents/``.
 
@@ -1877,16 +2124,19 @@ class Project(FileSys):
             e.g. ``"F003"``. When provided, the invoice folder's files
             (excluding ``main.tex``) become file overlays on the receipt.
         :type invoice_id: str or None
+        :param config: Optional config dict forwarded to
+            :meth:`~losalamos.documents.Receipt.apply_config`. When provided,
+            rewrites ``partials/services-receipt.tex`` from the services list
+            and invoice settings in the dict.
+        :type config: dict or None
         :raises FileNotFoundError: If *invoice_id* is given but the
             corresponding invoice folder does not exist.
         :returns: The newly created receipt document instance.
         :rtype: losalamos.documents.Document
         """
         if invoice_id is not None:
-            budget_docs = Path(self.folder_root) / "budget/documents"
-            invoice_folder = budget_docs / f"INVOICE_{self.name}_{invoice_id}"
-            if not invoice_folder.is_dir():
-                raise FileNotFoundError(f"Invoice folder not found: '{invoice_folder}'")
+            invoice_name = f"INVOICE_{self.name}_{invoice_id}"
+            invoice_folder = self._locate_document_source(name=invoice_name)
             files_overlay = {
                 src.relative_to(invoice_folder).as_posix(): str(src)
                 for src in invoice_folder.rglob("*")
@@ -1898,7 +2148,7 @@ class Project(FileSys):
         return self._add_asset_document(
             asset_type="RECEIPT",
             files_overlay=files_overlay,
-            subfolder="budget/documents",
+            config=config,
         )
 
     def build_invoice(self, file_id):
@@ -1907,7 +2157,7 @@ class Project(FileSys):
 
         Reads ``\\DocVersion`` from ``definitions/project.tex``, compiles
         via ``latexmk`` with cleanup, and places the result at
-        ``budget/documents/INVOICE_{project}_{file_id}_{version}.pdf``.
+        ``inputs/documents/INVOICE_{project}_{file_id}_{version}.pdf``.
         Updates the ``asset_file`` field in the sidecar note.
 
         :param file_id: Asset file ID assigned at creation, e.g. ``"F003"``.
@@ -1917,7 +2167,7 @@ class Project(FileSys):
         :rtype: pathlib.Path
         """
         return self._build_asset_document(
-            asset_type="INVOICE", file_id=file_id, subfolder="budget/documents"
+            asset_type="INVOICE", file_id=file_id, subfolder="inputs/documents"
         )
 
     def build_receipt(self, file_id):
@@ -1926,7 +2176,7 @@ class Project(FileSys):
 
         Reads ``\\DocVersion`` from ``definitions/project.tex``, compiles
         via ``latexmk`` with cleanup, and places the result at
-        ``budget/documents/RECEIPT_{project}_{file_id}_{version}.pdf``.
+        ``inputs/documents/RECEIPT_{project}_{file_id}_{version}.pdf``.
         Updates the ``asset_file`` field in the sidecar note.
 
         :param file_id: Asset file ID assigned at creation, e.g. ``"F003"``.
@@ -1936,19 +2186,20 @@ class Project(FileSys):
         :rtype: pathlib.Path
         """
         return self._build_asset_document(
-            asset_type="RECEIPT", file_id=file_id, subfolder="budget/documents"
+            asset_type="RECEIPT", file_id=file_id, subfolder="inputs/documents"
         )
 
     def add_proposal(self):
         """
-        Create a new proposal document inside ``admin/proposals/``.
+        Create a new proposal document.
 
-        The folder and sidecar note are named ``PROPOSAL_{project}_{file_id}``,
-        e.g. ``PROPOSAL_C034_F005``. No compilation or condensing is performed.
+        The working tree is created at ``inputs/documents/PROPOSAL_{project}_{file_id}/``
+        and the sidecar note at ``inputs/documents/PROPOSAL_{project}_{file_id}.md``.
+        No compilation or condensing is performed.
 
         The template directory is read from
         ``sources["templates"]["documents"]["proposal"]`` in the project's
-        ``admin/config/sources.yaml``. The following overlays are applied
+        ``admin/config/sources.toml``. The following overlays are applied
         when present in ``admin/config/overlays/``:
 
         - ``project.tex`` → ``definitions/project.tex``
@@ -1960,7 +2211,6 @@ class Project(FileSys):
         return self._add_asset_document(
             asset_type="PROPOSAL",
             files_overlay=self._standard_files_overlay(),
-            subfolder="admin/proposals",
         )
 
     def build_proposal(self, file_id):

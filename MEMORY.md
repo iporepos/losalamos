@@ -1,5 +1,34 @@
 # Memory Log
 
+- 2026-09-03 — moved TestLatexCompileErrorReal from tests/unit/test_documents_tex.py to tests/bcmk/test_documents_tex.py as BCMKTestDocumentTeXLatex; gated with @unittest.skipUnless(RUN_BENCHMARKS); keeps unit suite fast by not invoking real latexmk/pdflatex
+
+- 2026-09-03 — add_new_project: removed branch from required config keys; first screen is now an interactive branch picker (_pick_branch/_list_branches); user picks existing branch or creates new one with [+]; branch prefix computed from selection
+
+- 2026-09-03 — five bug fixes: (1) alias removed from _SYSTEM_KEYS so it's written to project note; (2) contractor/client/sapiens fields wrapped in [[...]] wiki-links; (3) _pick_party() in add_new_project — asks O/H then handles sapiens same/different/skip; (4) _print_columns auto-detects columns (<20→1, <40→2, 40+→3); (5) admin/documents and budget/documents removed from SUBFOLDERS; PDFs for invoice/receipt now go to inputs/documents
+
+- 2026-09-03 — remote folder branch mirroring: add_new_project now passes folder_base=vault + branch=branch_folder to new_project() so rel=branch/name; load_project gains optional vault param to detect branch and set p.branch; manage_documents passes vault to load_project; TestProjectBranch gains test_load_project_with_vault_sets_branch
+
+- 2026-09-03 — nomenclature refactor: basefolder→vault, prefix→branch, collection→branch across project.py (self.branch, _SYSTEM_KEYS, new_project()), add_new_project.py (vault/branch/folder_system/separator params, _next_increment rewrite with re.sub), manage_documents.py (same); sources templates restructured to [folders.search]/[folders.remote]/[templates.documents]; TOML now preferred format in all docstring examples; NoneType guard added to parse_metadata calls in _next_asset_id/_get_assets/_next_transfer_id/get_transfers
+
+- 2026-09-03 — three bug fixes: (1) _pick_item letter prompt now uses 0=skip so Q-starting items are reachable; 0=skip also replaces ENTER=skip at selection prompt; (2) sources.toml template had documents/data keys nested under [templates.documents] — moved before that section so _resolve_remote_folders picks them up; (3) improved missing-key error messages in add_new_project and manage_documents to show found keys
+
+- 2026-09-02 — fix duplicate sources config: new_project() now pre-places sources file before p.setup() so _install_config_templates sees it and skips blank; rank changed to prefer TOML; _load_sources_config search order updated to toml→yaml→yml→json
+
+- 2026-09-02 — Phase 8: added _transfer.md template (data/ warning issued); NoteTransfer(NoteBasic) in notes.py; _next_transfer_id()/add_transfer()/get_transfers() in project.py; transfer_type inflow→budget/inflows/ outflow→budget/outflows/; tests in test_notes.py (TestNoteTransfer) and test_project.py (TestAddTransfer, TestGetTransfers)
+
+- 2026-09-02 — Phase 7: extracted DocumentTeX.clean() from to_pdf() if-cleanup block; same is_main guard/latexmkrc detection/chdir-finally pattern; to_pdf() calls self.clean() in place of inline block; tests in test_documents_tex.py (TestDocumentTeXClean)
+
+- 2026-09-02 — Phase 6: added LatexCompileError(RuntimeError) with source/returncode/log_path attrs; to_pdf() wraps subprocess.run in try/except — CalledProcessError→LatexCompileError with log_path if .log exists, FileNotFoundError→LatexCompileError("latexmk not found"); cleanup block gated on successful compile with explicit comment; tests in test_documents_tex.py
+
+- 2026-09-02 — Phase 5: added FigureSVG._temp_working_copy() contextmanager (contextlib+tempfile.TemporaryDirectory); refactored to_image/to_pdf/to_svg to use it; crop_id temp_svg now lives in same temp dir (no separate make_local_tempfile call); make_local_tempfile untouched in utils.py; tests in test_figures.py
+
+- 2026-09-02 — Phase 4: added Document.apply_config() no-op; Invoice._build_services_tex() static method generates LaTeX table from services list + tax_rate; Invoice/Receipt.apply_config() rewrites partials/services-invoice/receipt.tex; config=None param threaded through _add_asset_document/add_invoice/add_receipt; tests in test_documents.py
+
+- 2026-09-02 — Phase 3: added folder_remote_documents/folder_remote_data (resolved via _resolve_remote_folders after _load_sources_config); _setup_remote_folders creates inputs/documents and inputs/data in remote roots; _locate_document_source now checks remote fallback; sources templates updated with documents/data keys
+- 2026-09-02 — Phase 2: added collection attribute to Project (default None); folder_root = folder_base/collection/name when set, flat otherwise; main_note_path derived from folder_root; collection in _SYSTEM_KEYS (not written to note); load_project unaffected
+- 2026-09-02 — Phase 1: unified document source to inputs/documents/{name}/; note at inputs/documents/{name}.md (local/Obsidian-visible); PDF shipped to type-specific target; added _locate_document_source(); removed subfolder param from _add_asset_document; add_receipt uses resolver for invoice lookup
+- 2026-09-02 — Phase 0: added MbaE.load_config_file() static method (json/yaml/toml); updated boot() to branch on extension; replaced _load_files_overlay, _load_config, _load_sources_config inline blocks with calls to it; generalized FileSys.setup_subfolders(root, folder_list)
+
 - 2026-08-31 — generalized tools prefix: renamed config key collection→prefix in add_new_project and manage_documents; removed .upper() coercion; fixed _next_increment to use case-insensitive matching; updated all docs/examples
 - 2026-08-31 — CI fixes: added pyyaml to pyproject.toml dependencies; corrected test_tools_templates.py subprocess call from losalamos.tools.templates to losalamos.tools.update_templates
 - 2026-08-31 — manage_documents: added delete action; removes TeX folder + PDFs but keeps sidecar note as tombstone; home listing filtered to active documents only via _active_documents(); _next_asset_id() naturally skips tombstone IDs

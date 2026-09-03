@@ -16,9 +16,11 @@ in SVG, PDF, PNG, and JPEG formats using Inkscape as the rendering backend.
 
 # Native imports
 # =======================================================================
+import contextlib
 import os
 import pprint
 import shutil
+import tempfile
 from pathlib import Path
 
 # ... {develop}
@@ -1103,6 +1105,31 @@ class FigureSVG(Figure):
 
         return None
 
+    @contextlib.contextmanager
+    def _temp_working_copy(self, suffix=None):
+        """
+        Context manager: copy ``self.file_data`` into a fresh OS temp directory,
+        swap ``self.file_data`` to point at the copy, yield the copy path, then
+        restore ``self.file_data`` and delete the entire temp directory —
+        guaranteed on both normal exit and exceptions.
+
+        :param suffix: Filename suffix for the temp copy. Defaults to the
+            original file's suffix.
+        :type suffix: str or None
+        :yields: Path to the temporary copy.
+        :rtype: pathlib.Path
+        """
+        src_file = self.file_data
+        ext = suffix if suffix is not None else src_file.suffix
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            dst_file = Path(tmp_dir) / (src_file.stem + ext)
+            shutil.copy(src=src_file, dst=dst_file)
+            self.file_data = dst_file
+            try:
+                yield dst_file
+            finally:
+                self.file_data = src_file
+
     def to_image(
         self,
         file_output=None,
@@ -1149,67 +1176,56 @@ class FigureSVG(Figure):
 
         """
         import subprocess
-        from losalamos.utils import make_local_tempfile
 
         # handle output file
         # -----------------------------------------------------------------------
         if file_output is None:
             file_output = self.file_data.parent / str(self.file_data.stem + ".png")
 
-        # handle svg file copy
-        # -----------------------------------------------------------------------
-        src_file = self.file_data
-        dst_file = make_local_tempfile(src_file=src_file)
-        shutil.copy(src=self.file_data, dst=dst_file)
-        self.file_data = dst_file
-
-        # handle page opacity for jpeg render
-        # -----------------------------------------------------------------------
-        if to_jpeg:
-            self.set_page_opacity(opacity=1.0)
-            self.save()
-
-        # Get abspath
         file_output = Path(file_output).resolve()
 
-        # handle visibility of layers
-        # -----------------------------------------------------------------------
-        b_save = False
+        with self._temp_working_copy() as dst_file:
 
-        if hide_layers is not None:
-            self.hide_layers(labels=hide_layers)
-            b_save = True
+            # handle page opacity for jpeg render
+            # -----------------------------------------------------------------------
+            if to_jpeg:
+                self.set_page_opacity(opacity=1.0)
+                self.save()
 
-        if show_layers is not None:
-            self.show_layers(labels=show_layers, inclusive=show_inclusive)
-            b_save = True
+            # handle visibility of layers
+            # -----------------------------------------------------------------------
+            b_save = False
 
-        # save to temporary file
-        if b_save:
-            self.save()
+            if hide_layers is not None:
+                self.hide_layers(labels=hide_layers)
+                b_save = True
 
-        # set return file
-        return_file = file_output
+            if show_layers is not None:
+                self.show_layers(labels=show_layers, inclusive=show_inclusive)
+                b_save = True
 
-        # build command
-        # -----------------------------------------------------------------------
-        cmd = [
-            "inkscape",
-            self.file_data,
-            "--export-type=png",
-            "--export-dpi={}".format(dpi),
-            "--export-filename={}".format(file_output),
-        ]
+            if b_save:
+                self.save()
 
-        if crop_id is not None:
-            cmd = cmd + ["--export-id={}".format(crop_id)]
+            # build and run inkscape command
+            # -----------------------------------------------------------------------
+            cmd = [
+                "inkscape",
+                dst_file,
+                "--export-type=png",
+                "--export-dpi={}".format(dpi),
+                "--export-filename={}".format(file_output),
+            ]
 
-        # call inkscape process
-        # -----------------------------------------------------------------------
-        subprocess.run(cmd)
+            if crop_id is not None:
+                cmd = cmd + ["--export-id={}".format(crop_id)]
+
+            subprocess.run(cmd)
 
         # handle jpg conversion
         # -----------------------------------------------------------------------
+        return_file = file_output
+
         if to_jpeg:
             new_name = file_output.stem + ".jpeg"
             new_file = Path(file_output.parent / new_name)
@@ -1218,14 +1234,7 @@ class FigureSVG(Figure):
             if remove_png:
                 os.remove(file_output)
 
-            # reset return file
             return_file = new_file
-
-        # restore file data and cleanup
-        # -----------------------------------------------------------------------
-        self.file_data = src_file
-        # print(temp_folder)
-        os.remove(dst_file)
 
         return return_file
 
@@ -1274,12 +1283,7 @@ class FigureSVG(Figure):
             Requires ``inkscape`` available in system PATH.
 
         """
-        import os
-        import shutil
         import subprocess
-
-        from pathlib import Path
-        from losalamos.utils import make_local_tempfile
 
         # handle output file
         # -------------------------------------------------------------------------
@@ -1293,97 +1297,69 @@ class FigureSVG(Figure):
         if file_output.suffix.lower() != ".pdf":
             file_output = file_output.with_suffix(".pdf")
 
-        # create temporary working copy
-        # -------------------------------------------------------------------------
-        src_file = self.file_data
-        dst_file = make_local_tempfile(src_file=src_file)
+        with self._temp_working_copy() as dst_file:
 
-        shutil.copy(src=self.file_data, dst=dst_file)
+            # handle layer visibility
+            # -------------------------------------------------------------------------
+            b_save = False
 
-        self.file_data = dst_file
+            if hide_layers is not None:
+                self.hide_layers(labels=hide_layers)
+                b_save = True
 
-        # handle layer visibility
-        # -------------------------------------------------------------------------
-        b_save = False
+            if show_layers is not None:
+                self.show_layers(labels=show_layers, inclusive=show_inclusive)
+                b_save = True
 
-        if hide_layers is not None:
-            self.hide_layers(labels=hide_layers)
-            b_save = True
+            if b_save:
+                self.save()
 
-        if show_layers is not None:
-            self.show_layers(
-                labels=show_layers,
-                inclusive=show_inclusive,
-            )
-            b_save = True
+            # -------------------------------------------------------------------------
+            # CROPPED VECTOR EXPORT
+            # -------------------------------------------------------------------------
+            if crop_id is not None:
 
-        # save temporary document if modified
-        # -------------------------------------------------------------------------
-        if b_save:
-            self.save()
+                # intermediate cropped SVG lives in the same temp directory
+                temp_svg = dst_file.parent / (dst_file.stem + "_crop.svg")
 
-        # -------------------------------------------------------------------------
-        # CROPPED VECTOR EXPORT
-        # -------------------------------------------------------------------------
-        if crop_id is not None:
+                # stage 1: export cropped standalone svg
+                # ---------------------------------------------------------------------
+                cmd_svg = [
+                    "inkscape",
+                    dst_file,
+                    "--export-type=svg",
+                    f"--export-filename={temp_svg}",
+                    f"--export-id={crop_id}",
+                ]
 
-            temp_svg = make_local_tempfile(src_file=self.file_data.with_suffix(".svg"))
+                subprocess.run(cmd_svg, check=True)
 
-            # stage 1:
-            # export cropped standalone svg
-            # ---------------------------------------------------------------------
-            cmd_svg = [
-                "inkscape",
-                self.file_data,
-                "--export-type=svg",
-                f"--export-filename={temp_svg}",
-                f"--export-id={crop_id}",
-                # "--export-id-only",
-            ]
+                # stage 2: export svg -> pdf
+                # ---------------------------------------------------------------------
+                cmd_pdf = [
+                    "inkscape",
+                    temp_svg,
+                    "--export-type=pdf",
+                    "--export-area-page",
+                    f"--export-filename={file_output}",
+                ]
 
-            subprocess.run(cmd_svg, check=True)
+                subprocess.run(cmd_pdf, check=True)
 
-            # stage 2:
-            # export svg -> pdf
-            # ---------------------------------------------------------------------
-            cmd_pdf = [
-                "inkscape",
-                temp_svg,
-                "--export-type=pdf",
-                "--export-area-page",
-                f"--export-filename={file_output}",
-            ]
+            # -------------------------------------------------------------------------
+            # STANDARD FULL-PAGE EXPORT
+            # -------------------------------------------------------------------------
+            else:
 
-            subprocess.run(cmd_pdf, check=True)
+                cmd_pdf = [
+                    "inkscape",
+                    dst_file,
+                    "--export-type=pdf",
+                    "--export-area-page",
+                    f"--export-filename={file_output}",
+                ]
 
-            # cleanup temporary svg
-            # ---------------------------------------------------------------------
-            if os.path.exists(temp_svg):
-                os.remove(temp_svg)
-
-        # -------------------------------------------------------------------------
-        # STANDARD FULL-PAGE EXPORT
-        # -------------------------------------------------------------------------
-        else:
-
-            cmd_pdf = [
-                "inkscape",
-                self.file_data,
-                "--export-type=pdf",
-                "--export-area-page",
-                f"--export-filename={file_output}",
-            ]
-
-            subprocess.run(cmd_pdf, check=True)
-
-        # restore original state
-        # -------------------------------------------------------------------------
-        self.file_data = src_file
-
-        # cleanup temporary working file
-        # -------------------------------------------------------------------------
-        if os.path.exists(dst_file):
-            os.remove(dst_file)
+                subprocess.run(cmd_pdf, check=True)
 
         return file_output
 
@@ -1419,7 +1395,6 @@ class FigureSVG(Figure):
 
         """
         import subprocess
-        from losalamos.utils import make_local_tempfile
 
         # handle output file
         # -----------------------------------------------------------------------
@@ -1439,48 +1414,36 @@ class FigureSVG(Figure):
                 f"Provide an explicit destination path to avoid overwriting the master SVG."
             )
 
-        # create temporary working copy
-        # -----------------------------------------------------------------------
-        src_file = self.file_data
-        dst_file = make_local_tempfile(src_file=src_file)
-        shutil.copy(src=self.file_data, dst=dst_file)
-        self.file_data = dst_file
+        with self._temp_working_copy() as dst_file:
 
-        # handle layer visibility
-        # -----------------------------------------------------------------------
-        b_save = False
+            # handle layer visibility
+            # -----------------------------------------------------------------------
+            b_save = False
 
-        if hide_layers is not None:
-            self.hide_layers(labels=hide_layers)
-            b_save = True
+            if hide_layers is not None:
+                self.hide_layers(labels=hide_layers)
+                b_save = True
 
-        if show_layers is not None:
-            self.show_layers(labels=show_layers, inclusive=show_inclusive)
-            b_save = True
+            if show_layers is not None:
+                self.show_layers(labels=show_layers, inclusive=show_inclusive)
+                b_save = True
 
-        if b_save:
-            self.save()
+            if b_save:
+                self.save()
 
-        # build and run inkscape command
-        # -----------------------------------------------------------------------
-        cmd = [
-            "inkscape",
-            self.file_data,
-            "--export-type=svg",
-            f"--export-filename={file_output}",
-        ]
+            # build and run inkscape command
+            # -----------------------------------------------------------------------
+            cmd = [
+                "inkscape",
+                dst_file,
+                "--export-type=svg",
+                f"--export-filename={file_output}",
+            ]
 
-        if crop_id is not None:
-            cmd.append(f"--export-id={crop_id}")
+            if crop_id is not None:
+                cmd.append(f"--export-id={crop_id}")
 
-        subprocess.run(cmd, check=True)
-
-        # restore original state and cleanup
-        # -----------------------------------------------------------------------
-        self.file_data = src_file
-
-        if os.path.exists(dst_file):
-            os.remove(dst_file)
+            subprocess.run(cmd, check=True)
 
         return file_output
 

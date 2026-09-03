@@ -14,6 +14,8 @@ phone:
 affiliation:
 place:
 address:
+organization_id:
+organization_id_type:
 cnpj:
 website:
 abstract:
