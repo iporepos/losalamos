@@ -446,19 +446,21 @@
                   
   <section id="module-losalamos.tools.manage_documents">
 <span id="losalamos-tools-manage-documents"></span><h1>losalamos.tools.manage_documents<a class="headerlink" href="#module-losalamos.tools.manage_documents" title="Link to this heading">#</a></h1>
-<p>Terminal document manager for a project folder group.</p>
-<p>Reads a tool config file (YAML, TOML, or JSON) that sets the base folder
-and folder prefix. Presents an interactive project picker, then a
+<p>Terminal document manager for a branch folder.</p>
+<p>Reads a tool config file (YAML, TOML, or JSON) that sets the vault, branch
+name, and folder system. Presents an interactive project picker, then a
 per-project home page to add, edit, or build asset documents (invoices,
 receipts, proposals).</p>
 <p><strong>Shell usage</strong></p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>losalamos.tools.manage_documents<span class="w"> </span>--config<span class="w"> </span>path/to/config.yaml
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>losalamos.tools.manage_documents<span class="w"> </span>--config<span class="w"> </span>path/to/config.toml
 </pre></div>
 </div>
 <p><strong>Tool config keys</strong></p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">basefolder</span></code> (<em>str</em>, required) — root directory where project group folders live.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">prefix</span></code> (<em>str</em>, required) — string prefix for project folders, e.g. <code class="docutils literal notranslate"><span class="pre">C</span></code> or <code class="docutils literal notranslate"><span class="pre">Projects-Consulting-</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">vault</span></code> (<em>str</em>, required) — root directory where branch folders live.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">branch</span></code> (<em>str</em>, required) — branch name, e.g. <code class="docutils literal notranslate"><span class="pre">&quot;Research&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;C&quot;</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">folder_system</span></code> (<em>str</em>, optional) — <code class="docutils literal notranslate"><span class="pre">&quot;default&quot;</span></code> (branch folder is <code class="docutils literal notranslate"><span class="pre">&lt;branch&gt;/</span></code>)
+or <code class="docutils literal notranslate"><span class="pre">&quot;alphanumerical&quot;</span></code> (branch folder is <code class="docutils literal notranslate"><span class="pre">&lt;branch&gt;000/</span></code>). Defaults to <code class="docutils literal notranslate"><span class="pre">&quot;default&quot;</span></code>.</p></li>
 </ul>
 <p><strong>Navigation</strong></p>
 <ul class="simple">
@@ -469,13 +471,10 @@ receipts, proposals).</p>
 <details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3" open="open">
 <summary class="sd-summary-title sd-card-header">
 <span class="sd-summary-icon"><svg version="1.1" width="1.0em" height="1.0em" class="sd-octicon sd-octicon-code-square" viewBox="0 0 16 16" aria-hidden="true"><path d="M0 1.75C0 .784.784 0 1.75 0h12.5C15.216 0 16 .784 16 1.75v12.5A1.75 1.75 0 0 1 14.25 16H1.75A1.75 1.75 0 0 1 0 14.25Zm1.75-.25a.25.25 0 0 0-.25.25v12.5c0 .138.112.25.25.25h12.5a.25.25 0 0 0 .25-.25V1.75a.25.25 0 0 0-.25-.25Zm7.47 3.97a.75.75 0 0 1 1.06 0l2 2a.75.75 0 0 1 0 1.06l-2 2a.749.749 0 0 1-1.275-.326.749.749 0 0 1 .215-.734L10.69 8 9.22 6.53a.75.75 0 0 1 0-1.06ZM6.78 6.53 5.31 8l1.47 1.47a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215l-2-2a.75.75 0 0 1 0-1.06l2-2a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042Z"></path></svg></span><span class="sd-summary-text">Example — tool config file</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
-<p class="sd-card-text">TOML and JSON are also accepted.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># Root directory that holds all project group folders.</span>
-<span class="nt">basefolder</span><span class="p">:</span><span class="w"> </span><span class="s">"C:/My</span><span class="nv"> </span><span class="s">Drive/projects"</span>
-
-<span class="c1"># Prefix that identifies the project folder group.</span>
-<span class="c1"># Can be a single letter (e.g. C) or any string (e.g. Projects-Consulting-).</span>
-<span class="nt">prefix</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">C</span>
+<p class="sd-card-text">Save a <code class="docutils literal notranslate"><span class="pre">manage_documents.toml</span></code> and pass it with <code class="docutils literal notranslate"><span class="pre">--config</span></code>:</p>
+<div class="highlight-toml notranslate"><div class="highlight"><pre><span></span><span class="n">vault</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"C:/My Drive/projects"</span>
+<span class="n">branch</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Research"</span>
+<span class="n">folder_system</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"default"</span>
 </pre></div>
 </div>
 </div>

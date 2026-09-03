@@ -24,3 +24,9 @@
       Proposal
       Receipt
    
+   .. rubric:: Exceptions
+
+   .. autosummary::
+   
+      LatexCompileError
+   

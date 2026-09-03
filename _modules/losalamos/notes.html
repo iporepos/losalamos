@@ -572,7 +572,10 @@
     <span class="s2">"subject"</span><span class="p">,</span>
     <span class="s2">"abstract"</span><span class="p">,</span>
     <span class="s2">"contractor"</span><span class="p">,</span>
+    <span class="s2">"contractor_sapiens"</span><span class="p">,</span>
     <span class="s2">"client"</span><span class="p">,</span>
+    <span class="s2">"client_sapiens"</span><span class="p">,</span>
+    <span class="s2">"service_id"</span><span class="p">,</span>
     <span class="s2">"project"</span><span class="p">,</span>
     <span class="s2">"comment"</span><span class="p">,</span>
     <span class="s2">"caption"</span><span class="p">,</span>
@@ -585,6 +588,11 @@
     <span class="s2">"publisher"</span><span class="p">,</span>
     <span class="s2">"booktitle"</span><span class="p">,</span>
     <span class="s2">"cite_bibli"</span><span class="p">,</span>
+    <span class="s2">"place"</span><span class="p">,</span>
+    <span class="s2">"edu_background"</span><span class="p">,</span>
+    <span class="s2">"affiliation_pro"</span><span class="p">,</span>
+    <span class="s2">"affiliation_edu"</span><span class="p">,</span>
+    <span class="s2">"address"</span><span class="p">,</span>
 <span class="p">]</span>
 <span class="n">HARMONIZE_DATE_FIELDS</span> <span class="o">=</span> <span class="p">[</span>
     <span class="s2">"timestamp"</span><span class="p">,</span>
@@ -716,7 +724,10 @@
         <span class="c1"># ---------------------</span>
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">dc</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">HARMONIZE_TEXT_FIELDS</span><span class="p">:</span>
-                <span class="n">dc</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">Note</span><span class="o">.</span><span class="n">harmonize_entry_text</span><span class="p">(</span><span class="n">dc</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
+                <span class="k">if</span> <span class="n">dc</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">==</span> <span class="s1">'""'</span> <span class="ow">or</span> <span class="n">dc</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="k">pass</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">dc</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">Note</span><span class="o">.</span><span class="n">harmonize_entry_text</span><span class="p">(</span><span class="n">dc</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
 
         <span class="c1"># DATE</span>
         <span class="c1"># ---------------------</span>
@@ -904,19 +915,19 @@
 <a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.Note.harmonize_entry_text">[docs]</a>
     <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">harmonize_entry_text</span><span class="p">(</span><span class="n">entry</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">entry</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">new_entry_bulk</span> <span class="o">=</span> <span class="n">entry</span><span class="p">[:]</span>
-            <span class="n">new_entry_bulk</span> <span class="o">=</span> <span class="n">new_entry_bulk</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">"'"</span><span class="p">,</span> <span class="s2">"`"</span><span class="p">)</span>
-            <span class="n">new_entry_bulk</span> <span class="o">=</span> <span class="n">new_entry_bulk</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">'"'</span><span class="p">,</span> <span class="s2">"``"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">entry</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">entry</span> <span class="o">==</span> <span class="s2">""</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
 
-            <span class="n">new_entry</span> <span class="o">=</span> <span class="s1">'"'</span> <span class="o">+</span> <span class="n">new_entry_bulk</span> <span class="o">+</span> <span class="s1">'"'</span>
-            <span class="n">s_start</span> <span class="o">=</span> <span class="n">new_entry</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">"`"</span><span class="p">,</span> <span class="s2">""</span><span class="p">)</span>
-            <span class="n">s_end</span> <span class="o">=</span> <span class="n">new_entry</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">:]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">"`"</span><span class="p">,</span> <span class="s2">""</span><span class="p">)</span>
-            <span class="n">s_bulk</span> <span class="o">=</span> <span class="n">new_entry</span><span class="p">[</span><span class="mi">2</span><span class="p">:</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">new_entry_bulk</span> <span class="o">=</span> <span class="n">entry</span><span class="p">[:]</span>
+        <span class="n">new_entry_bulk</span> <span class="o">=</span> <span class="n">new_entry_bulk</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">"'"</span><span class="p">,</span> <span class="s2">"`"</span><span class="p">)</span>
+        <span class="n">new_entry_bulk</span> <span class="o">=</span> <span class="n">new_entry_bulk</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">'"'</span><span class="p">,</span> <span class="s2">"``"</span><span class="p">)</span>
 
-            <span class="k">return</span> <span class="n">s_start</span> <span class="o">+</span> <span class="n">s_bulk</span> <span class="o">+</span> <span class="n">s_end</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="kc">None</span></div>
+        <span class="n">new_entry</span> <span class="o">=</span> <span class="s1">'"'</span> <span class="o">+</span> <span class="n">new_entry_bulk</span> <span class="o">+</span> <span class="s1">'"'</span>
+        <span class="n">s_start</span> <span class="o">=</span> <span class="n">new_entry</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">"`"</span><span class="p">,</span> <span class="s2">""</span><span class="p">)</span>
+        <span class="n">s_end</span> <span class="o">=</span> <span class="n">new_entry</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">:]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">"`"</span><span class="p">,</span> <span class="s2">""</span><span class="p">)</span>
+        <span class="n">s_bulk</span> <span class="o">=</span> <span class="n">new_entry</span><span class="p">[</span><span class="mi">2</span><span class="p">:</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">s_start</span> <span class="o">+</span> <span class="n">s_bulk</span> <span class="o">+</span> <span class="n">s_end</span></div>
 
 
 <div class="viewcode-block" id="Note.harmonize_entry_date">
@@ -1651,6 +1662,22 @@
 <span class="sd">    """</span>
 
     <span class="n">TEMPLATE_FILE</span> <span class="o">=</span> <span class="n">FOLDER_TEMPLATES_NOTES</span> <span class="o">/</span> <span class="s2">"_asset.md"</span>
+    <span class="n">THUMBNAIL_SIZE</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+
+
+<div class="viewcode-block" id="NoteTransfer">
+<a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.NoteTransfer">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">NoteTransfer</span><span class="p">(</span><span class="n">NoteBasic</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""</span>
+<span class="sd">    Note for a financial transfer (inflow or outflow).</span>
+
+<span class="sd">    Inherits from :class:`NoteBasic`. Maps to the ``_transfer.md`` template</span>
+<span class="sd">    which records the transfer date, type, account, value, and optional</span>
+<span class="sd">    scheduling and protocol fields.</span>
+<span class="sd">    """</span>
+
+    <span class="n">TEMPLATE_FILE</span> <span class="o">=</span> <span class="n">FOLDER_TEMPLATES_NOTES</span> <span class="o">/</span> <span class="s2">"_transfer.md"</span>
     <span class="n">THUMBNAIL_SIZE</span> <span class="o">=</span> <span class="kc">None</span></div>
 
 

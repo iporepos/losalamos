@@ -557,16 +557,42 @@ Deeper than here is only the Python built-in <code class="docutils literal notra
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="losalamos.root.MbaE.boot">
-<span class="sig-name descname"><span class="pre">boot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bootfile</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/root.html#MbaE.boot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.root.MbaE.boot" title="Link to this definition">#</a></dt>
-<dd><p>Boot basic attributes from a <code class="docutils literal notranslate"><span class="pre">csv</span></code> table.</p>
+<dt class="sig sig-object py" id="losalamos.root.MbaE.load_config_file">
+<span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">load_config_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/root.html#MbaE.load_config_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.root.MbaE.load_config_file" title="Link to this definition">#</a></dt>
+<dd><p>Parse a <code class="docutils literal notranslate"><span class="pre">.json</span></code>, <code class="docutils literal notranslate"><span class="pre">.yaml</span></code>/<code class="docutils literal notranslate"><span class="pre">.yml</span></code>, or <code class="docutils literal notranslate"><span class="pre">.toml</span></code> file into a dict.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>bootfile</strong> (<em>str</em>) – file path to <code class="docutils literal notranslate"><span class="pre">csv</span></code> table with booting information.</p>
+<dd class="field-odd"><p><strong>path</strong> (<em>str</em><em> or </em><em>pathlib.Path</em>) – path to the config file.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>FileNotFoundError</strong> – If the file does not exist.</p></li>
+<li><p><strong>ValueError</strong> – If the file extension is not supported.</p></li>
+<li><p><strong>ImportError</strong> – If the required parser (PyYAML, tomli) is not installed.</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Parsed configuration dict.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.root.MbaE.boot">
+<span class="sig-name descname"><span class="pre">boot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bootfile</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/root.html#MbaE.boot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.root.MbaE.boot" title="Link to this definition">#</a></dt>
+<dd><p>Boot basic attributes from a file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>bootfile</strong> (<em>str</em><em> or </em><em>pathlib.Path</em>) – path to a <code class="docutils literal notranslate"><span class="pre">.csv</span></code> boot table or a <code class="docutils literal notranslate"><span class="pre">.json</span></code>/<code class="docutils literal notranslate"><span class="pre">.yaml</span></code>/<code class="docutils literal notranslate"><span class="pre">.toml</span></code>
+config file. CSV files use the canonical <code class="docutils literal notranslate"><span class="pre">field;value</span></code> format.
+Other supported formats are parsed via <a class="reference internal" href="#losalamos.root.MbaE.load_config_file" title="losalamos.root.MbaE.load_config_file"><code class="xref py py-meth docutils literal notranslate"><span class="pre">load_config_file()</span></code></a>.</p>
 </dd>
 </dl>
 <p><strong>Notes</strong></p>
-<p>Expected <code class="docutils literal notranslate"><span class="pre">bootfile</span></code> format:</p>
+<p>Expected <code class="docutils literal notranslate"><span class="pre">.csv</span></code> <code class="docutils literal notranslate"><span class="pre">bootfile</span></code> format:</p>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>field;value
 name;ResTia
 alias;Ra
@@ -974,8 +1000,18 @@ custom applications.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="losalamos.root.FileSys.setup_subfolders">
-<span class="sig-name descname"><span class="pre">setup_subfolders</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/root.html#FileSys.setup_subfolders"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.root.FileSys.setup_subfolders" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">setup_subfolders</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">root</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">folder_list</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/root.html#FileSys.setup_subfolders"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.root.FileSys.setup_subfolders" title="Link to this definition">#</a></dt>
 <dd><p>Make all subfolders expected in the file system. Skip if exists.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>root</strong> (<em>str</em><em> or </em><em>pathlib.Path</em><em> or </em><em>None</em>) – root directory to create folders under. Defaults to
+<code class="docutils literal notranslate"><span class="pre">self.folder_root</span></code>.</p></li>
+<li><p><strong>folder_list</strong> (<em>iterable</em><em> or </em><em>None</em>) – iterable of subfolder stems to create. Defaults to
+<code class="docutils literal notranslate"><span class="pre">self.data[&quot;folder&quot;]</span></code>.</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
@@ -1498,6 +1534,7 @@ Base Method.</p>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.root.MbaE.get_metadata"><code class="docutils literal notranslate"><span class="pre">MbaE.get_metadata()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.root.MbaE.get_metadata_df"><code class="docutils literal notranslate"><span class="pre">MbaE.get_metadata_df()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.root.MbaE.setter"><code class="docutils literal notranslate"><span class="pre">MbaE.setter()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.root.MbaE.load_config_file"><code class="docutils literal notranslate"><span class="pre">MbaE.load_config_file()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.root.MbaE.boot"><code class="docutils literal notranslate"><span class="pre">MbaE.boot()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.root.MbaE.export_metadata"><code class="docutils literal notranslate"><span class="pre">MbaE.export_metadata()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.root.MbaE.export"><code class="docutils literal notranslate"><span class="pre">MbaE.export()</span></code></a></li>

@@ -446,7 +446,7 @@
 
 <span class="c1"># Project-level imports</span>
 <span class="c1"># =======================================================================</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">losalamos.root</span><span class="w"> </span><span class="kn">import</span> <span class="n">FileSys</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">losalamos.root</span><span class="w"> </span><span class="kn">import</span> <span class="n">FileSys</span><span class="p">,</span> <span class="n">MbaE</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">losalamos.documents</span><span class="w"> </span><span class="kn">import</span> <span class="n">DOCUMENT_TYPES</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">losalamos.notes</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">NoteProject</span><span class="p">,</span>
@@ -454,6 +454,7 @@
     <span class="n">NoteSapiens</span><span class="p">,</span>
     <span class="n">NoteBasic</span><span class="p">,</span>
     <span class="n">NoteAsset</span><span class="p">,</span>
+    <span class="n">NoteTransfer</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">losalamos.paths</span><span class="w"> </span><span class="kn">import</span> <span class="n">FOLDER_TEMPLATES</span><span class="p">,</span> <span class="n">FOLDER_TEMPLATES_CONFIG_PROJECT</span>
 
@@ -481,7 +482,6 @@
         <span class="s2">"admin/contracts"</span><span class="p">,</span>
         <span class="s2">"admin/contracts/main"</span><span class="p">,</span>
         <span class="s2">"admin/proposals"</span><span class="p">,</span>
-        <span class="s2">"admin/documents"</span><span class="p">,</span>
         <span class="s2">"admin/paperwork"</span><span class="p">,</span>
         <span class="s2">"admin/meetings"</span><span class="p">,</span>
         <span class="s2">"admin/received"</span><span class="p">,</span>
@@ -490,7 +490,6 @@
         <span class="s2">"admin/config/overlays"</span><span class="p">,</span>
         <span class="c1"># Accounting</span>
         <span class="c1"># --------------------------------</span>
-        <span class="s2">"budget/documents"</span><span class="p">,</span>
         <span class="s2">"budget/inflows"</span><span class="p">,</span>
         <span class="s2">"budget/outflows"</span><span class="p">,</span>
         <span class="c1"># Inputs</span>
@@ -539,33 +538,11 @@
 <span class="sd">    :type source: str or pathlib.Path</span>
 <span class="sd">    :raises FileNotFoundError: If the file does not exist.</span>
 <span class="sd">    :raises ValueError: If the file extension is not supported.</span>
+<span class="sd">    :raises ImportError: If the required parser is not installed.</span>
 <span class="sd">    :returns: Parsed configuration dict.</span>
 <span class="sd">    :rtype: dict</span>
 <span class="sd">    """</span>
-    <span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">source</span><span class="p">)</span><span class="o">.</span><span class="n">absolute</span><span class="p">()</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">path</span><span class="o">.</span><span class="n">is_file</span><span class="p">():</span>
-        <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Config file not found: '</span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2">'"</span><span class="p">)</span>
-    <span class="n">suffix</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">suffix</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
-    <span class="k">if</span> <span class="n">suffix</span> <span class="o">==</span> <span class="s2">".json"</span><span class="p">:</span>
-        <span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
-
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">"r"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">suffix</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">".yaml"</span><span class="p">,</span> <span class="s2">".yml"</span><span class="p">):</span>
-        <span class="kn">import</span><span class="w"> </span><span class="nn">yaml</span>
-
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">"r"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">yaml</span><span class="o">.</span><span class="n">safe_load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">suffix</span> <span class="o">==</span> <span class="s2">".toml"</span><span class="p">:</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="kn">import</span><span class="w"> </span><span class="nn">tomllib</span>
-        <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
-            <span class="kn">import</span><span class="w"> </span><span class="nn">tomli</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">tomllib</span>
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">"rb"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">tomllib</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
-    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-        <span class="sa">f</span><span class="s2">"Unsupported config format: '</span><span class="si">{</span><span class="n">suffix</span><span class="si">}</span><span class="s2">'. Use .json, .yaml, or .toml"</span>
-    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">MbaE</span><span class="o">.</span><span class="n">load_config_file</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">source</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="new_project">
@@ -631,23 +608,23 @@
 <span class="sd">                "alias": "SV26",</span>
 <span class="sd">                "title": "Environmental Survey 2026",</span>
 <span class="sd">                "status": "planning",</span>
-<span class="sd">                "sources": "/vault/sources.yaml",</span>
+<span class="sd">                "sources": "/vault/sources.toml",</span>
 <span class="sd">            })</span>
 
-<span class="sd">    .. dropdown:: Example — YAML config file</span>
+<span class="sd">    .. dropdown:: Example — TOML config file</span>
 <span class="sd">        :icon: code-square</span>
 <span class="sd">        :open:</span>
 
-<span class="sd">        Save a ``project-config.yaml``:</span>
+<span class="sd">        Save a ``project-config.toml``:</span>
 
-<span class="sd">        .. code-block:: yaml</span>
+<span class="sd">        .. code-block:: toml</span>
 
-<span class="sd">            folder_base: /home/user/projects</span>
-<span class="sd">            name: Survey2026</span>
-<span class="sd">            alias: SV26</span>
-<span class="sd">            title: "Environmental Survey 2026"</span>
-<span class="sd">            status: planning</span>
-<span class="sd">            sources: /vault/sources.yaml</span>
+<span class="sd">            folder_base = "/home/user/projects"</span>
+<span class="sd">            name = "Survey2026"</span>
+<span class="sd">            alias = "SV26"</span>
+<span class="sd">            title = "Environmental Survey 2026"</span>
+<span class="sd">            status = "planning"</span>
+<span class="sd">            sources = "/vault/sources.toml"</span>
 
 <span class="sd">        Then create the project:</span>
 
@@ -655,7 +632,7 @@
 
 <span class="sd">            import losalamos</span>
 
-<span class="sd">            pj = losalamos.new_project(config="project-config.yaml")</span>
+<span class="sd">            pj = losalamos.new_project(config="project-config.toml")</span>
 
 <span class="sd">    """</span>
     <span class="c1"># Parse config from file if a path was given</span>
@@ -669,33 +646,49 @@
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Missing required key: '</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">'"</span><span class="p">)</span>
 
     <span class="c1"># System-level keys — applied to the Project object, not the note</span>
-    <span class="n">_SYSTEM_KEYS</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"folder_base"</span><span class="p">,</span> <span class="s2">"name"</span><span class="p">,</span> <span class="s2">"alias"</span><span class="p">,</span> <span class="s2">"source"</span><span class="p">,</span> <span class="s2">"description"</span><span class="p">,</span> <span class="s2">"sources"</span><span class="p">}</span>
+    <span class="n">_SYSTEM_KEYS</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"folder_base"</span><span class="p">,</span> <span class="s2">"name"</span><span class="p">,</span> <span class="s2">"source"</span><span class="p">,</span> <span class="s2">"description"</span><span class="p">,</span> <span class="s2">"sources"</span><span class="p">,</span> <span class="s2">"branch"</span><span class="p">}</span>
+    <span class="c1"># Note fields that store cross-note references and need Obsidian wiki-link syntax</span>
+    <span class="n">_LINK_FIELDS</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">"contractor"</span><span class="p">,</span>
+        <span class="s2">"contractor_sapiens"</span><span class="p">,</span>
+        <span class="s2">"client"</span><span class="p">,</span>
+        <span class="s2">"client_sapiens"</span><span class="p">,</span>
+        <span class="s2">"service_id"</span><span class="p">,</span>
+    <span class="p">}</span>
 
     <span class="n">name</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s2">"name"</span><span class="p">]</span>
     <span class="n">alias</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"alias"</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
     <span class="n">sources_file</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"sources"</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="n">branch</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"branch"</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
 
     <span class="c1"># Create project folder structure</span>
     <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s2">"folder_base"</span><span class="p">],</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">folder_root</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s2">"folder_base"</span><span class="p">])</span> <span class="o">/</span> <span class="n">name</span>
+    <span class="k">if</span> <span class="n">branch</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">folder_root</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s2">"folder_base"</span><span class="p">])</span> <span class="o">/</span> <span class="n">branch</span> <span class="o">/</span> <span class="n">name</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">folder_root</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s2">"folder_base"</span><span class="p">])</span> <span class="o">/</span> <span class="n">name</span>
     <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">folder_root</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Project folder already exists '</span><span class="si">{</span><span class="n">folder_root</span><span class="si">}</span><span class="s2">'"</span><span class="p">)</span>
 
     <span class="n">p</span> <span class="o">=</span> <span class="n">Project</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="n">alias</span><span class="p">)</span>
+    <span class="n">p</span><span class="o">.</span><span class="n">branch</span> <span class="o">=</span> <span class="n">branch</span>
     <span class="n">p</span><span class="o">.</span><span class="n">source</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"source"</span><span class="p">,</span> <span class="s2">""</span><span class="p">)</span>
     <span class="n">p</span><span class="o">.</span><span class="n">description</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"description"</span><span class="p">,</span> <span class="s2">""</span><span class="p">)</span>
     <span class="n">p</span><span class="o">.</span><span class="n">folder_base</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s2">"folder_base"</span><span class="p">]</span>
     <span class="n">p</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
-    <span class="n">p</span><span class="o">.</span><span class="n">setup</span><span class="p">()</span>
 
-    <span class="c1"># Copy sources config file after setup() so admin/config/ already exists.</span>
-    <span class="c1"># The user-provided file overwrites the blank template installed by setup().</span>
+    <span class="c1"># Pre-place sources file before setup() so _install_config_templates sees</span>
+    <span class="c1"># it and skips creating a blank template of a different format.</span>
     <span class="k">if</span> <span class="n">sources_file</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">src</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">sources_file</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">src</span><span class="o">.</span><span class="n">is_file</span><span class="p">():</span>
             <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Sources config file not found: '</span><span class="si">{</span><span class="n">src</span><span class="si">}</span><span class="s2">'"</span><span class="p">)</span>
-        <span class="n">dst</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">folder_root</span><span class="p">)</span> <span class="o">/</span> <span class="s2">"admin/config"</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">"sources</span><span class="si">{</span><span class="n">src</span><span class="o">.</span><span class="n">suffix</span><span class="si">}</span><span class="s2">"</span>
+        <span class="n">config_dir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">folder_root</span><span class="p">)</span> <span class="o">/</span> <span class="s2">"admin/config"</span>
+        <span class="n">config_dir</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">dst</span> <span class="o">=</span> <span class="n">config_dir</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">"sources</span><span class="si">{</span><span class="n">src</span><span class="o">.</span><span class="n">suffix</span><span class="si">}</span><span class="s2">"</span>
         <span class="n">shutil</span><span class="o">.</span><span class="n">copy2</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">src</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">dst</span><span class="p">))</span>
+
+    <span class="n">p</span><span class="o">.</span><span class="n">setup</span><span class="p">()</span>
 
     <span class="c1"># Create main project note</span>
     <span class="n">note_file</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">folder_root</span><span class="p">)</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">.md"</span>
@@ -712,13 +705,14 @@
     <span class="n">note_fields</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">config</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">_SYSTEM_KEYS</span><span class="p">}</span>
     <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">note_fields</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
         <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">n</span><span class="o">.</span><span class="n">metadata</span><span class="p">:</span>
-            <span class="n">n</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
+            <span class="n">n</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">'"[[</span><span class="si">{</span><span class="n">v</span><span class="si">}</span><span class="s1">]]"'</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">_LINK_FIELDS</span> <span class="k">else</span> <span class="n">v</span>
 
     <span class="n">n</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
     <span class="n">n</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
 
     <span class="c1"># Reload so main_note, sources, and overlays are current on return</span>
     <span class="n">p</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+    <span class="n">p</span><span class="o">.</span><span class="n">_setup_remote_folders</span><span class="p">()</span>
 
     <span class="k">return</span> <span class="n">p</span></div>
 
@@ -726,17 +720,22 @@
 
 <div class="viewcode-block" id="load_project">
 <a class="viewcode-back" href="../../generated/losalamos.project.html#losalamos.project.load_project">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">load_project</span><span class="p">(</span><span class="n">project_folder</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">load_project</span><span class="p">(</span><span class="n">project_folder</span><span class="p">,</span> <span class="n">vault</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Load a Project from a folder path.</span>
 
-<span class="sd">    If ``admin/config/sources.yaml`` (or ``.toml``/``.json``) exists in the</span>
+<span class="sd">    If ``admin/config/sources.toml`` (or ``.yaml``/``.json``) exists in the</span>
 <span class="sd">    project, it is parsed and merged into :attr:`~Project.sources`</span>
 <span class="sd">    automatically. Overlay files in ``admin/config/overlays/`` are then</span>
 <span class="sd">    regenerated from the loaded metadata.</span>
 
 <span class="sd">    :param project_folder: Path to the project root folder.</span>
 <span class="sd">    :type project_folder: str or Path</span>
+<span class="sd">    :param vault: Optional path to the vault root. When provided and the</span>
+<span class="sd">        project sits one level below *vault*, :attr:`~Project.branch` is set</span>
+<span class="sd">        to the intermediate folder name so that remote-folder mirroring</span>
+<span class="sd">        preserves the full ``vault/branch/name`` layout.</span>
+<span class="sd">    :type vault: str or Path or None</span>
 <span class="sd">    :returns: A new :class:`losalamos.Project` instance.</span>
 <span class="sd">    :rtype: :class:`losalamos.Project`</span>
 
@@ -744,26 +743,33 @@
 <span class="sd">        :icon: code-square</span>
 <span class="sd">        :open:</span>
 
-<span class="sd">        Import the package.</span>
-
 <span class="sd">        .. code-block:: python</span>
 
 <span class="sd">            import losalamos</span>
-
-<span class="sd">        Load an existing project. Sources and overlays are resolved</span>
-<span class="sd">        automatically if ``admin/config/sources.yaml`` is present.</span>
-
-<span class="sd">        .. code-block:: python</span>
 
 <span class="sd">            pj = losalamos.load_project(project_folder="path/to/project/folder")</span>
 
 <span class="sd">    """</span>
     <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">project_folder</span><span class="p">):</span>
-        <span class="n">name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">project_folder</span><span class="p">)</span>
-        <span class="n">folder_base</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">project_folder</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span><span class="p">)</span>
+        <span class="n">project_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">project_folder</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">project_path</span><span class="o">.</span><span class="n">name</span>
+
+        <span class="k">if</span> <span class="n">vault</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">vault_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">vault</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
+            <span class="n">branch_folder</span> <span class="o">=</span> <span class="n">project_path</span><span class="o">.</span><span class="n">parent</span>
+            <span class="k">if</span> <span class="n">branch_folder</span> <span class="o">!=</span> <span class="n">vault_path</span><span class="p">:</span>
+                <span class="n">folder_base</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">vault_path</span><span class="p">)</span>
+                <span class="n">branch</span> <span class="o">=</span> <span class="n">branch_folder</span><span class="o">.</span><span class="n">name</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">folder_base</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">vault_path</span><span class="p">)</span>
+                <span class="n">branch</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">folder_base</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">project_path</span><span class="o">.</span><span class="n">parent</span><span class="p">)</span>
+            <span class="n">branch</span> <span class="o">=</span> <span class="kc">None</span>
+
         <span class="n">p</span> <span class="o">=</span> <span class="n">Project</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
-        <span class="n">p</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
         <span class="n">p</span><span class="o">.</span><span class="n">folder_base</span> <span class="o">=</span> <span class="n">folder_base</span>
+        <span class="n">p</span><span class="o">.</span><span class="n">branch</span> <span class="o">=</span> <span class="n">branch</span>
 
         <span class="c1"># update project</span>
         <span class="n">p</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
@@ -1077,22 +1083,24 @@
 
 <span class="sd">    The :attr:`sources` dict maps note categories to lists of directory paths</span>
 <span class="sd">    scanned when resolving contractors, clients, and services. It is</span>
-<span class="sd">    auto-populated from ``admin/config/sources.yaml`` (also ``.toml`` or</span>
+<span class="sd">    auto-populated from ``admin/config/sources.toml`` (also ``.yaml`` or</span>
 <span class="sd">    ``.json``) each time the project is opened:</span>
 
-<span class="sd">    .. code-block:: yaml</span>
+<span class="sd">    .. code-block:: toml</span>
 
-<span class="sd">        # admin/config/sources.yaml</span>
-<span class="sd">        organizations:     # NoteOrganization notes</span>
-<span class="sd">          - /vault/organizations</span>
-<span class="sd">        sapiens:           # NoteSapiens notes</span>
-<span class="sd">          - /vault/people</span>
-<span class="sd">        services:          # NoteBasic notes, matched by service_id</span>
-<span class="sd">          - /vault/services</span>
-<span class="sd">        templates:         # document template directories</span>
-<span class="sd">          documents:</span>
-<span class="sd">            invoice: /vault/templates/invoice</span>
-<span class="sd">            proposal: /vault/templates/proposal</span>
+<span class="sd">        # admin/config/sources.toml</span>
+<span class="sd">        [folders.search]</span>
+<span class="sd">        organizations = ["/vault/organizations"]   # NoteOrganization notes</span>
+<span class="sd">        sapiens       = ["/vault/people"]          # NoteSapiens notes</span>
+<span class="sd">        services      = ["/vault/services"]        # NoteBasic notes, matched by service_id</span>
+
+<span class="sd">        [folders.remote]                           # optional remote vault roots</span>
+<span class="sd">        documents = "/vault/documents"</span>
+<span class="sd">        data      = "/vault/data"</span>
+
+<span class="sd">        [templates.documents]                      # document template directories</span>
+<span class="sd">        invoice  = "/vault/templates/invoice"</span>
+<span class="sd">        proposal = "/vault/templates/proposal"</span>
 
 <span class="sd">    Overlays are written to ``admin/config/overlays/`` and applied to</span>
 <span class="sd">    document templates via the ``files_overlay`` parameter of</span>
@@ -1108,6 +1116,10 @@
 <span class="sd">        :param alias: Optional short identifier.</span>
 <span class="sd">        :type alias: str</span>
 <span class="sd">        """</span>
+        <span class="c1"># must precede super().__init__() — update() is called during init chain</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">branch</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">folder_remote_documents</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">folder_remote_data</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="n">alias</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">load_data</span><span class="p">()</span>
 
@@ -1165,14 +1177,15 @@
 <span class="sd">            This method overwrites all existing default files (parent behaviour).</span>
 <span class="sd">        """</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">setup</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_install_config_templates</span><span class="p">()</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_install_config_templates</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_setup_remote_folders</span><span class="p">()</span></div>
 
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_install_config_templates</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">"""Copy missing config templates into ``admin/config/``, preferring YAML over TOML over JSON."""</span>
+<span class="w">        </span><span class="sd">"""Copy missing config templates into ``admin/config/``, preferring TOML over YAML over JSON."""</span>
         <span class="n">config_dir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">folder_root</span><span class="p">)</span> <span class="o">/</span> <span class="s2">"admin/config"</span>
         <span class="c1"># rank by preferred format; lower rank wins</span>
-        <span class="n">rank</span> <span class="o">=</span> <span class="p">{</span><span class="s2">".yaml"</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">".yml"</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">".toml"</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">".json"</span><span class="p">:</span> <span class="mi">3</span><span class="p">}</span>
+        <span class="n">rank</span> <span class="o">=</span> <span class="p">{</span><span class="s2">".toml"</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">".yaml"</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">".yml"</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">".json"</span><span class="p">:</span> <span class="mi">3</span><span class="p">}</span>
         <span class="n">best</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">for</span> <span class="n">src</span> <span class="ow">in</span> <span class="n">FOLDER_TEMPLATES_CONFIG_PROJECT</span><span class="o">.</span><span class="n">iterdir</span><span class="p">():</span>
             <span class="n">ext</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">src</span><span class="o">.</span><span class="n">name</span><span class="p">)</span><span class="o">.</span><span class="n">suffix</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
@@ -1203,13 +1216,70 @@
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">folder_base</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">folder_base</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">folder_base</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">folder_root</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">folder_root</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">main_note_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">folder_base</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">.md"</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">branch</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">folder_root</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">folder_base</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">branch</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">folder_root</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">folder_base</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">main_note_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">folder_root</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">.md"</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">main_note_path</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">load_main_note</span><span class="p">()</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_load_sources_config</span><span class="p">()</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_update_overlays</span><span class="p">()</span></div>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_update_overlays</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_resolve_remote_folders</span><span class="p">()</span></div>
 
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_resolve_remote_folders</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""</span>
+<span class="sd">        Resolve ``folder_remote_documents`` and ``folder_remote_data`` from</span>
+<span class="sd">        ``self.sources``.</span>
+
+<span class="sd">        Uses the relative offset of ``folder_root`` from ``folder_base`` to</span>
+<span class="sd">        mirror the vault layout (including any branch tier) into the remote</span>
+<span class="sd">        root. Falls back to ``folder_root`` when the key is absent or blank.</span>
+<span class="sd">        """</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">rel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">folder_root</span><span class="o">.</span><span class="n">relative_to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">folder_base</span><span class="p">)</span>
+        <span class="k">except</span> <span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">):</span>
+            <span class="n">rel</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+
+        <span class="n">remote</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"folders"</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"remote"</span><span class="p">,</span> <span class="p">{})</span>
+
+        <span class="n">docs_root</span> <span class="o">=</span> <span class="n">remote</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"documents"</span><span class="p">,</span> <span class="s2">""</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">docs_root</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">folder_remote_documents</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">docs_root</span><span class="p">)</span> <span class="o">/</span> <span class="n">rel</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">folder_remote_documents</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">folder_root</span>
+
+        <span class="n">data_root</span> <span class="o">=</span> <span class="n">remote</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"data"</span><span class="p">,</span> <span class="s2">""</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">data_root</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">folder_remote_data</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">data_root</span><span class="p">)</span> <span class="o">/</span> <span class="n">rel</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">folder_remote_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">folder_root</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_setup_remote_folders</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""</span>
+<span class="sd">        Create curated remote-vault subfolders when a remote root is configured.</span>
+
+<span class="sd">        Only acts when the resolved remote path differs from ``folder_root``</span>
+<span class="sd">        (i.e. a remote root was actually set in sources). Safe to call multiple</span>
+<span class="sd">        times; existing folders are skipped.</span>
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">folder_remote_documents</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">folder_remote_documents</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">folder_root</span>
+        <span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">setup_subfolders</span><span class="p">(</span>
+                <span class="n">root</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">folder_remote_documents</span><span class="p">,</span>
+                <span class="n">folder_list</span><span class="o">=</span><span class="p">[</span><span class="s2">"inputs/documents"</span><span class="p">],</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">folder_remote_data</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">folder_remote_data</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">folder_root</span>
+        <span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">setup_subfolders</span><span class="p">(</span>
+                <span class="n">root</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">folder_remote_data</span><span class="p">,</span>
+                <span class="n">folder_list</span><span class="o">=</span><span class="p">[</span><span class="s2">"inputs/data"</span><span class="p">],</span>
+            <span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_update_overlays</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">"""Regenerate overlay files; party_b and service overlays skip silently if sources are not configured."""</span>
@@ -1235,35 +1305,18 @@
 <span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Load ``self.sources`` from ``admin/config/sources.*`` if present.</span>
 
-<span class="sd">        Checks for ``sources.yaml``, ``sources.yml``, ``sources.toml``, and</span>
+<span class="sd">        Checks for ``sources.toml``, ``sources.yaml``, ``sources.yml``, and</span>
 <span class="sd">        ``sources.json`` in that order; the first match is parsed and merged</span>
 <span class="sd">        into :attr:`sources`. Parse errors and missing files are silently</span>
 <span class="sd">        ignored.</span>
 <span class="sd">        """</span>
         <span class="n">config_dir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">folder_root</span><span class="p">)</span> <span class="o">/</span> <span class="s2">"admin/config"</span>
-        <span class="k">for</span> <span class="n">fname</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"sources.json"</span><span class="p">,</span> <span class="s2">"sources.yaml"</span><span class="p">,</span> <span class="s2">"sources.yml"</span><span class="p">,</span> <span class="s2">"sources.toml"</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">fname</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"sources.toml"</span><span class="p">,</span> <span class="s2">"sources.yaml"</span><span class="p">,</span> <span class="s2">"sources.yml"</span><span class="p">,</span> <span class="s2">"sources.json"</span><span class="p">):</span>
             <span class="n">path</span> <span class="o">=</span> <span class="n">config_dir</span> <span class="o">/</span> <span class="n">fname</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">path</span><span class="o">.</span><span class="n">is_file</span><span class="p">():</span>
                 <span class="k">continue</span>
             <span class="k">try</span><span class="p">:</span>
-                <span class="n">suffix</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">suffix</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
-                <span class="k">if</span> <span class="n">suffix</span> <span class="o">==</span> <span class="s2">".json"</span><span class="p">:</span>
-                    <span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
-
-                    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">"r"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-                        <span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
-                <span class="k">elif</span> <span class="n">suffix</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">".yaml"</span><span class="p">,</span> <span class="s2">".yml"</span><span class="p">):</span>
-                    <span class="kn">import</span><span class="w"> </span><span class="nn">yaml</span>
-
-                    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">"r"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-                        <span class="n">data</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">safe_load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="k">try</span><span class="p">:</span>
-                        <span class="kn">import</span><span class="w"> </span><span class="nn">tomllib</span>
-                    <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
-                        <span class="kn">import</span><span class="w"> </span><span class="nn">tomli</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">tomllib</span>
-                    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">"rb"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-                        <span class="n">data</span> <span class="o">=</span> <span class="n">tomllib</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+                <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">load_config_file</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">path</span><span class="p">)</span>
                 <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
             <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
@@ -1341,7 +1394,7 @@
 <span class="sd">        note in ``self.contractor`` and the resolved path in ``self.contractor_path``.</span>
 
 <span class="sd">        :attr:`sources` is populated automatically from</span>
-<span class="sd">        ``admin/config/sources.yaml`` on project load; it can also be set</span>
+<span class="sd">        ``admin/config/sources.toml`` on project load; it can also be set</span>
 <span class="sd">        manually before calling this method.</span>
 
 <span class="sd">        :raises FileNotFoundError: If no note matching the contractor name is found</span>
@@ -1351,8 +1404,9 @@
 <span class="sd">        """</span>
         <span class="n">contractor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_contractor</span><span class="p">()</span>
 
-        <span class="n">sources_organizations</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"organizations"</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-        <span class="n">sources_sapiens</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"sapiens"</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">search</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"folders"</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"search"</span><span class="p">,</span> <span class="p">{})</span>
+        <span class="n">sources_organizations</span> <span class="o">=</span> <span class="n">search</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"organizations"</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">sources_sapiens</span> <span class="o">=</span> <span class="n">search</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"sapiens"</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
 
         <span class="c1"># organizations take precedence in the search over individuals</span>
         <span class="n">path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_collect_md_files</span><span class="p">(</span><span class="n">sources_organizations</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">contractor</span><span class="p">)</span>
@@ -1394,7 +1448,9 @@
 <span class="sd">        :rtype: None</span>
 <span class="sd">        """</span>
         <span class="n">contractor_sapiens</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_contractor_sapiens</span><span class="p">()</span>
-        <span class="n">sources_sapiens</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"sapiens"</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">sources_sapiens</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"folders"</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"search"</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"sapiens"</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">contractor</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">load_contractor</span><span class="p">()</span>
 
@@ -1421,7 +1477,7 @@
 <span class="sd">        note in ``self.client`` and the resolved path in ``self.client_path``.</span>
 
 <span class="sd">        :attr:`sources` is populated automatically from</span>
-<span class="sd">        ``admin/config/sources.yaml`` on project load; it can also be set</span>
+<span class="sd">        ``admin/config/sources.toml`` on project load; it can also be set</span>
 <span class="sd">        manually before calling this method.</span>
 
 <span class="sd">        :raises FileNotFoundError: If no note matching the client name is found</span>
@@ -1431,8 +1487,9 @@
 <span class="sd">        """</span>
         <span class="n">client</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_client</span><span class="p">()</span>
 
-        <span class="n">sources_organizations</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"organizations"</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-        <span class="n">sources_sapiens</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"sapiens"</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">search</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"folders"</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"search"</span><span class="p">,</span> <span class="p">{})</span>
+        <span class="n">sources_organizations</span> <span class="o">=</span> <span class="n">search</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"organizations"</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">sources_sapiens</span> <span class="o">=</span> <span class="n">search</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"sapiens"</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
 
         <span class="c1"># organizations take precedence in the search over individuals</span>
         <span class="n">path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_collect_md_files</span><span class="p">(</span><span class="n">sources_organizations</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">client</span><span class="p">)</span>
@@ -1467,7 +1524,7 @@
 <span class="sd">        path in ``self.service_path``.</span>
 
 <span class="sd">        :attr:`sources` is populated automatically from</span>
-<span class="sd">        ``admin/config/sources.yaml`` on project load; it can also be set</span>
+<span class="sd">        ``admin/config/sources.toml`` on project load; it can also be set</span>
 <span class="sd">        manually before calling this method.</span>
 
 <span class="sd">        :raises FileNotFoundError: If no note matching the service_id is found</span>
@@ -1476,7 +1533,9 @@
 <span class="sd">        :rtype: None</span>
 <span class="sd">        """</span>
         <span class="n">service_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_attribute</span><span class="p">(</span><span class="n">entry_key</span><span class="o">=</span><span class="s2">"service_id"</span><span class="p">,</span> <span class="n">clean_cref</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-        <span class="n">sources_services</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"services"</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">sources_services</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"folders"</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"search"</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"services"</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="p">)</span>
 
         <span class="n">path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_collect_md_files</span><span class="p">(</span><span class="n">sources_services</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">service_id</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -1508,12 +1567,12 @@
 <span class="sd">            :icon: code-square</span>
 <span class="sd">            :open:</span>
 
-<span class="sd">            Place ``sources.yaml`` in the project's ``admin/config/`` folder:</span>
+<span class="sd">            Place ``sources.toml`` in the project's ``admin/config/`` folder:</span>
 
-<span class="sd">            .. code-block:: yaml</span>
+<span class="sd">            .. code-block:: toml</span>
 
-<span class="sd">                services:</span>
-<span class="sd">                  - /vault/services   # folder containing &lt;service_id&gt;.md files</span>
+<span class="sd">                [folders.search]</span>
+<span class="sd">                services = ["/vault/services"]   # folder containing &lt;service_id&gt;.md files</span>
 
 <span class="sd">            The file is read automatically on project load. Each service note</span>
 <span class="sd">            must have an ``abstract`` metadata field with the display name:</span>
@@ -1542,7 +1601,7 @@
 <span class="sd">                import losalamos</span>
 
 <span class="sd">                pj = losalamos.load_project("path/to/myProject")</span>
-<span class="sd">                pj.sources = {"services": ["path/to/service/notes"]}</span>
+<span class="sd">                pj.sources = {"folders": {"search": {"services": ["path/to/service/notes"]}}}</span>
 
 <span class="sd">                path = pj.make_overlay_service()</span>
 <span class="sd">        """</span>
@@ -1788,8 +1847,12 @@
 
 <span class="sd">                pj = losalamos.load_project("path/to/myProject")</span>
 <span class="sd">                pj.sources = {</span>
-<span class="sd">                    "organizations": ["path/to/org/notes"],</span>
-<span class="sd">                    "sapiens": ["path/to/people/notes"],</span>
+<span class="sd">                    "folders": {</span>
+<span class="sd">                        "search": {</span>
+<span class="sd">                            "organizations": ["path/to/org/notes"],</span>
+<span class="sd">                            "sapiens": ["path/to/people/notes"],</span>
+<span class="sd">                        }</span>
+<span class="sd">                    }</span>
 <span class="sd">                }</span>
 
 <span class="sd">                path = pj.make_overlay_party_b_contractor()</span>
@@ -1867,8 +1930,12 @@
 
 <span class="sd">                pj = losalamos.load_project("path/to/myProject")</span>
 <span class="sd">                pj.sources = {</span>
-<span class="sd">                    "organizations": ["path/to/org/notes"],</span>
-<span class="sd">                    "sapiens": ["path/to/people/notes"],</span>
+<span class="sd">                    "folders": {</span>
+<span class="sd">                        "search": {</span>
+<span class="sd">                            "organizations": ["path/to/org/notes"],</span>
+<span class="sd">                            "sapiens": ["path/to/people/notes"],</span>
+<span class="sd">                        }</span>
+<span class="sd">                    }</span>
 <span class="sd">                }</span>
 
 <span class="sd">                path = pj.make_overlay_party_b_client()</span>
@@ -2078,7 +2145,7 @@
         <span class="n">numbers</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">md_file</span> <span class="ow">in</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">folder_root</span><span class="p">)</span><span class="o">.</span><span class="n">rglob</span><span class="p">(</span><span class="s2">"*.md"</span><span class="p">):</span>
             <span class="n">meta</span> <span class="o">=</span> <span class="n">NoteBasic</span><span class="o">.</span><span class="n">parse_metadata</span><span class="p">(</span><span class="n">note_file</span><span class="o">=</span><span class="n">md_file</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">meta</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"note_type"</span><span class="p">)</span> <span class="o">!=</span> <span class="s2">"asset"</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">meta</span> <span class="ow">or</span> <span class="n">meta</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"note_type"</span><span class="p">)</span> <span class="o">!=</span> <span class="s2">"asset"</span><span class="p">:</span>
                 <span class="k">continue</span>
             <span class="n">asset_id</span> <span class="o">=</span> <span class="n">meta</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"asset_id"</span><span class="p">,</span> <span class="s2">""</span><span class="p">)</span>
             <span class="k">if</span> <span class="p">(</span>
@@ -2108,7 +2175,7 @@
         <span class="n">rows</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">md_file</span> <span class="ow">in</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">folder_root</span><span class="p">)</span><span class="o">.</span><span class="n">rglob</span><span class="p">(</span><span class="s2">"*.md"</span><span class="p">):</span>
             <span class="n">meta</span> <span class="o">=</span> <span class="n">NoteBasic</span><span class="o">.</span><span class="n">parse_metadata</span><span class="p">(</span><span class="n">note_file</span><span class="o">=</span><span class="n">md_file</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">meta</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"note_type"</span><span class="p">)</span> <span class="o">!=</span> <span class="s2">"asset"</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">meta</span> <span class="ow">or</span> <span class="n">meta</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"note_type"</span><span class="p">)</span> <span class="o">!=</span> <span class="s2">"asset"</span><span class="p">:</span>
                 <span class="k">continue</span>
             <span class="n">raw_file</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">meta</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"asset_file"</span><span class="p">)</span> <span class="ow">or</span> <span class="s2">""</span><span class="p">)</span>
             <span class="c1"># strip surrounding quotes and [[...]] wiki-link brackets</span>
@@ -2125,6 +2192,153 @@
         <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
             <span class="n">rows</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">"asset_id"</span><span class="p">,</span> <span class="s2">"asset_type"</span><span class="p">,</span> <span class="s2">"name"</span><span class="p">,</span> <span class="s2">"asset_file"</span><span class="p">]</span>
         <span class="p">)</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_next_transfer_id</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""</span>
+<span class="sd">        Return the next available transfer ID as a zero-padded string.</span>
+
+<span class="sd">        Globs all ``.md`` files under the project root, reads front-matter</span>
+<span class="sd">        for those whose ``note_type`` is ``transfer``, and collects the</span>
+<span class="sd">        numeric part of each ``name`` field that ends with a ``T``-prefixed</span>
+<span class="sd">        ID (e.g. ``INFLOW_proj_T003`` → ``3``). Returns the next available</span>
+<span class="sd">        zero-padded identifier.</span>
+
+<span class="sd">        :returns: Next transfer ID, e.g. ``"T004"``.</span>
+<span class="sd">        :rtype: str</span>
+<span class="sd">        """</span>
+        <span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">"T(\d+)$"</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">IGNORECASE</span><span class="p">)</span>
+        <span class="n">numbers</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">md_file</span> <span class="ow">in</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">folder_root</span><span class="p">)</span><span class="o">.</span><span class="n">rglob</span><span class="p">(</span><span class="s2">"*.md"</span><span class="p">):</span>
+            <span class="n">meta</span> <span class="o">=</span> <span class="n">NoteBasic</span><span class="o">.</span><span class="n">parse_metadata</span><span class="p">(</span><span class="n">note_file</span><span class="o">=</span><span class="n">md_file</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">meta</span> <span class="ow">or</span> <span class="n">meta</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"note_type"</span><span class="p">)</span> <span class="o">!=</span> <span class="s2">"transfer"</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">meta</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"name"</span><span class="p">,</span> <span class="s2">""</span><span class="p">))</span>
+            <span class="n">m</span> <span class="o">=</span> <span class="n">pattern</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">m</span><span class="p">:</span>
+                <span class="n">numbers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)))</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">numbers</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">numbers</span> <span class="k">else</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">"T</span><span class="si">{</span><span class="n">n</span><span class="si">:</span><span class="s2">03d</span><span class="si">}</span><span class="s2">"</span>
+
+<div class="viewcode-block" id="Project.add_transfer">
+<a class="viewcode-back" href="../../generated/losalamos.project.html#losalamos.project.Project.add_transfer">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">add_transfer</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">transfer_type</span><span class="p">,</span>
+        <span class="n">date</span><span class="p">,</span>
+        <span class="n">account</span><span class="p">,</span>
+        <span class="n">value</span><span class="p">,</span>
+        <span class="n">status</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">commitment</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">recurrence</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">method</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">protocol</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">related_asset</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">"""</span>
+<span class="sd">        Create a new transfer note under ``budget/inflows/`` or ``budget/outflows/``.</span>
+
+<span class="sd">        The target folder is chosen from *transfer_type*: ``"inflow"`` writes</span>
+<span class="sd">        to ``budget/inflows/`` and ``"outflow"`` to ``budget/outflows/``.</span>
+
+<span class="sd">        :param transfer_type: Direction of the transfer. Must be ``"inflow"``</span>
+<span class="sd">            or ``"outflow"``.</span>
+<span class="sd">        :type transfer_type: str</span>
+<span class="sd">        :param date: Date of the transfer, e.g. ``"2026-09-02"``.</span>
+<span class="sd">        :type date: str</span>
+<span class="sd">        :param account: Account name or identifier.</span>
+<span class="sd">        :type account: str</span>
+<span class="sd">        :param value: Monetary value of the transfer.</span>
+<span class="sd">        :type value: float or str</span>
+<span class="sd">        :param status: Execution status. One of ``"Executed"``,</span>
+<span class="sd">            ``"Cancelled"``, or ``"Prospected"``.</span>
+<span class="sd">        :type status: str or None</span>
+<span class="sd">        :param commitment: Financial commitment type. One of</span>
+<span class="sd">            ``"Contracted"`` or ``"Optional"``.</span>
+<span class="sd">        :type commitment: str or None</span>
+<span class="sd">        :param recurrence: Recurrence period. One of ``"Monthly"`` or</span>
+<span class="sd">            ``"Yearly"``.</span>
+<span class="sd">        :type recurrence: str or None</span>
+<span class="sd">        :param method: Payment method. Defaults to ``"Manual"`` when</span>
+<span class="sd">            ``None``.</span>
+<span class="sd">        :type method: str or None</span>
+<span class="sd">        :param protocol: Payment protocol. One of ``"Bill"`` or</span>
+<span class="sd">            ``"Transfer"``.</span>
+<span class="sd">        :type protocol: str or None</span>
+<span class="sd">        :param related_asset: Optional reference to a related asset note.</span>
+<span class="sd">        :type related_asset: str or None</span>
+<span class="sd">        :raises ValueError: If *transfer_type* is not ``"inflow"`` or</span>
+<span class="sd">            ``"outflow"``.</span>
+<span class="sd">        :returns: The newly created transfer note.</span>
+<span class="sd">        :rtype: losalamos.notes.NoteTransfer</span>
+<span class="sd">        """</span>
+        <span class="n">transfer_type</span> <span class="o">=</span> <span class="n">transfer_type</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">transfer_type</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"inflow"</span><span class="p">,</span> <span class="s2">"outflow"</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">"transfer_type must be 'inflow' or 'outflow', got '</span><span class="si">{</span><span class="n">transfer_type</span><span class="si">}</span><span class="s2">'"</span>
+            <span class="p">)</span>
+
+        <span class="n">transfer_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_next_transfer_id</span><span class="p">()</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">transfer_type</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">transfer_id</span><span class="si">}</span><span class="s2">"</span>
+        <span class="n">target_folder</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">folder_root</span><span class="p">)</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">"budget/</span><span class="si">{</span><span class="n">transfer_type</span><span class="si">}</span><span class="s2">s"</span>
+        <span class="n">target_folder</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">note_file</span> <span class="o">=</span> <span class="n">target_folder</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">.md"</span>
+        <span class="n">note</span> <span class="o">=</span> <span class="n">NoteTransfer</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
+        <span class="n">note</span><span class="o">.</span><span class="n">load_new</span><span class="p">(</span><span class="n">file_note</span><span class="o">=</span><span class="n">note_file</span><span class="p">)</span>
+        <span class="n">note</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">"name"</span><span class="p">]</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="n">note</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">"date"</span><span class="p">]</span> <span class="o">=</span> <span class="n">date</span>
+        <span class="n">note</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">"transfer_type"</span><span class="p">]</span> <span class="o">=</span> <span class="n">transfer_type</span>
+        <span class="n">note</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">"account"</span><span class="p">]</span> <span class="o">=</span> <span class="n">account</span>
+        <span class="n">note</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">"value"</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="n">note</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">"status"</span><span class="p">]</span> <span class="o">=</span> <span class="n">status</span>
+        <span class="n">note</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">"commitment"</span><span class="p">]</span> <span class="o">=</span> <span class="n">commitment</span>
+        <span class="n">note</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">"recurrence"</span><span class="p">]</span> <span class="o">=</span> <span class="n">recurrence</span>
+        <span class="n">note</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">"method"</span><span class="p">]</span> <span class="o">=</span> <span class="n">method</span> <span class="k">if</span> <span class="n">method</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="s2">"Manual"</span>
+        <span class="n">note</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">"protocol"</span><span class="p">]</span> <span class="o">=</span> <span class="n">protocol</span>
+        <span class="n">note</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">"related_asset"</span><span class="p">]</span> <span class="o">=</span> <span class="n">related_asset</span>
+        <span class="n">note</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+        <span class="n">note</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="n">note</span></div>
+
+
+<div class="viewcode-block" id="Project.get_transfers">
+<a class="viewcode-back" href="../../generated/losalamos.project.html#losalamos.project.Project.get_transfers">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_transfers</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""</span>
+<span class="sd">        Return a DataFrame of all transfer notes found under the project root.</span>
+
+<span class="sd">        Scans every ``.md`` file for ``note_type: transfer`` front-matter and</span>
+<span class="sd">        collects the transfer schema fields. Rows are sorted by ``name``.</span>
+
+<span class="sd">        :returns: DataFrame with columns ``name``, ``date``, ``transfer_type``,</span>
+<span class="sd">            ``status``, ``account``, ``value``, ``commitment``, ``recurrence``,</span>
+<span class="sd">            ``method``, ``protocol``, ``related_asset``. Empty DataFrame when</span>
+<span class="sd">            no transfers exist.</span>
+<span class="sd">        :rtype: pandas.DataFrame</span>
+<span class="sd">        """</span>
+        <span class="n">_cols</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s2">"name"</span><span class="p">,</span>
+            <span class="s2">"date"</span><span class="p">,</span>
+            <span class="s2">"transfer_type"</span><span class="p">,</span>
+            <span class="s2">"status"</span><span class="p">,</span>
+            <span class="s2">"account"</span><span class="p">,</span>
+            <span class="s2">"value"</span><span class="p">,</span>
+            <span class="s2">"commitment"</span><span class="p">,</span>
+            <span class="s2">"recurrence"</span><span class="p">,</span>
+            <span class="s2">"method"</span><span class="p">,</span>
+            <span class="s2">"protocol"</span><span class="p">,</span>
+            <span class="s2">"related_asset"</span><span class="p">,</span>
+        <span class="p">]</span>
+        <span class="n">rows</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">md_file</span> <span class="ow">in</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">folder_root</span><span class="p">)</span><span class="o">.</span><span class="n">rglob</span><span class="p">(</span><span class="s2">"*.md"</span><span class="p">):</span>
+            <span class="n">meta</span> <span class="o">=</span> <span class="n">NoteBasic</span><span class="o">.</span><span class="n">parse_metadata</span><span class="p">(</span><span class="n">note_file</span><span class="o">=</span><span class="n">md_file</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">meta</span> <span class="ow">or</span> <span class="n">meta</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"note_type"</span><span class="p">)</span> <span class="o">!=</span> <span class="s2">"transfer"</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="n">rows</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="n">col</span><span class="p">:</span> <span class="n">meta</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">col</span><span class="p">,</span> <span class="s2">""</span><span class="p">)</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">_cols</span><span class="p">})</span>
+        <span class="n">rows</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">r</span><span class="p">:</span> <span class="n">r</span><span class="p">[</span><span class="s2">"name"</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">rows</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">_cols</span><span class="p">)</span></div>
 
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_localize_doc_type</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">asset_type</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
@@ -2193,28 +2407,59 @@
         <span class="p">}</span>
         <span class="k">return</span> <span class="p">{</span><span class="n">dst</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">src</span><span class="p">)</span> <span class="k">for</span> <span class="n">dst</span><span class="p">,</span> <span class="n">src</span> <span class="ow">in</span> <span class="n">_map</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">src</span><span class="o">.</span><span class="n">is_file</span><span class="p">()}</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="nf">_add_asset_document</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">asset_type</span><span class="p">,</span> <span class="n">files_overlay</span><span class="p">,</span> <span class="n">subfolder</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_locate_document_source</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""</span>
+<span class="sd">        Locate the working source folder for a document by name.</span>
+
+<span class="sd">        Checks ``inputs/documents/{name}/`` under the local project root first,</span>
+<span class="sd">        then under ``folder_remote_documents`` if a remote documents root is</span>
+<span class="sd">        configured.</span>
+
+<span class="sd">        :param name: Document folder name, e.g. ``"INVOICE_C034_F003"``.</span>
+<span class="sd">        :type name: str</span>
+<span class="sd">        :raises FileNotFoundError: If the source folder is not found in either</span>
+<span class="sd">            the local or (when configured) the remote location.</span>
+<span class="sd">        :returns: Path to the document source folder.</span>
+<span class="sd">        :rtype: pathlib.Path</span>
+<span class="sd">        """</span>
+        <span class="n">local</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">folder_root</span><span class="p">)</span> <span class="o">/</span> <span class="s2">"inputs/documents"</span> <span class="o">/</span> <span class="n">name</span>
+        <span class="k">if</span> <span class="n">local</span><span class="o">.</span><span class="n">is_dir</span><span class="p">():</span>
+            <span class="k">return</span> <span class="n">local</span>
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">folder_remote_documents</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">folder_remote_documents</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">folder_root</span>
+        <span class="p">):</span>
+            <span class="n">remote</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">folder_remote_documents</span> <span class="o">/</span> <span class="s2">"inputs/documents"</span> <span class="o">/</span> <span class="n">name</span>
+            <span class="k">if</span> <span class="n">remote</span><span class="o">.</span><span class="n">is_dir</span><span class="p">():</span>
+                <span class="k">return</span> <span class="n">remote</span>
+            <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">"Document source not found for '</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">'. "</span>
+                <span class="sa">f</span><span class="s2">"Checked: '</span><span class="si">{</span><span class="n">local</span><span class="si">}</span><span class="s2">', '</span><span class="si">{</span><span class="n">remote</span><span class="si">}</span><span class="s2">'"</span>
+            <span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">"Document source not found for '</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">'. Checked: '</span><span class="si">{</span><span class="n">local</span><span class="si">}</span><span class="s2">'"</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_add_asset_document</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">asset_type</span><span class="p">,</span> <span class="n">files_overlay</span><span class="p">,</span> <span class="n">config</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Core creation logic for asset documents (invoice, receipt, proposal, etc.).</span>
 
-<span class="sd">        Creates the document folder under *subfolder*, registers the document</span>
-<span class="sd">        via :meth:`add_document`, patches ``definitions/project.tex`` with the</span>
-<span class="sd">        asset identity fields, and writes the sidecar asset note. The document</span>
-<span class="sd">        type key and template overlay are resolved from *asset_type* (lowercased)</span>
-<span class="sd">        and ``sources["templates"]["documents"]``.</span>
+<span class="sd">        Creates the document working tree at ``inputs/documents/{name}/``, registers</span>
+<span class="sd">        the document via :meth:`add_document`, patches ``definitions/project.tex``</span>
+<span class="sd">        with the asset identity fields, writes the sidecar asset note at</span>
+<span class="sd">        ``inputs/documents/{name}.md`` (always local, visible to Obsidian), and</span>
+<span class="sd">        optionally rewrites the services table via :meth:`~losalamos.documents.Document.apply_config`.</span>
 
 <span class="sd">        :param asset_type: Asset type string in uppercase, e.g. ``"INVOICE"``.</span>
 <span class="sd">        :type asset_type: str</span>
 <span class="sd">        :param files_overlay: File overlay dict passed to :meth:`add_document`.</span>
 <span class="sd">        :type files_overlay: dict or None</span>
-<span class="sd">        :param subfolder: Project-relative target folder, e.g. ``"budget/documents"``.</span>
-<span class="sd">        :type subfolder: str</span>
+<span class="sd">        :param config: Optional config dict forwarded to :meth:`~losalamos.documents.Document.apply_config`.</span>
+<span class="sd">            When provided, rewrites the document's services table.</span>
+<span class="sd">        :type config: dict or None</span>
 <span class="sd">        :returns: The newly created document instance.</span>
 <span class="sd">        :rtype: losalamos.documents.Document</span>
 <span class="sd">        """</span>
-        <span class="n">doc_dir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">folder_root</span><span class="p">)</span> <span class="o">/</span> <span class="n">subfolder</span>
-        <span class="n">doc_dir</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
         <span class="n">asset_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_next_asset_id</span><span class="p">()</span>
         <span class="n">name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">asset_type</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">asset_id</span><span class="si">}</span><span class="s2">"</span>
 
@@ -2229,18 +2474,22 @@
             <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
             <span class="n">template_overlay</span><span class="o">=</span><span class="n">template_overlay</span><span class="p">,</span>
             <span class="n">files_overlay</span><span class="o">=</span><span class="n">files_overlay</span> <span class="ow">or</span> <span class="kc">None</span><span class="p">,</span>
-            <span class="n">subfolder</span><span class="o">=</span><span class="n">subfolder</span><span class="p">,</span>
+            <span class="n">subfolder</span><span class="o">=</span><span class="s2">"inputs/documents"</span><span class="p">,</span>
             <span class="n">condensed</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
             <span class="n">compile_pdf</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="p">)</span>
 
+        <span class="n">source_folder</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">folder_root</span><span class="p">)</span> <span class="o">/</span> <span class="s2">"inputs/documents"</span> <span class="o">/</span> <span class="n">name</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_patch_project_tex</span><span class="p">(</span>
-            <span class="n">doc_folder</span><span class="o">=</span><span class="n">doc_dir</span> <span class="o">/</span> <span class="n">name</span><span class="p">,</span>
+            <span class="n">doc_folder</span><span class="o">=</span><span class="n">source_folder</span><span class="p">,</span>
             <span class="n">file_id</span><span class="o">=</span><span class="n">asset_id</span><span class="p">,</span>
             <span class="n">asset_type</span><span class="o">=</span><span class="n">asset_type</span><span class="p">,</span>
         <span class="p">)</span>
 
-        <span class="n">note_file</span> <span class="o">=</span> <span class="n">doc_dir</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">.md"</span>
+        <span class="k">if</span> <span class="n">config</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">doc</span><span class="o">.</span><span class="n">apply_config</span><span class="p">(</span><span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">)</span>
+
+        <span class="n">note_file</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">folder_root</span><span class="p">)</span> <span class="o">/</span> <span class="s2">"inputs/documents"</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">.md"</span>
         <span class="n">asset_note</span> <span class="o">=</span> <span class="n">NoteAsset</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
         <span class="n">asset_note</span><span class="o">.</span><span class="n">load_new</span><span class="p">(</span><span class="n">file_note</span><span class="o">=</span><span class="n">note_file</span><span class="p">)</span>
         <span class="n">asset_note</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">"name"</span><span class="p">]</span> <span class="o">=</span> <span class="n">name</span>
@@ -2257,28 +2506,24 @@
 <span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Core build logic for asset documents (invoice, receipt, proposal, etc.).</span>
 
-<span class="sd">        Locates ``{asset_type}_{project}_{file_id}`` under *subfolder*, reads</span>
+<span class="sd">        Locates the source via :meth:`_locate_document_source`, reads</span>
 <span class="sd">        ``\\DocVersion`` from ``definitions/project.tex`` (dots removed, ``V``</span>
-<span class="sd">        prefix added), compiles via ``latexmk`` with cleanup, moves the PDF to</span>
+<span class="sd">        prefix added), compiles via ``latexmk`` with cleanup, ships the PDF to</span>
 <span class="sd">        ``{subfolder}/{asset_type}_{project}_{file_id}_{version}.pdf``, and</span>
-<span class="sd">        updates ``asset_file`` in the sidecar note.</span>
+<span class="sd">        updates ``asset_file`` in the sidecar note at ``inputs/documents/{name}.md``.</span>
 
 <span class="sd">        :param asset_type: Asset type string in uppercase, e.g. ``"INVOICE"``.</span>
 <span class="sd">        :type asset_type: str</span>
 <span class="sd">        :param file_id: Asset file ID assigned at creation, e.g. ``"F003"``.</span>
 <span class="sd">        :type file_id: str</span>
-<span class="sd">        :param subfolder: Project-relative folder containing the document, e.g. ``"budget/documents"``.</span>
+<span class="sd">        :param subfolder: Project-relative target folder for the PDF, e.g. ``"budget/documents"``.</span>
 <span class="sd">        :type subfolder: str</span>
-<span class="sd">        :raises FileNotFoundError: If the document folder or ``main.tex`` is not found.</span>
+<span class="sd">        :raises FileNotFoundError: If the document source folder or ``main.tex`` is not found.</span>
 <span class="sd">        :returns: Path to the compiled PDF.</span>
 <span class="sd">        :rtype: pathlib.Path</span>
 <span class="sd">        """</span>
-        <span class="n">doc_dir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">folder_root</span><span class="p">)</span> <span class="o">/</span> <span class="n">subfolder</span>
         <span class="n">name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">asset_type</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">file_id</span><span class="si">}</span><span class="s2">"</span>
-        <span class="n">doc_folder</span> <span class="o">=</span> <span class="n">doc_dir</span> <span class="o">/</span> <span class="n">name</span>
-
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">doc_folder</span><span class="o">.</span><span class="n">is_dir</span><span class="p">():</span>
-            <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">asset_type</span><span class="si">}</span><span class="s2"> folder not found: '</span><span class="si">{</span><span class="n">doc_folder</span><span class="si">}</span><span class="s2">'"</span><span class="p">)</span>
+        <span class="n">doc_folder</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_locate_document_source</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
 
         <span class="n">main_tex</span> <span class="o">=</span> <span class="n">doc_folder</span> <span class="o">/</span> <span class="s2">"main.tex"</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">main_tex</span><span class="o">.</span><span class="n">is_file</span><span class="p">():</span>
@@ -2296,15 +2541,17 @@
                 <span class="n">version_raw</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
         <span class="n">version_tag</span> <span class="o">=</span> <span class="s2">"V"</span> <span class="o">+</span> <span class="n">version_raw</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">"."</span><span class="p">,</span> <span class="s2">""</span><span class="p">)</span>
 
+        <span class="n">target_dir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">folder_root</span><span class="p">)</span> <span class="o">/</span> <span class="n">subfolder</span>
+        <span class="n">target_dir</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="n">pdf_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">asset_type</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">file_id</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">version_tag</span><span class="si">}</span><span class="s2">.pdf"</span>
-        <span class="n">pdf_output</span> <span class="o">=</span> <span class="n">doc_dir</span> <span class="o">/</span> <span class="n">pdf_name</span>
+        <span class="n">pdf_output</span> <span class="o">=</span> <span class="n">target_dir</span> <span class="o">/</span> <span class="n">pdf_name</span>
 
         <span class="n">klass</span> <span class="o">=</span> <span class="n">DOCUMENT_TYPES</span><span class="p">[</span><span class="n">asset_type</span><span class="o">.</span><span class="n">lower</span><span class="p">()]</span>
         <span class="n">doc</span> <span class="o">=</span> <span class="n">klass</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
         <span class="n">doc</span><span class="o">.</span><span class="n">load_data</span><span class="p">(</span><span class="n">file_data</span><span class="o">=</span><span class="n">main_tex</span><span class="p">)</span>
         <span class="n">doc</span><span class="o">.</span><span class="n">to_pdf</span><span class="p">(</span><span class="n">file_output</span><span class="o">=</span><span class="n">pdf_output</span><span class="p">,</span> <span class="n">cleanup</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-        <span class="n">note_file</span> <span class="o">=</span> <span class="n">doc_dir</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">.md"</span>
+        <span class="n">note_file</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">folder_root</span><span class="p">)</span> <span class="o">/</span> <span class="s2">"inputs/documents"</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">.md"</span>
         <span class="k">if</span> <span class="n">note_file</span><span class="o">.</span><span class="n">is_file</span><span class="p">():</span>
             <span class="n">asset_note</span> <span class="o">=</span> <span class="n">NoteAsset</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
             <span class="n">asset_note</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">file_note</span><span class="o">=</span><span class="n">note_file</span><span class="p">)</span>
@@ -2316,34 +2563,40 @@
 
 <div class="viewcode-block" id="Project.add_invoice">
 <a class="viewcode-back" href="../../generated/losalamos.project.html#losalamos.project.Project.add_invoice">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">add_invoice</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">add_invoice</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">"""</span>
-<span class="sd">        Create a new invoice document inside ``budget/documents/``.</span>
+<span class="sd">        Create a new invoice document.</span>
 
-<span class="sd">        The folder and sidecar note are named ``INVOICE_{project}_{file_id}``,</span>
-<span class="sd">        e.g. ``INVOICE_C034_F003``. No compilation or condensing is performed.</span>
+<span class="sd">        The working tree is created at ``inputs/documents/INVOICE_{project}_{file_id}/``</span>
+<span class="sd">        and the sidecar note at ``inputs/documents/INVOICE_{project}_{file_id}.md``.</span>
+<span class="sd">        No compilation or condensing is performed.</span>
 
 <span class="sd">        The template directory is read from</span>
 <span class="sd">        ``sources["templates"]["documents"]["invoice"]`` in the project's</span>
-<span class="sd">        ``admin/config/sources.yaml``. The following overlays are applied</span>
+<span class="sd">        ``admin/config/sources.toml``. The following overlays are applied</span>
 <span class="sd">        when present in ``admin/config/overlays/``:</span>
 
 <span class="sd">        - ``project.tex`` → ``definitions/project.tex``</span>
 <span class="sd">        - ``party_b_contractor.tex`` → ``definitions/party_b.tex``</span>
 
+<span class="sd">        :param config: Optional config dict forwarded to</span>
+<span class="sd">            :meth:`~losalamos.documents.Invoice.apply_config`. When provided,</span>
+<span class="sd">            rewrites ``partials/services-invoice.tex`` from the services list</span>
+<span class="sd">            and invoice settings in the dict.</span>
+<span class="sd">        :type config: dict or None</span>
 <span class="sd">        :returns: The newly created invoice document instance.</span>
 <span class="sd">        :rtype: losalamos.documents.Document</span>
 <span class="sd">        """</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_add_asset_document</span><span class="p">(</span>
             <span class="n">asset_type</span><span class="o">=</span><span class="s2">"INVOICE"</span><span class="p">,</span>
             <span class="n">files_overlay</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_standard_files_overlay</span><span class="p">(),</span>
-            <span class="n">subfolder</span><span class="o">=</span><span class="s2">"budget/documents"</span><span class="p">,</span>
+            <span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">,</span>
         <span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="Project.add_receipt">
 <a class="viewcode-back" href="../../generated/losalamos.project.html#losalamos.project.Project.add_receipt">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">add_receipt</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">invoice_id</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">add_receipt</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">invoice_id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">config</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Create a new receipt document inside ``budget/documents/``.</span>
 
@@ -2360,16 +2613,19 @@
 <span class="sd">            e.g. ``"F003"``. When provided, the invoice folder's files</span>
 <span class="sd">            (excluding ``main.tex``) become file overlays on the receipt.</span>
 <span class="sd">        :type invoice_id: str or None</span>
+<span class="sd">        :param config: Optional config dict forwarded to</span>
+<span class="sd">            :meth:`~losalamos.documents.Receipt.apply_config`. When provided,</span>
+<span class="sd">            rewrites ``partials/services-receipt.tex`` from the services list</span>
+<span class="sd">            and invoice settings in the dict.</span>
+<span class="sd">        :type config: dict or None</span>
 <span class="sd">        :raises FileNotFoundError: If *invoice_id* is given but the</span>
 <span class="sd">            corresponding invoice folder does not exist.</span>
 <span class="sd">        :returns: The newly created receipt document instance.</span>
 <span class="sd">        :rtype: losalamos.documents.Document</span>
 <span class="sd">        """</span>
         <span class="k">if</span> <span class="n">invoice_id</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">budget_docs</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">folder_root</span><span class="p">)</span> <span class="o">/</span> <span class="s2">"budget/documents"</span>
-            <span class="n">invoice_folder</span> <span class="o">=</span> <span class="n">budget_docs</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">"INVOICE_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">invoice_id</span><span class="si">}</span><span class="s2">"</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="n">invoice_folder</span><span class="o">.</span><span class="n">is_dir</span><span class="p">():</span>
-                <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Invoice folder not found: '</span><span class="si">{</span><span class="n">invoice_folder</span><span class="si">}</span><span class="s2">'"</span><span class="p">)</span>
+            <span class="n">invoice_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"INVOICE_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">invoice_id</span><span class="si">}</span><span class="s2">"</span>
+            <span class="n">invoice_folder</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_locate_document_source</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">invoice_name</span><span class="p">)</span>
             <span class="n">files_overlay</span> <span class="o">=</span> <span class="p">{</span>
                 <span class="n">src</span><span class="o">.</span><span class="n">relative_to</span><span class="p">(</span><span class="n">invoice_folder</span><span class="p">)</span><span class="o">.</span><span class="n">as_posix</span><span class="p">():</span> <span class="nb">str</span><span class="p">(</span><span class="n">src</span><span class="p">)</span>
                 <span class="k">for</span> <span class="n">src</span> <span class="ow">in</span> <span class="n">invoice_folder</span><span class="o">.</span><span class="n">rglob</span><span class="p">(</span><span class="s2">"*"</span><span class="p">)</span>
@@ -2381,7 +2637,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_add_asset_document</span><span class="p">(</span>
             <span class="n">asset_type</span><span class="o">=</span><span class="s2">"RECEIPT"</span><span class="p">,</span>
             <span class="n">files_overlay</span><span class="o">=</span><span class="n">files_overlay</span><span class="p">,</span>
-            <span class="n">subfolder</span><span class="o">=</span><span class="s2">"budget/documents"</span><span class="p">,</span>
+            <span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">,</span>
         <span class="p">)</span></div>
 
 
@@ -2393,7 +2649,7 @@
 
 <span class="sd">        Reads ``\\DocVersion`` from ``definitions/project.tex``, compiles</span>
 <span class="sd">        via ``latexmk`` with cleanup, and places the result at</span>
-<span class="sd">        ``budget/documents/INVOICE_{project}_{file_id}_{version}.pdf``.</span>
+<span class="sd">        ``inputs/documents/INVOICE_{project}_{file_id}_{version}.pdf``.</span>
 <span class="sd">        Updates the ``asset_file`` field in the sidecar note.</span>
 
 <span class="sd">        :param file_id: Asset file ID assigned at creation, e.g. ``"F003"``.</span>
@@ -2403,7 +2659,7 @@
 <span class="sd">        :rtype: pathlib.Path</span>
 <span class="sd">        """</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_build_asset_document</span><span class="p">(</span>
-            <span class="n">asset_type</span><span class="o">=</span><span class="s2">"INVOICE"</span><span class="p">,</span> <span class="n">file_id</span><span class="o">=</span><span class="n">file_id</span><span class="p">,</span> <span class="n">subfolder</span><span class="o">=</span><span class="s2">"budget/documents"</span>
+            <span class="n">asset_type</span><span class="o">=</span><span class="s2">"INVOICE"</span><span class="p">,</span> <span class="n">file_id</span><span class="o">=</span><span class="n">file_id</span><span class="p">,</span> <span class="n">subfolder</span><span class="o">=</span><span class="s2">"inputs/documents"</span>
         <span class="p">)</span></div>
 
 
@@ -2415,7 +2671,7 @@
 
 <span class="sd">        Reads ``\\DocVersion`` from ``definitions/project.tex``, compiles</span>
 <span class="sd">        via ``latexmk`` with cleanup, and places the result at</span>
-<span class="sd">        ``budget/documents/RECEIPT_{project}_{file_id}_{version}.pdf``.</span>
+<span class="sd">        ``inputs/documents/RECEIPT_{project}_{file_id}_{version}.pdf``.</span>
 <span class="sd">        Updates the ``asset_file`` field in the sidecar note.</span>
 
 <span class="sd">        :param file_id: Asset file ID assigned at creation, e.g. ``"F003"``.</span>
@@ -2425,7 +2681,7 @@
 <span class="sd">        :rtype: pathlib.Path</span>
 <span class="sd">        """</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_build_asset_document</span><span class="p">(</span>
-            <span class="n">asset_type</span><span class="o">=</span><span class="s2">"RECEIPT"</span><span class="p">,</span> <span class="n">file_id</span><span class="o">=</span><span class="n">file_id</span><span class="p">,</span> <span class="n">subfolder</span><span class="o">=</span><span class="s2">"budget/documents"</span>
+            <span class="n">asset_type</span><span class="o">=</span><span class="s2">"RECEIPT"</span><span class="p">,</span> <span class="n">file_id</span><span class="o">=</span><span class="n">file_id</span><span class="p">,</span> <span class="n">subfolder</span><span class="o">=</span><span class="s2">"inputs/documents"</span>
         <span class="p">)</span></div>
 
 
@@ -2433,14 +2689,15 @@
 <a class="viewcode-back" href="../../generated/losalamos.project.html#losalamos.project.Project.add_proposal">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">add_proposal</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">"""</span>
-<span class="sd">        Create a new proposal document inside ``admin/proposals/``.</span>
+<span class="sd">        Create a new proposal document.</span>
 
-<span class="sd">        The folder and sidecar note are named ``PROPOSAL_{project}_{file_id}``,</span>
-<span class="sd">        e.g. ``PROPOSAL_C034_F005``. No compilation or condensing is performed.</span>
+<span class="sd">        The working tree is created at ``inputs/documents/PROPOSAL_{project}_{file_id}/``</span>
+<span class="sd">        and the sidecar note at ``inputs/documents/PROPOSAL_{project}_{file_id}.md``.</span>
+<span class="sd">        No compilation or condensing is performed.</span>
 
 <span class="sd">        The template directory is read from</span>
 <span class="sd">        ``sources["templates"]["documents"]["proposal"]`` in the project's</span>
-<span class="sd">        ``admin/config/sources.yaml``. The following overlays are applied</span>
+<span class="sd">        ``admin/config/sources.toml``. The following overlays are applied</span>
 <span class="sd">        when present in ``admin/config/overlays/``:</span>
 
 <span class="sd">        - ``project.tex`` → ``definitions/project.tex``</span>
@@ -2452,7 +2709,6 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_add_asset_document</span><span class="p">(</span>
             <span class="n">asset_type</span><span class="o">=</span><span class="s2">"PROPOSAL"</span><span class="p">,</span>
             <span class="n">files_overlay</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_standard_files_overlay</span><span class="p">(),</span>
-            <span class="n">subfolder</span><span class="o">=</span><span class="s2">"admin/proposals"</span><span class="p">,</span>
         <span class="p">)</span></div>
 
 

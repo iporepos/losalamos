@@ -417,9 +417,11 @@
 
 <span class="c1"># Native imports</span>
 <span class="c1"># =======================================================================</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">contextlib</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">pprint</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">shutil</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">tempfile</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
 
 <span class="c1"># ... {develop}</span>
@@ -1593,6 +1595,31 @@
         <span class="k">return</span> <span class="kc">None</span></div>
 
 
+    <span class="nd">@contextlib</span><span class="o">.</span><span class="n">contextmanager</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_temp_working_copy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""</span>
+<span class="sd">        Context manager: copy ``self.file_data`` into a fresh OS temp directory,</span>
+<span class="sd">        swap ``self.file_data`` to point at the copy, yield the copy path, then</span>
+<span class="sd">        restore ``self.file_data`` and delete the entire temp directory —</span>
+<span class="sd">        guaranteed on both normal exit and exceptions.</span>
+
+<span class="sd">        :param suffix: Filename suffix for the temp copy. Defaults to the</span>
+<span class="sd">            original file's suffix.</span>
+<span class="sd">        :type suffix: str or None</span>
+<span class="sd">        :yields: Path to the temporary copy.</span>
+<span class="sd">        :rtype: pathlib.Path</span>
+<span class="sd">        """</span>
+        <span class="n">src_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_data</span>
+        <span class="n">ext</span> <span class="o">=</span> <span class="n">suffix</span> <span class="k">if</span> <span class="n">suffix</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">src_file</span><span class="o">.</span><span class="n">suffix</span>
+        <span class="k">with</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">TemporaryDirectory</span><span class="p">()</span> <span class="k">as</span> <span class="n">tmp_dir</span><span class="p">:</span>
+            <span class="n">dst_file</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">tmp_dir</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">src_file</span><span class="o">.</span><span class="n">stem</span> <span class="o">+</span> <span class="n">ext</span><span class="p">)</span>
+            <span class="n">shutil</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">src</span><span class="o">=</span><span class="n">src_file</span><span class="p">,</span> <span class="n">dst</span><span class="o">=</span><span class="n">dst_file</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">file_data</span> <span class="o">=</span> <span class="n">dst_file</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">yield</span> <span class="n">dst_file</span>
+            <span class="k">finally</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">file_data</span> <span class="o">=</span> <span class="n">src_file</span>
+
 <div class="viewcode-block" id="FigureSVG.to_image">
 <a class="viewcode-back" href="../../generated/losalamos.figures.html#losalamos.figures.FigureSVG.to_image">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">to_image</span><span class="p">(</span>
@@ -1641,67 +1668,56 @@
 
 <span class="sd">        """</span>
         <span class="kn">import</span><span class="w"> </span><span class="nn">subprocess</span>
-        <span class="kn">from</span><span class="w"> </span><span class="nn">losalamos.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">make_local_tempfile</span>
 
         <span class="c1"># handle output file</span>
         <span class="c1"># -----------------------------------------------------------------------</span>
         <span class="k">if</span> <span class="n">file_output</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">file_output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_data</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">file_data</span><span class="o">.</span><span class="n">stem</span> <span class="o">+</span> <span class="s2">".png"</span><span class="p">)</span>
 
-        <span class="c1"># handle svg file copy</span>
-        <span class="c1"># -----------------------------------------------------------------------</span>
-        <span class="n">src_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_data</span>
-        <span class="n">dst_file</span> <span class="o">=</span> <span class="n">make_local_tempfile</span><span class="p">(</span><span class="n">src_file</span><span class="o">=</span><span class="n">src_file</span><span class="p">)</span>
-        <span class="n">shutil</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">src</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">file_data</span><span class="p">,</span> <span class="n">dst</span><span class="o">=</span><span class="n">dst_file</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">file_data</span> <span class="o">=</span> <span class="n">dst_file</span>
-
-        <span class="c1"># handle page opacity for jpeg render</span>
-        <span class="c1"># -----------------------------------------------------------------------</span>
-        <span class="k">if</span> <span class="n">to_jpeg</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">set_page_opacity</span><span class="p">(</span><span class="n">opacity</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
-
-        <span class="c1"># Get abspath</span>
         <span class="n">file_output</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">file_output</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
 
-        <span class="c1"># handle visibility of layers</span>
-        <span class="c1"># -----------------------------------------------------------------------</span>
-        <span class="n">b_save</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_temp_working_copy</span><span class="p">()</span> <span class="k">as</span> <span class="n">dst_file</span><span class="p">:</span>
 
-        <span class="k">if</span> <span class="n">hide_layers</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">hide_layers</span><span class="p">(</span><span class="n">labels</span><span class="o">=</span><span class="n">hide_layers</span><span class="p">)</span>
-            <span class="n">b_save</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="c1"># handle page opacity for jpeg render</span>
+            <span class="c1"># -----------------------------------------------------------------------</span>
+            <span class="k">if</span> <span class="n">to_jpeg</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">set_page_opacity</span><span class="p">(</span><span class="n">opacity</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
 
-        <span class="k">if</span> <span class="n">show_layers</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">show_layers</span><span class="p">(</span><span class="n">labels</span><span class="o">=</span><span class="n">show_layers</span><span class="p">,</span> <span class="n">inclusive</span><span class="o">=</span><span class="n">show_inclusive</span><span class="p">)</span>
-            <span class="n">b_save</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="c1"># handle visibility of layers</span>
+            <span class="c1"># -----------------------------------------------------------------------</span>
+            <span class="n">b_save</span> <span class="o">=</span> <span class="kc">False</span>
 
-        <span class="c1"># save to temporary file</span>
-        <span class="k">if</span> <span class="n">b_save</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">hide_layers</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">hide_layers</span><span class="p">(</span><span class="n">labels</span><span class="o">=</span><span class="n">hide_layers</span><span class="p">)</span>
+                <span class="n">b_save</span> <span class="o">=</span> <span class="kc">True</span>
 
-        <span class="c1"># set return file</span>
-        <span class="n">return_file</span> <span class="o">=</span> <span class="n">file_output</span>
+            <span class="k">if</span> <span class="n">show_layers</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">show_layers</span><span class="p">(</span><span class="n">labels</span><span class="o">=</span><span class="n">show_layers</span><span class="p">,</span> <span class="n">inclusive</span><span class="o">=</span><span class="n">show_inclusive</span><span class="p">)</span>
+                <span class="n">b_save</span> <span class="o">=</span> <span class="kc">True</span>
 
-        <span class="c1"># build command</span>
-        <span class="c1"># -----------------------------------------------------------------------</span>
-        <span class="n">cmd</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="s2">"inkscape"</span><span class="p">,</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">file_data</span><span class="p">,</span>
-            <span class="s2">"--export-type=png"</span><span class="p">,</span>
-            <span class="s2">"--export-dpi=</span><span class="si">{}</span><span class="s2">"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">dpi</span><span class="p">),</span>
-            <span class="s2">"--export-filename=</span><span class="si">{}</span><span class="s2">"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">file_output</span><span class="p">),</span>
-        <span class="p">]</span>
+            <span class="k">if</span> <span class="n">b_save</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
 
-        <span class="k">if</span> <span class="n">crop_id</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">cmd</span> <span class="o">=</span> <span class="n">cmd</span> <span class="o">+</span> <span class="p">[</span><span class="s2">"--export-id=</span><span class="si">{}</span><span class="s2">"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">crop_id</span><span class="p">)]</span>
+            <span class="c1"># build and run inkscape command</span>
+            <span class="c1"># -----------------------------------------------------------------------</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="s2">"inkscape"</span><span class="p">,</span>
+                <span class="n">dst_file</span><span class="p">,</span>
+                <span class="s2">"--export-type=png"</span><span class="p">,</span>
+                <span class="s2">"--export-dpi=</span><span class="si">{}</span><span class="s2">"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">dpi</span><span class="p">),</span>
+                <span class="s2">"--export-filename=</span><span class="si">{}</span><span class="s2">"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">file_output</span><span class="p">),</span>
+            <span class="p">]</span>
 
-        <span class="c1"># call inkscape process</span>
-        <span class="c1"># -----------------------------------------------------------------------</span>
-        <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">crop_id</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">cmd</span> <span class="o">=</span> <span class="n">cmd</span> <span class="o">+</span> <span class="p">[</span><span class="s2">"--export-id=</span><span class="si">{}</span><span class="s2">"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">crop_id</span><span class="p">)]</span>
+
+            <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
 
         <span class="c1"># handle jpg conversion</span>
         <span class="c1"># -----------------------------------------------------------------------</span>
+        <span class="n">return_file</span> <span class="o">=</span> <span class="n">file_output</span>
+
         <span class="k">if</span> <span class="n">to_jpeg</span><span class="p">:</span>
             <span class="n">new_name</span> <span class="o">=</span> <span class="n">file_output</span><span class="o">.</span><span class="n">stem</span> <span class="o">+</span> <span class="s2">".jpeg"</span>
             <span class="n">new_file</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">file_output</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="n">new_name</span><span class="p">)</span>
@@ -1710,14 +1726,7 @@
             <span class="k">if</span> <span class="n">remove_png</span><span class="p">:</span>
                 <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">file_output</span><span class="p">)</span>
 
-            <span class="c1"># reset return file</span>
             <span class="n">return_file</span> <span class="o">=</span> <span class="n">new_file</span>
-
-        <span class="c1"># restore file data and cleanup</span>
-        <span class="c1"># -----------------------------------------------------------------------</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">file_data</span> <span class="o">=</span> <span class="n">src_file</span>
-        <span class="c1"># print(temp_folder)</span>
-        <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">dst_file</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">return_file</span></div>
 
@@ -1769,12 +1778,7 @@
 <span class="sd">            Requires ``inkscape`` available in system PATH.</span>
 
 <span class="sd">        """</span>
-        <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
-        <span class="kn">import</span><span class="w"> </span><span class="nn">shutil</span>
         <span class="kn">import</span><span class="w"> </span><span class="nn">subprocess</span>
-
-        <span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
-        <span class="kn">from</span><span class="w"> </span><span class="nn">losalamos.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">make_local_tempfile</span>
 
         <span class="c1"># handle output file</span>
         <span class="c1"># -------------------------------------------------------------------------</span>
@@ -1788,97 +1792,69 @@
         <span class="k">if</span> <span class="n">file_output</span><span class="o">.</span><span class="n">suffix</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">!=</span> <span class="s2">".pdf"</span><span class="p">:</span>
             <span class="n">file_output</span> <span class="o">=</span> <span class="n">file_output</span><span class="o">.</span><span class="n">with_suffix</span><span class="p">(</span><span class="s2">".pdf"</span><span class="p">)</span>
 
-        <span class="c1"># create temporary working copy</span>
-        <span class="c1"># -------------------------------------------------------------------------</span>
-        <span class="n">src_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_data</span>
-        <span class="n">dst_file</span> <span class="o">=</span> <span class="n">make_local_tempfile</span><span class="p">(</span><span class="n">src_file</span><span class="o">=</span><span class="n">src_file</span><span class="p">)</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_temp_working_copy</span><span class="p">()</span> <span class="k">as</span> <span class="n">dst_file</span><span class="p">:</span>
 
-        <span class="n">shutil</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">src</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">file_data</span><span class="p">,</span> <span class="n">dst</span><span class="o">=</span><span class="n">dst_file</span><span class="p">)</span>
+            <span class="c1"># handle layer visibility</span>
+            <span class="c1"># -------------------------------------------------------------------------</span>
+            <span class="n">b_save</span> <span class="o">=</span> <span class="kc">False</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">file_data</span> <span class="o">=</span> <span class="n">dst_file</span>
+            <span class="k">if</span> <span class="n">hide_layers</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">hide_layers</span><span class="p">(</span><span class="n">labels</span><span class="o">=</span><span class="n">hide_layers</span><span class="p">)</span>
+                <span class="n">b_save</span> <span class="o">=</span> <span class="kc">True</span>
 
-        <span class="c1"># handle layer visibility</span>
-        <span class="c1"># -------------------------------------------------------------------------</span>
-        <span class="n">b_save</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="k">if</span> <span class="n">show_layers</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">show_layers</span><span class="p">(</span><span class="n">labels</span><span class="o">=</span><span class="n">show_layers</span><span class="p">,</span> <span class="n">inclusive</span><span class="o">=</span><span class="n">show_inclusive</span><span class="p">)</span>
+                <span class="n">b_save</span> <span class="o">=</span> <span class="kc">True</span>
 
-        <span class="k">if</span> <span class="n">hide_layers</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">hide_layers</span><span class="p">(</span><span class="n">labels</span><span class="o">=</span><span class="n">hide_layers</span><span class="p">)</span>
-            <span class="n">b_save</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">if</span> <span class="n">b_save</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
 
-        <span class="k">if</span> <span class="n">show_layers</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">show_layers</span><span class="p">(</span>
-                <span class="n">labels</span><span class="o">=</span><span class="n">show_layers</span><span class="p">,</span>
-                <span class="n">inclusive</span><span class="o">=</span><span class="n">show_inclusive</span><span class="p">,</span>
-            <span class="p">)</span>
-            <span class="n">b_save</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="c1"># -------------------------------------------------------------------------</span>
+            <span class="c1"># CROPPED VECTOR EXPORT</span>
+            <span class="c1"># -------------------------------------------------------------------------</span>
+            <span class="k">if</span> <span class="n">crop_id</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
 
-        <span class="c1"># save temporary document if modified</span>
-        <span class="c1"># -------------------------------------------------------------------------</span>
-        <span class="k">if</span> <span class="n">b_save</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+                <span class="c1"># intermediate cropped SVG lives in the same temp directory</span>
+                <span class="n">temp_svg</span> <span class="o">=</span> <span class="n">dst_file</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="p">(</span><span class="n">dst_file</span><span class="o">.</span><span class="n">stem</span> <span class="o">+</span> <span class="s2">"_crop.svg"</span><span class="p">)</span>
 
-        <span class="c1"># -------------------------------------------------------------------------</span>
-        <span class="c1"># CROPPED VECTOR EXPORT</span>
-        <span class="c1"># -------------------------------------------------------------------------</span>
-        <span class="k">if</span> <span class="n">crop_id</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="c1"># stage 1: export cropped standalone svg</span>
+                <span class="c1"># ---------------------------------------------------------------------</span>
+                <span class="n">cmd_svg</span> <span class="o">=</span> <span class="p">[</span>
+                    <span class="s2">"inkscape"</span><span class="p">,</span>
+                    <span class="n">dst_file</span><span class="p">,</span>
+                    <span class="s2">"--export-type=svg"</span><span class="p">,</span>
+                    <span class="sa">f</span><span class="s2">"--export-filename=</span><span class="si">{</span><span class="n">temp_svg</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
+                    <span class="sa">f</span><span class="s2">"--export-id=</span><span class="si">{</span><span class="n">crop_id</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
+                <span class="p">]</span>
 
-            <span class="n">temp_svg</span> <span class="o">=</span> <span class="n">make_local_tempfile</span><span class="p">(</span><span class="n">src_file</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">file_data</span><span class="o">.</span><span class="n">with_suffix</span><span class="p">(</span><span class="s2">".svg"</span><span class="p">))</span>
+                <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd_svg</span><span class="p">,</span> <span class="n">check</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-            <span class="c1"># stage 1:</span>
-            <span class="c1"># export cropped standalone svg</span>
-            <span class="c1"># ---------------------------------------------------------------------</span>
-            <span class="n">cmd_svg</span> <span class="o">=</span> <span class="p">[</span>
-                <span class="s2">"inkscape"</span><span class="p">,</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">file_data</span><span class="p">,</span>
-                <span class="s2">"--export-type=svg"</span><span class="p">,</span>
-                <span class="sa">f</span><span class="s2">"--export-filename=</span><span class="si">{</span><span class="n">temp_svg</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
-                <span class="sa">f</span><span class="s2">"--export-id=</span><span class="si">{</span><span class="n">crop_id</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
-                <span class="c1"># "--export-id-only",</span>
-            <span class="p">]</span>
+                <span class="c1"># stage 2: export svg -&gt; pdf</span>
+                <span class="c1"># ---------------------------------------------------------------------</span>
+                <span class="n">cmd_pdf</span> <span class="o">=</span> <span class="p">[</span>
+                    <span class="s2">"inkscape"</span><span class="p">,</span>
+                    <span class="n">temp_svg</span><span class="p">,</span>
+                    <span class="s2">"--export-type=pdf"</span><span class="p">,</span>
+                    <span class="s2">"--export-area-page"</span><span class="p">,</span>
+                    <span class="sa">f</span><span class="s2">"--export-filename=</span><span class="si">{</span><span class="n">file_output</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
+                <span class="p">]</span>
 
-            <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd_svg</span><span class="p">,</span> <span class="n">check</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd_pdf</span><span class="p">,</span> <span class="n">check</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-            <span class="c1"># stage 2:</span>
-            <span class="c1"># export svg -&gt; pdf</span>
-            <span class="c1"># ---------------------------------------------------------------------</span>
-            <span class="n">cmd_pdf</span> <span class="o">=</span> <span class="p">[</span>
-                <span class="s2">"inkscape"</span><span class="p">,</span>
-                <span class="n">temp_svg</span><span class="p">,</span>
-                <span class="s2">"--export-type=pdf"</span><span class="p">,</span>
-                <span class="s2">"--export-area-page"</span><span class="p">,</span>
-                <span class="sa">f</span><span class="s2">"--export-filename=</span><span class="si">{</span><span class="n">file_output</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
-            <span class="p">]</span>
+            <span class="c1"># -------------------------------------------------------------------------</span>
+            <span class="c1"># STANDARD FULL-PAGE EXPORT</span>
+            <span class="c1"># -------------------------------------------------------------------------</span>
+            <span class="k">else</span><span class="p">:</span>
 
-            <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd_pdf</span><span class="p">,</span> <span class="n">check</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                <span class="n">cmd_pdf</span> <span class="o">=</span> <span class="p">[</span>
+                    <span class="s2">"inkscape"</span><span class="p">,</span>
+                    <span class="n">dst_file</span><span class="p">,</span>
+                    <span class="s2">"--export-type=pdf"</span><span class="p">,</span>
+                    <span class="s2">"--export-area-page"</span><span class="p">,</span>
+                    <span class="sa">f</span><span class="s2">"--export-filename=</span><span class="si">{</span><span class="n">file_output</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
+                <span class="p">]</span>
 
-            <span class="c1"># cleanup temporary svg</span>
-            <span class="c1"># ---------------------------------------------------------------------</span>
-            <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">temp_svg</span><span class="p">):</span>
-                <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">temp_svg</span><span class="p">)</span>
-
-        <span class="c1"># -------------------------------------------------------------------------</span>
-        <span class="c1"># STANDARD FULL-PAGE EXPORT</span>
-        <span class="c1"># -------------------------------------------------------------------------</span>
-        <span class="k">else</span><span class="p">:</span>
-
-            <span class="n">cmd_pdf</span> <span class="o">=</span> <span class="p">[</span>
-                <span class="s2">"inkscape"</span><span class="p">,</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">file_data</span><span class="p">,</span>
-                <span class="s2">"--export-type=pdf"</span><span class="p">,</span>
-                <span class="s2">"--export-area-page"</span><span class="p">,</span>
-                <span class="sa">f</span><span class="s2">"--export-filename=</span><span class="si">{</span><span class="n">file_output</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
-            <span class="p">]</span>
-
-            <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd_pdf</span><span class="p">,</span> <span class="n">check</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
-        <span class="c1"># restore original state</span>
-        <span class="c1"># -------------------------------------------------------------------------</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">file_data</span> <span class="o">=</span> <span class="n">src_file</span>
-
-        <span class="c1"># cleanup temporary working file</span>
-        <span class="c1"># -------------------------------------------------------------------------</span>
-        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">dst_file</span><span class="p">):</span>
-            <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">dst_file</span><span class="p">)</span>
+                <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd_pdf</span><span class="p">,</span> <span class="n">check</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">file_output</span></div>
 
@@ -1917,7 +1893,6 @@
 
 <span class="sd">        """</span>
         <span class="kn">import</span><span class="w"> </span><span class="nn">subprocess</span>
-        <span class="kn">from</span><span class="w"> </span><span class="nn">losalamos.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">make_local_tempfile</span>
 
         <span class="c1"># handle output file</span>
         <span class="c1"># -----------------------------------------------------------------------</span>
@@ -1937,48 +1912,36 @@
                 <span class="sa">f</span><span class="s2">"Provide an explicit destination path to avoid overwriting the master SVG."</span>
             <span class="p">)</span>
 
-        <span class="c1"># create temporary working copy</span>
-        <span class="c1"># -----------------------------------------------------------------------</span>
-        <span class="n">src_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_data</span>
-        <span class="n">dst_file</span> <span class="o">=</span> <span class="n">make_local_tempfile</span><span class="p">(</span><span class="n">src_file</span><span class="o">=</span><span class="n">src_file</span><span class="p">)</span>
-        <span class="n">shutil</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">src</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">file_data</span><span class="p">,</span> <span class="n">dst</span><span class="o">=</span><span class="n">dst_file</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">file_data</span> <span class="o">=</span> <span class="n">dst_file</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_temp_working_copy</span><span class="p">()</span> <span class="k">as</span> <span class="n">dst_file</span><span class="p">:</span>
 
-        <span class="c1"># handle layer visibility</span>
-        <span class="c1"># -----------------------------------------------------------------------</span>
-        <span class="n">b_save</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="c1"># handle layer visibility</span>
+            <span class="c1"># -----------------------------------------------------------------------</span>
+            <span class="n">b_save</span> <span class="o">=</span> <span class="kc">False</span>
 
-        <span class="k">if</span> <span class="n">hide_layers</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">hide_layers</span><span class="p">(</span><span class="n">labels</span><span class="o">=</span><span class="n">hide_layers</span><span class="p">)</span>
-            <span class="n">b_save</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">if</span> <span class="n">hide_layers</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">hide_layers</span><span class="p">(</span><span class="n">labels</span><span class="o">=</span><span class="n">hide_layers</span><span class="p">)</span>
+                <span class="n">b_save</span> <span class="o">=</span> <span class="kc">True</span>
 
-        <span class="k">if</span> <span class="n">show_layers</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">show_layers</span><span class="p">(</span><span class="n">labels</span><span class="o">=</span><span class="n">show_layers</span><span class="p">,</span> <span class="n">inclusive</span><span class="o">=</span><span class="n">show_inclusive</span><span class="p">)</span>
-            <span class="n">b_save</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">if</span> <span class="n">show_layers</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">show_layers</span><span class="p">(</span><span class="n">labels</span><span class="o">=</span><span class="n">show_layers</span><span class="p">,</span> <span class="n">inclusive</span><span class="o">=</span><span class="n">show_inclusive</span><span class="p">)</span>
+                <span class="n">b_save</span> <span class="o">=</span> <span class="kc">True</span>
 
-        <span class="k">if</span> <span class="n">b_save</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">b_save</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
 
-        <span class="c1"># build and run inkscape command</span>
-        <span class="c1"># -----------------------------------------------------------------------</span>
-        <span class="n">cmd</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="s2">"inkscape"</span><span class="p">,</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">file_data</span><span class="p">,</span>
-            <span class="s2">"--export-type=svg"</span><span class="p">,</span>
-            <span class="sa">f</span><span class="s2">"--export-filename=</span><span class="si">{</span><span class="n">file_output</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
-        <span class="p">]</span>
+            <span class="c1"># build and run inkscape command</span>
+            <span class="c1"># -----------------------------------------------------------------------</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="s2">"inkscape"</span><span class="p">,</span>
+                <span class="n">dst_file</span><span class="p">,</span>
+                <span class="s2">"--export-type=svg"</span><span class="p">,</span>
+                <span class="sa">f</span><span class="s2">"--export-filename=</span><span class="si">{</span><span class="n">file_output</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
+            <span class="p">]</span>
 
-        <span class="k">if</span> <span class="n">crop_id</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">cmd</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">"--export-id=</span><span class="si">{</span><span class="n">crop_id</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">crop_id</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">cmd</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">"--export-id=</span><span class="si">{</span><span class="n">crop_id</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
-        <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">check</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
-        <span class="c1"># restore original state and cleanup</span>
-        <span class="c1"># -----------------------------------------------------------------------</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">file_data</span> <span class="o">=</span> <span class="n">src_file</span>
-
-        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">dst_file</span><span class="p">):</span>
-            <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">dst_file</span><span class="p">)</span>
+            <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">check</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">file_output</span></div>
 

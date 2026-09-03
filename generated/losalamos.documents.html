@@ -526,6 +526,15 @@ inherited transparently from the layer below.</p>
 </tbody>
 </table>
 </div>
+<p class="rubric">Exceptions</p>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#losalamos.documents.LatexCompileError" title="losalamos.documents.LatexCompileError"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LatexCompileError</span></code></a>(message[, source, ...])</p></td>
+<td><p>Raised when <code class="docutils literal notranslate"><span class="pre">latexmk</span></code> fails or cannot be found on <code class="docutils literal notranslate"><span class="pre">PATH</span></code>.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
 </section>
 <dl class="py function">
 <dt class="sig sig-object py" id="losalamos.documents.escape_percent_latex">
@@ -675,6 +684,44 @@ document.</p>
 </div>
 </details></dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.documents.Document.apply_config">
+<span class="sig-name descname"><span class="pre">apply_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/documents.html#Document.apply_config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.documents.Document.apply_config" title="Link to this definition">#</a></dt>
+<dd><p>Apply document configuration. No-op in the base class.</p>
+<p>Subclasses such as <a class="reference internal" href="#losalamos.documents.Invoice" title="losalamos.documents.Invoice"><code class="xref py py-class docutils literal notranslate"><span class="pre">Invoice</span></code></a> and <a class="reference internal" href="#losalamos.documents.Receipt" title="losalamos.documents.Receipt"><code class="xref py py-class docutils literal notranslate"><span class="pre">Receipt</span></code></a> override
+this to rewrite their services table partial from <code class="docutils literal notranslate"><span class="pre">config</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>config</strong> (<em>dict</em><em> or </em><em>None</em>) – Configuration dict. Subclasses interpret the contents.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="losalamos.documents.LatexCompileError">
+<span class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">losalamos.documents.</span></span><span class="sig-name descname"><span class="pre">LatexCompileError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">returncode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">log_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/documents.html#LatexCompileError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.documents.LatexCompileError" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">RuntimeError</span></code></p>
+<p>Raised when <code class="docutils literal notranslate"><span class="pre">latexmk</span></code> fails or cannot be found on <code class="docutils literal notranslate"><span class="pre">PATH</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>message</strong> (<em>str</em>) – Human-readable error description.</p></li>
+<li><p><strong>source</strong> (<em>pathlib.Path</em><em> or </em><em>None</em>) – Path to the <code class="docutils literal notranslate"><span class="pre">.tex</span></code> file being compiled, or <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
+<li><p><strong>returncode</strong> (<em>int</em>) – Exit code returned by <code class="docutils literal notranslate"><span class="pre">latexmk</span></code>. <code class="docutils literal notranslate"><span class="pre">-1</span></code> when
+<code class="docutils literal notranslate"><span class="pre">latexmk</span></code> was not found.</p></li>
+<li><p><strong>log_path</strong> (<em>pathlib.Path</em><em> or </em><em>None</em>) – Path to the <code class="docutils literal notranslate"><span class="pre">.log</span></code> file produced by the failed run,
+or <code class="docutils literal notranslate"><span class="pre">None</span></code> if unavailable.</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py class">
@@ -746,11 +793,36 @@ Common values: <code class="docutils literal notranslate"><span class="pre">&quo
 <code class="docutils literal notranslate"><span class="pre">&quot;pdfxe&quot;</span></code> (xelatex).</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#losalamos.documents.LatexCompileError" title="losalamos.documents.LatexCompileError"><strong>LatexCompileError</strong></a> – If <code class="docutils literal notranslate"><span class="pre">latexmk</span></code> exits with a non-zero
+return code or is not found on <code class="docutils literal notranslate"><span class="pre">PATH</span></code>. The exception carries
+<code class="docutils literal notranslate"><span class="pre">source</span></code>, <code class="docutils literal notranslate"><span class="pre">returncode</span></code>, and <code class="docutils literal notranslate"><span class="pre">log_path</span></code> attributes.</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>None</p>
 </dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.documents.DocumentTeX.clean">
+<span class="sig-name descname"><span class="pre">clean</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/documents.html#DocumentTeX.clean"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.documents.DocumentTeX.clean" title="Link to this definition">#</a></dt>
+<dd><p>Remove auxiliary files left by a previous <code class="docutils literal notranslate"><span class="pre">latexmk</span></code> run.</p>
+<p>Runs <code class="docutils literal notranslate"><span class="pre">latexmk</span> <span class="pre">-c</span></code> and then sweeps for extra suffixes that
+<code class="docutils literal notranslate"><span class="pre">latexmk</span> <span class="pre">-c</span></code> does not track. The working directory is temporarily
+switched to the source file’s parent folder (matching <a class="reference internal" href="#losalamos.documents.DocumentTeX.to_pdf" title="losalamos.documents.DocumentTeX.to_pdf"><code class="xref py py-meth docutils literal notranslate"><span class="pre">to_pdf()</span></code></a>)
+and is always restored in a <code class="docutils literal notranslate"><span class="pre">finally</span></code> block.</p>
+<p>Only executes when <code class="xref py py-attr docutils literal notranslate"><span class="pre">is_main</span></code> is <code class="docutils literal notranslate"><span class="pre">True</span></code>; partial files are
+silently skipped.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>None</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1334,6 +1406,33 @@ the next content are discarded (replaced by the controlled padding).</p>
 <span class="sig-name descname"><span class="pre">VARIANT_TEMPLATE</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">PosixPath('/home/runner/work/losalamos/losalamos/src/losalamos/data/templates/documents/tex/professional/invoice')</span></span><a class="headerlink" href="#losalamos.documents.Invoice.VARIANT_TEMPLATE" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.documents.Invoice.apply_config">
+<span class="sig-name descname"><span class="pre">apply_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/documents.html#Invoice.apply_config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.documents.Invoice.apply_config" title="Link to this definition">#</a></dt>
+<dd><p>Rewrite <code class="docutils literal notranslate"><span class="pre">partials/services-invoice.tex</span></code> from a config dict.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>config</strong> (<em>dict</em><em> or </em><em>None</em>) – <p>Dict with a <code class="docutils literal notranslate"><span class="pre">services</span></code> list and optional <code class="docutils literal notranslate"><span class="pre">invoice</span></code>
+settings. Keys:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">services</span></code>: list of dicts with <code class="docutils literal notranslate"><span class="pre">description</span></code> (str),
+<code class="docutils literal notranslate"><span class="pre">quantity</span></code> (float), and <code class="docutils literal notranslate"><span class="pre">unit_price</span></code> (float).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">invoice.currency_symbol</span></code>: LaTeX currency prefix
+(default <code class="docutils literal notranslate"><span class="pre">r&quot;\texteuro\;&quot;</span></code>).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">invoice.tax_rate</span></code>: fraction applied to the subtotal
+(default <code class="docutils literal notranslate"><span class="pre">0.0</span></code>).</p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="py class">
@@ -1344,6 +1443,25 @@ the next content are discarded (replaced by the controlled padding).</p>
 <dt class="sig sig-object py" id="losalamos.documents.Receipt.VARIANT_TEMPLATE">
 <span class="sig-name descname"><span class="pre">VARIANT_TEMPLATE</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">PosixPath('/home/runner/work/losalamos/losalamos/src/losalamos/data/templates/documents/tex/professional/receipt')</span></span><a class="headerlink" href="#losalamos.documents.Receipt.VARIANT_TEMPLATE" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.documents.Receipt.apply_config">
+<span class="sig-name descname"><span class="pre">apply_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/documents.html#Receipt.apply_config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.documents.Receipt.apply_config" title="Link to this definition">#</a></dt>
+<dd><p>Rewrite <code class="docutils literal notranslate"><span class="pre">partials/services-receipt.tex</span></code> from a config dict.</p>
+<p>Identical structure to <a class="reference internal" href="#losalamos.documents.Invoice.apply_config" title="losalamos.documents.Invoice.apply_config"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Invoice.apply_config()</span></code></a>, but appends
+a <code class="docutils literal notranslate"><span class="pre">PAID</span></code> row to the table.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>config</strong> (<em>dict</em><em> or </em><em>None</em>) – Same structure as <a class="reference internal" href="#losalamos.documents.Invoice.apply_config" title="losalamos.documents.Invoice.apply_config"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Invoice.apply_config()</span></code></a>.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 
@@ -1437,13 +1555,16 @@ the next content are discarded (replaced by the controlled padding).</p>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.documents.Document.VARIANT_TEMPLATE"><code class="docutils literal notranslate"><span class="pre">Document.VARIANT_TEMPLATE</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.documents.Document.load_data"><code class="docutils literal notranslate"><span class="pre">Document.load_data()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.documents.Document.new"><code class="docutils literal notranslate"><span class="pre">Document.new()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.documents.Document.apply_config"><code class="docutils literal notranslate"><span class="pre">Document.apply_config()</span></code></a></li>
 </ul>
 </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.documents.LatexCompileError"><code class="docutils literal notranslate"><span class="pre">LatexCompileError</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.documents.DocumentTeX"><code class="docutils literal notranslate"><span class="pre">DocumentTeX</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.documents.DocumentTeX.BASE_TEMPLATE"><code class="docutils literal notranslate"><span class="pre">DocumentTeX.BASE_TEMPLATE</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.documents.DocumentTeX.VARIANT_TEMPLATE"><code class="docutils literal notranslate"><span class="pre">DocumentTeX.VARIANT_TEMPLATE</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.documents.DocumentTeX.load_data"><code class="docutils literal notranslate"><span class="pre">DocumentTeX.load_data()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.documents.DocumentTeX.to_pdf"><code class="docutils literal notranslate"><span class="pre">DocumentTeX.to_pdf()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.documents.DocumentTeX.clean"><code class="docutils literal notranslate"><span class="pre">DocumentTeX.clean()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.documents.DocumentTeX.to_flat"><code class="docutils literal notranslate"><span class="pre">DocumentTeX.to_flat()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.documents.DocumentTeX.export"><code class="docutils literal notranslate"><span class="pre">DocumentTeX.export()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.documents.DocumentTeX.split_preamble"><code class="docutils literal notranslate"><span class="pre">DocumentTeX.split_preamble()</span></code></a></li>
@@ -1464,10 +1585,12 @@ the next content are discarded (replaced by the controlled padding).</p>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.documents.Invoice"><code class="docutils literal notranslate"><span class="pre">Invoice</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.documents.Invoice.VARIANT_TEMPLATE"><code class="docutils literal notranslate"><span class="pre">Invoice.VARIANT_TEMPLATE</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.documents.Invoice.apply_config"><code class="docutils literal notranslate"><span class="pre">Invoice.apply_config()</span></code></a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.documents.Receipt"><code class="docutils literal notranslate"><span class="pre">Receipt</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.documents.Receipt.VARIANT_TEMPLATE"><code class="docutils literal notranslate"><span class="pre">Receipt.VARIANT_TEMPLATE</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.documents.Receipt.apply_config"><code class="docutils literal notranslate"><span class="pre">Receipt.apply_config()</span></code></a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.documents.Proposal"><code class="docutils literal notranslate"><span class="pre">Proposal</span></code></a><ul class="nav section-nav flex-column">

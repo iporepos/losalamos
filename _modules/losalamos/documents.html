@@ -458,7 +458,7 @@
 
 <span class="c1"># Project-level imports</span>
 <span class="c1"># =======================================================================</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">losalamos.root</span><span class="w"> </span><span class="kn">import</span> <span class="n">DataSet</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">losalamos.root</span><span class="w"> </span><span class="kn">import</span> <span class="n">DataSet</span><span class="p">,</span> <span class="n">MbaE</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">losalamos.paths</span><span class="w"> </span><span class="kn">import</span> <span class="n">FOLDER_TEMPLATES_DOCUMENTS</span>
 
 <span class="c1"># ... {develop}</span>
@@ -511,45 +511,7 @@
 <span class="sd">    :returns: Mapping of destination-relative paths to source file paths.</span>
 <span class="sd">    :rtype: dict</span>
 <span class="sd">    """</span>
-    <span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">source</span><span class="p">)</span><span class="o">.</span><span class="n">absolute</span><span class="p">()</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">path</span><span class="o">.</span><span class="n">is_file</span><span class="p">():</span>
-        <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"files_overlay config not found: '</span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2">'"</span><span class="p">)</span>
-
-    <span class="n">suffix</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">suffix</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
-
-    <span class="k">if</span> <span class="n">suffix</span> <span class="o">==</span> <span class="s2">".json"</span><span class="p">:</span>
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">"r"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
-
-    <span class="k">if</span> <span class="n">suffix</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">".yaml"</span><span class="p">,</span> <span class="s2">".yml"</span><span class="p">):</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="kn">import</span><span class="w"> </span><span class="nn">yaml</span>
-        <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span>
-                <span class="s2">"PyYAML is required to load .yaml/.yml files. "</span>
-                <span class="s2">"Install it with: pip install pyyaml"</span>
-            <span class="p">)</span>
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">"r"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">yaml</span><span class="o">.</span><span class="n">safe_load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
-
-    <span class="k">if</span> <span class="n">suffix</span> <span class="o">==</span> <span class="s2">".toml"</span><span class="p">:</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="kn">import</span><span class="w"> </span><span class="nn">tomllib</span>
-        <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
-            <span class="k">try</span><span class="p">:</span>
-                <span class="kn">import</span><span class="w"> </span><span class="nn">tomli</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">tomllib</span>
-            <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span>
-                    <span class="s2">"TOML support requires Python 3.11+ (tomllib) or 'tomli'. "</span>
-                    <span class="s2">"Install it with: pip install tomli"</span>
-                <span class="p">)</span>
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">"rb"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">tomllib</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
-
-    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-        <span class="sa">f</span><span class="s2">"Unsupported files_overlay format: '</span><span class="si">{</span><span class="n">suffix</span><span class="si">}</span><span class="s2">'. "</span>
-        <span class="s2">"Supported: .json, .yaml, .yml, .toml"</span>
-    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">MbaE</span><span class="o">.</span><span class="n">load_config_file</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">source</span><span class="p">)</span>
 
 
 <span class="c1"># ***********************************************************************</span>
@@ -856,12 +818,55 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">load_data</span><span class="p">(</span><span class="n">target</span> <span class="o">/</span> <span class="n">main_candidates</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 
         <span class="k">return</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="Document.apply_config">
+<a class="viewcode-back" href="../../generated/losalamos.documents.html#losalamos.documents.Document.apply_config">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">apply_config</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""</span>
+<span class="sd">        Apply document configuration. No-op in the base class.</span>
+
+<span class="sd">        Subclasses such as :class:`Invoice` and :class:`Receipt` override</span>
+<span class="sd">        this to rewrite their services table partial from ``config``.</span>
+
+<span class="sd">        :param config: Configuration dict. Subclasses interpret the contents.</span>
+<span class="sd">        :type config: dict or None</span>
+<span class="sd">        :returns: None</span>
+<span class="sd">        :rtype: None</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
 </div>
 
 
 
 <span class="c1"># CLASSES -- Module-level</span>
 <span class="c1"># =======================================================================</span>
+
+
+<div class="viewcode-block" id="LatexCompileError">
+<a class="viewcode-back" href="../../generated/losalamos.documents.html#losalamos.documents.LatexCompileError">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">LatexCompileError</span><span class="p">(</span><span class="ne">RuntimeError</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""</span>
+<span class="sd">    Raised when ``latexmk`` fails or cannot be found on ``PATH``.</span>
+
+<span class="sd">    :param message: Human-readable error description.</span>
+<span class="sd">    :type message: str</span>
+<span class="sd">    :param source: Path to the ``.tex`` file being compiled, or ``None``.</span>
+<span class="sd">    :type source: pathlib.Path or None</span>
+<span class="sd">    :param returncode: Exit code returned by ``latexmk``. ``-1`` when</span>
+<span class="sd">        ``latexmk`` was not found.</span>
+<span class="sd">    :type returncode: int</span>
+<span class="sd">    :param log_path: Path to the ``.log`` file produced by the failed run,</span>
+<span class="sd">        or ``None`` if unavailable.</span>
+<span class="sd">    :type log_path: pathlib.Path or None</span>
+<span class="sd">    """</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">returncode</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">log_path</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">source</span> <span class="o">=</span> <span class="n">source</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">returncode</span> <span class="o">=</span> <span class="n">returncode</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log_path</span> <span class="o">=</span> <span class="n">log_path</span></div>
+
 
 
 <div class="viewcode-block" id="DocumentTeX">
@@ -945,6 +950,9 @@
 <span class="sd">            Common values: ``"pdf"`` (pdflatex), ``"pdflua"`` (lualatex),</span>
 <span class="sd">            ``"pdfxe"`` (xelatex).</span>
 <span class="sd">        :type command: str</span>
+<span class="sd">        :raises LatexCompileError: If ``latexmk`` exits with a non-zero</span>
+<span class="sd">            return code or is not found on ``PATH``. The exception carries</span>
+<span class="sd">            ``source``, ``returncode``, and ``log_path`` attributes.</span>
 <span class="sd">        :returns: None</span>
 <span class="sd">        :rtype: None</span>
 <span class="sd">        """</span>
@@ -971,7 +979,23 @@
 
             <span class="n">compile_cmd</span> <span class="o">+=</span> <span class="p">[</span><span class="n">source</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>
 
-            <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">compile_cmd</span><span class="p">,</span> <span class="n">check</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">compile_cmd</span><span class="p">,</span> <span class="n">check</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="k">except</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">CalledProcessError</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+                <span class="n">log</span> <span class="o">=</span> <span class="n">source</span><span class="o">.</span><span class="n">with_suffix</span><span class="p">(</span><span class="s2">".log"</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="n">LatexCompileError</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">"latexmk failed (exit </span><span class="si">{</span><span class="n">exc</span><span class="o">.</span><span class="n">returncode</span><span class="si">}</span><span class="s2">): '</span><span class="si">{</span><span class="n">source</span><span class="si">}</span><span class="s2">'"</span><span class="p">,</span>
+                    <span class="n">source</span><span class="o">=</span><span class="n">source</span><span class="p">,</span>
+                    <span class="n">returncode</span><span class="o">=</span><span class="n">exc</span><span class="o">.</span><span class="n">returncode</span><span class="p">,</span>
+                    <span class="n">log_path</span><span class="o">=</span><span class="n">log</span> <span class="k">if</span> <span class="n">log</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+                <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">exc</span>
+            <span class="k">except</span> <span class="ne">FileNotFoundError</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">LatexCompileError</span><span class="p">(</span>
+                    <span class="s2">"latexmk not found — is a LaTeX distribution installed?"</span><span class="p">,</span>
+                    <span class="n">source</span><span class="o">=</span><span class="n">source</span><span class="p">,</span>
+                    <span class="n">returncode</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>
+                    <span class="n">log_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="kc">None</span>
 
             <span class="c1"># Handle output destination</span>
             <span class="c1"># --------------------------------------------------</span>
@@ -982,41 +1006,80 @@
                 <span class="n">shutil</span><span class="o">.</span><span class="n">copy2</span><span class="p">(</span><span class="n">default_pdf</span><span class="p">,</span> <span class="n">target_path</span><span class="p">)</span>
                 <span class="n">default_pdf</span><span class="o">.</span><span class="n">unlink</span><span class="p">()</span>
 
-            <span class="c1"># Cleanup auxiliary files</span>
+            <span class="c1"># Cleanup auxiliary files — intentionally only reachable after a</span>
+            <span class="c1"># successful compile so that .log and aux files survive on failure.</span>
             <span class="c1"># --------------------------------------------------</span>
             <span class="k">if</span> <span class="n">cleanup</span><span class="p">:</span>
-                <span class="n">cleanup_cmd</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"latexmk"</span><span class="p">,</span> <span class="s2">"-c"</span><span class="p">]</span>
-                <span class="k">if</span> <span class="n">latexmkrc</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
-                    <span class="n">cleanup_cmd</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">"-r"</span><span class="p">,</span> <span class="s2">"latexmkrc"</span><span class="p">]</span>
-                <span class="n">cleanup_cmd</span> <span class="o">+=</span> <span class="p">[</span><span class="n">source</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>
-                <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cleanup_cmd</span><span class="p">,</span> <span class="n">check</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">clean</span><span class="p">()</span>
 
-                <span class="c1"># Manual sweep for files latexmk -c never tracks</span>
-                <span class="n">_extra_suffixes</span> <span class="o">=</span> <span class="p">{</span>
-                    <span class="s2">".bbl"</span><span class="p">,</span>
-                    <span class="s2">".bcf"</span><span class="p">,</span>
-                    <span class="s2">".run.xml"</span><span class="p">,</span>
-                    <span class="s2">".glo"</span><span class="p">,</span>
-                    <span class="s2">".gls"</span><span class="p">,</span>
-                    <span class="s2">".glg"</span><span class="p">,</span>
-                    <span class="s2">".acn"</span><span class="p">,</span>
-                    <span class="s2">".acr"</span><span class="p">,</span>
-                    <span class="s2">".alg"</span><span class="p">,</span>
-                    <span class="s2">".nlo"</span><span class="p">,</span>
-                    <span class="s2">".nls"</span><span class="p">,</span>
-                    <span class="s2">".nlg"</span><span class="p">,</span>
-                    <span class="s2">".ist"</span><span class="p">,</span>
-                    <span class="s2">".maf"</span><span class="p">,</span>
-                    <span class="s2">".mtc"</span><span class="p">,</span>
-                    <span class="s2">".mtc0"</span><span class="p">,</span>
-                    <span class="s2">".lol"</span><span class="p">,</span>
-                    <span class="s2">".lob"</span><span class="p">,</span>
-                <span class="p">}</span>
-                <span class="n">stem</span> <span class="o">=</span> <span class="n">source</span><span class="o">.</span><span class="n">stem</span>
-                <span class="k">for</span> <span class="n">suffix</span> <span class="ow">in</span> <span class="n">_extra_suffixes</span><span class="p">:</span>
-                    <span class="n">leftover</span> <span class="o">=</span> <span class="n">source_dir</span> <span class="o">/</span> <span class="p">(</span><span class="n">stem</span> <span class="o">+</span> <span class="n">suffix</span><span class="p">)</span>
-                    <span class="k">if</span> <span class="n">leftover</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
-                        <span class="n">leftover</span><span class="o">.</span><span class="n">unlink</span><span class="p">()</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">original_dir</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="DocumentTeX.clean">
+<a class="viewcode-back" href="../../generated/losalamos.documents.html#losalamos.documents.DocumentTeX.clean">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">clean</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""</span>
+<span class="sd">        Remove auxiliary files left by a previous ``latexmk`` run.</span>
+
+<span class="sd">        Runs ``latexmk -c`` and then sweeps for extra suffixes that</span>
+<span class="sd">        ``latexmk -c`` does not track. The working directory is temporarily</span>
+<span class="sd">        switched to the source file's parent folder (matching :meth:`to_pdf`)</span>
+<span class="sd">        and is always restored in a ``finally`` block.</span>
+
+<span class="sd">        Only executes when :attr:`is_main` is ``True``; partial files are</span>
+<span class="sd">        silently skipped.</span>
+
+<span class="sd">        :returns: None</span>
+<span class="sd">        :rtype: None</span>
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_main</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="kn">import</span><span class="w"> </span><span class="nn">subprocess</span>
+
+        <span class="n">source</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_data</span><span class="o">.</span><span class="n">absolute</span><span class="p">()</span>
+        <span class="n">source_dir</span> <span class="o">=</span> <span class="n">source</span><span class="o">.</span><span class="n">parent</span>
+        <span class="n">latexmkrc</span> <span class="o">=</span> <span class="n">source_dir</span> <span class="o">/</span> <span class="s2">"latexmkrc"</span>
+        <span class="n">original_dir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">())</span>
+
+        <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">source_dir</span><span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">cleanup_cmd</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"latexmk"</span><span class="p">,</span> <span class="s2">"-c"</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">latexmkrc</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+                <span class="n">cleanup_cmd</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">"-r"</span><span class="p">,</span> <span class="s2">"latexmkrc"</span><span class="p">]</span>
+            <span class="n">cleanup_cmd</span> <span class="o">+=</span> <span class="p">[</span><span class="n">source</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>
+            <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cleanup_cmd</span><span class="p">,</span> <span class="n">check</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+            <span class="c1"># Manual sweep for files latexmk -c never tracks</span>
+            <span class="n">_extra_suffixes</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s2">".bbl"</span><span class="p">,</span>
+                <span class="s2">".bcf"</span><span class="p">,</span>
+                <span class="s2">".run.xml"</span><span class="p">,</span>
+                <span class="s2">".glo"</span><span class="p">,</span>
+                <span class="s2">".gls"</span><span class="p">,</span>
+                <span class="s2">".glg"</span><span class="p">,</span>
+                <span class="s2">".acn"</span><span class="p">,</span>
+                <span class="s2">".acr"</span><span class="p">,</span>
+                <span class="s2">".alg"</span><span class="p">,</span>
+                <span class="s2">".nlo"</span><span class="p">,</span>
+                <span class="s2">".nls"</span><span class="p">,</span>
+                <span class="s2">".nlg"</span><span class="p">,</span>
+                <span class="s2">".ist"</span><span class="p">,</span>
+                <span class="s2">".maf"</span><span class="p">,</span>
+                <span class="s2">".mtc"</span><span class="p">,</span>
+                <span class="s2">".mtc0"</span><span class="p">,</span>
+                <span class="s2">".lol"</span><span class="p">,</span>
+                <span class="s2">".lob"</span><span class="p">,</span>
+            <span class="p">}</span>
+            <span class="n">stem</span> <span class="o">=</span> <span class="n">source</span><span class="o">.</span><span class="n">stem</span>
+            <span class="k">for</span> <span class="n">suffix</span> <span class="ow">in</span> <span class="n">_extra_suffixes</span><span class="p">:</span>
+                <span class="n">leftover</span> <span class="o">=</span> <span class="n">source_dir</span> <span class="o">/</span> <span class="p">(</span><span class="n">stem</span> <span class="o">+</span> <span class="n">suffix</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">leftover</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+                    <span class="n">leftover</span><span class="o">.</span><span class="n">unlink</span><span class="p">()</span>
 
         <span class="k">finally</span><span class="p">:</span>
             <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">original_dir</span><span class="p">)</span>
@@ -2393,7 +2456,123 @@
 <a class="viewcode-back" href="../../generated/losalamos.documents.html#losalamos.documents.Invoice">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">Invoice</span><span class="p">(</span><span class="n">Professional</span><span class="p">):</span>
 
-    <span class="n">VARIANT_TEMPLATE</span> <span class="o">=</span> <span class="n">FOLDER_TEMPLATES_DOCUMENTS</span> <span class="o">/</span> <span class="s2">"tex/professional/invoice"</span></div>
+    <span class="n">VARIANT_TEMPLATE</span> <span class="o">=</span> <span class="n">FOLDER_TEMPLATES_DOCUMENTS</span> <span class="o">/</span> <span class="s2">"tex/professional/invoice"</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_build_services_tex</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">paid</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""</span>
+<span class="sd">        Build the LaTeX services table string from a config dict.</span>
+
+<span class="sd">        :param config: Dict with a ``services`` list (each entry has</span>
+<span class="sd">            ``description``, ``quantity``, ``unit_price``) and an optional</span>
+<span class="sd">            ``invoice`` sub-dict (``currency_symbol``, ``tax_rate``).</span>
+<span class="sd">        :type config: dict</span>
+<span class="sd">        :param paid: Append a ``PAID`` row when ``True`` (used by receipts).</span>
+<span class="sd">        :type paid: bool</span>
+<span class="sd">        :returns: Complete LaTeX fragment for the services table.</span>
+<span class="sd">        :rtype: str</span>
+<span class="sd">        """</span>
+        <span class="n">services</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"services"</span><span class="p">,</span> <span class="p">[])</span>
+        <span class="n">invoice_cfg</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"invoice"</span><span class="p">,</span> <span class="p">{})</span>
+        <span class="n">currency</span> <span class="o">=</span> <span class="n">invoice_cfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"currency_symbol"</span><span class="p">,</span> <span class="sa">r</span><span class="s2">"\texteuro\;"</span><span class="p">)</span>
+        <span class="n">tax_rate</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">invoice_cfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"tax_rate"</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">))</span>
+
+        <span class="k">def</span><span class="w"> </span><span class="nf">fmt_currency</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">currency</span> <span class="o">+</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">value</span><span class="si">:</span><span class="s2">,.2f</span><span class="si">}</span><span class="s2">"</span>
+
+        <span class="n">service_rows</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">subtotal</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="k">for</span> <span class="n">svc</span> <span class="ow">in</span> <span class="n">services</span><span class="p">:</span>
+            <span class="n">desc</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">svc</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"description"</span><span class="p">,</span> <span class="s2">""</span><span class="p">))</span>
+            <span class="n">desc</span> <span class="o">=</span> <span class="n">desc</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">"&amp;"</span><span class="p">,</span> <span class="sa">r</span><span class="s2">"\&amp;"</span><span class="p">)</span>
+            <span class="n">desc</span> <span class="o">=</span> <span class="n">escape_percent_latex</span><span class="p">(</span><span class="n">desc</span><span class="p">)</span>
+            <span class="n">qty</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">svc</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"quantity"</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">))</span>
+            <span class="n">unit_price</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">svc</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"unit_price"</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">))</span>
+            <span class="n">row_total</span> <span class="o">=</span> <span class="n">qty</span> <span class="o">*</span> <span class="n">unit_price</span>
+            <span class="n">subtotal</span> <span class="o">+=</span> <span class="n">row_total</span>
+            <span class="n">service_rows</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="s2">"    "</span>
+                <span class="o">+</span> <span class="n">desc</span>
+                <span class="o">+</span> <span class="s2">" &amp; "</span>
+                <span class="o">+</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">qty</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">"</span>
+                <span class="o">+</span> <span class="s2">" &amp; "</span>
+                <span class="o">+</span> <span class="n">fmt_currency</span><span class="p">(</span><span class="n">unit_price</span><span class="p">)</span>
+                <span class="o">+</span> <span class="s2">" &amp; "</span>
+                <span class="o">+</span> <span class="n">fmt_currency</span><span class="p">(</span><span class="n">row_total</span><span class="p">)</span>
+                <span class="o">+</span> <span class="s2">" </span><span class="se">\\\\</span><span class="s2"> [1mm]"</span>
+            <span class="p">)</span>
+
+        <span class="n">tax</span> <span class="o">=</span> <span class="n">subtotal</span> <span class="o">*</span> <span class="n">tax_rate</span>
+        <span class="n">grand_total</span> <span class="o">=</span> <span class="n">subtotal</span> <span class="o">+</span> <span class="n">tax</span>
+
+        <span class="n">lines</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="sa">r</span><span class="s2">"\noindent {\sf\textbf</span><span class="si">{Services}</span><span class="s2">}"</span><span class="p">,</span>
+            <span class="s2">""</span><span class="p">,</span>
+            <span class="sa">r</span><span class="s2">"\noindent The provided services are listed below:"</span><span class="p">,</span>
+            <span class="s2">""</span><span class="p">,</span>
+            <span class="s2">""</span><span class="p">,</span>
+            <span class="sa">r</span><span class="s2">"</span><span class="si">% s</span><span class="s2">tart the table"</span><span class="p">,</span>
+            <span class="sa">r</span><span class="s2">"\begin</span><span class="si">{table}</span><span class="s2">[h!]"</span><span class="p">,</span>
+            <span class="sa">r</span><span class="s2">"\centering"</span><span class="p">,</span>
+            <span class="sa">r</span><span class="s2">"\footnotesize % table font size"</span><span class="p">,</span>
+            <span class="sa">r</span><span class="s2">"\sffamily % table font style"</span><span class="p">,</span>
+            <span class="sa">r</span><span class="s2">"\label{tbl:services}"</span><span class="p">,</span>
+            <span class="sa">r</span><span class="s2">"\begin</span><span class="si">{tabular}</span><span class="s2">{"</span><span class="p">,</span>
+            <span class="sa">r</span><span class="s2">"&gt;{\raggedright\arraybackslash}p</span><span class="si">{7cm}</span><span class="s2">"</span><span class="p">,</span>
+            <span class="sa">r</span><span class="s2">"&gt;{\raggedright\arraybackslash}p</span><span class="si">{2cm}</span><span class="s2">"</span><span class="p">,</span>
+            <span class="sa">r</span><span class="s2">"&gt;{\raggedright\arraybackslash}p</span><span class="si">{2cm}</span><span class="s2">"</span><span class="p">,</span>
+            <span class="sa">r</span><span class="s2">"&gt;{\raggedright\arraybackslash}p</span><span class="si">{2cm}</span><span class="s2">"</span><span class="p">,</span>
+            <span class="sa">r</span><span class="s2">"}"</span><span class="p">,</span>
+            <span class="sa">r</span><span class="s2">"    \toprule"</span><span class="p">,</span>
+            <span class="sa">r</span><span class="s2">"    \textbf</span><span class="si">{Description}</span><span class="s2"> &amp; \textbf</span><span class="si">{Quantity}</span><span class="s2"> &amp; \textbf{Unit price} &amp; \textbf</span><span class="si">{Total}</span><span class="s2"> </span><span class="se">\\</span><span class="s2"> [1mm]"</span><span class="p">,</span>
+            <span class="sa">r</span><span class="s2">"    \midrule"</span><span class="p">,</span>
+        <span class="p">]</span>
+        <span class="n">lines</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">service_rows</span><span class="p">)</span>
+        <span class="n">lines</span> <span class="o">+=</span> <span class="p">[</span>
+            <span class="sa">r</span><span class="s2">"    &amp; &amp; &amp; </span><span class="se">\\</span><span class="s2"> [1mm]"</span><span class="p">,</span>
+            <span class="sa">r</span><span class="s2">"    \midrule"</span><span class="p">,</span>
+            <span class="s2">"    &amp; &amp; Subtotal &amp; "</span> <span class="o">+</span> <span class="n">fmt_currency</span><span class="p">(</span><span class="n">subtotal</span><span class="p">)</span> <span class="o">+</span> <span class="s2">" </span><span class="se">\\\\</span><span class="s2"> [1mm]"</span><span class="p">,</span>
+            <span class="s2">"    &amp; &amp; Tax &amp; "</span> <span class="o">+</span> <span class="n">fmt_currency</span><span class="p">(</span><span class="n">tax</span><span class="p">)</span> <span class="o">+</span> <span class="s2">" </span><span class="se">\\\\</span><span class="s2"> [1mm]"</span><span class="p">,</span>
+            <span class="s2">"    &amp; &amp; </span><span class="se">\\</span><span class="s2">textbf</span><span class="si">{Total}</span><span class="s2"> &amp; </span><span class="se">\\</span><span class="s2">textbf{"</span>
+            <span class="o">+</span> <span class="n">fmt_currency</span><span class="p">(</span><span class="n">grand_total</span><span class="p">)</span>
+            <span class="o">+</span> <span class="s2">"} </span><span class="se">\\\\</span><span class="s2"> [1mm]"</span><span class="p">,</span>
+        <span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">paid</span><span class="p">:</span>
+            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">r</span><span class="s2">"    &amp; &amp; &amp; \textcolor</span><span class="si">{OliveGreen}</span><span class="s2">{\textbf</span><span class="si">{PAID}</span><span class="s2">} </span><span class="se">\\</span><span class="s2"> [1mm]"</span><span class="p">)</span>
+
+        <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">r</span><span class="s2">"    \end</span><span class="si">{tabular}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">r</span><span class="s2">"\end</span><span class="si">{table}</span><span class="s2">"</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Invoice.apply_config">
+<a class="viewcode-back" href="../../generated/losalamos.documents.html#losalamos.documents.Invoice.apply_config">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">apply_config</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""</span>
+<span class="sd">        Rewrite ``partials/services-invoice.tex`` from a config dict.</span>
+
+<span class="sd">        :param config: Dict with a ``services`` list and optional ``invoice``</span>
+<span class="sd">            settings. Keys:</span>
+
+<span class="sd">            - ``services``: list of dicts with ``description`` (str),</span>
+<span class="sd">              ``quantity`` (float), and ``unit_price`` (float).</span>
+<span class="sd">            - ``invoice.currency_symbol``: LaTeX currency prefix</span>
+<span class="sd">              (default ``r"\\texteuro\\;"``).</span>
+<span class="sd">            - ``invoice.tax_rate``: fraction applied to the subtotal</span>
+<span class="sd">              (default ``0.0``).</span>
+
+<span class="sd">        :type config: dict or None</span>
+<span class="sd">        :returns: None</span>
+<span class="sd">        :rtype: None</span>
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="n">config</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="n">content</span> <span class="o">=</span> <span class="n">Invoice</span><span class="o">.</span><span class="n">_build_services_tex</span><span class="p">(</span><span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">,</span> <span class="n">paid</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">out_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_data</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="s2">"partials"</span> <span class="o">/</span> <span class="s2">"services-invoice.tex"</span>
+        <span class="n">out_file</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+</div>
 
 
 
@@ -2401,7 +2580,29 @@
 <a class="viewcode-back" href="../../generated/losalamos.documents.html#losalamos.documents.Receipt">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">Receipt</span><span class="p">(</span><span class="n">Invoice</span><span class="p">):</span>
 
-    <span class="n">VARIANT_TEMPLATE</span> <span class="o">=</span> <span class="n">FOLDER_TEMPLATES_DOCUMENTS</span> <span class="o">/</span> <span class="s2">"tex/professional/receipt"</span></div>
+    <span class="n">VARIANT_TEMPLATE</span> <span class="o">=</span> <span class="n">FOLDER_TEMPLATES_DOCUMENTS</span> <span class="o">/</span> <span class="s2">"tex/professional/receipt"</span>
+
+<div class="viewcode-block" id="Receipt.apply_config">
+<a class="viewcode-back" href="../../generated/losalamos.documents.html#losalamos.documents.Receipt.apply_config">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">apply_config</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""</span>
+<span class="sd">        Rewrite ``partials/services-receipt.tex`` from a config dict.</span>
+
+<span class="sd">        Identical structure to :meth:`Invoice.apply_config`, but appends</span>
+<span class="sd">        a ``PAID`` row to the table.</span>
+
+<span class="sd">        :param config: Same structure as :meth:`Invoice.apply_config`.</span>
+<span class="sd">        :type config: dict or None</span>
+<span class="sd">        :returns: None</span>
+<span class="sd">        :rtype: None</span>
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="n">config</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="n">content</span> <span class="o">=</span> <span class="n">Invoice</span><span class="o">.</span><span class="n">_build_services_tex</span><span class="p">(</span><span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">,</span> <span class="n">paid</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">out_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_data</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="s2">"partials"</span> <span class="o">/</span> <span class="s2">"services-receipt.tex"</span>
+        <span class="n">out_file</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+</div>
 
 
 

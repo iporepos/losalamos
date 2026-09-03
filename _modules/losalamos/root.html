@@ -621,18 +621,72 @@
 
         <span class="c1"># ... continues in downstream objects ... #</span>
 
+<div class="viewcode-block" id="MbaE.load_config_file">
+<a class="viewcode-back" href="../../generated/losalamos.root.html#losalamos.root.MbaE.load_config_file">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">load_config_file</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""</span>
+<span class="sd">        Parse a ``.json``, ``.yaml``/``.yml``, or ``.toml`` file into a dict.</span>
+
+<span class="sd">        :param path: path to the config file.</span>
+<span class="sd">        :type path: str or pathlib.Path</span>
+<span class="sd">        :raises FileNotFoundError: If the file does not exist.</span>
+<span class="sd">        :raises ValueError: If the file extension is not supported.</span>
+<span class="sd">        :raises ImportError: If the required parser (PyYAML, tomli) is not installed.</span>
+<span class="sd">        :returns: Parsed configuration dict.</span>
+<span class="sd">        :rtype: dict</span>
+<span class="sd">        """</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span><span class="o">.</span><span class="n">absolute</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">path</span><span class="o">.</span><span class="n">is_file</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Config file not found: '</span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2">'"</span><span class="p">)</span>
+        <span class="n">suffix</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">suffix</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">suffix</span> <span class="o">==</span> <span class="s2">".json"</span><span class="p">:</span>
+            <span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">"r"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">suffix</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">".yaml"</span><span class="p">,</span> <span class="s2">".yml"</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="kn">import</span><span class="w"> </span><span class="nn">yaml</span>
+            <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span>
+                    <span class="s2">"PyYAML is required to load .yaml/.yml files. "</span>
+                    <span class="s2">"Install it with: pip install pyyaml"</span>
+                <span class="p">)</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">"r"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">yaml</span><span class="o">.</span><span class="n">safe_load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">suffix</span> <span class="o">==</span> <span class="s2">".toml"</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="kn">import</span><span class="w"> </span><span class="nn">tomllib</span>
+            <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="kn">import</span><span class="w"> </span><span class="nn">tomli</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">tomllib</span>
+                <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span>
+                        <span class="s2">"TOML support requires Python 3.11+ (tomllib) or 'tomli'. "</span>
+                        <span class="s2">"Install it with: pip install tomli"</span>
+                    <span class="p">)</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">"rb"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">tomllib</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">"Unsupported config format: '</span><span class="si">{</span><span class="n">suffix</span><span class="si">}</span><span class="s2">'. Use .json, .yaml/.yml, or .toml"</span>
+        <span class="p">)</span></div>
+
+
 <div class="viewcode-block" id="MbaE.boot">
 <a class="viewcode-back" href="../../generated/losalamos.root.html#losalamos.root.MbaE.boot">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">boot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bootfile</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">"""</span>
-<span class="sd">        Boot basic attributes from a ``csv`` table.</span>
+<span class="sd">        Boot basic attributes from a file.</span>
 
-<span class="sd">        :param bootfile: file path to ``csv`` table with booting information.</span>
-<span class="sd">        :type bootfile: str</span>
+<span class="sd">        :param bootfile: path to a ``.csv`` boot table or a ``.json``/``.yaml``/``.toml``</span>
+<span class="sd">            config file. CSV files use the canonical ``field;value`` format.</span>
+<span class="sd">            Other supported formats are parsed via :meth:`load_config_file`.</span>
+<span class="sd">        :type bootfile: str or pathlib.Path</span>
 
 <span class="sd">        **Notes**</span>
 
-<span class="sd">        Expected ``bootfile`` format:</span>
+<span class="sd">        Expected ``.csv`` ``bootfile`` format:</span>
 
 <span class="sd">        .. code-block:: text</span>
 
@@ -646,24 +700,19 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">bootfile</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">bootfile</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">folder_bootfile</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">bootfile</span><span class="p">)</span>
 
-        <span class="c1"># get expected fields</span>
-        <span class="n">list_columns</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">field_bootfile_attribute</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">field_bootfile_value</span><span class="p">]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">bootfile</span><span class="o">.</span><span class="n">suffix</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">".csv"</span><span class="p">:</span>
+            <span class="c1"># canonical CSV path — unchanged</span>
+            <span class="n">list_columns</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">field_bootfile_attribute</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">field_bootfile_value</span><span class="p">]</span>
+            <span class="n">df_boot_table</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">bootfile</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s2">";"</span><span class="p">,</span> <span class="n">usecols</span><span class="o">=</span><span class="n">list_columns</span><span class="p">)</span>
+            <span class="n">dict_setter</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">df_boot_table</span><span class="p">)):</span>
+                <span class="n">dict_setter</span><span class="p">[</span><span class="n">df_boot_table</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">field_bootfile_attribute</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="n">df_boot_table</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">field_bootfile_value</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">dict_setter</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">load_config_file</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">bootfile</span><span class="p">)</span>
 
-        <span class="c1"># read info table from ``csv`` file. metadata keys are the expected fields</span>
-        <span class="n">df_boot_table</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">bootfile</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s2">";"</span><span class="p">,</span> <span class="n">usecols</span><span class="o">=</span><span class="n">list_columns</span><span class="p">)</span>
-
-        <span class="c1"># setter loop</span>
-        <span class="n">dict_setter</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">df_boot_table</span><span class="p">)):</span>
-            <span class="c1"># build setter from row</span>
-            <span class="n">dict_setter</span><span class="p">[</span><span class="n">df_boot_table</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">field_bootfile_attribute</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="n">df_boot_table</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">field_bootfile_value</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-            <span class="p">)</span>
-
-        <span class="c1"># pass setter to set() method</span>
-        <span class="c1"># pprint.pprint(dict_setter)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">setter</span><span class="p">(</span><span class="n">dict_setter</span><span class="o">=</span><span class="n">dict_setter</span><span class="p">)</span>
-
         <span class="k">return</span> <span class="kc">None</span></div>
 
 
@@ -1595,16 +1644,25 @@
 
 <div class="viewcode-block" id="FileSys.setup_subfolders">
 <a class="viewcode-back" href="../../generated/losalamos.root.html#losalamos.root.FileSys.setup_subfolders">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">setup_subfolders</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">setup_subfolders</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">root</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">folder_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Make all subfolders expected in the file system. Skip if exists.</span>
+
+<span class="sd">        :param root: root directory to create folders under. Defaults to</span>
+<span class="sd">            ``self.folder_root``.</span>
+<span class="sd">        :type root: str or pathlib.Path or None</span>
+<span class="sd">        :param folder_list: iterable of subfolder stems to create. Defaults to</span>
+<span class="sd">            ``self.data["folder"]``.</span>
+<span class="sd">        :type folder_list: iterable or None</span>
 <span class="sd">        """</span>
-        <span class="c1"># fill folders</span>
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">)):</span>
-            <span class="n">folder_sub_stem</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">"folder"</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">root</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">root</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">folder_root</span>
+        <span class="k">if</span> <span class="n">folder_list</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">folder_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">"folder"</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+        <span class="k">for</span> <span class="n">folder_sub_stem</span> <span class="ow">in</span> <span class="n">folder_list</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">folder_sub_stem</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"/"</span><span class="p">:</span>
                 <span class="n">folder_sub_stem</span> <span class="o">=</span> <span class="n">folder_sub_stem</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
-            <span class="n">folder_sub</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">folder_root</span><span class="p">)</span> <span class="o">/</span> <span class="n">folder_sub_stem</span>
+            <span class="n">folder_sub</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">root</span><span class="p">)</span> <span class="o">/</span> <span class="n">folder_sub_stem</span>
             <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">folder_sub</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span></div>
 
