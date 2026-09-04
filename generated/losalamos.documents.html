@@ -453,10 +453,18 @@
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>DataSet
 └── Document                    (base for all document types)
     └── DocumentTeX             (base for all TeX documents)
-        ├── Preprint            (preprint / arXiv-style)
-        ├── Report              (standard report)
-        ├── ReportLarge         (multi-chapter report)
-        └── Memo                (short internal memo)
+        └── Essay               (base for essay-style documents)
+            ├── Academic        (academic documents)
+            │   ├── Article
+            │   ├── Preprint
+            │   └── PrintArticle
+            └── Professional    (professional documents)
+                ├── Report      (standard report; PDF/note → outputs/)
+                ├── Invoice
+                │   ├── Receipt
+                │   └── Proposal
+                │       ├── Agreement
+                │       └── Contract
 </pre></div>
 </div>
 </section>
@@ -497,7 +505,13 @@ inherited transparently from the layer below.</p>
 <p class="rubric">Classes</p>
 <div class="pst-scrollable-table-container"><table class="autosummary longtable table">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#losalamos.documents.Agreement" title="losalamos.documents.Agreement"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Agreement</span></code></a>([name, alias])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#losalamos.documents.Academic" title="losalamos.documents.Academic"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Academic</span></code></a>([name, alias])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#losalamos.documents.Agreement" title="losalamos.documents.Agreement"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Agreement</span></code></a>([name, alias])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#losalamos.documents.Article" title="losalamos.documents.Article"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Article</span></code></a>([name, alias])</p></td>
 <td><p></p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#losalamos.documents.Contract" title="losalamos.documents.Contract"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Contract</span></code></a>([name, alias])</p></td>
@@ -515,6 +529,12 @@ inherited transparently from the layer below.</p>
 <tr class="row-even"><td><p><a class="reference internal" href="#losalamos.documents.Invoice" title="losalamos.documents.Invoice"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Invoice</span></code></a>([name, alias])</p></td>
 <td><p></p></td>
 </tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#losalamos.documents.Preprint" title="losalamos.documents.Preprint"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Preprint</span></code></a>([name, alias])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#losalamos.documents.PrintArticle" title="losalamos.documents.PrintArticle"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PrintArticle</span></code></a>([name, alias])</p></td>
+<td><p></p></td>
+</tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#losalamos.documents.Professional" title="losalamos.documents.Professional"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Professional</span></code></a>([name, alias])</p></td>
 <td><p></p></td>
 </tr>
@@ -522,6 +542,9 @@ inherited transparently from the layer below.</p>
 <td><p></p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#losalamos.documents.Receipt" title="losalamos.documents.Receipt"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Receipt</span></code></a>([name, alias])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#losalamos.documents.Report" title="losalamos.documents.Report"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Report</span></code></a>([name, alias])</p></td>
 <td><p></p></td>
 </tr>
 </tbody>
@@ -1388,12 +1411,67 @@ the next content are discarded (replaced by the controlled padding).</p>
 </dd></dl>
 
 <dl class="py class">
+<dt class="sig sig-object py" id="losalamos.documents.Academic">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">losalamos.documents.</span></span><span class="sig-name descname"><span class="pre">Academic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'MyDocTeX'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alias</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'TeX'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/documents.html#Academic"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.documents.Academic" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#losalamos.documents.Essay" title="losalamos.documents.Essay"><code class="xref py py-class docutils literal notranslate"><span class="pre">Essay</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="losalamos.documents.Academic.VARIANT_TEMPLATE">
+<span class="sig-name descname"><span class="pre">VARIANT_TEMPLATE</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">PosixPath('/home/runner/work/losalamos/losalamos/src/losalamos/data/templates/documents/tex/academic/base')</span></span><a class="headerlink" href="#losalamos.documents.Academic.VARIANT_TEMPLATE" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="losalamos.documents.Article">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">losalamos.documents.</span></span><span class="sig-name descname"><span class="pre">Article</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'MyDocTeX'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alias</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'TeX'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/documents.html#Article"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.documents.Article" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#losalamos.documents.Academic" title="losalamos.documents.Academic"><code class="xref py py-class docutils literal notranslate"><span class="pre">Academic</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="losalamos.documents.Article.VARIANT_TEMPLATE">
+<span class="sig-name descname"><span class="pre">VARIANT_TEMPLATE</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">PosixPath('/home/runner/work/losalamos/losalamos/src/losalamos/data/templates/documents/tex/academic/article')</span></span><a class="headerlink" href="#losalamos.documents.Article.VARIANT_TEMPLATE" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="losalamos.documents.Preprint">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">losalamos.documents.</span></span><span class="sig-name descname"><span class="pre">Preprint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'MyDocTeX'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alias</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'TeX'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/documents.html#Preprint"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.documents.Preprint" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#losalamos.documents.Article" title="losalamos.documents.Article"><code class="xref py py-class docutils literal notranslate"><span class="pre">Article</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="losalamos.documents.Preprint.VARIANT_TEMPLATE">
+<span class="sig-name descname"><span class="pre">VARIANT_TEMPLATE</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">PosixPath('/home/runner/work/losalamos/losalamos/src/losalamos/data/templates/documents/tex/academic/preprint')</span></span><a class="headerlink" href="#losalamos.documents.Preprint.VARIANT_TEMPLATE" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="losalamos.documents.PrintArticle">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">losalamos.documents.</span></span><span class="sig-name descname"><span class="pre">PrintArticle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'MyDocTeX'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alias</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'TeX'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/documents.html#PrintArticle"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.documents.PrintArticle" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#losalamos.documents.Article" title="losalamos.documents.Article"><code class="xref py py-class docutils literal notranslate"><span class="pre">Article</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="losalamos.documents.PrintArticle.VARIANT_TEMPLATE">
+<span class="sig-name descname"><span class="pre">VARIANT_TEMPLATE</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">PosixPath('/home/runner/work/losalamos/losalamos/src/losalamos/data/templates/documents/tex/academic/base')</span></span><a class="headerlink" href="#losalamos.documents.PrintArticle.VARIANT_TEMPLATE" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
 <dt class="sig sig-object py" id="losalamos.documents.Professional">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">losalamos.documents.</span></span><span class="sig-name descname"><span class="pre">Professional</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'MyDocTeX'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alias</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'TeX'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/documents.html#Professional"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.documents.Professional" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#losalamos.documents.Essay" title="losalamos.documents.Essay"><code class="xref py py-class docutils literal notranslate"><span class="pre">Essay</span></code></a></p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="losalamos.documents.Professional.VARIANT_TEMPLATE">
 <span class="sig-name descname"><span class="pre">VARIANT_TEMPLATE</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">PosixPath('/home/runner/work/losalamos/losalamos/src/losalamos/data/templates/documents/tex/professional/base')</span></span><a class="headerlink" href="#losalamos.documents.Professional.VARIANT_TEMPLATE" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="losalamos.documents.Report">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">losalamos.documents.</span></span><span class="sig-name descname"><span class="pre">Report</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'MyDocTeX'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alias</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'TeX'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/documents.html#Report"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.documents.Report" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#losalamos.documents.Professional" title="losalamos.documents.Professional"><code class="xref py py-class docutils literal notranslate"><span class="pre">Professional</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="losalamos.documents.Report.VARIANT_TEMPLATE">
+<span class="sig-name descname"><span class="pre">VARIANT_TEMPLATE</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">PosixPath('/home/runner/work/losalamos/losalamos/src/losalamos/data/templates/documents/tex/professional/report')</span></span><a class="headerlink" href="#losalamos.documents.Report.VARIANT_TEMPLATE" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -1580,8 +1658,28 @@ a <code class="docutils literal notranslate"><span class="pre">PAID</span></code
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.documents.Essay.VARIANT_TEMPLATE"><code class="docutils literal notranslate"><span class="pre">Essay.VARIANT_TEMPLATE</span></code></a></li>
 </ul>
 </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.documents.Academic"><code class="docutils literal notranslate"><span class="pre">Academic</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.documents.Academic.VARIANT_TEMPLATE"><code class="docutils literal notranslate"><span class="pre">Academic.VARIANT_TEMPLATE</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.documents.Article"><code class="docutils literal notranslate"><span class="pre">Article</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.documents.Article.VARIANT_TEMPLATE"><code class="docutils literal notranslate"><span class="pre">Article.VARIANT_TEMPLATE</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.documents.Preprint"><code class="docutils literal notranslate"><span class="pre">Preprint</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.documents.Preprint.VARIANT_TEMPLATE"><code class="docutils literal notranslate"><span class="pre">Preprint.VARIANT_TEMPLATE</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.documents.PrintArticle"><code class="docutils literal notranslate"><span class="pre">PrintArticle</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.documents.PrintArticle.VARIANT_TEMPLATE"><code class="docutils literal notranslate"><span class="pre">PrintArticle.VARIANT_TEMPLATE</span></code></a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.documents.Professional"><code class="docutils literal notranslate"><span class="pre">Professional</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.documents.Professional.VARIANT_TEMPLATE"><code class="docutils literal notranslate"><span class="pre">Professional.VARIANT_TEMPLATE</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.documents.Report"><code class="docutils literal notranslate"><span class="pre">Report</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.documents.Report.VARIANT_TEMPLATE"><code class="docutils literal notranslate"><span class="pre">Report.VARIANT_TEMPLATE</span></code></a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.documents.Invoice"><code class="docutils literal notranslate"><span class="pre">Invoice</span></code></a><ul class="nav section-nav flex-column">

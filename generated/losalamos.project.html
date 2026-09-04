@@ -1411,7 +1411,7 @@ and invoice settings in the dict.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="losalamos.project.Project.add_receipt">
 <span class="sig-name descname"><span class="pre">add_receipt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">invoice_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/project.html#Project.add_receipt"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.project.Project.add_receipt" title="Link to this definition">#</a></dt>
-<dd><p>Create a new receipt document inside <code class="docutils literal notranslate"><span class="pre">budget/documents/</span></code>.</p>
+<dd><p>Create a new receipt document inside <code class="docutils literal notranslate"><span class="pre">inputs/documents/</span></code>.</p>
 <p>When <em>invoice_id</em> is provided, all files from the linked invoice
 folder (except <code class="docutils literal notranslate"><span class="pre">main.tex</span></code>) become file overlays, so the receipt
 inherits the invoice’s project definitions, party files, and any
@@ -1450,7 +1450,7 @@ corresponding invoice folder does not exist.</p>
 <dd><p>Compile a previously created invoice to PDF.</p>
 <p>Reads <code class="docutils literal notranslate"><span class="pre">\DocVersion</span></code> from <code class="docutils literal notranslate"><span class="pre">definitions/project.tex</span></code>, compiles
 via <code class="docutils literal notranslate"><span class="pre">latexmk</span></code> with cleanup, and places the result at
-<code class="docutils literal notranslate"><span class="pre">inputs/documents/INVOICE_{project}_{file_id}_{version}.pdf</span></code>.
+<code class="docutils literal notranslate"><span class="pre">budget/inflows/INVOICE_{project}_{file_id}_{version}.pdf</span></code>.
 Updates the <code class="docutils literal notranslate"><span class="pre">asset_file</span></code> field in the sidecar note.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1460,10 +1460,10 @@ Updates the <code class="docutils literal notranslate"><span class="pre">asset_f
 <dd class="field-even"><p><strong>FileNotFoundError</strong> – If the invoice folder or <code class="docutils literal notranslate"><span class="pre">main.tex</span></code> is not found.</p>
 </dd>
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Path to the compiled PDF.</p>
+<dd class="field-odd"><p>Tuple of <code class="docutils literal notranslate"><span class="pre">(pdf_path,</span> <span class="pre">zip_path)</span></code>.</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>pathlib.Path</p>
+<dd class="field-even"><p>tuple[pathlib.Path, pathlib.Path]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1474,7 +1474,7 @@ Updates the <code class="docutils literal notranslate"><span class="pre">asset_f
 <dd><p>Compile a previously created receipt to PDF.</p>
 <p>Reads <code class="docutils literal notranslate"><span class="pre">\DocVersion</span></code> from <code class="docutils literal notranslate"><span class="pre">definitions/project.tex</span></code>, compiles
 via <code class="docutils literal notranslate"><span class="pre">latexmk</span></code> with cleanup, and places the result at
-<code class="docutils literal notranslate"><span class="pre">inputs/documents/RECEIPT_{project}_{file_id}_{version}.pdf</span></code>.
+<code class="docutils literal notranslate"><span class="pre">budget/inflows/RECEIPT_{project}_{file_id}_{version}.pdf</span></code>.
 Updates the <code class="docutils literal notranslate"><span class="pre">asset_file</span></code> field in the sidecar note.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1484,10 +1484,10 @@ Updates the <code class="docutils literal notranslate"><span class="pre">asset_f
 <dd class="field-even"><p><strong>FileNotFoundError</strong> – If the receipt folder or <code class="docutils literal notranslate"><span class="pre">main.tex</span></code> is not found.</p>
 </dd>
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Path to the compiled PDF.</p>
+<dd class="field-odd"><p>Tuple of <code class="docutils literal notranslate"><span class="pre">(pdf_path,</span> <span class="pre">zip_path)</span></code>.</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>pathlib.Path</p>
+<dd class="field-even"><p>tuple[pathlib.Path, pathlib.Path]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1533,10 +1533,59 @@ Updates the <code class="docutils literal notranslate"><span class="pre">asset_f
 <dd class="field-even"><p><strong>FileNotFoundError</strong> – If the proposal folder or <code class="docutils literal notranslate"><span class="pre">main.tex</span></code> is not found.</p>
 </dd>
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Path to the compiled PDF.</p>
+<dd class="field-odd"><p>Tuple of <code class="docutils literal notranslate"><span class="pre">(pdf_path,</span> <span class="pre">zip_path)</span></code>.</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>pathlib.Path</p>
+<dd class="field-even"><p>tuple[pathlib.Path, pathlib.Path]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.project.Project.add_report">
+<span class="sig-name descname"><span class="pre">add_report</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/project.html#Project.add_report"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.project.Project.add_report" title="Link to this definition">#</a></dt>
+<dd><p>Create a new report document.</p>
+<p>The working tree is created at <code class="docutils literal notranslate"><span class="pre">inputs/documents/REPORT_{project}_{file_id}/</span></code>
+and the sidecar note at <code class="docutils literal notranslate"><span class="pre">outputs/REPORT_{project}_{file_id}.md</span></code>.
+No compilation is performed.</p>
+<p>The template directory is read from
+<code class="docutils literal notranslate"><span class="pre">sources[&quot;templates&quot;][&quot;documents&quot;][&quot;report&quot;]</span></code> in the project’s
+<code class="docutils literal notranslate"><span class="pre">admin/config/sources.toml</span></code>. The following overlays are applied
+when present in <code class="docutils literal notranslate"><span class="pre">admin/config/overlays/</span></code>:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">project.tex</span></code> → <code class="docutils literal notranslate"><span class="pre">definitions/project.tex</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">party_b_contractor.tex</span></code> → <code class="docutils literal notranslate"><span class="pre">definitions/party_b.tex</span></code></p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The newly created report document instance.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="losalamos.documents.html#losalamos.documents.Document" title="losalamos.documents.Document">losalamos.documents.Document</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.project.Project.build_report">
+<span class="sig-name descname"><span class="pre">build_report</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/project.html#Project.build_report"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.project.Project.build_report" title="Link to this definition">#</a></dt>
+<dd><p>Compile a previously created report to PDF.</p>
+<p>Reads <code class="docutils literal notranslate"><span class="pre">\DocVersion</span></code> from <code class="docutils literal notranslate"><span class="pre">definitions/project.tex</span></code>, compiles
+via <code class="docutils literal notranslate"><span class="pre">latexmk</span></code> with cleanup, and places the result at
+<code class="docutils literal notranslate"><span class="pre">outputs/REPORT_{project}_{file_id}_{version}.pdf</span></code>.
+Updates the <code class="docutils literal notranslate"><span class="pre">asset_file</span></code> field in the sidecar note.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>file_id</strong> (<em>str</em>) – Asset file ID assigned at creation, e.g. <code class="docutils literal notranslate"><span class="pre">&quot;F006&quot;</span></code>.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>FileNotFoundError</strong> – If the report folder or <code class="docutils literal notranslate"><span class="pre">main.tex</span></code> is not found.</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Tuple of <code class="docutils literal notranslate"><span class="pre">(pdf_path,</span> <span class="pre">zip_path)</span></code>.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>tuple[pathlib.Path, pathlib.Path]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1683,6 +1732,8 @@ the archive path.</p>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.project.Project.build_receipt"><code class="docutils literal notranslate"><span class="pre">Project.build_receipt()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.project.Project.add_proposal"><code class="docutils literal notranslate"><span class="pre">Project.add_proposal()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.project.Project.build_proposal"><code class="docutils literal notranslate"><span class="pre">Project.build_proposal()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.project.Project.add_report"><code class="docutils literal notranslate"><span class="pre">Project.add_report()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.project.Project.build_report"><code class="docutils literal notranslate"><span class="pre">Project.build_report()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.project.Project.publish"><code class="docutils literal notranslate"><span class="pre">Project.publish()</span></code></a></li>
 </ul>
 </li>

@@ -409,6 +409,8 @@
 
 <span class="sd">Reads a tool config file (YAML, TOML, or JSON) listing one or more vaults.</span>
 <span class="sd">Navigation flows from vault → branch → project → document management.</span>
+<span class="sd">When only one vault is configured the vault selection screen is skipped and</span>
+<span class="sd">the tool opens directly at the branch picker.</span>
 <span class="sd">Adding a project writes a temporary config file and delegates to</span>
 <span class="sd">:func:`losalamos.tools.add_new_project.run`.</span>
 
@@ -727,7 +729,10 @@
 
     <span class="k">try</span><span class="p">:</span>
         <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
-            <span class="n">vault</span> <span class="o">=</span> <span class="n">_pick_vault</span><span class="p">(</span><span class="n">vaults</span><span class="o">=</span><span class="n">vaults</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">vaults</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">vault</span> <span class="o">=</span> <span class="n">vaults</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">vault</span> <span class="o">=</span> <span class="n">_pick_vault</span><span class="p">(</span><span class="n">vaults</span><span class="o">=</span><span class="n">vaults</span><span class="p">)</span>
 
             <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
                 <span class="n">branch_path</span> <span class="o">=</span> <span class="n">_pick_branch</span><span class="p">(</span><span class="n">vault</span><span class="o">=</span><span class="n">vault</span><span class="p">)</span>
@@ -743,6 +748,9 @@
                     <span class="k">if</span> <span class="n">result</span> <span class="o">==</span> <span class="s2">"quit"</span><span class="p">:</span>
                         <span class="k">raise</span> <span class="n">_Quit</span><span class="p">()</span>
                     <span class="c1"># "projects" → back to project picker</span>
+
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">vaults</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">break</span>  <span class="c1"># no vault screen to return to; p from branches exits</span>
 
     <span class="k">except</span> <span class="n">_Quit</span><span class="p">:</span>
         <span class="k">pass</span>

@@ -415,10 +415,18 @@
 <span class="sd">    DataSet</span>
 <span class="sd">    └── Document                    (base for all document types)</span>
 <span class="sd">        └── DocumentTeX             (base for all TeX documents)</span>
-<span class="sd">            ├── Preprint            (preprint / arXiv-style)</span>
-<span class="sd">            ├── Report              (standard report)</span>
-<span class="sd">            ├── ReportLarge         (multi-chapter report)</span>
-<span class="sd">            └── Memo                (short internal memo)</span>
+<span class="sd">            └── Essay               (base for essay-style documents)</span>
+<span class="sd">                ├── Academic        (academic documents)</span>
+<span class="sd">                │   ├── Article</span>
+<span class="sd">                │   ├── Preprint</span>
+<span class="sd">                │   └── PrintArticle</span>
+<span class="sd">                └── Professional    (professional documents)</span>
+<span class="sd">                    ├── Report      (standard report; PDF/note → outputs/)</span>
+<span class="sd">                    ├── Invoice</span>
+<span class="sd">                    │   ├── Receipt</span>
+<span class="sd">                    │   └── Proposal</span>
+<span class="sd">                    │       ├── Agreement</span>
+<span class="sd">                    │       └── Contract</span>
 
 <span class="sd">Template resolution</span>
 <span class="sd">-------------------</span>
@@ -2444,11 +2452,61 @@
 
 
 
+<div class="viewcode-block" id="Academic">
+<a class="viewcode-back" href="../../generated/losalamos.documents.html#losalamos.documents.Academic">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Academic</span><span class="p">(</span><span class="n">Essay</span><span class="p">):</span>
+    <span class="c1"># ------------</span>
+    <span class="c1"># Academic documents are not provided by tecnical team</span>
+    <span class="c1"># They diverge from professional documents first by the metadata</span>
+    <span class="c1"># They can be a project but is a research project</span>
+    <span class="c1"># They hold a list of authors (one or more)</span>
+    <span class="c1"># Each author has attributes, including affiliation</span>
+    <span class="c1"># the document hold a provider institution</span>
+    <span class="c1"># other specificies can be develop downstream</span>
+    <span class="c1"># Examples : article, thesis, grant proposals, research report</span>
+
+    <span class="c1"># todo develop actual template</span>
+    <span class="n">VARIANT_TEMPLATE</span> <span class="o">=</span> <span class="n">FOLDER_TEMPLATES_DOCUMENTS</span> <span class="o">/</span> <span class="s2">"tex/academic/base"</span></div>
+
+
+
+<div class="viewcode-block" id="Article">
+<a class="viewcode-back" href="../../generated/losalamos.documents.html#losalamos.documents.Article">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Article</span><span class="p">(</span><span class="n">Academic</span><span class="p">):</span>
+    <span class="c1"># todo develop actual template</span>
+    <span class="n">VARIANT_TEMPLATE</span> <span class="o">=</span> <span class="n">FOLDER_TEMPLATES_DOCUMENTS</span> <span class="o">/</span> <span class="s2">"tex/academic/article"</span></div>
+
+
+
+<div class="viewcode-block" id="Preprint">
+<a class="viewcode-back" href="../../generated/losalamos.documents.html#losalamos.documents.Preprint">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Preprint</span><span class="p">(</span><span class="n">Article</span><span class="p">):</span>
+    <span class="c1"># todo develop actual template</span>
+    <span class="n">VARIANT_TEMPLATE</span> <span class="o">=</span> <span class="n">FOLDER_TEMPLATES_DOCUMENTS</span> <span class="o">/</span> <span class="s2">"tex/academic/preprint"</span></div>
+
+
+
+<div class="viewcode-block" id="PrintArticle">
+<a class="viewcode-back" href="../../generated/losalamos.documents.html#losalamos.documents.PrintArticle">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">PrintArticle</span><span class="p">(</span><span class="n">Article</span><span class="p">):</span>
+    <span class="c1"># todo develop actual template</span>
+    <span class="n">VARIANT_TEMPLATE</span> <span class="o">=</span> <span class="n">FOLDER_TEMPLATES_DOCUMENTS</span> <span class="o">/</span> <span class="s2">"tex/academic/base"</span></div>
+
+
+
 <div class="viewcode-block" id="Professional">
 <a class="viewcode-back" href="../../generated/losalamos.documents.html#losalamos.documents.Professional">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">Professional</span><span class="p">(</span><span class="n">Essay</span><span class="p">):</span>
 
     <span class="n">VARIANT_TEMPLATE</span> <span class="o">=</span> <span class="n">FOLDER_TEMPLATES_DOCUMENTS</span> <span class="o">/</span> <span class="s2">"tex/professional/base"</span></div>
+
+
+
+<div class="viewcode-block" id="Report">
+<a class="viewcode-back" href="../../generated/losalamos.documents.html#losalamos.documents.Report">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Report</span><span class="p">(</span><span class="n">Professional</span><span class="p">):</span>
+
+    <span class="n">VARIANT_TEMPLATE</span> <span class="o">=</span> <span class="n">FOLDER_TEMPLATES_DOCUMENTS</span> <span class="o">/</span> <span class="s2">"tex/professional/report"</span></div>
 
 
 
@@ -2638,6 +2696,7 @@
 <span class="n">DOCUMENT_TYPES</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s2">"essay"</span><span class="p">:</span> <span class="n">Essay</span><span class="p">,</span>
     <span class="s2">"professional"</span><span class="p">:</span> <span class="n">Professional</span><span class="p">,</span>
+    <span class="s2">"report"</span><span class="p">:</span> <span class="n">Report</span><span class="p">,</span>
     <span class="s2">"proposal"</span><span class="p">:</span> <span class="n">Proposal</span><span class="p">,</span>
     <span class="s2">"invoice"</span><span class="p">:</span> <span class="n">Invoice</span><span class="p">,</span>
     <span class="s2">"receipt"</span><span class="p">:</span> <span class="n">Receipt</span><span class="p">,</span>

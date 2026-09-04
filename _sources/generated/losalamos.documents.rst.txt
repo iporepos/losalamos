@@ -14,15 +14,20 @@
 
    .. autosummary::
    
+      Academic
       Agreement
+      Article
       Contract
       Document
       DocumentTeX
       Essay
       Invoice
+      Preprint
+      PrintArticle
       Professional
       Proposal
       Receipt
+      Report
    
    .. rubric:: Exceptions
 

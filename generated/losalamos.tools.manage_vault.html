@@ -450,6 +450,8 @@
 <p>Top-level vault manager with three-level navigation.</p>
 <p>Reads a tool config file (YAML, TOML, or JSON) listing one or more vaults.
 Navigation flows from vault → branch → project → document management.
+When only one vault is configured the vault selection screen is skipped and
+the tool opens directly at the branch picker.
 Adding a project writes a temporary config file and delegates to
 <a class="reference internal" href="losalamos.tools.add_new_project.html#losalamos.tools.add_new_project.run" title="losalamos.tools.add_new_project.run"><code class="xref py py-func docutils literal notranslate"><span class="pre">losalamos.tools.add_new_project.run()</span></code></a>.</p>
 <p><strong>Shell usage</strong></p>
