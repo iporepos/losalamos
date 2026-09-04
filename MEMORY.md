@@ -1,5 +1,19 @@
 # Memory Log
 
+- 2026-09-04 — sidecar note placement: moved from _ASSET_PDF_SUBFOLDER (e.g. budget/inflows/) to inputs/documents/{name}.md; _build_asset_document now looks at doc_folder.parent for the note; tests TestAssetDocumentPaths confirm the new location
+- 2026-09-04 — _patch_metadata_tex: new Project method; writes \DocTitle and \DocSubtitle into definitions/metadata.tex from project note; skips fields whose get_attribute() returns a bracketed placeholder; called on add and reset for INVOICE, RECEIPT, PROPOSAL (not REPORT, which has distinct titles)
+- 2026-09-04 — manage_documents _action_reset: now calls pj._patch_project_tex() after add_document() to set DocVersion=001, DocFileID, and DocType — same as the original add flow via _add_asset_document; file_id taken from row["asset_id"]
+- 2026-09-04 — _build_asset_document: after to_pdf(cleanup=True), zips the clean source folder with shutil.make_archive (files at zip root, same stem as PDF); returns (pdf_path, zip_path) tuple; all build_* wrappers and _action_build updated accordingly
+- 2026-09-04 — manage_documents: wrapped shutil.rmtree in try/except OSError in _action_delete and _action_reset; Windows raises PermissionError (WinError 32) when file explorer or PDF viewer holds a handle on the folder; prints strerror + close-windows hint and returns without crashing
+- 2026-09-04 — sources.toml/yaml/json templates: added `report = ""` to `[templates.documents]` so the report overlay path is exposed to users; the key was missing while all other types (invoice, receipt, proposal) were present
+- 2026-09-04 — _update_overlays: purges party_b_contractor/party_b_client/service.tex before regenerating so stale files never persist when sources become unavailable; project.tex always rewritten unconditionally
+- 2026-09-04 — manage_documents: added [R] Reset document action; double _confirm() guard; deletes folder with shutil.rmtree then calls pj.add_document(condensed=False, compile_pdf=False) reapplying standard overlays; subfolder derived from _locate_document_source parent
+- 2026-09-04 — manage_documents: added [C] Clean document action; _action_clean loads main.tex and calls doc.clean() to remove latexmk aux files; DOCUMENT_TYPES imported for class lookup
+- 2026-09-04 — manage_documents: LatexCompileError caught in _action_build; prints exit code + log path and returns to menu instead of crashing
+- 2026-09-04 — Report document type added: Report class registered in DOCUMENT_TYPES; _ASSET_PDF_SUBFOLDER["REPORT"]="outputs"; add_report()/build_report() on Project; REPORT wired into manage_documents constants and _action_add ([T] key)
+- 2026-09-04 — manage_vault: single-vault fast-path; skips _pick_vault and jumps to branch picker; pressing p at branches exits cleanly instead of looping back to vault screen
+- 2026-09-04 — asset PDF/note co-location: added _ASSET_PDF_SUBFOLDER constant (INVOICE/RECEIPT→budget/inflows, PROPOSAL→admin/proposals); _add_asset_document writes sidecar note into PDF subfolder; _build_asset_document looks for note in subfolder; build_invoice/build_receipt changed from inputs/documents to budget/inflows; manage_documents._PDF_SUBFOLDER added; _action_view and _action_delete use it for PDF search
+
 - 2026-09-03 — new manage_vault.py tool: three-level vault→branch→project→documents navigation; config uses [[vaults]] array; add_new_project simplified to accept folder or config with 'folder' key (no branch picker); manage_documents simplified to accept project folder directly; manage_vault writes temp JSON to pass vault context to add_new_project; imports _home from manage_documents
 
 - 2026-09-03 — manage_documents: _active_documents now accepts folder_remote_documents and checks both local and remote paths; _action_edit/_action_delete use pj._locate_document_source() instead of hardcoded folder_root; _add_asset_document routes TeX tree to remote when configured; sidecar note stays local

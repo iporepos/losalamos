@@ -108,6 +108,14 @@ SUBFOLDERS = {
     ],
 }
 
+# Project-relative folder where each asset type's PDF (and sidecar note) live.
+_ASSET_PDF_SUBFOLDER = {
+    "INVOICE": "budget/inflows",
+    "RECEIPT": "budget/inflows",
+    "PROPOSAL": "admin/proposals",
+    "REPORT": "outputs",
+}
+
 # Human-readable document type labels per language.
 # Keys are BCP-47 language tags (lowercase). Add new languages here.
 _DOC_TYPE_LABELS = {
@@ -115,11 +123,13 @@ _DOC_TYPE_LABELS = {
         "invoice": "Invoice",
         "receipt": "Receipt",
         "proposal": "Proposal",
+        "report": "Report",
     },
     "pt-br": {
         "invoice": "Cobrança",
         "receipt": "Recibo",
         "proposal": "Proposta",
+        "report": "Relatório",
     },
 }
 
@@ -858,12 +868,28 @@ class Project(FileSys):
             )
 
     def _update_overlays(self):
-        """Regenerate overlay files; party_b and service overlays skip silently if sources are not configured."""
+        """
+        Regenerate overlay files from current note and sources data.
+
+        ``project.tex`` is always rewritten. The optional overlays
+        (``party_b_contractor.tex``, ``party_b_client.tex``, ``service.tex``)
+        are deleted before each attempt so that a failed resolution leaves no
+        stale file — a document created afterwards will fall back to the blank
+        template placeholder instead of using outdated data.
+        """
         self.make_overlay_project()
         self.contractor = None
         self.contractor_sapiens = None
         self.client = None
         self.service = None
+
+        # Purge optional overlays before regenerating so stale files never persist
+        overlays_dir = Path(self.folder_root) / "admin/config/overlays"
+        for _fname in ("party_b_contractor.tex", "party_b_client.tex", "service.tex"):
+            _p = overlays_dir / _fname
+            if _p.exists():
+                _p.unlink()
+
         try:
             self.make_overlay_party_b_contractor()
         except FileNotFoundError:
@@ -1914,6 +1940,39 @@ class Project(FileSys):
 
         project_tex.write_text(content, encoding="utf-8")
 
+    def _patch_metadata_tex(self, doc_folder) -> None:
+        """
+        Write project title and subtitle into ``definitions/metadata.tex``.
+
+        Sets ``\\DocTitle`` and ``\\DocSubtitle`` from the project's main note
+        metadata. Skips a field when the note has no value for it (placeholder
+        returned by :meth:`get_attribute`). Does nothing when the file is absent.
+
+        :param doc_folder: Root of the document folder containing ``definitions/``.
+        :type doc_folder: pathlib.Path
+        """
+        metadata_tex = Path(doc_folder) / "definitions" / "metadata.tex"
+        if not metadata_tex.is_file():
+            return
+
+        def _set_cmd(cmd_name, value, text):
+            return re.sub(
+                r"(\\newcommand\{\\" + re.escape(cmd_name) + r"\}\{)[^}]*(\})",
+                lambda m: m.group(1) + value + m.group(2),
+                text,
+            )
+
+        content = metadata_tex.read_text(encoding="utf-8")
+        title = self.get_title()
+        subtitle = self.get_subtitle()
+
+        if not title.startswith("["):
+            content = _set_cmd("DocTitle", title, content)
+        if not subtitle.startswith("["):
+            content = _set_cmd("DocSubtitle", subtitle, content)
+
+        metadata_tex.write_text(content, encoding="utf-8")
+
     def _standard_files_overlay(self) -> dict:
         """Return the default files_overlay dict from ``admin/config/overlays/``."""
         overlays_dir = Path(self.folder_root) / "admin/config/overlays"
@@ -1962,9 +2021,9 @@ class Project(FileSys):
 
         Creates the document working tree at ``inputs/documents/{name}/``. When
         ``folder_remote_documents`` is configured, the TeX tree is placed there
-        instead of the local project root. The sidecar asset note is always
-        written locally (``inputs/documents/{name}.md``) so it remains visible
-        to Obsidian. Registers the document via :meth:`add_document`, patches
+        instead of the local project root. The sidecar asset note is written
+        to ``inputs/documents/{name}.md``, next to its source folder. Registers the document via
+        :meth:`add_document`, patches
         ``definitions/project.tex`` with the asset identity fields, and
         optionally rewrites the services table via
         :meth:`~losalamos.documents.Document.apply_config`.
@@ -2013,16 +2072,18 @@ class Project(FileSys):
             file_id=asset_id,
             asset_type=asset_type,
         )
+        if asset_type in ("INVOICE", "RECEIPT", "PROPOSAL"):
+            self._patch_metadata_tex(doc_folder=source_folder)
 
         if config is not None:
             doc.apply_config(config=config)
 
-        note_file = Path(self.folder_root) / "inputs/documents" / f"{name}.md"
+        note_file = doc_root / f"{name}.md"
         asset_note = NoteAsset(name=name, alias=name)
         asset_note.load_new(file_note=note_file)
         asset_note.metadata["name"] = name
         asset_note.metadata["project"] = self.name
-        asset_note.metadata["asset_type"] = asset_type
+        asset_note.metadata["asset_type"] = asset_type.lower()
         asset_note.metadata["asset_id"] = asset_id
         asset_note.metadata["asset_file"] = f'"[[{name}.pdf]]"'
         asset_note.update()
@@ -2037,8 +2098,9 @@ class Project(FileSys):
         Locates the source via :meth:`_locate_document_source`, reads
         ``\\DocVersion`` from ``definitions/project.tex`` (dots removed, ``V``
         prefix added), compiles via ``latexmk`` with cleanup, ships the PDF to
-        ``{subfolder}/{asset_type}_{project}_{file_id}_{version}.pdf``, and
-        updates ``asset_file`` in the sidecar note at ``inputs/documents/{name}.md``.
+        ``{subfolder}/{asset_type}_{project}_{file_id}_{version}.pdf``, zips the
+        clean source tree to the same stem with a ``.zip`` extension, and
+        updates ``asset_file`` in the sidecar note.
 
         :param asset_type: Asset type string in uppercase, e.g. ``"INVOICE"``.
         :type asset_type: str
@@ -2047,8 +2109,8 @@ class Project(FileSys):
         :param subfolder: Project-relative target folder for the PDF, e.g. ``"budget/documents"``.
         :type subfolder: str
         :raises FileNotFoundError: If the document source folder or ``main.tex`` is not found.
-        :returns: Path to the compiled PDF.
-        :rtype: pathlib.Path
+        :returns: Tuple of ``(pdf_path, zip_path)`` for the compiled PDF and the source archive.
+        :rtype: tuple[pathlib.Path, pathlib.Path]
         """
         name = f"{asset_type}_{self.name}_{file_id}"
         doc_folder = self._locate_document_source(name=name)
@@ -2071,7 +2133,8 @@ class Project(FileSys):
 
         target_dir = Path(self.folder_root) / subfolder
         target_dir.mkdir(parents=True, exist_ok=True)
-        pdf_name = f"{asset_type}_{self.name}_{file_id}_{version_tag}.pdf"
+        stem = f"{asset_type}_{self.name}_{file_id}_{version_tag}"
+        pdf_name = f"{stem}.pdf"
         pdf_output = target_dir / pdf_name
 
         klass = DOCUMENT_TYPES[asset_type.lower()]
@@ -2079,7 +2142,16 @@ class Project(FileSys):
         doc.load_data(file_data=main_tex)
         doc.to_pdf(file_output=pdf_output, cleanup=True)
 
-        note_file = Path(self.folder_root) / "inputs/documents" / f"{name}.md"
+        # Zip the clean source tree (aux files purged by to_pdf cleanup=True)
+        zip_path = Path(
+            shutil.make_archive(
+                base_name=str(target_dir / stem),
+                format="zip",
+                root_dir=str(doc_folder),
+            )
+        )
+
+        note_file = doc_folder.parent / f"{name}.md"
         if note_file.is_file():
             asset_note = NoteAsset(name=name, alias=name)
             asset_note.load(file_note=note_file)
@@ -2087,7 +2159,7 @@ class Project(FileSys):
             asset_note.update()
             asset_note.save()
 
-        return pdf_output
+        return pdf_output, zip_path
 
     def add_invoice(self, config=None):
         """
@@ -2121,7 +2193,7 @@ class Project(FileSys):
 
     def add_receipt(self, invoice_id=None, config=None):
         """
-        Create a new receipt document inside ``budget/documents/``.
+        Create a new receipt document inside ``inputs/documents/``.
 
         When *invoice_id* is provided, all files from the linked invoice
         folder (except ``main.tex``) become file overlays, so the receipt
@@ -2169,17 +2241,17 @@ class Project(FileSys):
 
         Reads ``\\DocVersion`` from ``definitions/project.tex``, compiles
         via ``latexmk`` with cleanup, and places the result at
-        ``inputs/documents/INVOICE_{project}_{file_id}_{version}.pdf``.
+        ``budget/inflows/INVOICE_{project}_{file_id}_{version}.pdf``.
         Updates the ``asset_file`` field in the sidecar note.
 
         :param file_id: Asset file ID assigned at creation, e.g. ``"F003"``.
         :type file_id: str
         :raises FileNotFoundError: If the invoice folder or ``main.tex`` is not found.
-        :returns: Path to the compiled PDF.
-        :rtype: pathlib.Path
+        :returns: Tuple of ``(pdf_path, zip_path)``.
+        :rtype: tuple[pathlib.Path, pathlib.Path]
         """
         return self._build_asset_document(
-            asset_type="INVOICE", file_id=file_id, subfolder="inputs/documents"
+            asset_type="INVOICE", file_id=file_id, subfolder="budget/inflows"
         )
 
     def build_receipt(self, file_id):
@@ -2188,17 +2260,17 @@ class Project(FileSys):
 
         Reads ``\\DocVersion`` from ``definitions/project.tex``, compiles
         via ``latexmk`` with cleanup, and places the result at
-        ``inputs/documents/RECEIPT_{project}_{file_id}_{version}.pdf``.
+        ``budget/inflows/RECEIPT_{project}_{file_id}_{version}.pdf``.
         Updates the ``asset_file`` field in the sidecar note.
 
         :param file_id: Asset file ID assigned at creation, e.g. ``"F003"``.
         :type file_id: str
         :raises FileNotFoundError: If the receipt folder or ``main.tex`` is not found.
-        :returns: Path to the compiled PDF.
-        :rtype: pathlib.Path
+        :returns: Tuple of ``(pdf_path, zip_path)``.
+        :rtype: tuple[pathlib.Path, pathlib.Path]
         """
         return self._build_asset_document(
-            asset_type="RECEIPT", file_id=file_id, subfolder="inputs/documents"
+            asset_type="RECEIPT", file_id=file_id, subfolder="budget/inflows"
         )
 
     def add_proposal(self):
@@ -2237,11 +2309,54 @@ class Project(FileSys):
         :param file_id: Asset file ID assigned at creation, e.g. ``"F005"``.
         :type file_id: str
         :raises FileNotFoundError: If the proposal folder or ``main.tex`` is not found.
-        :returns: Path to the compiled PDF.
-        :rtype: pathlib.Path
+        :returns: Tuple of ``(pdf_path, zip_path)``.
+        :rtype: tuple[pathlib.Path, pathlib.Path]
         """
         return self._build_asset_document(
             asset_type="PROPOSAL", file_id=file_id, subfolder="admin/proposals"
+        )
+
+    def add_report(self):
+        """
+        Create a new report document.
+
+        The working tree is created at ``inputs/documents/REPORT_{project}_{file_id}/``
+        and the sidecar note at ``outputs/REPORT_{project}_{file_id}.md``.
+        No compilation is performed.
+
+        The template directory is read from
+        ``sources["templates"]["documents"]["report"]`` in the project's
+        ``admin/config/sources.toml``. The following overlays are applied
+        when present in ``admin/config/overlays/``:
+
+        - ``project.tex`` → ``definitions/project.tex``
+        - ``party_b_contractor.tex`` → ``definitions/party_b.tex``
+
+        :returns: The newly created report document instance.
+        :rtype: losalamos.documents.Document
+        """
+        return self._add_asset_document(
+            asset_type="REPORT",
+            files_overlay=self._standard_files_overlay(),
+        )
+
+    def build_report(self, file_id):
+        """
+        Compile a previously created report to PDF.
+
+        Reads ``\\DocVersion`` from ``definitions/project.tex``, compiles
+        via ``latexmk`` with cleanup, and places the result at
+        ``outputs/REPORT_{project}_{file_id}_{version}.pdf``.
+        Updates the ``asset_file`` field in the sidecar note.
+
+        :param file_id: Asset file ID assigned at creation, e.g. ``"F006"``.
+        :type file_id: str
+        :raises FileNotFoundError: If the report folder or ``main.tex`` is not found.
+        :returns: Tuple of ``(pdf_path, zip_path)``.
+        :rtype: tuple[pathlib.Path, pathlib.Path]
+        """
+        return self._build_asset_document(
+            asset_type="REPORT", file_id=file_id, subfolder="outputs"
         )
 
     def publish(

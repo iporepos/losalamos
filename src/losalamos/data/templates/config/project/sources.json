@@ -14,7 +14,8 @@
         "documents": {
             "invoice": "",
             "receipt": "",
-            "proposal": ""
+            "proposal": "",
+            "report": ""
         }
     }
 }

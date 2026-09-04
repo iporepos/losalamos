@@ -1,7 +1,6 @@
-\noindent {\sf\textbf{Services}}
+\noindent {\sf\textbf{\trServices}}
 
-\noindent The provided services are listed below:
-
+\noindent \trServicesList\footnote{\trTaxDisclaimer}
 
 % start the table
 \begin{table}[h!]
@@ -16,15 +15,26 @@
 >{\raggedright\arraybackslash}p{2cm}
 }
     \toprule
-    \textbf{Description} & \textbf{Quantity} & \textbf{Unit price} & \textbf{Total} \\ [1mm]
+    \textbf{\trService} & 
+    \textbf{\trPrice} & 
+    \textbf{\trUnits}  & 
+    \textbf{\trSubtotal} \\ [1mm]
     \midrule
-    Service A & 1.0 & \texteuro\;1,300.00 & \texteuro\;1,300.00 \\ [1mm]
-    Service B & 1.0 & \texteuro\;1,300.00 & \texteuro\;1,300.00 \\ [1mm]
-    Service C & 1.0 & \texteuro\;200.00 & \texteuro\;200.00 \\ [1mm]
+    Service A &
+    \trCurrencySymbol\;100.00 &
+    10h & 
+    \trCurrencySymbol\;1,000.00 \\ [1mm]
+    Service B &
+    \texteuro\;1,300.00 & 
+    1.0 & 
+    \trCurrencySymbol\;1,300.00 \\ [1mm]
+    Service C &
+    \trCurrencySymbol\;200.00 & 
+    1.0 & 
+    \trCurrencySymbol\;200.00 \\ [1mm]
     & & & \\ [1mm]
     \midrule
-    & & Subtotal & \texteuro\;2,800.00 \\ [1mm]
-    & & Tax & \texteuro\;0.00 \\ [1mm]
-    & & \textbf{Total} & \textbf{\texteuro\;2,800.00} \\ [1mm]
+    & & \textbf{\trTotal} & \textbf{\trCurrencySymbol\;2,800.00} \\ [1mm]
+    & & & \textcolor{Red}{\textbf{\trOpen}} \\ [1mm]
     \end{tabular}
 \end{table}

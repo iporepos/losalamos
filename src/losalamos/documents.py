@@ -14,10 +14,18 @@ Class hierarchy
     DataSet
     └── Document                    (base for all document types)
         └── DocumentTeX             (base for all TeX documents)
-            ├── Preprint            (preprint / arXiv-style)
-            ├── Report              (standard report)
-            ├── ReportLarge         (multi-chapter report)
-            └── Memo                (short internal memo)
+            └── Essay               (base for essay-style documents)
+                ├── Academic        (academic documents)
+                │   ├── Article
+                │   ├── Preprint
+                │   └── PrintArticle
+                └── Professional    (professional documents)
+                    ├── Report      (standard report; PDF/note → outputs/)
+                    ├── Invoice
+                    │   ├── Receipt
+                    │   └── Proposal
+                    │       ├── Agreement
+                    │       └── Contract
 
 Template resolution
 -------------------
@@ -1986,9 +1994,44 @@ class Essay(DocumentTeX):
     VARIANT_TEMPLATE = FOLDER_TEMPLATES_DOCUMENTS / "tex/essay"
 
 
+class Academic(Essay):
+    # ------------
+    # Academic documents are not provided by tecnical team
+    # They diverge from professional documents first by the metadata
+    # They can be a project but is a research project
+    # They hold a list of authors (one or more)
+    # Each author has attributes, including affiliation
+    # the document hold a provider institution
+    # other specificies can be develop downstream
+    # Examples : article, thesis, grant proposals, research report
+
+    # todo develop actual template
+    VARIANT_TEMPLATE = FOLDER_TEMPLATES_DOCUMENTS / "tex/academic/base"
+
+
+class Article(Academic):
+    # todo develop actual template
+    VARIANT_TEMPLATE = FOLDER_TEMPLATES_DOCUMENTS / "tex/academic/article"
+
+
+class Preprint(Article):
+    # todo develop actual template
+    VARIANT_TEMPLATE = FOLDER_TEMPLATES_DOCUMENTS / "tex/academic/preprint"
+
+
+class PrintArticle(Article):
+    # todo develop actual template
+    VARIANT_TEMPLATE = FOLDER_TEMPLATES_DOCUMENTS / "tex/academic/base"
+
+
 class Professional(Essay):
 
     VARIANT_TEMPLATE = FOLDER_TEMPLATES_DOCUMENTS / "tex/professional/base"
+
+
+class Report(Professional):
+
+    VARIANT_TEMPLATE = FOLDER_TEMPLATES_DOCUMENTS / "tex/professional/report"
 
 
 class Invoice(Professional):
@@ -2156,6 +2199,7 @@ class Contract(Agreement):
 DOCUMENT_TYPES = {
     "essay": Essay,
     "professional": Professional,
+    "report": Report,
     "proposal": Proposal,
     "invoice": Invoice,
     "receipt": Receipt,

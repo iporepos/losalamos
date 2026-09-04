@@ -8,6 +8,8 @@ Top-level vault manager with three-level navigation.
 
 Reads a tool config file (YAML, TOML, or JSON) listing one or more vaults.
 Navigation flows from vault → branch → project → document management.
+When only one vault is configured the vault selection screen is skipped and
+the tool opens directly at the branch picker.
 Adding a project writes a temporary config file and delegates to
 :func:`losalamos.tools.add_new_project.run`.
 
@@ -321,7 +323,10 @@ def run(config_path: str) -> None:
 
     try:
         while True:
-            vault = _pick_vault(vaults=vaults)
+            if len(vaults) == 1:
+                vault = vaults[0]
+            else:
+                vault = _pick_vault(vaults=vaults)
 
             while True:
                 branch_path = _pick_branch(vault=vault)
@@ -337,6 +342,9 @@ def run(config_path: str) -> None:
                     if result == "quit":
                         raise _Quit()
                     # "projects" → back to project picker
+
+            if len(vaults) == 1:
+                break  # no vault screen to return to; p from branches exits
 
     except _Quit:
         pass

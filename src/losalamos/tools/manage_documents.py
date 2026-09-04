@@ -43,6 +43,7 @@ from pathlib import Path
 import losalamos
 from losalamos.notes import NoteBasic
 from losalamos.project import _load_config
+from losalamos.documents import LatexCompileError, DOCUMENT_TYPES
 from losalamos.tools.core import *
 
 
@@ -50,13 +51,22 @@ from losalamos.tools.core import *
 # ***********************************************************************
 
 # Document asset types handled by this tool (uppercase)
-_ASSET_TYPES = ["INVOICE", "RECEIPT", "PROPOSAL"]
+_ASSET_TYPES = ["INVOICE", "RECEIPT", "PROPOSAL", "REPORT"]
 
-# Project-relative subfolder for each asset type
+# Project-relative subfolder for each asset type (TeX source)
 _SUBFOLDER = {
     "INVOICE": "inputs/documents",
     "RECEIPT": "inputs/documents",
     "PROPOSAL": "inputs/documents",
+    "REPORT": "inputs/documents",
+}
+
+# Project-relative subfolder where each asset type's PDF and sidecar note live
+_PDF_SUBFOLDER = {
+    "INVOICE": "budget/inflows",
+    "RECEIPT": "budget/inflows",
+    "PROPOSAL": "admin/proposals",
+    "REPORT": "outputs",
 }
 
 # Add-method names on Project, keyed by asset type
@@ -64,6 +74,7 @@ _ADD_METHOD = {
     "INVOICE": "add_invoice",
     "RECEIPT": "add_receipt",
     "PROPOSAL": "add_proposal",
+    "REPORT": "add_report",
 }
 
 # Build-method names on Project, keyed by asset type
@@ -71,6 +82,7 @@ _BUILD_METHOD = {
     "INVOICE": "build_invoice",
     "RECEIPT": "build_receipt",
     "PROPOSAL": "build_proposal",
+    "REPORT": "build_report",
 }
 
 
@@ -273,16 +285,16 @@ def _open_in_explorer(path: Path) -> None:
 def _action_add(pj) -> None:
     """Interactive add-document flow."""
     heading_subsection("Add document")
-    print("  [I] Invoice   [R] Receipt   [P] Proposal")
+    print("  [I] Invoice   [R] Receipt   [P] Proposal   [T] Report")
     print()
-    choice = input("  Select type  [I/R/P / ENTER=cancel / q=quit]: ").strip().lower()
+    choice = input("  Select type  [I/R/P/T / ENTER=cancel / q=quit]: ").strip().lower()
 
     if choice == "q":
         raise _Quit()
     if choice == "":
         return
 
-    type_map = {"i": "INVOICE", "r": "RECEIPT", "p": "PROPOSAL"}
+    type_map = {"i": "INVOICE", "r": "RECEIPT", "p": "PROPOSAL", "t": "REPORT"}
     if choice not in type_map:
         print(get_warning("Invalid choice."))
         return
@@ -351,8 +363,8 @@ def _action_view(pj, doc_df) -> None:
 
     asset_type = str(row["asset_type"]).upper()
     name = row["name"]
-    subfolder = _SUBFOLDER.get(asset_type, "inputs/documents")
-    doc_dir = Path(pj.folder_root) / subfolder
+    pdf_subfolder = _PDF_SUBFOLDER.get(asset_type, "inputs/documents")
+    doc_dir = Path(pj.folder_root) / pdf_subfolder
 
     candidates = sorted(
         doc_dir.glob(f"{name}_V*.pdf"),
@@ -391,8 +403,17 @@ def _action_build(pj, doc_df) -> None:
         return
 
     method = getattr(pj, _BUILD_METHOD[asset_type])
-    pdf = method(file_id=file_id)
+    try:
+        pdf, zip_path = method(file_id=file_id)
+    except LatexCompileError as exc:
+        print()
+        print(get_warning(f"Compile failed (exit {exc.returncode}): {exc}"))
+        if exc.log_path and exc.log_path.exists():
+            print(get_message(f"Log     : {exc.log_path}"))
+        print()
+        return
     print(get_message(f"PDF     : {pdf}"))
+    print(get_message(f"Source  : {zip_path}"))
 
 
 def _action_delete(pj, doc_df) -> None:
@@ -415,9 +436,10 @@ def _action_delete(pj, doc_df) -> None:
         print(get_warning(f"Folder not found for '{name}'"))
         return
 
-    # PDFs are always compiled to the local project root
-    local_doc_dir = Path(pj.folder_root) / "inputs/documents"
-    pdfs = sorted(local_doc_dir.glob(f"{name}_V*.pdf"))
+    asset_type = str(row["asset_type"]).upper()
+    pdf_subfolder = _PDF_SUBFOLDER.get(asset_type, "inputs/documents")
+    local_pdf_dir = Path(pj.folder_root) / pdf_subfolder
+    pdfs = sorted(local_pdf_dir.glob(f"{name}_V*.pdf"))
 
     print()
     print(get_message(f"Delete  : {doc_folder}"))
@@ -430,11 +452,141 @@ def _action_delete(pj, doc_df) -> None:
         print(get_message("Cancelled."))
         return
 
-    shutil.rmtree(str(doc_folder))
+    try:
+        shutil.rmtree(str(doc_folder))
+    except OSError as exc:
+        print()
+        print(get_warning(f"Could not delete folder: {exc.strerror}"))
+        print(
+            get_warning(
+                "Close any file explorer windows or PDF viewers inside that folder and try again."
+            )
+        )
+        return
     for pdf in pdfs:
         pdf.unlink()
 
     print(get_message(f"Deleted : {name}"))
+
+
+def _action_reset(pj, doc_df) -> None:
+    """
+    Interactive reset-document flow: erase the TeX folder and recreate from template.
+
+    Applies the same standard overlays used at creation time. All manual
+    edits inside the document folder are permanently lost.
+    """
+    heading_subsection("Reset document")
+    _print_documents(doc_df)
+    row = _pick_document(doc_df=doc_df)
+    if row is None:
+        return
+
+    name = row["name"]
+    asset_type = str(row["asset_type"]).upper()
+
+    try:
+        doc_folder = pj._locate_document_source(name=name)
+    except FileNotFoundError:
+        print(get_warning(f"Folder not found for '{name}'"))
+        return
+
+    print()
+    print(
+        get_warning(
+            f"ALL EDITS in '{name}' will be permanently erased and recreated from template."
+        )
+    )
+    print()
+
+    if not _confirm(prompt="First confirmation — reset document?"):
+        print(get_message("Cancelled."))
+        return
+
+    if not _confirm(prompt="Second confirmation — all edits will be lost. Proceed?"):
+        print(get_message("Cancelled."))
+        return
+
+    subfolder = doc_folder.parent
+    template_overlay = (
+        pj.sources.get("templates", {})
+        .get("documents", {})
+        .get(asset_type.lower(), None)
+    )
+
+    try:
+        shutil.rmtree(str(doc_folder))
+    except OSError as exc:
+        print()
+        print(get_warning(f"Could not delete folder: {exc.strerror}"))
+        print(
+            get_warning(
+                "Close any file explorer windows or PDF viewers inside that folder and try again."
+            )
+        )
+        return
+
+    pj.add_document(
+        document_type=asset_type.lower(),
+        name=name,
+        template_overlay=template_overlay,
+        files_overlay=pj._standard_files_overlay(),
+        subfolder=str(subfolder),
+        condensed=False,
+        compile_pdf=False,
+    )
+    pj._patch_project_tex(
+        doc_folder=doc_folder,
+        file_id=row["asset_id"],
+        asset_type=asset_type,
+    )
+    if asset_type in ("INVOICE", "RECEIPT", "PROPOSAL"):
+        pj._patch_metadata_tex(doc_folder=doc_folder)
+    print(get_message(f"Reset   : {name}"))
+
+
+def _action_clean(pj, doc_df) -> None:
+    """Interactive clean-document flow: remove latexmk auxiliary files."""
+    heading_subsection("Clean document")
+    _print_documents(doc_df)
+    row = _pick_document(doc_df=doc_df)
+    if row is None:
+        return
+
+    name = row["name"]
+    asset_type = str(row["asset_type"]).upper()
+
+    try:
+        doc_folder = pj._locate_document_source(name=name)
+    except FileNotFoundError:
+        print(get_warning(f"Folder not found for '{name}'"))
+        return
+
+    main_tex = doc_folder / "main.tex"
+    if not main_tex.is_file():
+        print(get_warning(f"main.tex not found in '{doc_folder}'"))
+        return
+
+    print()
+    print(get_message(f"Action  : clean {asset_type}  {name}"))
+    print()
+
+    if not _confirm():
+        print(get_message("Cancelled."))
+        return
+
+    klass = DOCUMENT_TYPES.get(asset_type.lower())
+    if klass is None:
+        print(get_warning(f"Unknown document type: '{asset_type}'"))
+        return
+
+    doc = klass(name=name)
+    doc.load_data(file_data=main_tex)
+    doc.clean()
+    pdf = main_tex.with_suffix(".pdf")
+    if pdf.exists():
+        pdf.unlink()
+    print(get_message("Auxiliary files removed."))
 
 
 def _home(pj, project_info: dict) -> str:
@@ -465,8 +617,9 @@ def _home(pj, project_info: dict) -> str:
             "  [A] Add document    [E] Edit document    [B] Build document    [V] View PDF"
         )
         print(
-            "  [D] Delete document [P] Back to projects                      [Q] Quit"
+            "  [D] Delete document [C] Clean document   [R] Reset document    [P] Back"
         )
+        print("  [Q] Quit")
         print()
 
         choice = input("  Select: ").strip().lower()
@@ -484,6 +637,10 @@ def _home(pj, project_info: dict) -> str:
             _action_build(pj=pj, doc_df=doc_df)
         elif choice == "v":
             _action_view(pj=pj, doc_df=doc_df)
+        elif choice == "c":
+            _action_clean(pj=pj, doc_df=doc_df)
+        elif choice == "r":
+            _action_reset(pj=pj, doc_df=doc_df)
         elif choice == "d":
             _action_delete(pj=pj, doc_df=doc_df)
 
