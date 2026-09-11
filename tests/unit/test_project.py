@@ -817,8 +817,9 @@ class TestProjectBranch(unittest.TestCase):
 
 class TestAssetDocumentPaths(unittest.TestCase):
     """
-    Tests for Phase 1 path layout: source at inputs/documents/{name}/,
-    note at inputs/documents/{name}.md, old type-specific folder untouched.
+    Tests for asset document path layout: TeX source at inputs/documents/{name}/,
+    sidecar notes at inputs/documents/{name}.md for invoice/receipt/proposal and
+    at outputs/{name}.md for reports.
     """
 
     @classmethod
@@ -835,6 +836,8 @@ class TestAssetDocumentPaths(unittest.TestCase):
         cls._invoice_name = cls._invoice.name
         cls._receipt = cls._project.add_receipt()
         cls._receipt_name = cls._receipt.name
+        cls._report = cls._project.add_report()
+        cls._report_name = cls._report.name
 
     @classmethod
     def tearDownClass(cls):
@@ -875,6 +878,21 @@ class TestAssetDocumentPaths(unittest.TestCase):
             / f"{self._receipt_name}.md"
         )
         self.assertTrue(note.is_file(), f"Receipt note missing: {note}")
+
+    def test_add_report_note_in_outputs(self):
+        """add_report() should place the sidecar note at outputs/{name}.md, not inputs/documents/."""
+        note = Path(self._project.folder_root) / "outputs" / f"{self._report_name}.md"
+        self.assertTrue(note.is_file(), f"Report note missing: {note}")
+
+    def test_add_report_note_not_in_inputs_documents(self):
+        """add_report() must not place the note under inputs/documents/."""
+        wrong = (
+            Path(self._project.folder_root)
+            / "inputs"
+            / "documents"
+            / f"{self._report_name}.md"
+        )
+        self.assertFalse(wrong.exists(), f"Report note wrongly placed at: {wrong}")
 
     def test_add_receipt_with_missing_invoice_raises(self):
         """add_receipt(invoice_id=...) should raise FileNotFoundError when the invoice source is absent."""

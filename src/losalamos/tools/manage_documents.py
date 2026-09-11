@@ -353,8 +353,42 @@ def _action_edit(pj, doc_df) -> None:
     input("\n  Press ENTER when done editing... ")
 
 
+def _pick_pdf_version(candidates: list) -> "Path | None":
+    """
+    Prompt the user to select a PDF version from *candidates*.
+
+    *candidates* must be sorted alphabetically (ascending) so the last entry
+    is the latest version. ENTER selects the latest.
+
+    :param candidates: Sorted list of PDF :class:`~pathlib.Path` objects.
+    :returns: Selected path, or ``None`` to cancel.
+    :raises _Quit: When the user enters ``q``.
+    """
+    print()
+    for i, p in enumerate(candidates):
+        tag = "  ← latest" if i == len(candidates) - 1 else ""
+        print(f"  [{i + 1:2d}]  {p.name}{tag}")
+    print()
+
+    while True:
+        choice = input(
+            f"  Select version  [1-{len(candidates)} / ENTER=latest / q=quit]: "
+        ).strip()
+        if choice.lower() == "q":
+            raise _Quit()
+        if choice == "":
+            return candidates[-1]
+        try:
+            idx = int(choice) - 1
+            if 0 <= idx < len(candidates):
+                return candidates[idx]
+            print(f"  Out of range (1–{len(candidates)}). Try again.\n")
+        except ValueError:
+            print("  Enter a number.\n")
+
+
 def _action_view(pj, doc_df) -> None:
-    """Interactive view-PDF flow: open the latest compiled PDF in the default viewer."""
+    """Interactive view-PDF flow: list all compiled versions and open the selected one."""
     heading_subsection("View PDF")
     _print_documents(doc_df)
     row = _pick_document(doc_df=doc_df)
@@ -366,10 +400,7 @@ def _action_view(pj, doc_df) -> None:
     pdf_subfolder = _PDF_SUBFOLDER.get(asset_type, "inputs/documents")
     doc_dir = Path(pj.folder_root) / pdf_subfolder
 
-    candidates = sorted(
-        doc_dir.glob(f"{name}_V*.pdf"),
-        key=lambda p: p.stat().st_mtime,
-    )
+    candidates = sorted(doc_dir.glob(f"{name}_V*.pdf"), key=lambda p: p.name)
 
     if not candidates:
         print()
@@ -377,7 +408,9 @@ def _action_view(pj, doc_df) -> None:
         print()
         return
 
-    pdf = candidates[-1]
+    pdf = _pick_pdf_version(candidates=candidates)
+    if pdf is None:
+        return
     print()
     print(get_message(f"Opening : {pdf.name}"))
     webbrowser.open(pdf.as_uri())

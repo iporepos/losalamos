@@ -1,5 +1,7 @@
 # Memory Log
 
+- 2026-09-11 — manage_documents _action_view: replaced auto-pick-latest-by-mtime with interactive version picker (_pick_pdf_version); lists all _V*.pdf sorted alphabetically; ENTER defaults to latest; multiple versions are intentional — accumulation is a feature for historical tracking
+- 2026-09-11 — sidecar note routing bug fixed: _add_asset_document used doc_root for note_file, so with remote documents configured the note landed in the remote folder (invisible to get_assets() rglob scan); added _ASSET_NOTE_SUBFOLDER constant mapping REPORT→"outputs", others→"inputs/documents"; both _add_asset_document and _build_asset_document now use Path(folder_root) / note_subfolder for the note path
 - 2026-09-04 — sidecar note placement: moved from _ASSET_PDF_SUBFOLDER (e.g. budget/inflows/) to inputs/documents/{name}.md; _build_asset_document now looks at doc_folder.parent for the note; tests TestAssetDocumentPaths confirm the new location
 - 2026-09-04 — _patch_metadata_tex: new Project method; writes \DocTitle and \DocSubtitle into definitions/metadata.tex from project note; skips fields whose get_attribute() returns a bracketed placeholder; called on add and reset for INVOICE, RECEIPT, PROPOSAL (not REPORT, which has distinct titles)
 - 2026-09-04 — manage_documents _action_reset: now calls pj._patch_project_tex() after add_document() to set DocVersion=001, DocFileID, and DocType — same as the original add flow via _add_asset_document; file_id taken from row["asset_id"]

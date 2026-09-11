@@ -108,11 +108,19 @@ SUBFOLDERS = {
     ],
 }
 
-# Project-relative folder where each asset type's PDF (and sidecar note) live.
+# Project-relative folder where each asset type's PDF lives.
 _ASSET_PDF_SUBFOLDER = {
     "INVOICE": "budget/inflows",
     "RECEIPT": "budget/inflows",
     "PROPOSAL": "admin/proposals",
+    "REPORT": "outputs",
+}
+
+# Project-relative folder where each asset type's sidecar note lives (always local).
+_ASSET_NOTE_SUBFOLDER = {
+    "INVOICE": "inputs/documents",
+    "RECEIPT": "inputs/documents",
+    "PROPOSAL": "inputs/documents",
     "REPORT": "outputs",
 }
 
@@ -2021,8 +2029,10 @@ class Project(FileSys):
 
         Creates the document working tree at ``inputs/documents/{name}/``. When
         ``folder_remote_documents`` is configured, the TeX tree is placed there
-        instead of the local project root. The sidecar asset note is written
-        to ``inputs/documents/{name}.md``, next to its source folder. Registers the document via
+        instead of the local project root. The sidecar asset note is always
+        written to the local project root under the subfolder defined by
+        ``_ASSET_NOTE_SUBFOLDER`` for the given type (e.g. ``outputs/`` for
+        reports, ``inputs/documents/`` for invoices). Registers the document via
         :meth:`add_document`, patches
         ``definitions/project.tex`` with the asset identity fields, and
         optionally rewrites the services table via
@@ -2078,7 +2088,8 @@ class Project(FileSys):
         if config is not None:
             doc.apply_config(config=config)
 
-        note_file = doc_root / f"{name}.md"
+        note_subfolder = _ASSET_NOTE_SUBFOLDER.get(asset_type, "inputs/documents")
+        note_file = Path(self.folder_root) / note_subfolder / f"{name}.md"
         asset_note = NoteAsset(name=name, alias=name)
         asset_note.load_new(file_note=note_file)
         asset_note.metadata["name"] = name
@@ -2151,7 +2162,8 @@ class Project(FileSys):
             )
         )
 
-        note_file = doc_folder.parent / f"{name}.md"
+        note_subfolder = _ASSET_NOTE_SUBFOLDER.get(asset_type, "inputs/documents")
+        note_file = Path(self.folder_root) / note_subfolder / f"{name}.md"
         if note_file.is_file():
             asset_note = NoteAsset(name=name, alias=name)
             asset_note.load(file_note=note_file)
