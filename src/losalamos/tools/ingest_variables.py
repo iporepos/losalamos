@@ -208,7 +208,10 @@ def _run_batch(batch: dict, note_cls: NoteVariable, overwrite: bool) -> tuple[in
         )
 
         ok = _write_entry(
-            note_cls=note_cls, entry=merged, vault_folder=vault_folder, overwrite=overwrite
+            note_cls=note_cls,
+            entry=merged,
+            vault_folder=vault_folder,
+            overwrite=overwrite,
         )
         written += ok
         skipped += not ok
@@ -246,7 +249,9 @@ def ingest_variables(
     for i, batch in enumerate(batches, start=1):
         if len(batches) > 1:
             print(f"[{i}/{len(batches)}]")
-        written, skipped = _run_batch(batch=batch, note_cls=note_cls, overwrite=overwrite)
+        written, skipped = _run_batch(
+            batch=batch, note_cls=note_cls, overwrite=overwrite
+        )
         total_written += written
         total_skipped += skipped
         print()

@@ -28,7 +28,13 @@ import pandas as pd
 
 # Project-level imports
 # =======================================================================
-from losalamos.notes import NoteBasic, NoteCollection, NoteOrganization, NoteSapiens, NoteTransfer
+from losalamos.notes import (
+    NoteBasic,
+    NoteCollection,
+    NoteOrganization,
+    NoteSapiens,
+    NoteTransfer,
+)
 from tests.conftest import DATA_DIR
 from tests.conftest import OUTPUT_DIR, RUN_BENCHMARKS
 
@@ -411,7 +417,9 @@ class TestNoteBasicExtraFields(unittest.TestCase):
 
         reloaded = self._load(path=copy_path)
         for field in ("obsidian_plugin_x", "zebra_field", "alpha_extra"):
-            self.assertIn(field, reloaded.metadata, msg=f"'{field}' lost after roundtrip")
+            self.assertIn(
+                field, reloaded.metadata, msg=f"'{field}' lost after roundtrip"
+            )
 
 
 # SCRIPT
