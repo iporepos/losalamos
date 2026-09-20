@@ -1,5 +1,8 @@
 # Memory Log
 
+- 2026-09-20 — consistency revision of dev/checkout.py: fixed double-quoted commit message, removed two dead `elif "clear"` branches (fork called with clear_option=False), replaced all subprocess.run(["clear"]) with _clear() helper (Windows fix), added docstrings to all functions
+- 2026-09-20 — skipped TestAssetDocumentPaths on local Windows: @unittest.skipIf(win32 and not CI); setUpClass copies full LaTeX template trees triggering Windows Defender scans (79s); still runs in CI on Linux
+- 2026-09-20 — added per-test timing to test_project.py: _Timed(unittest.TestCase) mixin overrides run() and wraps setUpClass/tearDownClass via __init_subclass__; all 8 test classes now inherit from _Timed
 - 2026-09-11 — manage_documents _action_view: replaced auto-pick-latest-by-mtime with interactive version picker (_pick_pdf_version); lists all _V*.pdf sorted alphabetically; ENTER defaults to latest; multiple versions are intentional — accumulation is a feature for historical tracking
 - 2026-09-11 — sidecar note routing bug fixed: _add_asset_document used doc_root for note_file, so with remote documents configured the note landed in the remote folder (invisible to get_assets() rglob scan); added _ASSET_NOTE_SUBFOLDER constant mapping REPORT→"outputs", others→"inputs/documents"; both _add_asset_document and _build_asset_document now use Path(folder_root) / note_subfolder for the note path
 - 2026-09-04 — sidecar note placement: moved from _ASSET_PDF_SUBFOLDER (e.g. budget/inflows/) to inputs/documents/{name}.md; _build_asset_document now looks at doc_folder.parent for the note; tests TestAssetDocumentPaths confirm the new location

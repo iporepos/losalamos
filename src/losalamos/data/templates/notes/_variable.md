@@ -1,30 +1,27 @@
 ---
-note_type: attribute
+note_type: variable
 timestamp: <% tp.file.creation_date("YYYY-MM-DD HH:mm:ss") %>
 tags:
-  - attribute-note
+  - variable-note
 aliases:
 subject:
 code:
-twin_code:
 alias:
 name: <% tp.file.title %>
 synonyms:
 title:
 abstract:
 symbol:
-theme:
 category:
-archetype:
 dimension:
-units_ref:
-type:
-domain:
+units:
+dtype:
+range:
 source:
 ---
 # <% tp.file.title %>
 
-ATTRIBUTE NOTE
+VARIABLE NOTE
 
 > [!Abstract] Summary
 > {a paragraph description of the note}

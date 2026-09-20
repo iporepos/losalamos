@@ -1362,14 +1362,19 @@ class NoteDataset(NoteReference):
 
 
 # =======================================================================
-# NoteAttribute
+# NoteVariable
 # Paste this class into losalamos/notes.py after the NoteDataset class.
 # All imports it depends on are already present in notes.py:
 #   re, datetime, Path, FOLDER_TEMPLATES_NOTES
 # =======================================================================
 
+# todo refactor
+#  This note is deprecated. It must now follow the _variable.md template
+#  Update docstrings and expected fields for consistency
+#  Review the associated tool.
 
-class NoteAttribute(NoteBasic):
+
+class NoteVariable(NoteBasic):
     """
     Obsidian note for a single Flare canonical attribute registry entry.
 
@@ -1638,7 +1643,7 @@ class NoteAttribute(NoteBasic):
             neither level provides a value.
         """
         raw = entry_subject or default_subject or ""
-        return NoteAttribute._normalise_subject(raw) if raw else ""
+        return NoteVariable._normalise_subject(raw) if raw else ""
 
     # ------------------------------------------------------------------
     # Static normalisers
@@ -1786,7 +1791,7 @@ class NoteCollSapiens(NoteCollection):
 
 class NoteCollAttribute(NoteCollection):
 
-    BASE_OBJECT = NoteAttribute
+    BASE_OBJECT = NoteVariable
 
 
 # ... {develop}

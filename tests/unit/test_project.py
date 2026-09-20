@@ -30,6 +30,7 @@ From the terminal, run:
 # =======================================================================
 import os
 import shutil
+import sys
 import tempfile
 import unittest
 from pathlib import Path
@@ -815,6 +816,10 @@ class TestProjectBranch(unittest.TestCase):
             )
 
 
+@unittest.skipIf(
+    sys.platform == "win32" and not os.getenv("CI"),
+    "LaTeX template tree I/O is slow under Windows AV; runs in CI",
+)
 class TestAssetDocumentPaths(unittest.TestCase):
     """
     Tests for asset document path layout: TeX source at inputs/documents/{name}/,

@@ -96,7 +96,7 @@ import re
 import sys
 from pathlib import Path
 
-from losalamos.notes import Note, NoteAttribute
+from losalamos.notes import Note, NoteVariable
 
 
 # CONSTANTS
@@ -211,7 +211,7 @@ def _read_existing_code(file_path: Path) -> str | None:
 
 
 def _write_entry(
-    note_cls: NoteAttribute,
+    note_cls: NoteVariable,
     entry: dict,
     vault_folder: Path,
     overwrite: bool,
@@ -337,7 +337,7 @@ def populate_canonical(
     print(f"Next serial : {next_serial:03d}")
     print()
 
-    note_cls = NoteAttribute()
+    note_cls = NoteVariable()
     written = 0
     skipped = 0
 
@@ -354,11 +354,11 @@ def populate_canonical(
         merged.pop("code", None)
 
         # Resolve tags (additive) and subject (local override)
-        merged["_tags"] = NoteAttribute._resolve_tags(
+        merged["_tags"] = NoteVariable._resolve_tags(
             default_tags=default_tags,
             entry_tags=_as_list(entry.get("tags")),
         )
-        merged["_subject"] = NoteAttribute._resolve_subject(
+        merged["_subject"] = NoteVariable._resolve_subject(
             default_subject=default_subject,
             entry_subject=entry.get("subject") or "",
         )
