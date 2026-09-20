@@ -856,26 +856,24 @@ class NoteBasic(Note):
         """
         Loads metadata and synchronizes it against the standard template schema.
 
-        .. important::
-
-            This method filters the current metadata to ensure only keys present in
-            ``metadata_standard`` are kept, filling missing keys with ``None``.
+        Standard fields (defined in ``metadata_standard``) are placed first in
+        template order, with missing ones filled as ``None``. Any extra fields
+        present in the file but absent from the template are preserved and
+        appended alphabetically after the standard block — they are never dropped.
 
         :return: No value is returned.
         :rtype: None
         """
         super().load_metadata(file_note=file_note)
-        # filter standard entries
+        # standard fields first, in template order
         dc = {}
         for k in self.metadata_standard:
-            # filter standard entry
-            if k in self.metadata:
+            dc[k] = self.metadata.get(k, None)
+        # extra fields appended alphabetically — never dropped
+        for k in sorted(self.metadata):
+            if k not in dc:
                 dc[k] = self.metadata[k]
-            # add standard entry
-            else:
-                dc[k] = None
-
-        self.metadata = dc.copy()
+        self.metadata = dc
         return None
 
     def reset_data(self):

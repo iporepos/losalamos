@@ -1,5 +1,6 @@
 # Memory Log
 
+- 2026-09-20 — NoteBasic.load_metadata no longer drops non-standard fields: standard fields stay first in template order, extra fields appended alphabetically; fixes Obsidian plugin field loss on save roundtrip; tests in TestNoteBasicExtraFields
 - 2026-09-20 — consistency revision of dev/checkout.py: fixed double-quoted commit message, removed two dead `elif "clear"` branches (fork called with clear_option=False), replaced all subprocess.run(["clear"]) with _clear() helper (Windows fix), added docstrings to all functions
 - 2026-09-20 — skipped TestAssetDocumentPaths on local Windows: @unittest.skipIf(win32 and not CI); setUpClass copies full LaTeX template trees triggering Windows Defender scans (79s); still runs in CI on Linux
 - 2026-09-20 — added per-test timing to test_project.py: _Timed(unittest.TestCase) mixin overrides run() and wraps setUpClass/tearDownClass via __init_subclass__; all 8 test classes now inherit from _Timed

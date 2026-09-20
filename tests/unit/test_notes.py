@@ -28,7 +28,7 @@ import pandas as pd
 
 # Project-level imports
 # =======================================================================
-from losalamos.notes import NoteCollection, NoteOrganization, NoteSapiens, NoteTransfer
+from losalamos.notes import NoteBasic, NoteCollection, NoteOrganization, NoteSapiens, NoteTransfer
 from tests.conftest import DATA_DIR
 from tests.conftest import OUTPUT_DIR, RUN_BENCHMARKS
 
@@ -338,6 +338,80 @@ class TestNoteTransfer(unittest.TestCase):
         reloaded.load(file_note=self.file)
         self.assertEqual(reloaded.metadata.get("note_type"), "transfer")
         self.assertIn(self.file.stem, reloaded.metadata.get("name", ""))
+
+
+class TestNoteBasicExtraFields(unittest.TestCase):
+    """
+    Tests that NoteBasic preserves non-standard YAML fields across load and save.
+
+    Obsidian plugins can inject arbitrary frontmatter keys that are not part of
+    any template. These must survive a load/save roundtrip without being dropped.
+    """
+
+    _NOTE_CONTENT = (
+        "---\n"
+        "note_type: basic\n"
+        "name: ExtraFieldNote\n"
+        "abstract: \n"
+        "obsidian_plugin_x: some value\n"
+        "zebra_field: last alphabetically\n"
+        "alpha_extra: first alphabetically\n"
+        "---\n"
+        "# ExtraFieldNote\n"
+    )
+
+    @classmethod
+    def setUpClass(cls):
+        cls._tmp = Path(tempfile.mkdtemp(prefix="losalamos_test_extrafields_"))
+        cls._file = cls._tmp / "ExtraFieldNote.md"
+        cls._file.write_text(cls._NOTE_CONTENT, encoding="utf-8")
+
+    @classmethod
+    def tearDownClass(cls):
+        shutil.rmtree(cls._tmp, ignore_errors=True)
+
+    def _load(self, path=None):
+        note = NoteBasic()
+        note.load(file_note=path or self._file)
+        return note
+
+    def test_extra_fields_preserved_after_load(self):
+        """Non-standard fields must all be present in metadata after load."""
+        note = self._load()
+        for field in ("obsidian_plugin_x", "zebra_field", "alpha_extra"):
+            self.assertIn(field, note.metadata, msg=f"'{field}' was dropped")
+
+    def test_standard_fields_precede_extra_fields(self):
+        """Every standard template field must appear before any extra field."""
+        note = self._load()
+        keys = list(note.metadata.keys())
+        extra = {"obsidian_plugin_x", "zebra_field", "alpha_extra"}
+        last_std = max(
+            (keys.index(k) for k in note.metadata_standard if k in keys),
+            default=-1,
+        )
+        first_extra = min(keys.index(k) for k in extra)
+        self.assertLess(last_std, first_extra)
+
+    def test_extra_fields_sorted_alphabetically(self):
+        """Extra fields must appear in alphabetical order after the standard block."""
+        note = self._load()
+        keys = list(note.metadata.keys())
+        extras = [k for k in keys if k not in note.metadata_standard]
+        self.assertEqual(extras, sorted(extras))
+
+    def test_extra_fields_survive_save_roundtrip(self):
+        """Extra fields must still be present after save() and a fresh load()."""
+        copy_path = self._tmp / "RoundtripNote.md"
+        copy_path.write_text(self._NOTE_CONTENT, encoding="utf-8")
+
+        note = NoteBasic()
+        note.load(file_note=copy_path)
+        note.save()
+
+        reloaded = self._load(path=copy_path)
+        for field in ("obsidian_plugin_x", "zebra_field", "alpha_extra"):
+            self.assertIn(field, reloaded.metadata, msg=f"'{field}' lost after roundtrip")
 
 
 # SCRIPT
