@@ -1359,71 +1359,27 @@ class NoteDataset(NoteReference):
             dsub.mkdir(exist_ok=True, parents=True)
 
 
-# =======================================================================
-# NoteVariable
-# Paste this class into losalamos/notes.py after the NoteDataset class.
-# All imports it depends on are already present in notes.py:
-#   re, datetime, Path, FOLDER_TEMPLATES_NOTES
-# =======================================================================
-
-# todo refactor
-#  This note is deprecated. It must now follow the _variable.md template
-#  Update docstrings and expected fields for consistency
-#  Review the associated tool.
-
-
 class NoteVariable(NoteBasic):
     """
-    Obsidian note for a single Flare canonical attribute registry entry.
+    Obsidian note for a single variable registry entry.
 
-    Inherits from :class:`NoteBasic`. The template ``_attribute.md`` must be
-    present in ``FOLDER_TEMPLATES_NOTES`` before instantiation.
+    Inherits from :class:`NoteBasic`. The template ``_variable.md`` defines
+    the canonical frontmatter schema — code, units, dimension, dtype, and
+    range notation, among others.
 
-    All field definitions and normalisation logic are class-level, making
-    the class fully self-contained.
+    All field definitions and normalisation logic are class-level.
 
-    :cvar TEMPLATE_FILE: Path to the ``.md`` attribute note template.
+    :cvar TEMPLATE_FILE: Path to the ``_variable.md`` note template.
     :cvar NOTE_TYPE: Fixed value written to the ``note_type`` metadata field.
-    :cvar METADATA_FIELDS: Ordered list of frontmatter fields matching the
-        template. Subclasses may override to extend.
-    :cvar TEXT_FIELDS: Fields double-quoted in YAML output. Subclasses may
-        extend: ``TEXT_FIELDS = NoteAttribute.TEXT_FIELDS | {...}``.
-    :cvar REQUIRED_FIELDS: Fields that must be present before writing.
-        Subclasses may extend: ``REQUIRED_FIELDS = NoteAttribute.REQUIRED_FIELDS | {...}``.
-
-    Example
-    -------
-    .. code-block:: python
-
-        from losalamos.notes import NoteAttribute
-
-        note = NoteAttribute()
-        note.load_new(
-            file_note="vault/Streamflow.md",
-            entry={
-                "code": "F101A001",
-                "name": "Streamflow",
-                "theme": "101",
-                "type": "R",
-                "units_ref": "m^3/s",
-                "domain": "[0U)",
-                "symbol": "Q",
-                "alias": "streamflow",
-                "dimension": "L^{3}/T",
-                "abstract": "Volumetric flow rate...",
-                "source": "Chow et al. (1988)",
-                "_tags": ["attribute-note", "hydrology"],
-                "_subject": "[[Surface Hydrology]]",
-            }
-        )
-        note.save()
+    :cvar METADATA_FIELDS: Ordered list of frontmatter fields matching the template.
+    :cvar TEXT_FIELDS: Fields double-quoted in YAML output.
+    :cvar REQUIRED_FIELDS: Fields that must be non-empty before writing.
     """
 
-    TEMPLATE_FILE = FOLDER_TEMPLATES_NOTES / "_attribute.md"
-    NOTE_TYPE = "attribute"
+    TEMPLATE_FILE = FOLDER_TEMPLATES_NOTES / "_variable.md"
+    NOTE_TYPE = "variable"
 
-    # Ordered canonical field list — matches the attribute template exactly.
-    # Subclasses may extend by overriding and appending to this list.
+    # Ordered canonical field list — matches the _variable.md template exactly.
     METADATA_FIELDS = [
         "note_type",
         "timestamp",
@@ -1431,28 +1387,23 @@ class NoteVariable(NoteBasic):
         "aliases",
         "subject",
         "code",
-        "twin_code",
         "alias",
         "name",
         "synonyms",
         "title",
         "abstract",
         "symbol",
-        "theme",
         "category",
-        "archetype",
         "dimension",
-        "units_ref",
-        "type",
-        "domain",
+        "units",
+        "dtype",
+        "range",
         "source",
     ]
 
-    # Fields double-quoted in YAML output to guard against structural
-    # characters (colons, brackets, commas). Only short controlled-vocabulary
-    # fields are left unquoted: note_type, timestamp, tags, aliases, code,
-    # twin_code, theme, type, category.
-    # Subclasses: TEXT_FIELDS = NoteAttribute.TEXT_FIELDS | {"extra_field"}
+    # Fields double-quoted in YAML output to guard against structural characters.
+    # Short controlled-vocabulary fields (note_type, timestamp, tags, aliases,
+    # code, category, dtype) are left unquoted.
     TEXT_FIELDS = {
         "subject",
         "alias",
@@ -1462,14 +1413,13 @@ class NoteVariable(NoteBasic):
         "abstract",
         "symbol",
         "dimension",
-        "units_ref",
-        "domain",
+        "units",
+        "range",
         "source",
     }
 
     # Fields required in each entry before a note is written.
-    # Subclasses: REQUIRED_FIELDS = NoteAttribute.REQUIRED_FIELDS | {"extra"}
-    REQUIRED_FIELDS = {"name", "theme"}
+    REQUIRED_FIELDS = {"name"}
 
     # ------------------------------------------------------------------
     # Initialisation
@@ -1537,7 +1487,7 @@ class NoteVariable(NoteBasic):
 
         - ``symbol``    — ``$`` delimiters stripped
         - ``dimension`` — ``[]`` brackets and ``$`` delimiters stripped
-        - ``units_ref`` — ``$`` delimiters stripped
+        - ``units``     — ``$`` delimiters stripped
 
         :param entry: Merged and validated entry dict with code and
             ``_tags`` / ``_subject`` assigned.
@@ -1572,7 +1522,7 @@ class NoteVariable(NoteBasic):
         Apply field-specific normalisation before quoting.
 
         Dispatches to the appropriate static normaliser for ``symbol``,
-        ``dimension``, and ``units_ref``; returns value unchanged otherwise.
+        ``dimension``, and ``units``; returns value unchanged otherwise.
 
         :param field: Metadata field name.
         :param value: Raw string value from the seed entry.
@@ -1582,7 +1532,7 @@ class NoteVariable(NoteBasic):
             return self._normalise_symbol(value)
         elif field == "dimension":
             return self._normalise_dimension(value)
-        elif field == "units_ref":
+        elif field == "units":
             return self._normalise_units(value)
         return value
 
@@ -1619,7 +1569,7 @@ class NoteVariable(NoteBasic):
         """
         seen = set()
         result = []
-        for tag in ["attribute-note"] + (default_tags or []) + (entry_tags or []):
+        for tag in ["variable-note"] + (default_tags or []) + (entry_tags or []):
             if tag and tag not in seen:
                 seen.add(tag)
                 result.append(tag)
@@ -1680,10 +1630,8 @@ class NoteVariable(NoteBasic):
     def _normalise_units(value: str) -> str:
         """
         Strip accidental ``$`` delimiters from a units string.
-        Units are stored as plain readable text and rendered to LaTeX
-        downstream.
 
-        :param value: Raw units string, e.g. ``m^3/s``.
+        :param value: Raw units string, e.g. ``m^3/s`` or ``mm/(dt)``.
         :return: Plain units string.
         """
         v = value.strip()

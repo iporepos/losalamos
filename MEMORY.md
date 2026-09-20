@@ -1,5 +1,8 @@
 # Memory Log
 
+- 2026-09-20 — ingest_variables.py: seed is now a list of batches; each batch has vault+defaults+entries; _run_batch() handles one batch; single-dict seed still accepted for convenience
+- 2026-09-20 — ingest_variables.py: new tool replacing populate_attributes.py; removed auto-code-assign, twin_notes, and serial logic; codes are user-provided; populate_attributes.py can be git-removed
+- 2026-09-20 — NoteVariable refactored to _variable.md template: NOTE_TYPE attribute→variable; removed twin_code/theme/archetype/type/domain fields; renamed units_ref→units; added dtype and range; REQUIRED_FIELDS reduced to {name}; populate_attributes.py tool to be discussed separately
 - 2026-09-20 — NoteBasic.load_metadata no longer drops non-standard fields: standard fields stay first in template order, extra fields appended alphabetically; fixes Obsidian plugin field loss on save roundtrip; tests in TestNoteBasicExtraFields
 - 2026-09-20 — consistency revision of dev/checkout.py: fixed double-quoted commit message, removed two dead `elif "clear"` branches (fork called with clear_option=False), replaced all subprocess.run(["clear"]) with _clear() helper (Windows fix), added docstrings to all functions
 - 2026-09-20 — skipped TestAssetDocumentPaths on local Windows: @unittest.skipIf(win32 and not CI); setUpClass copies full LaTeX template trees triggering Windows Defender scans (79s); still runs in CI on Linux
