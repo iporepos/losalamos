@@ -1,0 +1,12 @@
+﻿losalamos.tools.ingest\_variables
+=================================
+
+.. automodule:: losalamos.tools.ingest_variables
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      ingest_variables
+   

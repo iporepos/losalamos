@@ -16,7 +16,6 @@
    
       Note
       NoteAsset
-      NoteAttribute
       NoteBasic
       NoteCollAttribute
       NoteCollBasic
@@ -34,4 +33,5 @@
       NoteReference
       NoteSapiens
       NoteTransfer
+      NoteVariable
    

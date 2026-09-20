@@ -47,7 +47,7 @@ Tools
    losalamos.tools.search_references
    losalamos.tools.update_references
    losalamos.tools.update_templates
-   losalamos.tools.populate_attributes
+   losalamos.tools.ingest_variables
    losalamos.tools.database
    losalamos.tools.add_new_project
    losalamos.tools.manage_documents

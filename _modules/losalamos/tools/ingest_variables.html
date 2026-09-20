@@ -1,0 +1,765 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" data-theme="light">
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>losalamos.tools.ingest_variables &#8212; losalamos 0.0.1 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../../../_static/scripts/fontawesome.js?digest=cb8930eaaf36d9849b67"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
+
+    <script src="../../../_static/documentation_options.js?v=d45e8c67"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/losalamos/tools/ingest_variables';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="author" title="About these documents" href="../../../about.html" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="../../../_static/searchtools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <script src="../../../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="light">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+    
+    
+    
+    <img src="https://github.com/iporepos/losalamos/blob/main/docs/figs/logo.png?raw=true" class="logo__image only-light" alt="losalamos 0.0.1 documentation - Home"/>
+    <img src="https://github.com/iporepos/losalamos/blob/main/docs/figs/logo.png?raw=true" class="logo__image only-dark pst-js-only" alt="losalamos 0.0.1 documentation - Home"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../index.html">
+    Home
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../about.html">
+    About
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../usage.html">
+    Usage
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../api.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../development.html">
+    Development
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/iporepos/losalamos" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../index.html">
+    Home
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../about.html">
+    About
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../usage.html">
+    Usage
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../api.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../development.html">
+    Development
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/iporepos/losalamos" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../index.html" class="nav-link">Module code</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">losalamos.tools.ingest_variables</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for losalamos.tools.ingest_variables</h1><div class="highlight"><pre>
+<span></span><span class="c1"># SPDX-License-Identifier: GPL-3.0-or-later</span>
+<span class="c1">#</span>
+<span class="c1"># Copyright (C) 2025 The Project Authors</span>
+<span class="c1"># See pyproject.toml for authors/maintainers.</span>
+<span class="c1"># See LICENSE for license details.</span>
+<span class="sd">"""</span>
+<span class="sd">Batch-creation tool for variable registry notes.</span>
+
+<span class="sd">Reads a JSON seed file and writes one Obsidian ``.md`` note per entry into</span>
+<span class="sd">a target vault folder using :class:`losalamos.notes.NoteVariable`.</span>
+
+<span class="sd">Codes are user-assigned and must appear in each entry. Shared fields</span>
+<span class="sd">(``subject``, ``tags``, ``category``, etc.) can be declared once in</span>
+<span class="sd">``defaults`` and are merged into every entry automatically.</span>
+
+<span class="sd">Usage</span>
+<span class="sd">-----</span>
+
+<span class="sd">.. code-block:: shell</span>
+
+<span class="sd">    python -m losalamos.tools.ingest_variables --variables &lt;seed.json&gt; [--overwrite]</span>
+
+<span class="sd">Seed JSON format</span>
+<span class="sd">----------------</span>
+
+<span class="sd">The seed file is a **list of batches**. Each batch targets one vault folder</span>
+<span class="sd">and carries its own ``defaults`` and ``entries``.</span>
+
+<span class="sd">.. code-block:: json</span>
+
+<span class="sd">    [</span>
+<span class="sd">        {</span>
+<span class="sd">            "vault": "/path/to/vault/hydrology",</span>
+<span class="sd">            "defaults": {</span>
+<span class="sd">                "subject": "[[Surface Hydrology]]",</span>
+<span class="sd">                "tags": ["hydrology"],</span>
+<span class="sd">                "category": "physical"</span>
+<span class="sd">            },</span>
+<span class="sd">            "entries": [</span>
+<span class="sd">                {</span>
+<span class="sd">                    "code": "F101V001",</span>
+<span class="sd">                    "name": "Streamflow",</span>
+<span class="sd">                    "alias": "streamflow",</span>
+<span class="sd">                    "units": "m^3/s",</span>
+<span class="sd">                    "range": "[0U)",</span>
+<span class="sd">                    "symbol": "Q",</span>
+<span class="sd">                    "dimension": "L^{3}/T"</span>
+<span class="sd">                }</span>
+<span class="sd">            ]</span>
+<span class="sd">        },</span>
+<span class="sd">        {</span>
+<span class="sd">            "vault": "/path/to/vault/climate",</span>
+<span class="sd">            "defaults": {</span>
+<span class="sd">                "subject": "[[Climatology]]",</span>
+<span class="sd">                "tags": ["climate"]</span>
+<span class="sd">            },</span>
+<span class="sd">            "entries": []</span>
+<span class="sd">        }</span>
+<span class="sd">    ]</span>
+
+<span class="sd">Batch keys</span>
+<span class="sd">----------</span>
+<span class="sd">``vault``</span>
+<span class="sd">    Required per batch. Path to the destination vault folder.</span>
+
+<span class="sd">``defaults``</span>
+<span class="sd">    Fields applied to every entry in the batch. Entry-level values override</span>
+<span class="sd">    on conflict, except for ``tags`` which are merged additively.</span>
+
+<span class="sd">``tags``</span>
+<span class="sd">    Additive. ``defaults`` tags apply to every entry; entry-level tags</span>
+<span class="sd">    extend them. The base tag ``variable-note`` is always prepended.</span>
+
+<span class="sd">``subject``</span>
+<span class="sd">    Entry-level value overrides the default for that entry. Write as</span>
+<span class="sd">    Obsidian wiki-link notation: ``[[Note Name]]``.</span>
+
+<span class="sd">``code``</span>
+<span class="sd">    User-assigned. Not validated — omitting it leaves the field blank.</span>
+<span class="sd">"""</span>
+
+<span class="c1"># IMPORTS</span>
+<span class="c1"># =======================================================================</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">argparse</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">losalamos.notes</span><span class="w"> </span><span class="kn">import</span> <span class="n">NoteVariable</span>
+
+
+<span class="c1"># HELPERS</span>
+<span class="c1"># =======================================================================</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_as_list</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Coerce a tags value to a list, handling str, list, and None.</span>
+
+<span class="sd">    :param value: Raw value — str, list, or None.</span>
+<span class="sd">    :return: List of strings, empty list for missing/null input.</span>
+<span class="sd">    """</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">value</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">value</span><span class="p">]</span>
+    <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_merge</span><span class="p">(</span><span class="n">defaults</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">entry</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Merge defaults with entry overrides. Entry values take precedence.</span>
+
+<span class="sd">    :param defaults: Shared field values from the ``defaults`` block.</span>
+<span class="sd">    :param entry: Individual entry dict.</span>
+<span class="sd">    :return: Merged dict.</span>
+<span class="sd">    """</span>
+    <span class="n">merged</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">defaults</span><span class="p">)</span>
+    <span class="n">merged</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">entry</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">merged</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_validate</span><span class="p">(</span><span class="n">entry</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">required_fields</span><span class="p">:</span> <span class="nb">set</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Raise ``ValueError`` if any required field is missing or empty.</span>
+
+<span class="sd">    :param entry: Merged entry dict.</span>
+<span class="sd">    :param required_fields: Set of field names that must be non-empty.</span>
+<span class="sd">    """</span>
+    <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">required_fields</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">entry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">field</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">"Entry missing required field '</span><span class="si">{</span><span class="n">field</span><span class="si">}</span><span class="s2">': "</span>
+                <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">entry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'name'</span><span class="p">,</span><span class="w"> </span><span class="s1">'&lt;unnamed&gt;'</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span>
+            <span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_write_entry</span><span class="p">(</span>
+    <span class="n">note_cls</span><span class="p">:</span> <span class="n">NoteVariable</span><span class="p">,</span>
+    <span class="n">entry</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
+    <span class="n">vault_folder</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span>
+    <span class="n">overwrite</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Write a single variable note to disk.</span>
+
+<span class="sd">    :param note_cls: Shared ``NoteVariable`` instance (reused across entries).</span>
+<span class="sd">    :param entry: Fully resolved entry dict with ``_tags`` and ``_subject`` set.</span>
+<span class="sd">    :param vault_folder: Destination folder for the note file.</span>
+<span class="sd">    :param overwrite: When ``False``, skip files that already exist.</span>
+<span class="sd">    :return: ``True`` if the note was written, ``False`` if skipped.</span>
+<span class="sd">    """</span>
+    <span class="n">filename</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">entry</span><span class="p">[</span><span class="s1">'name'</span><span class="p">]</span><span class="si">}</span><span class="s2">.md"</span>
+    <span class="n">file_path</span> <span class="o">=</span> <span class="n">vault_folder</span> <span class="o">/</span> <span class="n">filename</span>
+
+    <span class="k">if</span> <span class="n">file_path</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">overwrite</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  [skip]      </span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="n">action</span> <span class="o">=</span> <span class="s2">"overwrite"</span> <span class="k">if</span> <span class="n">file_path</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span> <span class="k">else</span> <span class="s2">"write"</span>
+    <span class="n">note_cls</span><span class="o">.</span><span class="n">load_new</span><span class="p">(</span><span class="n">file_note</span><span class="o">=</span><span class="n">file_path</span><span class="p">,</span> <span class="n">entry</span><span class="o">=</span><span class="n">entry</span><span class="p">)</span>
+    <span class="n">note_cls</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  [</span><span class="si">{</span><span class="n">action</span><span class="si">}</span><span class="s2">]     </span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="k">return</span> <span class="kc">True</span>
+
+
+<span class="c1"># ENTRY POINT</span>
+<span class="c1"># =======================================================================</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_run_batch</span><span class="p">(</span><span class="n">batch</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">note_cls</span><span class="p">:</span> <span class="n">NoteVariable</span><span class="p">,</span> <span class="n">overwrite</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">"""Process one batch (vault + defaults + entries).</span>
+
+<span class="sd">    :param batch: Single batch dict with ``vault``, ``defaults``, and ``entries``.</span>
+<span class="sd">    :param note_cls: Shared ``NoteVariable`` instance reused across batches.</span>
+<span class="sd">    :param overwrite: When ``False``, skip files that already exist.</span>
+<span class="sd">    :return: Tuple ``(written, skipped)`` counts for this batch.</span>
+<span class="sd">    """</span>
+    <span class="n">vault_raw</span> <span class="o">=</span> <span class="n">batch</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"vault"</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">vault_raw</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"A batch is missing the required 'vault' key."</span><span class="p">)</span>
+    <span class="n">vault_folder</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">vault_raw</span><span class="p">)</span>
+    <span class="n">vault_folder</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="n">defaults</span> <span class="o">=</span> <span class="n">batch</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"defaults"</span><span class="p">,</span> <span class="p">{})</span>
+    <span class="n">entries</span> <span class="o">=</span> <span class="n">batch</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"entries"</span><span class="p">,</span> <span class="p">[])</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Vault : </span><span class="si">{</span><span class="n">vault_folder</span><span class="si">}</span><span class="s2">  (</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">entries</span><span class="p">)</span><span class="si">}</span><span class="s2"> entries)"</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">entries</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"  No entries — skipping."</span><span class="p">)</span>
+        <span class="k">return</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span>
+
+    <span class="n">default_tags</span> <span class="o">=</span> <span class="n">_as_list</span><span class="p">(</span><span class="n">defaults</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"tags"</span><span class="p">))</span>
+    <span class="n">default_subject</span> <span class="o">=</span> <span class="n">defaults</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"subject"</span><span class="p">)</span> <span class="ow">or</span> <span class="s2">""</span>
+
+    <span class="n">written</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">skipped</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">entries</span><span class="p">:</span>
+        <span class="n">merged</span> <span class="o">=</span> <span class="n">_merge</span><span class="p">(</span><span class="n">defaults</span><span class="p">,</span> <span class="n">entry</span><span class="p">)</span>
+        <span class="n">_validate</span><span class="p">(</span><span class="n">merged</span><span class="p">,</span> <span class="n">note_cls</span><span class="o">.</span><span class="n">REQUIRED_FIELDS</span><span class="p">)</span>
+
+        <span class="n">merged</span><span class="p">[</span><span class="s2">"_tags"</span><span class="p">]</span> <span class="o">=</span> <span class="n">NoteVariable</span><span class="o">.</span><span class="n">_resolve_tags</span><span class="p">(</span>
+            <span class="n">default_tags</span><span class="o">=</span><span class="n">default_tags</span><span class="p">,</span>
+            <span class="n">entry_tags</span><span class="o">=</span><span class="n">_as_list</span><span class="p">(</span><span class="n">entry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"tags"</span><span class="p">)),</span>
+        <span class="p">)</span>
+        <span class="n">merged</span><span class="p">[</span><span class="s2">"_subject"</span><span class="p">]</span> <span class="o">=</span> <span class="n">NoteVariable</span><span class="o">.</span><span class="n">_resolve_subject</span><span class="p">(</span>
+            <span class="n">default_subject</span><span class="o">=</span><span class="n">default_subject</span><span class="p">,</span>
+            <span class="n">entry_subject</span><span class="o">=</span><span class="n">entry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"subject"</span><span class="p">)</span> <span class="ow">or</span> <span class="s2">""</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="n">ok</span> <span class="o">=</span> <span class="n">_write_entry</span><span class="p">(</span>
+            <span class="n">note_cls</span><span class="o">=</span><span class="n">note_cls</span><span class="p">,</span>
+            <span class="n">entry</span><span class="o">=</span><span class="n">merged</span><span class="p">,</span>
+            <span class="n">vault_folder</span><span class="o">=</span><span class="n">vault_folder</span><span class="p">,</span>
+            <span class="n">overwrite</span><span class="o">=</span><span class="n">overwrite</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">written</span> <span class="o">+=</span> <span class="n">ok</span>
+        <span class="n">skipped</span> <span class="o">+=</span> <span class="ow">not</span> <span class="n">ok</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  </span><span class="si">{</span><span class="n">written</span><span class="si">}</span><span class="s2"> written, </span><span class="si">{</span><span class="n">skipped</span><span class="si">}</span><span class="s2"> skipped."</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">written</span><span class="p">,</span> <span class="n">skipped</span>
+
+
+<div class="viewcode-block" id="ingest_variables">
+<a class="viewcode-back" href="../../../generated/losalamos.tools.ingest_variables.html#losalamos.tools.ingest_variables.ingest_variables">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">ingest_variables</span><span class="p">(</span>
+    <span class="n">seed_path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span>
+    <span class="n">overwrite</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Read a JSON seed file and process all batches.</span>
+
+<span class="sd">    The seed must be a list of batch dicts, each with a ``vault``, optional</span>
+<span class="sd">    ``defaults``, and an ``entries`` list. A single batch dict is also accepted.</span>
+
+<span class="sd">    :param seed_path: Path to the JSON seed file.</span>
+<span class="sd">    :type seed_path: :class:`pathlib.Path`</span>
+<span class="sd">    :param overwrite: If ``False`` (default), existing files are skipped.</span>
+<span class="sd">    :type overwrite: bool</span>
+<span class="sd">    """</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">seed_path</span><span class="p">,</span> <span class="s2">"r"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">seed</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+
+    <span class="n">batches</span> <span class="o">=</span> <span class="n">seed</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">seed</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="k">else</span> <span class="p">[</span><span class="n">seed</span><span class="p">]</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Seed  : </span><span class="si">{</span><span class="n">seed_path</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">  (</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">batches</span><span class="p">)</span><span class="si">}</span><span class="s2"> batch(es))"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">()</span>
+
+    <span class="n">note_cls</span> <span class="o">=</span> <span class="n">NoteVariable</span><span class="p">()</span>
+    <span class="n">total_written</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">total_skipped</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">batch</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">batches</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">batches</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"[</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">batches</span><span class="p">)</span><span class="si">}</span><span class="s2">]"</span><span class="p">)</span>
+        <span class="n">written</span><span class="p">,</span> <span class="n">skipped</span> <span class="o">=</span> <span class="n">_run_batch</span><span class="p">(</span>
+            <span class="n">batch</span><span class="o">=</span><span class="n">batch</span><span class="p">,</span> <span class="n">note_cls</span><span class="o">=</span><span class="n">note_cls</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="n">overwrite</span>
+        <span class="p">)</span>
+        <span class="n">total_written</span> <span class="o">+=</span> <span class="n">written</span>
+        <span class="n">total_skipped</span> <span class="o">+=</span> <span class="n">skipped</span>
+        <span class="nb">print</span><span class="p">()</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Total — </span><span class="si">{</span><span class="n">total_written</span><span class="si">}</span><span class="s2"> written, </span><span class="si">{</span><span class="n">total_skipped</span><span class="si">}</span><span class="s2"> skipped."</span><span class="p">)</span></div>
+
+
+
+<span class="c1"># CLI</span>
+<span class="c1"># =======================================================================</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">"Batch-create variable registry notes from a seed JSON file."</span>
+    <span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">"--variables"</span><span class="p">,</span>
+        <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">metavar</span><span class="o">=</span><span class="s2">"SEED_JSON"</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">"Path to the seed JSON file."</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">"--overwrite"</span><span class="p">,</span>
+        <span class="n">action</span><span class="o">=</span><span class="s2">"store_true"</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">"Overwrite existing note files."</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+
+    <span class="n">_seed_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">variables</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">_seed_path</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Seed file not found: </span><span class="si">{</span><span class="n">_seed_path</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="n">ingest_variables</span><span class="p">(</span><span class="n">seed_path</span><span class="o">=</span><span class="n">_seed_path</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">overwrite</span><span class="p">)</span>
+</pre></div>
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2026, Iporã Possantti.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.0.4.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.21.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

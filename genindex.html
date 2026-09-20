@@ -784,6 +784,8 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="generated/losalamos.figures.html#losalamos.figures.Figure.image_to_jpeg">image_to_jpeg() (losalamos.figures.Figure static method)</a>
 </li>
+      <li><a href="generated/losalamos.tools.ingest_variables.html#losalamos.tools.ingest_variables.ingest_variables">ingest_variables() (in module losalamos.tools.ingest_variables)</a>
+</li>
       <li><a href="generated/losalamos.ingestion.html#losalamos.ingestion.Ingester">Ingester (class in losalamos.ingestion)</a>
 </li>
   </ul></td>
@@ -872,12 +874,12 @@
       </ul></li>
       <li><a href="generated/losalamos.notes.html#losalamos.notes.NoteBasic.load_metadata_standard">load_metadata_standard() (losalamos.notes.NoteBasic method)</a>
 </li>
-      <li><a href="generated/losalamos.notes.html#losalamos.notes.NoteAttribute.load_new">load_new() (losalamos.notes.NoteAttribute method)</a>
+      <li><a href="generated/losalamos.notes.html#losalamos.notes.NoteBasic.load_new">load_new() (losalamos.notes.NoteBasic method)</a>
 
       <ul>
-        <li><a href="generated/losalamos.notes.html#losalamos.notes.NoteBasic.load_new">(losalamos.notes.NoteBasic method)</a>
-</li>
         <li><a href="generated/losalamos.notes.html#losalamos.notes.NoteReference.load_new">(losalamos.notes.NoteReference method)</a>
+</li>
+        <li><a href="generated/losalamos.notes.html#losalamos.notes.NoteVariable.load_new">(losalamos.notes.NoteVariable method)</a>
 </li>
       </ul></li>
       <li><a href="generated/losalamos.notes.html#losalamos.notes.NoteCollection.load_pattern">load_pattern() (losalamos.notes.NoteCollection method)</a>
@@ -977,6 +979,13 @@
 </li>
       </ul></li>
       <li>
+    losalamos.tools.ingest_variables
+
+      <ul>
+        <li><a href="generated/losalamos.tools.ingest_variables.html#module-losalamos.tools.ingest_variables">module</a>
+</li>
+      </ul></li>
+      <li>
     losalamos.tools.manage_documents
 
       <ul>
@@ -995,13 +1004,6 @@
 
       <ul>
         <li><a href="generated/losalamos.tools.new_drawing.html#module-losalamos.tools.new_drawing">module</a>
-</li>
-      </ul></li>
-      <li>
-    losalamos.tools.populate_attributes
-
-      <ul>
-        <li><a href="generated/losalamos.tools.populate_attributes.html#module-losalamos.tools.populate_attributes">module</a>
 </li>
       </ul></li>
       <li>
@@ -1069,7 +1071,7 @@
 </li>
       <li><a href="generated/losalamos.root.html#losalamos.root.MbaE">MbaE (class in losalamos.root)</a>
 </li>
-      <li><a href="generated/losalamos.notes.html#losalamos.notes.NoteAttribute.METADATA_FIELDS">METADATA_FIELDS (losalamos.notes.NoteAttribute attribute)</a>
+      <li><a href="generated/losalamos.notes.html#losalamos.notes.NoteVariable.METADATA_FIELDS">METADATA_FIELDS (losalamos.notes.NoteVariable attribute)</a>
 </li>
       <li><a href="generated/losalamos.notes.html#losalamos.notes.Note.metadata_to_list">metadata_to_list() (losalamos.notes.Note static method)</a>
 </li>
@@ -1103,13 +1105,13 @@
 </li>
         <li><a href="generated/losalamos.tools.ingest_references.html#module-losalamos.tools.ingest_references">losalamos.tools.ingest_references</a>
 </li>
+        <li><a href="generated/losalamos.tools.ingest_variables.html#module-losalamos.tools.ingest_variables">losalamos.tools.ingest_variables</a>
+</li>
         <li><a href="generated/losalamos.tools.manage_documents.html#module-losalamos.tools.manage_documents">losalamos.tools.manage_documents</a>
 </li>
         <li><a href="generated/losalamos.tools.manage_vault.html#module-losalamos.tools.manage_vault">losalamos.tools.manage_vault</a>
 </li>
         <li><a href="generated/losalamos.tools.new_drawing.html#module-losalamos.tools.new_drawing">losalamos.tools.new_drawing</a>
-</li>
-        <li><a href="generated/losalamos.tools.populate_attributes.html#module-losalamos.tools.populate_attributes">losalamos.tools.populate_attributes</a>
 </li>
         <li><a href="generated/losalamos.tools.search_references.html#module-losalamos.tools.search_references">losalamos.tools.search_references</a>
 </li>
@@ -1134,11 +1136,9 @@
 </li>
       <li><a href="generated/losalamos.notes.html#losalamos.notes.Note">Note (class in losalamos.notes)</a>
 </li>
-      <li><a href="generated/losalamos.notes.html#losalamos.notes.NoteAttribute.NOTE_TYPE">NOTE_TYPE (losalamos.notes.NoteAttribute attribute)</a>
+      <li><a href="generated/losalamos.notes.html#losalamos.notes.NoteVariable.NOTE_TYPE">NOTE_TYPE (losalamos.notes.NoteVariable attribute)</a>
 </li>
       <li><a href="generated/losalamos.notes.html#losalamos.notes.NoteAsset">NoteAsset (class in losalamos.notes)</a>
-</li>
-      <li><a href="generated/losalamos.notes.html#losalamos.notes.NoteAttribute">NoteAttribute (class in losalamos.notes)</a>
 </li>
       <li><a href="generated/losalamos.notes.html#losalamos.notes.NoteBasic">NoteBasic (class in losalamos.notes)</a>
 </li>
@@ -1148,10 +1148,10 @@
 </li>
       <li><a href="generated/losalamos.notes.html#losalamos.notes.NoteCollection">NoteCollection (class in losalamos.notes)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="generated/losalamos.notes.html#losalamos.notes.NoteCollFigure">NoteCollFigure (class in losalamos.notes)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="generated/losalamos.notes.html#losalamos.notes.NoteCollJournal">NoteCollJournal (class in losalamos.notes)</a>
 </li>
       <li><a href="generated/losalamos.notes.html#losalamos.notes.NoteCollOrganization">NoteCollOrganization (class in losalamos.notes)</a>
@@ -1175,6 +1175,8 @@
       <li><a href="generated/losalamos.notes.html#losalamos.notes.NoteSapiens">NoteSapiens (class in losalamos.notes)</a>
 </li>
       <li><a href="generated/losalamos.notes.html#losalamos.notes.NoteTransfer">NoteTransfer (class in losalamos.notes)</a>
+</li>
+      <li><a href="generated/losalamos.notes.html#losalamos.notes.NoteVariable">NoteVariable (class in losalamos.notes)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -1212,8 +1214,6 @@
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="generated/losalamos.tools.populate_attributes.html#losalamos.tools.populate_attributes.populate_canonical">populate_canonical() (in module losalamos.tools.populate_attributes)</a>
-</li>
       <li><a href="generated/losalamos.documents.html#losalamos.documents.Preprint">Preprint (class in losalamos.documents)</a>
 </li>
       <li><a href="generated/losalamos.documents.html#losalamos.documents.PrintArticle">PrintArticle (class in losalamos.documents)</a>
@@ -1286,7 +1286,7 @@
 </li>
       <li><a href="generated/losalamos.documents.html#losalamos.documents.Report">Report (class in losalamos.documents)</a>
 </li>
-      <li><a href="generated/losalamos.notes.html#losalamos.notes.NoteAttribute.REQUIRED_FIELDS">REQUIRED_FIELDS (losalamos.notes.NoteAttribute attribute)</a>
+      <li><a href="generated/losalamos.notes.html#losalamos.notes.NoteVariable.REQUIRED_FIELDS">REQUIRED_FIELDS (losalamos.notes.NoteVariable attribute)</a>
 </li>
       <li><a href="generated/losalamos.notes.html#losalamos.notes.NoteBasic.reset_data">reset_data() (losalamos.notes.NoteBasic method)</a>
 </li>
@@ -1435,8 +1435,6 @@
       <li><a href="generated/losalamos.notes.html#losalamos.notes.NoteAsset.TEMPLATE_FILE">TEMPLATE_FILE (losalamos.notes.NoteAsset attribute)</a>
 
       <ul>
-        <li><a href="generated/losalamos.notes.html#losalamos.notes.NoteAttribute.TEMPLATE_FILE">(losalamos.notes.NoteAttribute attribute)</a>
-</li>
         <li><a href="generated/losalamos.notes.html#losalamos.notes.NoteBasic.TEMPLATE_FILE">(losalamos.notes.NoteBasic attribute)</a>
 </li>
         <li><a href="generated/losalamos.notes.html#losalamos.notes.NoteDataset.TEMPLATE_FILE">(losalamos.notes.NoteDataset attribute)</a>
@@ -1455,8 +1453,10 @@
 </li>
         <li><a href="generated/losalamos.notes.html#losalamos.notes.NoteTransfer.TEMPLATE_FILE">(losalamos.notes.NoteTransfer attribute)</a>
 </li>
+        <li><a href="generated/losalamos.notes.html#losalamos.notes.NoteVariable.TEMPLATE_FILE">(losalamos.notes.NoteVariable attribute)</a>
+</li>
       </ul></li>
-      <li><a href="generated/losalamos.notes.html#losalamos.notes.NoteAttribute.TEXT_FIELDS">TEXT_FIELDS (losalamos.notes.NoteAttribute attribute)</a>
+      <li><a href="generated/losalamos.notes.html#losalamos.notes.NoteVariable.TEXT_FIELDS">TEXT_FIELDS (losalamos.notes.NoteVariable attribute)</a>
 </li>
       <li><a href="generated/losalamos.notes.html#losalamos.notes.NoteAsset.THUMBNAIL_SIZE">THUMBNAIL_SIZE (losalamos.notes.NoteAsset attribute)</a>
 
@@ -1514,16 +1514,16 @@
 <h2 id="U">U</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="generated/losalamos.notes.html#losalamos.notes.NoteAttribute.update">update() (losalamos.notes.NoteAttribute method)</a>
+      <li><a href="generated/losalamos.notes.html#losalamos.notes.NoteBasic.update">update() (losalamos.notes.NoteBasic method)</a>
 
       <ul>
-        <li><a href="generated/losalamos.notes.html#losalamos.notes.NoteBasic.update">(losalamos.notes.NoteBasic method)</a>
-</li>
         <li><a href="generated/losalamos.notes.html#losalamos.notes.NoteDataset.update">(losalamos.notes.NoteDataset method)</a>
 </li>
         <li><a href="generated/losalamos.notes.html#losalamos.notes.NoteJournal.update">(losalamos.notes.NoteJournal method)</a>
 </li>
         <li><a href="generated/losalamos.notes.html#losalamos.notes.NoteReference.update">(losalamos.notes.NoteReference method)</a>
+</li>
+        <li><a href="generated/losalamos.notes.html#losalamos.notes.NoteVariable.update">(losalamos.notes.NoteVariable method)</a>
 </li>
         <li><a href="generated/losalamos.project.html#losalamos.project.Project.update">(losalamos.project.Project method)</a>
 </li>
