@@ -5,6 +5,7 @@ tags:
   - transfer-note
 aliases:
 name: <% tp.file.title %>
+title:
 abstract:
 date:
 commitment:
@@ -23,6 +24,10 @@ domain:
 category: 
 subcategory:
 related_asset:
+file_bill:
+file_invoice:
+file_receipt:
+file_proof:
 ---
 # <% tp.file.title %>
 
@@ -43,6 +48,7 @@ TRANSFER NOTE
 ---
 ## Definitions
 
+`title` - short human-readable label for the transfer
 `date` - due date
 `commitment` - Great groups: "contracts", "lifestyle", "maintenance", "safeguards", "retirement", etc.
 `project` - link to the related project note
@@ -59,6 +65,10 @@ TRANSFER NOTE
 `category` and subcategory - open fields for hierarchy categorization
 `domain` - open field for cross classification
 `related_asset` - open field for links
+`file_bill` - wiki link to the bill file or note
+`file_invoice` - wiki link to the invoice file or note
+`file_receipt` - wiki link to the receipt file or note
+`file_proof` - wiki link to the proof-of-payment file or note
 
 ---
 

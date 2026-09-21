@@ -1091,6 +1091,10 @@ class TestGetTransfers(unittest.TestCase):
             "category",
             "subcategory",
             "related_asset",
+            "file_bill",
+            "file_invoice",
+            "file_receipt",
+            "file_proof",
         }
         self.assertTrue(expected.issubset(set(self._df.columns)))
 

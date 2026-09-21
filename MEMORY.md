@@ -1,5 +1,9 @@
 # Memory Log
 
+- 2026-09-21 — Budget.build() counter changed from global to per-month: `month_counters` dict keyed on YYYY-MM; note suffix NNNN now resets to 0001 each month; global `counter` variable removed
+- 2026-09-21 — added `title` field to transfer note system: _transfer.md template, Budget.build(), and TestNoteTransfer.EXPECTED_FIELDS; field is user-set (not auto-derived); text harmonization inherited from HARMONIZE_TEXT_FIELDS
+- 2026-09-21 — added file_bill, file_invoice, file_receipt, file_proof to transfer note system: _transfer.md template, Budget.build(), Project.add_transfer()/get_transfers(), and unit tests in test_notes.py and test_project.py
+- 2026-09-21 — budget.py: Budget._strip_definitions() added; strips ## Definitions section from transfer note body after load_new() in Budget.build()
 - 2026-09-21 — docs: tools section moved from api.rst to new cli.rst (4 groups: Project/Build/Ingestion/References); losalamos.budget added to api.rst Domain; cli added to index.rst toctree
 - 2026-09-21 — tab-set docstring pattern applied to manage_vault.py, new_project.py, ingest_variables.py; ingest_variables loader upgraded from json.load to MbaE.load_config_file with batch-key normalisation (now accepts TOML/YAML/JSON)
 - 2026-09-21 — tools/build_budget.py: CLI tool --config <file> builds Budget from TOML/YAML/JSON config; merges multiple batch files; optional equivalent analysis print and folder save; docstring uses tab-set for all three config and budget file format examples

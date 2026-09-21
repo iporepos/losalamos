@@ -367,6 +367,7 @@ class TestNoteTransfer(unittest.TestCase):
         "note_type",
         "timestamp",
         "name",
+        "title",
         "abstract",
         "date",
         "direction",
@@ -384,6 +385,10 @@ class TestNoteTransfer(unittest.TestCase):
         "category",
         "subcategory",
         "related_asset",
+        "file_bill",
+        "file_invoice",
+        "file_receipt",
+        "file_proof",
     }
 
     @classmethod

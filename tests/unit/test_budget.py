@@ -185,6 +185,33 @@ class TestBudgetBuild(unittest.TestCase):
         b.build(batches=_minimal_batches())
         self.assertEqual(len(b.catalog), len(b.collection))
 
+    def test_per_month_counter_resets(self):
+        """Counter must restart at 0001 each month."""
+        b = _simple_budget(name="MyBudget")
+        b.build(
+            batches=[
+                {
+                    "defaults": {
+                        "direction": "outflow",
+                        "account": "A",
+                        "currency": "BRL",
+                    },
+                    "transfers": [
+                        {"value": 100, "recurrence": "1 month"},
+                        {"value": 200, "recurrence": "1 month"},
+                    ],
+                }
+            ]
+        )
+        self.assertEqual(len(b.collection), 24)
+        month_seqs = {}
+        for name in b.collection:
+            parts = name.split("_")
+            month, seq = parts[2], parts[3]
+            month_seqs.setdefault(month, set()).add(seq)
+        for month, seqs in month_seqs.items():
+            self.assertEqual(seqs, {"0001", "0002"}, msg=f"Month {month}: {seqs}")
+
 
 class TestBudgetEquivalent(unittest.TestCase):
     """``monthly_equivalent`` and ``annual_equivalent`` — pivot, net, account filter."""

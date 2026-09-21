@@ -157,7 +157,7 @@ class Budget(NoteCollTransfer):
         self.catalog = pd.DataFrame()
         self.size = 0
 
-        counter = 1
+        month_counters = {}
         for batch in batches:
             defaults = batch.get("defaults", {})
             for entry in batch.get("transfers", []):
@@ -178,15 +178,17 @@ class Budget(NoteCollTransfer):
                 direction = str(merged.get("direction", "outflow")).lower().rstrip("s")
 
                 for dt in dates:
-                    name = (
-                        f"{self.NOTE_PREFIX.upper()}_{self.name}_{dt[:7]}_{counter:04d}"
-                    )
+                    month_key = dt[:7]
+                    month_counters[month_key] = month_counters.get(month_key, 0) + 1
+                    name = f"{self.NOTE_PREFIX.upper()}_{self.name}_{month_key}_{month_counters[month_key]:04d}"
 
                     note = NoteTransfer(name=name, alias=name)
                     # load_new reads the template without writing any file
                     note.load_new(file_note=Path("_") / f"{name}.md")
+                    Budget._strip_definitions(note=note)
 
                     note.metadata["name"] = name
+                    note.metadata["title"] = merged.get("title")
                     note.metadata["date"] = dt
                     note.metadata["direction"] = direction
                     note.metadata["value"] = merged.get("value")
@@ -204,9 +206,12 @@ class Budget(NoteCollTransfer):
                     note.metadata["category"] = merged.get("category")
                     note.metadata["subcategory"] = merged.get("subcategory")
                     note.metadata["related_asset"] = merged.get("related_asset")
+                    note.metadata["file_bill"] = merged.get("file_bill")
+                    note.metadata["file_invoice"] = merged.get("file_invoice")
+                    note.metadata["file_receipt"] = merged.get("file_receipt")
+                    note.metadata["file_proof"] = merged.get("file_proof")
 
                     self.append(note)
-                    counter += 1
 
         return None
 
@@ -361,6 +366,29 @@ class Budget(NoteCollTransfer):
     # ------------------------------------------------------------------
     # Static helpers
     # ------------------------------------------------------------------
+
+    @staticmethod
+    def _strip_definitions(note):
+        """
+        Remove the ``## Definitions`` section from a transfer note body.
+
+        Finds the first ``## Definitions`` line in the ``Body`` segment, discards
+        it and everything after it, then trims any trailing blank lines or ``---``
+        separators left at the end.
+
+        :param note: Transfer note instance loaded from the template.
+        :type note: :class:`~losalamos.notes.NoteTransfer`
+        :return: No value is returned.
+        :rtype: None
+        """
+        body = note.data.get(NoteTransfer.STR_BODY, [])
+        for i, line in enumerate(body):
+            if line.strip() == "## Definitions":
+                trimmed = body[:i]
+                while trimmed and trimmed[-1].strip() in ("", "---"):
+                    trimmed.pop()
+                note.data[NoteTransfer.STR_BODY] = trimmed
+                return
 
     @staticmethod
     def _wiki(value):

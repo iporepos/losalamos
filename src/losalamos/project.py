@@ -1885,6 +1885,10 @@ class Project(FileSys):
         domain=None,
         category=None,
         subcategory=None,
+        file_bill=None,
+        file_invoice=None,
+        file_receipt=None,
+        file_proof=None,
     ):
         """
         Create a new transfer note under ``budget/inflows/`` or ``budget/outflows/``.
@@ -1917,6 +1921,14 @@ class Project(FileSys):
         :type protocol: str or None
         :param related_asset: Optional link to a related asset note.
         :type related_asset: str or None
+        :param file_bill: Wiki link to the bill file or note.
+        :type file_bill: str or None
+        :param file_invoice: Wiki link to the invoice file or note.
+        :type file_invoice: str or None
+        :param file_receipt: Wiki link to the receipt file or note.
+        :type file_receipt: str or None
+        :param file_proof: Wiki link to the proof-of-payment file or note.
+        :type file_proof: str or None
         :param payer: Name or link to the payer party.
         :type payer: str or None
         :param receiver: Name or link to the receiver party.
@@ -1958,6 +1970,10 @@ class Project(FileSys):
         note.metadata["method"] = method if method is not None else "manual"
         note.metadata["protocol"] = protocol
         note.metadata["related_asset"] = related_asset
+        note.metadata["file_bill"] = file_bill
+        note.metadata["file_invoice"] = file_invoice
+        note.metadata["file_receipt"] = file_receipt
+        note.metadata["file_proof"] = file_proof
         note.metadata["payer"] = payer
         note.metadata["receiver"] = receiver
         note.metadata["currency"] = currency
@@ -1979,7 +1995,8 @@ class Project(FileSys):
         :returns: DataFrame with columns ``name``, ``date``, ``direction``,
             ``status``, ``account``, ``value``, ``currency``, ``commitment``,
             ``recurrence``, ``method``, ``protocol``, ``payer``, ``receiver``,
-            ``domain``, ``category``, ``subcategory``, ``related_asset``.
+            ``domain``, ``category``, ``subcategory``, ``related_asset``,
+            ``file_bill``, ``file_invoice``, ``file_receipt``, ``file_proof``.
             Empty DataFrame when no transfers exist.
         :rtype: pandas.DataFrame
         """
@@ -2001,6 +2018,10 @@ class Project(FileSys):
             "category",
             "subcategory",
             "related_asset",
+            "file_bill",
+            "file_invoice",
+            "file_receipt",
+            "file_proof",
         ]
         rows = []
         for md_file in Path(self.folder_root).rglob("*.md"):
