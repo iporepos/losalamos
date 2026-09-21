@@ -167,6 +167,13 @@
 
 
 <li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../cli.html">
+    CLI
+  </a>
+</li>
+
+
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="../../../development.html">
     Development
   </a>
@@ -294,6 +301,13 @@
 
 
 <li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../cli.html">
+    CLI
+  </a>
+</li>
+
+
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="../../../development.html">
     Development
   </a>
@@ -407,8 +421,8 @@
 <span class="sd">"""</span>
 <span class="sd">Batch-creation tool for variable registry notes.</span>
 
-<span class="sd">Reads a JSON seed file and writes one Obsidian ``.md`` note per entry into</span>
-<span class="sd">a target vault folder using :class:`losalamos.notes.NoteVariable`.</span>
+<span class="sd">Reads a seed file (TOML, YAML, or JSON) and writes one Obsidian ``.md`` note</span>
+<span class="sd">per entry into a target vault folder using :class:`losalamos.notes.NoteVariable`.</span>
 
 <span class="sd">Codes are user-assigned and must appear in each entry. Shared fields</span>
 <span class="sd">(``subject``, ``tags``, ``category``, etc.) can be declared once in</span>
@@ -419,48 +433,109 @@
 
 <span class="sd">.. code-block:: shell</span>
 
-<span class="sd">    python -m losalamos.tools.ingest_variables --variables &lt;seed.json&gt; [--overwrite]</span>
+<span class="sd">    python -m losalamos.tools.ingest_variables --variables &lt;seed_file&gt; [--overwrite]</span>
 
-<span class="sd">Seed JSON format</span>
-<span class="sd">----------------</span>
+<span class="sd">Seed file</span>
+<span class="sd">---------</span>
 
-<span class="sd">The seed file is a **list of batches**. Each batch targets one vault folder</span>
+<span class="sd">The seed holds one or more batches. Each batch targets one vault folder</span>
 <span class="sd">and carries its own ``defaults`` and ``entries``.</span>
 
-<span class="sd">.. code-block:: json</span>
+<span class="sd">.. tab-set::</span>
 
-<span class="sd">    [</span>
-<span class="sd">        {</span>
-<span class="sd">            "vault": "/path/to/vault/hydrology",</span>
-<span class="sd">            "defaults": {</span>
-<span class="sd">                "subject": "[[Surface Hydrology]]",</span>
-<span class="sd">                "tags": ["hydrology"],</span>
-<span class="sd">                "category": "physical"</span>
-<span class="sd">            },</span>
-<span class="sd">            "entries": [</span>
-<span class="sd">                {</span>
-<span class="sd">                    "code": "F101V001",</span>
-<span class="sd">                    "name": "Streamflow",</span>
-<span class="sd">                    "alias": "streamflow",</span>
-<span class="sd">                    "units": "m^3/s",</span>
-<span class="sd">                    "range": "[0U)",</span>
-<span class="sd">                    "symbol": "Q",</span>
+<span class="sd">    .. tab-item:: TOML</span>
+
+<span class="sd">        .. code-block:: toml</span>
+
+<span class="sd">            [[batch]]</span>
+<span class="sd">            vault = "/path/to/vault/hydrology"</span>
+
+<span class="sd">            [batch.defaults]</span>
+<span class="sd">            subject  = "[[Surface Hydrology]]"</span>
+<span class="sd">            tags     = ["hydrology"]</span>
+<span class="sd">            category = "physical"</span>
+
+<span class="sd">            [[batch.entries]]</span>
+<span class="sd">            code      = "F101V001"</span>
+<span class="sd">            name      = "Streamflow"</span>
+<span class="sd">            alias     = "streamflow"</span>
+<span class="sd">            units     = "m^3/s"</span>
+<span class="sd">            range     = "[0U)"</span>
+<span class="sd">            symbol    = "Q"</span>
+<span class="sd">            dimension = "L^{3}/T"</span>
+
+
+<span class="sd">            [[batch]]</span>
+<span class="sd">            vault = "/path/to/vault/climate"</span>
+
+<span class="sd">            [batch.parameters]</span>
+<span class="sd">            fallback_title = false</span>
+
+<span class="sd">            [batch.defaults]</span>
+<span class="sd">            subject = "[[Climatology]]"</span>
+<span class="sd">            tags    = ["climate"]</span>
+
+<span class="sd">    .. tab-item:: YAML</span>
+
+<span class="sd">        .. code-block:: yaml</span>
+
+<span class="sd">            batch:</span>
+<span class="sd">              - vault: /path/to/vault/hydrology</span>
+<span class="sd">                defaults:</span>
+<span class="sd">                  subject:  "[[Surface Hydrology]]"</span>
+<span class="sd">                  tags:     [hydrology]</span>
+<span class="sd">                  category: physical</span>
+<span class="sd">                entries:</span>
+<span class="sd">                  - code:      F101V001</span>
+<span class="sd">                    name:      Streamflow</span>
+<span class="sd">                    alias:     streamflow</span>
+<span class="sd">                    units:     m^3/s</span>
+<span class="sd">                    range:     "[0U)"</span>
+<span class="sd">                    symbol:    Q</span>
+<span class="sd">                    dimension: "L^{3}/T"</span>
+
+<span class="sd">              - vault: /path/to/vault/climate</span>
+<span class="sd">                parameters:</span>
+<span class="sd">                  fallback_title: false</span>
+<span class="sd">                defaults:</span>
+<span class="sd">                  subject: "[[Climatology]]"</span>
+<span class="sd">                  tags:    [climate]</span>
+<span class="sd">                entries:   []</span>
+
+<span class="sd">    .. tab-item:: JSON</span>
+
+<span class="sd">        .. code-block:: json</span>
+
+<span class="sd">            [</span>
+<span class="sd">              {</span>
+<span class="sd">                "vault": "/path/to/vault/hydrology",</span>
+<span class="sd">                "defaults": {</span>
+<span class="sd">                  "subject":  "[[Surface Hydrology]]",</span>
+<span class="sd">                  "tags":     ["hydrology"],</span>
+<span class="sd">                  "category": "physical"</span>
+<span class="sd">                },</span>
+<span class="sd">                "entries": [</span>
+<span class="sd">                  {</span>
+<span class="sd">                    "code":      "F101V001",</span>
+<span class="sd">                    "name":      "Streamflow",</span>
+<span class="sd">                    "alias":     "streamflow",</span>
+<span class="sd">                    "units":     "m^3/s",</span>
+<span class="sd">                    "range":     "[0U)",</span>
+<span class="sd">                    "symbol":    "Q",</span>
 <span class="sd">                    "dimension": "L^{3}/T"</span>
-<span class="sd">                }</span>
+<span class="sd">                  }</span>
+<span class="sd">                ]</span>
+<span class="sd">              },</span>
+<span class="sd">              {</span>
+<span class="sd">                "vault": "/path/to/vault/climate",</span>
+<span class="sd">                "parameters": {"fallback_title": false},</span>
+<span class="sd">                "defaults": {</span>
+<span class="sd">                  "subject": "[[Climatology]]",</span>
+<span class="sd">                  "tags":    ["climate"]</span>
+<span class="sd">                },</span>
+<span class="sd">                "entries": []</span>
+<span class="sd">              }</span>
 <span class="sd">            ]</span>
-<span class="sd">        },</span>
-<span class="sd">        {</span>
-<span class="sd">            "vault": "/path/to/vault/climate",</span>
-<span class="sd">            "parameters": {</span>
-<span class="sd">                "fallback_title": false</span>
-<span class="sd">            },</span>
-<span class="sd">            "defaults": {</span>
-<span class="sd">                "subject": "[[Climatology]]",</span>
-<span class="sd">                "tags": ["climate"]</span>
-<span class="sd">            },</span>
-<span class="sd">            "entries": []</span>
-<span class="sd">        }</span>
-<span class="sd">    ]</span>
 
 <span class="sd">Batch keys</span>
 <span class="sd">----------</span>
@@ -494,11 +569,11 @@
 <span class="c1"># =======================================================================</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">argparse</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">losalamos.notes</span><span class="w"> </span><span class="kn">import</span> <span class="n">NoteVariable</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">losalamos.root</span><span class="w"> </span><span class="kn">import</span> <span class="n">MbaE</span>
 
 
 <span class="c1"># HELPERS</span>
@@ -670,20 +745,26 @@
     <span class="n">seed_path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span>
     <span class="n">overwrite</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">"""Read a JSON seed file and process all batches.</span>
+<span class="w">    </span><span class="sd">"""Read a seed file (TOML, YAML, or JSON) and process all batches.</span>
 
 <span class="sd">    The seed must be a list of batch dicts, each with a ``vault``, optional</span>
-<span class="sd">    ``defaults``, and an ``entries`` list. A single batch dict is also accepted.</span>
+<span class="sd">    ``defaults``, and an ``entries`` list. TOML and YAML files may wrap</span>
+<span class="sd">    batches under a top-level ``batch`` key; JSON files may be a bare list.</span>
+<span class="sd">    A single batch dict is also accepted.</span>
 
-<span class="sd">    :param seed_path: Path to the JSON seed file.</span>
+<span class="sd">    :param seed_path: Path to the seed file (TOML, YAML, or JSON).</span>
 <span class="sd">    :type seed_path: :class:`pathlib.Path`</span>
 <span class="sd">    :param overwrite: If ``False`` (default), existing files are skipped.</span>
 <span class="sd">    :type overwrite: bool</span>
 <span class="sd">    """</span>
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">seed_path</span><span class="p">,</span> <span class="s2">"r"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-        <span class="n">seed</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+    <span class="n">raw</span> <span class="o">=</span> <span class="n">MbaE</span><span class="o">.</span><span class="n">load_config_file</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">seed_path</span><span class="p">)</span>
 
-    <span class="n">batches</span> <span class="o">=</span> <span class="n">seed</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">seed</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="k">else</span> <span class="p">[</span><span class="n">seed</span><span class="p">]</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">raw</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="n">batches</span> <span class="o">=</span> <span class="n">raw</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">raw</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">and</span> <span class="s2">"batch"</span> <span class="ow">in</span> <span class="n">raw</span><span class="p">:</span>
+        <span class="n">batches</span> <span class="o">=</span> <span class="n">raw</span><span class="p">[</span><span class="s2">"batch"</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">batches</span> <span class="o">=</span> <span class="p">[</span><span class="n">raw</span><span class="p">]</span>
 
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Seed  : </span><span class="si">{</span><span class="n">seed_path</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">  (</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">batches</span><span class="p">)</span><span class="si">}</span><span class="s2"> batch(es))"</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">()</span>

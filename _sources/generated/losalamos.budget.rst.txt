@@ -1,0 +1,12 @@
+﻿losalamos.budget
+================
+
+.. automodule:: losalamos.budget
+
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      Budget
+   

@@ -1,0 +1,995 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" data-theme="light">
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>losalamos.budget &#8212; losalamos 0.0.1 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../../_static/scripts/fontawesome.js?digest=cb8930eaaf36d9849b67"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
+
+    <script src="../../_static/documentation_options.js?v=d45e8c67"></script>
+    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/losalamos/budget';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="../../_static/searchtools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <script src="../../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="light">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+    
+    
+    
+    <img src="https://github.com/iporepos/losalamos/blob/main/docs/figs/logo.png?raw=true" class="logo__image only-light" alt="losalamos 0.0.1 documentation - Home"/>
+    <img src="https://github.com/iporepos/losalamos/blob/main/docs/figs/logo.png?raw=true" class="logo__image only-dark pst-js-only" alt="losalamos 0.0.1 documentation - Home"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../index.html">
+    Home
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../about.html">
+    About
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../usage.html">
+    Usage
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../api.html">
+    API
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../cli.html">
+    CLI
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../development.html">
+    Development
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/iporepos/losalamos" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../index.html">
+    Home
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../about.html">
+    About
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../usage.html">
+    Usage
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../api.html">
+    API
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../cli.html">
+    CLI
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../development.html">
+    Development
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/iporepos/losalamos" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../index.html" class="nav-link">Module code</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">losalamos.budget</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for losalamos.budget</h1><div class="highlight"><pre>
+<span></span><span class="c1"># SPDX-License-Identifier: GPL-3.0-or-later</span>
+<span class="c1">#</span>
+<span class="c1"># Copyright (C) 2025 The Project Authors</span>
+<span class="c1"># See pyproject.toml for authors/maintainers.</span>
+<span class="c1"># See LICENSE for license details.</span>
+<span class="sd">"""</span>
+<span class="sd">Budget generation and analysis utilities.</span>
+
+<span class="sd">Provides :class:`Budget` for building collections of transfer notes from a</span>
+<span class="sd">structured batch seed, with a recurrence engine that expands periodic</span>
+<span class="sd">transfers into individual dated instances.</span>
+
+<span class="sd">The typical workflow is:</span>
+
+<span class="sd">1. Instantiate and configure the budget::</span>
+
+<span class="sd">    from losalamos.budget import Budget</span>
+<span class="sd">    from pathlib import Path</span>
+
+<span class="sd">    budget = Budget()</span>
+<span class="sd">    budget.year = 2027</span>
+<span class="sd">    budget.duration = 1</span>
+<span class="sd">    budget.output_folder = Path("vault/budget")</span>
+
+<span class="sd">2. Build the in-memory collection from a batch seed::</span>
+
+<span class="sd">    budget.build(batches=[</span>
+<span class="sd">        {</span>
+<span class="sd">            "defaults": {</span>
+<span class="sd">                "currency": "BRL",</span>
+<span class="sd">                "direction": "outflow",</span>
+<span class="sd">                "payer": "My Company",</span>
+<span class="sd">            },</span>
+<span class="sd">            "transfers": [</span>
+<span class="sd">                {"value": 1000.00, "receiver": "Rent Corp", "recurrence": "1 month"},</span>
+<span class="sd">                {"value": 5000.00, "receiver": "Insurance Co", "recurrence": "1 year"},</span>
+<span class="sd">            ],</span>
+<span class="sd">        }</span>
+<span class="sd">    ])</span>
+
+<span class="sd">3. Inspect before writing::</span>
+
+<span class="sd">    print(budget.catalog)</span>
+<span class="sd">    print(budget.monthly_equivalent(group_by="commitment"))</span>
+
+<span class="sd">4. Materialise notes to disk::</span>
+
+<span class="sd">    budget.save()</span>
+
+<span class="sd">"""</span>
+<span class="c1"># IMPORTS</span>
+<span class="c1"># ***********************************************************************</span>
+
+<span class="c1"># Native imports</span>
+<span class="c1"># =======================================================================</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">calendar</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">date</span><span class="p">,</span> <span class="n">timedelta</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+
+<span class="c1"># External imports</span>
+<span class="c1"># =======================================================================</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+
+<span class="c1"># Project-level imports</span>
+<span class="c1"># =======================================================================</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">losalamos.notes</span><span class="w"> </span><span class="kn">import</span> <span class="n">NoteCollTransfer</span><span class="p">,</span> <span class="n">NoteTransfer</span>
+
+<span class="c1"># ... {develop}</span>
+
+
+<span class="c1"># CONSTANTS</span>
+<span class="c1"># ***********************************************************************</span>
+<span class="c1"># ... {develop}</span>
+
+
+<span class="c1"># CLASSES</span>
+<span class="c1"># ***********************************************************************</span>
+
+
+<div class="viewcode-block" id="Budget">
+<a class="viewcode-back" href="../../generated/losalamos.budget.html#losalamos.budget.Budget">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Budget</span><span class="p">(</span><span class="n">NoteCollTransfer</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""</span>
+<span class="sd">    A collection of transfer notes built from a batch seed.</span>
+
+<span class="sd">    Extends :class:`~losalamos.notes.NoteCollTransfer` with a recurrence</span>
+<span class="sd">    engine and budget-level statistics. Notes are held in memory until</span>
+<span class="sd">    :meth:`save` materializes them as Markdown files.</span>
+
+<span class="sd">    The collection can also be populated from existing files via the</span>
+<span class="sd">    inherited :meth:`~losalamos.notes.NoteCollection.load_folder` and</span>
+<span class="sd">    related methods.</span>
+
+<span class="sd">    :param name: Budget name, used as the prefix for every generated note</span>
+<span class="sd">        filename (e.g. ``"HouseBudget"`` → ``HouseBudget_2027_001.md``).</span>
+<span class="sd">        Required — no default.</span>
+<span class="sd">    :type name: str</span>
+<span class="sd">    :param alias: Object alias. Default value = ``"Bgt"``</span>
+<span class="sd">    :type alias: str</span>
+
+<span class="sd">    **Attributes**</span>
+
+<span class="sd">    - ``NOTE_PREFIX`` (*str*): Prefix for generated note filenames, uppercased</span>
+<span class="sd">      at use. Default value = ``"transfer"``</span>
+<span class="sd">    - ``year`` (*int*): Budget start year. Defaults to the current year.</span>
+<span class="sd">    - ``duration`` (*int*): Number of years covered. Default value = ``1``</span>
+<span class="sd">    - ``output_folder`` (*Path or None*): Destination for :meth:`save`.</span>
+<span class="sd">    - ``split`` (*bool*): When ``True``, :meth:`save` writes inflows to</span>
+<span class="sd">      ``output_folder/inflows/`` and outflows to ``output_folder/outflows/``.</span>
+<span class="sd">      Default value = ``False``</span>
+<span class="sd">    """</span>
+
+    <span class="n">NOTE_PREFIX</span> <span class="o">=</span> <span class="s2">"transfer"</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s2">"Bgt"</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="n">alias</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">year</span> <span class="o">=</span> <span class="n">date</span><span class="o">.</span><span class="n">today</span><span class="p">()</span><span class="o">.</span><span class="n">year</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">duration</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">output_folder</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">split</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">catalog_monthly</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">catalog_annual</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="c1"># ------------------------------------------------------------------</span>
+    <span class="c1"># Public interface</span>
+    <span class="c1"># ------------------------------------------------------------------</span>
+
+<div class="viewcode-block" id="Budget.build">
+<a class="viewcode-back" href="../../generated/losalamos.budget.html#losalamos.budget.Budget.build">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">build</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batches</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""</span>
+<span class="sd">        Populate the in-memory collection from a list of transfer batches.</span>
+
+<span class="sd">        Each batch is a dict with a ``defaults`` block and a ``transfers``</span>
+<span class="sd">        list. Every entry in ``transfers`` is merged with ``defaults``</span>
+<span class="sd">        (entry-level keys win), then expanded by the recurrence engine into</span>
+<span class="sd">        one :class:`~losalamos.notes.NoteTransfer` per occurrence.</span>
+
+<span class="sd">        Two optional per-transfer anchor keys are consumed before the note</span>
+<span class="sd">        is created and do not appear in the note metadata:</span>
+
+<span class="sd">        - ``day`` (*int*): Day-of-month anchor. Default value = ``1``</span>
+<span class="sd">        - ``month`` (*int*): Month anchor, only used for year-level</span>
+<span class="sd">          recurrence. Default value = ``1``</span>
+
+<span class="sd">        Calling :meth:`build` replaces any previously built content.</span>
+<span class="sd">        No files are written to disk.</span>
+
+<span class="sd">        :param batches: List of batch dicts, each with:</span>
+
+<span class="sd">            - ``defaults`` (*dict*) — fields applied to every transfer in the batch.</span>
+<span class="sd">            - ``transfers`` (*list[dict]*) — per-transfer overrides.</span>
+
+<span class="sd">        :type batches: list[dict]</span>
+<span class="sd">        :return: No value is returned.</span>
+<span class="sd">        :rtype: None</span>
+<span class="sd">        """</span>
+        <span class="c1"># reset collection</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">collection</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">catalog</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">size</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="n">counter</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">for</span> <span class="n">batch</span> <span class="ow">in</span> <span class="n">batches</span><span class="p">:</span>
+            <span class="n">defaults</span> <span class="o">=</span> <span class="n">batch</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"defaults"</span><span class="p">,</span> <span class="p">{})</span>
+            <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">batch</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"transfers"</span><span class="p">,</span> <span class="p">[]):</span>
+                <span class="n">merged</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="n">defaults</span><span class="p">,</span> <span class="o">**</span><span class="n">entry</span><span class="p">}</span>
+
+                <span class="n">day</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">merged</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">"day"</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+                <span class="n">month</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">merged</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">"month"</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+                <span class="n">recurrence</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">merged</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"recurrence"</span><span class="p">,</span> <span class="s2">"non-recurrent"</span><span class="p">))</span>
+
+                <span class="n">dates</span> <span class="o">=</span> <span class="n">Budget</span><span class="o">.</span><span class="n">_resolve_dates</span><span class="p">(</span>
+                    <span class="n">recurrence</span><span class="o">=</span><span class="n">recurrence</span><span class="p">,</span>
+                    <span class="n">year</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">year</span><span class="p">,</span>
+                    <span class="n">duration</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">duration</span><span class="p">,</span>
+                    <span class="n">day</span><span class="o">=</span><span class="n">day</span><span class="p">,</span>
+                    <span class="n">month</span><span class="o">=</span><span class="n">month</span><span class="p">,</span>
+                <span class="p">)</span>
+
+                <span class="n">direction</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">merged</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"direction"</span><span class="p">,</span> <span class="s2">"outflow"</span><span class="p">))</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s2">"s"</span><span class="p">)</span>
+
+                <span class="k">for</span> <span class="n">dt</span> <span class="ow">in</span> <span class="n">dates</span><span class="p">:</span>
+                    <span class="n">name</span> <span class="o">=</span> <span class="p">(</span>
+                        <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">NOTE_PREFIX</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">dt</span><span class="p">[:</span><span class="mi">7</span><span class="p">]</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">counter</span><span class="si">:</span><span class="s2">04d</span><span class="si">}</span><span class="s2">"</span>
+                    <span class="p">)</span>
+
+                    <span class="n">note</span> <span class="o">=</span> <span class="n">NoteTransfer</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
+                    <span class="c1"># load_new reads the template without writing any file</span>
+                    <span class="n">note</span><span class="o">.</span><span class="n">load_new</span><span class="p">(</span><span class="n">file_note</span><span class="o">=</span><span class="n">Path</span><span class="p">(</span><span class="s2">"_"</span><span class="p">)</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">.md"</span><span class="p">)</span>
+
+                    <span class="n">note</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">"name"</span><span class="p">]</span> <span class="o">=</span> <span class="n">name</span>
+                    <span class="n">note</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">"date"</span><span class="p">]</span> <span class="o">=</span> <span class="n">dt</span>
+                    <span class="n">note</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">"direction"</span><span class="p">]</span> <span class="o">=</span> <span class="n">direction</span>
+                    <span class="n">note</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">"value"</span><span class="p">]</span> <span class="o">=</span> <span class="n">merged</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"value"</span><span class="p">)</span>
+                    <span class="n">note</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">"currency"</span><span class="p">]</span> <span class="o">=</span> <span class="n">merged</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"currency"</span><span class="p">)</span>
+                    <span class="n">note</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">"payer"</span><span class="p">]</span> <span class="o">=</span> <span class="n">Budget</span><span class="o">.</span><span class="n">_wiki</span><span class="p">(</span><span class="n">merged</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"payer"</span><span class="p">))</span>
+                    <span class="n">note</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">"receiver"</span><span class="p">]</span> <span class="o">=</span> <span class="n">Budget</span><span class="o">.</span><span class="n">_wiki</span><span class="p">(</span><span class="n">merged</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"receiver"</span><span class="p">))</span>
+                    <span class="n">note</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">"commitment"</span><span class="p">]</span> <span class="o">=</span> <span class="n">merged</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"commitment"</span><span class="p">)</span>
+                    <span class="n">note</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">"project"</span><span class="p">]</span> <span class="o">=</span> <span class="n">Budget</span><span class="o">.</span><span class="n">_wiki</span><span class="p">(</span><span class="n">merged</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"project"</span><span class="p">))</span>
+                    <span class="n">note</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">"recurrence"</span><span class="p">]</span> <span class="o">=</span> <span class="n">recurrence</span>
+                    <span class="n">note</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">"account"</span><span class="p">]</span> <span class="o">=</span> <span class="n">merged</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"account"</span><span class="p">)</span>
+                    <span class="n">note</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">"status"</span><span class="p">]</span> <span class="o">=</span> <span class="n">merged</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"status"</span><span class="p">,</span> <span class="s2">"expected"</span><span class="p">)</span>
+                    <span class="n">note</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">"method"</span><span class="p">]</span> <span class="o">=</span> <span class="n">merged</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"method"</span><span class="p">,</span> <span class="s2">"manual"</span><span class="p">)</span>
+                    <span class="n">note</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">"protocol"</span><span class="p">]</span> <span class="o">=</span> <span class="n">merged</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"protocol"</span><span class="p">)</span>
+                    <span class="n">note</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">"domain"</span><span class="p">]</span> <span class="o">=</span> <span class="n">merged</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"domain"</span><span class="p">)</span>
+                    <span class="n">note</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">"category"</span><span class="p">]</span> <span class="o">=</span> <span class="n">merged</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"category"</span><span class="p">)</span>
+                    <span class="n">note</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">"subcategory"</span><span class="p">]</span> <span class="o">=</span> <span class="n">merged</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"subcategory"</span><span class="p">)</span>
+                    <span class="n">note</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">"related_asset"</span><span class="p">]</span> <span class="o">=</span> <span class="n">merged</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"related_asset"</span><span class="p">)</span>
+
+                    <span class="bp">self</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">note</span><span class="p">)</span>
+                    <span class="n">counter</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="Budget.save">
+<a class="viewcode-back" href="../../generated/losalamos.budget.html#losalamos.budget.Budget.save">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""</span>
+<span class="sd">        Write all in-memory transfer notes to :attr:`output_folder`.</span>
+
+<span class="sd">        When :attr:`split` is ``False`` (default), all notes are written flat</span>
+<span class="sd">        into ``output_folder``. When ``True``, inflow notes go to</span>
+<span class="sd">        ``output_folder/inflows/`` and outflow notes to</span>
+<span class="sd">        ``output_folder/outflows/``. All required folders are created if absent.</span>
+
+<span class="sd">        :raises ValueError: If :attr:`output_folder` is ``None``.</span>
+<span class="sd">        :return: No value is returned.</span>
+<span class="sd">        :rtype: None</span>
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_folder</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"output_folder is not set"</span><span class="p">)</span>
+
+        <span class="n">base</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output_folder</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">note</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">collection</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">split</span><span class="p">:</span>
+                <span class="n">direction</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">note</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"direction"</span><span class="p">,</span> <span class="s2">"outflow"</span><span class="p">))</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+                <span class="n">folder</span> <span class="o">=</span> <span class="n">base</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">direction</span><span class="si">}</span><span class="s2">s"</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">folder</span> <span class="o">=</span> <span class="n">base</span>
+            <span class="n">folder</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">note</span><span class="o">.</span><span class="n">file_note</span> <span class="o">=</span> <span class="n">folder</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">.md"</span>
+            <span class="n">note</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="Budget.monthly_equivalent">
+<a class="viewcode-back" href="../../generated/losalamos.budget.html#losalamos.budget.Budget.monthly_equivalent">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">monthly_equivalent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">group_by</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">account</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""</span>
+<span class="sd">        Return the monthly equivalent value across all transfers.</span>
+
+<span class="sd">        Sums every note's value and divides by the total budget duration</span>
+<span class="sd">        in months, normalising transfers with different recurrences to a</span>
+<span class="sd">        common monthly baseline.</span>
+
+<span class="sd">        The result is a wide table where ``direction`` becomes columns so</span>
+<span class="sd">        inflows and outflows can be compared side by side:</span>
+
+<span class="sd">        .. code-block:: text</span>
+
+<span class="sd">            equivalence | account  | inflow  | outflow  | net</span>
+<span class="sd">            monthly     | BB-001   | 10500   | 4780     | 5720</span>
+<span class="sd">            monthly     | NB-002   | 1200    | 1455     | -255</span>
+
+<span class="sd">        Pass *group_by* to add row-level breakdown after ``account``.</span>
+
+<span class="sd">        :param group_by: Extra column name or list of column names used as</span>
+<span class="sd">            additional row keys after ``account``, e.g. ``"commitment"`` or</span>
+<span class="sd">            ``["commitment", "category"]``. When ``None``, rows are by</span>
+<span class="sd">            ``account`` only.</span>
+<span class="sd">        :type group_by: str, list, or None</span>
+<span class="sd">        :param account: Account code or list of account codes to include.</span>
+<span class="sd">            When ``None``, all accounts are included.</span>
+<span class="sd">        :type account: str, list, or None</span>
+<span class="sd">        :return: DataFrame with columns ``equivalence``, ``account``,</span>
+<span class="sd">            optional extras, ``inflow``, ``outflow``, ``net``. Also stored</span>
+<span class="sd">            as :attr:`catalog_monthly`.</span>
+<span class="sd">        :rtype: :class:`pandas.DataFrame`</span>
+<span class="sd">        """</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">catalog_monthly</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_equivalent</span><span class="p">(</span>
+            <span class="n">divisor</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">duration</span> <span class="o">*</span> <span class="mi">12</span><span class="p">,</span>
+            <span class="n">scale_label</span><span class="o">=</span><span class="s2">"monthly"</span><span class="p">,</span>
+            <span class="n">group_by</span><span class="o">=</span><span class="n">group_by</span><span class="p">,</span>
+            <span class="n">account</span><span class="o">=</span><span class="n">account</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">catalog_monthly</span></div>
+
+
+<div class="viewcode-block" id="Budget.annual_equivalent">
+<a class="viewcode-back" href="../../generated/losalamos.budget.html#losalamos.budget.Budget.annual_equivalent">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">annual_equivalent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">group_by</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">account</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""</span>
+<span class="sd">        Return the annual equivalent value across all transfers.</span>
+
+<span class="sd">        Same wide layout as :meth:`monthly_equivalent` with</span>
+<span class="sd">        ``equivalence = "annual"``.</span>
+
+<span class="sd">        :param group_by: Extra column name or list of column names used as</span>
+<span class="sd">            additional row keys after ``account``. When ``None``, rows are</span>
+<span class="sd">            by ``account`` only.</span>
+<span class="sd">        :type group_by: str, list, or None</span>
+<span class="sd">        :param account: Account code or list of account codes to include.</span>
+<span class="sd">            When ``None``, all accounts are included.</span>
+<span class="sd">        :type account: str, list, or None</span>
+<span class="sd">        :return: DataFrame with columns ``equivalence``, ``account``,</span>
+<span class="sd">            optional extras, ``inflow``, ``outflow``, ``net``. Also stored</span>
+<span class="sd">            as :attr:`catalog_annual`.</span>
+<span class="sd">        :rtype: :class:`pandas.DataFrame`</span>
+<span class="sd">        """</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">catalog_annual</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_equivalent</span><span class="p">(</span>
+            <span class="n">divisor</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">duration</span><span class="p">,</span>
+            <span class="n">scale_label</span><span class="o">=</span><span class="s2">"annual"</span><span class="p">,</span>
+            <span class="n">group_by</span><span class="o">=</span><span class="n">group_by</span><span class="p">,</span>
+            <span class="n">account</span><span class="o">=</span><span class="n">account</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">catalog_annual</span></div>
+
+
+    <span class="c1"># ------------------------------------------------------------------</span>
+    <span class="c1"># Internal</span>
+    <span class="c1"># ------------------------------------------------------------------</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_equivalent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">divisor</span><span class="p">,</span> <span class="n">scale_label</span><span class="p">,</span> <span class="n">group_by</span><span class="p">,</span> <span class="n">account</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""</span>
+<span class="sd">        Pivot transfer values into a wide inflow/outflow table.</span>
+
+<span class="sd">        Computes ``value / divisor`` for every note, optionally filters by</span>
+<span class="sd">        *account*, groups by ``account`` plus any *group_by* extras, then</span>
+<span class="sd">        pivots ``direction`` so that ``inflow`` and ``outflow`` become</span>
+<span class="sd">        side-by-side columns. A leading ``equivalence`` column carries</span>
+<span class="sd">        *scale_label* for reference.</span>
+
+<span class="sd">        :param divisor: Total periods (months or years) to divide by.</span>
+<span class="sd">        :param scale_label: Label written into the ``equivalence`` column.</span>
+<span class="sd">        :param group_by: Extra row-key column(s) after ``account``, or ``None``.</span>
+<span class="sd">        :param account: Account code or list of codes to filter on, or ``None``</span>
+<span class="sd">            for all accounts.</span>
+<span class="sd">        """</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">catalog</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">df</span><span class="p">[</span><span class="s2">"value"</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_numeric</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">"value"</span><span class="p">],</span> <span class="n">errors</span><span class="o">=</span><span class="s2">"coerce"</span><span class="p">)</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">account</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">codes</span> <span class="o">=</span> <span class="p">[</span><span class="n">account</span><span class="p">]</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">account</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="k">else</span> <span class="nb">list</span><span class="p">(</span><span class="n">account</span><span class="p">)</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s2">"account"</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">codes</span><span class="p">)]</span>
+        <span class="n">df</span><span class="p">[</span><span class="s2">"_equiv"</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">"value"</span><span class="p">]</span> <span class="o">/</span> <span class="n">divisor</span>
+
+        <span class="n">row_keys</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"account"</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">group_by</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">extras</span> <span class="o">=</span> <span class="p">[</span><span class="n">group_by</span><span class="p">]</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">group_by</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="k">else</span> <span class="nb">list</span><span class="p">(</span><span class="n">group_by</span><span class="p">)</span>
+            <span class="n">row_keys</span> <span class="o">=</span> <span class="n">row_keys</span> <span class="o">+</span> <span class="n">extras</span>
+
+        <span class="n">grouped</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">row_keys</span> <span class="o">+</span> <span class="p">[</span><span class="s2">"direction"</span><span class="p">])[</span><span class="s2">"_equiv"</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+        <span class="n">pivoted</span> <span class="o">=</span> <span class="n">grouped</span><span class="o">.</span><span class="n">pivot_table</span><span class="p">(</span>
+            <span class="n">index</span><span class="o">=</span><span class="n">row_keys</span><span class="p">,</span>
+            <span class="n">columns</span><span class="o">=</span><span class="s2">"direction"</span><span class="p">,</span>
+            <span class="n">values</span><span class="o">=</span><span class="s2">"_equiv"</span><span class="p">,</span>
+            <span class="n">fill_value</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+        <span class="n">pivoted</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"inflow"</span><span class="p">,</span> <span class="s2">"outflow"</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">d</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">pivoted</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+                <span class="n">pivoted</span><span class="p">[</span><span class="n">d</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span>
+
+        <span class="n">pivoted</span><span class="p">[</span><span class="s2">"net"</span><span class="p">]</span> <span class="o">=</span> <span class="n">pivoted</span><span class="p">[</span><span class="s2">"inflow"</span><span class="p">]</span> <span class="o">-</span> <span class="n">pivoted</span><span class="p">[</span><span class="s2">"outflow"</span><span class="p">]</span>
+        <span class="n">pivoted</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s2">"equivalence"</span><span class="p">,</span> <span class="n">scale_label</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">pivoted</span><span class="p">[[</span><span class="s2">"equivalence"</span><span class="p">]</span> <span class="o">+</span> <span class="n">row_keys</span> <span class="o">+</span> <span class="p">[</span><span class="s2">"inflow"</span><span class="p">,</span> <span class="s2">"outflow"</span><span class="p">,</span> <span class="s2">"net"</span><span class="p">]]</span>
+
+    <span class="c1"># ------------------------------------------------------------------</span>
+    <span class="c1"># Static helpers</span>
+    <span class="c1"># ------------------------------------------------------------------</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_wiki</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""</span>
+<span class="sd">        Wrap a plain-text name in quoted Obsidian wiki-link notation.</span>
+
+<span class="sd">        The result always has the form ``"[[Name]]"`` — double quotes included</span>
+<span class="sd">        as part of the string — so that ``metadata_to_list`` writes the field</span>
+<span class="sd">        correctly in YAML frontmatter.  Existing outer quotes and ``[[``</span>
+<span class="sd">        brackets are stripped before re-wrapping, so the input can be in any</span>
+<span class="sd">        partial form.</span>
+
+<span class="sd">        :param value: Raw name string, e.g. ``"Anthropic Inc"`` or ``"[[Anthropic Inc]]"``.</span>
+<span class="sd">        :return: Quoted wiki-link string, e.g. ``'"[[Anthropic Inc]]"'``, or empty string.</span>
+<span class="sd">        :rtype: str</span>
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">value</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">""</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="c1"># strip outer double quotes if already present</span>
+        <span class="k">if</span> <span class="n">v</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">'"'</span><span class="p">)</span> <span class="ow">and</span> <span class="n">v</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">'"'</span><span class="p">):</span>
+            <span class="n">v</span> <span class="o">=</span> <span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="c1"># strip wiki brackets if already present</span>
+        <span class="k">if</span> <span class="n">v</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">"[["</span><span class="p">)</span> <span class="ow">and</span> <span class="n">v</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">"]]"</span><span class="p">):</span>
+            <span class="n">v</span> <span class="o">=</span> <span class="n">v</span><span class="p">[</span><span class="mi">2</span><span class="p">:</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s1">'"[[</span><span class="si">{</span><span class="n">v</span><span class="si">}</span><span class="s1">]]"'</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_resolve_dates</span><span class="p">(</span><span class="n">recurrence</span><span class="p">,</span> <span class="n">year</span><span class="p">,</span> <span class="n">duration</span><span class="p">,</span> <span class="n">day</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">month</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""</span>
+<span class="sd">        Compute all occurrence dates for a recurrence rule within the budget window.</span>
+
+<span class="sd">        Accepted syntax: ``"N day[s]"``, ``"N week[s]"``, ``"N month[s]"``,</span>
+<span class="sd">        ``"N year[s]"``. Any other string yields an empty list.</span>
+
+<span class="sd">        The anchor for the first occurrence is:</span>
+
+<span class="sd">        - Day/week recurrences: ``year-01-{day}``</span>
+<span class="sd">        - Month recurrences: ``year-01-{day}``</span>
+<span class="sd">        - Year recurrences: ``year-{month}-{day}``</span>
+
+<span class="sd">        For multi-year recurrences (e.g. ``"3 years"``), the first occurrence</span>
+<span class="sd">        always falls in the starting year.</span>
+
+<span class="sd">        :param recurrence: Recurrence string, e.g. ``"1 month"``, ``"2 weeks"``.</span>
+<span class="sd">        :type recurrence: str</span>
+<span class="sd">        :param year: Budget start year.</span>
+<span class="sd">        :type year: int</span>
+<span class="sd">        :param duration: Number of years in the budget window.</span>
+<span class="sd">        :type duration: int</span>
+<span class="sd">        :param day: Anchor day-of-month. Default value = ``1``</span>
+<span class="sd">        :type day: int</span>
+<span class="sd">        :param month: Anchor month (year recurrences only). Default value = ``1``</span>
+<span class="sd">        :type month: int</span>
+<span class="sd">        :return: Sorted list of ISO date strings within ``[year, year + duration)``.</span>
+<span class="sd">        :rtype: list[str]</span>
+<span class="sd">        """</span>
+        <span class="n">recurrence</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">recurrence</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span>
+            <span class="sa">r</span><span class="s2">"^(\d+)\s+(day|days|week|weeks|month|months|year|years)$"</span><span class="p">,</span> <span class="n">recurrence</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">m</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[]</span>
+
+        <span class="n">n</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+        <span class="n">unit</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s2">"s"</span><span class="p">)</span>  <span class="c1"># normalise plural: "months" → "month"</span>
+
+        <span class="n">window_start</span> <span class="o">=</span> <span class="n">date</span><span class="p">(</span><span class="n">year</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">window_end</span> <span class="o">=</span> <span class="n">date</span><span class="p">(</span><span class="n">year</span> <span class="o">+</span> <span class="n">duration</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">dates</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">if</span> <span class="n">unit</span> <span class="o">==</span> <span class="s2">"day"</span><span class="p">:</span>
+            <span class="n">current</span> <span class="o">=</span> <span class="n">date</span><span class="p">(</span><span class="n">year</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">day</span><span class="p">)</span>
+            <span class="n">delta</span> <span class="o">=</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="n">n</span><span class="p">)</span>
+            <span class="k">while</span> <span class="n">current</span> <span class="o">&lt;</span> <span class="n">window_end</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">current</span> <span class="o">&gt;=</span> <span class="n">window_start</span><span class="p">:</span>
+                    <span class="n">dates</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">current</span><span class="o">.</span><span class="n">isoformat</span><span class="p">())</span>
+                <span class="n">current</span> <span class="o">+=</span> <span class="n">delta</span>
+
+        <span class="k">elif</span> <span class="n">unit</span> <span class="o">==</span> <span class="s2">"week"</span><span class="p">:</span>
+            <span class="n">current</span> <span class="o">=</span> <span class="n">date</span><span class="p">(</span><span class="n">year</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">day</span><span class="p">)</span>
+            <span class="n">delta</span> <span class="o">=</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">weeks</span><span class="o">=</span><span class="n">n</span><span class="p">)</span>
+            <span class="k">while</span> <span class="n">current</span> <span class="o">&lt;</span> <span class="n">window_end</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">current</span> <span class="o">&gt;=</span> <span class="n">window_start</span><span class="p">:</span>
+                    <span class="n">dates</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">current</span><span class="o">.</span><span class="n">isoformat</span><span class="p">())</span>
+                <span class="n">current</span> <span class="o">+=</span> <span class="n">delta</span>
+
+        <span class="k">elif</span> <span class="n">unit</span> <span class="o">==</span> <span class="s2">"month"</span><span class="p">:</span>
+            <span class="n">current</span> <span class="o">=</span> <span class="n">date</span><span class="p">(</span><span class="n">year</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">day</span><span class="p">)</span>
+            <span class="k">while</span> <span class="n">current</span> <span class="o">&lt;</span> <span class="n">window_end</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">current</span> <span class="o">&gt;=</span> <span class="n">window_start</span><span class="p">:</span>
+                    <span class="n">dates</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">current</span><span class="o">.</span><span class="n">isoformat</span><span class="p">())</span>
+                <span class="n">current</span> <span class="o">=</span> <span class="n">Budget</span><span class="o">.</span><span class="n">_add_months</span><span class="p">(</span><span class="n">current</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="n">unit</span> <span class="o">==</span> <span class="s2">"year"</span><span class="p">:</span>
+            <span class="c1"># Multi-year: the first occurrence always falls within the start year.</span>
+            <span class="n">current</span> <span class="o">=</span> <span class="n">date</span><span class="p">(</span><span class="n">year</span><span class="p">,</span> <span class="n">month</span><span class="p">,</span> <span class="n">day</span><span class="p">)</span>
+            <span class="k">while</span> <span class="n">current</span> <span class="o">&lt;</span> <span class="n">window_end</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">current</span> <span class="o">&gt;=</span> <span class="n">window_start</span><span class="p">:</span>
+                    <span class="n">dates</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">current</span><span class="o">.</span><span class="n">isoformat</span><span class="p">())</span>
+                <span class="n">current</span> <span class="o">=</span> <span class="n">Budget</span><span class="o">.</span><span class="n">_add_months</span><span class="p">(</span><span class="n">current</span><span class="p">,</span> <span class="n">n</span> <span class="o">*</span> <span class="mi">12</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">dates</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_add_months</span><span class="p">(</span><span class="n">dt</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""</span>
+<span class="sd">        Add *n* months to a date, clamping to the last valid day when needed.</span>
+
+<span class="sd">        :param dt: Source date.</span>
+<span class="sd">        :type dt: :class:`datetime.date`</span>
+<span class="sd">        :param n: Number of months to add.</span>
+<span class="sd">        :type n: int</span>
+<span class="sd">        :return: New date shifted forward by *n* months.</span>
+<span class="sd">        :rtype: :class:`datetime.date`</span>
+<span class="sd">        """</span>
+        <span class="n">total_months</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">month</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">n</span>
+        <span class="n">new_year</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">year</span> <span class="o">+</span> <span class="n">total_months</span> <span class="o">//</span> <span class="mi">12</span>
+        <span class="n">new_month</span> <span class="o">=</span> <span class="n">total_months</span> <span class="o">%</span> <span class="mi">12</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="n">new_day</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">dt</span><span class="o">.</span><span class="n">day</span><span class="p">,</span> <span class="n">calendar</span><span class="o">.</span><span class="n">monthrange</span><span class="p">(</span><span class="n">new_year</span><span class="p">,</span> <span class="n">new_month</span><span class="p">)[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">dt</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">year</span><span class="o">=</span><span class="n">new_year</span><span class="p">,</span> <span class="n">month</span><span class="o">=</span><span class="n">new_month</span><span class="p">,</span> <span class="n">day</span><span class="o">=</span><span class="n">new_day</span><span class="p">)</span></div>
+
+
+
+<span class="c1"># SCRIPT</span>
+<span class="c1"># ***********************************************************************</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"Hello world!"</span><span class="p">)</span>
+    <span class="c1"># ... {develop}</span>
+</pre></div>
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2026, Iporã Possantti.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.0.4.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.21.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

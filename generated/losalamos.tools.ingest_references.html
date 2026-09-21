@@ -52,7 +52,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="losalamos.tools.search_references" href="losalamos.tools.search_references.html" />
-    <link rel="prev" title="losalamos.tools.new_drawing" href="losalamos.tools.new_drawing.html" />
+    <link rel="prev" title="losalamos.tools.ingest_variables" href="losalamos.tools.ingest_variables.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
@@ -162,9 +162,16 @@
 </li>
 
 
-<li class="nav-item current active">
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="../api.html">
     API
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../cli.html">
+    CLI
   </a>
 </li>
 
@@ -291,9 +298,16 @@
 </li>
 
 
-<li class="nav-item current active">
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="../api.html">
     API
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../cli.html">
+    CLI
   </a>
 </li>
 
@@ -362,29 +376,23 @@
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="losalamos.html">losalamos</a></li>
-<li class="toctree-l1"><a class="reference internal" href="losalamos.root.html">losalamos.root</a></li>
-<li class="toctree-l1"><a class="reference internal" href="losalamos.project.html">losalamos.project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="losalamos.tools.new_project.html">losalamos.tools.new_project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="losalamos.tools.manage_vault.html">losalamos.tools.manage_vault</a></li>
+<li class="toctree-l1"><a class="reference internal" href="losalamos.tools.manage_documents.html">losalamos.tools.manage_documents</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="losalamos.notes.html">losalamos.notes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="losalamos.figures.html">losalamos.figures</a></li>
-<li class="toctree-l1"><a class="reference internal" href="losalamos.references.html">losalamos.references</a></li>
-<li class="toctree-l1"><a class="reference internal" href="losalamos.ingestion.html">losalamos.ingestion</a></li>
-<li class="toctree-l1"><a class="reference internal" href="losalamos.documents.html">losalamos.documents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="losalamos.tools.build_figures.html">losalamos.tools.build_figures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="losalamos.tools.build_budget.html">losalamos.tools.build_budget</a></li>
+<li class="toctree-l1"><a class="reference internal" href="losalamos.tools.new_drawing.html">losalamos.tools.new_drawing</a></li>
 </ul>
 <ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="losalamos.tools.build_figures.html">losalamos.tools.build_figures</a></li>
-<li class="toctree-l1"><a class="reference internal" href="losalamos.tools.new_drawing.html">losalamos.tools.new_drawing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="losalamos.tools.ingest_variables.html">losalamos.tools.ingest_variables</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">losalamos.tools.ingest_references</a></li>
+</ul>
+<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="losalamos.tools.search_references.html">losalamos.tools.search_references</a></li>
 <li class="toctree-l1"><a class="reference internal" href="losalamos.tools.update_references.html">losalamos.tools.update_references</a></li>
 <li class="toctree-l1"><a class="reference internal" href="losalamos.tools.update_templates.html">losalamos.tools.update_templates</a></li>
-<li class="toctree-l1"><a class="reference internal" href="losalamos.tools.ingest_variables.html">losalamos.tools.ingest_variables</a></li>
-<li class="toctree-l1"><a class="reference internal" href="losalamos.tools.database.html">losalamos.tools.database</a></li>
-<li class="toctree-l1"><a class="reference internal" href="losalamos.tools.add_new_project.html">losalamos.tools.add_new_project</a></li>
-<li class="toctree-l1"><a class="reference internal" href="losalamos.tools.manage_documents.html">losalamos.tools.manage_documents</a></li>
-<li class="toctree-l1"><a class="reference internal" href="losalamos.tools.manage_vault.html">losalamos.tools.manage_vault</a></li>
 </ul>
 </div>
 </nav></div>
@@ -426,7 +434,7 @@
       </a>
     </li>
     
-    <li class="breadcrumb-item"><a href="../api.html" class="nav-link">API</a></li>
+    <li class="breadcrumb-item"><a href="../cli.html" class="nav-link">CLI</a></li>
     
     <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">losalamos.tools.ingest_references</span></li>
   </ul>
@@ -500,12 +508,12 @@ batch ingestion with basic validation and progress feedback.</p>
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="losalamos.tools.new_drawing.html"
+       href="losalamos.tools.ingest_variables.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">losalamos.tools.new_drawing</p>
+        <p class="prev-next-title">losalamos.tools.ingest_variables</p>
       </div>
     </a>
     <a class="right-next"

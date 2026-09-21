@@ -170,6 +170,13 @@
 
 
 <li class="nav-item ">
+  <a class="nav-link nav-internal" href="cli.html">
+    CLI
+  </a>
+</li>
+
+
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="development.html">
     Development
   </a>
@@ -299,6 +306,13 @@
 
 
 <li class="nav-item ">
+  <a class="nav-link nav-internal" href="cli.html">
+    CLI
+  </a>
+</li>
+
+
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="development.html">
     Development
   </a>
@@ -368,23 +382,11 @@
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="generated/losalamos.notes.html">losalamos.notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="generated/losalamos.budget.html">losalamos.budget</a></li>
 <li class="toctree-l1"><a class="reference internal" href="generated/losalamos.figures.html">losalamos.figures</a></li>
 <li class="toctree-l1"><a class="reference internal" href="generated/losalamos.references.html">losalamos.references</a></li>
 <li class="toctree-l1"><a class="reference internal" href="generated/losalamos.ingestion.html">losalamos.ingestion</a></li>
 <li class="toctree-l1"><a class="reference internal" href="generated/losalamos.documents.html">losalamos.documents</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="generated/losalamos.tools.build_figures.html">losalamos.tools.build_figures</a></li>
-<li class="toctree-l1"><a class="reference internal" href="generated/losalamos.tools.new_drawing.html">losalamos.tools.new_drawing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="generated/losalamos.tools.ingest_references.html">losalamos.tools.ingest_references</a></li>
-<li class="toctree-l1"><a class="reference internal" href="generated/losalamos.tools.search_references.html">losalamos.tools.search_references</a></li>
-<li class="toctree-l1"><a class="reference internal" href="generated/losalamos.tools.update_references.html">losalamos.tools.update_references</a></li>
-<li class="toctree-l1"><a class="reference internal" href="generated/losalamos.tools.update_templates.html">losalamos.tools.update_templates</a></li>
-<li class="toctree-l1"><a class="reference internal" href="generated/losalamos.tools.ingest_variables.html">losalamos.tools.ingest_variables</a></li>
-<li class="toctree-l1"><a class="reference internal" href="generated/losalamos.tools.database.html">losalamos.tools.database</a></li>
-<li class="toctree-l1"><a class="reference internal" href="generated/losalamos.tools.add_new_project.html">losalamos.tools.add_new_project</a></li>
-<li class="toctree-l1"><a class="reference internal" href="generated/losalamos.tools.manage_documents.html">losalamos.tools.manage_documents</a></li>
-<li class="toctree-l1"><a class="reference internal" href="generated/losalamos.tools.manage_vault.html">losalamos.tools.manage_vault</a></li>
 </ul>
 </div>
 </nav></div>
@@ -446,10 +448,6 @@
 <span id="id1"></span><h1>API<a class="headerlink" href="#api" title="Link to this heading">#</a></h1>
 <p>This reference is automatically generated from docstrings in the source code.
 It covers the main modules, classes, and functions available in the package.</p>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>This documentation is under active development and may be incomplete.</p>
-</div>
 <section id="core">
 <h2>Core<a class="headerlink" href="#core" title="Link to this heading">#</a></h2>
 <div class="pst-scrollable-table-container"><table class="autosummary longtable table">
@@ -474,58 +472,20 @@ It covers the main modules, classes, and functions available in the package.</p>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/losalamos.notes.html#module-losalamos.notes" title="losalamos.notes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">losalamos.notes</span></code></a></p></td>
 <td><p>Utilities for managing structured Markdown notes.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/losalamos.figures.html#module-losalamos.figures" title="losalamos.figures"><code class="xref py py-obj docutils literal notranslate"><span class="pre">losalamos.figures</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/losalamos.budget.html#module-losalamos.budget" title="losalamos.budget"><code class="xref py py-obj docutils literal notranslate"><span class="pre">losalamos.budget</span></code></a></p></td>
+<td><p>Budget generation and analysis utilities.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/losalamos.figures.html#module-losalamos.figures" title="losalamos.figures"><code class="xref py py-obj docutils literal notranslate"><span class="pre">losalamos.figures</span></code></a></p></td>
 <td><p>SVG and raster figure handling for export pipelines.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/losalamos.references.html#module-losalamos.references" title="losalamos.references"><code class="xref py py-obj docutils literal notranslate"><span class="pre">losalamos.references</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/losalamos.references.html#module-losalamos.references" title="losalamos.references"><code class="xref py py-obj docutils literal notranslate"><span class="pre">losalamos.references</span></code></a></p></td>
 <td><p>Reference management utilities for bibliographic metadata.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/losalamos.ingestion.html#module-losalamos.ingestion" title="losalamos.ingestion"><code class="xref py py-obj docutils literal notranslate"><span class="pre">losalamos.ingestion</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/losalamos.ingestion.html#module-losalamos.ingestion" title="losalamos.ingestion"><code class="xref py py-obj docutils literal notranslate"><span class="pre">losalamos.ingestion</span></code></a></p></td>
 <td><p>Automated ingestion utilities for bibliographic files.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/losalamos.documents.html#module-losalamos.documents" title="losalamos.documents"><code class="xref py py-obj docutils literal notranslate"><span class="pre">losalamos.documents</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/losalamos.documents.html#module-losalamos.documents" title="losalamos.documents"><code class="xref py py-obj docutils literal notranslate"><span class="pre">losalamos.documents</span></code></a></p></td>
 <td><p>Handle Documents editing, managing and builds.</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-</section>
-<section id="tools">
-<h2>Tools<a class="headerlink" href="#tools" title="Link to this heading">#</a></h2>
-<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
-<tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/losalamos.tools.build_figures.html#module-losalamos.tools.build_figures" title="losalamos.tools.build_figures"><code class="xref py py-obj docutils literal notranslate"><span class="pre">losalamos.tools.build_figures</span></code></a></p></td>
-<td><p>Build image outputs from a folder of SVG files using a JSON parameter file.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/losalamos.tools.new_drawing.html#module-losalamos.tools.new_drawing" title="losalamos.tools.new_drawing"><code class="xref py py-obj docutils literal notranslate"><span class="pre">losalamos.tools.new_drawing</span></code></a></p></td>
-<td><p>Create a new SVG figure from a named drawing template.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/losalamos.tools.ingest_references.html#module-losalamos.tools.ingest_references" title="losalamos.tools.ingest_references"><code class="xref py py-obj docutils literal notranslate"><span class="pre">losalamos.tools.ingest_references</span></code></a></p></td>
-<td><p>Ingest reference files from a source directory into a target dataset structure.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/losalamos.tools.search_references.html#module-losalamos.tools.search_references" title="losalamos.tools.search_references"><code class="xref py py-obj docutils literal notranslate"><span class="pre">losalamos.tools.search_references</span></code></a></p></td>
-<td><p>Batch-extract bibliographic references from PDFs using a Gemini model.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/losalamos.tools.update_references.html#module-losalamos.tools.update_references" title="losalamos.tools.update_references"><code class="xref py py-obj docutils literal notranslate"><span class="pre">losalamos.tools.update_references</span></code></a></p></td>
-<td><p>Update reference notes in a target folder.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/losalamos.tools.update_templates.html#module-losalamos.tools.update_templates" title="losalamos.tools.update_templates"><code class="xref py py-obj docutils literal notranslate"><span class="pre">losalamos.tools.update_templates</span></code></a></p></td>
-<td><p>Synchronise note templates to a target project folder.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/losalamos.tools.ingest_variables.html#module-losalamos.tools.ingest_variables" title="losalamos.tools.ingest_variables"><code class="xref py py-obj docutils literal notranslate"><span class="pre">losalamos.tools.ingest_variables</span></code></a></p></td>
-<td><p>Batch-creation tool for variable registry notes.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/losalamos.tools.database.html#module-losalamos.tools.database" title="losalamos.tools.database"><code class="xref py py-obj docutils literal notranslate"><span class="pre">losalamos.tools.database</span></code></a></p></td>
-<td><p>Database Manager</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/losalamos.tools.add_new_project.html#module-losalamos.tools.add_new_project" title="losalamos.tools.add_new_project"><code class="xref py py-obj docutils literal notranslate"><span class="pre">losalamos.tools.add_new_project</span></code></a></p></td>
-<td><p>Create a new numbered project inside a branch folder.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/losalamos.tools.manage_documents.html#module-losalamos.tools.manage_documents" title="losalamos.tools.manage_documents"><code class="xref py py-obj docutils literal notranslate"><span class="pre">losalamos.tools.manage_documents</span></code></a></p></td>
-<td><p>Terminal document manager for a single project.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/losalamos.tools.manage_vault.html#module-losalamos.tools.manage_vault" title="losalamos.tools.manage_vault"><code class="xref py py-obj docutils literal notranslate"><span class="pre">losalamos.tools.manage_vault</span></code></a></p></td>
-<td><p>Top-level vault manager with three-level navigation.</p></td>
 </tr>
 </tbody>
 </table>
@@ -582,7 +542,6 @@ It covers the main modules, classes, and functions available in the package.</p>
     <ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#core">Core</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#domain">Domain</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tools">Tools</a></li>
 </ul>
   </nav></div>
 

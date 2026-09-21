@@ -51,8 +51,8 @@
     <link rel="author" title="About these documents" href="../about.html" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="losalamos.tools.manage_vault" href="losalamos.tools.manage_vault.html" />
-    <link rel="prev" title="losalamos.tools.add_new_project" href="losalamos.tools.add_new_project.html" />
+    <link rel="next" title="losalamos.tools.build_figures" href="losalamos.tools.build_figures.html" />
+    <link rel="prev" title="losalamos.tools.manage_vault" href="losalamos.tools.manage_vault.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
@@ -162,9 +162,16 @@
 </li>
 
 
-<li class="nav-item current active">
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="../api.html">
     API
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../cli.html">
+    CLI
   </a>
 </li>
 
@@ -291,9 +298,16 @@
 </li>
 
 
-<li class="nav-item current active">
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="../api.html">
     API
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../cli.html">
+    CLI
   </a>
 </li>
 
@@ -361,30 +375,24 @@
 <nav class="bd-docs-nav bd-links"
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
-  <div class="bd-toc-item navbar-nav"><ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="losalamos.html">losalamos</a></li>
-<li class="toctree-l1"><a class="reference internal" href="losalamos.root.html">losalamos.root</a></li>
-<li class="toctree-l1"><a class="reference internal" href="losalamos.project.html">losalamos.project</a></li>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="losalamos.tools.new_project.html">losalamos.tools.new_project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="losalamos.tools.manage_vault.html">losalamos.tools.manage_vault</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">losalamos.tools.manage_documents</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="losalamos.notes.html">losalamos.notes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="losalamos.figures.html">losalamos.figures</a></li>
-<li class="toctree-l1"><a class="reference internal" href="losalamos.references.html">losalamos.references</a></li>
-<li class="toctree-l1"><a class="reference internal" href="losalamos.ingestion.html">losalamos.ingestion</a></li>
-<li class="toctree-l1"><a class="reference internal" href="losalamos.documents.html">losalamos.documents</a></li>
-</ul>
-<ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="losalamos.tools.build_figures.html">losalamos.tools.build_figures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="losalamos.tools.build_budget.html">losalamos.tools.build_budget</a></li>
 <li class="toctree-l1"><a class="reference internal" href="losalamos.tools.new_drawing.html">losalamos.tools.new_drawing</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="losalamos.tools.ingest_variables.html">losalamos.tools.ingest_variables</a></li>
 <li class="toctree-l1"><a class="reference internal" href="losalamos.tools.ingest_references.html">losalamos.tools.ingest_references</a></li>
+</ul>
+<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="losalamos.tools.search_references.html">losalamos.tools.search_references</a></li>
 <li class="toctree-l1"><a class="reference internal" href="losalamos.tools.update_references.html">losalamos.tools.update_references</a></li>
 <li class="toctree-l1"><a class="reference internal" href="losalamos.tools.update_templates.html">losalamos.tools.update_templates</a></li>
-<li class="toctree-l1"><a class="reference internal" href="losalamos.tools.ingest_variables.html">losalamos.tools.ingest_variables</a></li>
-<li class="toctree-l1"><a class="reference internal" href="losalamos.tools.database.html">losalamos.tools.database</a></li>
-<li class="toctree-l1"><a class="reference internal" href="losalamos.tools.add_new_project.html">losalamos.tools.add_new_project</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">losalamos.tools.manage_documents</a></li>
-<li class="toctree-l1"><a class="reference internal" href="losalamos.tools.manage_vault.html">losalamos.tools.manage_vault</a></li>
 </ul>
 </div>
 </nav></div>
@@ -426,7 +434,7 @@
       </a>
     </li>
     
-    <li class="breadcrumb-item"><a href="../api.html" class="nav-link">API</a></li>
+    <li class="breadcrumb-item"><a href="../cli.html" class="nav-link">CLI</a></li>
     
     <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">losalamos.tools.manage_documents</span></li>
   </ul>
@@ -522,20 +530,20 @@ or via <a class="reference internal" href="#losalamos.tools.manage_documents.mai
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="losalamos.tools.add_new_project.html"
+       href="losalamos.tools.manage_vault.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">losalamos.tools.add_new_project</p>
+        <p class="prev-next-title">losalamos.tools.manage_vault</p>
       </div>
     </a>
     <a class="right-next"
-       href="losalamos.tools.manage_vault.html"
+       href="losalamos.tools.build_figures.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">losalamos.tools.manage_vault</p>
+        <p class="prev-next-title">losalamos.tools.build_figures</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>

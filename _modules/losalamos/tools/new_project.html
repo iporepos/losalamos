@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>losalamos.tools.add_new_project &#8212; losalamos 0.0.1 documentation</title>
+    <title>losalamos.tools.new_project &#8212; losalamos 0.0.1 documentation</title>
   
   
   
@@ -45,7 +45,7 @@
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../../_static/copybutton.js?v=f281be69"></script>
     <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/losalamos/tools/add_new_project';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/losalamos/tools/new_project';</script>
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <link rel="author" title="About these documents" href="../../../about.html" />
     <link rel="index" title="Index" href="../../../genindex.html" />
@@ -162,6 +162,13 @@
 <li class="nav-item ">
   <a class="nav-link nav-internal" href="../../../api.html">
     API
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../cli.html">
+    CLI
   </a>
 </li>
 
@@ -294,6 +301,13 @@
 
 
 <li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../cli.html">
+    CLI
+  </a>
+</li>
+
+
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="../../../development.html">
     Development
   </a>
@@ -381,7 +395,7 @@
     
     <li class="breadcrumb-item"><a href="../../index.html" class="nav-link">Module code</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">losalamos.tools.add_new_project</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">losalamos.tools.new_project</span></li>
   </ul>
 </nav>
 </div>
@@ -398,7 +412,7 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <h1>Source code for losalamos.tools.add_new_project</h1><div class="highlight"><pre>
+  <h1>Source code for losalamos.tools.new_project</h1><div class="highlight"><pre>
 <span></span><span class="c1"># SPDX-License-Identifier: GPL-3.0-or-later</span>
 <span class="c1">#</span>
 <span class="c1"># Copyright (C) 2025 The Project Authors</span>
@@ -416,8 +430,8 @@
 
 <span class="sd">.. code-block:: bash</span>
 
-<span class="sd">    python -m losalamos.tools.add_new_project path/to/branch/folder</span>
-<span class="sd">    python -m losalamos.tools.add_new_project path/to/config.toml</span>
+<span class="sd">    python -m losalamos.tools.new_project path/to/branch/folder</span>
+<span class="sd">    python -m losalamos.tools.new_project path/to/config.toml</span>
 
 <span class="sd">**Config file keys** (when passing a config file)</span>
 
@@ -437,26 +451,71 @@
 <span class="sd">- ``b`` after a filtered list — go back to the letter filter.</span>
 <span class="sd">- ``q`` at any prompt — abort and exit.</span>
 
-<span class="sd">.. dropdown:: Example — config file (default system)</span>
-<span class="sd">    :icon: code-square</span>
-<span class="sd">    :open:</span>
+<span class="sd">**Config file — default system**</span>
 
-<span class="sd">    .. code-block:: toml</span>
+<span class="sd">.. tab-set::</span>
 
-<span class="sd">        folder = "C:/My Drive/projects/Research"</span>
-<span class="sd">        folder_system = "default"</span>
-<span class="sd">        separator = "_"</span>
-<span class="sd">        sources = "C:/vault/sources.toml"</span>
-<span class="sd">        language = "pt-br"</span>
+<span class="sd">    .. tab-item:: TOML</span>
 
-<span class="sd">.. dropdown:: Example — config file (alphanumerical system)</span>
-<span class="sd">    :icon: code-square</span>
+<span class="sd">        .. code-block:: toml</span>
 
-<span class="sd">    .. code-block:: toml</span>
+<span class="sd">            folder        = "C:/My Drive/projects/Research"</span>
+<span class="sd">            folder_system = "default"</span>
+<span class="sd">            separator     = "_"</span>
+<span class="sd">            sources       = "C:/vault/sources.toml"</span>
+<span class="sd">            language      = "pt-br"</span>
 
-<span class="sd">        folder = "C:/My Drive/projects/C000"</span>
-<span class="sd">        folder_system = "alphanumerical"</span>
-<span class="sd">        sources = "C:/vault/sources.toml"</span>
+<span class="sd">    .. tab-item:: YAML</span>
+
+<span class="sd">        .. code-block:: yaml</span>
+
+<span class="sd">            folder:        C:/My Drive/projects/Research</span>
+<span class="sd">            folder_system: default</span>
+<span class="sd">            separator:     "_"</span>
+<span class="sd">            sources:       C:/vault/sources.toml</span>
+<span class="sd">            language:      pt-br</span>
+
+<span class="sd">    .. tab-item:: JSON</span>
+
+<span class="sd">        .. code-block:: json</span>
+
+<span class="sd">            {</span>
+<span class="sd">              "folder":        "C:/My Drive/projects/Research",</span>
+<span class="sd">              "folder_system": "default",</span>
+<span class="sd">              "separator":     "_",</span>
+<span class="sd">              "sources":       "C:/vault/sources.toml",</span>
+<span class="sd">              "language":      "pt-br"</span>
+<span class="sd">            }</span>
+
+<span class="sd">**Config file — alphanumerical system**</span>
+
+<span class="sd">.. tab-set::</span>
+
+<span class="sd">    .. tab-item:: TOML</span>
+
+<span class="sd">        .. code-block:: toml</span>
+
+<span class="sd">            folder        = "C:/My Drive/projects/C000"</span>
+<span class="sd">            folder_system = "alphanumerical"</span>
+<span class="sd">            sources       = "C:/vault/sources.toml"</span>
+
+<span class="sd">    .. tab-item:: YAML</span>
+
+<span class="sd">        .. code-block:: yaml</span>
+
+<span class="sd">            folder:        C:/My Drive/projects/C000</span>
+<span class="sd">            folder_system: alphanumerical</span>
+<span class="sd">            sources:       C:/vault/sources.toml</span>
+
+<span class="sd">    .. tab-item:: JSON</span>
+
+<span class="sd">        .. code-block:: json</span>
+
+<span class="sd">            {</span>
+<span class="sd">              "folder":        "C:/My Drive/projects/C000",</span>
+<span class="sd">              "folder_system": "alphanumerical",</span>
+<span class="sd">              "sources":       "C:/vault/sources.toml"</span>
+<span class="sd">            }</span>
 
 <span class="sd">"""</span>
 
@@ -499,7 +558,7 @@
 
 
 <div class="viewcode-block" id="get_arguments">
-<a class="viewcode-back" href="../../../generated/losalamos.tools.add_new_project.html#losalamos.tools.add_new_project.get_arguments">[docs]</a>
+<a class="viewcode-back" href="../../../generated/losalamos.tools.new_project.html#losalamos.tools.new_project.get_arguments">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">get_arguments</span><span class="p">():</span>
 <span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Parse command-line arguments.</span>
@@ -903,7 +962,7 @@
 
 
 <div class="viewcode-block" id="run">
-<a class="viewcode-back" href="../../../generated/losalamos.tools.add_new_project.html#losalamos.tools.add_new_project.run">[docs]</a>
+<a class="viewcode-back" href="../../../generated/losalamos.tools.new_project.html#losalamos.tools.new_project.run">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span><span class="n">source</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Create a new numbered project inside a branch folder.</span>
@@ -1088,7 +1147,7 @@
 
 
 <div class="viewcode-block" id="main">
-<a class="viewcode-back" href="../../../generated/losalamos.tools.add_new_project.html#losalamos.tools.add_new_project.main">[docs]</a>
+<a class="viewcode-back" href="../../../generated/losalamos.tools.new_project.html#losalamos.tools.new_project.main">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
     <span class="n">args</span> <span class="o">=</span> <span class="n">get_arguments</span><span class="p">()</span>
     <span class="n">run</span><span class="p">(</span><span class="n">source</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">source</span><span class="p">)</span></div>

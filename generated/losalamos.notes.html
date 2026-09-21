@@ -51,7 +51,7 @@
     <link rel="author" title="About these documents" href="../about.html" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="losalamos.figures" href="losalamos.figures.html" />
+    <link rel="next" title="losalamos.budget" href="losalamos.budget.html" />
     <link rel="prev" title="losalamos.project" href="losalamos.project.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -165,6 +165,13 @@
 <li class="nav-item current active">
   <a class="nav-link nav-internal" href="../api.html">
     API
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../cli.html">
+    CLI
   </a>
 </li>
 
@@ -299,6 +306,13 @@
 
 
 <li class="nav-item ">
+  <a class="nav-link nav-internal" href="../cli.html">
+    CLI
+  </a>
+</li>
+
+
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="../development.html">
     Development
   </a>
@@ -368,23 +382,11 @@
 </ul>
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">losalamos.notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="losalamos.budget.html">losalamos.budget</a></li>
 <li class="toctree-l1"><a class="reference internal" href="losalamos.figures.html">losalamos.figures</a></li>
 <li class="toctree-l1"><a class="reference internal" href="losalamos.references.html">losalamos.references</a></li>
 <li class="toctree-l1"><a class="reference internal" href="losalamos.ingestion.html">losalamos.ingestion</a></li>
 <li class="toctree-l1"><a class="reference internal" href="losalamos.documents.html">losalamos.documents</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="losalamos.tools.build_figures.html">losalamos.tools.build_figures</a></li>
-<li class="toctree-l1"><a class="reference internal" href="losalamos.tools.new_drawing.html">losalamos.tools.new_drawing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="losalamos.tools.ingest_references.html">losalamos.tools.ingest_references</a></li>
-<li class="toctree-l1"><a class="reference internal" href="losalamos.tools.search_references.html">losalamos.tools.search_references</a></li>
-<li class="toctree-l1"><a class="reference internal" href="losalamos.tools.update_references.html">losalamos.tools.update_references</a></li>
-<li class="toctree-l1"><a class="reference internal" href="losalamos.tools.update_templates.html">losalamos.tools.update_templates</a></li>
-<li class="toctree-l1"><a class="reference internal" href="losalamos.tools.ingest_variables.html">losalamos.tools.ingest_variables</a></li>
-<li class="toctree-l1"><a class="reference internal" href="losalamos.tools.database.html">losalamos.tools.database</a></li>
-<li class="toctree-l1"><a class="reference internal" href="losalamos.tools.add_new_project.html">losalamos.tools.add_new_project</a></li>
-<li class="toctree-l1"><a class="reference internal" href="losalamos.tools.manage_documents.html">losalamos.tools.manage_documents</a></li>
-<li class="toctree-l1"><a class="reference internal" href="losalamos.tools.manage_vault.html">losalamos.tools.manage_vault</a></li>
 </ul>
 </div>
 </nav></div>
@@ -586,37 +588,40 @@ BibTeX integration, and utilities for working with collections of notes.</p>
 <tr class="row-odd"><td><p><a class="reference internal" href="#losalamos.notes.NoteCollSapiens" title="losalamos.notes.NoteCollSapiens"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NoteCollSapiens</span></code></a>([name, alias])</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#losalamos.notes.NoteCollection" title="losalamos.notes.NoteCollection"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NoteCollection</span></code></a>([name, alias])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#losalamos.notes.NoteCollTransfer" title="losalamos.notes.NoteCollTransfer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NoteCollTransfer</span></code></a>([name, alias])</p></td>
+<td><p>Collection of <a class="reference internal" href="#losalamos.notes.NoteTransfer" title="losalamos.notes.NoteTransfer"><code class="xref py py-class docutils literal notranslate"><span class="pre">NoteTransfer</span></code></a> instances.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#losalamos.notes.NoteCollection" title="losalamos.notes.NoteCollection"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NoteCollection</span></code></a>([name, alias])</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#losalamos.notes.NoteDataset" title="losalamos.notes.NoteDataset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NoteDataset</span></code></a>()</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#losalamos.notes.NoteDataset" title="losalamos.notes.NoteDataset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NoteDataset</span></code></a>()</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#losalamos.notes.NoteFigure" title="losalamos.notes.NoteFigure"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NoteFigure</span></code></a>([name, alias])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#losalamos.notes.NoteFigure" title="losalamos.notes.NoteFigure"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NoteFigure</span></code></a>([name, alias])</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#losalamos.notes.NoteJournal" title="losalamos.notes.NoteJournal"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NoteJournal</span></code></a>([name, alias])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#losalamos.notes.NoteJournal" title="losalamos.notes.NoteJournal"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NoteJournal</span></code></a>([name, alias])</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#losalamos.notes.NoteOrganization" title="losalamos.notes.NoteOrganization"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NoteOrganization</span></code></a>([name, alias])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#losalamos.notes.NoteOrganization" title="losalamos.notes.NoteOrganization"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NoteOrganization</span></code></a>([name, alias])</p></td>
 <td><p>Note for an organization entry.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#losalamos.notes.NotePerson" title="losalamos.notes.NotePerson"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NotePerson</span></code></a>([name, alias])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#losalamos.notes.NotePerson" title="losalamos.notes.NotePerson"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NotePerson</span></code></a>([name, alias])</p></td>
 <td><p>Note for a person entry.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#losalamos.notes.NoteProject" title="losalamos.notes.NoteProject"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NoteProject</span></code></a>([name, alias])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#losalamos.notes.NoteProject" title="losalamos.notes.NoteProject"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NoteProject</span></code></a>([name, alias])</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#losalamos.notes.NoteReference" title="losalamos.notes.NoteReference"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NoteReference</span></code></a>()</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#losalamos.notes.NoteReference" title="losalamos.notes.NoteReference"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NoteReference</span></code></a>()</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#losalamos.notes.NoteSapiens" title="losalamos.notes.NoteSapiens"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NoteSapiens</span></code></a>([name, alias])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#losalamos.notes.NoteSapiens" title="losalamos.notes.NoteSapiens"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NoteSapiens</span></code></a>([name, alias])</p></td>
 <td><p>Note for a person entry.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#losalamos.notes.NoteTransfer" title="losalamos.notes.NoteTransfer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NoteTransfer</span></code></a>([name, alias])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#losalamos.notes.NoteTransfer" title="losalamos.notes.NoteTransfer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NoteTransfer</span></code></a>([name, alias])</p></td>
 <td><p>Note for a financial transfer (inflow or outflow).</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#losalamos.notes.NoteVariable" title="losalamos.notes.NoteVariable"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NoteVariable</span></code></a>()</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#losalamos.notes.NoteVariable" title="losalamos.notes.NoteVariable"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NoteVariable</span></code></a>()</p></td>
 <td><p>Obsidian note for a single variable registry entry.</p></td>
 </tr>
 </tbody>
@@ -1861,6 +1866,22 @@ sync since attribute notes are fully driven by <code class="docutils literal not
 
 </dd></dl>
 
+<dl class="py class">
+<dt class="sig sig-object py" id="losalamos.notes.NoteCollTransfer">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">losalamos.notes.</span></span><span class="sig-name descname"><span class="pre">NoteCollTransfer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'MyNoteColl'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alias</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'NtCol0'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/notes.html#NoteCollTransfer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.notes.NoteCollTransfer" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#losalamos.notes.NoteCollection" title="losalamos.notes.NoteCollection"><code class="xref py py-class docutils literal notranslate"><span class="pre">NoteCollection</span></code></a></p>
+<p>Collection of <a class="reference internal" href="#losalamos.notes.NoteTransfer" title="losalamos.notes.NoteTransfer"><code class="xref py py-class docutils literal notranslate"><span class="pre">NoteTransfer</span></code></a> instances.</p>
+<p>Inherits all load helpers (<code class="docutils literal notranslate"><span class="pre">load_folder</span></code>, <code class="docutils literal notranslate"><span class="pre">load_list</span></code>,
+<code class="docutils literal notranslate"><span class="pre">load_pattern</span></code>) from <a class="reference internal" href="#losalamos.notes.NoteCollection" title="losalamos.notes.NoteCollection"><code class="xref py py-class docutils literal notranslate"><span class="pre">NoteCollection</span></code></a>. Serves as the base
+class for <a class="reference internal" href="losalamos.budget.html#losalamos.budget.Budget" title="losalamos.budget.Budget"><code class="xref py py-class docutils literal notranslate"><span class="pre">Budget</span></code></a>.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="losalamos.notes.NoteCollTransfer.BASE_OBJECT">
+<span class="sig-name descname"><span class="pre">BASE_OBJECT</span></span><a class="headerlink" href="#losalamos.notes.NoteCollTransfer.BASE_OBJECT" title="Link to this definition">#</a></dt>
+<dd><p>alias of <a class="reference internal" href="#losalamos.notes.NoteTransfer" title="losalamos.notes.NoteTransfer"><code class="xref py py-class docutils literal notranslate"><span class="pre">NoteTransfer</span></code></a></p>
+</dd></dl>
+
+</dd></dl>
+
 </section>
 
 
@@ -1883,11 +1904,11 @@ sync since attribute notes are fully driven by <code class="docutils literal not
       </div>
     </a>
     <a class="right-next"
-       href="losalamos.figures.html"
+       href="losalamos.budget.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">losalamos.figures</p>
+        <p class="prev-next-title">losalamos.budget</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -2079,6 +2100,10 @@ sync since attribute notes are fully driven by <code class="docutils literal not
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.notes.NoteCollAttribute"><code class="docutils literal notranslate"><span class="pre">NoteCollAttribute</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.notes.NoteCollAttribute.BASE_OBJECT"><code class="docutils literal notranslate"><span class="pre">NoteCollAttribute.BASE_OBJECT</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.notes.NoteCollTransfer"><code class="docutils literal notranslate"><span class="pre">NoteCollTransfer</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.notes.NoteCollTransfer.BASE_OBJECT"><code class="docutils literal notranslate"><span class="pre">NoteCollTransfer.BASE_OBJECT</span></code></a></li>
 </ul>
 </li>
 </ul>

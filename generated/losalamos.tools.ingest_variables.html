@@ -51,8 +51,8 @@
     <link rel="author" title="About these documents" href="../about.html" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="losalamos.tools.database" href="losalamos.tools.database.html" />
-    <link rel="prev" title="losalamos.tools.update_templates" href="losalamos.tools.update_templates.html" />
+    <link rel="next" title="losalamos.tools.ingest_references" href="losalamos.tools.ingest_references.html" />
+    <link rel="prev" title="losalamos.tools.new_drawing" href="losalamos.tools.new_drawing.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
@@ -162,9 +162,16 @@
 </li>
 
 
-<li class="nav-item current active">
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="../api.html">
     API
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../cli.html">
+    CLI
   </a>
 </li>
 
@@ -291,9 +298,16 @@
 </li>
 
 
-<li class="nav-item current active">
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="../api.html">
     API
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../cli.html">
+    CLI
   </a>
 </li>
 
@@ -362,29 +376,23 @@
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="losalamos.html">losalamos</a></li>
-<li class="toctree-l1"><a class="reference internal" href="losalamos.root.html">losalamos.root</a></li>
-<li class="toctree-l1"><a class="reference internal" href="losalamos.project.html">losalamos.project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="losalamos.tools.new_project.html">losalamos.tools.new_project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="losalamos.tools.manage_vault.html">losalamos.tools.manage_vault</a></li>
+<li class="toctree-l1"><a class="reference internal" href="losalamos.tools.manage_documents.html">losalamos.tools.manage_documents</a></li>
 </ul>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="losalamos.notes.html">losalamos.notes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="losalamos.figures.html">losalamos.figures</a></li>
-<li class="toctree-l1"><a class="reference internal" href="losalamos.references.html">losalamos.references</a></li>
-<li class="toctree-l1"><a class="reference internal" href="losalamos.ingestion.html">losalamos.ingestion</a></li>
-<li class="toctree-l1"><a class="reference internal" href="losalamos.documents.html">losalamos.documents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="losalamos.tools.build_figures.html">losalamos.tools.build_figures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="losalamos.tools.build_budget.html">losalamos.tools.build_budget</a></li>
+<li class="toctree-l1"><a class="reference internal" href="losalamos.tools.new_drawing.html">losalamos.tools.new_drawing</a></li>
 </ul>
 <ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="losalamos.tools.build_figures.html">losalamos.tools.build_figures</a></li>
-<li class="toctree-l1"><a class="reference internal" href="losalamos.tools.new_drawing.html">losalamos.tools.new_drawing</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">losalamos.tools.ingest_variables</a></li>
 <li class="toctree-l1"><a class="reference internal" href="losalamos.tools.ingest_references.html">losalamos.tools.ingest_references</a></li>
+</ul>
+<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="losalamos.tools.search_references.html">losalamos.tools.search_references</a></li>
 <li class="toctree-l1"><a class="reference internal" href="losalamos.tools.update_references.html">losalamos.tools.update_references</a></li>
 <li class="toctree-l1"><a class="reference internal" href="losalamos.tools.update_templates.html">losalamos.tools.update_templates</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">losalamos.tools.ingest_variables</a></li>
-<li class="toctree-l1"><a class="reference internal" href="losalamos.tools.database.html">losalamos.tools.database</a></li>
-<li class="toctree-l1"><a class="reference internal" href="losalamos.tools.add_new_project.html">losalamos.tools.add_new_project</a></li>
-<li class="toctree-l1"><a class="reference internal" href="losalamos.tools.manage_documents.html">losalamos.tools.manage_documents</a></li>
-<li class="toctree-l1"><a class="reference internal" href="losalamos.tools.manage_vault.html">losalamos.tools.manage_vault</a></li>
 </ul>
 </div>
 </nav></div>
@@ -426,7 +434,7 @@
       </a>
     </li>
     
-    <li class="breadcrumb-item"><a href="../api.html" class="nav-link">API</a></li>
+    <li class="breadcrumb-item"><a href="../cli.html" class="nav-link">CLI</a></li>
     
     <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">losalamos.tools.ingest_variables</span></li>
   </ul>
@@ -448,54 +456,119 @@
   <section id="module-losalamos.tools.ingest_variables">
 <span id="losalamos-tools-ingest-variables"></span><h1>losalamos.tools.ingest_variables<a class="headerlink" href="#module-losalamos.tools.ingest_variables" title="Link to this heading">#</a></h1>
 <p>Batch-creation tool for variable registry notes.</p>
-<p>Reads a JSON seed file and writes one Obsidian <code class="docutils literal notranslate"><span class="pre">.md</span></code> note per entry into
-a target vault folder using <a class="reference internal" href="losalamos.notes.html#losalamos.notes.NoteVariable" title="losalamos.notes.NoteVariable"><code class="xref py py-class docutils literal notranslate"><span class="pre">losalamos.notes.NoteVariable</span></code></a>.</p>
+<p>Reads a seed file (TOML, YAML, or JSON) and writes one Obsidian <code class="docutils literal notranslate"><span class="pre">.md</span></code> note
+per entry into a target vault folder using <a class="reference internal" href="losalamos.notes.html#losalamos.notes.NoteVariable" title="losalamos.notes.NoteVariable"><code class="xref py py-class docutils literal notranslate"><span class="pre">losalamos.notes.NoteVariable</span></code></a>.</p>
 <p>Codes are user-assigned and must appear in each entry. Shared fields
 (<code class="docutils literal notranslate"><span class="pre">subject</span></code>, <code class="docutils literal notranslate"><span class="pre">tags</span></code>, <code class="docutils literal notranslate"><span class="pre">category</span></code>, etc.) can be declared once in
 <code class="docutils literal notranslate"><span class="pre">defaults</span></code> and are merged into every entry automatically.</p>
 <section id="usage">
 <h2>Usage<a class="headerlink" href="#usage" title="Link to this heading">#</a></h2>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>losalamos.tools.ingest_variables<span class="w"> </span>--variables<span class="w"> </span>&lt;seed.json&gt;<span class="w"> </span><span class="o">[</span>--overwrite<span class="o">]</span>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>losalamos.tools.ingest_variables<span class="w"> </span>--variables<span class="w"> </span>&lt;seed_file&gt;<span class="w"> </span><span class="o">[</span>--overwrite<span class="o">]</span>
 </pre></div>
 </div>
 </section>
-<section id="seed-json-format">
-<h2>Seed JSON format<a class="headerlink" href="#seed-json-format" title="Link to this heading">#</a></h2>
-<p>The seed file is a <strong>list of batches</strong>. Each batch targets one vault folder
+<section id="seed-file">
+<h2>Seed file<a class="headerlink" href="#seed-file" title="Link to this heading">#</a></h2>
+<p>The seed holds one or more batches. Each batch targets one vault folder
 and carries its own <code class="docutils literal notranslate"><span class="pre">defaults</span></code> and <code class="docutils literal notranslate"><span class="pre">entries</span></code>.</p>
+<div class="sd-tab-set docutils">
+<input checked="checked" id="sd-tab-item-0" name="sd-tab-set-0" type="radio">
+<label class="sd-tab-label" for="sd-tab-item-0">
+TOML</label><div class="sd-tab-content docutils">
+<div class="highlight-toml notranslate"><div class="highlight"><pre><span></span><span class="k">[[batch]]</span>
+<span class="n">vault</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"/path/to/vault/hydrology"</span>
+
+<span class="k">[batch.defaults]</span>
+<span class="n">subject</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="s2">"[[Surface Hydrology]]"</span>
+<span class="n">tags</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">"hydrology"</span><span class="p">]</span>
+<span class="n">category</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"physical"</span>
+
+<span class="k">[[batch.entries]]</span>
+<span class="n">code</span><span class="w">      </span><span class="o">=</span><span class="w"> </span><span class="s2">"F101V001"</span>
+<span class="n">name</span><span class="w">      </span><span class="o">=</span><span class="w"> </span><span class="s2">"Streamflow"</span>
+<span class="n">alias</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="s2">"streamflow"</span>
+<span class="n">units</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="s2">"m^3/s"</span>
+<span class="n">range</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="s2">"[0U)"</span>
+<span class="n">symbol</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="s2">"Q"</span>
+<span class="n">dimension</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"L^{3}/T"</span>
+
+
+<span class="k">[[batch]]</span>
+<span class="n">vault</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"/path/to/vault/climate"</span>
+
+<span class="k">[batch.parameters]</span>
+<span class="n">fallback_title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span>
+
+<span class="k">[batch.defaults]</span>
+<span class="n">subject</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"[[Climatology]]"</span>
+<span class="n">tags</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">"climate"</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<input id="sd-tab-item-1" name="sd-tab-set-0" type="radio">
+<label class="sd-tab-label" for="sd-tab-item-1">
+YAML</label><div class="sd-tab-content docutils">
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">batch</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">vault</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/path/to/vault/hydrology</span>
+<span class="w">    </span><span class="nt">defaults</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">subject</span><span class="p">:</span><span class="w">  </span><span class="s">"[[Surface</span><span class="nv"> </span><span class="s">Hydrology]]"</span>
+<span class="w">      </span><span class="nt">tags</span><span class="p">:</span><span class="w">     </span><span class="p p-Indicator">[</span><span class="nv">hydrology</span><span class="p p-Indicator">]</span>
+<span class="w">      </span><span class="nt">category</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">physical</span>
+<span class="w">    </span><span class="nt">entries</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">code</span><span class="p">:</span><span class="w">      </span><span class="l l-Scalar l-Scalar-Plain">F101V001</span>
+<span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w">      </span><span class="l l-Scalar l-Scalar-Plain">Streamflow</span>
+<span class="w">        </span><span class="nt">alias</span><span class="p">:</span><span class="w">     </span><span class="l l-Scalar l-Scalar-Plain">streamflow</span>
+<span class="w">        </span><span class="nt">units</span><span class="p">:</span><span class="w">     </span><span class="l l-Scalar l-Scalar-Plain">m^3/s</span>
+<span class="w">        </span><span class="nt">range</span><span class="p">:</span><span class="w">     </span><span class="s">"[0U)"</span>
+<span class="w">        </span><span class="nt">symbol</span><span class="p">:</span><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">Q</span>
+<span class="w">        </span><span class="nt">dimension</span><span class="p">:</span><span class="w"> </span><span class="s">"L^{3}/T"</span>
+
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">vault</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/path/to/vault/climate</span>
+<span class="w">    </span><span class="nt">parameters</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">fallback_title</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<span class="w">    </span><span class="nt">defaults</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">subject</span><span class="p">:</span><span class="w"> </span><span class="s">"[[Climatology]]"</span>
+<span class="w">      </span><span class="nt">tags</span><span class="p">:</span><span class="w">    </span><span class="p p-Indicator">[</span><span class="nv">climate</span><span class="p p-Indicator">]</span>
+<span class="w">    </span><span class="nt">entries</span><span class="p">:</span><span class="w">   </span><span class="p p-Indicator">[]</span>
+</pre></div>
+</div>
+</div>
+<input id="sd-tab-item-2" name="sd-tab-set-0" type="radio">
+<label class="sd-tab-label" for="sd-tab-item-2">
+JSON</label><div class="sd-tab-content docutils">
 <div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
-<span class="w">    </span><span class="p">{</span>
-<span class="w">        </span><span class="nt">"vault"</span><span class="p">:</span><span class="w"> </span><span class="s2">"/path/to/vault/hydrology"</span><span class="p">,</span>
-<span class="w">        </span><span class="nt">"defaults"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="nt">"subject"</span><span class="p">:</span><span class="w"> </span><span class="s2">"[[Surface Hydrology]]"</span><span class="p">,</span>
-<span class="w">            </span><span class="nt">"tags"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"hydrology"</span><span class="p">],</span>
-<span class="w">            </span><span class="nt">"category"</span><span class="p">:</span><span class="w"> </span><span class="s2">"physical"</span>
-<span class="w">        </span><span class="p">},</span>
-<span class="w">        </span><span class="nt">"entries"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
-<span class="w">            </span><span class="p">{</span>
-<span class="w">                </span><span class="nt">"code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"F101V001"</span><span class="p">,</span>
-<span class="w">                </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Streamflow"</span><span class="p">,</span>
-<span class="w">                </span><span class="nt">"alias"</span><span class="p">:</span><span class="w"> </span><span class="s2">"streamflow"</span><span class="p">,</span>
-<span class="w">                </span><span class="nt">"units"</span><span class="p">:</span><span class="w"> </span><span class="s2">"m^3/s"</span><span class="p">,</span>
-<span class="w">                </span><span class="nt">"range"</span><span class="p">:</span><span class="w"> </span><span class="s2">"[0U)"</span><span class="p">,</span>
-<span class="w">                </span><span class="nt">"symbol"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Q"</span><span class="p">,</span>
-<span class="w">                </span><span class="nt">"dimension"</span><span class="p">:</span><span class="w"> </span><span class="s2">"L^{3}/T"</span>
-<span class="w">            </span><span class="p">}</span>
-<span class="w">        </span><span class="p">]</span>
+<span class="w">  </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"vault"</span><span class="p">:</span><span class="w"> </span><span class="s2">"/path/to/vault/hydrology"</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"defaults"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"subject"</span><span class="p">:</span><span class="w">  </span><span class="s2">"[[Surface Hydrology]]"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"tags"</span><span class="p">:</span><span class="w">     </span><span class="p">[</span><span class="s2">"hydrology"</span><span class="p">],</span>
+<span class="w">      </span><span class="nt">"category"</span><span class="p">:</span><span class="w"> </span><span class="s2">"physical"</span>
 <span class="w">    </span><span class="p">},</span>
-<span class="w">    </span><span class="p">{</span>
-<span class="w">        </span><span class="nt">"vault"</span><span class="p">:</span><span class="w"> </span><span class="s2">"/path/to/vault/climate"</span><span class="p">,</span>
-<span class="w">        </span><span class="nt">"parameters"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="nt">"fallback_title"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span>
-<span class="w">        </span><span class="p">},</span>
-<span class="w">        </span><span class="nt">"defaults"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="nt">"subject"</span><span class="p">:</span><span class="w"> </span><span class="s2">"[[Climatology]]"</span><span class="p">,</span>
-<span class="w">            </span><span class="nt">"tags"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"climate"</span><span class="p">]</span>
-<span class="w">        </span><span class="p">},</span>
-<span class="w">        </span><span class="nt">"entries"</span><span class="p">:</span><span class="w"> </span><span class="p">[]</span>
-<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="nt">"entries"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">      </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">"code"</span><span class="p">:</span><span class="w">      </span><span class="s2">"F101V001"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"name"</span><span class="p">:</span><span class="w">      </span><span class="s2">"Streamflow"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"alias"</span><span class="p">:</span><span class="w">     </span><span class="s2">"streamflow"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"units"</span><span class="p">:</span><span class="w">     </span><span class="s2">"m^3/s"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"range"</span><span class="p">:</span><span class="w">     </span><span class="s2">"[0U)"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"symbol"</span><span class="p">:</span><span class="w">    </span><span class="s2">"Q"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"dimension"</span><span class="p">:</span><span class="w"> </span><span class="s2">"L^{3}/T"</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">]</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"vault"</span><span class="p">:</span><span class="w"> </span><span class="s2">"/path/to/vault/climate"</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"parameters"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">"fallback_title"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">},</span>
+<span class="w">    </span><span class="nt">"defaults"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"subject"</span><span class="p">:</span><span class="w"> </span><span class="s2">"[[Climatology]]"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"tags"</span><span class="p">:</span><span class="w">    </span><span class="p">[</span><span class="s2">"climate"</span><span class="p">]</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="nt">"entries"</span><span class="p">:</span><span class="w"> </span><span class="p">[]</span>
+<span class="w">  </span><span class="p">}</span>
 <span class="p">]</span>
 </pre></div>
+</div>
+</div>
 </div>
 </section>
 <section id="batch-keys">
@@ -526,7 +599,7 @@ Obsidian wiki-link notation: <code class="docutils literal notranslate"><span cl
 <div class="pst-scrollable-table-container"><table class="autosummary longtable table">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#losalamos.tools.ingest_variables.ingest_variables" title="losalamos.tools.ingest_variables.ingest_variables"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ingest_variables</span></code></a>(seed_path[, overwrite])</p></td>
-<td><p>Read a JSON seed file and process all batches.</p></td>
+<td><p>Read a seed file (TOML, YAML, or JSON) and process all batches.</p></td>
 </tr>
 </tbody>
 </table>
@@ -535,13 +608,15 @@ Obsidian wiki-link notation: <code class="docutils literal notranslate"><span cl
 <dl class="py function">
 <dt class="sig sig-object py" id="losalamos.tools.ingest_variables.ingest_variables">
 <span class="sig-prename descclassname"><span class="pre">losalamos.tools.ingest_variables.</span></span><span class="sig-name descname"><span class="pre">ingest_variables</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">seed_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overwrite</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../_modules/losalamos/tools/ingest_variables.html#ingest_variables"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.tools.ingest_variables.ingest_variables" title="Link to this definition">#</a></dt>
-<dd><p>Read a JSON seed file and process all batches.</p>
+<dd><p>Read a seed file (TOML, YAML, or JSON) and process all batches.</p>
 <p>The seed must be a list of batch dicts, each with a <code class="docutils literal notranslate"><span class="pre">vault</span></code>, optional
-<code class="docutils literal notranslate"><span class="pre">defaults</span></code>, and an <code class="docutils literal notranslate"><span class="pre">entries</span></code> list. A single batch dict is also accepted.</p>
+<code class="docutils literal notranslate"><span class="pre">defaults</span></code>, and an <code class="docutils literal notranslate"><span class="pre">entries</span></code> list. TOML and YAML files may wrap
+batches under a top-level <code class="docutils literal notranslate"><span class="pre">batch</span></code> key; JSON files may be a bare list.
+A single batch dict is also accepted.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>seed_path</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">pathlib.Path</span></code>) – Path to the JSON seed file.</p></li>
+<li><p><strong>seed_path</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">pathlib.Path</span></code>) – Path to the seed file (TOML, YAML, or JSON).</p></li>
 <li><p><strong>overwrite</strong> (<em>bool</em>) – If <code class="docutils literal notranslate"><span class="pre">False</span></code> (default), existing files are skipped.</p></li>
 </ul>
 </dd>
@@ -561,20 +636,20 @@ Obsidian wiki-link notation: <code class="docutils literal notranslate"><span cl
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="losalamos.tools.update_templates.html"
+       href="losalamos.tools.new_drawing.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">losalamos.tools.update_templates</p>
+        <p class="prev-next-title">losalamos.tools.new_drawing</p>
       </div>
     </a>
     <a class="right-next"
-       href="losalamos.tools.database.html"
+       href="losalamos.tools.ingest_references.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">losalamos.tools.database</p>
+        <p class="prev-next-title">losalamos.tools.ingest_references</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -598,7 +673,7 @@ Obsidian wiki-link notation: <code class="docutils literal notranslate"><span cl
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#usage">Usage</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#seed-json-format">Seed JSON format</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#seed-file">Seed file</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#batch-keys">Batch keys</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.tools.ingest_variables.ingest_variables"><code class="docutils literal notranslate"><span class="pre">ingest_variables()</span></code></a></li>
 </ul>

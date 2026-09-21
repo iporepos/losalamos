@@ -25,6 +25,7 @@
       NoteCollPerson
       NoteCollProject
       NoteCollSapiens
+      NoteCollTransfer
       NoteCollection
       NoteDataset
       NoteFigure

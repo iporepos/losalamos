@@ -1,0 +1,845 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" data-theme="light">
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>losalamos.tools.build_budget &#8212; losalamos 0.0.1 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../../../_static/scripts/fontawesome.js?digest=cb8930eaaf36d9849b67"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
+
+    <script src="../../../_static/documentation_options.js?v=d45e8c67"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/losalamos/tools/build_budget';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="author" title="About these documents" href="../../../about.html" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="../../../_static/searchtools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <script src="../../../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="light">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+    
+    
+    
+    <img src="https://github.com/iporepos/losalamos/blob/main/docs/figs/logo.png?raw=true" class="logo__image only-light" alt="losalamos 0.0.1 documentation - Home"/>
+    <img src="https://github.com/iporepos/losalamos/blob/main/docs/figs/logo.png?raw=true" class="logo__image only-dark pst-js-only" alt="losalamos 0.0.1 documentation - Home"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../index.html">
+    Home
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../about.html">
+    About
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../usage.html">
+    Usage
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../api.html">
+    API
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../cli.html">
+    CLI
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../development.html">
+    Development
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/iporepos/losalamos" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../index.html">
+    Home
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../about.html">
+    About
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../usage.html">
+    Usage
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../api.html">
+    API
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../cli.html">
+    CLI
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../development.html">
+    Development
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/iporepos/losalamos" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../index.html" class="nav-link">Module code</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">losalamos.tools.build_budget</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for losalamos.tools.build_budget</h1><div class="highlight"><pre>
+<span></span><span class="c1"># SPDX-License-Identifier: GPL-3.0-or-later</span>
+<span class="c1">#</span>
+<span class="c1"># Copyright (C) 2025 The Project Authors</span>
+<span class="c1"># See pyproject.toml for authors/maintainers.</span>
+<span class="c1"># See LICENSE for license details.</span>
+<span class="sd">"""</span>
+<span class="sd">Build transfer notes from a budget seed configuration.</span>
+
+<span class="sd">Reads a config file and one or more budget (batch) files, builds the</span>
+<span class="sd">in-memory :class:`~losalamos.budget.Budget` collection, optionally prints</span>
+<span class="sd">the equivalent analysis, and optionally writes the notes to disk.</span>
+
+<span class="sd">Usage</span>
+<span class="sd">-----</span>
+
+<span class="sd">.. code-block:: shell</span>
+
+<span class="sd">    python -m losalamos.tools.build_budget --config &lt;config_file&gt;</span>
+
+<span class="sd">Config file</span>
+<span class="sd">-----------</span>
+
+<span class="sd">The config file can be TOML, YAML, or JSON.</span>
+
+<span class="sd">**Required keys**</span>
+
+<span class="sd">- ``name`` — budget name, used as the note filename prefix.</span>
+<span class="sd">- ``year`` — budget year (integer).</span>
+<span class="sd">- ``budgets`` — list of paths to batch files.</span>
+
+<span class="sd">**Optional keys**</span>
+
+<span class="sd">- ``duration`` — number of years to cover (default ``1``).</span>
+<span class="sd">- ``folder`` — output folder path. When absent or ``null``, notes are built</span>
+<span class="sd">  in memory only and not written.</span>
+<span class="sd">- ``split`` — write inflows and outflows into separate subfolders</span>
+<span class="sd">  (default ``false``).</span>
+<span class="sd">- ``equivalent`` — print the equivalent analysis after building (default</span>
+<span class="sd">  ``false``).</span>
+
+<span class="sd">.. tab-set::</span>
+
+<span class="sd">    .. tab-item:: TOML</span>
+
+<span class="sd">        .. code-block:: toml</span>
+
+<span class="sd">            name     = "HouseBudget"</span>
+<span class="sd">            year     = 2027</span>
+<span class="sd">            duration = 1</span>
+<span class="sd">            folder   = "/vault/budget/house"</span>
+<span class="sd">            split    = false</span>
+<span class="sd">            equivalent = true</span>
+
+<span class="sd">            budgets = [</span>
+<span class="sd">                "/seeds/house_contracts.toml",</span>
+<span class="sd">                "/seeds/house_income.toml",</span>
+<span class="sd">            ]</span>
+
+<span class="sd">    .. tab-item:: YAML</span>
+
+<span class="sd">        .. code-block:: yaml</span>
+
+<span class="sd">            name:     HouseBudget</span>
+<span class="sd">            year:     2027</span>
+<span class="sd">            duration: 1</span>
+<span class="sd">            folder:   /vault/budget/house</span>
+<span class="sd">            split:    false</span>
+<span class="sd">            equivalent: true</span>
+
+<span class="sd">            budgets:</span>
+<span class="sd">              - /seeds/house_contracts.yaml</span>
+<span class="sd">              - /seeds/house_income.yaml</span>
+
+<span class="sd">    .. tab-item:: JSON</span>
+
+<span class="sd">        .. code-block:: json</span>
+
+<span class="sd">            {</span>
+<span class="sd">              "name": "HouseBudget",</span>
+<span class="sd">              "year": 2027,</span>
+<span class="sd">              "duration": 1,</span>
+<span class="sd">              "folder": "/vault/budget/house",</span>
+<span class="sd">              "split": false,</span>
+<span class="sd">              "equivalent": true,</span>
+<span class="sd">              "budgets": [</span>
+<span class="sd">                "/seeds/house_contracts.json",</span>
+<span class="sd">                "/seeds/house_income.json"</span>
+<span class="sd">              ]</span>
+<span class="sd">            }</span>
+
+<span class="sd">Budget file</span>
+<span class="sd">-----------</span>
+
+<span class="sd">A budget file holds one or more batches. Each batch has a ``defaults`` block</span>
+<span class="sd">and a ``transfers`` list. Entry-level keys override ``defaults``.</span>
+
+<span class="sd">.. tab-set::</span>
+
+<span class="sd">    .. tab-item:: TOML</span>
+
+<span class="sd">        .. code-block:: toml</span>
+
+<span class="sd">            [[batch]]</span>
+<span class="sd">            [batch.defaults]</span>
+<span class="sd">            commitment = "contracts"</span>
+<span class="sd">            recurrence = "1 month"</span>
+<span class="sd">            currency   = "BRL"</span>
+<span class="sd">            account    = "BB-001"</span>
+<span class="sd">            payer      = "Person Name"</span>
+<span class="sd">            direction  = "outflow"</span>
+
+<span class="sd">            [[batch.transfers]]</span>
+<span class="sd">            value    = 1000.00</span>
+<span class="sd">            receiver = "Landlord Co"</span>
+<span class="sd">            day      = 5</span>
+
+<span class="sd">            [[batch.transfers]]</span>
+<span class="sd">            value    = 500.00</span>
+<span class="sd">            receiver = "Internet Provider"</span>
+<span class="sd">            day      = 15</span>
+
+
+<span class="sd">            [[batch]]</span>
+<span class="sd">            [batch.defaults]</span>
+<span class="sd">            commitment = "income"</span>
+<span class="sd">            recurrence = "1 month"</span>
+<span class="sd">            currency   = "BRL"</span>
+<span class="sd">            account    = "BB-001"</span>
+<span class="sd">            receiver   = "Person Name"</span>
+<span class="sd">            direction  = "inflow"</span>
+
+<span class="sd">            [[batch.transfers]]</span>
+<span class="sd">            value = 5000.00</span>
+<span class="sd">            payer = "Employer Co"</span>
+<span class="sd">            day   = 5</span>
+
+<span class="sd">    .. tab-item:: YAML</span>
+
+<span class="sd">        .. code-block:: yaml</span>
+
+<span class="sd">            batch:</span>
+<span class="sd">              - defaults:</span>
+<span class="sd">                  commitment: contracts</span>
+<span class="sd">                  recurrence: 1 month</span>
+<span class="sd">                  currency:   BRL</span>
+<span class="sd">                  account:    BB-001</span>
+<span class="sd">                  payer:      Person Name</span>
+<span class="sd">                  direction:  outflow</span>
+<span class="sd">                transfers:</span>
+<span class="sd">                  - value:    1000.00</span>
+<span class="sd">                    receiver: Landlord Co</span>
+<span class="sd">                    day:      5</span>
+<span class="sd">                  - value:    500.00</span>
+<span class="sd">                    receiver: Internet Provider</span>
+<span class="sd">                    day:      15</span>
+
+<span class="sd">              - defaults:</span>
+<span class="sd">                  commitment: income</span>
+<span class="sd">                  recurrence: 1 month</span>
+<span class="sd">                  currency:   BRL</span>
+<span class="sd">                  account:    BB-001</span>
+<span class="sd">                  receiver:   Person Name</span>
+<span class="sd">                  direction:  inflow</span>
+<span class="sd">                transfers:</span>
+<span class="sd">                  - value: 5000.00</span>
+<span class="sd">                    payer: Employer Co</span>
+<span class="sd">                    day:   5</span>
+
+<span class="sd">    .. tab-item:: JSON</span>
+
+<span class="sd">        .. code-block:: json</span>
+
+<span class="sd">            [</span>
+<span class="sd">              {</span>
+<span class="sd">                "defaults": {</span>
+<span class="sd">                  "commitment": "contracts",</span>
+<span class="sd">                  "recurrence": "1 month",</span>
+<span class="sd">                  "currency": "BRL",</span>
+<span class="sd">                  "account": "BB-001",</span>
+<span class="sd">                  "payer": "Person Name",</span>
+<span class="sd">                  "direction": "outflow"</span>
+<span class="sd">                },</span>
+<span class="sd">                "transfers": [</span>
+<span class="sd">                  {"value": 1000.00, "receiver": "Landlord Co",      "day": 5},</span>
+<span class="sd">                  {"value":  500.00, "receiver": "Internet Provider", "day": 15}</span>
+<span class="sd">                ]</span>
+<span class="sd">              },</span>
+<span class="sd">              {</span>
+<span class="sd">                "defaults": {</span>
+<span class="sd">                  "commitment": "income",</span>
+<span class="sd">                  "recurrence": "1 month",</span>
+<span class="sd">                  "currency": "BRL",</span>
+<span class="sd">                  "account": "BB-001",</span>
+<span class="sd">                  "receiver": "Person Name",</span>
+<span class="sd">                  "direction": "inflow"</span>
+<span class="sd">                },</span>
+<span class="sd">                "transfers": [</span>
+<span class="sd">                  {"value": 5000.00, "payer": "Employer Co", "day": 5}</span>
+<span class="sd">                ]</span>
+<span class="sd">              }</span>
+<span class="sd">            ]</span>
+
+<span class="sd">"""</span>
+
+<span class="c1"># IMPORTS</span>
+<span class="c1"># =======================================================================</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">argparse</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">losalamos.budget</span><span class="w"> </span><span class="kn">import</span> <span class="n">Budget</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">losalamos.root</span><span class="w"> </span><span class="kn">import</span> <span class="n">MbaE</span>
+
+
+<span class="c1"># HELPERS</span>
+<span class="c1"># =======================================================================</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_load_batches</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""</span>
+<span class="sd">    Load a budget file and return its list of batches.</span>
+
+<span class="sd">    Accepts TOML, YAML, or JSON. TOML and YAML files may wrap batches under</span>
+<span class="sd">    a top-level ``batch`` key; JSON files may be a bare list. Both forms are</span>
+<span class="sd">    normalised to a plain list.</span>
+
+<span class="sd">    :param path: Path to the budget file.</span>
+<span class="sd">    :type path: :class:`pathlib.Path`</span>
+<span class="sd">    :raises FileNotFoundError: If the file does not exist.</span>
+<span class="sd">    :raises ValueError: If no ``batch``/batches can be found in the file.</span>
+<span class="sd">    :return: List of batch dicts.</span>
+<span class="sd">    :rtype: list</span>
+<span class="sd">    """</span>
+    <span class="n">raw</span> <span class="o">=</span> <span class="n">MbaE</span><span class="o">.</span><span class="n">load_config_file</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">path</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">raw</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">raw</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">raw</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="k">if</span> <span class="s2">"batch"</span> <span class="ow">in</span> <span class="n">raw</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">raw</span><span class="p">[</span><span class="s2">"batch"</span><span class="p">]</span>
+        <span class="c1"># single batch dict without a wrapper key</span>
+        <span class="k">if</span> <span class="s2">"transfers"</span> <span class="ow">in</span> <span class="n">raw</span> <span class="ow">or</span> <span class="s2">"defaults"</span> <span class="ow">in</span> <span class="n">raw</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[</span><span class="n">raw</span><span class="p">]</span>
+
+    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s2">"Cannot parse batch structure from '</span><span class="si">{</span><span class="n">path</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">'. "</span>
+        <span class="s2">"Expected a list of batches or a dict with a 'batch' key."</span>
+    <span class="p">)</span>
+
+
+<span class="c1"># ENTRY POINT</span>
+<span class="c1"># =======================================================================</span>
+
+
+<div class="viewcode-block" id="build_budget">
+<a class="viewcode-back" href="../../../generated/losalamos.tools.build_budget.html#losalamos.tools.build_budget.build_budget">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">build_budget</span><span class="p">(</span><span class="n">config_path</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Budget</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""</span>
+<span class="sd">    Build a :class:`~losalamos.budget.Budget` from a config file.</span>
+
+<span class="sd">    Loads the config, resolves and merges all batch files listed under</span>
+<span class="sd">    ``budgets``, builds the in-memory collection, optionally prints the</span>
+<span class="sd">    equivalent analysis, and optionally saves notes to disk.</span>
+
+<span class="sd">    :param config_path: Path to the config file (TOML, YAML, or JSON).</span>
+<span class="sd">    :type config_path: :class:`pathlib.Path`</span>
+<span class="sd">    :raises ValueError: If required config keys are missing or a batch file</span>
+<span class="sd">        cannot be parsed.</span>
+<span class="sd">    :return: The populated :class:`~losalamos.budget.Budget` instance.</span>
+<span class="sd">    :rtype: :class:`~losalamos.budget.Budget`</span>
+<span class="sd">    """</span>
+    <span class="n">config</span> <span class="o">=</span> <span class="n">MbaE</span><span class="o">.</span><span class="n">load_config_file</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">config_path</span><span class="p">)</span>
+
+    <span class="c1"># --- validate required keys ---</span>
+    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"name"</span><span class="p">,</span> <span class="s2">"year"</span><span class="p">,</span> <span class="s2">"budgets"</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"[error] Config is missing required key: '</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">'"</span><span class="p">)</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="n">name</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s2">"name"</span><span class="p">]</span>
+    <span class="n">year</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s2">"year"</span><span class="p">])</span>
+    <span class="n">duration</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"duration"</span><span class="p">)</span> <span class="ow">or</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">folder</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"folder"</span><span class="p">)</span> <span class="ow">or</span> <span class="kc">None</span>
+    <span class="n">split</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"split"</span><span class="p">,</span> <span class="kc">False</span><span class="p">))</span>
+    <span class="n">equivalent</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"equivalent"</span><span class="p">,</span> <span class="kc">False</span><span class="p">))</span>
+
+    <span class="c1"># --- load and merge all batch files ---</span>
+    <span class="n">all_batches</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">budget_paths</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s2">"budgets"</span><span class="p">]</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2">Config : </span><span class="si">{</span><span class="n">config_path</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Budget : </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">  |  year=</span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s2">  duration=</span><span class="si">{</span><span class="n">duration</span><span class="si">}</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">bp</span> <span class="ow">in</span> <span class="n">budget_paths</span><span class="p">:</span>
+        <span class="n">bp</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">bp</span><span class="p">)</span>
+        <span class="n">batches</span> <span class="o">=</span> <span class="n">_load_batches</span><span class="p">(</span><span class="n">bp</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  [loaded]  </span><span class="si">{</span><span class="n">bp</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">  (</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">batches</span><span class="p">)</span><span class="si">}</span><span class="s2"> batch(es))"</span><span class="p">)</span>
+        <span class="n">all_batches</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">batches</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2">  </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">all_batches</span><span class="p">)</span><span class="si">}</span><span class="s2"> total batch(es) across </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">budget_paths</span><span class="p">)</span><span class="si">}</span><span class="s2"> file(s)</span><span class="se">\n</span><span class="s2">"</span>
+    <span class="p">)</span>
+
+    <span class="c1"># --- build ---</span>
+    <span class="n">budget</span> <span class="o">=</span> <span class="n">Budget</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
+    <span class="n">budget</span><span class="o">.</span><span class="n">year</span> <span class="o">=</span> <span class="n">year</span>
+    <span class="n">budget</span><span class="o">.</span><span class="n">duration</span> <span class="o">=</span> <span class="n">duration</span>
+    <span class="n">budget</span><span class="o">.</span><span class="n">split</span> <span class="o">=</span> <span class="n">split</span>
+
+    <span class="k">if</span> <span class="n">folder</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">budget</span><span class="o">.</span><span class="n">output_folder</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">folder</span><span class="p">)</span>
+
+    <span class="n">budget</span><span class="o">.</span><span class="n">build</span><span class="p">(</span><span class="n">batches</span><span class="o">=</span><span class="n">all_batches</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Built  : </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">budget</span><span class="o">.</span><span class="n">collection</span><span class="p">)</span><span class="si">}</span><span class="s2"> transfer note(s) in memory</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
+
+    <span class="c1"># --- equivalent analysis ---</span>
+    <span class="k">if</span> <span class="n">equivalent</span><span class="p">:</span>
+        <span class="n">sep</span> <span class="o">=</span> <span class="s2">"─"</span> <span class="o">*</span> <span class="mi">60</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">sep</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">" Monthly equivalent  (by account)"</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">sep</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">budget</span><span class="o">.</span><span class="n">monthly_equivalent</span><span class="p">()</span><span class="o">.</span><span class="n">to_string</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">sep</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">" Annual equivalent  (by account)"</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">sep</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">budget</span><span class="o">.</span><span class="n">annual_equivalent</span><span class="p">()</span><span class="o">.</span><span class="n">to_string</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">()</span>
+
+    <span class="c1"># --- save ---</span>
+    <span class="k">if</span> <span class="n">folder</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">budget</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Saved  : </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">budget</span><span class="o">.</span><span class="n">collection</span><span class="p">)</span><span class="si">}</span><span class="s2"> note(s) → </span><span class="si">{</span><span class="n">budget</span><span class="o">.</span><span class="n">output_folder</span><span class="si">}</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"No folder set — notes kept in memory, nothing written.</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">budget</span></div>
+
+
+
+<span class="c1"># CLI</span>
+<span class="c1"># =======================================================================</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">"Build transfer notes from a budget config file."</span>
+    <span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">"--config"</span><span class="p">,</span>
+        <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">metavar</span><span class="o">=</span><span class="s2">"CONFIG_FILE"</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">"Path to the config file (TOML, YAML, or JSON)."</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+    <span class="n">build_budget</span><span class="p">(</span><span class="n">config_path</span><span class="o">=</span><span class="n">Path</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">config</span><span class="p">))</span>
+</pre></div>
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2026, Iporã Possantti.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.0.4.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.21.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

@@ -167,6 +167,13 @@
 
 
 <li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../cli.html">
+    CLI
+  </a>
+</li>
+
+
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="../../../development.html">
     Development
   </a>
@@ -294,6 +301,13 @@
 
 
 <li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../cli.html">
+    CLI
+  </a>
+</li>
+
+
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="../../../development.html">
     Development
   </a>
@@ -412,7 +426,7 @@
 <span class="sd">When only one vault is configured the vault selection screen is skipped and</span>
 <span class="sd">the tool opens directly at the branch picker.</span>
 <span class="sd">Adding a project writes a temporary config file and delegates to</span>
-<span class="sd">:func:`losalamos.tools.add_new_project.run`.</span>
+<span class="sd">:func:`losalamos.tools.new_project.run`.</span>
 
 <span class="sd">**Shell usage**</span>
 
@@ -433,24 +447,62 @@
 <span class="sd">- ``sources`` (*str*, optional) — path to a shared sources config file.</span>
 <span class="sd">- ``language`` (*str*, optional) — language tag (e.g. ``"pt-br"``).</span>
 
-<span class="sd">.. dropdown:: Example — tool config file</span>
-<span class="sd">    :icon: code-square</span>
-<span class="sd">    :open:</span>
+<span class="sd">.. tab-set::</span>
 
-<span class="sd">    .. code-block:: toml</span>
+<span class="sd">    .. tab-item:: TOML</span>
 
-<span class="sd">        [[vaults]]</span>
-<span class="sd">        name = "Client Projects"</span>
-<span class="sd">        path = "C:/My Drive/projects"</span>
-<span class="sd">        folder_system = "default"</span>
-<span class="sd">        separator = "_"</span>
-<span class="sd">        sources = "C:/vault/sources.toml"</span>
-<span class="sd">        language = "pt-br"</span>
+<span class="sd">        .. code-block:: toml</span>
 
-<span class="sd">        [[vaults]]</span>
-<span class="sd">        name = "Research"</span>
-<span class="sd">        path = "C:/research"</span>
-<span class="sd">        folder_system = "alphanumerical"</span>
+<span class="sd">            [[vaults]]</span>
+<span class="sd">            name      = "Client Projects"</span>
+<span class="sd">            path      = "C:/My Drive/projects"</span>
+<span class="sd">            folder_system = "default"</span>
+<span class="sd">            separator = "_"</span>
+<span class="sd">            sources   = "C:/vault/sources.toml"</span>
+<span class="sd">            language  = "pt-br"</span>
+
+<span class="sd">            [[vaults]]</span>
+<span class="sd">            name      = "Research"</span>
+<span class="sd">            path      = "C:/research"</span>
+<span class="sd">            folder_system = "alphanumerical"</span>
+
+<span class="sd">    .. tab-item:: YAML</span>
+
+<span class="sd">        .. code-block:: yaml</span>
+
+<span class="sd">            vaults:</span>
+<span class="sd">              - name:          Client Projects</span>
+<span class="sd">                path:          C:/My Drive/projects</span>
+<span class="sd">                folder_system: default</span>
+<span class="sd">                separator:     "_"</span>
+<span class="sd">                sources:       C:/vault/sources.toml</span>
+<span class="sd">                language:      pt-br</span>
+
+<span class="sd">              - name:          Research</span>
+<span class="sd">                path:          C:/research</span>
+<span class="sd">                folder_system: alphanumerical</span>
+
+<span class="sd">    .. tab-item:: JSON</span>
+
+<span class="sd">        .. code-block:: json</span>
+
+<span class="sd">            {</span>
+<span class="sd">              "vaults": [</span>
+<span class="sd">                {</span>
+<span class="sd">                  "name":          "Client Projects",</span>
+<span class="sd">                  "path":          "C:/My Drive/projects",</span>
+<span class="sd">                  "folder_system": "default",</span>
+<span class="sd">                  "separator":     "_",</span>
+<span class="sd">                  "sources":       "C:/vault/sources.toml",</span>
+<span class="sd">                  "language":      "pt-br"</span>
+<span class="sd">                },</span>
+<span class="sd">                {</span>
+<span class="sd">                  "name":          "Research",</span>
+<span class="sd">                  "path":          "C:/research",</span>
+<span class="sd">                  "folder_system": "alphanumerical"</span>
+<span class="sd">                }</span>
+<span class="sd">              ]</span>
+<span class="sd">            }</span>
 
 <span class="sd">"""</span>
 
@@ -470,7 +522,7 @@
 <span class="kn">import</span><span class="w"> </span><span class="nn">losalamos</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">losalamos.project</span><span class="w"> </span><span class="kn">import</span> <span class="n">_load_config</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">losalamos.tools.core</span><span class="w"> </span><span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">losalamos.tools.add_new_project</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">losalamos.tools.new_project</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">_list_branches</span><span class="p">,</span>
     <span class="n">_next_increment</span><span class="p">,</span>
     <span class="n">run</span> <span class="k">as</span> <span class="n">_add_project_run</span><span class="p">,</span>
@@ -667,7 +719,7 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">_add_project</span><span class="p">(</span><span class="n">vault</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">branch_path</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Add a new project by writing a temporary config and calling</span>
-<span class="sd">    :func:`losalamos.tools.add_new_project.run`.</span>
+<span class="sd">    :func:`losalamos.tools.new_project.run`.</span>
 
 <span class="sd">    :param vault: Vault dict providing folder_system, separator, sources, language.</span>
 <span class="sd">    :param branch_path: Path to the branch folder where the project will be created.</span>
