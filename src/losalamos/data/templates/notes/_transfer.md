@@ -8,6 +8,7 @@ name: <% tp.file.title %>
 abstract:
 date:
 commitment:
+project:
 status:
 payer:
 receiver:
@@ -44,6 +45,7 @@ TRANSFER NOTE
 
 `date` - due date
 `commitment` - Great groups: "contracts", "lifestyle", "maintenance", "safeguards", "retirement", etc.
+`project` - link to the related project note
 `status` - transfer status. typical options: "expected", "issued", "executed", "canceled", "prospected"
 `payer` - name or link to payer party
 `receiver` - name or link to receiver party
@@ -51,7 +53,7 @@ TRANSFER NOTE
 `direction` - transfer direction relative to the account. options: "inflow" or "outflow"
 `value` - value of the transfer
 `currency` - currency code. Eg, BRL, USD, EUR
-`reccurence` - smart syntax for recurrece: "1 mo", "2 mo", "1 yr", "non-reccurent"
+`reccurence` - smart syntax for recurrece: "1 month", "2 months", "1 year", "non-reccurent"
 `protocol` - "deposit", "pix", "bill"
 `method` - "manual" or "automatic" 
 `category` and subcategory - open fields for hierarchy categorization

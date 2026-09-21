@@ -1757,6 +1757,18 @@ class NoteCollAttribute(NoteCollection):
     BASE_OBJECT = NoteVariable
 
 
+class NoteCollTransfer(NoteCollection):
+    """
+    Collection of :class:`NoteTransfer` instances.
+
+    Inherits all load helpers (``load_folder``, ``load_list``,
+    ``load_pattern``) from :class:`NoteCollection`. Serves as the base
+    class for :class:`~losalamos.budget.Budget`.
+    """
+
+    BASE_OBJECT = NoteTransfer
+
+
 # ... {develop}
 
 # CLASSES -- Module-level

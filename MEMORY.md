@@ -1,5 +1,6 @@
 # Memory Log
 
+- 2026-09-21 — budget.py (new module): Budget(NoteCollTransfer) with build(batches)/save()/monthly_equivalent()/annual_equivalent(); recurrence engine supports day/week/month/year syntax; NoteCollTransfer added to notes.py; "no new module" rule relaxed at user's explicit request
 - 2026-09-21 — scripts/standardize_project_notes.py: new script to standardize existing project notes to current template schema; handles missing fields, field reordering, and legacy "contract"→"contractor" rename; uses NoteProject.load_metadata for the heavy lifting
 - 2026-09-20 — added provider/provider_person fields to project system: _project.md template, HARMONIZE_TEXT_FIELDS, _LINK_FIELDS, instance attributes, get_provider/load_provider/get_provider_person/load_provider_person methods in project.py, and interactive picker in add_new_project.py
 - 2026-09-20 — NoteSapiens renamed to NotePerson: NotePerson(NoteSapiens) child class added; NoteSapiens kept for backward compat; _person.md template created; contractor_sapiens/client_sapiens → contractor_person/client_person in project note, project.py, and add_new_project.py; sources config key "persons" preferred ("sapiens" still merged for compat); NoteCollPerson added
