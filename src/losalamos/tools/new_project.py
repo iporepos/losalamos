@@ -15,8 +15,8 @@ handled by the higher-level :mod:`losalamos.tools.manage_vault` tool.
 
 .. code-block:: bash
 
-    python -m losalamos.tools.add_new_project path/to/branch/folder
-    python -m losalamos.tools.add_new_project path/to/config.toml
+    python -m losalamos.tools.new_project path/to/branch/folder
+    python -m losalamos.tools.new_project path/to/config.toml
 
 **Config file keys** (when passing a config file)
 
@@ -36,26 +36,71 @@ handled by the higher-level :mod:`losalamos.tools.manage_vault` tool.
 - ``b`` after a filtered list — go back to the letter filter.
 - ``q`` at any prompt — abort and exit.
 
-.. dropdown:: Example — config file (default system)
-    :icon: code-square
-    :open:
+**Config file — default system**
 
-    .. code-block:: toml
+.. tab-set::
 
-        folder = "C:/My Drive/projects/Research"
-        folder_system = "default"
-        separator = "_"
-        sources = "C:/vault/sources.toml"
-        language = "pt-br"
+    .. tab-item:: TOML
 
-.. dropdown:: Example — config file (alphanumerical system)
-    :icon: code-square
+        .. code-block:: toml
 
-    .. code-block:: toml
+            folder        = "C:/My Drive/projects/Research"
+            folder_system = "default"
+            separator     = "_"
+            sources       = "C:/vault/sources.toml"
+            language      = "pt-br"
 
-        folder = "C:/My Drive/projects/C000"
-        folder_system = "alphanumerical"
-        sources = "C:/vault/sources.toml"
+    .. tab-item:: YAML
+
+        .. code-block:: yaml
+
+            folder:        C:/My Drive/projects/Research
+            folder_system: default
+            separator:     "_"
+            sources:       C:/vault/sources.toml
+            language:      pt-br
+
+    .. tab-item:: JSON
+
+        .. code-block:: json
+
+            {
+              "folder":        "C:/My Drive/projects/Research",
+              "folder_system": "default",
+              "separator":     "_",
+              "sources":       "C:/vault/sources.toml",
+              "language":      "pt-br"
+            }
+
+**Config file — alphanumerical system**
+
+.. tab-set::
+
+    .. tab-item:: TOML
+
+        .. code-block:: toml
+
+            folder        = "C:/My Drive/projects/C000"
+            folder_system = "alphanumerical"
+            sources       = "C:/vault/sources.toml"
+
+    .. tab-item:: YAML
+
+        .. code-block:: yaml
+
+            folder:        C:/My Drive/projects/C000
+            folder_system: alphanumerical
+            sources:       C:/vault/sources.toml
+
+    .. tab-item:: JSON
+
+        .. code-block:: json
+
+            {
+              "folder":        "C:/My Drive/projects/C000",
+              "folder_system": "alphanumerical",
+              "sources":       "C:/vault/sources.toml"
+            }
 
 """
 

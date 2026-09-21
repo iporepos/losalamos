@@ -11,7 +11,7 @@ Navigation flows from vault → branch → project → document management.
 When only one vault is configured the vault selection screen is skipped and
 the tool opens directly at the branch picker.
 Adding a project writes a temporary config file and delegates to
-:func:`losalamos.tools.add_new_project.run`.
+:func:`losalamos.tools.new_project.run`.
 
 **Shell usage**
 
@@ -32,24 +32,62 @@ Each entry in the ``vaults`` array supports:
 - ``sources`` (*str*, optional) — path to a shared sources config file.
 - ``language`` (*str*, optional) — language tag (e.g. ``"pt-br"``).
 
-.. dropdown:: Example — tool config file
-    :icon: code-square
-    :open:
+.. tab-set::
 
-    .. code-block:: toml
+    .. tab-item:: TOML
 
-        [[vaults]]
-        name = "Client Projects"
-        path = "C:/My Drive/projects"
-        folder_system = "default"
-        separator = "_"
-        sources = "C:/vault/sources.toml"
-        language = "pt-br"
+        .. code-block:: toml
 
-        [[vaults]]
-        name = "Research"
-        path = "C:/research"
-        folder_system = "alphanumerical"
+            [[vaults]]
+            name      = "Client Projects"
+            path      = "C:/My Drive/projects"
+            folder_system = "default"
+            separator = "_"
+            sources   = "C:/vault/sources.toml"
+            language  = "pt-br"
+
+            [[vaults]]
+            name      = "Research"
+            path      = "C:/research"
+            folder_system = "alphanumerical"
+
+    .. tab-item:: YAML
+
+        .. code-block:: yaml
+
+            vaults:
+              - name:          Client Projects
+                path:          C:/My Drive/projects
+                folder_system: default
+                separator:     "_"
+                sources:       C:/vault/sources.toml
+                language:      pt-br
+
+              - name:          Research
+                path:          C:/research
+                folder_system: alphanumerical
+
+    .. tab-item:: JSON
+
+        .. code-block:: json
+
+            {
+              "vaults": [
+                {
+                  "name":          "Client Projects",
+                  "path":          "C:/My Drive/projects",
+                  "folder_system": "default",
+                  "separator":     "_",
+                  "sources":       "C:/vault/sources.toml",
+                  "language":      "pt-br"
+                },
+                {
+                  "name":          "Research",
+                  "path":          "C:/research",
+                  "folder_system": "alphanumerical"
+                }
+              ]
+            }
 
 """
 
@@ -69,7 +107,7 @@ from pathlib import Path
 import losalamos
 from losalamos.project import _load_config
 from losalamos.tools.core import *
-from losalamos.tools.add_new_project import (
+from losalamos.tools.new_project import (
     _list_branches,
     _next_increment,
     run as _add_project_run,
@@ -263,7 +301,7 @@ def _pick_project(vault: dict, branch_path: Path) -> dict | None:
 def _add_project(vault: dict, branch_path: Path) -> None:
     """
     Add a new project by writing a temporary config and calling
-    :func:`losalamos.tools.add_new_project.run`.
+    :func:`losalamos.tools.new_project.run`.
 
     :param vault: Vault dict providing folder_system, separator, sources, language.
     :param branch_path: Path to the branch folder where the project will be created.

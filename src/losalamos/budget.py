@@ -178,7 +178,9 @@ class Budget(NoteCollTransfer):
                 direction = str(merged.get("direction", "outflow")).lower().rstrip("s")
 
                 for dt in dates:
-                    name = f"{self.NOTE_PREFIX.upper()}_{self.name}_{dt[:7]}_{counter:04d}"
+                    name = (
+                        f"{self.NOTE_PREFIX.upper()}_{self.name}_{dt[:7]}_{counter:04d}"
+                    )
 
                     note = NoteTransfer(name=name, alias=name)
                     # load_new reads the template without writing any file
@@ -417,7 +419,9 @@ class Budget(NoteCollTransfer):
         :rtype: list[str]
         """
         recurrence = str(recurrence).strip().lower()
-        m = re.match(r"^(\d+)\s+(day|days|week|weeks|month|months|year|years)$", recurrence)
+        m = re.match(
+            r"^(\d+)\s+(day|days|week|weeks|month|months|year|years)$", recurrence
+        )
         if not m:
             return []
 

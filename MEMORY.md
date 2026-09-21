@@ -1,5 +1,8 @@
 # Memory Log
 
+- 2026-09-21 — docs: tools section moved from api.rst to new cli.rst (4 groups: Project/Build/Ingestion/References); losalamos.budget added to api.rst Domain; cli added to index.rst toctree
+- 2026-09-21 — tab-set docstring pattern applied to manage_vault.py, new_project.py, ingest_variables.py; ingest_variables loader upgraded from json.load to MbaE.load_config_file with batch-key normalisation (now accepts TOML/YAML/JSON)
+- 2026-09-21 — tools/build_budget.py: CLI tool --config <file> builds Budget from TOML/YAML/JSON config; merges multiple batch files; optional equivalent analysis print and folder save; docstring uses tab-set for all three config and budget file format examples
 - 2026-09-21 — budget.py (new module): Budget(NoteCollTransfer) with build(batches)/save()/monthly_equivalent()/annual_equivalent(); recurrence engine supports day/week/month/year syntax; NoteCollTransfer added to notes.py; "no new module" rule relaxed at user's explicit request
 - 2026-09-21 — scripts/standardize_project_notes.py: new script to standardize existing project notes to current template schema; handles missing fields, field reordering, and legacy "contract"→"contractor" rename; uses NoteProject.load_metadata for the heavy lifting
 - 2026-09-20 — added provider/provider_person fields to project system: _project.md template, HARMONIZE_TEXT_FIELDS, _LINK_FIELDS, instance attributes, get_provider/load_provider/get_provider_person/load_provider_person methods in project.py, and interactive picker in add_new_project.py

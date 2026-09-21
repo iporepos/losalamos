@@ -6,10 +6,6 @@ API
 This reference is automatically generated from docstrings in the source code.
 It covers the main modules, classes, and functions available in the package.
 
-.. warning::
-
-    This documentation is under active development and may be incomplete.
-
 
 Core
 --------------------------------------------
@@ -29,26 +25,8 @@ Domain
    :toctree: generated
 
    losalamos.notes
+   losalamos.budget
    losalamos.figures
    losalamos.references
    losalamos.ingestion
    losalamos.documents
-
-
-Tools
---------------------------------------------
-
-.. autosummary::
-   :toctree: generated
-
-   losalamos.tools.build_figures
-   losalamos.tools.new_drawing
-   losalamos.tools.ingest_references
-   losalamos.tools.search_references
-   losalamos.tools.update_references
-   losalamos.tools.update_templates
-   losalamos.tools.ingest_variables
-   losalamos.tools.database
-   losalamos.tools.add_new_project
-   losalamos.tools.manage_documents
-   losalamos.tools.manage_vault

@@ -19,4 +19,5 @@ Contents
    about
    usage
    api
+   cli
    development

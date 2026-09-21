@@ -6,8 +6,8 @@
 """
 Batch-creation tool for variable registry notes.
 
-Reads a JSON seed file and writes one Obsidian ``.md`` note per entry into
-a target vault folder using :class:`losalamos.notes.NoteVariable`.
+Reads a seed file (TOML, YAML, or JSON) and writes one Obsidian ``.md`` note
+per entry into a target vault folder using :class:`losalamos.notes.NoteVariable`.
 
 Codes are user-assigned and must appear in each entry. Shared fields
 (``subject``, ``tags``, ``category``, etc.) can be declared once in
@@ -18,48 +18,109 @@ Usage
 
 .. code-block:: shell
 
-    python -m losalamos.tools.ingest_variables --variables <seed.json> [--overwrite]
+    python -m losalamos.tools.ingest_variables --variables <seed_file> [--overwrite]
 
-Seed JSON format
-----------------
+Seed file
+---------
 
-The seed file is a **list of batches**. Each batch targets one vault folder
+The seed holds one or more batches. Each batch targets one vault folder
 and carries its own ``defaults`` and ``entries``.
 
-.. code-block:: json
+.. tab-set::
 
-    [
-        {
-            "vault": "/path/to/vault/hydrology",
-            "defaults": {
-                "subject": "[[Surface Hydrology]]",
-                "tags": ["hydrology"],
-                "category": "physical"
-            },
-            "entries": [
-                {
-                    "code": "F101V001",
-                    "name": "Streamflow",
-                    "alias": "streamflow",
-                    "units": "m^3/s",
-                    "range": "[0U)",
-                    "symbol": "Q",
+    .. tab-item:: TOML
+
+        .. code-block:: toml
+
+            [[batch]]
+            vault = "/path/to/vault/hydrology"
+
+            [batch.defaults]
+            subject  = "[[Surface Hydrology]]"
+            tags     = ["hydrology"]
+            category = "physical"
+
+            [[batch.entries]]
+            code      = "F101V001"
+            name      = "Streamflow"
+            alias     = "streamflow"
+            units     = "m^3/s"
+            range     = "[0U)"
+            symbol    = "Q"
+            dimension = "L^{3}/T"
+
+
+            [[batch]]
+            vault = "/path/to/vault/climate"
+
+            [batch.parameters]
+            fallback_title = false
+
+            [batch.defaults]
+            subject = "[[Climatology]]"
+            tags    = ["climate"]
+
+    .. tab-item:: YAML
+
+        .. code-block:: yaml
+
+            batch:
+              - vault: /path/to/vault/hydrology
+                defaults:
+                  subject:  "[[Surface Hydrology]]"
+                  tags:     [hydrology]
+                  category: physical
+                entries:
+                  - code:      F101V001
+                    name:      Streamflow
+                    alias:     streamflow
+                    units:     m^3/s
+                    range:     "[0U)"
+                    symbol:    Q
+                    dimension: "L^{3}/T"
+
+              - vault: /path/to/vault/climate
+                parameters:
+                  fallback_title: false
+                defaults:
+                  subject: "[[Climatology]]"
+                  tags:    [climate]
+                entries:   []
+
+    .. tab-item:: JSON
+
+        .. code-block:: json
+
+            [
+              {
+                "vault": "/path/to/vault/hydrology",
+                "defaults": {
+                  "subject":  "[[Surface Hydrology]]",
+                  "tags":     ["hydrology"],
+                  "category": "physical"
+                },
+                "entries": [
+                  {
+                    "code":      "F101V001",
+                    "name":      "Streamflow",
+                    "alias":     "streamflow",
+                    "units":     "m^3/s",
+                    "range":     "[0U)",
+                    "symbol":    "Q",
                     "dimension": "L^{3}/T"
-                }
+                  }
+                ]
+              },
+              {
+                "vault": "/path/to/vault/climate",
+                "parameters": {"fallback_title": false},
+                "defaults": {
+                  "subject": "[[Climatology]]",
+                  "tags":    ["climate"]
+                },
+                "entries": []
+              }
             ]
-        },
-        {
-            "vault": "/path/to/vault/climate",
-            "parameters": {
-                "fallback_title": false
-            },
-            "defaults": {
-                "subject": "[[Climatology]]",
-                "tags": ["climate"]
-            },
-            "entries": []
-        }
-    ]
 
 Batch keys
 ----------
@@ -93,11 +154,11 @@ Batch keys
 # =======================================================================
 
 import argparse
-import json
 import sys
 from pathlib import Path
 
 from losalamos.notes import NoteVariable
+from losalamos.root import MbaE
 
 
 # HELPERS
@@ -267,20 +328,26 @@ def ingest_variables(
     seed_path: Path,
     overwrite: bool = False,
 ) -> None:
-    """Read a JSON seed file and process all batches.
+    """Read a seed file (TOML, YAML, or JSON) and process all batches.
 
     The seed must be a list of batch dicts, each with a ``vault``, optional
-    ``defaults``, and an ``entries`` list. A single batch dict is also accepted.
+    ``defaults``, and an ``entries`` list. TOML and YAML files may wrap
+    batches under a top-level ``batch`` key; JSON files may be a bare list.
+    A single batch dict is also accepted.
 
-    :param seed_path: Path to the JSON seed file.
+    :param seed_path: Path to the seed file (TOML, YAML, or JSON).
     :type seed_path: :class:`pathlib.Path`
     :param overwrite: If ``False`` (default), existing files are skipped.
     :type overwrite: bool
     """
-    with open(seed_path, "r", encoding="utf-8") as f:
-        seed = json.load(f)
+    raw = MbaE.load_config_file(path=seed_path)
 
-    batches = seed if isinstance(seed, list) else [seed]
+    if isinstance(raw, list):
+        batches = raw
+    elif isinstance(raw, dict) and "batch" in raw:
+        batches = raw["batch"]
+    else:
+        batches = [raw]
 
     print(f"Seed  : {seed_path.name}  ({len(batches)} batch(es))")
     print()

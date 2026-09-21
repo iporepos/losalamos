@@ -17,6 +17,7 @@ from losalamos.budget import Budget
 # Helpers
 # ---------------------------------------------------------------------------
 
+
 def _simple_budget(name="TestBudget"):
     b = Budget(name=name)
     b.year = 2027
@@ -84,7 +85,9 @@ class TestResolveDates(unittest.TestCase):
         self.assertEqual(len(dates), 1)
 
     def test_day_anchor_applied(self):
-        dates = Budget._resolve_dates(recurrence="1 month", year=2027, duration=1, day=10)
+        dates = Budget._resolve_dates(
+            recurrence="1 month", year=2027, duration=1, day=10
+        )
         self.assertTrue(all(d.endswith("-10") for d in dates))
 
     def test_unknown_recurrence_returns_empty(self):
@@ -159,10 +162,14 @@ class TestBudgetBuild(unittest.TestCase):
 
     def test_direction_plural_normalised(self):
         b = _simple_budget()
-        b.build(batches=[{
-            "defaults": {"account": "A", "recurrence": "1 year"},
-            "transfers": [{"value": 50, "direction": "outflows"}],
-        }])
+        b.build(
+            batches=[
+                {
+                    "defaults": {"account": "A", "recurrence": "1 year"},
+                    "transfers": [{"value": 50, "direction": "outflows"}],
+                }
+            ]
+        )
         note = list(b.collection.values())[0]
         self.assertEqual(note.metadata["direction"], "outflow")
 
@@ -187,35 +194,37 @@ class TestBudgetEquivalent(unittest.TestCase):
         cls.budget = Budget(name="EquivTest")
         cls.budget.year = 2027
         cls.budget.duration = 1
-        cls.budget.build(batches=[
-            {
-                "defaults": {
-                    "direction": "outflow",
-                    "account": "ACC-01",
-                    "recurrence": "1 month",
-                    "currency": "BRL",
+        cls.budget.build(
+            batches=[
+                {
+                    "defaults": {
+                        "direction": "outflow",
+                        "account": "ACC-01",
+                        "recurrence": "1 month",
+                        "currency": "BRL",
+                    },
+                    "transfers": [{"value": 1200.0, "receiver": "Landlord"}],
                 },
-                "transfers": [{"value": 1200.0, "receiver": "Landlord"}],
-            },
-            {
-                "defaults": {
-                    "direction": "inflow",
-                    "account": "ACC-01",
-                    "recurrence": "1 month",
-                    "currency": "BRL",
+                {
+                    "defaults": {
+                        "direction": "inflow",
+                        "account": "ACC-01",
+                        "recurrence": "1 month",
+                        "currency": "BRL",
+                    },
+                    "transfers": [{"value": 3000.0, "payer": "Employer"}],
                 },
-                "transfers": [{"value": 3000.0, "payer": "Employer"}],
-            },
-            {
-                "defaults": {
-                    "direction": "outflow",
-                    "account": "ACC-02",
-                    "recurrence": "1 month",
-                    "currency": "BRL",
+                {
+                    "defaults": {
+                        "direction": "outflow",
+                        "account": "ACC-02",
+                        "recurrence": "1 month",
+                        "currency": "BRL",
+                    },
+                    "transfers": [{"value": 500.0, "receiver": "Gym"}],
                 },
-                "transfers": [{"value": 500.0, "receiver": "Gym"}],
-            },
-        ])
+            ]
+        )
 
     def test_monthly_columns(self):
         df = self.budget.monthly_equivalent()
