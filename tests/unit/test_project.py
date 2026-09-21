@@ -47,7 +47,13 @@ from losalamos.project import (
     Project,
     SUBFOLDERS,
 )
-from losalamos.notes import NoteProject, NoteOrganization, NoteSapiens, NoteBasic
+from losalamos.notes import (
+    NoteProject,
+    NoteOrganization,
+    NoteSapiens,
+    NotePerson,
+    NoteBasic,
+)
 
 # ***********************************************************************
 # CLASSES
@@ -191,15 +197,15 @@ class TestProject(unittest.TestCase):
                 "name": "LinkProject",
                 "contractor": "Acme Corp",
                 "client": "Beta Ltd",
-                "contractor_sapiens": "John Doe",
-                "client_sapiens": "Jane Doe",
+                "contractor_person": "John Doe",
+                "client_person": "Jane Doe",
             }
         )
         for field, expected in [
             ("contractor", '"[[Acme Corp]]"'),
             ("client", '"[[Beta Ltd]]"'),
-            ("contractor_sapiens", '"[[John Doe]]"'),
-            ("client_sapiens", '"[[Jane Doe]]"'),
+            ("contractor_person", '"[[John Doe]]"'),
+            ("client_person", '"[[Jane Doe]]"'),
         ]:
             val = str(p.main_note.metadata.get(field, ""))
             self.assertIn(expected, val, f"{field} missing wiki-link")
@@ -232,7 +238,7 @@ class TestProject(unittest.TestCase):
         # write a minimal sources.yaml to a temp location
         import yaml
 
-        sources_content = {"organizations": [], "sapiens": [], "services": []}
+        sources_content = {"organizations": [], "persons": [], "services": []}
         src_file = Path(self._tmp_root) / "sources_fixture.yaml"
         src_file.write_text(yaml.dump(sources_content), encoding="utf-8")
 
@@ -347,7 +353,7 @@ class TestProject(unittest.TestCase):
 class TestProjectContractor(unittest.TestCase):
     """
     Tests for Project.get_attribute (quote stripping), _collect_md_files,
-    load_contractor, and load_contractor_sapiens.
+    load_contractor, and load_contractor_person.
     """
 
     # -------------------------------------------------------------------
@@ -359,9 +365,9 @@ class TestProjectContractor(unittest.TestCase):
         cls._tmp = Path(tempfile.mkdtemp(prefix="losalamos_test_contractor_"))
 
         cls.org_dir = cls._tmp / "organizations"
-        cls.sapiens_dir = cls._tmp / "individuals"
+        cls.persons_dir = cls._tmp / "individuals"
         cls.org_dir.mkdir()
-        cls.sapiens_dir.mkdir()
+        cls.persons_dir.mkdir()
 
         # organization note fixture
         (cls.org_dir / "AMA Consultoria.md").write_text(
@@ -369,9 +375,9 @@ class TestProjectContractor(unittest.TestCase):
             encoding="utf-8",
         )
 
-        # sapiens note fixture
-        (cls.sapiens_dir / "John Doe.md").write_text(
-            "---\nnote_type: sapiens\nname: John Doe\n---\n# John Doe\n",
+        # person note fixture
+        (cls.persons_dir / "John Doe.md").write_text(
+            "---\nnote_type: person\nname: John Doe\n---\n# John Doe\n",
             encoding="utf-8",
         )
 
@@ -389,17 +395,17 @@ class TestProjectContractor(unittest.TestCase):
             encoding="utf-8",
         )
 
-        # project note: contractor is a sapiens (not an org)
-        cls._note_sapiens_contractor = cls._tmp / "project_sapiens_ctr.md"
-        cls._note_sapiens_contractor.write_text(
+        # project note: contractor is a person (not an org)
+        cls._note_person_contractor = cls._tmp / "project_person_ctr.md"
+        cls._note_person_contractor.write_text(
             "---\nnote_type: project\nname: TestProject\ncontractor: John Doe\n---\n# TestProject\n",
             encoding="utf-8",
         )
 
-        # project note: both contractor (org) and contractor_sapiens fields
-        cls._note_with_sapiens = cls._tmp / "project_with_sapiens.md"
-        cls._note_with_sapiens.write_text(
-            "---\nnote_type: project\nname: TestProject\ncontractor: AMA Consultoria\ncontractor_sapiens: John Doe\n---\n# TestProject\n",
+        # project note: both contractor (org) and contractor_person fields
+        cls._note_with_person = cls._tmp / "project_with_person.md"
+        cls._note_with_person.write_text(
+            "---\nnote_type: project\nname: TestProject\ncontractor: AMA Consultoria\ncontractor_person: John Doe\n---\n# TestProject\n",
             encoding="utf-8",
         )
 
@@ -414,7 +420,7 @@ class TestProjectContractor(unittest.TestCase):
     def tearDownClass(cls):
         shutil.rmtree(cls._tmp, ignore_errors=True)
 
-    def _make_project(self, note_path, org_sources=None, sapiens_sources=None):
+    def _make_project(self, note_path, org_sources=None, person_sources=None):
         """Instantiate a Project with a preloaded main note and configured sources."""
         p = Project(name="TestProject", alias="TP")
         p.main_note = NoteProject(name="TestProject", alias="TP")
@@ -422,8 +428,8 @@ class TestProjectContractor(unittest.TestCase):
         search = p.sources.setdefault("folders", {}).setdefault("search", {})
         if org_sources is not None:
             search["organizations"] = org_sources
-        if sapiens_sources is not None:
-            search["sapiens"] = sapiens_sources
+        if person_sources is not None:
+            search["persons"] = person_sources
         return p
 
     # -------------------------------------------------------------------
@@ -489,17 +495,17 @@ class TestProjectContractor(unittest.TestCase):
         p.load_contractor()
         self.assertIsInstance(p.contractor, NoteOrganization)
 
-    def test_load_contractor_falls_back_to_sapiens(self):
+    def test_load_contractor_falls_back_to_person(self):
         """
-        load_contractor should set self.contractor to a NoteSapiens when the
-        contractor name is not found in org sources but is found in sapiens sources.
+        load_contractor should set self.contractor to a NotePerson when the
+        contractor name is not found in org sources but is found in person sources.
         """
         p = self._make_project(
-            self._note_sapiens_contractor,
-            sapiens_sources=[self.sapiens_dir],
+            self._note_person_contractor,
+            person_sources=[self.persons_dir],
         )
         p.load_contractor()
-        self.assertIsInstance(p.contractor, NoteSapiens)
+        self.assertIsInstance(p.contractor, NotePerson)
 
     def test_load_contractor_not_found_raises(self):
         """
@@ -509,7 +515,7 @@ class TestProjectContractor(unittest.TestCase):
         p = self._make_project(
             self._note_unknown,
             org_sources=[self.org_dir],
-            sapiens_sources=[self.sapiens_dir],
+            person_sources=[self.persons_dir],
         )
         with self.assertRaises(FileNotFoundError):
             p.load_contractor()
@@ -523,48 +529,48 @@ class TestProjectContractor(unittest.TestCase):
             p.load_contractor()
 
     # -------------------------------------------------------------------
-    # load_contractor_sapiens
+    # load_contractor_person
     # -------------------------------------------------------------------
 
-    def test_load_contractor_sapiens_sets_attributes(self):
+    def test_load_contractor_person_sets_attributes(self):
         """
-        load_contractor_sapiens should set self.contractor_sapiens to a
-        NoteSapiens and populate self.contractor_sapiens_path.
+        load_contractor_person should set self.contractor_person to a
+        NotePerson and populate self.contractor_person_path.
         """
         p = self._make_project(
-            self._note_with_sapiens,
+            self._note_with_person,
             org_sources=[self.org_dir],
-            sapiens_sources=[self.sapiens_dir],
+            person_sources=[self.persons_dir],
         )
-        p.load_contractor_sapiens()
-        self.assertIsInstance(p.contractor_sapiens, NoteSapiens)
-        self.assertIsNotNone(p.contractor_sapiens_path)
+        p.load_contractor_person()
+        self.assertIsInstance(p.contractor_person, NotePerson)
+        self.assertIsNotNone(p.contractor_person_path)
 
-    def test_load_contractor_sapiens_triggers_load_contractor(self):
+    def test_load_contractor_person_triggers_load_contractor(self):
         """
-        load_contractor_sapiens should automatically load the contractor
+        load_contractor_person should automatically load the contractor
         when self.contractor has not been set yet.
         """
         p = self._make_project(
-            self._note_with_sapiens,
+            self._note_with_person,
             org_sources=[self.org_dir],
-            sapiens_sources=[self.sapiens_dir],
+            person_sources=[self.persons_dir],
         )
         self.assertIsNone(p.contractor)
-        p.load_contractor_sapiens()
+        p.load_contractor_person()
         self.assertIsNotNone(p.contractor)
 
-    def test_load_contractor_sapiens_not_found_raises(self):
+    def test_load_contractor_person_not_found_raises(self):
         """
-        load_contractor_sapiens should raise FileNotFoundError when the
-        contractor_sapiens name is not found in sapiens sources.
+        load_contractor_person should raise FileNotFoundError when the
+        contractor_person name is not found in person sources.
         """
         p = self._make_project(
-            self._note_with_sapiens,
+            self._note_with_person,
             org_sources=[self.org_dir],
         )
         with self.assertRaises(FileNotFoundError):
-            p.load_contractor_sapiens()
+            p.load_contractor_person()
 
 
 class TestRemoteFolders(unittest.TestCase):
@@ -976,12 +982,12 @@ class TestAddTransfer(unittest.TestCase):
         cls._tmp = Path(tempfile.mkdtemp(prefix="transfer_add_"))
         cls._pj = _make_bare_project(cls._tmp)
         cls._note = cls._pj.add_transfer(
-            transfer_type="inflow",
+            direction="inflow",
             date="2026-09-02",
             account="main-account",
             value=1500.0,
-            status="Executed",
-            protocol="Transfer",
+            status="executed",
+            protocol="pix",
         )
 
     @classmethod
@@ -996,8 +1002,8 @@ class TestAddTransfer(unittest.TestCase):
     def test_note_type_is_transfer(self):
         self.assertEqual(self._note.metadata.get("note_type"), "transfer")
 
-    def test_transfer_type_stored(self):
-        self.assertEqual(self._note.metadata.get("transfer_type"), "inflow")
+    def test_direction_stored(self):
+        self.assertEqual(self._note.metadata.get("direction"), "inflow")
 
     def test_account_stored(self):
         self.assertEqual(self._note.metadata.get("account"), "main-account")
@@ -1006,12 +1012,12 @@ class TestAddTransfer(unittest.TestCase):
         self.assertEqual(self._note.metadata.get("value"), 1500.0)
 
     def test_method_defaults_to_manual(self):
-        self.assertEqual(self._note.metadata.get("method"), "Manual")
+        self.assertEqual(self._note.metadata.get("method"), "manual")
 
     def test_outflow_goes_to_outflows_folder(self):
         pj = _make_bare_project(self._tmp, name="outproj")
         pj.add_transfer(
-            transfer_type="outflow",
+            direction="outflow",
             date="2026-09-02",
             account="expenses",
             value=200.0,
@@ -1019,10 +1025,10 @@ class TestAddTransfer(unittest.TestCase):
         outflows = Path(pj.folder_root) / "budget" / "outflows"
         self.assertTrue(any(outflows.glob("*.md")))
 
-    def test_invalid_transfer_type_raises(self):
+    def test_invalid_direction_raises(self):
         with self.assertRaises(ValueError):
             self._pj.add_transfer(
-                transfer_type="sideways",
+                direction="sideways",
                 date="2026-09-02",
                 account="x",
                 value=0,
@@ -1031,10 +1037,10 @@ class TestAddTransfer(unittest.TestCase):
     def test_transfer_id_increments(self):
         pj = _make_bare_project(self._tmp, name="incproj")
         n1 = pj.add_transfer(
-            transfer_type="inflow", date="2026-09-02", account="a", value=10
+            direction="inflow", date="2026-09-02", account="a", value=10
         )
         n2 = pj.add_transfer(
-            transfer_type="inflow", date="2026-09-02", account="b", value=20
+            direction="inflow", date="2026-09-02", account="b", value=20
         )
         id1 = n1.metadata.get("name", "").split("_")[-1]
         id2 = n2.metadata.get("name", "").split("_")[-1]
@@ -1049,10 +1055,10 @@ class TestGetTransfers(unittest.TestCase):
         cls._tmp = Path(tempfile.mkdtemp(prefix="transfer_get_"))
         cls._pj = _make_bare_project(cls._tmp)
         cls._pj.add_transfer(
-            transfer_type="inflow", date="2026-09-01", account="a", value=100
+            direction="inflow", date="2026-09-01", account="a", value=100
         )
         cls._pj.add_transfer(
-            transfer_type="outflow", date="2026-09-02", account="b", value=50
+            direction="outflow", date="2026-09-02", account="b", value=50
         )
         cls._df = cls._pj.get_transfers()
 
@@ -1070,22 +1076,28 @@ class TestGetTransfers(unittest.TestCase):
         expected = {
             "name",
             "date",
-            "transfer_type",
+            "direction",
             "status",
             "account",
             "value",
+            "currency",
             "commitment",
             "recurrence",
             "method",
             "protocol",
+            "payer",
+            "receiver",
+            "domain",
+            "category",
+            "subcategory",
             "related_asset",
         }
         self.assertTrue(expected.issubset(set(self._df.columns)))
 
-    def test_both_transfer_types_present(self):
-        types = set(self._df["transfer_type"].tolist())
-        self.assertIn("inflow", types)
-        self.assertIn("outflow", types)
+    def test_both_directions_present(self):
+        directions = set(self._df["direction"].tolist())
+        self.assertIn("inflow", directions)
+        self.assertIn("outflow", directions)
 
     def test_empty_when_no_transfers(self):
         pj = _make_bare_project(self._tmp, name="emptyproj")

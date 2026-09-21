@@ -33,6 +33,7 @@ from losalamos.notes import (
     NoteCollection,
     NoteOrganization,
     NoteSapiens,
+    NotePerson,
     NoteTransfer,
 )
 from tests.conftest import DATA_DIR
@@ -249,9 +250,9 @@ class TestNoteSapiens(unittest.TestCase):
         self.assertIsNotNone(self.note.data)
 
     def test_note_type(self):
-        """note_type field must be 'sapiens'."""
+        """note_type field must be 'person'."""
         self.note.load_new(file_note=self.file)
-        self.assertEqual(self.note.metadata.get("note_type"), "sapiens")
+        self.assertEqual(self.note.metadata.get("note_type"), "person")
 
     def test_metadata_fields(self):
         """All template fields must be present after load_new."""
@@ -266,7 +267,7 @@ class TestNoteSapiens(unittest.TestCase):
 
         reloaded = NoteSapiens()
         reloaded.load(file_note=self.file)
-        self.assertEqual(reloaded.metadata.get("note_type"), "sapiens")
+        self.assertEqual(reloaded.metadata.get("note_type"), "person")
         self.assertIn(self.file.stem, reloaded.metadata.get("name", ""))
 
     def test_abstract_pattern(self):
@@ -276,6 +277,84 @@ class TestNoteSapiens(unittest.TestCase):
         self.note.update()
         head_text = "\n".join(self.note.data[self.note.STR_HEAD])
         self.assertIn("A test person.", head_text)
+
+
+class TestNotePerson(unittest.TestCase):
+    """
+    Tests for ``losalamos.notes.NotePerson``.
+    """
+
+    EXPECTED_FIELDS = {
+        "note_type",
+        "timestamp",
+        "name",
+        "email",
+        "email_pro",
+        "phone",
+        "place",
+        "abstract",
+        "edu_background",
+        "degree",
+        "profession",
+        "affiliation_edu",
+        "affiliation_pro",
+        "address",
+        "lattes",
+        "orcid",
+        "website",
+        "cpf",
+        "rg",
+        "github",
+        "linkedin",
+    }
+
+    @classmethod
+    def setUpClass(cls):
+        if RUN_BENCHMARKS:
+            cls._tmp_root = OUTPUT_DIR / "notes_person"
+            cls._tmp_root.mkdir(parents=True, exist_ok=True)
+        else:
+            cls._tmp_root = Path(tempfile.mkdtemp(prefix="losalamos_test_person_"))
+
+    @classmethod
+    def tearDownClass(cls):
+        if not RUN_BENCHMARKS:
+            shutil.rmtree(cls._tmp_root, ignore_errors=True)
+
+    def setUp(self):
+        self.note = NotePerson()
+        self.file = self._tmp_root / "TestPerson2.md"
+
+    def test_load_new(self):
+        """load_new creates the file and populates metadata."""
+        self.note.load_new(file_note=self.file)
+        self.assertIsNotNone(self.note.metadata)
+        self.assertIsNotNone(self.note.data)
+
+    def test_note_type(self):
+        """note_type field must be 'person'."""
+        self.note.load_new(file_note=self.file)
+        self.assertEqual(self.note.metadata.get("note_type"), "person")
+
+    def test_metadata_fields(self):
+        """All template fields must be present after load_new."""
+        self.note.load_new(file_note=self.file)
+        missing = self.EXPECTED_FIELDS - set(self.note.metadata.keys())
+        self.assertSetEqual(missing, set(), msg=f"Missing fields: {missing}")
+
+    def test_save_roundtrip(self):
+        """Save then reload preserves note_type and name."""
+        self.note.load_new(file_note=self.file)
+        self.note.save()
+
+        reloaded = NotePerson()
+        reloaded.load(file_note=self.file)
+        self.assertEqual(reloaded.metadata.get("note_type"), "person")
+        self.assertIn(self.file.stem, reloaded.metadata.get("name", ""))
+
+    def test_is_subclass_of_sapiens(self):
+        """NotePerson must be a subclass of NoteSapiens for backward compat."""
+        self.assertIsInstance(self.note, NoteSapiens)
 
 
 # ***********************************************************************
@@ -290,14 +369,20 @@ class TestNoteTransfer(unittest.TestCase):
         "name",
         "abstract",
         "date",
-        "transfer_type",
+        "direction",
         "status",
+        "payer",
+        "receiver",
         "account",
         "value",
+        "currency",
         "commitment",
         "recurrence",
         "method",
         "protocol",
+        "domain",
+        "category",
+        "subcategory",
         "related_asset",
     }
 

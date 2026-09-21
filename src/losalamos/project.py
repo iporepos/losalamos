@@ -51,6 +51,7 @@ from losalamos.notes import (
     NoteProject,
     NoteOrganization,
     NoteSapiens,
+    NotePerson,
     NoteBasic,
     NoteAsset,
     NoteTransfer,
@@ -197,7 +198,7 @@ def new_project(config):
         - ``status`` — defaults to ``"on going"`` if not provided
         - ``aliases`` — defaults to ``["{name} project", "Project {name}"]``
         - ``activity_id``, ``service_id``, ``professional_id``
-        - ``contractor``, ``contractor_sapiens``, ``client``, ``client_sapiens``
+        - ``contractor``, ``contractor_person``, ``client``, ``client_person``, ``provider``, ``provider_person``
         - ``date_start``, ``date_end``, ``revenue_expected``
 
     :type config: dict, str, or pathlib.Path
@@ -265,9 +266,11 @@ def new_project(config):
     # Note fields that store cross-note references and need Obsidian wiki-link syntax
     _LINK_FIELDS = {
         "contractor",
-        "contractor_sapiens",
+        "contractor_person",
         "client",
-        "client_sapiens",
+        "client_person",
+        "provider",
+        "provider_person",
         "service_id",
     }
 
@@ -694,7 +697,7 @@ class Project(FileSys):
         # admin/config/sources.toml
         [folders.search]
         organizations = ["/vault/organizations"]   # NoteOrganization notes
-        sapiens       = ["/vault/people"]          # NoteSapiens notes
+        persons       = ["/vault/people"]          # NotePerson notes  ("sapiens" also accepted)
         services      = ["/vault/services"]        # NoteBasic notes, matched by service_id
 
         [folders.remote]                           # optional remote vault roots
@@ -735,11 +738,16 @@ class Project(FileSys):
 
         self.contractor_path = None
         self.contractor = None
-        self.contractor_sapiens_path = None
-        self.contractor_sapiens = None
+        self.contractor_person_path = None
+        self.contractor_person = None
 
         self.client_path = None
         self.client = None
+
+        self.provider_path = None
+        self.provider = None
+        self.provider_person_path = None
+        self.provider_person = None
 
         self.service_path = None
         self.service = None
@@ -887,8 +895,10 @@ class Project(FileSys):
         """
         self.make_overlay_project()
         self.contractor = None
-        self.contractor_sapiens = None
+        self.contractor_person = None
         self.client = None
+        self.provider = None
+        self.provider_person = None
         self.service = None
 
         # Purge optional overlays before regenerating so stale files never persist
@@ -956,9 +966,9 @@ class Project(FileSys):
         """Return the contractor name from the main note metadata."""
         return self.get_attribute(entry_key="contractor", clean_cref=True)
 
-    def get_contractor_sapiens(self):
+    def get_contractor_person(self):
         """Return the contractor's individual representative name from the main note metadata."""
-        return self.get_attribute(entry_key="contractor_sapiens", clean_cref=True)
+        return self.get_attribute(entry_key="contractor_person", clean_cref=True)
 
     def get_client(self):
         """Return the client name from the main note metadata."""
@@ -980,8 +990,9 @@ class Project(FileSys):
 
         Reads the contractor name from the project's main note metadata and
         searches for a matching ``.md`` file in ``self.sources["organizations"]``
-        first, then in ``self.sources["sapiens"]``. On success, stores the loaded
-        note in ``self.contractor`` and the resolved path in ``self.contractor_path``.
+        first, then in ``self.sources["persons"]`` (``"sapiens"`` also accepted for
+        backward compatibility). On success, stores the loaded note in
+        ``self.contractor`` and the resolved path in ``self.contractor_path``.
 
         :attr:`sources` is populated automatically from
         ``admin/config/sources.toml`` on project load; it can also be set
@@ -996,7 +1007,7 @@ class Project(FileSys):
 
         search = self.sources.get("folders", {}).get("search", {})
         sources_organizations = search.get("organizations", None)
-        sources_sapiens = search.get("sapiens", None)
+        sources_persons = (search.get("persons") or []) + (search.get("sapiens") or [])
 
         # organizations take precedence in the search over individuals
         path = self._collect_md_files(sources_organizations).get(contractor)
@@ -1007,10 +1018,9 @@ class Project(FileSys):
             self.contractor = note
             return None
 
-        # case for a sapiens contractor
-        path = self._collect_md_files(sources_sapiens).get(contractor)
+        path = self._collect_md_files(sources_persons).get(contractor)
         if path is not None:
-            note = NoteSapiens(name=contractor, alias=contractor)
+            note = NotePerson(name=contractor, alias=contractor)
             note.load(file_note=path)
             self.contractor_path = path
             self.contractor = note
@@ -1018,38 +1028,38 @@ class Project(FileSys):
 
         raise FileNotFoundError(f"No contractor found for '{contractor}'")
 
-    def load_contractor_sapiens(self):
+    def load_contractor_person(self):
         """
-        Load the individual (sapiens) contractor note from ``self.sources``.
+        Load the individual contractor person note from ``self.sources``.
 
-        Reads the ``contractor_sapiens`` name from the project's main note
-        metadata and searches ``self.sources["sapiens"]`` for a matching
-        ``.md`` file. If ``self.contractor`` has not been loaded yet, calls
+        Reads the ``contractor_person`` name from the project's main note
+        metadata and searches ``self.sources["persons"]`` (``"sapiens"`` also
+        accepted for backward compatibility) for a matching ``.md`` file. If
+        ``self.contractor`` has not been loaded yet, calls
         :meth:`load_contractor` first. On success, stores the loaded note in
-        ``self.contractor_sapiens`` and the resolved path in
-        ``self.contractor_sapiens_path``.
+        ``self.contractor_person`` and the resolved path in
+        ``self.contractor_person_path``.
 
-        :raises FileNotFoundError: If no note matching the contractor_sapiens
-            name is found in the configured sapiens sources.
+        :raises FileNotFoundError: If no note matching the contractor_person
+            name is found in the configured person sources.
         :returns: None
         :rtype: None
         """
-        contractor_sapiens = self.get_contractor_sapiens()
-        sources_sapiens = (
-            self.sources.get("folders", {}).get("search", {}).get("sapiens", None)
-        )
+        contractor_person = self.get_contractor_person()
+        search = self.sources.get("folders", {}).get("search", {})
+        sources_persons = (search.get("persons") or []) + (search.get("sapiens") or [])
         if self.contractor is None:
             self.load_contractor()
 
-        path = self._collect_md_files(sources_sapiens).get(contractor_sapiens)
+        path = self._collect_md_files(sources_persons).get(contractor_person)
         if path is not None:
-            note = NoteSapiens(name=contractor_sapiens, alias=contractor_sapiens)
+            note = NotePerson(name=contractor_person, alias=contractor_person)
             note.load(file_note=path)
-            self.contractor_sapiens_path = path
-            self.contractor_sapiens = note
+            self.contractor_person_path = path
+            self.contractor_person = note
             return None
 
-        raise FileNotFoundError(f"No sapiens found for '{contractor_sapiens}'")
+        raise FileNotFoundError(f"No person found for '{contractor_person}'")
 
     def load_client(self):
         """
@@ -1057,8 +1067,9 @@ class Project(FileSys):
 
         Reads the client name from the project's main note metadata and
         searches for a matching ``.md`` file in ``self.sources["organizations"]``
-        first, then in ``self.sources["sapiens"]``. On success, stores the loaded
-        note in ``self.client`` and the resolved path in ``self.client_path``.
+        first, then in ``self.sources["persons"]`` (``"sapiens"`` also accepted for
+        backward compatibility). On success, stores the loaded note in
+        ``self.client`` and the resolved path in ``self.client_path``.
 
         :attr:`sources` is populated automatically from
         ``admin/config/sources.toml`` on project load; it can also be set
@@ -1073,7 +1084,7 @@ class Project(FileSys):
 
         search = self.sources.get("folders", {}).get("search", {})
         sources_organizations = search.get("organizations", None)
-        sources_sapiens = search.get("sapiens", None)
+        sources_persons = (search.get("persons") or []) + (search.get("sapiens") or [])
 
         # organizations take precedence in the search over individuals
         path = self._collect_md_files(sources_organizations).get(client)
@@ -1084,15 +1095,95 @@ class Project(FileSys):
             self.client = note
             return None
 
-        path = self._collect_md_files(sources_sapiens).get(client)
+        path = self._collect_md_files(sources_persons).get(client)
         if path is not None:
-            note = NoteSapiens(name=client, alias=client)
+            note = NotePerson(name=client, alias=client)
             note.load(file_note=path)
             self.client_path = path
             self.client = note
             return None
 
         raise FileNotFoundError(f"No client found for '{client}'")
+
+    def get_provider(self):
+        """Return the provider name from the main note metadata."""
+        return self.get_attribute(entry_key="provider", clean_cref=True)
+
+    def get_provider_person(self):
+        """Return the provider's individual representative name from the main note metadata."""
+        return self.get_attribute(entry_key="provider_person", clean_cref=True)
+
+    def load_provider(self):
+        """
+        Load the provider note from ``self.sources``.
+
+        Reads the provider name from the project's main note metadata and
+        searches for a matching ``.md`` file in ``self.sources["organizations"]``
+        first, then in ``self.sources["persons"]`` (``"sapiens"`` also accepted for
+        backward compatibility). On success, stores the loaded note in
+        ``self.provider`` and the resolved path in ``self.provider_path``.
+
+        :raises FileNotFoundError: If no note matching the provider name is found
+            in any configured source.
+        :returns: None
+        :rtype: None
+        """
+        provider = self.get_provider()
+
+        search = self.sources.get("folders", {}).get("search", {})
+        sources_organizations = search.get("organizations", None)
+        sources_persons = (search.get("persons") or []) + (search.get("sapiens") or [])
+
+        path = self._collect_md_files(sources_organizations).get(provider)
+        if path is not None:
+            note = NoteOrganization(name=provider, alias=provider)
+            note.load(file_note=path)
+            self.provider_path = path
+            self.provider = note
+            return None
+
+        path = self._collect_md_files(sources_persons).get(provider)
+        if path is not None:
+            note = NotePerson(name=provider, alias=provider)
+            note.load(file_note=path)
+            self.provider_path = path
+            self.provider = note
+            return None
+
+        raise FileNotFoundError(f"No provider found for '{provider}'")
+
+    def load_provider_person(self):
+        """
+        Load the individual provider person note from ``self.sources``.
+
+        Reads the ``provider_person`` name from the project's main note
+        metadata and searches ``self.sources["persons"]`` (``"sapiens"`` also
+        accepted for backward compatibility) for a matching ``.md`` file. If
+        ``self.provider`` has not been loaded yet, calls
+        :meth:`load_provider` first. On success, stores the loaded note in
+        ``self.provider_person`` and the resolved path in
+        ``self.provider_person_path``.
+
+        :raises FileNotFoundError: If no note matching the provider_person
+            name is found in the configured person sources.
+        :returns: None
+        :rtype: None
+        """
+        provider_person = self.get_provider_person()
+        search = self.sources.get("folders", {}).get("search", {})
+        sources_persons = (search.get("persons") or []) + (search.get("sapiens") or [])
+        if self.provider is None:
+            self.load_provider()
+
+        path = self._collect_md_files(sources_persons).get(provider_person)
+        if path is not None:
+            note = NotePerson(name=provider_person, alias=provider_person)
+            note.load(file_note=path)
+            self.provider_person_path = path
+            self.provider_person = note
+            return None
+
+        raise FileNotFoundError(f"No person found for '{provider_person}'")
 
     def load_service(self):
         """
@@ -1383,22 +1474,22 @@ class Project(FileSys):
         Create a ``party_b_contractor.tex`` overlay from the project's contractor data.
 
         Loads :attr:`contractor` if not yet set. When the contractor is an
-        organization, also loads :attr:`contractor_sapiens` as the representative.
+        organization, also loads :attr:`contractor_person` as the representative.
         Delegates to :meth:`make_overlay_file` using the built-in ``party_b.tex``
         template.
 
         Two scenarios are handled automatically:
 
         **Contractor is an organization** — :attr:`contractor` is a
-        :class:`~losalamos.notes.NoteOrganization`; :attr:`contractor_sapiens`
+        :class:`~losalamos.notes.NoteOrganization`; :attr:`contractor_person`
         provides the representative's fields. Both must be resolvable from
         ``self.sources``.
 
         **Contractor is an individual** — :attr:`contractor` is a
-        :class:`~losalamos.notes.NoteSapiens`; all party-B fields (entity and
+        :class:`~losalamos.notes.NotePerson`; all party-B fields (entity and
         representative) are derived from the same note.
 
-        :raises FileNotFoundError: If the contractor or sapiens representative
+        :raises FileNotFoundError: If the contractor or person representative
             cannot be found in ``self.sources``.
         :returns: Path to the written overlay file.
         :rtype: pathlib.Path
@@ -1408,7 +1499,7 @@ class Project(FileSys):
             :open:
 
             The project note has ``contractor: AMA Consultoria`` and
-            ``contractor_sapiens: John Doe``.
+            ``contractor_person: John Doe``.
 
             .. code-block:: python
 
@@ -1419,7 +1510,7 @@ class Project(FileSys):
                     "folders": {
                         "search": {
                             "organizations": ["path/to/org/notes"],
-                            "sapiens": ["path/to/people/notes"],
+                            "persons": ["path/to/people/notes"],
                         }
                     }
                 }
@@ -1441,11 +1532,11 @@ class Project(FileSys):
             :icon: code-square
             :open:
 
-            The project note has ``contractor: John Doe`` (no ``contractor_sapiens``).
+            The project note has ``contractor: John Doe`` (no ``contractor_person``).
 
             .. code-block:: python
 
-                pj.sources = {"sapiens": ["path/to/people/notes"]}
+                pj.sources = {"folders": {"search": {"persons": ["path/to/people/notes"]}}}
 
                 path = pj.make_overlay_party_b_contractor()
                 # entity and representative fields both come from "John Doe.md"
@@ -1455,9 +1546,9 @@ class Project(FileSys):
 
         representative = None
         if isinstance(self.contractor, NoteOrganization):
-            if self.contractor_sapiens is None:
-                self.load_contractor_sapiens()
-            representative = self.contractor_sapiens
+            if self.contractor_person is None:
+                self.load_contractor_person()
+            representative = self.contractor_person
 
         placeholders = self._build_party_b_placeholders(
             entity=self.contractor,
@@ -1499,7 +1590,7 @@ class Project(FileSys):
                     "folders": {
                         "search": {
                             "organizations": ["path/to/org/notes"],
-                            "sapiens": ["path/to/people/notes"],
+                            "persons": ["path/to/people/notes"],
                         }
                     }
                 }
@@ -1778,7 +1869,7 @@ class Project(FileSys):
 
     def add_transfer(
         self,
-        transfer_type,
+        direction,
         date,
         account,
         value,
@@ -1788,53 +1879,69 @@ class Project(FileSys):
         method=None,
         protocol=None,
         related_asset=None,
+        payer=None,
+        receiver=None,
+        currency=None,
+        domain=None,
+        category=None,
+        subcategory=None,
     ):
         """
         Create a new transfer note under ``budget/inflows/`` or ``budget/outflows/``.
 
-        The target folder is chosen from *transfer_type*: ``"inflow"`` writes
+        The target folder is chosen from *direction*: ``"inflow"`` writes
         to ``budget/inflows/`` and ``"outflow"`` to ``budget/outflows/``.
 
-        :param transfer_type: Direction of the transfer. Must be ``"inflow"``
+        :param direction: Direction of the transfer. Must be ``"inflow"``
             or ``"outflow"``.
-        :type transfer_type: str
-        :param date: Date of the transfer, e.g. ``"2026-09-02"``.
+        :type direction: str
+        :param date: Due date of the transfer, e.g. ``"2026-09-02"``.
         :type date: str
-        :param account: Account name or identifier.
+        :param account: Bank account code of the payer.
         :type account: str
         :param value: Monetary value of the transfer.
         :type value: float or str
-        :param status: Execution status. One of ``"Executed"``,
-            ``"Cancelled"``, or ``"Prospected"``.
+        :param status: Transfer status. Typical values: ``"expected"``,
+            ``"issued"``, ``"executed"``, ``"canceled"``, ``"prospected"``.
         :type status: str or None
-        :param commitment: Financial commitment type. One of
-            ``"Contracted"`` or ``"Optional"``.
+        :param commitment: Commitment group, e.g. ``"contracts"``,
+            ``"lifestyle"``, ``"maintenance"``.
         :type commitment: str or None
-        :param recurrence: Recurrence period. One of ``"Monthly"`` or
-            ``"Yearly"``.
+        :param recurrence: Recurrence in smart syntax, e.g. ``"1 mo"``,
+            ``"1 yr"``, ``"non-recurrent"``.
         :type recurrence: str or None
-        :param method: Payment method. Defaults to ``"Manual"`` when
-            ``None``.
+        :param method: Payment method. Defaults to ``"manual"`` when ``None``.
         :type method: str or None
-        :param protocol: Payment protocol. One of ``"Bill"`` or
-            ``"Transfer"``.
+        :param protocol: Payment protocol, e.g. ``"pix"``, ``"deposit"``,
+            ``"bill"``.
         :type protocol: str or None
-        :param related_asset: Optional reference to a related asset note.
+        :param related_asset: Optional link to a related asset note.
         :type related_asset: str or None
-        :raises ValueError: If *transfer_type* is not ``"inflow"`` or
-            ``"outflow"``.
+        :param payer: Name or link to the payer party.
+        :type payer: str or None
+        :param receiver: Name or link to the receiver party.
+        :type receiver: str or None
+        :param currency: Currency code, e.g. ``"BRL"``, ``"USD"``.
+        :type currency: str or None
+        :param domain: Open field for cross-classification.
+        :type domain: str or None
+        :param category: Category for hierarchy classification.
+        :type category: str or None
+        :param subcategory: Subcategory for hierarchy classification.
+        :type subcategory: str or None
+        :raises ValueError: If *direction* is not ``"inflow"`` or ``"outflow"``.
         :returns: The newly created transfer note.
         :rtype: losalamos.notes.NoteTransfer
         """
-        transfer_type = transfer_type.lower()
-        if transfer_type not in ("inflow", "outflow"):
+        direction = direction.lower()
+        if direction not in ("inflow", "outflow"):
             raise ValueError(
-                f"transfer_type must be 'inflow' or 'outflow', got '{transfer_type}'"
+                f"direction must be 'inflow' or 'outflow', got '{direction}'"
             )
 
         transfer_id = self._next_transfer_id()
-        name = f"{transfer_type.upper()}_{self.name}_{transfer_id}"
-        target_folder = Path(self.folder_root) / f"budget/{transfer_type}s"
+        name = f"{direction.upper()}_{self.name}_{transfer_id}"
+        target_folder = Path(self.folder_root) / f"budget/{direction}s"
         target_folder.mkdir(parents=True, exist_ok=True)
 
         note_file = target_folder / f"{name}.md"
@@ -1842,15 +1949,21 @@ class Project(FileSys):
         note.load_new(file_note=note_file)
         note.metadata["name"] = name
         note.metadata["date"] = date
-        note.metadata["transfer_type"] = transfer_type
+        note.metadata["direction"] = direction
         note.metadata["account"] = account
         note.metadata["value"] = value
         note.metadata["status"] = status
         note.metadata["commitment"] = commitment
         note.metadata["recurrence"] = recurrence
-        note.metadata["method"] = method if method is not None else "Manual"
+        note.metadata["method"] = method if method is not None else "manual"
         note.metadata["protocol"] = protocol
         note.metadata["related_asset"] = related_asset
+        note.metadata["payer"] = payer
+        note.metadata["receiver"] = receiver
+        note.metadata["currency"] = currency
+        note.metadata["domain"] = domain
+        note.metadata["category"] = category
+        note.metadata["subcategory"] = subcategory
         note.update()
         note.save()
 
@@ -1863,23 +1976,30 @@ class Project(FileSys):
         Scans every ``.md`` file for ``note_type: transfer`` front-matter and
         collects the transfer schema fields. Rows are sorted by ``name``.
 
-        :returns: DataFrame with columns ``name``, ``date``, ``transfer_type``,
-            ``status``, ``account``, ``value``, ``commitment``, ``recurrence``,
-            ``method``, ``protocol``, ``related_asset``. Empty DataFrame when
-            no transfers exist.
+        :returns: DataFrame with columns ``name``, ``date``, ``direction``,
+            ``status``, ``account``, ``value``, ``currency``, ``commitment``,
+            ``recurrence``, ``method``, ``protocol``, ``payer``, ``receiver``,
+            ``domain``, ``category``, ``subcategory``, ``related_asset``.
+            Empty DataFrame when no transfers exist.
         :rtype: pandas.DataFrame
         """
         _cols = [
             "name",
             "date",
-            "transfer_type",
+            "direction",
             "status",
             "account",
             "value",
+            "currency",
             "commitment",
             "recurrence",
             "method",
             "protocol",
+            "payer",
+            "receiver",
+            "domain",
+            "category",
+            "subcategory",
             "related_asset",
         ]
         rows = []

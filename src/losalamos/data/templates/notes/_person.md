@@ -1,8 +1,8 @@
 ---
-note_type: sapiens
+note_type: person
 timestamp: <% tp.file.creation_date("YYYY-MM-DD HH:mm:ss") %>
 tags:
-  - homo_sapiens
+  - person
   - organism
 aliases:
 name: <% tp.file.title %>
@@ -44,7 +44,7 @@ facebook:
 # <% tp.file.title %>
 {email}
 
-SAPIENS
+PERSON
 
 > [!Info]+ Abstract
 > 

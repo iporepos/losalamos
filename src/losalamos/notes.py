@@ -171,9 +171,11 @@ HARMONIZE_TEXT_FIELDS = [
     "subject",
     "abstract",
     "contractor",
-    "contractor_sapiens",
+    "contractor_person",
     "client",
-    "client_sapiens",
+    "client_person",
+    "provider",
+    "provider_person",
     "service_id",
     "project",
     "comment",
@@ -1093,16 +1095,26 @@ class NoteOrganization(NoteBasic):
 
 class NoteSapiens(NoteBasic):
     """
-    Note for a person (homo sapiens) entry.
+    Note for a person entry.
 
-    Inherits from :class:`NoteBasic`. Maps to the ``_sapiens.md``
-    template which tracks contact, academic, professional, and
-    identification fields.
+    Inherits from :class:`NoteBasic`. Maps to the ``_person.md`` template.
+    Kept for backward compatibility — prefer :class:`NotePerson` for new code.
     """
 
-    TEMPLATE_FILE = FOLDER_TEMPLATES_NOTES / "_sapiens.md"
+    TEMPLATE_FILE = FOLDER_TEMPLATES_NOTES / "_person.md"
     THUMBNAIL_SIZE = 200
     PATTERN_ABSTRACT = "[!Info]"
+
+
+class NotePerson(NoteSapiens):
+    """
+    Note for a person entry.
+
+    Inherits from :class:`NoteSapiens`. Maps to the ``_person.md`` template.
+    Preferred over :class:`NoteSapiens` for new vaults.
+    """
+
+    TEMPLATE_FILE = FOLDER_TEMPLATES_NOTES / "_person.md"
 
 
 class NoteAsset(NoteBasic):
@@ -1733,6 +1745,11 @@ class NoteCollOrganization(NoteCollection):
 class NoteCollSapiens(NoteCollection):
 
     BASE_OBJECT = NoteSapiens
+
+
+class NoteCollPerson(NoteCollection):
+
+    BASE_OBJECT = NotePerson
 
 
 class NoteCollAttribute(NoteCollection):

@@ -22,9 +22,11 @@ service_id_type: NFS-e
 professional_id:
 professional_id_type: CREA
 contractor:
-contractor_sapiens:
+contractor_person:
 client:
-client_sapiens:
+client_person:
+provider:
+provider_person:
 status: on going
 revenue_expected:
 revenue:

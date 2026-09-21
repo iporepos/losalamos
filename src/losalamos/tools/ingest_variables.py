@@ -50,6 +50,9 @@ and carries its own ``defaults`` and ``entries``.
         },
         {
             "vault": "/path/to/vault/climate",
+            "parameters": {
+                "fallback_title": false
+            },
             "defaults": {
                 "subject": "[[Climatology]]",
                 "tags": ["climate"]
@@ -62,6 +65,13 @@ Batch keys
 ----------
 ``vault``
     Required per batch. Path to the destination vault folder.
+
+``parameters``
+    Optional dict of batch-level behavioural flags.
+
+    ``fallback_title`` (bool, default ``true``)
+        When ``true``, entries whose ``title`` is absent or empty receive
+        the value of ``name`` as their title automatically.
 
 ``defaults``
     Fields applied to every entry in the batch. Entry-level values override
@@ -133,6 +143,36 @@ def _validate(entry: dict, required_fields: set) -> None:
             )
 
 
+def _apply_parameters(entry: dict, parameters: dict) -> dict:
+    """Apply batch-level parameters to a merged entry.
+
+    :param entry: Merged entry dict (modified in place).
+    :param parameters: Batch ``parameters`` dict.
+    :return: The modified entry dict.
+    """
+    if parameters.get("fallback_title", True):
+        if not entry.get("title"):
+            entry["title"] = entry.get("name", "")
+    return entry
+
+
+def _strip_definitions_section(note_cls: NoteVariable) -> None:
+    """Remove the ``## Definitions`` section from the note body data if present.
+
+    Finds the first line matching ``## Definitions`` in the ``Body`` segment,
+    discards it and everything after it, then strips any trailing blank lines
+    or ``---`` separators left at the end of the retained content.
+    """
+    body = note_cls.data.get(NoteVariable.STR_BODY, [])
+    for i, line in enumerate(body):
+        if line.strip() == "## Definitions":
+            trimmed = body[:i]
+            while trimmed and trimmed[-1].strip() in ("", "---"):
+                trimmed.pop()
+            note_cls.data[NoteVariable.STR_BODY] = trimmed
+            return
+
+
 def _write_entry(
     note_cls: NoteVariable,
     entry: dict,
@@ -156,6 +196,7 @@ def _write_entry(
 
     action = "overwrite" if file_path.exists() else "write"
     note_cls.load_new(file_note=file_path, entry=entry)
+    _strip_definitions_section(note_cls)
     note_cls.save()
     print(f"  [{action}]     {filename}")
     return True
@@ -168,7 +209,7 @@ def _write_entry(
 def _run_batch(batch: dict, note_cls: NoteVariable, overwrite: bool) -> tuple[int, int]:
     """Process one batch (vault + defaults + entries).
 
-    :param batch: Single batch dict with ``vault``, ``defaults``, and ``entries``.
+    :param batch: Single batch dict with ``vault``, optional ``parameters``, ``defaults``, and ``entries``.
     :param note_cls: Shared ``NoteVariable`` instance reused across batches.
     :param overwrite: When ``False``, skip files that already exist.
     :return: Tuple ``(written, skipped)`` counts for this batch.
@@ -179,6 +220,7 @@ def _run_batch(batch: dict, note_cls: NoteVariable, overwrite: bool) -> tuple[in
     vault_folder = Path(vault_raw)
     vault_folder.mkdir(parents=True, exist_ok=True)
 
+    parameters = batch.get("parameters", {})
     defaults = batch.get("defaults", {})
     entries = batch.get("entries", [])
 
@@ -196,6 +238,7 @@ def _run_batch(batch: dict, note_cls: NoteVariable, overwrite: bool) -> tuple[in
 
     for entry in entries:
         merged = _merge(defaults, entry)
+        _apply_parameters(entry=merged, parameters=parameters)
         _validate(merged, note_cls.REQUIRED_FIELDS)
 
         merged["_tags"] = NoteVariable._resolve_tags(

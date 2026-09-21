@@ -1,5 +1,9 @@
 # Memory Log
 
+- 2026-09-21 — scripts/standardize_project_notes.py: new script to standardize existing project notes to current template schema; handles missing fields, field reordering, and legacy "contract"→"contractor" rename; uses NoteProject.load_metadata for the heavy lifting
+- 2026-09-20 — added provider/provider_person fields to project system: _project.md template, HARMONIZE_TEXT_FIELDS, _LINK_FIELDS, instance attributes, get_provider/load_provider/get_provider_person/load_provider_person methods in project.py, and interactive picker in add_new_project.py
+- 2026-09-20 — NoteSapiens renamed to NotePerson: NotePerson(NoteSapiens) child class added; NoteSapiens kept for backward compat; _person.md template created; contractor_sapiens/client_sapiens → contractor_person/client_person in project note, project.py, and add_new_project.py; sources config key "persons" preferred ("sapiens" still merged for compat); NoteCollPerson added
+- 2026-09-20 — NoteTransfer updated to new _transfer.md template: `transfer_type` renamed to `direction`; added payer, receiver, currency, domain, category, subcategory fields; add_transfer() and get_transfers() in project.py updated; method default changed to "manual" (lowercase); tests in test_notes.py and test_project.py updated accordingly
 - 2026-09-20 — ingest_variables.py: seed is now a list of batches; each batch has vault+defaults+entries; _run_batch() handles one batch; single-dict seed still accepted for convenience
 - 2026-09-20 — ingest_variables.py: new tool replacing populate_attributes.py; removed auto-code-assign, twin_notes, and serial logic; codes are user-provided; populate_attributes.py can be git-removed
 - 2026-09-20 — NoteVariable refactored to _variable.md template: NOTE_TYPE attribute→variable; removed twin_code/theme/archetype/type/domain fields; renamed units_ref→units; added dtype and range; REQUIRED_FIELDS reduced to {name}; populate_attributes.py tool to be discussed separately

@@ -329,24 +329,24 @@ def _pick_item(
 
 def _pick_party(
     org_names: list[str],
-    sapiens_names: list[str],
+    person_names: list[str],
     label: str,
 ) -> tuple[str | None, str | None]:
     """
     Interactive picker for a project party (contractor or client).
 
-    Asks whether the party is an organization or a human (sapiens), then
-    picks from the appropriate list. For humans, also asks whether the
-    sapiens contact is the same person or someone else.
+    Asks whether the party is an organization or a person, then picks from the
+    appropriate list. For persons, also asks whether the contact is the same
+    individual or someone else.
 
     :param org_names: Sorted list of organization names.
-    :param sapiens_names: Sorted list of sapiens (person) names.
+    :param person_names: Sorted list of person names.
     :param label: Field label shown in headers and prompts.
-    :returns: Tuple of ``(party_value, sapiens_contact_value)``.
+    :returns: Tuple of ``(party_value, person_contact_value)``.
     :raises _Quit: When the user enters ``q``.
     """
     _field_header(label)
-    print("  [O] Organization   [H] Human (sapiens)   [0] Skip")
+    print("  [O] Organization   [H] Person   [0] Skip")
     print()
 
     while True:
@@ -359,10 +359,10 @@ def _pick_party(
             party = _pick_item(names=org_names, label=f"{label} (organization)")
             if party is None:
                 return None, None
-            sapiens = _pick_item(names=sapiens_names, label=f"{label} contact")
-            return party, sapiens
+            person = _pick_item(names=person_names, label=f"{label} contact")
+            return party, person
         if kind == "h":
-            party = _pick_item(names=sapiens_names, label=f"{label} (human)")
+            party = _pick_item(names=person_names, label=f"{label} (person)")
             if party is None:
                 return None, None
             print()
@@ -381,8 +381,8 @@ def _pick_party(
                 if ans in ("y", ""):
                     return party, party
                 if ans == "n":
-                    sapiens = _pick_item(names=sapiens_names, label=f"{label} contact")
-                    return party, sapiens
+                    person = _pick_item(names=person_names, label=f"{label} contact")
+                    return party, person
                 print("  Enter y, n, or 0.\n")
         print("  Enter O, H, or 0.\n")
 
@@ -545,7 +545,7 @@ def run(source: str) -> None:
     # Load available names from sources for interactive pickers
     # ----------------------------------------------------------------
     org_names: list[str] = []
-    sapiens_names: list[str] = []
+    person_names: list[str] = []
     service_ids: list[str] = []
     service_labels: list[str] = []
 
@@ -554,7 +554,10 @@ def run(source: str) -> None:
             src_cfg = _load_config(source=sources_file)
             search = src_cfg.get("folders", {}).get("search", {})
             org_names = _collect_names(directories=search.get("organizations", []))
-            sapiens_names = _collect_names(directories=search.get("sapiens", []))
+            person_names = _collect_names(
+                directories=(search.get("persons") or [])
+                + (search.get("sapiens") or [])
+            )
             service_ids, service_labels = _collect_services(
                 directories=search.get("services", [])
             )
@@ -596,9 +599,11 @@ def run(source: str) -> None:
         title = None
         alias = None
         contractor = None
-        contractor_sapiens = None
+        contractor_person = None
         client = None
-        client_sapiens = None
+        client_person = None
+        provider = None
+        provider_person = None
         service_id = None
 
         if not skip_details:
@@ -608,15 +613,20 @@ def run(source: str) -> None:
             _field_header("Alias")
             alias = _ask_text(label="Alias")
 
-            contractor, contractor_sapiens = _pick_party(
+            contractor, contractor_person = _pick_party(
                 org_names=org_names,
-                sapiens_names=sapiens_names,
+                person_names=person_names,
                 label="Contractor",
             )
-            client, client_sapiens = _pick_party(
+            client, client_person = _pick_party(
                 org_names=org_names,
-                sapiens_names=sapiens_names,
+                person_names=person_names,
                 label="Client",
+            )
+            provider, provider_person = _pick_party(
+                org_names=org_names,
+                person_names=person_names,
+                label="Provider",
             )
             service_id = _pick_item(
                 names=service_ids,
@@ -639,12 +649,16 @@ def run(source: str) -> None:
             project_config["title"] = title
         if contractor:
             project_config["contractor"] = contractor
-        if contractor_sapiens:
-            project_config["contractor_sapiens"] = contractor_sapiens
+        if contractor_person:
+            project_config["contractor_person"] = contractor_person
         if client:
             project_config["client"] = client
-        if client_sapiens:
-            project_config["client_sapiens"] = client_sapiens
+        if client_person:
+            project_config["client_person"] = client_person
+        if provider:
+            project_config["provider"] = provider
+        if provider_person:
+            project_config["provider_person"] = provider_person
         if service_id:
             project_config["service_id"] = service_id
         if "language" in tool_cfg:
