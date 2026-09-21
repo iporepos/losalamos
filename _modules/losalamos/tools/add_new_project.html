@@ -161,7 +161,7 @@
 
 <li class="nav-item ">
   <a class="nav-link nav-internal" href="../../../api.html">
-    API Reference
+    API
   </a>
 </li>
 
@@ -288,7 +288,7 @@
 
 <li class="nav-item ">
   <a class="nav-link nav-internal" href="../../../api.html">
-    API Reference
+    API
   </a>
 </li>
 
@@ -733,24 +733,24 @@
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_pick_party</span><span class="p">(</span>
     <span class="n">org_names</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
-    <span class="n">sapiens_names</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+    <span class="n">person_names</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
     <span class="n">label</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Interactive picker for a project party (contractor or client).</span>
 
-<span class="sd">    Asks whether the party is an organization or a human (sapiens), then</span>
-<span class="sd">    picks from the appropriate list. For humans, also asks whether the</span>
-<span class="sd">    sapiens contact is the same person or someone else.</span>
+<span class="sd">    Asks whether the party is an organization or a person, then picks from the</span>
+<span class="sd">    appropriate list. For persons, also asks whether the contact is the same</span>
+<span class="sd">    individual or someone else.</span>
 
 <span class="sd">    :param org_names: Sorted list of organization names.</span>
-<span class="sd">    :param sapiens_names: Sorted list of sapiens (person) names.</span>
+<span class="sd">    :param person_names: Sorted list of person names.</span>
 <span class="sd">    :param label: Field label shown in headers and prompts.</span>
-<span class="sd">    :returns: Tuple of ``(party_value, sapiens_contact_value)``.</span>
+<span class="sd">    :returns: Tuple of ``(party_value, person_contact_value)``.</span>
 <span class="sd">    :raises _Quit: When the user enters ``q``.</span>
 <span class="sd">    """</span>
     <span class="n">_field_header</span><span class="p">(</span><span class="n">label</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">"  [O] Organization   [H] Human (sapiens)   [0] Skip"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"  [O] Organization   [H] Person   [0] Skip"</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">()</span>
 
     <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
@@ -763,10 +763,10 @@
             <span class="n">party</span> <span class="o">=</span> <span class="n">_pick_item</span><span class="p">(</span><span class="n">names</span><span class="o">=</span><span class="n">org_names</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2"> (organization)"</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">party</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
-            <span class="n">sapiens</span> <span class="o">=</span> <span class="n">_pick_item</span><span class="p">(</span><span class="n">names</span><span class="o">=</span><span class="n">sapiens_names</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2"> contact"</span><span class="p">)</span>
-            <span class="k">return</span> <span class="n">party</span><span class="p">,</span> <span class="n">sapiens</span>
+            <span class="n">person</span> <span class="o">=</span> <span class="n">_pick_item</span><span class="p">(</span><span class="n">names</span><span class="o">=</span><span class="n">person_names</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2"> contact"</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">party</span><span class="p">,</span> <span class="n">person</span>
         <span class="k">if</span> <span class="n">kind</span> <span class="o">==</span> <span class="s2">"h"</span><span class="p">:</span>
-            <span class="n">party</span> <span class="o">=</span> <span class="n">_pick_item</span><span class="p">(</span><span class="n">names</span><span class="o">=</span><span class="n">sapiens_names</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2"> (human)"</span><span class="p">)</span>
+            <span class="n">party</span> <span class="o">=</span> <span class="n">_pick_item</span><span class="p">(</span><span class="n">names</span><span class="o">=</span><span class="n">person_names</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2"> (person)"</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">party</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
             <span class="nb">print</span><span class="p">()</span>
@@ -785,8 +785,8 @@
                 <span class="k">if</span> <span class="n">ans</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"y"</span><span class="p">,</span> <span class="s2">""</span><span class="p">):</span>
                     <span class="k">return</span> <span class="n">party</span><span class="p">,</span> <span class="n">party</span>
                 <span class="k">if</span> <span class="n">ans</span> <span class="o">==</span> <span class="s2">"n"</span><span class="p">:</span>
-                    <span class="n">sapiens</span> <span class="o">=</span> <span class="n">_pick_item</span><span class="p">(</span><span class="n">names</span><span class="o">=</span><span class="n">sapiens_names</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2"> contact"</span><span class="p">)</span>
-                    <span class="k">return</span> <span class="n">party</span><span class="p">,</span> <span class="n">sapiens</span>
+                    <span class="n">person</span> <span class="o">=</span> <span class="n">_pick_item</span><span class="p">(</span><span class="n">names</span><span class="o">=</span><span class="n">person_names</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2"> contact"</span><span class="p">)</span>
+                    <span class="k">return</span> <span class="n">party</span><span class="p">,</span> <span class="n">person</span>
                 <span class="nb">print</span><span class="p">(</span><span class="s2">"  Enter y, n, or 0.</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">"  Enter O, H, or 0.</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
 
@@ -951,7 +951,7 @@
     <span class="c1"># Load available names from sources for interactive pickers</span>
     <span class="c1"># ----------------------------------------------------------------</span>
     <span class="n">org_names</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="n">sapiens_names</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">person_names</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">service_ids</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">service_labels</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
 
@@ -960,7 +960,10 @@
             <span class="n">src_cfg</span> <span class="o">=</span> <span class="n">_load_config</span><span class="p">(</span><span class="n">source</span><span class="o">=</span><span class="n">sources_file</span><span class="p">)</span>
             <span class="n">search</span> <span class="o">=</span> <span class="n">src_cfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"folders"</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"search"</span><span class="p">,</span> <span class="p">{})</span>
             <span class="n">org_names</span> <span class="o">=</span> <span class="n">_collect_names</span><span class="p">(</span><span class="n">directories</span><span class="o">=</span><span class="n">search</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"organizations"</span><span class="p">,</span> <span class="p">[]))</span>
-            <span class="n">sapiens_names</span> <span class="o">=</span> <span class="n">_collect_names</span><span class="p">(</span><span class="n">directories</span><span class="o">=</span><span class="n">search</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"sapiens"</span><span class="p">,</span> <span class="p">[]))</span>
+            <span class="n">person_names</span> <span class="o">=</span> <span class="n">_collect_names</span><span class="p">(</span>
+                <span class="n">directories</span><span class="o">=</span><span class="p">(</span><span class="n">search</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"persons"</span><span class="p">)</span> <span class="ow">or</span> <span class="p">[])</span>
+                <span class="o">+</span> <span class="p">(</span><span class="n">search</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"sapiens"</span><span class="p">)</span> <span class="ow">or</span> <span class="p">[])</span>
+            <span class="p">)</span>
             <span class="n">service_ids</span><span class="p">,</span> <span class="n">service_labels</span> <span class="o">=</span> <span class="n">_collect_services</span><span class="p">(</span>
                 <span class="n">directories</span><span class="o">=</span><span class="n">search</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"services"</span><span class="p">,</span> <span class="p">[])</span>
             <span class="p">)</span>
@@ -1002,9 +1005,11 @@
         <span class="n">title</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="n">alias</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="n">contractor</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="n">contractor_sapiens</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">contractor_person</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="n">client</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="n">client_sapiens</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">client_person</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">provider</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">provider_person</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="n">service_id</span> <span class="o">=</span> <span class="kc">None</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="n">skip_details</span><span class="p">:</span>
@@ -1014,15 +1019,20 @@
             <span class="n">_field_header</span><span class="p">(</span><span class="s2">"Alias"</span><span class="p">)</span>
             <span class="n">alias</span> <span class="o">=</span> <span class="n">_ask_text</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s2">"Alias"</span><span class="p">)</span>
 
-            <span class="n">contractor</span><span class="p">,</span> <span class="n">contractor_sapiens</span> <span class="o">=</span> <span class="n">_pick_party</span><span class="p">(</span>
+            <span class="n">contractor</span><span class="p">,</span> <span class="n">contractor_person</span> <span class="o">=</span> <span class="n">_pick_party</span><span class="p">(</span>
                 <span class="n">org_names</span><span class="o">=</span><span class="n">org_names</span><span class="p">,</span>
-                <span class="n">sapiens_names</span><span class="o">=</span><span class="n">sapiens_names</span><span class="p">,</span>
+                <span class="n">person_names</span><span class="o">=</span><span class="n">person_names</span><span class="p">,</span>
                 <span class="n">label</span><span class="o">=</span><span class="s2">"Contractor"</span><span class="p">,</span>
             <span class="p">)</span>
-            <span class="n">client</span><span class="p">,</span> <span class="n">client_sapiens</span> <span class="o">=</span> <span class="n">_pick_party</span><span class="p">(</span>
+            <span class="n">client</span><span class="p">,</span> <span class="n">client_person</span> <span class="o">=</span> <span class="n">_pick_party</span><span class="p">(</span>
                 <span class="n">org_names</span><span class="o">=</span><span class="n">org_names</span><span class="p">,</span>
-                <span class="n">sapiens_names</span><span class="o">=</span><span class="n">sapiens_names</span><span class="p">,</span>
+                <span class="n">person_names</span><span class="o">=</span><span class="n">person_names</span><span class="p">,</span>
                 <span class="n">label</span><span class="o">=</span><span class="s2">"Client"</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">provider</span><span class="p">,</span> <span class="n">provider_person</span> <span class="o">=</span> <span class="n">_pick_party</span><span class="p">(</span>
+                <span class="n">org_names</span><span class="o">=</span><span class="n">org_names</span><span class="p">,</span>
+                <span class="n">person_names</span><span class="o">=</span><span class="n">person_names</span><span class="p">,</span>
+                <span class="n">label</span><span class="o">=</span><span class="s2">"Provider"</span><span class="p">,</span>
             <span class="p">)</span>
             <span class="n">service_id</span> <span class="o">=</span> <span class="n">_pick_item</span><span class="p">(</span>
                 <span class="n">names</span><span class="o">=</span><span class="n">service_ids</span><span class="p">,</span>
@@ -1045,12 +1055,16 @@
             <span class="n">project_config</span><span class="p">[</span><span class="s2">"title"</span><span class="p">]</span> <span class="o">=</span> <span class="n">title</span>
         <span class="k">if</span> <span class="n">contractor</span><span class="p">:</span>
             <span class="n">project_config</span><span class="p">[</span><span class="s2">"contractor"</span><span class="p">]</span> <span class="o">=</span> <span class="n">contractor</span>
-        <span class="k">if</span> <span class="n">contractor_sapiens</span><span class="p">:</span>
-            <span class="n">project_config</span><span class="p">[</span><span class="s2">"contractor_sapiens"</span><span class="p">]</span> <span class="o">=</span> <span class="n">contractor_sapiens</span>
+        <span class="k">if</span> <span class="n">contractor_person</span><span class="p">:</span>
+            <span class="n">project_config</span><span class="p">[</span><span class="s2">"contractor_person"</span><span class="p">]</span> <span class="o">=</span> <span class="n">contractor_person</span>
         <span class="k">if</span> <span class="n">client</span><span class="p">:</span>
             <span class="n">project_config</span><span class="p">[</span><span class="s2">"client"</span><span class="p">]</span> <span class="o">=</span> <span class="n">client</span>
-        <span class="k">if</span> <span class="n">client_sapiens</span><span class="p">:</span>
-            <span class="n">project_config</span><span class="p">[</span><span class="s2">"client_sapiens"</span><span class="p">]</span> <span class="o">=</span> <span class="n">client_sapiens</span>
+        <span class="k">if</span> <span class="n">client_person</span><span class="p">:</span>
+            <span class="n">project_config</span><span class="p">[</span><span class="s2">"client_person"</span><span class="p">]</span> <span class="o">=</span> <span class="n">client_person</span>
+        <span class="k">if</span> <span class="n">provider</span><span class="p">:</span>
+            <span class="n">project_config</span><span class="p">[</span><span class="s2">"provider"</span><span class="p">]</span> <span class="o">=</span> <span class="n">provider</span>
+        <span class="k">if</span> <span class="n">provider_person</span><span class="p">:</span>
+            <span class="n">project_config</span><span class="p">[</span><span class="s2">"provider_person"</span><span class="p">]</span> <span class="o">=</span> <span class="n">provider_person</span>
         <span class="k">if</span> <span class="n">service_id</span><span class="p">:</span>
             <span class="n">project_config</span><span class="p">[</span><span class="s2">"service_id"</span><span class="p">]</span> <span class="o">=</span> <span class="n">service_id</span>
         <span class="k">if</span> <span class="s2">"language"</span> <span class="ow">in</span> <span class="n">tool_cfg</span><span class="p">:</span>

@@ -1,6 +1,6 @@
 .. _api:
 
-API Reference
+API
 ############################################
 
 This reference is automatically generated from docstrings in the source code.

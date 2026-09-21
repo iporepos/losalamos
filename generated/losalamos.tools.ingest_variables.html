@@ -164,7 +164,7 @@
 
 <li class="nav-item current active">
   <a class="nav-link nav-internal" href="../api.html">
-    API Reference
+    API
   </a>
 </li>
 
@@ -293,7 +293,7 @@
 
 <li class="nav-item current active">
   <a class="nav-link nav-internal" href="../api.html">
-    API Reference
+    API
   </a>
 </li>
 
@@ -426,7 +426,7 @@
       </a>
     </li>
     
-    <li class="breadcrumb-item"><a href="../api.html" class="nav-link">API Reference</a></li>
+    <li class="breadcrumb-item"><a href="../api.html" class="nav-link">API</a></li>
     
     <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">losalamos.tools.ingest_variables</span></li>
   </ul>
@@ -485,6 +485,9 @@ and carries its own <code class="docutils literal notranslate"><span class="pre"
 <span class="w">    </span><span class="p">},</span>
 <span class="w">    </span><span class="p">{</span>
 <span class="w">        </span><span class="nt">"vault"</span><span class="p">:</span><span class="w"> </span><span class="s2">"/path/to/vault/climate"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"parameters"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">"fallback_title"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span>
+<span class="w">        </span><span class="p">},</span>
 <span class="w">        </span><span class="nt">"defaults"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
 <span class="w">            </span><span class="nt">"subject"</span><span class="p">:</span><span class="w"> </span><span class="s2">"[[Climatology]]"</span><span class="p">,</span>
 <span class="w">            </span><span class="nt">"tags"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"climate"</span><span class="p">]</span>
@@ -497,8 +500,15 @@ and carries its own <code class="docutils literal notranslate"><span class="pre"
 </section>
 <section id="batch-keys">
 <h2>Batch keys<a class="headerlink" href="#batch-keys" title="Link to this heading">#</a></h2>
-<dl class="simple">
+<dl>
 <dt><code class="docutils literal notranslate"><span class="pre">vault</span></code></dt><dd><p>Required per batch. Path to the destination vault folder.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">parameters</span></code></dt><dd><p>Optional dict of batch-level behavioural flags.</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">fallback_title</span></code> (bool, default <code class="docutils literal notranslate"><span class="pre">true</span></code>)</dt><dd><p>When <code class="docutils literal notranslate"><span class="pre">true</span></code>, entries whose <code class="docutils literal notranslate"><span class="pre">title</span></code> is absent or empty receive
+the value of <code class="docutils literal notranslate"><span class="pre">name</span></code> as their title automatically.</p>
+</dd>
+</dl>
 </dd>
 <dt><code class="docutils literal notranslate"><span class="pre">defaults</span></code></dt><dd><p>Fields applied to every entry in the batch. Entry-level values override
 on conflict, except for <code class="docutils literal notranslate"><span class="pre">tags</span></code> which are merged additively.</p>

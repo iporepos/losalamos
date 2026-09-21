@@ -22,6 +22,7 @@
       NoteCollFigure
       NoteCollJournal
       NoteCollOrganization
+      NoteCollPerson
       NoteCollProject
       NoteCollSapiens
       NoteCollection
@@ -29,6 +30,7 @@
       NoteFigure
       NoteJournal
       NoteOrganization
+      NotePerson
       NoteProject
       NoteReference
       NoteSapiens
