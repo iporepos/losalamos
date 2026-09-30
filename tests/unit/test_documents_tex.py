@@ -256,6 +256,7 @@ class TestDocumentTeXExport(unittest.TestCase):
         self.assertTrue((result / "images" / "logo.png").exists())
 
     def test_split_metadata_keeps_metadata_as_its_own_file(self):
+        # testing
         result = self.doc.export(
             self.out_root, "split_metadata_export", split=True, split_metadata=True
         )
