@@ -274,10 +274,13 @@ class Document(DataSet):
             point to a valid directory. Validated before any files are written.
         :raises FileNotFoundError: If a source path in ``files_overlay`` does not exist
             or is not a file. Also raised if the merged template does not contain exactly
-            one top-level ``main.*`` file to load as the document's entry point.
+            one top-level ``main.tex`` file to load as the document's entry point
+            (non-``.tex`` files sharing the ``main`` stem, e.g. stray ``main.aux``/
+            ``main.fls`` left over from a compile run inside a template folder, are
+            ignored rather than counted as candidates).
 
         :returns: None. Acts in place: locates the merged tree's top-level
-            ``main.*`` file and calls :meth:`load_data` on it, which updates
+            ``main.tex`` file and calls :meth:`load_data` on it, which updates
             :attr:`file_data`, :attr:`data`, and (for subclasses such as
             :class:`DocumentTeX`) :attr:`is_main` to reflect the newly created
             document.
@@ -396,17 +399,23 @@ class Document(DataSet):
                 dest.parent.mkdir(parents=True, exist_ok=True)
                 shutil.copy2(Path(src_path).absolute(), dest)
 
-        # Locate the merged tree's entry file and load it in place
+        # Locate the merged tree's entry file and load it in place. Restricted
+        # to .tex specifically -- matching on stem alone would also catch
+        # unrelated same-stemmed files (e.g. latexmk byproducts like
+        # main.aux/main.fls/main.fdb_latexmk left over from a stray compile
+        # inside a template or overlay folder).
         # --------------------------------------------------
         main_candidates = [
             rel_path
             for rel_path in merged
-            if len(rel_path.parts) == 1 and rel_path.stem == "main"
+            if len(rel_path.parts) == 1
+            and rel_path.stem == "main"
+            and rel_path.suffix == ".tex"
         ]
 
         if len(main_candidates) != 1:
             raise FileNotFoundError(
-                "Expected exactly one top-level 'main.*' file in the merged "
+                "Expected exactly one top-level 'main.tex' file in the merged "
                 f"template, found {len(main_candidates)}: {main_candidates}. "
                 "Cannot determine which file to load."
             )

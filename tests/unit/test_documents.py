@@ -85,7 +85,7 @@ class TestDocumentNew(unittest.TestCase):
         # Minimal BASE_TEMPLATE tree
         cls._base_template = cls._tmp_root / "_base_template"
         cls._base_template.mkdir()
-        (cls._base_template / "main.txt").write_text("base main")
+        (cls._base_template / "main.tex").write_text("base main")
         (cls._base_template / "config.cfg").write_text("base config")
         assets = cls._base_template / "assets"
         assets.mkdir()
@@ -94,7 +94,7 @@ class TestDocumentNew(unittest.TestCase):
         # Minimal overlay template tree
         cls._overlay_template = cls._tmp_root / "_overlay_template"
         cls._overlay_template.mkdir()
-        (cls._overlay_template / "main.txt").write_text("overlay main")
+        (cls._overlay_template / "main.tex").write_text("overlay main")
         (cls._overlay_template / "extra.txt").write_text("overlay extra")
 
     @classmethod
@@ -118,7 +118,7 @@ class TestDocumentNew(unittest.TestCase):
         self.doc.new(self.work_dir)
         target = self.work_dir / "TestDoc"  # self.doc.name
         self.assertTrue(target.is_dir())
-        self.assertEqual(self.doc.file_data, target / "main.txt")
+        self.assertEqual(self.doc.file_data, target / "main.tex")
 
     def test_new_explicit_name_overrides_self_name(self):
         self.doc.new(self.work_dir, "explicit_name")
@@ -128,7 +128,7 @@ class TestDocumentNew(unittest.TestCase):
 
     def test_new_loads_file_data_in_place(self):
         self.doc.new(self.work_dir, "doc_file_data")
-        expected = self.work_dir / "doc_file_data" / "main.txt"
+        expected = self.work_dir / "doc_file_data" / "main.tex"
         self.assertEqual(self.doc.file_data, expected)
         self.assertTrue(self.doc.file_data.is_absolute())
 
@@ -145,14 +145,14 @@ class TestDocumentNew(unittest.TestCase):
     def test_new_simple_copies_all_base_files(self):
         self.doc.new(self.work_dir, "doc_simple_files")
         target = self.work_dir / "doc_simple_files"
-        self.assertTrue((target / "main.txt").exists())
+        self.assertTrue((target / "main.tex").exists())
         self.assertTrue((target / "config.cfg").exists())
         self.assertTrue((target / "assets" / "logo.png").exists())
 
     def test_new_simple_preserves_file_content(self):
         self.doc.new(self.work_dir, "doc_simple_content")
         target = self.work_dir / "doc_simple_content"
-        self.assertEqual((target / "main.txt").read_text(), "base main")
+        self.assertEqual((target / "main.tex").read_text(), "base main")
         self.assertEqual((target / "config.cfg").read_text(), "base config")
 
     def test_new_simple_preserves_subfolder_structure(self):
@@ -168,7 +168,7 @@ class TestDocumentNew(unittest.TestCase):
             template_overlay=self._overlay_template,
         )
         target = self.work_dir / "doc_overlay_collision"
-        self.assertEqual((target / "main.txt").read_text(), "overlay main")
+        self.assertEqual((target / "main.tex").read_text(), "overlay main")
 
     def test_new_overlay_base_only_files_are_copied(self):
         self.doc.new(
@@ -204,7 +204,7 @@ class TestDocumentNew(unittest.TestCase):
             template_overlay=self._overlay_template,
         )
         target = self.work_dir / "doc_overlay_union"
-        expected = {"main.txt", "config.cfg", "extra.txt"}
+        expected = {"main.tex", "config.cfg", "extra.txt"}
         found = {f.name for f in target.rglob("*") if f.is_file()}
         self.assertTrue(expected.issubset(found))
 
@@ -257,15 +257,31 @@ class TestDocumentNew(unittest.TestCase):
         with self.assertRaises(FileNotFoundError):
             self.doc.new(self.work_dir, "doc_no_main")
 
-    def test_new_raises_filenotfound_when_multiple_main_files(self):
-        """BASE_TEMPLATE with two top-level main.* files -- ambiguous."""
-        ambiguous_template = self._tmp_root / "_ambiguous_template"
-        ambiguous_template.mkdir()
-        (ambiguous_template / "main.txt").write_text("main one")
-        (ambiguous_template / "main.tex").write_text("main two")
-        self.doc.BASE_TEMPLATE = ambiguous_template
+    def test_new_raises_filenotfound_when_only_non_tex_main_file(self):
+        """A top-level 'main.*' that isn't .tex doesn't count as a candidate,
+        so this must behave exactly like the no-main-file case above."""
+        non_tex_main_template = self._tmp_root / "_non_tex_main_template"
+        non_tex_main_template.mkdir()
+        (non_tex_main_template / "main.md").write_text("not a tex file")
+        self.doc.BASE_TEMPLATE = non_tex_main_template
         with self.assertRaises(FileNotFoundError):
-            self.doc.new(self.work_dir, "doc_ambiguous_main")
+            self.doc.new(self.work_dir, "doc_non_tex_main")
+
+    def test_new_ignores_non_tex_files_sharing_main_stem(self):
+        """Regression test: a stray same-stemmed non-.tex file (e.g. a
+        latexmk byproduct like main.aux left over from a compile run inside
+        a template folder) must not be mistaken for a second candidate --
+        only main.tex counts, so new() should succeed and resolve to it."""
+        polluted_template = self._tmp_root / "_polluted_template"
+        polluted_template.mkdir()
+        (polluted_template / "main.tex").write_text("the real entry point")
+        (polluted_template / "main.aux").write_text("latexmk byproduct")
+        (polluted_template / "main.fls").write_text("latexmk byproduct")
+        self.doc.BASE_TEMPLATE = polluted_template
+        self.doc.new(self.work_dir, "doc_polluted_main")
+        target = self.work_dir / "doc_polluted_main"
+        self.assertEqual(self.doc.file_data, target / "main.tex")
+        self.assertEqual(self.doc.data, ["the real entry point"])
 
 
 class _VariantLevelA(Document):
@@ -295,7 +311,7 @@ class TestDocumentNewVariantTemplateMRO(unittest.TestCase):
 
         cls._base_template = cls._tmp_root / "_base"
         cls._base_template.mkdir()
-        (cls._base_template / "main.txt").write_text("base main")
+        (cls._base_template / "main.tex").write_text("base main")
 
         cls._variant_a = cls._tmp_root / "_variant_a"
         cls._variant_a.mkdir()

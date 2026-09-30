@@ -47,6 +47,22 @@ __tempfile__*
 *.zip
 # ... [ADD MORE IF NEEDED]
 
+# LaTeX build byproducts (latexmk/pdflatex/biber) -- can appear anywhere
+# a .tex file gets compiled in place, including template source folders
+# -----------------------------------------------------------------------
+*.aux
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.bbl
+*.bcf
+*.blg
+*.run.xml
+*.toc
+*.out
+*.nav
+*.snm
+
 
 # Folders
 # =======================================================================
