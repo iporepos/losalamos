@@ -1,0 +1,16 @@
+# Fdb version 4
+["pdflatex"] 1790774624.60608 "./scripts/outputs/preprint/main.tex" "main.pdf" "main" 1790774641.31048 2
+  "./scripts/outputs/preprint/main.tex" 1790774510.27695 1329 163c10221007216acad269e31729cfa2 ""
+  "c:/texlive/2026/texmf-dist/tex/latex/base/article.cls" 1779980289.68733 20144 b966087dda3b194755eb460d32e2ef75 ""
+  "c:/texlive/2026/texmf-dist/tex/latex/base/size10.clo" 1779980289.7191 8448 686612a86f0e04f41ea577f5ec7e83d8 ""
+  "c:/texlive/2026/texmf-dist/web2c/texmf.cnf" 1779975583.42841 43630 e9fa012910491fe5ae08a72c3c2997a7 ""
+  "c:/texlive/2026/texmf-var/web2c/pdftex/pdflatex.fmt" 1779985679 3651025 dd524a5a9cbc9b8247e653b98900bdef ""
+  "c:/texlive/2026/texmf.cnf" 1779985574.97873 713 baa45e065482d44c4cd81b98ef72c63b ""
+  "main.aux" 1790774616.59829 32 3985256e7290058c681f74d7a3565a19 "pdflatex"
+  "preamble.tex" 0 -1 0 ""
+  "scripts/outputs/preprint/main.tex" 1790774510.27695 1329 163c10221007216acad269e31729cfa2 ""
+  (generated)
+  "main.aux"
+  "main.log"
+  "main.pdf"
+  (rewritten before read)

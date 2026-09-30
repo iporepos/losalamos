@@ -204,6 +204,7 @@ class TestDocumentTeXExport(unittest.TestCase):
         main.write_text(
             "\\documentclass{article}\n"
             "\\addbibresource{refs.bib}\n"
+            "\\input{definitions/metadata}\n"
             "\\begin{document}\n"
             "\\input{content}\n"
             "\\end{document}\n"
@@ -214,6 +215,10 @@ class TestDocumentTeXExport(unittest.TestCase):
         (self.project_dir / "images").mkdir()
         (self.project_dir / "images" / "logo.png").write_bytes(b"\x89PNG")
         (self.project_dir / "refs.bib").write_text("@article{x,}\n")
+        (self.project_dir / "definitions").mkdir()
+        (self.project_dir / "definitions" / "metadata.tex").write_text(
+            "\\newcommand{\\DocTitle}{Test Title}\n"
+        )
 
         self.doc = DocumentTeX(name="ExportDoc", alias="ED")
         self.doc.load_data(main)
@@ -243,10 +248,26 @@ class TestDocumentTeXExport(unittest.TestCase):
         result = self.doc.export(self.out_root, "split_export", split=True)
         tex_files = sorted(p.name for p in result.glob("*.tex"))
         self.assertEqual(tex_files, ["main.tex", "preamble.tex"])
+        # backward-compatible default: metadata gets flattened into preamble
+        self.assertIn("Test Title", (result / "preamble.tex").read_text())
         # no leftover intermediate flat file
         self.assertEqual(len(list(result.glob("_*_flat.tex"))), 0)
         self.assertTrue((result / "refs.bib").exists())
         self.assertTrue((result / "images" / "logo.png").exists())
+
+    def test_split_metadata_keeps_metadata_as_its_own_file(self):
+        result = self.doc.export(
+            self.out_root, "split_metadata_export", split=True, split_metadata=True
+        )
+        tex_files = sorted(p.name for p in result.glob("*.tex"))
+        self.assertEqual(tex_files, ["main.tex", "metadata.tex", "preamble.tex"])
+
+        metadata_text = (result / "metadata.tex").read_text()
+        self.assertIn("Test Title", metadata_text)
+
+        preamble_text = (result / "preamble.tex").read_text()
+        self.assertIn("\\input{metadata}", preamble_text)
+        self.assertNotIn("Test Title", preamble_text)
 
     def test_zip_export_places_files_at_archive_root(self):
         result = self.doc.export(

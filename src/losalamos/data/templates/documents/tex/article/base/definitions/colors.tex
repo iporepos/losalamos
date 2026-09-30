@@ -1,0 +1,45 @@
+% ==============================================================
+% colors.tex — Article
+% Same palette structure as the base, but the brand/accent color
+% defaults to black instead of blue (distinct from Essay).
+% Override this file via variant or user overlay to apply
+% a different brand or theme color scheme.
+% ==============================================================
+
+% --------------------------------------------------------------
+% Grayscale utilities
+\definecolor{verylightgray}{gray}{0.97}
+\definecolor{lightgray}{gray}{0.85}
+\definecolor{midgray}{gray}{0.50}
+
+% --------------------------------------------------------------
+% Brand / accent
+\colorlet{AccentColor}{black}
+
+% --------------------------------------------------------------
+% Accent versions
+\colorlet{AccentColorVeryLight}{AccentColor!5}
+\colorlet{AccentColorLight}{AccentColor!20}
+
+% --------------------------------------------------------------
+% Semantic aliases
+\definecolor{HeadingColor}{named}{AccentColor}
+\definecolor{LinkColor}{named}{blue}
+\definecolor{RuleColor}{named}{midgray}
+\definecolor{TextColor}{named}{black}
+
+
+% --------------------------------------------------------------
+% Page and text
+\pagecolor{white}
+\color{TextColor}
+
+% --------------------------------------------------------------
+% Links
+\hypersetup{
+    colorlinks=true,
+    linkcolor=LinkColor,
+    citecolor=LinkColor,
+    filecolor=LinkColor,
+    urlcolor=LinkColor,
+}

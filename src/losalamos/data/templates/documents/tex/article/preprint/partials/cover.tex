@@ -1,0 +1,65 @@
+% ==============================================================
+% cover.tex — PrePrint
+% Same as Article's cover, plus a submitted/accepted line right
+% after the author list.
+% ==============================================================
+
+% --------------------------------------------------------------
+% Title block
+% \raggedright group instead of flushleft: flushleft is a list
+% environment with its own topsep baggage, which fights any \vspace
+% placed right after it -- \raggedright gives exact, predictable
+% spacing since nothing implicit is added before or after.
+{\raggedright
+    {\small \sffamily \MakeUppercase{\DocType}}\\[4mm]
+
+    {\Large \sffamily\bfseries \DocTitle}\\[6mm]
+
+    {\normalsize \rmfamily
+    \AuthorAName\ \AuthorALastName$^{\AuthorAAffiliationNum\ifdefstring{\AuthorACorresponding}{true}{,\ast}{}}$,
+    \AuthorBName\ \AuthorBLastName$^{\AuthorBAffiliationNum\ifdefstring{\AuthorBCorresponding}{true}{,\ast}{}}$,
+    \AuthorCName\ \AuthorCLastName$^{\AuthorCAffiliationNum\ifdefstring{\AuthorCCorresponding}{true}{,\ast}{}}$
+    }\\[5mm]
+
+    {\footnotesize \sffamily Submitted to: \DocJournal;\ Submission date: \DocSubmissionDate;\ Accepted: \DocAcceptedDate.}\par
+}
+
+% Footnote carries the corresponding-author contact and the
+% affiliation list; \thefootnote is blanked since the numbers are
+% already embedded in the text above and in \DocAffiliations itself.
+{\renewcommand{\thefootnote}{}%
+\footnotetext{$\ast$~Corresponding author: \DocCorrespondingAuthorEmail.\ \DocAffiliations}}
+
+% Submission details sit almost glued to the ruler below.
+\vspace{1mm}
+
+\rule{\linewidth}{1pt}
+
+\vspace{4mm}
+
+% --------------------------------------------------------------
+% Highlights (tight line spread -- these wrap to a couple of lines
+% each now that the placeholder text runs a bit longer)
+\noindent {\small \sffamily\bfseries Highlights}
+{\linespread{0.85}\selectfont
+\begin{itemize}
+    \setlength\itemsep{0mm}
+    \item {\footnotesize \sffamily \DocHighlightOne}
+    \item {\footnotesize \sffamily \DocHighlightTwo}
+    \item {\footnotesize \sffamily \DocHighlightThree}
+\end{itemize}
+}
+
+\vspace{2mm}
+
+% --------------------------------------------------------------
+% Abstract (run-in, sans serif)
+\noindent {\small \sffamily\bfseries \trAbstract.}\ {\small \sffamily \DocAbstract}
+
+\vspace{2mm}
+
+% --------------------------------------------------------------
+% Keywords
+\noindent {\small \sffamily\bfseries Keywords:}\ {\small \sffamily \DocKeywords}
+
+\vspace{4mm}

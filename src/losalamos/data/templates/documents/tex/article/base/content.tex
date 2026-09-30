@@ -1,0 +1,90 @@
+\section{Introduction} \label{sec:introduction}
+
+\lipsum[1] \cite{Hoffman_2023_a}.
+
+\lipsum[2]
+
+\section{Methods} \label{sec:methods}
+
+\lipsum[1]
+
+\subsection{Materials} \label{sec:methods:materials}
+
+\lipsum[1]
+
+\subsection{Data Analysis} \label{sec:methods:analysis}
+
+\lipsum[1]
+
+\section{Results} \label{sec:results}
+
+\lipsum[1]
+
+% Table, figures, and their subsections are kept directly in this
+% file (not \input from partials/tables or partials/figures) so the
+% whole manuscript body reads top to bottom as one piece -- easier to
+% lift into a journal submission later.
+
+\subsection{Summary Table} \label{sec:results:table}
+
+\lipsum[2]
+
+\begin{table}[h!]
+\centering
+\begin{threeparttable}
+\footnotesize
+\sffamily
+\caption[Summary statistics by group]{
+    \textbf{Summary statistics by experimental group.}
+    Values are reported as mean $\pm$ standard deviation unless noted otherwise.
+}
+\label{tbl:summary}
+\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} l c c c c c c c c}
+\toprule
+\textbf{Group} & \textbf{N} & \textbf{Mean} & \textbf{SD} & \textbf{SE} & \textbf{95\% CI} & \textbf{$t$} & \textbf{df} & \textbf{$p$-value} \\
+\midrule
+Control     & 24 & 12.4 & 1.8 & 0.37 & [11.6, 13.2] & --   & --  & --                \\
+Treatment A & 22 & 15.1 & 2.1 & 0.45 & [14.2, 16.0] & 2.61 & 44  & 0.012\tnote{a}     \\
+Treatment B & 25 & 18.7 & 2.4 & 0.48 & [17.7, 19.7] & 4.87 & 47  & $<0.001$\tnote{a}  \\
+\bottomrule
+\end{tabular*}
+\begin{tablenotes}
+\footnotesize
+\item[a] Compared to control, two-tailed $t$-test.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+\subsection{Overview Figure} \label{sec:results:figure-small}
+
+\lipsum[1]
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.5\textwidth]{example-image-golden}
+\caption[Overview schematic]{
+    \textbf{Overview schematic.}
+    Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+}
+\label{fig:small}
+\end{figure}
+
+\subsection{Detailed Results Panel} \label{sec:results:figure-large}
+
+\lipsum[2]
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=\textwidth]{example-image-16x9}
+\caption[Detailed results panel]{
+    \textbf{Detailed results panel.}
+    Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+    \;\textbf{a}\;---\;Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+    \;\textbf{b}\;---\;Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+}
+\label{fig:large}
+\end{figure}
+
+\section{Conclusion} \label{sec:conclusion}
+
+\lipsum[1]

@@ -1,0 +1,17 @@
+% ==============================================================
+% headerfooter.tex — Article
+% Running header uses the first author's surname (et al.) and year,
+% the convention used by most academic journals. Footer carries the
+% DOI in place of the essay-style city/date line.
+% ==============================================================
+
+% --------------------------------------------------------------
+% Header
+\newcommand{\HeaderLeft}{\DocJournal}
+\newcommand{\HeaderRight}{\AuthorALastName\ et al. (\DocYear)}
+
+% --------------------------------------------------------------
+% Footer
+\newcommand{\FooterLeft}{\url{\DocDOI}}
+\newcommand{\FooterCenter}{}
+\newcommand{\FooterRight}{\thepage\;/\;\pageref{LastPage}}

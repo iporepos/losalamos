@@ -1,0 +1,19 @@
+% ==============================================================
+% headerfooter.tex — PrePrint
+% Header marks the document as a preprint instead of naming the
+% target journal, and the "(year)" in the running citation becomes
+% "(in press)" since a preprint has no publication year yet.
+% In manuscript mode (\IsManuscript = true) the header instead reads
+% "MANUSCRIPT" and the footer swaps the DOI for the submission line.
+% ==============================================================
+
+% --------------------------------------------------------------
+% Header
+\newcommand{\HeaderLeft}{\ifdefstring{\IsManuscript}{true}{MANUSCRIPT}{PREPRINT}}
+\newcommand{\HeaderRight}{\AuthorALastName\ et al. (in press)}
+
+% --------------------------------------------------------------
+% Footer
+\newcommand{\FooterLeft}{\ifdefstring{\IsManuscript}{true}{Submitted to: \DocJournal}{\url{\DocDOI}}}
+\newcommand{\FooterCenter}{}
+\newcommand{\FooterRight}{\thepage\;/\;\pageref{LastPage}}

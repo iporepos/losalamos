@@ -15,9 +15,8 @@ Class hierarchy
     └── Document                    (base for all document types)
         └── DocumentTeX             (base for all TeX documents)
             └── Essay               (base for essay-style documents)
-                ├── Academic        (academic documents)
-                │   ├── Article
-                │   ├── Preprint
+                ├── Article         (academic articles)
+                │   ├── PrePrint
                 │   └── PrintArticle
                 └── Professional    (professional documents)
                     ├── Report      (standard report; PDF/note → outputs/)
@@ -708,7 +707,15 @@ class DocumentTeX(Document):
 
         return None
 
-    def export(self, folder_root, name, flatten=False, split=False, zip_export=False):
+    def export(
+        self,
+        folder_root,
+        name,
+        flatten=False,
+        split=False,
+        split_metadata=False,
+        zip_export=False,
+    ):
         """
         Export the TeX document to a self-contained folder.
 
@@ -730,6 +737,15 @@ class DocumentTeX(Document):
           document is first flattened into a temporary file, then split
           into ``preamble.tex`` and ``main.tex``. The intermediate flat
           file is removed after splitting.
+        - **Split with metadata kept separate** (``split=True``,
+          ``split_metadata=True``): same as **Split**, except
+          ``definitions/metadata.tex`` is never inlined into the merged
+          preamble -- it is copied to the export folder as its own
+          ``metadata.tex``, and ``preamble.tex`` keeps a single
+          ``\\input{metadata}`` line where that content used to be spliced
+          in. Result is three files (``preamble.tex``, ``metadata.tex``,
+          ``main.tex``) instead of two. Off by default so existing
+          ``split=True`` callers keep getting the original two-file layout.
 
         :param folder_root: Parent directory under which the export folder
             is created.
@@ -745,6 +761,11 @@ class DocumentTeX(Document):
             into ``preamble.tex`` and ``main.tex``. Takes precedence over
             ``flatten``.
         :type split: bool
+        :param split_metadata: If ``True`` (and ``split=True``), also keep
+            ``definitions/metadata.tex`` out of the merged preamble and
+            export it separately as its own ``metadata.tex``, ``\\input``-ed
+            from ``preamble.tex``. Ignored when ``split=False``.
+        :type split_metadata: bool
         :param zip_export: If ``True``, additionally packages the export
             folder's contents into a ``.zip`` archive at
             ``folder_root/<name>.zip``. Files are placed at the archive's
@@ -791,13 +812,33 @@ class DocumentTeX(Document):
         # --------------------------------------------------
         if split:
             # Flatten to a temp file inside the export folder, then split
-            # and remove the intermediate flat file
+            # and remove the intermediate flat file. With split_metadata,
+            # definitions/metadata is left unresolved by make_flat so it
+            # survives as a literal \input line, then peeled out into its
+            # own metadata.tex below.
             flat_file = export_dir / f"_{name}_flat.tex"
             assets = set()
-            DocumentTeX.make_flat(self.file_data, output_tex=flat_file, assets=assets)
+            skip_inputs = {"definitions/metadata"} if split_metadata else None
+            DocumentTeX.make_flat(
+                self.file_data,
+                output_tex=flat_file,
+                assets=assets,
+                skip_inputs=skip_inputs,
+            )
             DocumentTeX.split_preamble(flat_file, output_folder=export_dir)
             flat_file.unlink()
             DocumentTeX._copy_assets(assets, self.file_data.parent, export_dir)
+
+            if split_metadata:
+                preamble_path = export_dir / "preamble.tex"
+                preamble_text = preamble_path.read_text(encoding="utf-8")
+                preamble_text = preamble_text.replace(
+                    r"\input{definitions/metadata}", r"\input{metadata}"
+                )
+                preamble_path.write_text(preamble_text, encoding="utf-8")
+
+                metadata_src = self.file_data.parent / "definitions" / "metadata.tex"
+                shutil.copy2(metadata_src, export_dir / "metadata.tex")
 
         elif flatten:
             # Single merged file named after the export folder
@@ -961,7 +1002,7 @@ class DocumentTeX(Document):
         return preamble_path, main_path
 
     @staticmethod
-    def make_flat(input_tex, output_tex=None, assets=None):
+    def make_flat(input_tex, output_tex=None, assets=None, skip_inputs=None):
         """
         Flatten a TeX document by recursively resolving ``\\input`` /
         ``\\include`` directives and embedding the compiled bibliography.
@@ -990,6 +1031,13 @@ class DocumentTeX(Document):
             tree, such as the ``example-image-*`` placeholders) are never
             added.
         :type assets: set or None
+        :param skip_inputs: Optional set of ``\\input``/``\\include`` targets,
+            exactly as they appear inside the braces (e.g.
+            ``"definitions/metadata"``), to leave unresolved in the output
+            instead of inlining their content. Used by :meth:`export` to
+            keep ``metadata.tex`` split out as its own file. ``None``
+            (default) flattens everything.
+        :type skip_inputs: set of str or None
         :returns: The fully flattened LaTeX source as a string.
         :rtype: str
         """
@@ -1006,6 +1054,8 @@ class DocumentTeX(Document):
 
             def replace_input(match):
                 target_file = match.group(1).strip()
+                if skip_inputs is not None and target_file in skip_inputs:
+                    return match.group(0)
                 if not target_file.endswith(".tex"):
                     target_file += ".tex"
                 # \input/\include paths in LaTeX always resolve relative to the
@@ -1994,34 +2044,40 @@ class Essay(DocumentTeX):
     VARIANT_TEMPLATE = FOLDER_TEMPLATES_DOCUMENTS / "tex/essay"
 
 
-class Academic(Essay):
+class Article(Essay):
     # ------------
-    # Academic documents are not provided by tecnical team
-    # They diverge from professional documents first by the metadata
-    # They can be a project but is a research project
-    # They hold a list of authors (one or more)
-    # Each author has attributes, including affiliation
-    # the document hold a provider institution
-    # other specificies can be develop downstream
-    # Examples : article, thesis, grant proposals, research report
+    # Base for academic articles (papers). Diverges from Essay mainly by
+    # metadata: a manual list of authors (AuthorA, AuthorB, AuthorC by
+    # default -- see definitions/metadata.tex), each with First Name,
+    # Last Name, Affiliation, Email and a Corresponding boolean flag.
+    # No subtitle; the running header shows first-author "et al. (year)".
+
+    # extra attributes:
+    # doi
+    # url
+    # keywords
+    # highlights
+    # aknowledgments
+    #
 
     # todo develop actual template
-    VARIANT_TEMPLATE = FOLDER_TEMPLATES_DOCUMENTS / "tex/academic/base"
+    VARIANT_TEMPLATE = FOLDER_TEMPLATES_DOCUMENTS / "tex/article/base"
 
 
-class Article(Academic):
+class PrePrint(Article):
+
     # todo develop actual template
-    VARIANT_TEMPLATE = FOLDER_TEMPLATES_DOCUMENTS / "tex/academic/article"
-
-
-class Preprint(Article):
-    # todo develop actual template
-    VARIANT_TEMPLATE = FOLDER_TEMPLATES_DOCUMENTS / "tex/academic/preprint"
+    VARIANT_TEMPLATE = FOLDER_TEMPLATES_DOCUMENTS / "tex/article/preprint"
 
 
 class PrintArticle(Article):
+
+    # This variant is an example of a fine-tuned Journal article,
+    # it contains more adjustments for the final print layout
+    # it may contain special macros for images etc
+
     # todo develop actual template
-    VARIANT_TEMPLATE = FOLDER_TEMPLATES_DOCUMENTS / "tex/academic/base"
+    VARIANT_TEMPLATE = FOLDER_TEMPLATES_DOCUMENTS / "tex/article/print"
 
 
 class Professional(Essay):

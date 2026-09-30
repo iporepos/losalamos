@@ -1,0 +1,83 @@
+% ==============================================================
+% metadata.tex — Article
+% Metadata for a multi-author academic article. Authors are listed
+% manually (AuthorA, AuthorB, AuthorC by default) rather than via a
+% loop or Python wrapper -- add/remove blocks here and mirror the
+% change in partials/cover.tex and definitions/headerfooter.tex.
+% ==============================================================
+
+% --------------------------------------------------------------
+% Draft mode
+\newcommand{\IsDraft}{false}
+
+% --------------------------------------------------------------
+% Content
+\newcommand{\DocType}{Research Article}
+\newcommand{\DocTitle}{[Article Title]}
+\newcommand{\DocJournal}{[Journal Title]}
+\newcommand{\DocAbstract}{\lipsum[1] \lipsum[2]}
+\newcommand{\DocAcknowledgements}{\lipsum[1]}
+\newcommand{\DocKeywords}{[Keyword One]; [Keyword Two]; [Keyword Three]}
+\newcommand{\DocHighlightOne}{\lipsum[1][1-2]}
+\newcommand{\DocHighlightTwo}{\lipsum[2][1-2]}
+\newcommand{\DocHighlightThree}{\lipsum[3][1-2]}
+
+% --------------------------------------------------------------
+% Authorship
+% Default: 3 authors. Each carries name, contact email, a
+% corresponding-author flag ("true"/"false", read via \ifdefstring),
+% and an affiliation number matching an entry in \DocAffiliations
+% below. Two authors at the same institution should share a number
+% (e.g. set \AuthorBAffiliationNum to {1} to match Author A) -- when
+% you do that, also delete that author's now-duplicate entry from
+% \DocAffiliations by hand.
+% Each author also carries a \AuthorXCredit field: a manually written,
+% comma-separated list of CRediT (Contributor Roles Taxonomy) roles --
+% e.g. Conceptualization, Data Curation, Formal Analysis, Funding
+% Acquisition, Investigation, Methodology, Project Administration,
+% Resources, Software, Supervision, Validation, Visualization,
+% Writing -- Original Draft, Writing -- Review \& Editing.
+\newcommand{\AuthorAName}{[Author A First Name]}
+\newcommand{\AuthorALastName}{[Author A Last Name]}
+\newcommand{\AuthorAAffiliationNum}{1}
+\newcommand{\AuthorAEmail}{authora@example.com}
+\newcommand{\AuthorACorresponding}{true}
+\newcommand{\AuthorACredit}{Conceptualization, Methodology, Writing -- Original Draft}
+
+\newcommand{\AuthorBName}{[Author B First Name]}
+\newcommand{\AuthorBLastName}{[Author B Last Name]}
+\newcommand{\AuthorBAffiliationNum}{2}
+\newcommand{\AuthorBEmail}{authorb@example.com}
+\newcommand{\AuthorBCorresponding}{false}
+\newcommand{\AuthorBCredit}{Data Curation, Formal Analysis, Investigation}
+
+\newcommand{\AuthorCName}{[Author C First Name]}
+\newcommand{\AuthorCLastName}{[Author C Last Name]}
+\newcommand{\AuthorCAffiliationNum}{3}
+\newcommand{\AuthorCEmail}{authorc@example.com}
+\newcommand{\AuthorCCorresponding}{false}
+\newcommand{\AuthorCCredit}{Software, Visualization, Writing -- Review \& Editing}
+
+% --------------------------------------------------------------
+% Affiliations
+% One semicolon-separated list, numbered to match the
+% \AuthorXAffiliationNum values above. Edit this single line by hand
+% to add, remove, reorder, or merge entries.
+\newcommand{\DocAffiliations}{1 [Author A Affiliation]; 2 [Author B Affiliation]; 3 [Author C Affiliation]}
+
+% --------------------------------------------------------------
+% Corresponding author
+% Point this at whichever AuthorX has \AuthorXCorresponding set to
+% {true} above -- kept as a separate manual field rather than derived.
+\newcommand{\DocCorrespondingAuthorEmail}{\AuthorAEmail}
+
+% --------------------------------------------------------------
+% Identifiers
+\newcommand{\DocYear}{\the\year}
+\newcommand{\DocDOI}{https://doi.org/10.0000/xxxxxx}
+
+% --------------------------------------------------------------
+% Draft watermark
+\ifdefstring{\IsDraft}{true}{
+    \usepackage{draftwatermark}
+}{}

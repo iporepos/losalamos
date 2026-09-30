@@ -1,0 +1,70 @@
+% --------------------------------------------------------------
+% Page size and margins
+% Same as base, except headsep is enlarged to open a clear gap
+% between the running header and the title block below it -- the
+% header itself stays put (headheight/top margin unchanged), only
+% the space below it grows.
+\geometry{
+ a4paper,
+ left=40mm,
+ right=20mm,
+ top=20mm,
+ includefoot,
+ bottom=20mm,
+ headheight=8mm,    % must fit your header content exactly, or LaTeX pads it for you
+ headsep=15mm,       % blank space between header and body text (Article: enlarged)
+ footskip=10mm,      % distance from body text to footer baseline
+}
+
+% --------------------------------------------------------------
+% Custom spaces
+\newcommand{\pagesectionvspace}{\vspace*{15mm}}
+
+% Text body tab space
+\newcommand{\bodytab}{0mm}
+
+% Appendix body tab space
+\newcommand{\appendixtab}{15mm}
+
+% --------------------------------------------------------------
+% Paragraph indentation space -- 0mm = no indentation
+\setlength{\parindent}{0mm}
+
+% --------------------------------------------------------------
+% Paragraph spacing
+\setlength{\parskip}{2mm}
+
+% --------------------------------------------------------------
+% Space between float and surrounding text
+\setlength{\intextsep}{3mm}      % above and below in-text floats (h)
+\setlength{\textfloatsep}{2mm}   % above/below top (t) and bottom (b) floats
+\setlength{\floatsep}{2mm}       % between two consecutive floats
+
+% --------------------------------------------------------------
+% Space between float and its caption
+\setlength{\abovecaptionskip}{1mm}
+\setlength{\belowcaptionskip}{1mm}
+
+% --------------------------------------------------------------
+% Line spacing
+\linespread{1}
+
+% --------------------------------------------------------------
+% Section spacing
+\titlespacing*{\section}      {0mm}{6mm}{2mm}
+\titlespacing*{\subsection}   {0mm}{2mm}{0mm}
+\titlespacing*{\subsubsection}{0mm}{2mm}{0mm}
+\titlespacing{\paragraph}
+  {0mm}   % left indent
+  {2mm}   % space before
+  {2mm}   % space after (between title and the following text)
+
+% --------------------------------------------------------------
+% Header spacing
+\setlength{\headheight}{15mm}
+\setlength{\headsep}{15mm}
+
+% --------------------------------------------------------------
+% Footer spacing
+\setlength{\footskip}{10mm}
+

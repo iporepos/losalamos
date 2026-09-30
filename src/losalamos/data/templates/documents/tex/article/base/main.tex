@@ -1,0 +1,32 @@
+% ==============================================================
+% SET DOCUMENT CLASS
+\documentclass[10pt]{article}
+
+% ==============================================================
+% PREAMBLE
+\input{preamble}
+
+% ==============================================================
+% DOCUMENT
+\begin{document}
+
+% --------------------------------------------------------------
+% Cover
+\input{partials/cover}
+
+% --------------------------------------------------------------
+% Content
+\input{content}
+
+% --------------------------------------------------------------
+% Acknowledgements and Credits (kept out of content.tex so that file
+% stays clean manuscript LaTeX)
+\input{partials/acknowledgements}
+\input{partials/credits}
+
+% --------------------------------------------------------------
+% References -- no \newpage before this: continues right after
+% content/credits instead of forcing a break (unlike Essay's main.tex).
+\input{partials/refs}
+
+\end{document}

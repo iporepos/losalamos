@@ -1,0 +1,41 @@
+% ==============================================================
+% SET DOCUMENT CLASS
+\documentclass[10pt]{article}
+
+% ==============================================================
+% PREAMBLE
+\input{preamble}
+
+% ==============================================================
+% DOCUMENT
+\begin{document}
+
+% --------------------------------------------------------------
+% Cover (stays single-spaced/as-designed even in manuscript mode)
+\input{partials/cover}
+
+% --------------------------------------------------------------
+% Manuscript mode: double-spaced body with line numbers, from here
+% through the end of the document. lineno and setspace are both
+% already loaded by config/packages.tex.
+\ifdefstring{\IsManuscript}{true}{
+    \doublespacing
+    \linenumbers
+}{}
+
+% --------------------------------------------------------------
+% Content
+\input{content}
+
+% --------------------------------------------------------------
+% Acknowledgements and Credits (kept out of content.tex so that file
+% stays clean manuscript LaTeX)
+\input{partials/acknowledgements}
+\input{partials/credits}
+
+% --------------------------------------------------------------
+% References -- no \newpage before this: continues right after
+% content/credits instead of forcing a break (unlike Essay's main.tex).
+\input{partials/refs}
+
+\end{document}

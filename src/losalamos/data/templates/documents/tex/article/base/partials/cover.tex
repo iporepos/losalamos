@@ -1,0 +1,64 @@
+% ==============================================================
+% cover.tex — Article
+% Left-aligned title block with a footnoted author/affiliation list,
+% highlights, a run-in abstract, and keywords. Keeps the page's
+% normal header/footer (no \thispagestyle{empty}) and issues no page
+% break of its own -- \newpage placement is the main file's job (see
+% main.tex), so the first body section continues right after the
+% keywords. The gap between the header and the title is set via
+% headsep in design/spaces.tex, not an in-body \vspace, so the header
+% itself stays flush to the top margin like every other document type.
+% ==============================================================
+
+% --------------------------------------------------------------
+% Title block
+\begin{flushleft}
+    {\small \sffamily \MakeUppercase{\DocType}}\\[4mm]
+
+    {\Large \sffamily\bfseries \DocTitle}\\[6mm]
+
+    {\normalsize \rmfamily
+    \AuthorAName\ \AuthorALastName$^{\AuthorAAffiliationNum\ifdefstring{\AuthorACorresponding}{true}{,\ast}{}}$,
+    \AuthorBName\ \AuthorBLastName$^{\AuthorBAffiliationNum\ifdefstring{\AuthorBCorresponding}{true}{,\ast}{}}$,
+    \AuthorCName\ \AuthorCLastName$^{\AuthorCAffiliationNum\ifdefstring{\AuthorCCorresponding}{true}{,\ast}{}}$
+    }
+\end{flushleft}
+
+% Footnote carries the corresponding-author contact and the
+% affiliation list; \thefootnote is blanked since the numbers are
+% already embedded in the text above and in \DocAffiliations itself.
+{\renewcommand{\thefootnote}{}%
+\footnotetext{$\ast$~Corresponding author: \DocCorrespondingAuthorEmail.\ \DocAffiliations}}
+
+\vspace{4mm}
+
+\rule{\linewidth}{1pt}
+
+\vspace{4mm}
+
+% --------------------------------------------------------------
+% Highlights (tight line spread -- these wrap to a couple of lines
+% each now that the placeholder text runs a bit longer)
+\noindent {\small \sffamily\bfseries Highlights}
+{\linespread{0.85}\selectfont
+\begin{itemize}
+    \setlength\itemsep{0mm}
+    \item {\footnotesize \sffamily \DocHighlightOne}
+    \item {\footnotesize \sffamily \DocHighlightTwo}
+    \item {\footnotesize \sffamily \DocHighlightThree}
+\end{itemize}
+}
+
+\vspace{2mm}
+
+% --------------------------------------------------------------
+% Abstract (run-in, sans serif)
+\noindent {\small \sffamily\bfseries \trAbstract.}\ {\small \sffamily \DocAbstract}
+
+\vspace{2mm}
+
+% --------------------------------------------------------------
+% Keywords
+\noindent {\small \sffamily\bfseries Keywords:}\ {\small \sffamily \DocKeywords}
+
+\vspace{4mm}
