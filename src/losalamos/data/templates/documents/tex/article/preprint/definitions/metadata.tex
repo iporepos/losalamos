@@ -86,8 +86,15 @@
 
 % --------------------------------------------------------------
 % Identifiers
+% \DocFileID and \DocVersion mirror the Professional branch's
+% definitions/project.tex fields of the same name (this branch has no
+% project.tex, so Project._patch_metadata_tex writes them here
+% instead) -- same naming/versioning logic drives both, e.g. the
+% output filename PREPRINT_{project}_{file_id}_V{version}.pdf.
 \newcommand{\DocYear}{\the\year}
 \newcommand{\DocDOI}{https://doi.org/10.0000/xxxxxx}
+\newcommand{\DocFileID}{[File ID]}
+\newcommand{\DocVersion}{[Version]}
 
 % --------------------------------------------------------------
 % Draft watermark

@@ -849,6 +849,8 @@ class TestAssetDocumentPaths(unittest.TestCase):
         cls._receipt_name = cls._receipt.name
         cls._report = cls._project.add_report()
         cls._report_name = cls._report.name
+        cls._preprint = cls._project.add_preprint()
+        cls._preprint_name = cls._preprint.name
 
     @classmethod
     def tearDownClass(cls):
@@ -909,6 +911,66 @@ class TestAssetDocumentPaths(unittest.TestCase):
         """add_receipt(invoice_id=...) should raise FileNotFoundError when the invoice source is absent."""
         with self.assertRaises(FileNotFoundError):
             self._project.add_receipt(invoice_id="F999")
+
+    def test_add_preprint_source_in_inputs_documents(self):
+        """add_preprint should create the working tree under inputs/documents/,
+        same as every other asset type -- only the note location differs."""
+        source = (
+            Path(self._project.folder_root)
+            / "inputs"
+            / "documents"
+            / self._preprint_name
+        )
+        self.assertTrue(source.is_dir(), f"Source folder missing: {source}")
+
+    def test_add_preprint_note_in_outputs(self):
+        """add_preprint() should place the sidecar note at outputs/{name}.md,
+        same subfolder as add_report() -- not inputs/documents/."""
+        note = Path(self._project.folder_root) / "outputs" / f"{self._preprint_name}.md"
+        self.assertTrue(note.is_file(), f"Preprint note missing: {note}")
+
+    def test_add_preprint_note_not_in_inputs_documents(self):
+        """add_preprint() must not place the note under inputs/documents/."""
+        wrong = (
+            Path(self._project.folder_root)
+            / "inputs"
+            / "documents"
+            / f"{self._preprint_name}.md"
+        )
+        self.assertFalse(wrong.exists(), f"Preprint note wrongly placed at: {wrong}")
+
+    def test_add_preprint_is_condensed_into_three_tex_files(self):
+        """PREPRINT is in _ASSET_CONDENSED_TYPES, so add_preprint() should
+        default to the flattened preamble/metadata/main trio -- no live
+        definitions/ (or any other) subfolder tree left behind."""
+        doc_folder = (
+            Path(self._project.folder_root)
+            / "inputs"
+            / "documents"
+            / self._preprint_name
+        )
+        tex_files = sorted(p.name for p in doc_folder.glob("*.tex"))
+        self.assertEqual(tex_files, ["main.tex", "metadata.tex", "preamble.tex"])
+        self.assertFalse((doc_folder / "definitions").exists())
+
+    def test_add_preprint_patches_identity_fields_in_metadata_tex(self):
+        """PrePrint has no project.tex, so \\DocVersion/\\DocFileID/\\DocType
+        must land in metadata.tex instead -- same fields, same naming/
+        versioning logic as the Professional branch's project.tex. \\DocTitle
+        must NOT be patched: an article's title isn't the project's title."""
+        metadata_tex = (
+            Path(self._project.folder_root)
+            / "inputs"
+            / "documents"
+            / self._preprint_name
+            / "metadata.tex"
+        )
+        content = metadata_tex.read_text(encoding="utf-8")
+        file_id = self._preprint_name.rsplit("_", 1)[-1]
+        self.assertIn(f"\\newcommand{{\\DocFileID}}{{{file_id}}}", content)
+        self.assertIn("\\newcommand{\\DocVersion}{001}", content)
+        self.assertIn("\\newcommand{\\DocType}{Preprint}", content)
+        self.assertIn("\\newcommand{\\DocTitle}{[Article Title]}", content)
 
 
 class TestLocateDocumentSource(unittest.TestCase):

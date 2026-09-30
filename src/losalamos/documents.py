@@ -2270,6 +2270,8 @@ DOCUMENT_TYPES = {
     "receipt": Receipt,
     "agreement": Agreement,
     "contract": Contract,
+    "article": Article,
+    "preprint": PrePrint,
 }
 
 # ***********************************************************************

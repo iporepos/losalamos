@@ -1,6 +1,27 @@
 % ==============================================================
 % bibliography.tex
-% Default: IEEE style with biber backend.
-% Override this file via template overlay for other styles.
+% Default: IEEE style with biber backend -- \cite{ref} renders as a
+% bracketed number: "a bold claim [1]."
+%
+% Override this file via template overlay to switch styles. All of
+% these keep backend=biber; only the style= value (and, for the
+% narrative row below, the citation command) changes what \cite{ref}
+% renders as:
+%
+%   style=ieee        "a bold claim [1]."                (biblatex-ieee, default)
+%   style=numeric     "a bold claim [1]."                (biblatex core)
+%   style=authoryear  "a bold claim (Smith, 2023)."       (biblatex core)
+%   style=apa         "a bold claim (Smith, 2023)."       (biblatex-apa)
+%   style=nature      "a bold claim¹."                    (biblatex-nature)
+%
+% Narrative form -- author name outside the parentheses -- is a
+% citation-command choice, not a style choice: with style=authoryear
+% or style=apa, use \textcite{ref} instead of \cite{ref} to get
+%
+%   "a bold claim from Smith (2023)."
+%
+% Any style beyond ieee/numeric/authoryear (apa, nature, chicago-authordate,
+% mla, ...) pulls in its own biblatex-* companion package, which must be
+% installed in the TeX distribution.
 % ==============================================================
 \usepackage[backend=biber, style=ieee]{biblatex}

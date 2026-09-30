@@ -115,6 +115,7 @@ _ASSET_PDF_SUBFOLDER = {
     "RECEIPT": "budget/inflows",
     "PROPOSAL": "admin/proposals",
     "REPORT": "outputs",
+    "PREPRINT": "outputs",
 }
 
 # Project-relative folder where each asset type's sidecar note lives (always local).
@@ -123,7 +124,23 @@ _ASSET_NOTE_SUBFOLDER = {
     "RECEIPT": "inputs/documents",
     "PROPOSAL": "inputs/documents",
     "REPORT": "outputs",
+    "PREPRINT": "outputs",
 }
+
+# Asset types whose definitions/metadata.tex (rather than
+# definitions/project.tex) is the source of truth for \DocVersion,
+# \DocFileID, and \DocType -- the Article/PrePrint branch has no
+# project.tex at all, so _patch_metadata_tex writes these fields there
+# instead of _patch_project_tex writing them to project.tex.
+_ASSET_METADATA_PATCH_TYPES = ("INVOICE", "RECEIPT", "PROPOSAL", "PREPRINT")
+
+# Asset types created pre-condensed into the flattened 3-file layout
+# (preamble.tex + metadata.tex + main.tex) by default, instead of the
+# live multi-file template tree every other asset type keeps (so its
+# many definitions/*.tex, config/*.tex, design/*.tex files stay directly
+# editable). A preprint benefits from the condensed form -- it's the
+# shape a journal/arXiv submission wants -- where invoices/reports don't.
+_ASSET_CONDENSED_TYPES = ("PREPRINT",)
 
 # Human-readable document type labels per language.
 # Keys are BCP-47 language tags (lowercase). Add new languages here.
@@ -133,12 +150,16 @@ _DOC_TYPE_LABELS = {
         "receipt": "Receipt",
         "proposal": "Proposal",
         "report": "Report",
+        "preprint": "Preprint",
     },
     "pt-br": {
         "invoice": "Cobrança",
         "receipt": "Recibo",
         "proposal": "Proposta",
         "report": "Relatório",
+        # Preprints stay in English regardless of project language --
+        # academic convention (arXiv/bioRxiv etc.), not a translation gap.
+        "preprint": "Preprint",
     },
 }
 
@@ -1658,6 +1679,7 @@ class Project(FileSys):
         template_overlay=None,
         files_overlay=None,
         condensed=True,
+        split_metadata=False,
         zip_export=False,
         compile_pdf=True,
         subfolder="inputs/documents",
@@ -1665,7 +1687,7 @@ class Project(FileSys):
     ):
         """
         Create a new document inside the project, optionally condensed
-        into a flattened+split pair of files and/or compiled to PDF.
+        into a flattened+split pair (or trio) of files and/or compiled to PDF.
 
         :param document_type: Key into :data:`losalamos.documents.DOCUMENT_TYPES`.
         :type document_type: str
@@ -1677,8 +1699,15 @@ class Project(FileSys):
         :param files_overlay: Forwarded to :meth:`Document.new`.
         :type files_overlay: dict or None
         :param condensed: If True, flatten+split into main.tex/preamble.tex
-            via a temp staging dir. If False, keep the live template tree.
+            (plus metadata.tex when *split_metadata* is also True) via a temp
+            staging dir. If False, keep the live template tree.
         :type condensed: bool
+        :param split_metadata: If True (and *condensed* is True), also keep
+            ``definitions/metadata.tex`` split out as its own top-level
+            ``metadata.tex`` instead of flattening it into ``preamble.tex``.
+            Forwarded to :meth:`~losalamos.documents.DocumentTeX.export`.
+            Ignored when *condensed* is False.
+        :type split_metadata: bool
         :param zip_export: Zip the condensed export (deletes the folder).
             Requires condensed=True; mutually exclusive with compile_pdf.
         :type zip_export: bool
@@ -1765,10 +1794,14 @@ class Project(FileSys):
                 folder_root=documents_folder,
                 flatten=True,
                 split=True,
+                split_metadata=split_metadata,
                 zip_export=zip_export,
             )
             shutil.rmtree(target_folder)
-            target_folder = documents_folder / name
+            # export() already created documents_folder/name itself -- reset
+            # to documents_folder so the load below (which appends /name
+            # uniformly for both branches) doesn't double it up.
+            target_folder = documents_folder
 
         return_instance = klass(name=name)
         return_instance.load_data(file_data=target_folder / name / "main.tex")
@@ -2089,19 +2122,42 @@ class Project(FileSys):
 
         project_tex.write_text(content, encoding="utf-8")
 
-    def _patch_metadata_tex(self, doc_folder) -> None:
+    def _patch_metadata_tex(self, doc_folder, file_id=None, asset_type=None) -> None:
         """
-        Write project title and subtitle into ``definitions/metadata.tex``.
+        Write project title/subtitle, and (when given) identity fields, into
+        the document's ``metadata.tex``.
 
         Sets ``\\DocTitle`` and ``\\DocSubtitle`` from the project's main note
-        metadata. Skips a field when the note has no value for it (placeholder
-        returned by :meth:`get_attribute`). Does nothing when the file is absent.
+        metadata -- except for ``asset_type="PREPRINT"``, where ``\\DocTitle``
+        is deliberately left untouched: an article's title is its own thing,
+        not the project's title, so it stays whatever the template shipped
+        with (or whatever was typed in by hand) rather than being overwritten.
+        Skips a field when the note has no value for it (placeholder returned
+        by :meth:`get_attribute`). When *file_id* and *asset_type* are given,
+        also sets ``\\DocVersion`` to ``"001"``, ``\\DocFileID`` to *file_id*,
+        and ``\\DocType`` to the localized document type label -- the same
+        fields :meth:`_patch_project_tex` writes to ``definitions/project.tex``
+        for the Professional branch, since the Article/PrePrint branch keeps
+        them in ``metadata.tex`` instead (it has no ``project.tex``). Every
+        field is a no-op when its ``\\newcommand`` isn't present in the file,
+        so this is safe to call unconditionally across branches.
 
-        :param doc_folder: Root of the document folder containing ``definitions/``.
+        Looks for ``metadata.tex`` at ``definitions/metadata.tex`` (the live,
+        uncondensed template layout) first, then at the folder's top level
+        (the condensed ``split_metadata=True`` layout, where it sits next to
+        ``preamble.tex``/``main.tex`` instead of under ``definitions/``).
+        Does nothing when neither is found.
+
+        :param doc_folder: Root of the document folder.
         :type doc_folder: pathlib.Path
+        :param file_id: Asset file ID, e.g. ``"F003"``. Required together with
+            *asset_type* to also patch ``\\DocVersion``/``\\DocFileID``/``\\DocType``.
+        :type file_id: str or None
+        :param asset_type: Asset type string in uppercase, e.g. ``"PREPRINT"``.
+        :type asset_type: str or None
         """
-        metadata_tex = Path(doc_folder) / "definitions" / "metadata.tex"
-        if not metadata_tex.is_file():
+        metadata_tex = self._locate_metadata_tex(doc_folder=doc_folder)
+        if metadata_tex is None:
             return
 
         def _set_cmd(cmd_name, value, text):
@@ -2115,10 +2171,17 @@ class Project(FileSys):
         title = self.get_title()
         subtitle = self.get_subtitle()
 
-        if not title.startswith("["):
-            content = _set_cmd("DocTitle", title, content)
-        if not subtitle.startswith("["):
-            content = _set_cmd("DocSubtitle", subtitle, content)
+        if asset_type != "PREPRINT":
+            if not title.startswith("["):
+                content = _set_cmd("DocTitle", title, content)
+            if not subtitle.startswith("["):
+                content = _set_cmd("DocSubtitle", subtitle, content)
+
+        if file_id is not None and asset_type is not None:
+            doc_type_label = self._localize_doc_type(asset_type=asset_type)
+            content = _set_cmd("DocVersion", "001", content)
+            content = _set_cmd("DocFileID", file_id, content)
+            content = _set_cmd("DocType", doc_type_label, content)
 
         metadata_tex.write_text(content, encoding="utf-8")
 
@@ -2207,13 +2270,16 @@ class Project(FileSys):
         else:
             doc_root = Path(self.folder_root) / "inputs/documents"
 
+        condense = asset_type in _ASSET_CONDENSED_TYPES
+
         doc = self.add_document(
             document_type=asset_type.lower(),
             name=name,
             template_overlay=template_overlay,
             files_overlay=files_overlay or None,
             subfolder=str(doc_root),
-            condensed=False,
+            condensed=condense,
+            split_metadata=condense,
             compile_pdf=False,
         )
 
@@ -2223,8 +2289,12 @@ class Project(FileSys):
             file_id=asset_id,
             asset_type=asset_type,
         )
-        if asset_type in ("INVOICE", "RECEIPT", "PROPOSAL"):
-            self._patch_metadata_tex(doc_folder=source_folder)
+        if asset_type in _ASSET_METADATA_PATCH_TYPES:
+            self._patch_metadata_tex(
+                doc_folder=source_folder,
+                file_id=asset_id,
+                asset_type=asset_type,
+            )
 
         if config is not None:
             doc.apply_config(config=config)
@@ -2243,12 +2313,69 @@ class Project(FileSys):
 
         return doc
 
+    @staticmethod
+    def _locate_metadata_tex(doc_folder):
+        """
+        Locate a document's ``metadata.tex``, whichever layout it's in.
+
+        Checks ``definitions/metadata.tex`` first (the live, uncondensed
+        template layout), then the folder's top level (the condensed
+        ``split_metadata=True`` layout, where it sits next to
+        ``preamble.tex``/``main.tex`` instead of under ``definitions/``).
+
+        :param doc_folder: Root of the document folder.
+        :type doc_folder: pathlib.Path
+        :returns: Path to ``metadata.tex``, or ``None`` if neither layout has it.
+        :rtype: pathlib.Path or None
+        """
+        doc_folder = Path(doc_folder)
+        for candidate in (
+            doc_folder / "definitions" / "metadata.tex",
+            doc_folder / "metadata.tex",
+        ):
+            if candidate.is_file():
+                return candidate
+        return None
+
+    @classmethod
+    def _read_doc_version(cls, doc_folder) -> str:
+        """
+        Read ``\\DocVersion`` from a document folder's identity file.
+
+        Tries ``definitions/project.tex`` first (the Professional branch's
+        identity file), then falls back to ``metadata.tex`` via
+        :meth:`_locate_metadata_tex` (used by the Article/PrePrint branch
+        instead, which has no project.tex, in either its live or condensed
+        layout) -- same field name, same naming/versioning logic either way.
+
+        :param doc_folder: Root of the document folder.
+        :type doc_folder: pathlib.Path
+        :returns: Raw ``\\DocVersion`` value, e.g. ``"001"``, or ``"[Version]"``
+            when neither file defines it.
+        :rtype: str
+        """
+        candidates = [Path(doc_folder) / "definitions" / "project.tex"]
+        metadata_tex = cls._locate_metadata_tex(doc_folder=doc_folder)
+        if metadata_tex is not None:
+            candidates.append(metadata_tex)
+
+        for identity_tex in candidates:
+            if not identity_tex.is_file():
+                continue
+            m = re.search(
+                r"\\newcommand\{\\DocVersion\}\{([^}]+)\}",
+                identity_tex.read_text(encoding="utf-8"),
+            )
+            if m:
+                return m.group(1)
+        return "[Version]"
+
     def _build_asset_document(self, asset_type, file_id, subfolder):
         """
         Core build logic for asset documents (invoice, receipt, proposal, etc.).
 
         Locates the source via :meth:`_locate_document_source`, reads
-        ``\\DocVersion`` from ``definitions/project.tex`` (dots removed, ``V``
+        ``\\DocVersion`` via :meth:`_read_doc_version` (dots removed, ``V``
         prefix added), compiles via ``latexmk`` with cleanup, ships the PDF to
         ``{subfolder}/{asset_type}_{project}_{file_id}_{version}.pdf``, zips the
         clean source tree to the same stem with a ``.zip`` extension, and
@@ -2271,16 +2398,7 @@ class Project(FileSys):
         if not main_tex.is_file():
             raise FileNotFoundError(f"main.tex not found in '{doc_folder}'")
 
-        # Read \DocVersion from definitions/project.tex
-        project_tex = doc_folder / "definitions" / "project.tex"
-        version_raw = "[Version]"
-        if project_tex.is_file():
-            m = re.search(
-                r"\\newcommand\{\\DocVersion\}\{([^}]+)\}",
-                project_tex.read_text(encoding="utf-8"),
-            )
-            if m:
-                version_raw = m.group(1)
+        version_raw = self._read_doc_version(doc_folder=doc_folder)
         version_tag = "V" + version_raw.replace(".", "")
 
         target_dir = Path(self.folder_root) / subfolder
@@ -2510,6 +2628,56 @@ class Project(FileSys):
         """
         return self._build_asset_document(
             asset_type="REPORT", file_id=file_id, subfolder="outputs"
+        )
+
+    def add_preprint(self):
+        """
+        Create a new preprint document.
+
+        The working tree is created at ``inputs/documents/PREPRINT_{project}_{file_id}/``
+        and the sidecar note at ``outputs/PREPRINT_{project}_{file_id}.md``.
+        No compilation is performed.
+
+        Same naming/versioning logic as :meth:`add_report`/:meth:`add_invoice`
+        etc. (``{TYPE}_{project}_{file_id}``, shared ``F###`` ID counter), but
+        the Article/PrePrint branch has no ``definitions/project.tex`` --
+        ``\\DocVersion``/``\\DocFileID``/``\\DocType`` live in
+        ``definitions/metadata.tex`` instead, and no
+        ``admin/config/overlays/`` files apply (that mechanism is
+        Professional-branch-specific: client/provider party info this
+        branch doesn't have).
+
+        The template directory is read from
+        ``sources["templates"]["documents"]["preprint"]`` in the project's
+        ``admin/config/sources.toml`` (optional -- the built-in PrePrint
+        template is used when unset).
+
+        :returns: The newly created preprint document instance.
+        :rtype: losalamos.documents.Document
+        """
+        return self._add_asset_document(
+            asset_type="PREPRINT",
+            files_overlay=None,
+        )
+
+    def build_preprint(self, file_id):
+        """
+        Compile a previously created preprint to PDF.
+
+        Reads ``\\DocVersion`` via :meth:`_read_doc_version` (from
+        ``definitions/metadata.tex`` for this branch), compiles via
+        ``latexmk`` with cleanup, and places the result at
+        ``outputs/PREPRINT_{project}_{file_id}_{version}.pdf``.
+        Updates the ``asset_file`` field in the sidecar note.
+
+        :param file_id: Asset file ID assigned at creation, e.g. ``"F007"``.
+        :type file_id: str
+        :raises FileNotFoundError: If the preprint folder or ``main.tex`` is not found.
+        :returns: Tuple of ``(pdf_path, zip_path)``.
+        :rtype: tuple[pathlib.Path, pathlib.Path]
+        """
+        return self._build_asset_document(
+            asset_type="PREPRINT", file_id=file_id, subfolder="outputs"
         )
 
     def publish(

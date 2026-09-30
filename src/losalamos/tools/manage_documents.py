@@ -51,7 +51,7 @@ from losalamos.tools.core import *
 # ***********************************************************************
 
 # Document asset types handled by this tool (uppercase)
-_ASSET_TYPES = ["INVOICE", "RECEIPT", "PROPOSAL", "REPORT"]
+_ASSET_TYPES = ["INVOICE", "RECEIPT", "PROPOSAL", "REPORT", "PREPRINT"]
 
 # Project-relative subfolder for each asset type (TeX source)
 _SUBFOLDER = {
@@ -59,6 +59,7 @@ _SUBFOLDER = {
     "RECEIPT": "inputs/documents",
     "PROPOSAL": "inputs/documents",
     "REPORT": "inputs/documents",
+    "PREPRINT": "inputs/documents",
 }
 
 # Project-relative subfolder where each asset type's PDF and sidecar note live
@@ -67,6 +68,7 @@ _PDF_SUBFOLDER = {
     "RECEIPT": "budget/inflows",
     "PROPOSAL": "admin/proposals",
     "REPORT": "outputs",
+    "PREPRINT": "outputs",
 }
 
 # Add-method names on Project, keyed by asset type
@@ -75,6 +77,7 @@ _ADD_METHOD = {
     "RECEIPT": "add_receipt",
     "PROPOSAL": "add_proposal",
     "REPORT": "add_report",
+    "PREPRINT": "add_preprint",
 }
 
 # Build-method names on Project, keyed by asset type
@@ -83,6 +86,7 @@ _BUILD_METHOD = {
     "RECEIPT": "build_receipt",
     "PROPOSAL": "build_proposal",
     "REPORT": "build_report",
+    "PREPRINT": "build_preprint",
 }
 
 
@@ -285,16 +289,24 @@ def _open_in_explorer(path: Path) -> None:
 def _action_add(pj) -> None:
     """Interactive add-document flow."""
     heading_subsection("Add document")
-    print("  [I] Invoice   [R] Receipt   [P] Proposal   [T] Report")
+    print("  [I] Invoice   [R] Receipt   [P] Proposal   [T] Report   [X] Preprint")
     print()
-    choice = input("  Select type  [I/R/P/T / ENTER=cancel / q=quit]: ").strip().lower()
+    choice = (
+        input("  Select type  [I/R/P/T/X / ENTER=cancel / q=quit]: ").strip().lower()
+    )
 
     if choice == "q":
         raise _Quit()
     if choice == "":
         return
 
-    type_map = {"i": "INVOICE", "r": "RECEIPT", "p": "PROPOSAL", "t": "REPORT"}
+    type_map = {
+        "i": "INVOICE",
+        "r": "RECEIPT",
+        "p": "PROPOSAL",
+        "t": "REPORT",
+        "x": "PREPRINT",
+    }
     if choice not in type_map:
         print(get_warning("Invalid choice."))
         return
@@ -573,8 +585,12 @@ def _action_reset(pj, doc_df) -> None:
         file_id=row["asset_id"],
         asset_type=asset_type,
     )
-    if asset_type in ("INVOICE", "RECEIPT", "PROPOSAL"):
-        pj._patch_metadata_tex(doc_folder=doc_folder)
+    if asset_type in ("INVOICE", "RECEIPT", "PROPOSAL", "PREPRINT"):
+        pj._patch_metadata_tex(
+            doc_folder=doc_folder,
+            file_id=row["asset_id"],
+            asset_type=asset_type,
+        )
     print(get_message(f"Reset   : {name}"))
 
 
