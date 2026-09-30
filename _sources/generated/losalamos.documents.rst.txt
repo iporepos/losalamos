@@ -14,7 +14,6 @@
 
    .. autosummary::
    
-      Academic
       Agreement
       Article
       Contract
@@ -22,7 +21,7 @@
       DocumentTeX
       Essay
       Invoice
-      Preprint
+      PrePrint
       PrintArticle
       Professional
       Proposal
