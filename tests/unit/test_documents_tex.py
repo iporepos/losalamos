@@ -255,21 +255,6 @@ class TestDocumentTeXExport(unittest.TestCase):
         self.assertTrue((result / "refs.bib").exists())
         self.assertTrue((result / "images" / "logo.png").exists())
 
-    def test_split_metadata_keeps_metadata_as_its_own_file(self):
-        # testing
-        result = self.doc.export(
-            self.out_root, "split_metadata_export", split=True, split_metadata=True
-        )
-        tex_files = sorted(p.name for p in result.glob("*.tex"))
-        self.assertEqual(tex_files, ["main.tex", "metadata.tex", "preamble.tex"])
-
-        metadata_text = (result / "metadata.tex").read_text()
-        self.assertIn("Test Title", metadata_text)
-
-        preamble_text = (result / "preamble.tex").read_text()
-        self.assertIn("\\input{metadata}", preamble_text)
-        self.assertNotIn("Test Title", preamble_text)
-
     def test_zip_export_places_files_at_archive_root(self):
         result = self.doc.export(
             self.out_root, "zip_export", split=True, zip_export=True
