@@ -529,6 +529,7 @@
     <span class="s2">"RECEIPT"</span><span class="p">:</span> <span class="s2">"budget/inflows"</span><span class="p">,</span>
     <span class="s2">"PROPOSAL"</span><span class="p">:</span> <span class="s2">"admin/proposals"</span><span class="p">,</span>
     <span class="s2">"REPORT"</span><span class="p">:</span> <span class="s2">"outputs"</span><span class="p">,</span>
+    <span class="s2">"PREPRINT"</span><span class="p">:</span> <span class="s2">"outputs"</span><span class="p">,</span>
 <span class="p">}</span>
 
 <span class="c1"># Project-relative folder where each asset type's sidecar note lives (always local).</span>
@@ -537,7 +538,23 @@
     <span class="s2">"RECEIPT"</span><span class="p">:</span> <span class="s2">"inputs/documents"</span><span class="p">,</span>
     <span class="s2">"PROPOSAL"</span><span class="p">:</span> <span class="s2">"inputs/documents"</span><span class="p">,</span>
     <span class="s2">"REPORT"</span><span class="p">:</span> <span class="s2">"outputs"</span><span class="p">,</span>
+    <span class="s2">"PREPRINT"</span><span class="p">:</span> <span class="s2">"outputs"</span><span class="p">,</span>
 <span class="p">}</span>
+
+<span class="c1"># Asset types whose definitions/metadata.tex (rather than</span>
+<span class="c1"># definitions/project.tex) is the source of truth for \DocVersion,</span>
+<span class="c1"># \DocFileID, and \DocType -- the Article/PrePrint branch has no</span>
+<span class="c1"># project.tex at all, so _patch_metadata_tex writes these fields there</span>
+<span class="c1"># instead of _patch_project_tex writing them to project.tex.</span>
+<span class="n">_ASSET_METADATA_PATCH_TYPES</span> <span class="o">=</span> <span class="p">(</span><span class="s2">"INVOICE"</span><span class="p">,</span> <span class="s2">"RECEIPT"</span><span class="p">,</span> <span class="s2">"PROPOSAL"</span><span class="p">,</span> <span class="s2">"PREPRINT"</span><span class="p">)</span>
+
+<span class="c1"># Asset types created pre-condensed into the flattened 3-file layout</span>
+<span class="c1"># (preamble.tex + metadata.tex + main.tex) by default, instead of the</span>
+<span class="c1"># live multi-file template tree every other asset type keeps (so its</span>
+<span class="c1"># many definitions/*.tex, config/*.tex, design/*.tex files stay directly</span>
+<span class="c1"># editable). A preprint benefits from the condensed form -- it's the</span>
+<span class="c1"># shape a journal/arXiv submission wants -- where invoices/reports don't.</span>
+<span class="n">_ASSET_CONDENSED_TYPES</span> <span class="o">=</span> <span class="p">(</span><span class="s2">"PREPRINT"</span><span class="p">,)</span>
 
 <span class="c1"># Human-readable document type labels per language.</span>
 <span class="c1"># Keys are BCP-47 language tags (lowercase). Add new languages here.</span>
@@ -547,12 +564,16 @@
         <span class="s2">"receipt"</span><span class="p">:</span> <span class="s2">"Receipt"</span><span class="p">,</span>
         <span class="s2">"proposal"</span><span class="p">:</span> <span class="s2">"Proposal"</span><span class="p">,</span>
         <span class="s2">"report"</span><span class="p">:</span> <span class="s2">"Report"</span><span class="p">,</span>
+        <span class="s2">"preprint"</span><span class="p">:</span> <span class="s2">"Preprint"</span><span class="p">,</span>
     <span class="p">},</span>
     <span class="s2">"pt-br"</span><span class="p">:</span> <span class="p">{</span>
         <span class="s2">"invoice"</span><span class="p">:</span> <span class="s2">"Cobrança"</span><span class="p">,</span>
         <span class="s2">"receipt"</span><span class="p">:</span> <span class="s2">"Recibo"</span><span class="p">,</span>
         <span class="s2">"proposal"</span><span class="p">:</span> <span class="s2">"Proposta"</span><span class="p">,</span>
         <span class="s2">"report"</span><span class="p">:</span> <span class="s2">"Relatório"</span><span class="p">,</span>
+        <span class="c1"># Preprints stay in English regardless of project language --</span>
+        <span class="c1"># academic convention (arXiv/bioRxiv etc.), not a translation gap.</span>
+        <span class="s2">"preprint"</span><span class="p">:</span> <span class="s2">"Preprint"</span><span class="p">,</span>
     <span class="p">},</span>
 <span class="p">}</span>
 
@@ -2157,6 +2178,7 @@
         <span class="n">template_overlay</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">files_overlay</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">condensed</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">split_metadata</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">zip_export</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">compile_pdf</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="n">subfolder</span><span class="o">=</span><span class="s2">"inputs/documents"</span><span class="p">,</span>
@@ -2164,7 +2186,7 @@
     <span class="p">):</span>
 <span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Create a new document inside the project, optionally condensed</span>
-<span class="sd">        into a flattened+split pair of files and/or compiled to PDF.</span>
+<span class="sd">        into a flattened+split pair (or trio) of files and/or compiled to PDF.</span>
 
 <span class="sd">        :param document_type: Key into :data:`losalamos.documents.DOCUMENT_TYPES`.</span>
 <span class="sd">        :type document_type: str</span>
@@ -2176,8 +2198,15 @@
 <span class="sd">        :param files_overlay: Forwarded to :meth:`Document.new`.</span>
 <span class="sd">        :type files_overlay: dict or None</span>
 <span class="sd">        :param condensed: If True, flatten+split into main.tex/preamble.tex</span>
-<span class="sd">            via a temp staging dir. If False, keep the live template tree.</span>
+<span class="sd">            (plus metadata.tex when *split_metadata* is also True) via a temp</span>
+<span class="sd">            staging dir. If False, keep the live template tree.</span>
 <span class="sd">        :type condensed: bool</span>
+<span class="sd">        :param split_metadata: If True (and *condensed* is True), also keep</span>
+<span class="sd">            ``definitions/metadata.tex`` split out as its own top-level</span>
+<span class="sd">            ``metadata.tex`` instead of flattening it into ``preamble.tex``.</span>
+<span class="sd">            Forwarded to :meth:`~losalamos.documents.DocumentTeX.export`.</span>
+<span class="sd">            Ignored when *condensed* is False.</span>
+<span class="sd">        :type split_metadata: bool</span>
 <span class="sd">        :param zip_export: Zip the condensed export (deletes the folder).</span>
 <span class="sd">            Requires condensed=True; mutually exclusive with compile_pdf.</span>
 <span class="sd">        :type zip_export: bool</span>
@@ -2264,10 +2293,14 @@
                 <span class="n">folder_root</span><span class="o">=</span><span class="n">documents_folder</span><span class="p">,</span>
                 <span class="n">flatten</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                 <span class="n">split</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">split_metadata</span><span class="o">=</span><span class="n">split_metadata</span><span class="p">,</span>
                 <span class="n">zip_export</span><span class="o">=</span><span class="n">zip_export</span><span class="p">,</span>
             <span class="p">)</span>
             <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">target_folder</span><span class="p">)</span>
-            <span class="n">target_folder</span> <span class="o">=</span> <span class="n">documents_folder</span> <span class="o">/</span> <span class="n">name</span>
+            <span class="c1"># export() already created documents_folder/name itself -- reset</span>
+            <span class="c1"># to documents_folder so the load below (which appends /name</span>
+            <span class="c1"># uniformly for both branches) doesn't double it up.</span>
+            <span class="n">target_folder</span> <span class="o">=</span> <span class="n">documents_folder</span>
 
         <span class="n">return_instance</span> <span class="o">=</span> <span class="n">klass</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
         <span class="n">return_instance</span><span class="o">.</span><span class="n">load_data</span><span class="p">(</span><span class="n">file_data</span><span class="o">=</span><span class="n">target_folder</span> <span class="o">/</span> <span class="n">name</span> <span class="o">/</span> <span class="s2">"main.tex"</span><span class="p">)</span>
@@ -2598,19 +2631,42 @@
 
         <span class="n">project_tex</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="nf">_patch_metadata_tex</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">doc_folder</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_patch_metadata_tex</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">doc_folder</span><span class="p">,</span> <span class="n">file_id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">asset_type</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">"""</span>
-<span class="sd">        Write project title and subtitle into ``definitions/metadata.tex``.</span>
+<span class="sd">        Write project title/subtitle, and (when given) identity fields, into</span>
+<span class="sd">        the document's ``metadata.tex``.</span>
 
 <span class="sd">        Sets ``\\DocTitle`` and ``\\DocSubtitle`` from the project's main note</span>
-<span class="sd">        metadata. Skips a field when the note has no value for it (placeholder</span>
-<span class="sd">        returned by :meth:`get_attribute`). Does nothing when the file is absent.</span>
+<span class="sd">        metadata -- except for ``asset_type="PREPRINT"``, where ``\\DocTitle``</span>
+<span class="sd">        is deliberately left untouched: an article's title is its own thing,</span>
+<span class="sd">        not the project's title, so it stays whatever the template shipped</span>
+<span class="sd">        with (or whatever was typed in by hand) rather than being overwritten.</span>
+<span class="sd">        Skips a field when the note has no value for it (placeholder returned</span>
+<span class="sd">        by :meth:`get_attribute`). When *file_id* and *asset_type* are given,</span>
+<span class="sd">        also sets ``\\DocVersion`` to ``"001"``, ``\\DocFileID`` to *file_id*,</span>
+<span class="sd">        and ``\\DocType`` to the localized document type label -- the same</span>
+<span class="sd">        fields :meth:`_patch_project_tex` writes to ``definitions/project.tex``</span>
+<span class="sd">        for the Professional branch, since the Article/PrePrint branch keeps</span>
+<span class="sd">        them in ``metadata.tex`` instead (it has no ``project.tex``). Every</span>
+<span class="sd">        field is a no-op when its ``\\newcommand`` isn't present in the file,</span>
+<span class="sd">        so this is safe to call unconditionally across branches.</span>
 
-<span class="sd">        :param doc_folder: Root of the document folder containing ``definitions/``.</span>
+<span class="sd">        Looks for ``metadata.tex`` at ``definitions/metadata.tex`` (the live,</span>
+<span class="sd">        uncondensed template layout) first, then at the folder's top level</span>
+<span class="sd">        (the condensed ``split_metadata=True`` layout, where it sits next to</span>
+<span class="sd">        ``preamble.tex``/``main.tex`` instead of under ``definitions/``).</span>
+<span class="sd">        Does nothing when neither is found.</span>
+
+<span class="sd">        :param doc_folder: Root of the document folder.</span>
 <span class="sd">        :type doc_folder: pathlib.Path</span>
+<span class="sd">        :param file_id: Asset file ID, e.g. ``"F003"``. Required together with</span>
+<span class="sd">            *asset_type* to also patch ``\\DocVersion``/``\\DocFileID``/``\\DocType``.</span>
+<span class="sd">        :type file_id: str or None</span>
+<span class="sd">        :param asset_type: Asset type string in uppercase, e.g. ``"PREPRINT"``.</span>
+<span class="sd">        :type asset_type: str or None</span>
 <span class="sd">        """</span>
-        <span class="n">metadata_tex</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">doc_folder</span><span class="p">)</span> <span class="o">/</span> <span class="s2">"definitions"</span> <span class="o">/</span> <span class="s2">"metadata.tex"</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">metadata_tex</span><span class="o">.</span><span class="n">is_file</span><span class="p">():</span>
+        <span class="n">metadata_tex</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_locate_metadata_tex</span><span class="p">(</span><span class="n">doc_folder</span><span class="o">=</span><span class="n">doc_folder</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">metadata_tex</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span>
 
         <span class="k">def</span><span class="w"> </span><span class="nf">_set_cmd</span><span class="p">(</span><span class="n">cmd_name</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
@@ -2624,10 +2680,17 @@
         <span class="n">title</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_title</span><span class="p">()</span>
         <span class="n">subtitle</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_subtitle</span><span class="p">()</span>
 
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">title</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">"["</span><span class="p">):</span>
-            <span class="n">content</span> <span class="o">=</span> <span class="n">_set_cmd</span><span class="p">(</span><span class="s2">"DocTitle"</span><span class="p">,</span> <span class="n">title</span><span class="p">,</span> <span class="n">content</span><span class="p">)</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">subtitle</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">"["</span><span class="p">):</span>
-            <span class="n">content</span> <span class="o">=</span> <span class="n">_set_cmd</span><span class="p">(</span><span class="s2">"DocSubtitle"</span><span class="p">,</span> <span class="n">subtitle</span><span class="p">,</span> <span class="n">content</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">asset_type</span> <span class="o">!=</span> <span class="s2">"PREPRINT"</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">title</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">"["</span><span class="p">):</span>
+                <span class="n">content</span> <span class="o">=</span> <span class="n">_set_cmd</span><span class="p">(</span><span class="s2">"DocTitle"</span><span class="p">,</span> <span class="n">title</span><span class="p">,</span> <span class="n">content</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">subtitle</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">"["</span><span class="p">):</span>
+                <span class="n">content</span> <span class="o">=</span> <span class="n">_set_cmd</span><span class="p">(</span><span class="s2">"DocSubtitle"</span><span class="p">,</span> <span class="n">subtitle</span><span class="p">,</span> <span class="n">content</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">file_id</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">asset_type</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">doc_type_label</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_localize_doc_type</span><span class="p">(</span><span class="n">asset_type</span><span class="o">=</span><span class="n">asset_type</span><span class="p">)</span>
+            <span class="n">content</span> <span class="o">=</span> <span class="n">_set_cmd</span><span class="p">(</span><span class="s2">"DocVersion"</span><span class="p">,</span> <span class="s2">"001"</span><span class="p">,</span> <span class="n">content</span><span class="p">)</span>
+            <span class="n">content</span> <span class="o">=</span> <span class="n">_set_cmd</span><span class="p">(</span><span class="s2">"DocFileID"</span><span class="p">,</span> <span class="n">file_id</span><span class="p">,</span> <span class="n">content</span><span class="p">)</span>
+            <span class="n">content</span> <span class="o">=</span> <span class="n">_set_cmd</span><span class="p">(</span><span class="s2">"DocType"</span><span class="p">,</span> <span class="n">doc_type_label</span><span class="p">,</span> <span class="n">content</span><span class="p">)</span>
 
         <span class="n">metadata_tex</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span>
 
@@ -2716,13 +2779,16 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">doc_root</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">folder_root</span><span class="p">)</span> <span class="o">/</span> <span class="s2">"inputs/documents"</span>
 
+        <span class="n">condense</span> <span class="o">=</span> <span class="n">asset_type</span> <span class="ow">in</span> <span class="n">_ASSET_CONDENSED_TYPES</span>
+
         <span class="n">doc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">add_document</span><span class="p">(</span>
             <span class="n">document_type</span><span class="o">=</span><span class="n">asset_type</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span>
             <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
             <span class="n">template_overlay</span><span class="o">=</span><span class="n">template_overlay</span><span class="p">,</span>
             <span class="n">files_overlay</span><span class="o">=</span><span class="n">files_overlay</span> <span class="ow">or</span> <span class="kc">None</span><span class="p">,</span>
             <span class="n">subfolder</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">doc_root</span><span class="p">),</span>
-            <span class="n">condensed</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">condensed</span><span class="o">=</span><span class="n">condense</span><span class="p">,</span>
+            <span class="n">split_metadata</span><span class="o">=</span><span class="n">condense</span><span class="p">,</span>
             <span class="n">compile_pdf</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="p">)</span>
 
@@ -2732,8 +2798,12 @@
             <span class="n">file_id</span><span class="o">=</span><span class="n">asset_id</span><span class="p">,</span>
             <span class="n">asset_type</span><span class="o">=</span><span class="n">asset_type</span><span class="p">,</span>
         <span class="p">)</span>
-        <span class="k">if</span> <span class="n">asset_type</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"INVOICE"</span><span class="p">,</span> <span class="s2">"RECEIPT"</span><span class="p">,</span> <span class="s2">"PROPOSAL"</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_patch_metadata_tex</span><span class="p">(</span><span class="n">doc_folder</span><span class="o">=</span><span class="n">source_folder</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">asset_type</span> <span class="ow">in</span> <span class="n">_ASSET_METADATA_PATCH_TYPES</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_patch_metadata_tex</span><span class="p">(</span>
+                <span class="n">doc_folder</span><span class="o">=</span><span class="n">source_folder</span><span class="p">,</span>
+                <span class="n">file_id</span><span class="o">=</span><span class="n">asset_id</span><span class="p">,</span>
+                <span class="n">asset_type</span><span class="o">=</span><span class="n">asset_type</span><span class="p">,</span>
+            <span class="p">)</span>
 
         <span class="k">if</span> <span class="n">config</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">doc</span><span class="o">.</span><span class="n">apply_config</span><span class="p">(</span><span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">)</span>
@@ -2752,12 +2822,69 @@
 
         <span class="k">return</span> <span class="n">doc</span>
 
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_locate_metadata_tex</span><span class="p">(</span><span class="n">doc_folder</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""</span>
+<span class="sd">        Locate a document's ``metadata.tex``, whichever layout it's in.</span>
+
+<span class="sd">        Checks ``definitions/metadata.tex`` first (the live, uncondensed</span>
+<span class="sd">        template layout), then the folder's top level (the condensed</span>
+<span class="sd">        ``split_metadata=True`` layout, where it sits next to</span>
+<span class="sd">        ``preamble.tex``/``main.tex`` instead of under ``definitions/``).</span>
+
+<span class="sd">        :param doc_folder: Root of the document folder.</span>
+<span class="sd">        :type doc_folder: pathlib.Path</span>
+<span class="sd">        :returns: Path to ``metadata.tex``, or ``None`` if neither layout has it.</span>
+<span class="sd">        :rtype: pathlib.Path or None</span>
+<span class="sd">        """</span>
+        <span class="n">doc_folder</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">doc_folder</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">candidate</span> <span class="ow">in</span> <span class="p">(</span>
+            <span class="n">doc_folder</span> <span class="o">/</span> <span class="s2">"definitions"</span> <span class="o">/</span> <span class="s2">"metadata.tex"</span><span class="p">,</span>
+            <span class="n">doc_folder</span> <span class="o">/</span> <span class="s2">"metadata.tex"</span><span class="p">,</span>
+        <span class="p">):</span>
+            <span class="k">if</span> <span class="n">candidate</span><span class="o">.</span><span class="n">is_file</span><span class="p">():</span>
+                <span class="k">return</span> <span class="n">candidate</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_read_doc_version</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">doc_folder</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""</span>
+<span class="sd">        Read ``\\DocVersion`` from a document folder's identity file.</span>
+
+<span class="sd">        Tries ``definitions/project.tex`` first (the Professional branch's</span>
+<span class="sd">        identity file), then falls back to ``metadata.tex`` via</span>
+<span class="sd">        :meth:`_locate_metadata_tex` (used by the Article/PrePrint branch</span>
+<span class="sd">        instead, which has no project.tex, in either its live or condensed</span>
+<span class="sd">        layout) -- same field name, same naming/versioning logic either way.</span>
+
+<span class="sd">        :param doc_folder: Root of the document folder.</span>
+<span class="sd">        :type doc_folder: pathlib.Path</span>
+<span class="sd">        :returns: Raw ``\\DocVersion`` value, e.g. ``"001"``, or ``"[Version]"``</span>
+<span class="sd">            when neither file defines it.</span>
+<span class="sd">        :rtype: str</span>
+<span class="sd">        """</span>
+        <span class="n">candidates</span> <span class="o">=</span> <span class="p">[</span><span class="n">Path</span><span class="p">(</span><span class="n">doc_folder</span><span class="p">)</span> <span class="o">/</span> <span class="s2">"definitions"</span> <span class="o">/</span> <span class="s2">"project.tex"</span><span class="p">]</span>
+        <span class="n">metadata_tex</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_locate_metadata_tex</span><span class="p">(</span><span class="n">doc_folder</span><span class="o">=</span><span class="n">doc_folder</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">metadata_tex</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">candidates</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">metadata_tex</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">identity_tex</span> <span class="ow">in</span> <span class="n">candidates</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">identity_tex</span><span class="o">.</span><span class="n">is_file</span><span class="p">():</span>
+                <span class="k">continue</span>
+            <span class="n">m</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span>
+                <span class="sa">r</span><span class="s2">"</span><span class="se">\\</span><span class="s2">newcommand\{</span><span class="se">\\</span><span class="s2">DocVersion\}\{([^}]+)\}"</span><span class="p">,</span>
+                <span class="n">identity_tex</span><span class="o">.</span><span class="n">read_text</span><span class="p">(</span><span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">),</span>
+            <span class="p">)</span>
+            <span class="k">if</span> <span class="n">m</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s2">"[Version]"</span>
+
     <span class="k">def</span><span class="w"> </span><span class="nf">_build_asset_document</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">asset_type</span><span class="p">,</span> <span class="n">file_id</span><span class="p">,</span> <span class="n">subfolder</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Core build logic for asset documents (invoice, receipt, proposal, etc.).</span>
 
 <span class="sd">        Locates the source via :meth:`_locate_document_source`, reads</span>
-<span class="sd">        ``\\DocVersion`` from ``definitions/project.tex`` (dots removed, ``V``</span>
+<span class="sd">        ``\\DocVersion`` via :meth:`_read_doc_version` (dots removed, ``V``</span>
 <span class="sd">        prefix added), compiles via ``latexmk`` with cleanup, ships the PDF to</span>
 <span class="sd">        ``{subfolder}/{asset_type}_{project}_{file_id}_{version}.pdf``, zips the</span>
 <span class="sd">        clean source tree to the same stem with a ``.zip`` extension, and</span>
@@ -2780,16 +2907,7 @@
         <span class="k">if</span> <span class="ow">not</span> <span class="n">main_tex</span><span class="o">.</span><span class="n">is_file</span><span class="p">():</span>
             <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"main.tex not found in '</span><span class="si">{</span><span class="n">doc_folder</span><span class="si">}</span><span class="s2">'"</span><span class="p">)</span>
 
-        <span class="c1"># Read \DocVersion from definitions/project.tex</span>
-        <span class="n">project_tex</span> <span class="o">=</span> <span class="n">doc_folder</span> <span class="o">/</span> <span class="s2">"definitions"</span> <span class="o">/</span> <span class="s2">"project.tex"</span>
-        <span class="n">version_raw</span> <span class="o">=</span> <span class="s2">"[Version]"</span>
-        <span class="k">if</span> <span class="n">project_tex</span><span class="o">.</span><span class="n">is_file</span><span class="p">():</span>
-            <span class="n">m</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span>
-                <span class="sa">r</span><span class="s2">"</span><span class="se">\\</span><span class="s2">newcommand\{</span><span class="se">\\</span><span class="s2">DocVersion\}\{([^}]+)\}"</span><span class="p">,</span>
-                <span class="n">project_tex</span><span class="o">.</span><span class="n">read_text</span><span class="p">(</span><span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">),</span>
-            <span class="p">)</span>
-            <span class="k">if</span> <span class="n">m</span><span class="p">:</span>
-                <span class="n">version_raw</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">version_raw</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_read_doc_version</span><span class="p">(</span><span class="n">doc_folder</span><span class="o">=</span><span class="n">doc_folder</span><span class="p">)</span>
         <span class="n">version_tag</span> <span class="o">=</span> <span class="s2">"V"</span> <span class="o">+</span> <span class="n">version_raw</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">"."</span><span class="p">,</span> <span class="s2">""</span><span class="p">)</span>
 
         <span class="n">target_dir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">folder_root</span><span class="p">)</span> <span class="o">/</span> <span class="n">subfolder</span>
@@ -3042,6 +3160,62 @@
 <span class="sd">        """</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_build_asset_document</span><span class="p">(</span>
             <span class="n">asset_type</span><span class="o">=</span><span class="s2">"REPORT"</span><span class="p">,</span> <span class="n">file_id</span><span class="o">=</span><span class="n">file_id</span><span class="p">,</span> <span class="n">subfolder</span><span class="o">=</span><span class="s2">"outputs"</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Project.add_preprint">
+<a class="viewcode-back" href="../../generated/losalamos.project.html#losalamos.project.Project.add_preprint">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">add_preprint</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""</span>
+<span class="sd">        Create a new preprint document.</span>
+
+<span class="sd">        The working tree is created at ``inputs/documents/PREPRINT_{project}_{file_id}/``</span>
+<span class="sd">        and the sidecar note at ``outputs/PREPRINT_{project}_{file_id}.md``.</span>
+<span class="sd">        No compilation is performed.</span>
+
+<span class="sd">        Same naming/versioning logic as :meth:`add_report`/:meth:`add_invoice`</span>
+<span class="sd">        etc. (``{TYPE}_{project}_{file_id}``, shared ``F###`` ID counter), but</span>
+<span class="sd">        the Article/PrePrint branch has no ``definitions/project.tex`` --</span>
+<span class="sd">        ``\\DocVersion``/``\\DocFileID``/``\\DocType`` live in</span>
+<span class="sd">        ``definitions/metadata.tex`` instead, and no</span>
+<span class="sd">        ``admin/config/overlays/`` files apply (that mechanism is</span>
+<span class="sd">        Professional-branch-specific: client/provider party info this</span>
+<span class="sd">        branch doesn't have).</span>
+
+<span class="sd">        The template directory is read from</span>
+<span class="sd">        ``sources["templates"]["documents"]["preprint"]`` in the project's</span>
+<span class="sd">        ``admin/config/sources.toml`` (optional -- the built-in PrePrint</span>
+<span class="sd">        template is used when unset).</span>
+
+<span class="sd">        :returns: The newly created preprint document instance.</span>
+<span class="sd">        :rtype: losalamos.documents.Document</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_add_asset_document</span><span class="p">(</span>
+            <span class="n">asset_type</span><span class="o">=</span><span class="s2">"PREPRINT"</span><span class="p">,</span>
+            <span class="n">files_overlay</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Project.build_preprint">
+<a class="viewcode-back" href="../../generated/losalamos.project.html#losalamos.project.Project.build_preprint">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">build_preprint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_id</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""</span>
+<span class="sd">        Compile a previously created preprint to PDF.</span>
+
+<span class="sd">        Reads ``\\DocVersion`` via :meth:`_read_doc_version` (from</span>
+<span class="sd">        ``definitions/metadata.tex`` for this branch), compiles via</span>
+<span class="sd">        ``latexmk`` with cleanup, and places the result at</span>
+<span class="sd">        ``outputs/PREPRINT_{project}_{file_id}_{version}.pdf``.</span>
+<span class="sd">        Updates the ``asset_file`` field in the sidecar note.</span>
+
+<span class="sd">        :param file_id: Asset file ID assigned at creation, e.g. ``"F007"``.</span>
+<span class="sd">        :type file_id: str</span>
+<span class="sd">        :raises FileNotFoundError: If the preprint folder or ``main.tex`` is not found.</span>
+<span class="sd">        :returns: Tuple of ``(pdf_path, zip_path)``.</span>
+<span class="sd">        :rtype: tuple[pathlib.Path, pathlib.Path]</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_build_asset_document</span><span class="p">(</span>
+            <span class="n">asset_type</span><span class="o">=</span><span class="s2">"PREPRINT"</span><span class="p">,</span> <span class="n">file_id</span><span class="o">=</span><span class="n">file_id</span><span class="p">,</span> <span class="n">subfolder</span><span class="o">=</span><span class="s2">"outputs"</span>
         <span class="p">)</span></div>
 
 

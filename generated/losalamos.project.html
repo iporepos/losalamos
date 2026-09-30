@@ -1302,9 +1302,9 @@ is absent or has a <code class="docutils literal notranslate"><span class="pre">
 
 <dl class="py method">
 <dt class="sig sig-object py" id="losalamos.project.Project.add_document">
-<span class="sig-name descname"><span class="pre">add_document</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">document_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">template_overlay</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">files_overlay</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">condensed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zip_export</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compile_pdf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subfolder</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'inputs/documents'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force_new</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/project.html#Project.add_document"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.project.Project.add_document" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">add_document</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">document_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">template_overlay</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">files_overlay</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">condensed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split_metadata</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zip_export</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compile_pdf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subfolder</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'inputs/documents'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force_new</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/project.html#Project.add_document"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.project.Project.add_document" title="Link to this definition">#</a></dt>
 <dd><p>Create a new document inside the project, optionally condensed
-into a flattened+split pair of files and/or compiled to PDF.</p>
+into a flattened+split pair (or trio) of files and/or compiled to PDF.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -1314,7 +1314,13 @@ Must be non-empty and free of path separators.</p></li>
 <li><p><strong>template_overlay</strong> (<em>str</em><em>, </em><em>pathlib.Path</em><em>, or </em><em>None</em>) – Forwarded to <code class="xref py py-meth docutils literal notranslate"><span class="pre">Document.new()</span></code>.</p></li>
 <li><p><strong>files_overlay</strong> (<em>dict</em><em> or </em><em>None</em>) – Forwarded to <code class="xref py py-meth docutils literal notranslate"><span class="pre">Document.new()</span></code>.</p></li>
 <li><p><strong>condensed</strong> (<em>bool</em>) – If True, flatten+split into main.tex/preamble.tex
-via a temp staging dir. If False, keep the live template tree.</p></li>
+(plus metadata.tex when <em>split_metadata</em> is also True) via a temp
+staging dir. If False, keep the live template tree.</p></li>
+<li><p><strong>split_metadata</strong> (<em>bool</em>) – If True (and <em>condensed</em> is True), also keep
+<code class="docutils literal notranslate"><span class="pre">definitions/metadata.tex</span></code> split out as its own top-level
+<code class="docutils literal notranslate"><span class="pre">metadata.tex</span></code> instead of flattening it into <code class="docutils literal notranslate"><span class="pre">preamble.tex</span></code>.
+Forwarded to <a class="reference internal" href="losalamos.documents.html#losalamos.documents.DocumentTeX.export" title="losalamos.documents.DocumentTeX.export"><code class="xref py py-meth docutils literal notranslate"><span class="pre">export()</span></code></a>.
+Ignored when <em>condensed</em> is False.</p></li>
 <li><p><strong>zip_export</strong> (<em>bool</em>) – Zip the condensed export (deletes the folder).
 Requires condensed=True; mutually exclusive with compile_pdf.</p></li>
 <li><p><strong>compile_pdf</strong> (<em>bool</em>) – Compile to PDF via <code class="xref py py-meth docutils literal notranslate"><span class="pre">DocumentTeX.to_pdf()</span></code>.</p></li>
@@ -1665,6 +1671,60 @@ Updates the <code class="docutils literal notranslate"><span class="pre">asset_f
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="losalamos.project.Project.add_preprint">
+<span class="sig-name descname"><span class="pre">add_preprint</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/project.html#Project.add_preprint"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.project.Project.add_preprint" title="Link to this definition">#</a></dt>
+<dd><p>Create a new preprint document.</p>
+<p>The working tree is created at <code class="docutils literal notranslate"><span class="pre">inputs/documents/PREPRINT_{project}_{file_id}/</span></code>
+and the sidecar note at <code class="docutils literal notranslate"><span class="pre">outputs/PREPRINT_{project}_{file_id}.md</span></code>.
+No compilation is performed.</p>
+<p>Same naming/versioning logic as <a class="reference internal" href="#losalamos.project.Project.add_report" title="losalamos.project.Project.add_report"><code class="xref py py-meth docutils literal notranslate"><span class="pre">add_report()</span></code></a>/<a class="reference internal" href="#losalamos.project.Project.add_invoice" title="losalamos.project.Project.add_invoice"><code class="xref py py-meth docutils literal notranslate"><span class="pre">add_invoice()</span></code></a>
+etc. (<code class="docutils literal notranslate"><span class="pre">{TYPE}_{project}_{file_id}</span></code>, shared <code class="docutils literal notranslate"><span class="pre">F###</span></code> ID counter), but
+the Article/PrePrint branch has no <code class="docutils literal notranslate"><span class="pre">definitions/project.tex</span></code> –
+<code class="docutils literal notranslate"><span class="pre">\DocVersion</span></code>/<code class="docutils literal notranslate"><span class="pre">\DocFileID</span></code>/<code class="docutils literal notranslate"><span class="pre">\DocType</span></code> live in
+<code class="docutils literal notranslate"><span class="pre">definitions/metadata.tex</span></code> instead, and no
+<code class="docutils literal notranslate"><span class="pre">admin/config/overlays/</span></code> files apply (that mechanism is
+Professional-branch-specific: client/provider party info this
+branch doesn’t have).</p>
+<p>The template directory is read from
+<code class="docutils literal notranslate"><span class="pre">sources[&quot;templates&quot;][&quot;documents&quot;][&quot;preprint&quot;]</span></code> in the project’s
+<code class="docutils literal notranslate"><span class="pre">admin/config/sources.toml</span></code> (optional – the built-in PrePrint
+template is used when unset).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The newly created preprint document instance.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="losalamos.documents.html#losalamos.documents.Document" title="losalamos.documents.Document">losalamos.documents.Document</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="losalamos.project.Project.build_preprint">
+<span class="sig-name descname"><span class="pre">build_preprint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/project.html#Project.build_preprint"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.project.Project.build_preprint" title="Link to this definition">#</a></dt>
+<dd><p>Compile a previously created preprint to PDF.</p>
+<p>Reads <code class="docutils literal notranslate"><span class="pre">\DocVersion</span></code> via <code class="xref py py-meth docutils literal notranslate"><span class="pre">_read_doc_version()</span></code> (from
+<code class="docutils literal notranslate"><span class="pre">definitions/metadata.tex</span></code> for this branch), compiles via
+<code class="docutils literal notranslate"><span class="pre">latexmk</span></code> with cleanup, and places the result at
+<code class="docutils literal notranslate"><span class="pre">outputs/PREPRINT_{project}_{file_id}_{version}.pdf</span></code>.
+Updates the <code class="docutils literal notranslate"><span class="pre">asset_file</span></code> field in the sidecar note.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>file_id</strong> (<em>str</em>) – Asset file ID assigned at creation, e.g. <code class="docutils literal notranslate"><span class="pre">&quot;F007&quot;</span></code>.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>FileNotFoundError</strong> – If the preprint folder or <code class="docutils literal notranslate"><span class="pre">main.tex</span></code> is not found.</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Tuple of <code class="docutils literal notranslate"><span class="pre">(pdf_path,</span> <span class="pre">zip_path)</span></code>.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>tuple[pathlib.Path, pathlib.Path]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="losalamos.project.Project.publish">
 <span class="sig-name descname"><span class="pre">publish</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">targets</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_folder</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">surface</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/project.html#Project.publish"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.project.Project.publish" title="Link to this definition">#</a></dt>
 <dd><p>Publish a versioned snapshot of selected directories to a managed output location.</p>
@@ -1812,6 +1872,8 @@ the archive path.</p>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.project.Project.build_proposal"><code class="docutils literal notranslate"><span class="pre">Project.build_proposal()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.project.Project.add_report"><code class="docutils literal notranslate"><span class="pre">Project.add_report()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.project.Project.build_report"><code class="docutils literal notranslate"><span class="pre">Project.build_report()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.project.Project.add_preprint"><code class="docutils literal notranslate"><span class="pre">Project.add_preprint()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.project.Project.build_preprint"><code class="docutils literal notranslate"><span class="pre">Project.build_preprint()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.project.Project.publish"><code class="docutils literal notranslate"><span class="pre">Project.publish()</span></code></a></li>
 </ul>
 </li>

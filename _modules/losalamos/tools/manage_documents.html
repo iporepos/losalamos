@@ -465,7 +465,7 @@
 <span class="c1"># ***********************************************************************</span>
 
 <span class="c1"># Document asset types handled by this tool (uppercase)</span>
-<span class="n">_ASSET_TYPES</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"INVOICE"</span><span class="p">,</span> <span class="s2">"RECEIPT"</span><span class="p">,</span> <span class="s2">"PROPOSAL"</span><span class="p">,</span> <span class="s2">"REPORT"</span><span class="p">]</span>
+<span class="n">_ASSET_TYPES</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"INVOICE"</span><span class="p">,</span> <span class="s2">"RECEIPT"</span><span class="p">,</span> <span class="s2">"PROPOSAL"</span><span class="p">,</span> <span class="s2">"REPORT"</span><span class="p">,</span> <span class="s2">"PREPRINT"</span><span class="p">]</span>
 
 <span class="c1"># Project-relative subfolder for each asset type (TeX source)</span>
 <span class="n">_SUBFOLDER</span> <span class="o">=</span> <span class="p">{</span>
@@ -473,6 +473,7 @@
     <span class="s2">"RECEIPT"</span><span class="p">:</span> <span class="s2">"inputs/documents"</span><span class="p">,</span>
     <span class="s2">"PROPOSAL"</span><span class="p">:</span> <span class="s2">"inputs/documents"</span><span class="p">,</span>
     <span class="s2">"REPORT"</span><span class="p">:</span> <span class="s2">"inputs/documents"</span><span class="p">,</span>
+    <span class="s2">"PREPRINT"</span><span class="p">:</span> <span class="s2">"inputs/documents"</span><span class="p">,</span>
 <span class="p">}</span>
 
 <span class="c1"># Project-relative subfolder where each asset type's PDF and sidecar note live</span>
@@ -481,6 +482,7 @@
     <span class="s2">"RECEIPT"</span><span class="p">:</span> <span class="s2">"budget/inflows"</span><span class="p">,</span>
     <span class="s2">"PROPOSAL"</span><span class="p">:</span> <span class="s2">"admin/proposals"</span><span class="p">,</span>
     <span class="s2">"REPORT"</span><span class="p">:</span> <span class="s2">"outputs"</span><span class="p">,</span>
+    <span class="s2">"PREPRINT"</span><span class="p">:</span> <span class="s2">"outputs"</span><span class="p">,</span>
 <span class="p">}</span>
 
 <span class="c1"># Add-method names on Project, keyed by asset type</span>
@@ -489,6 +491,7 @@
     <span class="s2">"RECEIPT"</span><span class="p">:</span> <span class="s2">"add_receipt"</span><span class="p">,</span>
     <span class="s2">"PROPOSAL"</span><span class="p">:</span> <span class="s2">"add_proposal"</span><span class="p">,</span>
     <span class="s2">"REPORT"</span><span class="p">:</span> <span class="s2">"add_report"</span><span class="p">,</span>
+    <span class="s2">"PREPRINT"</span><span class="p">:</span> <span class="s2">"add_preprint"</span><span class="p">,</span>
 <span class="p">}</span>
 
 <span class="c1"># Build-method names on Project, keyed by asset type</span>
@@ -497,6 +500,7 @@
     <span class="s2">"RECEIPT"</span><span class="p">:</span> <span class="s2">"build_receipt"</span><span class="p">,</span>
     <span class="s2">"PROPOSAL"</span><span class="p">:</span> <span class="s2">"build_proposal"</span><span class="p">,</span>
     <span class="s2">"REPORT"</span><span class="p">:</span> <span class="s2">"build_report"</span><span class="p">,</span>
+    <span class="s2">"PREPRINT"</span><span class="p">:</span> <span class="s2">"build_preprint"</span><span class="p">,</span>
 <span class="p">}</span>
 
 
@@ -702,16 +706,24 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">_action_add</span><span class="p">(</span><span class="n">pj</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">"""Interactive add-document flow."""</span>
     <span class="n">heading_subsection</span><span class="p">(</span><span class="s2">"Add document"</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">"  [I] Invoice   [R] Receipt   [P] Proposal   [T] Report"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"  [I] Invoice   [R] Receipt   [P] Proposal   [T] Report   [X] Preprint"</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">()</span>
-    <span class="n">choice</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">"  Select type  [I/R/P/T / ENTER=cancel / q=quit]: "</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+    <span class="n">choice</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="nb">input</span><span class="p">(</span><span class="s2">"  Select type  [I/R/P/T/X / ENTER=cancel / q=quit]: "</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+    <span class="p">)</span>
 
     <span class="k">if</span> <span class="n">choice</span> <span class="o">==</span> <span class="s2">"q"</span><span class="p">:</span>
         <span class="k">raise</span> <span class="n">_Quit</span><span class="p">()</span>
     <span class="k">if</span> <span class="n">choice</span> <span class="o">==</span> <span class="s2">""</span><span class="p">:</span>
         <span class="k">return</span>
 
-    <span class="n">type_map</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"i"</span><span class="p">:</span> <span class="s2">"INVOICE"</span><span class="p">,</span> <span class="s2">"r"</span><span class="p">:</span> <span class="s2">"RECEIPT"</span><span class="p">,</span> <span class="s2">"p"</span><span class="p">:</span> <span class="s2">"PROPOSAL"</span><span class="p">,</span> <span class="s2">"t"</span><span class="p">:</span> <span class="s2">"REPORT"</span><span class="p">}</span>
+    <span class="n">type_map</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">"i"</span><span class="p">:</span> <span class="s2">"INVOICE"</span><span class="p">,</span>
+        <span class="s2">"r"</span><span class="p">:</span> <span class="s2">"RECEIPT"</span><span class="p">,</span>
+        <span class="s2">"p"</span><span class="p">:</span> <span class="s2">"PROPOSAL"</span><span class="p">,</span>
+        <span class="s2">"t"</span><span class="p">:</span> <span class="s2">"REPORT"</span><span class="p">,</span>
+        <span class="s2">"x"</span><span class="p">:</span> <span class="s2">"PREPRINT"</span><span class="p">,</span>
+    <span class="p">}</span>
     <span class="k">if</span> <span class="n">choice</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">type_map</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span><span class="n">get_warning</span><span class="p">(</span><span class="s2">"Invalid choice."</span><span class="p">))</span>
         <span class="k">return</span>
@@ -990,8 +1002,12 @@
         <span class="n">file_id</span><span class="o">=</span><span class="n">row</span><span class="p">[</span><span class="s2">"asset_id"</span><span class="p">],</span>
         <span class="n">asset_type</span><span class="o">=</span><span class="n">asset_type</span><span class="p">,</span>
     <span class="p">)</span>
-    <span class="k">if</span> <span class="n">asset_type</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"INVOICE"</span><span class="p">,</span> <span class="s2">"RECEIPT"</span><span class="p">,</span> <span class="s2">"PROPOSAL"</span><span class="p">):</span>
-        <span class="n">pj</span><span class="o">.</span><span class="n">_patch_metadata_tex</span><span class="p">(</span><span class="n">doc_folder</span><span class="o">=</span><span class="n">doc_folder</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">asset_type</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"INVOICE"</span><span class="p">,</span> <span class="s2">"RECEIPT"</span><span class="p">,</span> <span class="s2">"PROPOSAL"</span><span class="p">,</span> <span class="s2">"PREPRINT"</span><span class="p">):</span>
+        <span class="n">pj</span><span class="o">.</span><span class="n">_patch_metadata_tex</span><span class="p">(</span>
+            <span class="n">doc_folder</span><span class="o">=</span><span class="n">doc_folder</span><span class="p">,</span>
+            <span class="n">file_id</span><span class="o">=</span><span class="n">row</span><span class="p">[</span><span class="s2">"asset_id"</span><span class="p">],</span>
+            <span class="n">asset_type</span><span class="o">=</span><span class="n">asset_type</span><span class="p">,</span>
+        <span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">get_message</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Reset   : </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">"</span><span class="p">))</span>
 
 
