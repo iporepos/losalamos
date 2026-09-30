@@ -668,12 +668,15 @@ No files are created or modified in this case.</p></li>
 point to a valid directory. Validated before any files are written.</p></li>
 <li><p><strong>FileNotFoundError</strong> – If a source path in <code class="docutils literal notranslate"><span class="pre">files_overlay</span></code> does not exist
 or is not a file. Also raised if the merged template does not contain exactly
-one top-level <code class="docutils literal notranslate"><span class="pre">main.*</span></code> file to load as the document’s entry point.</p></li>
+one top-level <code class="docutils literal notranslate"><span class="pre">main.tex</span></code> file to load as the document’s entry point
+(non-<code class="docutils literal notranslate"><span class="pre">.tex</span></code> files sharing the <code class="docutils literal notranslate"><span class="pre">main</span></code> stem, e.g. stray <code class="docutils literal notranslate"><span class="pre">main.aux</span></code>/
+<code class="docutils literal notranslate"><span class="pre">main.fls</span></code> left over from a compile run inside a template folder, are
+ignored rather than counted as candidates).</p></li>
 </ul>
 </dd>
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>None. Acts in place: locates the merged tree’s top-level
-<code class="docutils literal notranslate"><span class="pre">main.*</span></code> file and calls <a class="reference internal" href="#losalamos.documents.Document.load_data" title="losalamos.documents.Document.load_data"><code class="xref py py-meth docutils literal notranslate"><span class="pre">load_data()</span></code></a> on it, which updates
+<code class="docutils literal notranslate"><span class="pre">main.tex</span></code> file and calls <a class="reference internal" href="#losalamos.documents.Document.load_data" title="losalamos.documents.Document.load_data"><code class="xref py py-meth docutils literal notranslate"><span class="pre">load_data()</span></code></a> on it, which updates
 <code class="xref py py-attr docutils literal notranslate"><span class="pre">file_data</span></code>, <code class="xref py py-attr docutils literal notranslate"><span class="pre">data</span></code>, and (for subclasses such as
 <a class="reference internal" href="#losalamos.documents.DocumentTeX" title="losalamos.documents.DocumentTeX"><code class="xref py py-class docutils literal notranslate"><span class="pre">DocumentTeX</span></code></a>) <code class="xref py py-attr docutils literal notranslate"><span class="pre">is_main</span></code> to reflect the newly created
 document.</p>

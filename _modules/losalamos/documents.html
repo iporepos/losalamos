@@ -698,10 +698,13 @@
 <span class="sd">            point to a valid directory. Validated before any files are written.</span>
 <span class="sd">        :raises FileNotFoundError: If a source path in ``files_overlay`` does not exist</span>
 <span class="sd">            or is not a file. Also raised if the merged template does not contain exactly</span>
-<span class="sd">            one top-level ``main.*`` file to load as the document's entry point.</span>
+<span class="sd">            one top-level ``main.tex`` file to load as the document's entry point</span>
+<span class="sd">            (non-``.tex`` files sharing the ``main`` stem, e.g. stray ``main.aux``/</span>
+<span class="sd">            ``main.fls`` left over from a compile run inside a template folder, are</span>
+<span class="sd">            ignored rather than counted as candidates).</span>
 
 <span class="sd">        :returns: None. Acts in place: locates the merged tree's top-level</span>
-<span class="sd">            ``main.*`` file and calls :meth:`load_data` on it, which updates</span>
+<span class="sd">            ``main.tex`` file and calls :meth:`load_data` on it, which updates</span>
 <span class="sd">            :attr:`file_data`, :attr:`data`, and (for subclasses such as</span>
 <span class="sd">            :class:`DocumentTeX`) :attr:`is_main` to reflect the newly created</span>
 <span class="sd">            document.</span>
@@ -820,17 +823,23 @@
                 <span class="n">dest</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
                 <span class="n">shutil</span><span class="o">.</span><span class="n">copy2</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">src_path</span><span class="p">)</span><span class="o">.</span><span class="n">absolute</span><span class="p">(),</span> <span class="n">dest</span><span class="p">)</span>
 
-        <span class="c1"># Locate the merged tree's entry file and load it in place</span>
+        <span class="c1"># Locate the merged tree's entry file and load it in place. Restricted</span>
+        <span class="c1"># to .tex specifically -- matching on stem alone would also catch</span>
+        <span class="c1"># unrelated same-stemmed files (e.g. latexmk byproducts like</span>
+        <span class="c1"># main.aux/main.fls/main.fdb_latexmk left over from a stray compile</span>
+        <span class="c1"># inside a template or overlay folder).</span>
         <span class="c1"># --------------------------------------------------</span>
         <span class="n">main_candidates</span> <span class="o">=</span> <span class="p">[</span>
             <span class="n">rel_path</span>
             <span class="k">for</span> <span class="n">rel_path</span> <span class="ow">in</span> <span class="n">merged</span>
-            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">rel_path</span><span class="o">.</span><span class="n">parts</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">rel_path</span><span class="o">.</span><span class="n">stem</span> <span class="o">==</span> <span class="s2">"main"</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">rel_path</span><span class="o">.</span><span class="n">parts</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span>
+            <span class="ow">and</span> <span class="n">rel_path</span><span class="o">.</span><span class="n">stem</span> <span class="o">==</span> <span class="s2">"main"</span>
+            <span class="ow">and</span> <span class="n">rel_path</span><span class="o">.</span><span class="n">suffix</span> <span class="o">==</span> <span class="s2">".tex"</span>
         <span class="p">]</span>
 
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">main_candidates</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span>
-                <span class="s2">"Expected exactly one top-level 'main.*' file in the merged "</span>
+                <span class="s2">"Expected exactly one top-level 'main.tex' file in the merged "</span>
                 <span class="sa">f</span><span class="s2">"template, found </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">main_candidates</span><span class="p">)</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">main_candidates</span><span class="si">}</span><span class="s2">. "</span>
                 <span class="s2">"Cannot determine which file to load."</span>
             <span class="p">)</span>
