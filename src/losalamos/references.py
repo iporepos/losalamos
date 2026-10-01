@@ -341,6 +341,13 @@ class Reference(DataSet):
         """
         Returns a copy of the internal data dictionary excluding all keys with ``None`` values.
 
+        .. note::
+
+             The ``abstract`` field, when present, has unescaped ``%`` characters
+             escaped for safe LaTeX/BibTeX output. This keeps ``self.data`` itself
+             free of LaTeX escaping so it can be reused as-is in non-LaTeX contexts,
+             such as Obsidian note frontmatter.
+
         :return: A filtered dictionary containing only non-null reference data.
         :rtype: dict
         """
@@ -348,6 +355,12 @@ class Reference(DataSet):
         for k in self.data:
             if self.data[k] is not None:
                 dc[k] = self.data[k]
+
+        if dc.get("abstract") is not None:
+            from losalamos.documents import escape_percent_latex
+
+            dc["abstract"] = escape_percent_latex(dc["abstract"])
+
         return dc.copy()
 
     def _increment_suffix(self, suffix: str) -> str:
@@ -535,7 +548,9 @@ class Reference(DataSet):
              This method reconstructs the ``data`` attribute by merging ``CORE_FIELDS`` and ``SPECIFIC_FIELDS``.
              It ensures all expected keys exist (defaulting to ``None``), reorders specific metadata to the
              end of the dictionary based on ``TAIL_ENTRIES``, and applies specific formatting logic
-             to the abstract and author fields via ``harmonize_abstract`` and ``standardize_author``.
+             to the author field via ``standardize_author``. LaTeX-specific escaping (e.g., of the
+             ``abstract`` field) is deliberately deferred to bib-serialization time (see
+             ``get_clean_data``), so ``self.data`` stays usable in non-LaTeX contexts.
 
         :return: No value is returned.
         :rtype: None
@@ -564,25 +579,10 @@ class Reference(DataSet):
 
         self.data = new_data.copy()
 
-        self.harmonize_abstract()
-
         if self.data["author"] is not None:
             self.data["author"] = Reference.standardize_author(self.data)
 
         return None
-
-    def harmonize_abstract(self):
-        """
-        Ensures the abstract field is properly formatted by escaping LaTeX-specific percent symbols.
-
-        :return: No value is returned.
-        :rtype: None
-        """
-        if self.data["abstract"] is not None:
-            from losalamos.documents import escape_percent_latex
-
-            text = self.data["abstract"][:]
-            self.data["abstract"] = escape_percent_latex(text)
 
     def export_template(self, output):
         """
