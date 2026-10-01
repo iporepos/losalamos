@@ -1,0 +1,14 @@
+﻿losalamos.tools.manage\_budget
+==============================
+
+.. automodule:: losalamos.tools.manage_budget
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      get_arguments
+      main
+      run
+   

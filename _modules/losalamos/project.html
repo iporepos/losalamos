@@ -496,6 +496,7 @@
         <span class="s2">"admin/contracts"</span><span class="p">,</span>
         <span class="s2">"admin/contracts/main"</span><span class="p">,</span>
         <span class="s2">"admin/proposals"</span><span class="p">,</span>
+        <span class="s2">"admin/invoices"</span><span class="p">,</span>
         <span class="s2">"admin/paperwork"</span><span class="p">,</span>
         <span class="s2">"admin/meetings"</span><span class="p">,</span>
         <span class="s2">"admin/received"</span><span class="p">,</span>
@@ -525,17 +526,20 @@
 
 <span class="c1"># Project-relative folder where each asset type's PDF lives.</span>
 <span class="n">_ASSET_PDF_SUBFOLDER</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">"INVOICE"</span><span class="p">:</span> <span class="s2">"budget/inflows"</span><span class="p">,</span>
-    <span class="s2">"RECEIPT"</span><span class="p">:</span> <span class="s2">"budget/inflows"</span><span class="p">,</span>
+    <span class="s2">"INVOICE"</span><span class="p">:</span> <span class="s2">"admin/invoices"</span><span class="p">,</span>
+    <span class="s2">"RECEIPT"</span><span class="p">:</span> <span class="s2">"admin/invoices"</span><span class="p">,</span>
     <span class="s2">"PROPOSAL"</span><span class="p">:</span> <span class="s2">"admin/proposals"</span><span class="p">,</span>
     <span class="s2">"REPORT"</span><span class="p">:</span> <span class="s2">"outputs"</span><span class="p">,</span>
     <span class="s2">"PREPRINT"</span><span class="p">:</span> <span class="s2">"outputs"</span><span class="p">,</span>
 <span class="p">}</span>
 
 <span class="c1"># Project-relative folder where each asset type's sidecar note lives (always local).</span>
+<span class="c1"># INVOICE/RECEIPT notes live alongside their PDF under admin/invoices -- billing</span>
+<span class="c1"># paperwork is "means" work (running the business), not "end" work, so it no</span>
+<span class="c1"># longer belongs under inputs/.</span>
 <span class="n">_ASSET_NOTE_SUBFOLDER</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">"INVOICE"</span><span class="p">:</span> <span class="s2">"inputs/documents"</span><span class="p">,</span>
-    <span class="s2">"RECEIPT"</span><span class="p">:</span> <span class="s2">"inputs/documents"</span><span class="p">,</span>
+    <span class="s2">"INVOICE"</span><span class="p">:</span> <span class="s2">"admin/invoices"</span><span class="p">,</span>
+    <span class="s2">"RECEIPT"</span><span class="p">:</span> <span class="s2">"admin/invoices"</span><span class="p">,</span>
     <span class="s2">"PROPOSAL"</span><span class="p">:</span> <span class="s2">"inputs/documents"</span><span class="p">,</span>
     <span class="s2">"REPORT"</span><span class="p">:</span> <span class="s2">"outputs"</span><span class="p">,</span>
     <span class="s2">"PREPRINT"</span><span class="p">:</span> <span class="s2">"outputs"</span><span class="p">,</span>
@@ -2467,9 +2471,13 @@
 <span class="sd">        :type file_receipt: str or None</span>
 <span class="sd">        :param file_proof: Wiki link to the proof-of-payment file or note.</span>
 <span class="sd">        :type file_proof: str or None</span>
-<span class="sd">        :param payer: Name or link to the payer party.</span>
+<span class="sd">        :param payer: Name or link to the payer party. Wrapped in Obsidian</span>
+<span class="sd">            wiki-link notation via :meth:`~losalamos.notes.NoteTransfer.wiki_link`</span>
+<span class="sd">            before being written (plain names and already-bracketed links are</span>
+<span class="sd">            both accepted).</span>
 <span class="sd">        :type payer: str or None</span>
-<span class="sd">        :param receiver: Name or link to the receiver party.</span>
+<span class="sd">        :param receiver: Name or link to the receiver party. Wrapped the same</span>
+<span class="sd">            way as *payer*.</span>
 <span class="sd">        :type receiver: str or None</span>
 <span class="sd">        :param currency: Currency code, e.g. ``"BRL"``, ``"USD"``.</span>
 <span class="sd">        :type currency: str or None</span>
@@ -2497,6 +2505,7 @@
         <span class="n">note_file</span> <span class="o">=</span> <span class="n">target_folder</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">.md"</span>
         <span class="n">note</span> <span class="o">=</span> <span class="n">NoteTransfer</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
         <span class="n">note</span><span class="o">.</span><span class="n">load_new</span><span class="p">(</span><span class="n">file_note</span><span class="o">=</span><span class="n">note_file</span><span class="p">)</span>
+        <span class="n">note</span><span class="o">.</span><span class="n">strip_definitions</span><span class="p">()</span>
         <span class="n">note</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">"name"</span><span class="p">]</span> <span class="o">=</span> <span class="n">name</span>
         <span class="n">note</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">"date"</span><span class="p">]</span> <span class="o">=</span> <span class="n">date</span>
         <span class="n">note</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">"direction"</span><span class="p">]</span> <span class="o">=</span> <span class="n">direction</span>
@@ -2512,8 +2521,8 @@
         <span class="n">note</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">"file_invoice"</span><span class="p">]</span> <span class="o">=</span> <span class="n">file_invoice</span>
         <span class="n">note</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">"file_receipt"</span><span class="p">]</span> <span class="o">=</span> <span class="n">file_receipt</span>
         <span class="n">note</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">"file_proof"</span><span class="p">]</span> <span class="o">=</span> <span class="n">file_proof</span>
-        <span class="n">note</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">"payer"</span><span class="p">]</span> <span class="o">=</span> <span class="n">payer</span>
-        <span class="n">note</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">"receiver"</span><span class="p">]</span> <span class="o">=</span> <span class="n">receiver</span>
+        <span class="n">note</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">"payer"</span><span class="p">]</span> <span class="o">=</span> <span class="n">NoteTransfer</span><span class="o">.</span><span class="n">wiki_link</span><span class="p">(</span><span class="n">payer</span><span class="p">)</span>
+        <span class="n">note</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">"receiver"</span><span class="p">]</span> <span class="o">=</span> <span class="n">NoteTransfer</span><span class="o">.</span><span class="n">wiki_link</span><span class="p">(</span><span class="n">receiver</span><span class="p">)</span>
         <span class="n">note</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">"currency"</span><span class="p">]</span> <span class="o">=</span> <span class="n">currency</span>
         <span class="n">note</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">"domain"</span><span class="p">]</span> <span class="o">=</span> <span class="n">domain</span>
         <span class="n">note</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">"category"</span><span class="p">]</span> <span class="o">=</span> <span class="n">category</span>
@@ -2572,6 +2581,32 @@
             <span class="n">rows</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="n">col</span><span class="p">:</span> <span class="n">meta</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">col</span><span class="p">,</span> <span class="s2">""</span><span class="p">)</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">_cols</span><span class="p">})</span>
         <span class="n">rows</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">r</span><span class="p">:</span> <span class="n">r</span><span class="p">[</span><span class="s2">"name"</span><span class="p">])</span>
         <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">rows</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">_cols</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Project.get_latest_transfer">
+<a class="viewcode-back" href="../../generated/losalamos.project.html#losalamos.project.Project.get_latest_transfer">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_latest_transfer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">direction</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""</span>
+<span class="sd">        Return the most recently created transfer note for a direction.</span>
+
+<span class="sd">        Filters :meth:`get_transfers` to *direction* and takes the last row --</span>
+<span class="sd">        rows there are already sorted by ``name`` (e.g. ``INFLOW_{project}_T007``),</span>
+<span class="sd">        and the zero-padded transfer ID means that order is also creation</span>
+<span class="sd">        order. Intended for a "copy from previous" convenience when a new</span>
+<span class="sd">        transfer is another installment of the same recurring service.</span>
+
+<span class="sd">        :param direction: ``"inflow"`` or ``"outflow"``.</span>
+<span class="sd">        :type direction: str</span>
+<span class="sd">        :returns: Dict of the latest transfer's fields (same columns as</span>
+<span class="sd">            :meth:`get_transfers`), or an empty dict when no transfer of that</span>
+<span class="sd">            direction exists yet.</span>
+<span class="sd">        :rtype: dict</span>
+<span class="sd">        """</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_transfers</span><span class="p">()</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s2">"direction"</span><span class="p">]</span> <span class="o">==</span> <span class="n">direction</span><span class="o">.</span><span class="n">lower</span><span class="p">()]</span>
+        <span class="k">if</span> <span class="n">df</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">{}</span>
+        <span class="k">return</span> <span class="n">df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span></div>
 
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_localize_doc_type</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">asset_type</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
@@ -2703,6 +2738,37 @@
         <span class="p">}</span>
         <span class="k">return</span> <span class="p">{</span><span class="n">dst</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">src</span><span class="p">)</span> <span class="k">for</span> <span class="n">dst</span><span class="p">,</span> <span class="n">src</span> <span class="ow">in</span> <span class="n">_map</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">src</span><span class="o">.</span><span class="n">is_file</span><span class="p">()}</span>
 
+    <span class="k">def</span><span class="w"> </span><span class="nf">_copy_overlay_from_asset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">asset_type</span><span class="p">,</span> <span class="n">file_id</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""</span>
+<span class="sd">        Build a files_overlay dict from every file in an existing asset's</span>
+<span class="sd">        working tree (except ``main.tex``).</span>
+
+<span class="sd">        Used both to link a receipt to its own paired invoice</span>
+<span class="sd">        (:meth:`add_receipt`'s *invoice_id*) and to seed a new asset from an</span>
+<span class="sd">        earlier one of the same type (:meth:`add_invoice`'s *copy_from*) --</span>
+<span class="sd">        e.g. recurring installments of the same service, where the party</span>
+<span class="sd">        files and services table are likely unchanged. Identity fields</span>
+<span class="sd">        (``\\DocVersion``/``\\DocFileID``/``\\DocType``) are not part of this</span>
+<span class="sd">        copy: :meth:`_add_asset_document` always patches them fresh onto the</span>
+<span class="sd">        new document afterward, so a copied asset never inherits a stale</span>
+<span class="sd">        version number.</span>
+
+<span class="sd">        :param asset_type: Asset type string in uppercase, e.g. ``"INVOICE"``.</span>
+<span class="sd">        :type asset_type: str</span>
+<span class="sd">        :param file_id: Asset file ID of the source document, e.g. ``"F003"``.</span>
+<span class="sd">        :type file_id: str</span>
+<span class="sd">        :raises FileNotFoundError: If the source document folder is not found.</span>
+<span class="sd">        :returns: Dict of ``{relative_path: absolute_source_path}``.</span>
+<span class="sd">        :rtype: dict</span>
+<span class="sd">        """</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">asset_type</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">file_id</span><span class="si">}</span><span class="s2">"</span>
+        <span class="n">folder</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_locate_document_source</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="n">src</span><span class="o">.</span><span class="n">relative_to</span><span class="p">(</span><span class="n">folder</span><span class="p">)</span><span class="o">.</span><span class="n">as_posix</span><span class="p">():</span> <span class="nb">str</span><span class="p">(</span><span class="n">src</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">src</span> <span class="ow">in</span> <span class="n">folder</span><span class="o">.</span><span class="n">rglob</span><span class="p">(</span><span class="s2">"*"</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">src</span><span class="o">.</span><span class="n">is_file</span><span class="p">()</span> <span class="ow">and</span> <span class="n">src</span><span class="o">.</span><span class="n">name</span> <span class="o">!=</span> <span class="s2">"main.tex"</span>
+        <span class="p">}</span>
+
     <span class="k">def</span><span class="w"> </span><span class="nf">_locate_document_source</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Locate the working source folder for a document by name.</span>
@@ -2745,7 +2811,7 @@
 <span class="sd">        instead of the local project root. The sidecar asset note is always</span>
 <span class="sd">        written to the local project root under the subfolder defined by</span>
 <span class="sd">        ``_ASSET_NOTE_SUBFOLDER`` for the given type (e.g. ``outputs/`` for</span>
-<span class="sd">        reports, ``inputs/documents/`` for invoices). Registers the document via</span>
+<span class="sd">        reports, ``admin/invoices/`` for invoices). Registers the document via</span>
 <span class="sd">        :meth:`add_document`, patches</span>
 <span class="sd">        ``definitions/project.tex`` with the asset identity fields, and</span>
 <span class="sd">        optionally rewrites the services table via</span>
@@ -2764,10 +2830,15 @@
         <span class="n">asset_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_next_asset_id</span><span class="p">()</span>
         <span class="n">name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">asset_type</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">asset_id</span><span class="si">}</span><span class="s2">"</span>
 
+        <span class="c1"># sources.toml ships an empty string ("") rather than an absent key</span>
+        <span class="c1"># for each templates.documents.* entry -- normalize that to None here</span>
+        <span class="c1"># too (Document.new() now also guards against it, but an empty string</span>
+        <span class="c1"># should never even reach it as "a template overlay was configured").</span>
         <span class="n">template_overlay</span> <span class="o">=</span> <span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"templates"</span><span class="p">,</span> <span class="p">{})</span>
             <span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"documents"</span><span class="p">,</span> <span class="p">{})</span>
             <span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">asset_type</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="ow">or</span> <span class="kc">None</span>
         <span class="p">)</span>
 
         <span class="c1"># Route TeX tree to remote documents folder when configured</span>
@@ -2810,6 +2881,9 @@
 
         <span class="n">note_subfolder</span> <span class="o">=</span> <span class="n">_ASSET_NOTE_SUBFOLDER</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">asset_type</span><span class="p">,</span> <span class="s2">"inputs/documents"</span><span class="p">)</span>
         <span class="n">note_file</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">folder_root</span><span class="p">)</span> <span class="o">/</span> <span class="n">note_subfolder</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">.md"</span>
+        <span class="c1"># Backward compatible: projects created before admin/invoices became a</span>
+        <span class="c1"># standard folder won't have it yet -- create it on first use.</span>
+        <span class="n">note_file</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="n">asset_note</span> <span class="o">=</span> <span class="n">NoteAsset</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
         <span class="n">asset_note</span><span class="o">.</span><span class="n">load_new</span><span class="p">(</span><span class="n">file_note</span><span class="o">=</span><span class="n">note_file</span><span class="p">)</span>
         <span class="n">asset_note</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">"name"</span><span class="p">]</span> <span class="o">=</span> <span class="n">name</span>
@@ -2943,17 +3017,17 @@
 
 <div class="viewcode-block" id="Project.add_invoice">
 <a class="viewcode-back" href="../../generated/losalamos.project.html#losalamos.project.Project.add_invoice">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">add_invoice</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">add_invoice</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">copy_from</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Create a new invoice document.</span>
 
 <span class="sd">        The working tree is created at ``inputs/documents/INVOICE_{project}_{file_id}/``</span>
-<span class="sd">        and the sidecar note at ``inputs/documents/INVOICE_{project}_{file_id}.md``.</span>
+<span class="sd">        and the sidecar note at ``admin/invoices/INVOICE_{project}_{file_id}.md``.</span>
 <span class="sd">        No compilation or condensing is performed.</span>
 
-<span class="sd">        The template directory is read from</span>
+<span class="sd">        Without *copy_from*, the template directory is read from</span>
 <span class="sd">        ``sources["templates"]["documents"]["invoice"]`` in the project's</span>
-<span class="sd">        ``admin/config/sources.toml``. The following overlays are applied</span>
+<span class="sd">        ``admin/config/sources.toml``, and the following overlays are applied</span>
 <span class="sd">        when present in ``admin/config/overlays/``:</span>
 
 <span class="sd">        - ``project.tex`` → ``definitions/project.tex``</span>
@@ -2964,12 +3038,28 @@
 <span class="sd">            rewrites ``partials/services-invoice.tex`` from the services list</span>
 <span class="sd">            and invoice settings in the dict.</span>
 <span class="sd">        :type config: dict or None</span>
+<span class="sd">        :param copy_from: Asset file ID of a previous invoice in this</span>
+<span class="sd">            project, e.g. ``"F003"``. When provided, every file from that</span>
+<span class="sd">            invoice's working tree (except ``main.tex``) seeds the new one</span>
+<span class="sd">            instead of the standard overlay -- useful when this invoice is</span>
+<span class="sd">            another installment of the same recurring service. ``\\DocVersion``</span>
+<span class="sd">            is still reset to ``001`` on the new invoice regardless.</span>
+<span class="sd">        :type copy_from: str or None</span>
+<span class="sd">        :raises FileNotFoundError: If *copy_from* is given but the</span>
+<span class="sd">            corresponding invoice folder does not exist.</span>
 <span class="sd">        :returns: The newly created invoice document instance.</span>
 <span class="sd">        :rtype: losalamos.documents.Document</span>
 <span class="sd">        """</span>
+        <span class="k">if</span> <span class="n">copy_from</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">files_overlay</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_copy_overlay_from_asset</span><span class="p">(</span>
+                <span class="n">asset_type</span><span class="o">=</span><span class="s2">"INVOICE"</span><span class="p">,</span> <span class="n">file_id</span><span class="o">=</span><span class="n">copy_from</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">files_overlay</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_standard_files_overlay</span><span class="p">()</span>
+
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_add_asset_document</span><span class="p">(</span>
             <span class="n">asset_type</span><span class="o">=</span><span class="s2">"INVOICE"</span><span class="p">,</span>
-            <span class="n">files_overlay</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_standard_files_overlay</span><span class="p">(),</span>
+            <span class="n">files_overlay</span><span class="o">=</span><span class="n">files_overlay</span><span class="p">,</span>
             <span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">,</span>
         <span class="p">)</span></div>
 
@@ -2978,7 +3068,10 @@
 <a class="viewcode-back" href="../../generated/losalamos.project.html#losalamos.project.Project.add_receipt">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">add_receipt</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">invoice_id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">config</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">"""</span>
-<span class="sd">        Create a new receipt document inside ``inputs/documents/``.</span>
+<span class="sd">        Create a new receipt document.</span>
+
+<span class="sd">        The working tree is created at ``inputs/documents/RECEIPT_{project}_{file_id}/``</span>
+<span class="sd">        and the sidecar note at ``admin/invoices/RECEIPT_{project}_{file_id}.md``.</span>
 
 <span class="sd">        When *invoice_id* is provided, all files from the linked invoice</span>
 <span class="sd">        folder (except ``main.tex``) become file overlays, so the receipt</span>
@@ -3004,13 +3097,9 @@
 <span class="sd">        :rtype: losalamos.documents.Document</span>
 <span class="sd">        """</span>
         <span class="k">if</span> <span class="n">invoice_id</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">invoice_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"INVOICE_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">invoice_id</span><span class="si">}</span><span class="s2">"</span>
-            <span class="n">invoice_folder</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_locate_document_source</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">invoice_name</span><span class="p">)</span>
-            <span class="n">files_overlay</span> <span class="o">=</span> <span class="p">{</span>
-                <span class="n">src</span><span class="o">.</span><span class="n">relative_to</span><span class="p">(</span><span class="n">invoice_folder</span><span class="p">)</span><span class="o">.</span><span class="n">as_posix</span><span class="p">():</span> <span class="nb">str</span><span class="p">(</span><span class="n">src</span><span class="p">)</span>
-                <span class="k">for</span> <span class="n">src</span> <span class="ow">in</span> <span class="n">invoice_folder</span><span class="o">.</span><span class="n">rglob</span><span class="p">(</span><span class="s2">"*"</span><span class="p">)</span>
-                <span class="k">if</span> <span class="n">src</span><span class="o">.</span><span class="n">is_file</span><span class="p">()</span> <span class="ow">and</span> <span class="n">src</span><span class="o">.</span><span class="n">name</span> <span class="o">!=</span> <span class="s2">"main.tex"</span>
-            <span class="p">}</span>
+            <span class="n">files_overlay</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_copy_overlay_from_asset</span><span class="p">(</span>
+                <span class="n">asset_type</span><span class="o">=</span><span class="s2">"INVOICE"</span><span class="p">,</span> <span class="n">file_id</span><span class="o">=</span><span class="n">invoice_id</span>
+            <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">files_overlay</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_standard_files_overlay</span><span class="p">()</span>
 
@@ -3021,6 +3110,106 @@
         <span class="p">)</span></div>
 
 
+<div class="viewcode-block" id="Project.add_inflow_transfer">
+<a class="viewcode-back" href="../../generated/losalamos.project.html#losalamos.project.Project.add_inflow_transfer">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">add_inflow_transfer</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">value</span><span class="p">,</span>
+        <span class="n">date</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">account</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">payer</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">receiver</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">commitment</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">recurrence</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">method</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">protocol</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">currency</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">domain</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">category</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">subcategory</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">copy_invoice_from</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">"""</span>
+<span class="sd">        Create an inflow transfer note together with its invoice and receipt.</span>
+
+<span class="sd">        Inflows are always backed by a billing pair: this creates the</span>
+<span class="sd">        :class:`~losalamos.notes.NoteTransfer` via :meth:`add_transfer`</span>
+<span class="sd">        (``status="expected"``), then an invoice via :meth:`add_invoice` and</span>
+<span class="sd">        a receipt linked to it via :meth:`add_receipt`. The transfer note's</span>
+<span class="sd">        ``file_invoice``/``file_receipt`` fields are updated afterwards with</span>
+<span class="sd">        wiki links to the two new asset notes.</span>
+
+<span class="sd">        :param value: Monetary value of the transfer.</span>
+<span class="sd">        :type value: float or str</span>
+<span class="sd">        :param date: Due date of the transfer, e.g. ``"2026-09-02"``.</span>
+<span class="sd">        :type date: str or None</span>
+<span class="sd">        :param account: Bank account code of the payer.</span>
+<span class="sd">        :type account: str or None</span>
+<span class="sd">        :param payer: Name or link to the payer party. Wrapped in Obsidian</span>
+<span class="sd">            wiki-link notation via :meth:`add_transfer`.</span>
+<span class="sd">        :type payer: str or None</span>
+<span class="sd">        :param receiver: Name or link to the receiver party. Wrapped the same</span>
+<span class="sd">            way as *payer*.</span>
+<span class="sd">        :type receiver: str or None</span>
+<span class="sd">        :param commitment: Commitment group, e.g. ``"contracts"``,</span>
+<span class="sd">            ``"lifestyle"``, ``"maintenance"``.</span>
+<span class="sd">        :type commitment: str or None</span>
+<span class="sd">        :param recurrence: Recurrence in smart syntax, e.g. ``"1 mo"``,</span>
+<span class="sd">            ``"1 yr"``, ``"non-recurrent"``.</span>
+<span class="sd">        :type recurrence: str or None</span>
+<span class="sd">        :param method: Payment method. Defaults to ``"manual"`` when ``None``.</span>
+<span class="sd">        :type method: str or None</span>
+<span class="sd">        :param protocol: Payment protocol, e.g. ``"pix"``, ``"deposit"``,</span>
+<span class="sd">            ``"bill"``.</span>
+<span class="sd">        :type protocol: str or None</span>
+<span class="sd">        :param currency: Currency code, e.g. ``"BRL"``, ``"USD"``.</span>
+<span class="sd">        :type currency: str or None</span>
+<span class="sd">        :param domain: Open field for cross-classification.</span>
+<span class="sd">        :type domain: str or None</span>
+<span class="sd">        :param category: Category for hierarchy classification.</span>
+<span class="sd">        :type category: str or None</span>
+<span class="sd">        :param subcategory: Subcategory for hierarchy classification.</span>
+<span class="sd">        :type subcategory: str or None</span>
+<span class="sd">        :param copy_invoice_from: Asset file ID of a previous invoice in this</span>
+<span class="sd">            project to seed the new invoice from, forwarded to</span>
+<span class="sd">            :meth:`add_invoice`'s *copy_from*. The receipt is always derived</span>
+<span class="sd">            from this transfer's own new invoice (via *invoice_id*), so it</span>
+<span class="sd">            inherits any copied content transitively -- there is no separate</span>
+<span class="sd">            copy option for the receipt.</span>
+<span class="sd">        :type copy_invoice_from: str or None</span>
+<span class="sd">        :returns: Tuple of ``(transfer_note, invoice_doc, receipt_doc)``.</span>
+<span class="sd">        :rtype: tuple[losalamos.notes.NoteTransfer, losalamos.documents.Document, losalamos.documents.Document]</span>
+<span class="sd">        """</span>
+        <span class="n">transfer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">add_transfer</span><span class="p">(</span>
+            <span class="n">direction</span><span class="o">=</span><span class="s2">"inflow"</span><span class="p">,</span>
+            <span class="n">date</span><span class="o">=</span><span class="n">date</span><span class="p">,</span>
+            <span class="n">account</span><span class="o">=</span><span class="n">account</span><span class="p">,</span>
+            <span class="n">value</span><span class="o">=</span><span class="n">value</span><span class="p">,</span>
+            <span class="n">status</span><span class="o">=</span><span class="s2">"expected"</span><span class="p">,</span>
+            <span class="n">commitment</span><span class="o">=</span><span class="n">commitment</span><span class="p">,</span>
+            <span class="n">recurrence</span><span class="o">=</span><span class="n">recurrence</span><span class="p">,</span>
+            <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span>
+            <span class="n">protocol</span><span class="o">=</span><span class="n">protocol</span><span class="p">,</span>
+            <span class="n">payer</span><span class="o">=</span><span class="n">payer</span><span class="p">,</span>
+            <span class="n">receiver</span><span class="o">=</span><span class="n">receiver</span><span class="p">,</span>
+            <span class="n">currency</span><span class="o">=</span><span class="n">currency</span><span class="p">,</span>
+            <span class="n">domain</span><span class="o">=</span><span class="n">domain</span><span class="p">,</span>
+            <span class="n">category</span><span class="o">=</span><span class="n">category</span><span class="p">,</span>
+            <span class="n">subcategory</span><span class="o">=</span><span class="n">subcategory</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="n">invoice</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">add_invoice</span><span class="p">(</span><span class="n">copy_from</span><span class="o">=</span><span class="n">copy_invoice_from</span><span class="p">)</span>
+        <span class="n">invoice_id</span> <span class="o">=</span> <span class="n">invoice</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="s2">"_"</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">receipt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">add_receipt</span><span class="p">(</span><span class="n">invoice_id</span><span class="o">=</span><span class="n">invoice_id</span><span class="p">)</span>
+
+        <span class="n">transfer</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">"file_invoice"</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">'"[[</span><span class="si">{</span><span class="n">invoice</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s1">]]"'</span>
+        <span class="n">transfer</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">"file_receipt"</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">'"[[</span><span class="si">{</span><span class="n">receipt</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s1">]]"'</span>
+        <span class="n">transfer</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+        <span class="n">transfer</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="n">transfer</span><span class="p">,</span> <span class="n">invoice</span><span class="p">,</span> <span class="n">receipt</span></div>
+
+
 <div class="viewcode-block" id="Project.build_invoice">
 <a class="viewcode-back" href="../../generated/losalamos.project.html#losalamos.project.Project.build_invoice">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">build_invoice</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_id</span><span class="p">):</span>
@@ -3029,7 +3218,8 @@
 
 <span class="sd">        Reads ``\\DocVersion`` from ``definitions/project.tex``, compiles</span>
 <span class="sd">        via ``latexmk`` with cleanup, and places the result at</span>
-<span class="sd">        ``budget/inflows/INVOICE_{project}_{file_id}_{version}.pdf``.</span>
+<span class="sd">        ``admin/invoices/INVOICE_{project}_{file_id}_{version}.pdf``, next</span>
+<span class="sd">        to the invoice's sidecar note.</span>
 <span class="sd">        Updates the ``asset_file`` field in the sidecar note.</span>
 
 <span class="sd">        :param file_id: Asset file ID assigned at creation, e.g. ``"F003"``.</span>
@@ -3039,7 +3229,7 @@
 <span class="sd">        :rtype: tuple[pathlib.Path, pathlib.Path]</span>
 <span class="sd">        """</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_build_asset_document</span><span class="p">(</span>
-            <span class="n">asset_type</span><span class="o">=</span><span class="s2">"INVOICE"</span><span class="p">,</span> <span class="n">file_id</span><span class="o">=</span><span class="n">file_id</span><span class="p">,</span> <span class="n">subfolder</span><span class="o">=</span><span class="s2">"budget/inflows"</span>
+            <span class="n">asset_type</span><span class="o">=</span><span class="s2">"INVOICE"</span><span class="p">,</span> <span class="n">file_id</span><span class="o">=</span><span class="n">file_id</span><span class="p">,</span> <span class="n">subfolder</span><span class="o">=</span><span class="s2">"admin/invoices"</span>
         <span class="p">)</span></div>
 
 
@@ -3051,7 +3241,8 @@
 
 <span class="sd">        Reads ``\\DocVersion`` from ``definitions/project.tex``, compiles</span>
 <span class="sd">        via ``latexmk`` with cleanup, and places the result at</span>
-<span class="sd">        ``budget/inflows/RECEIPT_{project}_{file_id}_{version}.pdf``.</span>
+<span class="sd">        ``admin/invoices/RECEIPT_{project}_{file_id}_{version}.pdf``, next</span>
+<span class="sd">        to the receipt's sidecar note.</span>
 <span class="sd">        Updates the ``asset_file`` field in the sidecar note.</span>
 
 <span class="sd">        :param file_id: Asset file ID assigned at creation, e.g. ``"F003"``.</span>
@@ -3061,7 +3252,7 @@
 <span class="sd">        :rtype: tuple[pathlib.Path, pathlib.Path]</span>
 <span class="sd">        """</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_build_asset_document</span><span class="p">(</span>
-            <span class="n">asset_type</span><span class="o">=</span><span class="s2">"RECEIPT"</span><span class="p">,</span> <span class="n">file_id</span><span class="o">=</span><span class="n">file_id</span><span class="p">,</span> <span class="n">subfolder</span><span class="o">=</span><span class="s2">"budget/inflows"</span>
+            <span class="n">asset_type</span><span class="o">=</span><span class="s2">"RECEIPT"</span><span class="p">,</span> <span class="n">file_id</span><span class="o">=</span><span class="n">file_id</span><span class="p">,</span> <span class="n">subfolder</span><span class="o">=</span><span class="s2">"admin/invoices"</span>
         <span class="p">)</span></div>
 
 

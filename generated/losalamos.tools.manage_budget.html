@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>losalamos.tools.update_references &#8212; losalamos 0.0.1 documentation</title>
+    <title>losalamos.tools.manage_budget &#8212; losalamos 0.0.1 documentation</title>
   
   
   
@@ -45,13 +45,13 @@
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../_static/copybutton.js?v=f281be69"></script>
     <script src="../_static/design-tabs.js?v=f930bc37"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'generated/losalamos.tools.update_references';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'generated/losalamos.tools.manage_budget';</script>
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <link rel="author" title="About these documents" href="../about.html" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="losalamos.tools.update_templates" href="losalamos.tools.update_templates.html" />
-    <link rel="prev" title="losalamos.tools.search_references" href="losalamos.tools.search_references.html" />
+    <link rel="next" title="losalamos.tools.build_figures" href="losalamos.tools.build_figures.html" />
+    <link rel="prev" title="losalamos.tools.manage_documents" href="losalamos.tools.manage_documents.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
@@ -374,11 +374,11 @@
 <nav class="bd-docs-nav bd-links"
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
-  <div class="bd-toc-item navbar-nav"><ul class="nav bd-sidenav">
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="losalamos.tools.new_project.html">losalamos.tools.new_project</a></li>
 <li class="toctree-l1"><a class="reference internal" href="losalamos.tools.manage_vault.html">losalamos.tools.manage_vault</a></li>
 <li class="toctree-l1"><a class="reference internal" href="losalamos.tools.manage_documents.html">losalamos.tools.manage_documents</a></li>
-<li class="toctree-l1"><a class="reference internal" href="losalamos.tools.manage_budget.html">losalamos.tools.manage_budget</a></li>
+<li class="toctree-l1 current active"><a aria-current="page" class="current reference internal" href="#">losalamos.tools.manage_budget</a></li>
 </ul>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="losalamos.tools.build_figures.html">losalamos.tools.build_figures</a></li>
@@ -389,9 +389,9 @@
 <li class="toctree-l1"><a class="reference internal" href="losalamos.tools.ingest_variables.html">losalamos.tools.ingest_variables</a></li>
 <li class="toctree-l1"><a class="reference internal" href="losalamos.tools.ingest_references.html">losalamos.tools.ingest_references</a></li>
 </ul>
-<ul class="current nav bd-sidenav">
+<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="losalamos.tools.search_references.html">losalamos.tools.search_references</a></li>
-<li class="toctree-l1 current active"><a aria-current="page" class="current reference internal" href="#">losalamos.tools.update_references</a></li>
+<li class="toctree-l1"><a class="reference internal" href="losalamos.tools.update_references.html">losalamos.tools.update_references</a></li>
 <li class="toctree-l1"><a class="reference internal" href="losalamos.tools.update_templates.html">losalamos.tools.update_templates</a></li>
 </ul>
 </div>
@@ -436,7 +436,7 @@
     
     <li class="breadcrumb-item"><a href="../cli.html" class="nav-link">CLI</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">losalamos.tools.update_references</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">losalamos.tools.manage_budget</span></li>
   </ul>
 </nav>
 </div>
@@ -453,38 +453,72 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="module-losalamos.tools.update_references">
-<span id="losalamos-tools-update-references"></span><h1>losalamos.tools.update_references<a class="headerlink" href="#module-losalamos.tools.update_references" title="Link to this heading">#</a></h1>
-<p>Update reference notes in a target folder.</p>
-<p>Scans a directory for Markdown files whose metadata declares
-<code class="docutils literal notranslate"><span class="pre">note_type:</span> <span class="pre">reference</span></code> and runs the update pipeline on each one.</p>
+  <section id="module-losalamos.tools.manage_budget">
+<span id="losalamos-tools-manage-budget"></span><h1>losalamos.tools.manage_budget<a class="headerlink" href="#module-losalamos.tools.manage_budget" title="Link to this heading">#</a></h1>
+<p>Terminal budget manager for a single project.</p>
+<p>Accepts a project folder path and presents the transfer home page for that
+project directly. Project and branch navigation is handled by the
+higher-level <a class="reference internal" href="losalamos.tools.manage_vault.html#module-losalamos.tools.manage_vault" title="losalamos.tools.manage_vault"><code class="xref py py-mod docutils literal notranslate"><span class="pre">losalamos.tools.manage_vault</span></code></a> tool.</p>
+<p>Transfers are the single entry point for billing: adding an inflow transfer
+here always creates its invoice and receipt pair as a side effect (via
+<a class="reference internal" href="losalamos.project.html#losalamos.project.Project.add_inflow_transfer" title="losalamos.project.Project.add_inflow_transfer"><code class="xref py py-meth docutils literal notranslate"><span class="pre">losalamos.project.Project.add_inflow_transfer()</span></code></a>). Those two documents
+then show up in the document manager (<a class="reference internal" href="losalamos.tools.manage_documents.html#module-losalamos.tools.manage_documents" title="losalamos.tools.manage_documents"><code class="xref py py-mod docutils literal notranslate"><span class="pre">losalamos.tools.manage_documents</span></code></a>)
+for editing, building, and viewing, but cannot be created from there directly.</p>
 <p><strong>Shell usage</strong></p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>losalamos.tools.update_references<span class="w"> </span>--folder<span class="w"> </span>/path/to/notes
-
-<span class="c1"># Using short flag</span>
-python<span class="w"> </span>-m<span class="w"> </span>losalamos.tools.update_references<span class="w"> </span>-d<span class="w"> </span>/path/to/notes
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>losalamos.tools.manage_budget<span class="w"> </span>path/to/project/folder
 </pre></div>
 </div>
+<p><strong>Navigation</strong></p>
+<ul class="simple">
+<li><p>Home page: <code class="docutils literal notranslate"><span class="pre">I</span></code> add inflow / <code class="docutils literal notranslate"><span class="pre">O</span></code> add outflow / <code class="docutils literal notranslate"><span class="pre">P</span></code> back / <code class="docutils literal notranslate"><span class="pre">Q</span></code> quit.</p></li>
+<li><p>Confirmation: <code class="docutils literal notranslate"><span class="pre">ENTER</span></code> or <code class="docutils literal notranslate"><span class="pre">y</span></code> to confirm, <code class="docutils literal notranslate"><span class="pre">c</span></code> to cancel, <code class="docutils literal notranslate"><span class="pre">q</span></code> to quit.</p></li>
+</ul>
 <p class="rubric">Functions</p>
 <div class="pst-scrollable-table-container"><table class="autosummary longtable table">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#losalamos.tools.update_references.get_arguments" title="losalamos.tools.update_references.get_arguments"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_arguments</span></code></a>()</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#losalamos.tools.manage_budget.get_arguments" title="losalamos.tools.manage_budget.get_arguments"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_arguments</span></code></a>()</p></td>
+<td><p>Parse command-line arguments.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#losalamos.tools.manage_budget.main" title="losalamos.tools.manage_budget.main"><code class="xref py py-obj docutils literal notranslate"><span class="pre">main</span></code></a>()</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#losalamos.tools.update_references.main" title="losalamos.tools.update_references.main"><code class="xref py py-obj docutils literal notranslate"><span class="pre">main</span></code></a>()</p></td>
-<td><p></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#losalamos.tools.manage_budget.run" title="losalamos.tools.manage_budget.run"><code class="xref py py-obj docutils literal notranslate"><span class="pre">run</span></code></a>(project_folder[, vault])</p></td>
+<td><p>Open the budget manager home page for a single project.</p></td>
 </tr>
 </tbody>
 </table>
 </div>
 <dl class="py function">
-<dt class="sig sig-object py" id="losalamos.tools.update_references.get_arguments">
-<span class="sig-prename descclassname"><span class="pre">losalamos.tools.update_references.</span></span><span class="sig-name descname"><span class="pre">get_arguments</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/tools/update_references.html#get_arguments"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.tools.update_references.get_arguments" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dt class="sig sig-object py" id="losalamos.tools.manage_budget.get_arguments">
+<span class="sig-prename descclassname"><span class="pre">losalamos.tools.manage_budget.</span></span><span class="sig-name descname"><span class="pre">get_arguments</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/tools/manage_budget.html#get_arguments"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.tools.manage_budget.get_arguments" title="Link to this definition">#</a></dt>
+<dd><p>Parse command-line arguments.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Parsed argument namespace with a <code class="docutils literal notranslate"><span class="pre">source</span></code> attribute.</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="losalamos.tools.update_references.main">
-<span class="sig-prename descclassname"><span class="pre">losalamos.tools.update_references.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../_modules/losalamos/tools/update_references.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.tools.update_references.main" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="losalamos.tools.manage_budget.run">
+<span class="sig-prename descclassname"><span class="pre">losalamos.tools.manage_budget.</span></span><span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">project_folder</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vault</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../_modules/losalamos/tools/manage_budget.html#run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.tools.manage_budget.run" title="Link to this definition">#</a></dt>
+<dd><p>Open the budget manager home page for a single project.</p>
+<p>Can be called directly (e.g. from <a class="reference internal" href="losalamos.tools.manage_vault.html#module-losalamos.tools.manage_vault" title="losalamos.tools.manage_vault"><code class="xref py py-mod docutils literal notranslate"><span class="pre">losalamos.tools.manage_vault</span></code></a>)
+or via <a class="reference internal" href="#losalamos.tools.manage_budget.main" title="losalamos.tools.manage_budget.main"><code class="xref py py-func docutils literal notranslate"><span class="pre">main()</span></code></a> when invoked from the command line.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>project_folder</strong> (<em>str</em>) – Path to the project root folder.</p></li>
+<li><p><strong>vault</strong> (<em>str</em><em> or </em><em>None</em>) – Optional path to the vault root, passed to
+<code class="xref py py-func docutils literal notranslate"><span class="pre">losalamos.load_project()</span></code> for branch detection.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="losalamos.tools.manage_budget.main">
+<span class="sig-prename descclassname"><span class="pre">losalamos.tools.manage_budget.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../_modules/losalamos/tools/manage_budget.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.tools.manage_budget.main" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 </section>
@@ -500,20 +534,20 @@ python<span class="w"> </span>-m<span class="w"> </span>losalamos.tools.update_r
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="losalamos.tools.search_references.html"
+       href="losalamos.tools.manage_documents.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">losalamos.tools.search_references</p>
+        <p class="prev-next-title">losalamos.tools.manage_documents</p>
       </div>
     </a>
     <a class="right-next"
-       href="losalamos.tools.update_templates.html"
+       href="losalamos.tools.build_figures.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">losalamos.tools.update_templates</p>
+        <p class="prev-next-title">losalamos.tools.build_figures</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -536,15 +570,16 @@ python<span class="w"> </span>-m<span class="w"> </span>losalamos.tools.update_r
   </div>
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="pst-show_toc_level nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.tools.update_references.get_arguments"><code class="docutils literal notranslate"><span class="pre">get_arguments()</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.tools.update_references.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.tools.manage_budget.get_arguments"><code class="docutils literal notranslate"><span class="pre">get_arguments()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.tools.manage_budget.run"><code class="docutils literal notranslate"><span class="pre">run()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.tools.manage_budget.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
 </ul>
   </nav></div>
 
   <div class="sidebar-secondary-item">
 
   <div class="tocsection sourcelink">
-    <a href="../_sources/generated/losalamos.tools.update_references.rst.txt">
+    <a href="../_sources/generated/losalamos.tools.manage_budget.rst.txt">
       <i class="fa-solid fa-file-lines"></i> Show Source
     </a>
   </div>

@@ -679,9 +679,10 @@
 <span class="sd">        :param template_overlay: Optional user-supplied directory whose files take</span>
 <span class="sd">            priority over both :attr:`BASE_TEMPLATE` and :attr:`VARIANT_TEMPLATE`.</span>
 <span class="sd">            Intended for private or client-specific files (logos, confidential covers,</span>
-<span class="sd">            etc.). When ``None`` (default), only the class-level templates are used.</span>
-<span class="sd">            When provided, must be a valid existing directory; otherwise</span>
-<span class="sd">            :exc:`NotADirectoryError` is raised before any files are written.</span>
+<span class="sd">            etc.). When ``None`` or an empty string (default), only the class-level</span>
+<span class="sd">            templates are used -- an empty string is never treated as "current</span>
+<span class="sd">            directory". When provided non-empty, must be a valid existing directory;</span>
+<span class="sd">            otherwise :exc:`NotADirectoryError` is raised before any files are written.</span>
 <span class="sd">        :type template_overlay: str, pathlib.Path, or None</span>
 <span class="sd">        :param files_overlay: Optional file-level overlay applied after all template</span>
 <span class="sd">            layers. Can be a ``dict`` mapping destination-relative paths to source file</span>
@@ -735,6 +736,14 @@
 
         <span class="k">if</span> <span class="n">name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
+
+        <span class="c1"># An empty string is never a valid override directory -- treat it the</span>
+        <span class="c1"># same as None rather than letting Path("").absolute() silently</span>
+        <span class="c1"># resolve to the current working directory and merge its entire tree</span>
+        <span class="c1"># into the document (e.g. a blank "" left in a sources.toml template).</span>
+        <span class="c1"># --------------------------------------------------</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">template_overlay</span><span class="p">:</span>
+            <span class="n">template_overlay</span> <span class="o">=</span> <span class="kc">None</span>
 
         <span class="c1"># Resolve files_overlay from config file if a path is given</span>
         <span class="c1"># --------------------------------------------------</span>

@@ -17,6 +17,7 @@ Project
    losalamos.tools.new_project
    losalamos.tools.manage_vault
    losalamos.tools.manage_documents
+   losalamos.tools.manage_budget
 
 
 Build

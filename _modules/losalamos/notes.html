@@ -1704,7 +1704,62 @@
 <span class="sd">    """</span>
 
     <span class="n">TEMPLATE_FILE</span> <span class="o">=</span> <span class="n">FOLDER_TEMPLATES_NOTES</span> <span class="o">/</span> <span class="s2">"_transfer.md"</span>
-    <span class="n">THUMBNAIL_SIZE</span> <span class="o">=</span> <span class="kc">None</span></div>
+    <span class="n">THUMBNAIL_SIZE</span> <span class="o">=</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="NoteTransfer.strip_definitions">
+<a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.NoteTransfer.strip_definitions">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">strip_definitions</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""</span>
+<span class="sd">        Remove the ``## Definitions`` section from the note body.</span>
+
+<span class="sd">        Finds the first ``## Definitions`` line in the ``Body`` segment,</span>
+<span class="sd">        discards it and everything after it, then trims any trailing blank</span>
+<span class="sd">        lines or ``---`` separators left at the end. Call after</span>
+<span class="sd">        :meth:`~NoteBasic.load_new` so the template's field cheat-sheet never</span>
+<span class="sd">        ships in a materialized note.</span>
+
+<span class="sd">        :return: No value is returned.</span>
+<span class="sd">        :rtype: None</span>
+<span class="sd">        """</span>
+        <span class="n">body</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">STR_BODY</span><span class="p">,</span> <span class="p">[])</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">body</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="o">==</span> <span class="s2">"## Definitions"</span><span class="p">:</span>
+                <span class="n">trimmed</span> <span class="o">=</span> <span class="n">body</span><span class="p">[:</span><span class="n">i</span><span class="p">]</span>
+                <span class="k">while</span> <span class="n">trimmed</span> <span class="ow">and</span> <span class="n">trimmed</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">""</span><span class="p">,</span> <span class="s2">"---"</span><span class="p">):</span>
+                    <span class="n">trimmed</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">STR_BODY</span><span class="p">]</span> <span class="o">=</span> <span class="n">trimmed</span>
+                <span class="k">return</span></div>
+
+
+<div class="viewcode-block" id="NoteTransfer.wiki_link">
+<a class="viewcode-back" href="../../generated/losalamos.notes.html#losalamos.notes.NoteTransfer.wiki_link">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">wiki_link</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""</span>
+<span class="sd">        Wrap a plain-text name in quoted Obsidian wiki-link notation.</span>
+
+<span class="sd">        The result always has the form ``"[[Name]]"`` -- double quotes</span>
+<span class="sd">        included as part of the string -- so that ``metadata_to_list`` writes</span>
+<span class="sd">        the field correctly in YAML frontmatter. Existing outer quotes and</span>
+<span class="sd">        ``[[``/``]]`` brackets are stripped before re-wrapping, so the input</span>
+<span class="sd">        can be in any partial form.</span>
+
+<span class="sd">        :param value: Raw name string, e.g. ``"Anthropic Inc"`` or</span>
+<span class="sd">            ``"[[Anthropic Inc]]"``.</span>
+<span class="sd">        :type value: str or None</span>
+<span class="sd">        :returns: Quoted wiki-link string, e.g. ``'"[[Anthropic Inc]]"'``,</span>
+<span class="sd">            or empty string when *value* is falsy.</span>
+<span class="sd">        :rtype: str</span>
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">value</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">""</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">v</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">'"'</span><span class="p">)</span> <span class="ow">and</span> <span class="n">v</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">'"'</span><span class="p">):</span>
+            <span class="n">v</span> <span class="o">=</span> <span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">v</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">"[["</span><span class="p">)</span> <span class="ow">and</span> <span class="n">v</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">"]]"</span><span class="p">):</span>
+            <span class="n">v</span> <span class="o">=</span> <span class="n">v</span><span class="p">[</span><span class="mi">2</span><span class="p">:</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s1">'"[[</span><span class="si">{</span><span class="n">v</span><span class="si">}</span><span class="s1">]]"'</span></div>
+</div>
 
 
 

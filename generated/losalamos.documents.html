@@ -648,9 +648,10 @@ Must already exist as a directory on the filesystem.</p></li>
 <li><p><strong>template_overlay</strong> (<em>str</em><em>, </em><em>pathlib.Path</em><em>, or </em><em>None</em>) – Optional user-supplied directory whose files take
 priority over both <a class="reference internal" href="#losalamos.documents.Document.BASE_TEMPLATE" title="losalamos.documents.Document.BASE_TEMPLATE"><code class="xref py py-attr docutils literal notranslate"><span class="pre">BASE_TEMPLATE</span></code></a> and <a class="reference internal" href="#losalamos.documents.Document.VARIANT_TEMPLATE" title="losalamos.documents.Document.VARIANT_TEMPLATE"><code class="xref py py-attr docutils literal notranslate"><span class="pre">VARIANT_TEMPLATE</span></code></a>.
 Intended for private or client-specific files (logos, confidential covers,
-etc.). When <code class="docutils literal notranslate"><span class="pre">None</span></code> (default), only the class-level templates are used.
-When provided, must be a valid existing directory; otherwise
-<code class="xref py py-exc docutils literal notranslate"><span class="pre">NotADirectoryError</span></code> is raised before any files are written.</p></li>
+etc.). When <code class="docutils literal notranslate"><span class="pre">None</span></code> or an empty string (default), only the class-level
+templates are used – an empty string is never treated as “current
+directory”. When provided non-empty, must be a valid existing directory;
+otherwise <code class="xref py py-exc docutils literal notranslate"><span class="pre">NotADirectoryError</span></code> is raised before any files are written.</p></li>
 <li><p><strong>files_overlay</strong> (<em>dict</em><em>, </em><em>str</em><em>, </em><em>pathlib.Path</em><em>, or </em><em>None</em>) – Optional file-level overlay applied after all template
 layers. Can be a <code class="docutils literal notranslate"><span class="pre">dict</span></code> mapping destination-relative paths to source file
 paths, or a path to a <code class="docutils literal notranslate"><span class="pre">.json</span></code>, <code class="docutils literal notranslate"><span class="pre">.yaml</span></code>/<code class="docutils literal notranslate"><span class="pre">.yml</span></code>, or <code class="docutils literal notranslate"><span class="pre">.toml</span></code> config

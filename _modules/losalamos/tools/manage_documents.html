@@ -478,8 +478,8 @@
 
 <span class="c1"># Project-relative subfolder where each asset type's PDF and sidecar note live</span>
 <span class="n">_PDF_SUBFOLDER</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">"INVOICE"</span><span class="p">:</span> <span class="s2">"budget/inflows"</span><span class="p">,</span>
-    <span class="s2">"RECEIPT"</span><span class="p">:</span> <span class="s2">"budget/inflows"</span><span class="p">,</span>
+    <span class="s2">"INVOICE"</span><span class="p">:</span> <span class="s2">"admin/invoices"</span><span class="p">,</span>
+    <span class="s2">"RECEIPT"</span><span class="p">:</span> <span class="s2">"admin/invoices"</span><span class="p">,</span>
     <span class="s2">"PROPOSAL"</span><span class="p">:</span> <span class="s2">"admin/proposals"</span><span class="p">,</span>
     <span class="s2">"REPORT"</span><span class="p">:</span> <span class="s2">"outputs"</span><span class="p">,</span>
     <span class="s2">"PREPRINT"</span><span class="p">:</span> <span class="s2">"outputs"</span><span class="p">,</span>
@@ -704,13 +704,17 @@
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_action_add</span><span class="p">(</span><span class="n">pj</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">"""Interactive add-document flow."""</span>
+<span class="w">    </span><span class="sd">"""</span>
+<span class="sd">    Interactive add-document flow.</span>
+
+<span class="sd">    Invoice and receipt are deliberately not offered here — they are only</span>
+<span class="sd">    ever created as a pair, triggered by an inflow transfer in the budget</span>
+<span class="sd">    manager (see :mod:`losalamos.tools.manage_budget`).</span>
+<span class="sd">    """</span>
     <span class="n">heading_subsection</span><span class="p">(</span><span class="s2">"Add document"</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">"  [I] Invoice   [R] Receipt   [P] Proposal   [T] Report   [X] Preprint"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"  [P] Proposal   [T] Report   [X] Preprint"</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">()</span>
-    <span class="n">choice</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="nb">input</span><span class="p">(</span><span class="s2">"  Select type  [I/R/P/T/X / ENTER=cancel / q=quit]: "</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
-    <span class="p">)</span>
+    <span class="n">choice</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">"  Select type  [P/T/X / ENTER=cancel / q=quit]: "</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
 
     <span class="k">if</span> <span class="n">choice</span> <span class="o">==</span> <span class="s2">"q"</span><span class="p">:</span>
         <span class="k">raise</span> <span class="n">_Quit</span><span class="p">()</span>
@@ -718,8 +722,6 @@
         <span class="k">return</span>
 
     <span class="n">type_map</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">"i"</span><span class="p">:</span> <span class="s2">"INVOICE"</span><span class="p">,</span>
-        <span class="s2">"r"</span><span class="p">:</span> <span class="s2">"RECEIPT"</span><span class="p">,</span>
         <span class="s2">"p"</span><span class="p">:</span> <span class="s2">"PROPOSAL"</span><span class="p">,</span>
         <span class="s2">"t"</span><span class="p">:</span> <span class="s2">"REPORT"</span><span class="p">,</span>
         <span class="s2">"x"</span><span class="p">:</span> <span class="s2">"PREPRINT"</span><span class="p">,</span>
@@ -729,27 +731,9 @@
         <span class="k">return</span>
 
     <span class="n">asset_type</span> <span class="o">=</span> <span class="n">type_map</span><span class="p">[</span><span class="n">choice</span><span class="p">]</span>
-    <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{}</span>
-
-    <span class="c1"># For receipts, offer an optional invoice link</span>
-    <span class="k">if</span> <span class="n">asset_type</span> <span class="o">==</span> <span class="s2">"RECEIPT"</span><span class="p">:</span>
-        <span class="n">all_df</span> <span class="o">=</span> <span class="n">pj</span><span class="o">.</span><span class="n">get_assets</span><span class="p">()</span>
-        <span class="n">inv_df</span> <span class="o">=</span> <span class="n">all_df</span><span class="p">[</span><span class="n">all_df</span><span class="p">[</span><span class="s2">"asset_type"</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">==</span> <span class="s2">"INVOICE"</span><span class="p">]</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span>
-            <span class="n">drop</span><span class="o">=</span><span class="kc">True</span>
-        <span class="p">)</span>
-
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">inv_df</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">()</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">"  Link to an existing invoice? (optional)"</span><span class="p">)</span>
-            <span class="n">_print_documents</span><span class="p">(</span><span class="n">inv_df</span><span class="p">)</span>
-            <span class="n">sel</span> <span class="o">=</span> <span class="n">_pick_document</span><span class="p">(</span><span class="n">doc_df</span><span class="o">=</span><span class="n">inv_df</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">"Select invoice"</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">sel</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">kwargs</span><span class="p">[</span><span class="s2">"invoice_id"</span><span class="p">]</span> <span class="o">=</span> <span class="n">sel</span><span class="p">[</span><span class="s2">"asset_id"</span><span class="p">]</span>
 
     <span class="nb">print</span><span class="p">()</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">get_message</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Action  : add </span><span class="si">{</span><span class="n">asset_type</span><span class="si">}</span><span class="s2">"</span><span class="p">))</span>
-    <span class="k">if</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"invoice_id"</span><span class="p">):</span>
-        <span class="nb">print</span><span class="p">(</span><span class="n">get_message</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Linked  : </span><span class="si">{</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">'invoice_id'</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span><span class="p">))</span>
     <span class="nb">print</span><span class="p">()</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="n">_confirm</span><span class="p">():</span>
@@ -757,7 +741,7 @@
         <span class="k">return</span>
 
     <span class="n">method</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">pj</span><span class="p">,</span> <span class="n">_ADD_METHOD</span><span class="p">[</span><span class="n">asset_type</span><span class="p">])</span>
-    <span class="n">method</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="n">method</span><span class="p">()</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">get_message</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">asset_type</span><span class="si">}</span><span class="s2"> created."</span><span class="p">))</span>
 
 
@@ -970,10 +954,14 @@
         <span class="k">return</span>
 
     <span class="n">subfolder</span> <span class="o">=</span> <span class="n">doc_folder</span><span class="o">.</span><span class="n">parent</span>
+    <span class="c1"># sources.toml ships "" rather than an absent key for each</span>
+    <span class="c1"># templates.documents.* entry -- normalize to None (Document.new() also</span>
+    <span class="c1"># guards against "", but it should never reach it as "configured" here).</span>
     <span class="n">template_overlay</span> <span class="o">=</span> <span class="p">(</span>
         <span class="n">pj</span><span class="o">.</span><span class="n">sources</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"templates"</span><span class="p">,</span> <span class="p">{})</span>
         <span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"documents"</span><span class="p">,</span> <span class="p">{})</span>
         <span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">asset_type</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="ow">or</span> <span class="kc">None</span>
     <span class="p">)</span>
 
     <span class="k">try</span><span class="p">:</span>

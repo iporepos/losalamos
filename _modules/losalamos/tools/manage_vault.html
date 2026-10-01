@@ -525,13 +525,18 @@
     <span class="n">_list_branches</span><span class="p">,</span>
     <span class="n">_next_increment</span><span class="p">,</span>
     <span class="n">run</span> <span class="k">as</span> <span class="n">_add_project_run</span><span class="p">,</span>
+    <span class="n">_Quit</span> <span class="k">as</span> <span class="n">_PartyQuit</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">losalamos.tools.manage_documents</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">_load_projects</span><span class="p">,</span>
     <span class="n">_read_project_title</span><span class="p">,</span>
     <span class="n">_print_projects</span><span class="p">,</span>
-    <span class="n">_home</span><span class="p">,</span>
+    <span class="n">_home</span> <span class="k">as</span> <span class="n">_documents_home</span><span class="p">,</span>
     <span class="n">_Quit</span> <span class="k">as</span> <span class="n">_DocQuit</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">losalamos.tools.manage_budget</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">_home</span> <span class="k">as</span> <span class="n">_budget_home</span><span class="p">,</span>
+    <span class="n">_Quit</span> <span class="k">as</span> <span class="n">_BudgetQuit</span><span class="p">,</span>
 <span class="p">)</span>
 
 
@@ -740,9 +745,40 @@
         <span class="n">Path</span><span class="p">(</span><span class="n">tmp_path</span><span class="p">)</span><span class="o">.</span><span class="n">unlink</span><span class="p">(</span><span class="n">missing_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 
+<span class="k">def</span><span class="w"> </span><span class="nf">_pick_manager</span><span class="p">(</span><span class="n">project</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""</span>
+<span class="sd">    Interactive picker between the document manager and the budget manager.</span>
+
+<span class="sd">    :param project: Project info dict with ``name`` and ``title``.</span>
+<span class="sd">    :returns: ``"documents"``, ``"budget"``, or ``None`` to go back.</span>
+<span class="sd">    :raises _Quit: When the user enters ``q``.</span>
+<span class="sd">    """</span>
+    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">heading_subsection</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">project</span><span class="p">[</span><span class="s1">'name'</span><span class="p">]</span><span class="si">}</span><span class="s2">  —  </span><span class="si">{</span><span class="n">project</span><span class="p">[</span><span class="s1">'title'</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"  [D] Manage documents    [G] Manage budget"</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"  [P] Back    [Q] Quit"</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">()</span>
+
+        <span class="n">choice</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">"  Select: "</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">choice</span> <span class="o">==</span> <span class="s2">"q"</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">_Quit</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">choice</span> <span class="o">==</span> <span class="s2">"p"</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">choice</span> <span class="o">==</span> <span class="s2">"d"</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">"documents"</span>
+        <span class="k">if</span> <span class="n">choice</span> <span class="o">==</span> <span class="s2">"g"</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">"budget"</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"  Enter D, G, P, or Q.</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
+
+
 <span class="k">def</span><span class="w"> </span><span class="nf">_manage_project</span><span class="p">(</span><span class="n">vault</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">project</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">"""</span>
-<span class="sd">    Open the document management home page for a selected project.</span>
+<span class="sd">    Open the manager picker (documents or budget) for a selected project.</span>
+
+<span class="sd">    Loops back to the picker after either manager's home page returns</span>
+<span class="sd">    ``"projects"`` (its own back action), so ``P`` there means "back to</span>
+<span class="sd">    this picker", not "back to the project list".</span>
 
 <span class="sd">    :param vault: Vault dict (used for vault path context).</span>
 <span class="sd">    :param project: Project info dict with ``path`` and ``name``.</span>
@@ -753,8 +789,20 @@
         <span class="n">vault</span><span class="o">=</span><span class="n">vault</span><span class="p">[</span><span class="s2">"path"</span><span class="p">],</span>
     <span class="p">)</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">_home</span><span class="p">(</span><span class="n">pj</span><span class="o">=</span><span class="n">pj</span><span class="p">,</span> <span class="n">project_info</span><span class="o">=</span><span class="n">project</span><span class="p">)</span>
-    <span class="k">except</span> <span class="n">_DocQuit</span><span class="p">:</span>
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="n">manager</span> <span class="o">=</span> <span class="n">_pick_manager</span><span class="p">(</span><span class="n">project</span><span class="o">=</span><span class="n">project</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">manager</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">return</span> <span class="s2">"projects"</span>
+
+            <span class="k">if</span> <span class="n">manager</span> <span class="o">==</span> <span class="s2">"documents"</span><span class="p">:</span>
+                <span class="n">result</span> <span class="o">=</span> <span class="n">_documents_home</span><span class="p">(</span><span class="n">pj</span><span class="o">=</span><span class="n">pj</span><span class="p">,</span> <span class="n">project_info</span><span class="o">=</span><span class="n">project</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">result</span> <span class="o">=</span> <span class="n">_budget_home</span><span class="p">(</span><span class="n">pj</span><span class="o">=</span><span class="n">pj</span><span class="p">,</span> <span class="n">project_info</span><span class="o">=</span><span class="n">project</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">result</span> <span class="o">==</span> <span class="s2">"quit"</span><span class="p">:</span>
+                <span class="k">return</span> <span class="s2">"quit"</span>
+            <span class="c1"># result == "projects" -&gt; loop back to the manager picker</span>
+    <span class="k">except</span> <span class="p">(</span><span class="n">_DocQuit</span><span class="p">,</span> <span class="n">_BudgetQuit</span><span class="p">,</span> <span class="n">_PartyQuit</span><span class="p">):</span>
         <span class="k">return</span> <span class="s2">"quit"</span>
 
 
