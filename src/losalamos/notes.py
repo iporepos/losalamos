@@ -1143,6 +1143,55 @@ class NoteTransfer(NoteBasic):
     TEMPLATE_FILE = FOLDER_TEMPLATES_NOTES / "_transfer.md"
     THUMBNAIL_SIZE = None
 
+    def strip_definitions(self):
+        """
+        Remove the ``## Definitions`` section from the note body.
+
+        Finds the first ``## Definitions`` line in the ``Body`` segment,
+        discards it and everything after it, then trims any trailing blank
+        lines or ``---`` separators left at the end. Call after
+        :meth:`~NoteBasic.load_new` so the template's field cheat-sheet never
+        ships in a materialized note.
+
+        :return: No value is returned.
+        :rtype: None
+        """
+        body = self.data.get(self.STR_BODY, [])
+        for i, line in enumerate(body):
+            if line.strip() == "## Definitions":
+                trimmed = body[:i]
+                while trimmed and trimmed[-1].strip() in ("", "---"):
+                    trimmed.pop()
+                self.data[self.STR_BODY] = trimmed
+                return
+
+    @staticmethod
+    def wiki_link(value):
+        """
+        Wrap a plain-text name in quoted Obsidian wiki-link notation.
+
+        The result always has the form ``"[[Name]]"`` -- double quotes
+        included as part of the string -- so that ``metadata_to_list`` writes
+        the field correctly in YAML frontmatter. Existing outer quotes and
+        ``[[``/``]]`` brackets are stripped before re-wrapping, so the input
+        can be in any partial form.
+
+        :param value: Raw name string, e.g. ``"Anthropic Inc"`` or
+            ``"[[Anthropic Inc]]"``.
+        :type value: str or None
+        :returns: Quoted wiki-link string, e.g. ``'"[[Anthropic Inc]]"'``,
+            or empty string when *value* is falsy.
+        :rtype: str
+        """
+        if not value:
+            return ""
+        v = str(value).strip()
+        if v.startswith('"') and v.endswith('"'):
+            v = v[1:-1]
+        if v.startswith("[[") and v.endswith("]]"):
+            v = v[2:-2]
+        return f'"[[{v}]]"'
+
 
 class NoteReference(NoteBasic):
 

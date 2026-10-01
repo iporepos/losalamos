@@ -116,23 +116,6 @@ class TestAddMonths(unittest.TestCase):
         self.assertEqual(result, date(2027, 2, 28))
 
 
-class TestWiki(unittest.TestCase):
-    """Wiki-link helper — ``Budget._wiki``."""
-
-    def test_plain_text_wrapped(self):
-        self.assertEqual(Budget._wiki("Landlord Co"), '"[[Landlord Co]]"')
-
-    def test_already_bracketed_normalized(self):
-        self.assertEqual(Budget._wiki("[[Landlord Co]]"), '"[[Landlord Co]]"')
-
-    def test_already_quoted_and_bracketed_unchanged(self):
-        self.assertEqual(Budget._wiki('"[[Landlord Co]]"'), '"[[Landlord Co]]"')
-
-    def test_empty_returns_empty(self):
-        self.assertEqual(Budget._wiki(""), "")
-        self.assertEqual(Budget._wiki(None), "")
-
-
 class TestBudgetBuild(unittest.TestCase):
     """``Budget.build`` — collection size, naming, direction normalisation."""
 

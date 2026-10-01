@@ -221,7 +221,7 @@ class TestProject(unittest.TestCase):
         self.assertFalse((Path(p.folder_root) / "budget" / "documents").exists())
 
     def test_new_project_no_admin_documents_folder(self):
-        """admin/documents must not be auto-created by new_project."""
+        """admin/documents must not be auto-created by new_project (sunsetted)."""
         p = new_project(
             config={
                 "folder_base": str(self.base_dir),
@@ -229,6 +229,17 @@ class TestProject(unittest.TestCase):
             }
         )
         self.assertFalse((Path(p.folder_root) / "admin" / "documents").exists())
+
+    def test_new_project_admin_invoices_folder_created(self):
+        """admin/invoices must be auto-created by new_project -- it's where
+        invoice/receipt PDFs and sidecar notes land, replacing inputs/documents."""
+        p = new_project(
+            config={
+                "folder_base": str(self.base_dir),
+                "name": "AdminInvoices",
+            }
+        )
+        self.assertTrue((Path(p.folder_root) / "admin" / "invoices").is_dir())
 
     def test_new_project_with_sources_file(self):
         """
@@ -828,9 +839,10 @@ class TestProjectBranch(unittest.TestCase):
 )
 class TestAssetDocumentPaths(unittest.TestCase):
     """
-    Tests for asset document path layout: TeX source at inputs/documents/{name}/,
-    sidecar notes at inputs/documents/{name}.md for invoice/receipt/proposal and
-    at outputs/{name}.md for reports.
+    Tests for asset document path layout: TeX source at inputs/documents/{name}/
+    for every asset type; sidecar notes at admin/invoices/{name}.md for
+    invoice/receipt, inputs/documents/{name}.md for proposal, and
+    outputs/{name}.md for reports/preprints.
     """
 
     @classmethod
@@ -866,15 +878,26 @@ class TestAssetDocumentPaths(unittest.TestCase):
         )
         self.assertTrue(source.is_dir(), f"Source folder missing: {source}")
 
-    def test_add_invoice_note_in_inputs_documents(self):
-        """add_invoice should place the sidecar note at inputs/documents/{name}.md."""
+    def test_add_invoice_note_in_admin_invoices(self):
+        """add_invoice should place the sidecar note at admin/invoices/{name}.md."""
         note = (
+            Path(self._project.folder_root)
+            / "admin"
+            / "invoices"
+            / f"{self._invoice_name}.md"
+        )
+        self.assertTrue(note.is_file(), f"Invoice note missing: {note}")
+
+    def test_add_invoice_note_not_in_inputs_documents(self):
+        """add_invoice() must not place the note under inputs/documents/ anymore
+        -- billing paperwork is means work, not end work, so it moved to admin/."""
+        wrong = (
             Path(self._project.folder_root)
             / "inputs"
             / "documents"
             / f"{self._invoice_name}.md"
         )
-        self.assertTrue(note.is_file(), f"Invoice note missing: {note}")
+        self.assertFalse(wrong.exists(), f"Invoice note wrongly placed at: {wrong}")
 
     def test_budget_documents_folder_not_created(self):
         """budget/documents/ must not be auto-created by new_project or add_invoice."""
@@ -882,12 +905,12 @@ class TestAssetDocumentPaths(unittest.TestCase):
             (Path(self._project.folder_root) / "budget" / "documents").exists()
         )
 
-    def test_add_receipt_note_in_inputs_documents(self):
-        """add_receipt() should place its note at inputs/documents/{name}.md."""
+    def test_add_receipt_note_in_admin_invoices(self):
+        """add_receipt() should place its note at admin/invoices/{name}.md."""
         note = (
             Path(self._project.folder_root)
-            / "inputs"
-            / "documents"
+            / "admin"
+            / "invoices"
             / f"{self._receipt_name}.md"
         )
         self.assertTrue(note.is_file(), f"Receipt note missing: {note}")
@@ -973,6 +996,231 @@ class TestAssetDocumentPaths(unittest.TestCase):
         self.assertIn("\\newcommand{\\DocTitle}{[Article Title]}", content)
 
 
+@unittest.skipIf(
+    sys.platform == "win32" and not os.getenv("CI"),
+    "LaTeX template tree I/O is slow under Windows AV; runs in CI",
+)
+class TestAssetInvoiceFolderBackwardCompat(unittest.TestCase):
+    """admin/invoices must be created on demand for projects that predate it."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls._tmp = Path(tempfile.mkdtemp(prefix="losalamos_invoicecompat_"))
+        cls._project = new_project(
+            config={
+                "folder_base": str(cls._tmp),
+                "name": "OldProject",
+                "alias": "OP",
+            }
+        )
+        # simulate a project created before admin/invoices was a standard folder
+        shutil.rmtree(Path(cls._project.folder_root) / "admin" / "invoices")
+        cls._invoice = cls._project.add_invoice()
+
+    @classmethod
+    def tearDownClass(cls):
+        shutil.rmtree(cls._tmp, ignore_errors=True)
+
+    def test_add_invoice_recreates_missing_admin_invoices_folder(self):
+        """add_invoice() must not fail when admin/invoices is absent -- it is
+        created on demand instead of requiring new_project()/setup() to have
+        run since the folder became standard."""
+        note = (
+            Path(self._project.folder_root)
+            / "admin"
+            / "invoices"
+            / f"{self._invoice.name}.md"
+        )
+        self.assertTrue(note.is_file(), f"Invoice note missing: {note}")
+
+
+@unittest.skipIf(
+    sys.platform == "win32" and not os.getenv("CI"),
+    "LaTeX template tree I/O is slow under Windows AV; runs in CI",
+)
+class TestAddInvoiceCopyFrom(unittest.TestCase):
+    """add_invoice(copy_from=...) -- seeding a new invoice from a previous one."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls._tmp = Path(tempfile.mkdtemp(prefix="losalamos_invoicecopy_"))
+        cls._project = new_project(
+            config={
+                "folder_base": str(cls._tmp),
+                "name": "CopyProject",
+                "alias": "CP",
+            }
+        )
+        cls._invoice1 = cls._project.add_invoice()
+        cls._file_id_1 = cls._invoice1.name.rsplit("_", 1)[-1]
+        cls._folder_1 = cls._project._locate_document_source(name=cls._invoice1.name)
+
+        # mark the source folder with content no standard overlay would add,
+        # to prove it was copied rather than freshly templated
+        (cls._folder_1 / "CUSTOM_MARKER.txt").write_text(
+            "installment-1", encoding="utf-8"
+        )
+
+        # simulate invoice1 having been rebuilt (and thus bumped) before
+        # invoice2 is created from it -- the copy must not inherit this
+        project_tex = cls._folder_1 / "definitions" / "project.tex"
+        project_tex.write_text(
+            project_tex.read_text(encoding="utf-8").replace(
+                "\\newcommand{\\DocVersion}{001}", "\\newcommand{\\DocVersion}{005}"
+            ),
+            encoding="utf-8",
+        )
+
+        cls._invoice2 = cls._project.add_invoice(copy_from=cls._file_id_1)
+        cls._folder_2 = cls._project._locate_document_source(name=cls._invoice2.name)
+
+    @classmethod
+    def tearDownClass(cls):
+        shutil.rmtree(cls._tmp, ignore_errors=True)
+
+    def test_marker_file_copied(self):
+        """A file with no standard-overlay counterpart must still be copied
+        from invoice1's folder into invoice2's -- proof copy_from pulls the
+        whole working tree, not just the overlay set."""
+        marker = self._folder_2 / "CUSTOM_MARKER.txt"
+        self.assertTrue(marker.is_file())
+        self.assertEqual(marker.read_text(encoding="utf-8"), "installment-1")
+
+    def test_version_reset_to_default_not_copied(self):
+        """Even though the source invoice was at version 005, the copy must
+        land on 001 -- _patch_project_tex always overwrites it post-copy."""
+        version = self._project._read_doc_version(doc_folder=self._folder_2)
+        self.assertEqual(version, "001")
+
+    def test_copy_from_missing_invoice_raises(self):
+        with self.assertRaises(FileNotFoundError):
+            self._project.add_invoice(copy_from="F999")
+
+
+@unittest.skipIf(
+    sys.platform == "win32" and not os.getenv("CI"),
+    "LaTeX template tree I/O is slow under Windows AV; runs in CI",
+)
+class TestAddInflowTransfer(unittest.TestCase):
+    """Project.add_inflow_transfer() creates a transfer note plus its invoice/receipt pair."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls._tmp = Path(tempfile.mkdtemp(prefix="losalamos_inflow_"))
+        cls._project = new_project(
+            config={
+                "folder_base": str(cls._tmp),
+                "name": "InflowProject",
+                "alias": "IP",
+            }
+        )
+        cls._transfer, cls._invoice, cls._receipt = cls._project.add_inflow_transfer(
+            value=1500.0,
+            date="2026-09-02",
+            payer="Acme Corp",
+            receiver="Jane Doe",
+        )
+
+        # A standalone source invoice to copy_invoice_from -- deliberately not
+        # cls._invoice itself, since that one already has cls._receipt built
+        # from it; marking it after the fact would retroactively break
+        # test_receipt_linked_to_invoice's invoice-files-subset-of-receipt-files
+        # check (receipt1 was built before the marker existed).
+        cls._source_invoice = cls._project.add_invoice()
+        cls._source_invoice_folder = cls._project._locate_document_source(
+            name=cls._source_invoice.name
+        )
+        (cls._source_invoice_folder / "CUSTOM_MARKER.txt").write_text(
+            "installment-1", encoding="utf-8"
+        )
+        cls._source_file_id = cls._source_invoice.name.rsplit("_", 1)[-1]
+
+        cls._transfer2, cls._invoice2, cls._receipt2 = cls._project.add_inflow_transfer(
+            value=1500.0,
+            date="2026-10-02",
+            payer="Acme Corp",
+            receiver="Jane Doe",
+            copy_invoice_from=cls._source_file_id,
+        )
+        cls._invoice2_folder = cls._project._locate_document_source(
+            name=cls._invoice2.name
+        )
+
+    @classmethod
+    def tearDownClass(cls):
+        shutil.rmtree(cls._tmp, ignore_errors=True)
+
+    def test_returns_transfer_invoice_receipt(self):
+        self.assertEqual(self._transfer.metadata.get("note_type"), "transfer")
+        self.assertTrue(self._invoice.name.startswith("INVOICE_"))
+        self.assertTrue(self._receipt.name.startswith("RECEIPT_"))
+
+    def test_transfer_fields_stored(self):
+        self.assertEqual(self._transfer.metadata.get("direction"), "inflow")
+        self.assertEqual(self._transfer.metadata.get("status"), "expected")
+        self.assertEqual(self._transfer.metadata.get("value"), 1500.0)
+        self.assertEqual(self._transfer.metadata.get("payer"), '"[[Acme Corp]]"')
+        self.assertEqual(self._transfer.metadata.get("receiver"), '"[[Jane Doe]]"')
+
+    def test_transfer_links_invoice_and_receipt(self):
+        self.assertEqual(
+            self._transfer.metadata.get("file_invoice"),
+            f'"[[{self._invoice.name}]]"',
+        )
+        self.assertEqual(
+            self._transfer.metadata.get("file_receipt"),
+            f'"[[{self._receipt.name}]]"',
+        )
+
+    def test_links_persisted_on_disk(self):
+        """The transfer note's updated links must be saved, not just in memory."""
+        note_file = (
+            Path(self._project.folder_root)
+            / "budget"
+            / "inflows"
+            / f"{self._transfer.metadata['name']}.md"
+        )
+        content = note_file.read_text(encoding="utf-8")
+        self.assertIn(f"[[{self._invoice.name}]]", content)
+        self.assertIn(f"[[{self._receipt.name}]]", content)
+
+    def test_receipt_linked_to_invoice(self):
+        """add_receipt(invoice_id=...) should inherit the invoice's file overlays."""
+        receipt_folder = self._project._locate_document_source(name=self._receipt.name)
+        invoice_folder = self._project._locate_document_source(name=self._invoice.name)
+        invoice_files = {
+            p.relative_to(invoice_folder).as_posix()
+            for p in invoice_folder.rglob("*")
+            if p.is_file() and p.name != "main.tex"
+        }
+        receipt_files = {
+            p.relative_to(receipt_folder).as_posix()
+            for p in receipt_folder.rglob("*")
+            if p.is_file() and p.name != "main.tex"
+        }
+        self.assertTrue(invoice_files.issubset(receipt_files))
+
+    def test_copy_invoice_from_seeds_second_installment(self):
+        """add_inflow_transfer(copy_invoice_from=...) must seed invoice2 from
+        invoice1's working tree (marker file present), and the paired
+        receipt2 inherits it transitively via its own invoice_id -- no
+        separate copy step needed for the receipt."""
+        marker_in_invoice2 = self._invoice2_folder / "CUSTOM_MARKER.txt"
+        self.assertTrue(marker_in_invoice2.is_file())
+        self.assertEqual(
+            marker_in_invoice2.read_text(encoding="utf-8"), "installment-1"
+        )
+
+        receipt2_folder = self._project._locate_document_source(
+            name=self._receipt2.name
+        )
+        self.assertTrue((receipt2_folder / "CUSTOM_MARKER.txt").is_file())
+
+    def test_copy_invoice_from_still_resets_version(self):
+        version = self._project._read_doc_version(doc_folder=self._invoice2_folder)
+        self.assertEqual(version, "001")
+
+
 class TestLocateDocumentSource(unittest.TestCase):
     """Tests for Project._locate_document_source."""
 
@@ -1050,6 +1298,14 @@ class TestAddTransfer(unittest.TestCase):
             value=1500.0,
             status="executed",
             protocol="pix",
+            payer="Acme Corp",
+            receiver="Jane Doe",
+        )
+        cls._note_file = (
+            Path(cls._pj.folder_root)
+            / "budget"
+            / "inflows"
+            / f"{cls._note.metadata['name']}.md"
         )
 
     @classmethod
@@ -1075,6 +1331,18 @@ class TestAddTransfer(unittest.TestCase):
 
     def test_method_defaults_to_manual(self):
         self.assertEqual(self._note.metadata.get("method"), "manual")
+
+    def test_payer_wiki_linked(self):
+        self.assertEqual(self._note.metadata.get("payer"), '"[[Acme Corp]]"')
+
+    def test_receiver_wiki_linked(self):
+        self.assertEqual(self._note.metadata.get("receiver"), '"[[Jane Doe]]"')
+
+    def test_definitions_section_stripped_on_disk(self):
+        """The materialized note must not carry the template's ## Definitions
+        field cheat-sheet -- add_transfer() strips it before saving."""
+        content = self._note_file.read_text(encoding="utf-8")
+        self.assertNotIn("## Definitions", content)
 
     def test_outflow_goes_to_outflows_folder(self):
         pj = _make_bare_project(self._tmp, name="outproj")
@@ -1169,6 +1437,63 @@ class TestGetTransfers(unittest.TestCase):
         pj = _make_bare_project(self._tmp, name="emptyproj")
         df = pj.get_transfers()
         self.assertEqual(len(df), 0)
+
+
+class TestGetLatestTransfer(unittest.TestCase):
+    """Project.get_latest_transfer() -- 'copy from previous' lookup."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls._tmp = Path(tempfile.mkdtemp(prefix="transfer_latest_"))
+        cls._pj = _make_bare_project(cls._tmp)
+        cls._pj.add_transfer(
+            direction="inflow",
+            date="2026-09-01",
+            account="a",
+            value=100,
+            payer="Acme Corp",
+            receiver="Jane Doe",
+        )
+        cls._pj.add_transfer(
+            direction="inflow",
+            date="2026-10-01",
+            account="a",
+            value=200,
+            payer="Acme Corp",
+            receiver="Jane Doe",
+        )
+        cls._pj.add_transfer(
+            direction="outflow", date="2026-09-02", account="b", value=50
+        )
+
+    @classmethod
+    def tearDownClass(cls):
+        shutil.rmtree(cls._tmp, ignore_errors=True)
+
+    def test_returns_most_recently_created_of_direction(self):
+        """With two inflows, the second one (higher T-id) must win, not the
+        one with the later calendar date -- order is creation order."""
+        latest = self._pj.get_latest_transfer(direction="inflow")
+        # get_transfers() reads fields back from disk as plain strings --
+        # same behavior copy-from-previous callers must account for.
+        self.assertEqual(str(latest["value"]), "200")
+
+    def test_direction_filtering(self):
+        latest = self._pj.get_latest_transfer(direction="outflow")
+        self.assertEqual(str(latest["value"]), "50")
+
+    def test_direction_case_insensitive(self):
+        latest = self._pj.get_latest_transfer(direction="INFLOW")
+        self.assertEqual(str(latest["value"]), "200")
+
+    def test_empty_dict_when_no_transfer_of_direction(self):
+        pj = _make_bare_project(self._tmp, name="nooutflowproj")
+        pj.add_transfer(direction="inflow", date="2026-09-01", account="a", value=1)
+        self.assertEqual(pj.get_latest_transfer(direction="outflow"), {})
+
+    def test_empty_dict_when_no_transfers_at_all(self):
+        pj = _make_bare_project(self._tmp, name="emptylatestproj")
+        self.assertEqual(pj.get_latest_transfer(direction="inflow"), {})
 
 
 if __name__ == "__main__":

@@ -82,6 +82,7 @@ SUBFOLDERS = {
         "admin/contracts",
         "admin/contracts/main",
         "admin/proposals",
+        "admin/invoices",
         "admin/paperwork",
         "admin/meetings",
         "admin/received",
@@ -111,17 +112,20 @@ SUBFOLDERS = {
 
 # Project-relative folder where each asset type's PDF lives.
 _ASSET_PDF_SUBFOLDER = {
-    "INVOICE": "budget/inflows",
-    "RECEIPT": "budget/inflows",
+    "INVOICE": "admin/invoices",
+    "RECEIPT": "admin/invoices",
     "PROPOSAL": "admin/proposals",
     "REPORT": "outputs",
     "PREPRINT": "outputs",
 }
 
 # Project-relative folder where each asset type's sidecar note lives (always local).
+# INVOICE/RECEIPT notes live alongside their PDF under admin/invoices -- billing
+# paperwork is "means" work (running the business), not "end" work, so it no
+# longer belongs under inputs/.
 _ASSET_NOTE_SUBFOLDER = {
-    "INVOICE": "inputs/documents",
-    "RECEIPT": "inputs/documents",
+    "INVOICE": "admin/invoices",
+    "RECEIPT": "admin/invoices",
     "PROPOSAL": "inputs/documents",
     "REPORT": "outputs",
     "PREPRINT": "outputs",
@@ -1962,9 +1966,13 @@ class Project(FileSys):
         :type file_receipt: str or None
         :param file_proof: Wiki link to the proof-of-payment file or note.
         :type file_proof: str or None
-        :param payer: Name or link to the payer party.
+        :param payer: Name or link to the payer party. Wrapped in Obsidian
+            wiki-link notation via :meth:`~losalamos.notes.NoteTransfer.wiki_link`
+            before being written (plain names and already-bracketed links are
+            both accepted).
         :type payer: str or None
-        :param receiver: Name or link to the receiver party.
+        :param receiver: Name or link to the receiver party. Wrapped the same
+            way as *payer*.
         :type receiver: str or None
         :param currency: Currency code, e.g. ``"BRL"``, ``"USD"``.
         :type currency: str or None
@@ -1992,6 +2000,7 @@ class Project(FileSys):
         note_file = target_folder / f"{name}.md"
         note = NoteTransfer(name=name, alias=name)
         note.load_new(file_note=note_file)
+        note.strip_definitions()
         note.metadata["name"] = name
         note.metadata["date"] = date
         note.metadata["direction"] = direction
@@ -2007,8 +2016,8 @@ class Project(FileSys):
         note.metadata["file_invoice"] = file_invoice
         note.metadata["file_receipt"] = file_receipt
         note.metadata["file_proof"] = file_proof
-        note.metadata["payer"] = payer
-        note.metadata["receiver"] = receiver
+        note.metadata["payer"] = NoteTransfer.wiki_link(payer)
+        note.metadata["receiver"] = NoteTransfer.wiki_link(receiver)
         note.metadata["currency"] = currency
         note.metadata["domain"] = domain
         note.metadata["category"] = category
@@ -2064,6 +2073,29 @@ class Project(FileSys):
             rows.append({col: meta.get(col, "") for col in _cols})
         rows.sort(key=lambda r: r["name"])
         return pd.DataFrame(rows, columns=_cols)
+
+    def get_latest_transfer(self, direction) -> dict:
+        """
+        Return the most recently created transfer note for a direction.
+
+        Filters :meth:`get_transfers` to *direction* and takes the last row --
+        rows there are already sorted by ``name`` (e.g. ``INFLOW_{project}_T007``),
+        and the zero-padded transfer ID means that order is also creation
+        order. Intended for a "copy from previous" convenience when a new
+        transfer is another installment of the same recurring service.
+
+        :param direction: ``"inflow"`` or ``"outflow"``.
+        :type direction: str
+        :returns: Dict of the latest transfer's fields (same columns as
+            :meth:`get_transfers`), or an empty dict when no transfer of that
+            direction exists yet.
+        :rtype: dict
+        """
+        df = self.get_transfers()
+        df = df[df["direction"] == direction.lower()]
+        if df.empty:
+            return {}
+        return df.iloc[-1].to_dict()
 
     def _localize_doc_type(self, asset_type) -> str:
         """
@@ -2194,6 +2226,37 @@ class Project(FileSys):
         }
         return {dst: str(src) for dst, src in _map.items() if src.is_file()}
 
+    def _copy_overlay_from_asset(self, asset_type, file_id) -> dict:
+        """
+        Build a files_overlay dict from every file in an existing asset's
+        working tree (except ``main.tex``).
+
+        Used both to link a receipt to its own paired invoice
+        (:meth:`add_receipt`'s *invoice_id*) and to seed a new asset from an
+        earlier one of the same type (:meth:`add_invoice`'s *copy_from*) --
+        e.g. recurring installments of the same service, where the party
+        files and services table are likely unchanged. Identity fields
+        (``\\DocVersion``/``\\DocFileID``/``\\DocType``) are not part of this
+        copy: :meth:`_add_asset_document` always patches them fresh onto the
+        new document afterward, so a copied asset never inherits a stale
+        version number.
+
+        :param asset_type: Asset type string in uppercase, e.g. ``"INVOICE"``.
+        :type asset_type: str
+        :param file_id: Asset file ID of the source document, e.g. ``"F003"``.
+        :type file_id: str
+        :raises FileNotFoundError: If the source document folder is not found.
+        :returns: Dict of ``{relative_path: absolute_source_path}``.
+        :rtype: dict
+        """
+        name = f"{asset_type}_{self.name}_{file_id}"
+        folder = self._locate_document_source(name=name)
+        return {
+            src.relative_to(folder).as_posix(): str(src)
+            for src in folder.rglob("*")
+            if src.is_file() and src.name != "main.tex"
+        }
+
     def _locate_document_source(self, name) -> Path:
         """
         Locate the working source folder for a document by name.
@@ -2236,7 +2299,7 @@ class Project(FileSys):
         instead of the local project root. The sidecar asset note is always
         written to the local project root under the subfolder defined by
         ``_ASSET_NOTE_SUBFOLDER`` for the given type (e.g. ``outputs/`` for
-        reports, ``inputs/documents/`` for invoices). Registers the document via
+        reports, ``admin/invoices/`` for invoices). Registers the document via
         :meth:`add_document`, patches
         ``definitions/project.tex`` with the asset identity fields, and
         optionally rewrites the services table via
@@ -2255,10 +2318,15 @@ class Project(FileSys):
         asset_id = self._next_asset_id()
         name = f"{asset_type}_{self.name}_{asset_id}"
 
+        # sources.toml ships an empty string ("") rather than an absent key
+        # for each templates.documents.* entry -- normalize that to None here
+        # too (Document.new() now also guards against it, but an empty string
+        # should never even reach it as "a template overlay was configured").
         template_overlay = (
             self.sources.get("templates", {})
             .get("documents", {})
             .get(asset_type.lower(), None)
+            or None
         )
 
         # Route TeX tree to remote documents folder when configured
@@ -2301,6 +2369,9 @@ class Project(FileSys):
 
         note_subfolder = _ASSET_NOTE_SUBFOLDER.get(asset_type, "inputs/documents")
         note_file = Path(self.folder_root) / note_subfolder / f"{name}.md"
+        # Backward compatible: projects created before admin/invoices became a
+        # standard folder won't have it yet -- create it on first use.
+        note_file.parent.mkdir(parents=True, exist_ok=True)
         asset_note = NoteAsset(name=name, alias=name)
         asset_note.load_new(file_note=note_file)
         asset_note.metadata["name"] = name
@@ -2432,17 +2503,17 @@ class Project(FileSys):
 
         return pdf_output, zip_path
 
-    def add_invoice(self, config=None):
+    def add_invoice(self, config=None, copy_from=None):
         """
         Create a new invoice document.
 
         The working tree is created at ``inputs/documents/INVOICE_{project}_{file_id}/``
-        and the sidecar note at ``inputs/documents/INVOICE_{project}_{file_id}.md``.
+        and the sidecar note at ``admin/invoices/INVOICE_{project}_{file_id}.md``.
         No compilation or condensing is performed.
 
-        The template directory is read from
+        Without *copy_from*, the template directory is read from
         ``sources["templates"]["documents"]["invoice"]`` in the project's
-        ``admin/config/sources.toml``. The following overlays are applied
+        ``admin/config/sources.toml``, and the following overlays are applied
         when present in ``admin/config/overlays/``:
 
         - ``project.tex`` → ``definitions/project.tex``
@@ -2453,18 +2524,37 @@ class Project(FileSys):
             rewrites ``partials/services-invoice.tex`` from the services list
             and invoice settings in the dict.
         :type config: dict or None
+        :param copy_from: Asset file ID of a previous invoice in this
+            project, e.g. ``"F003"``. When provided, every file from that
+            invoice's working tree (except ``main.tex``) seeds the new one
+            instead of the standard overlay -- useful when this invoice is
+            another installment of the same recurring service. ``\\DocVersion``
+            is still reset to ``001`` on the new invoice regardless.
+        :type copy_from: str or None
+        :raises FileNotFoundError: If *copy_from* is given but the
+            corresponding invoice folder does not exist.
         :returns: The newly created invoice document instance.
         :rtype: losalamos.documents.Document
         """
+        if copy_from is not None:
+            files_overlay = self._copy_overlay_from_asset(
+                asset_type="INVOICE", file_id=copy_from
+            )
+        else:
+            files_overlay = self._standard_files_overlay()
+
         return self._add_asset_document(
             asset_type="INVOICE",
-            files_overlay=self._standard_files_overlay(),
+            files_overlay=files_overlay,
             config=config,
         )
 
     def add_receipt(self, invoice_id=None, config=None):
         """
-        Create a new receipt document inside ``inputs/documents/``.
+        Create a new receipt document.
+
+        The working tree is created at ``inputs/documents/RECEIPT_{project}_{file_id}/``
+        and the sidecar note at ``admin/invoices/RECEIPT_{project}_{file_id}.md``.
 
         When *invoice_id* is provided, all files from the linked invoice
         folder (except ``main.tex``) become file overlays, so the receipt
@@ -2490,13 +2580,9 @@ class Project(FileSys):
         :rtype: losalamos.documents.Document
         """
         if invoice_id is not None:
-            invoice_name = f"INVOICE_{self.name}_{invoice_id}"
-            invoice_folder = self._locate_document_source(name=invoice_name)
-            files_overlay = {
-                src.relative_to(invoice_folder).as_posix(): str(src)
-                for src in invoice_folder.rglob("*")
-                if src.is_file() and src.name != "main.tex"
-            }
+            files_overlay = self._copy_overlay_from_asset(
+                asset_type="INVOICE", file_id=invoice_id
+            )
         else:
             files_overlay = self._standard_files_overlay()
 
@@ -2506,13 +2592,111 @@ class Project(FileSys):
             config=config,
         )
 
+    def add_inflow_transfer(
+        self,
+        value,
+        date=None,
+        account=None,
+        payer=None,
+        receiver=None,
+        commitment=None,
+        recurrence=None,
+        method=None,
+        protocol=None,
+        currency=None,
+        domain=None,
+        category=None,
+        subcategory=None,
+        copy_invoice_from=None,
+    ):
+        """
+        Create an inflow transfer note together with its invoice and receipt.
+
+        Inflows are always backed by a billing pair: this creates the
+        :class:`~losalamos.notes.NoteTransfer` via :meth:`add_transfer`
+        (``status="expected"``), then an invoice via :meth:`add_invoice` and
+        a receipt linked to it via :meth:`add_receipt`. The transfer note's
+        ``file_invoice``/``file_receipt`` fields are updated afterwards with
+        wiki links to the two new asset notes.
+
+        :param value: Monetary value of the transfer.
+        :type value: float or str
+        :param date: Due date of the transfer, e.g. ``"2026-09-02"``.
+        :type date: str or None
+        :param account: Bank account code of the payer.
+        :type account: str or None
+        :param payer: Name or link to the payer party. Wrapped in Obsidian
+            wiki-link notation via :meth:`add_transfer`.
+        :type payer: str or None
+        :param receiver: Name or link to the receiver party. Wrapped the same
+            way as *payer*.
+        :type receiver: str or None
+        :param commitment: Commitment group, e.g. ``"contracts"``,
+            ``"lifestyle"``, ``"maintenance"``.
+        :type commitment: str or None
+        :param recurrence: Recurrence in smart syntax, e.g. ``"1 mo"``,
+            ``"1 yr"``, ``"non-recurrent"``.
+        :type recurrence: str or None
+        :param method: Payment method. Defaults to ``"manual"`` when ``None``.
+        :type method: str or None
+        :param protocol: Payment protocol, e.g. ``"pix"``, ``"deposit"``,
+            ``"bill"``.
+        :type protocol: str or None
+        :param currency: Currency code, e.g. ``"BRL"``, ``"USD"``.
+        :type currency: str or None
+        :param domain: Open field for cross-classification.
+        :type domain: str or None
+        :param category: Category for hierarchy classification.
+        :type category: str or None
+        :param subcategory: Subcategory for hierarchy classification.
+        :type subcategory: str or None
+        :param copy_invoice_from: Asset file ID of a previous invoice in this
+            project to seed the new invoice from, forwarded to
+            :meth:`add_invoice`'s *copy_from*. The receipt is always derived
+            from this transfer's own new invoice (via *invoice_id*), so it
+            inherits any copied content transitively -- there is no separate
+            copy option for the receipt.
+        :type copy_invoice_from: str or None
+        :returns: Tuple of ``(transfer_note, invoice_doc, receipt_doc)``.
+        :rtype: tuple[losalamos.notes.NoteTransfer, losalamos.documents.Document, losalamos.documents.Document]
+        """
+        transfer = self.add_transfer(
+            direction="inflow",
+            date=date,
+            account=account,
+            value=value,
+            status="expected",
+            commitment=commitment,
+            recurrence=recurrence,
+            method=method,
+            protocol=protocol,
+            payer=payer,
+            receiver=receiver,
+            currency=currency,
+            domain=domain,
+            category=category,
+            subcategory=subcategory,
+        )
+
+        invoice = self.add_invoice(copy_from=copy_invoice_from)
+        invoice_id = invoice.name.rsplit("_", 1)[-1]
+        receipt = self.add_receipt(invoice_id=invoice_id)
+
+        transfer.metadata["file_invoice"] = f'"[[{invoice.name}]]"'
+        transfer.metadata["file_receipt"] = f'"[[{receipt.name}]]"'
+        transfer.update()
+        transfer.save()
+
+        return transfer, invoice, receipt
+
     def build_invoice(self, file_id):
         """
         Compile a previously created invoice to PDF.
 
         Reads ``\\DocVersion`` from ``definitions/project.tex``, compiles
         via ``latexmk`` with cleanup, and places the result at
-        ``budget/inflows/INVOICE_{project}_{file_id}_{version}.pdf``.
+        ``admin/invoices/INVOICE_{project}_{file_id}_{version}.pdf``, next
+        to the invoice's sidecar note.
         Updates the ``asset_file`` field in the sidecar note.
 
         :param file_id: Asset file ID assigned at creation, e.g. ``"F003"``.
@@ -2522,7 +2706,7 @@ class Project(FileSys):
         :rtype: tuple[pathlib.Path, pathlib.Path]
         """
         return self._build_asset_document(
-            asset_type="INVOICE", file_id=file_id, subfolder="budget/inflows"
+            asset_type="INVOICE", file_id=file_id, subfolder="admin/invoices"
         )
 
     def build_receipt(self, file_id):
@@ -2531,7 +2715,8 @@ class Project(FileSys):
 
         Reads ``\\DocVersion`` from ``definitions/project.tex``, compiles
         via ``latexmk`` with cleanup, and places the result at
-        ``budget/inflows/RECEIPT_{project}_{file_id}_{version}.pdf``.
+        ``admin/invoices/RECEIPT_{project}_{file_id}_{version}.pdf``, next
+        to the receipt's sidecar note.
         Updates the ``asset_file`` field in the sidecar note.
 
         :param file_id: Asset file ID assigned at creation, e.g. ``"F003"``.
@@ -2541,7 +2726,7 @@ class Project(FileSys):
         :rtype: tuple[pathlib.Path, pathlib.Path]
         """
         return self._build_asset_document(
-            asset_type="RECEIPT", file_id=file_id, subfolder="budget/inflows"
+            asset_type="RECEIPT", file_id=file_id, subfolder="admin/invoices"
         )
 
     def add_proposal(self):

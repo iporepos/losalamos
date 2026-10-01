@@ -72,5 +72,7 @@ TRANSFER NOTE
 
 ---
 
-> [!example]+ Related 
-> - {related links}
+## Resources
+
+*Insert other resources*
+

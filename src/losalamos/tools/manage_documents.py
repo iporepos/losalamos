@@ -64,8 +64,8 @@ _SUBFOLDER = {
 
 # Project-relative subfolder where each asset type's PDF and sidecar note live
 _PDF_SUBFOLDER = {
-    "INVOICE": "budget/inflows",
-    "RECEIPT": "budget/inflows",
+    "INVOICE": "admin/invoices",
+    "RECEIPT": "admin/invoices",
     "PROPOSAL": "admin/proposals",
     "REPORT": "outputs",
     "PREPRINT": "outputs",
@@ -287,13 +287,17 @@ def _open_in_explorer(path: Path) -> None:
 
 
 def _action_add(pj) -> None:
-    """Interactive add-document flow."""
+    """
+    Interactive add-document flow.
+
+    Invoice and receipt are deliberately not offered here — they are only
+    ever created as a pair, triggered by an inflow transfer in the budget
+    manager (see :mod:`losalamos.tools.manage_budget`).
+    """
     heading_subsection("Add document")
-    print("  [I] Invoice   [R] Receipt   [P] Proposal   [T] Report   [X] Preprint")
+    print("  [P] Proposal   [T] Report   [X] Preprint")
     print()
-    choice = (
-        input("  Select type  [I/R/P/T/X / ENTER=cancel / q=quit]: ").strip().lower()
-    )
+    choice = input("  Select type  [P/T/X / ENTER=cancel / q=quit]: ").strip().lower()
 
     if choice == "q":
         raise _Quit()
@@ -301,8 +305,6 @@ def _action_add(pj) -> None:
         return
 
     type_map = {
-        "i": "INVOICE",
-        "r": "RECEIPT",
         "p": "PROPOSAL",
         "t": "REPORT",
         "x": "PREPRINT",
@@ -312,27 +314,9 @@ def _action_add(pj) -> None:
         return
 
     asset_type = type_map[choice]
-    kwargs = {}
-
-    # For receipts, offer an optional invoice link
-    if asset_type == "RECEIPT":
-        all_df = pj.get_assets()
-        inv_df = all_df[all_df["asset_type"].str.upper() == "INVOICE"].reset_index(
-            drop=True
-        )
-
-        if not inv_df.empty:
-            print()
-            print("  Link to an existing invoice? (optional)")
-            _print_documents(inv_df)
-            sel = _pick_document(doc_df=inv_df, label="Select invoice")
-            if sel is not None:
-                kwargs["invoice_id"] = sel["asset_id"]
 
     print()
     print(get_message(f"Action  : add {asset_type}"))
-    if kwargs.get("invoice_id"):
-        print(get_message(f"Linked  : {kwargs['invoice_id']}"))
     print()
 
     if not _confirm():
@@ -340,7 +324,7 @@ def _action_add(pj) -> None:
         return
 
     method = getattr(pj, _ADD_METHOD[asset_type])
-    method(**kwargs)
+    method()
     print(get_message(f"{asset_type} created."))
 
 
@@ -553,10 +537,14 @@ def _action_reset(pj, doc_df) -> None:
         return
 
     subfolder = doc_folder.parent
+    # sources.toml ships "" rather than an absent key for each
+    # templates.documents.* entry -- normalize to None (Document.new() also
+    # guards against "", but it should never reach it as "configured" here).
     template_overlay = (
         pj.sources.get("templates", {})
         .get("documents", {})
         .get(asset_type.lower(), None)
+        or None
     )
 
     try:

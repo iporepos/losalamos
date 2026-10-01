@@ -111,13 +111,18 @@ from losalamos.tools.new_project import (
     _list_branches,
     _next_increment,
     run as _add_project_run,
+    _Quit as _PartyQuit,
 )
 from losalamos.tools.manage_documents import (
     _load_projects,
     _read_project_title,
     _print_projects,
-    _home,
+    _home as _documents_home,
     _Quit as _DocQuit,
+)
+from losalamos.tools.manage_budget import (
+    _home as _budget_home,
+    _Quit as _BudgetQuit,
 )
 
 
@@ -323,9 +328,40 @@ def _add_project(vault: dict, branch_path: Path) -> None:
         Path(tmp_path).unlink(missing_ok=True)
 
 
+def _pick_manager(project: dict) -> str | None:
+    """
+    Interactive picker between the document manager and the budget manager.
+
+    :param project: Project info dict with ``name`` and ``title``.
+    :returns: ``"documents"``, ``"budget"``, or ``None`` to go back.
+    :raises _Quit: When the user enters ``q``.
+    """
+    while True:
+        heading_subsection(f"{project['name']}  —  {project['title']}")
+        print("  [D] Manage documents    [G] Manage budget")
+        print("  [P] Back    [Q] Quit")
+        print()
+
+        choice = input("  Select: ").strip().lower()
+
+        if choice == "q":
+            raise _Quit()
+        if choice == "p":
+            return None
+        if choice == "d":
+            return "documents"
+        if choice == "g":
+            return "budget"
+        print("  Enter D, G, P, or Q.\n")
+
+
 def _manage_project(vault: dict, project: dict) -> str:
     """
-    Open the document management home page for a selected project.
+    Open the manager picker (documents or budget) for a selected project.
+
+    Loops back to the picker after either manager's home page returns
+    ``"projects"`` (its own back action), so ``P`` there means "back to
+    this picker", not "back to the project list".
 
     :param vault: Vault dict (used for vault path context).
     :param project: Project info dict with ``path`` and ``name``.
@@ -336,8 +372,20 @@ def _manage_project(vault: dict, project: dict) -> str:
         vault=vault["path"],
     )
     try:
-        return _home(pj=pj, project_info=project)
-    except _DocQuit:
+        while True:
+            manager = _pick_manager(project=project)
+            if manager is None:
+                return "projects"
+
+            if manager == "documents":
+                result = _documents_home(pj=pj, project_info=project)
+            else:
+                result = _budget_home(pj=pj, project_info=project)
+
+            if result == "quit":
+                return "quit"
+            # result == "projects" -> loop back to the manager picker
+    except (_DocQuit, _BudgetQuit, _PartyQuit):
         return "quit"
 
 

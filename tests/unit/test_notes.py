@@ -435,6 +435,50 @@ class TestNoteTransfer(unittest.TestCase):
         self.assertEqual(reloaded.metadata.get("note_type"), "transfer")
         self.assertIn(self.file.stem, reloaded.metadata.get("name", ""))
 
+    def test_strip_definitions_removes_section_and_saves_clean(self):
+        """strip_definitions() must drop ## Definitions and everything after
+        it, so materialized notes never ship the template's field cheat-sheet."""
+        self.note.load_new(file_note=self.file)
+        body = self.note.data.get(self.note.STR_BODY, [])
+        self.assertTrue(
+            any(line.strip() == "## Definitions" for line in body),
+            "template fixture must contain ## Definitions for this test to be meaningful",
+        )
+
+        self.note.strip_definitions()
+        self.note.save()
+
+        content = self.file.read_text(encoding="utf-8")
+        self.assertNotIn("## Definitions", content)
+
+    def test_strip_definitions_noop_without_section(self):
+        """strip_definitions() must do nothing when there is no ## Definitions line."""
+        self.note.load_new(file_note=self.file)
+        self.note.data[self.note.STR_BODY] = ["# Title", "", "Just body text."]
+        self.note.strip_definitions()
+        self.assertEqual(
+            self.note.data[self.note.STR_BODY], ["# Title", "", "Just body text."]
+        )
+
+
+class TestNoteTransferWikiLink(unittest.TestCase):
+    """Wiki-link helper -- ``NoteTransfer.wiki_link``."""
+
+    def test_plain_text_wrapped(self):
+        self.assertEqual(NoteTransfer.wiki_link("Landlord Co"), '"[[Landlord Co]]"')
+
+    def test_already_bracketed_normalized(self):
+        self.assertEqual(NoteTransfer.wiki_link("[[Landlord Co]]"), '"[[Landlord Co]]"')
+
+    def test_already_quoted_and_bracketed_unchanged(self):
+        self.assertEqual(
+            NoteTransfer.wiki_link('"[[Landlord Co]]"'), '"[[Landlord Co]]"'
+        )
+
+    def test_empty_returns_empty(self):
+        self.assertEqual(NoteTransfer.wiki_link(""), "")
+        self.assertEqual(NoteTransfer.wiki_link(None), "")
+
 
 class TestNoteBasicExtraFields(unittest.TestCase):
     """

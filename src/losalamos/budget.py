@@ -185,7 +185,7 @@ class Budget(NoteCollTransfer):
                     note = NoteTransfer(name=name, alias=name)
                     # load_new reads the template without writing any file
                     note.load_new(file_note=Path("_") / f"{name}.md")
-                    Budget._strip_definitions(note=note)
+                    note.strip_definitions()
 
                     note.metadata["name"] = name
                     note.metadata["title"] = merged.get("title")
@@ -193,10 +193,14 @@ class Budget(NoteCollTransfer):
                     note.metadata["direction"] = direction
                     note.metadata["value"] = merged.get("value")
                     note.metadata["currency"] = merged.get("currency")
-                    note.metadata["payer"] = Budget._wiki(merged.get("payer"))
-                    note.metadata["receiver"] = Budget._wiki(merged.get("receiver"))
+                    note.metadata["payer"] = NoteTransfer.wiki_link(merged.get("payer"))
+                    note.metadata["receiver"] = NoteTransfer.wiki_link(
+                        merged.get("receiver")
+                    )
                     note.metadata["commitment"] = merged.get("commitment")
-                    note.metadata["project"] = Budget._wiki(merged.get("project"))
+                    note.metadata["project"] = NoteTransfer.wiki_link(
+                        merged.get("project")
+                    )
                     note.metadata["recurrence"] = recurrence
                     note.metadata["account"] = merged.get("account")
                     note.metadata["status"] = merged.get("status", "expected")
@@ -366,55 +370,6 @@ class Budget(NoteCollTransfer):
     # ------------------------------------------------------------------
     # Static helpers
     # ------------------------------------------------------------------
-
-    @staticmethod
-    def _strip_definitions(note):
-        """
-        Remove the ``## Definitions`` section from a transfer note body.
-
-        Finds the first ``## Definitions`` line in the ``Body`` segment, discards
-        it and everything after it, then trims any trailing blank lines or ``---``
-        separators left at the end.
-
-        :param note: Transfer note instance loaded from the template.
-        :type note: :class:`~losalamos.notes.NoteTransfer`
-        :return: No value is returned.
-        :rtype: None
-        """
-        body = note.data.get(NoteTransfer.STR_BODY, [])
-        for i, line in enumerate(body):
-            if line.strip() == "## Definitions":
-                trimmed = body[:i]
-                while trimmed and trimmed[-1].strip() in ("", "---"):
-                    trimmed.pop()
-                note.data[NoteTransfer.STR_BODY] = trimmed
-                return
-
-    @staticmethod
-    def _wiki(value):
-        """
-        Wrap a plain-text name in quoted Obsidian wiki-link notation.
-
-        The result always has the form ``"[[Name]]"`` — double quotes included
-        as part of the string — so that ``metadata_to_list`` writes the field
-        correctly in YAML frontmatter.  Existing outer quotes and ``[[``
-        brackets are stripped before re-wrapping, so the input can be in any
-        partial form.
-
-        :param value: Raw name string, e.g. ``"Anthropic Inc"`` or ``"[[Anthropic Inc]]"``.
-        :return: Quoted wiki-link string, e.g. ``'"[[Anthropic Inc]]"'``, or empty string.
-        :rtype: str
-        """
-        if not value:
-            return ""
-        v = str(value).strip()
-        # strip outer double quotes if already present
-        if v.startswith('"') and v.endswith('"'):
-            v = v[1:-1]
-        # strip wiki brackets if already present
-        if v.startswith("[[") and v.endswith("]]"):
-            v = v[2:-2]
-        return f'"[[{v}]]"'
 
     @staticmethod
     def _resolve_dates(recurrence, year, duration, day=1, month=1):

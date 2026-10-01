@@ -255,9 +255,10 @@ class Document(DataSet):
         :param template_overlay: Optional user-supplied directory whose files take
             priority over both :attr:`BASE_TEMPLATE` and :attr:`VARIANT_TEMPLATE`.
             Intended for private or client-specific files (logos, confidential covers,
-            etc.). When ``None`` (default), only the class-level templates are used.
-            When provided, must be a valid existing directory; otherwise
-            :exc:`NotADirectoryError` is raised before any files are written.
+            etc.). When ``None`` or an empty string (default), only the class-level
+            templates are used -- an empty string is never treated as "current
+            directory". When provided non-empty, must be a valid existing directory;
+            otherwise :exc:`NotADirectoryError` is raised before any files are written.
         :type template_overlay: str, pathlib.Path, or None
         :param files_overlay: Optional file-level overlay applied after all template
             layers. Can be a ``dict`` mapping destination-relative paths to source file
@@ -311,6 +312,14 @@ class Document(DataSet):
 
         if name is None:
             name = self.name
+
+        # An empty string is never a valid override directory -- treat it the
+        # same as None rather than letting Path("").absolute() silently
+        # resolve to the current working directory and merge its entire tree
+        # into the document (e.g. a blank "" left in a sources.toml template).
+        # --------------------------------------------------
+        if not template_overlay:
+            template_overlay = None
 
         # Resolve files_overlay from config file if a path is given
         # --------------------------------------------------
