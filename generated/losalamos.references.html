@@ -677,6 +677,13 @@ and saves it to the specified output.</p>
 <dt class="sig sig-object py" id="losalamos.references.Reference.get_clean_data">
 <span class="sig-name descname"><span class="pre">get_clean_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/references.html#Reference.get_clean_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.references.Reference.get_clean_data" title="Link to this definition">#</a></dt>
 <dd><p>Returns a copy of the internal data dictionary excluding all keys with <code class="docutils literal notranslate"><span class="pre">None</span></code> values.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">abstract</span></code> field, when present, has unescaped <code class="docutils literal notranslate"><span class="pre">%</span></code> characters
+escaped for safe LaTeX/BibTeX output. This keeps <code class="docutils literal notranslate"><span class="pre">self.data</span></code> itself
+free of LaTeX escaping so it can be reused as-is in non-LaTeX contexts,
+such as Obsidian note frontmatter.</p>
+</div>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>A filtered dictionary containing only non-null reference data.</p>
@@ -781,22 +788,10 @@ of <code class="docutils literal notranslate"><span class="pre">library_folder</
 <p>This method reconstructs the <code class="docutils literal notranslate"><span class="pre">data</span></code> attribute by merging <code class="docutils literal notranslate"><span class="pre">CORE_FIELDS</span></code> and <code class="docutils literal notranslate"><span class="pre">SPECIFIC_FIELDS</span></code>.
 It ensures all expected keys exist (defaulting to <code class="docutils literal notranslate"><span class="pre">None</span></code>), reorders specific metadata to the
 end of the dictionary based on <code class="docutils literal notranslate"><span class="pre">TAIL_ENTRIES</span></code>, and applies specific formatting logic
-to the abstract and author fields via <code class="docutils literal notranslate"><span class="pre">harmonize_abstract</span></code> and <code class="docutils literal notranslate"><span class="pre">standardize_author</span></code>.</p>
+to the author field via <code class="docutils literal notranslate"><span class="pre">standardize_author</span></code>. LaTeX-specific escaping (e.g., of the
+<code class="docutils literal notranslate"><span class="pre">abstract</span></code> field) is deliberately deferred to bib-serialization time (see
+<code class="docutils literal notranslate"><span class="pre">get_clean_data</span></code>), so <code class="docutils literal notranslate"><span class="pre">self.data</span></code> stays usable in non-LaTeX contexts.</p>
 </div>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>No value is returned.</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>None</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="losalamos.references.Reference.harmonize_abstract">
-<span class="sig-name descname"><span class="pre">harmonize_abstract</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/losalamos/references.html#Reference.harmonize_abstract"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#losalamos.references.Reference.harmonize_abstract" title="Link to this definition">#</a></dt>
-<dd><p>Ensures the abstract field is properly formatted by escaping LaTeX-specific percent symbols.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>No value is returned.</p>
@@ -1189,7 +1184,6 @@ it defaults to the <code class="docutils literal notranslate"><span class="pre">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.references.Reference.define_file_name"><code class="docutils literal notranslate"><span class="pre">Reference.define_file_name()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.references.Reference.get_str_bib"><code class="docutils literal notranslate"><span class="pre">Reference.get_str_bib()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.references.Reference.standardize"><code class="docutils literal notranslate"><span class="pre">Reference.standardize()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.references.Reference.harmonize_abstract"><code class="docutils literal notranslate"><span class="pre">Reference.harmonize_abstract()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.references.Reference.export_template"><code class="docutils literal notranslate"><span class="pre">Reference.export_template()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.references.Reference.parse_bib"><code class="docutils literal notranslate"><span class="pre">Reference.parse_bib()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#losalamos.references.Reference.cite_line"><code class="docutils literal notranslate"><span class="pre">Reference.cite_line()</span></code></a></li>

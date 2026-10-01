@@ -774,6 +774,13 @@
 <span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Returns a copy of the internal data dictionary excluding all keys with ``None`` values.</span>
 
+<span class="sd">        .. note::</span>
+
+<span class="sd">             The ``abstract`` field, when present, has unescaped ``%`` characters</span>
+<span class="sd">             escaped for safe LaTeX/BibTeX output. This keeps ``self.data`` itself</span>
+<span class="sd">             free of LaTeX escaping so it can be reused as-is in non-LaTeX contexts,</span>
+<span class="sd">             such as Obsidian note frontmatter.</span>
+
 <span class="sd">        :return: A filtered dictionary containing only non-null reference data.</span>
 <span class="sd">        :rtype: dict</span>
 <span class="sd">        """</span>
@@ -781,6 +788,12 @@
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">dc</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">dc</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"abstract"</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="kn">from</span><span class="w"> </span><span class="nn">losalamos.documents</span><span class="w"> </span><span class="kn">import</span> <span class="n">escape_percent_latex</span>
+
+            <span class="n">dc</span><span class="p">[</span><span class="s2">"abstract"</span><span class="p">]</span> <span class="o">=</span> <span class="n">escape_percent_latex</span><span class="p">(</span><span class="n">dc</span><span class="p">[</span><span class="s2">"abstract"</span><span class="p">])</span>
+
         <span class="k">return</span> <span class="n">dc</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span></div>
 
 
@@ -977,7 +990,9 @@
 <span class="sd">             This method reconstructs the ``data`` attribute by merging ``CORE_FIELDS`` and ``SPECIFIC_FIELDS``.</span>
 <span class="sd">             It ensures all expected keys exist (defaulting to ``None``), reorders specific metadata to the</span>
 <span class="sd">             end of the dictionary based on ``TAIL_ENTRIES``, and applies specific formatting logic</span>
-<span class="sd">             to the abstract and author fields via ``harmonize_abstract`` and ``standardize_author``.</span>
+<span class="sd">             to the author field via ``standardize_author``. LaTeX-specific escaping (e.g., of the</span>
+<span class="sd">             ``abstract`` field) is deliberately deferred to bib-serialization time (see</span>
+<span class="sd">             ``get_clean_data``), so ``self.data`` stays usable in non-LaTeX contexts.</span>
 
 <span class="sd">        :return: No value is returned.</span>
 <span class="sd">        :rtype: None</span>
@@ -1006,28 +1021,10 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">new_data</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">harmonize_abstract</span><span class="p">()</span>
-
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">"author"</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">"author"</span><span class="p">]</span> <span class="o">=</span> <span class="n">Reference</span><span class="o">.</span><span class="n">standardize_author</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="kc">None</span></div>
-
-
-<div class="viewcode-block" id="Reference.harmonize_abstract">
-<a class="viewcode-back" href="../../generated/losalamos.references.html#losalamos.references.Reference.harmonize_abstract">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">harmonize_abstract</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">"""</span>
-<span class="sd">        Ensures the abstract field is properly formatted by escaping LaTeX-specific percent symbols.</span>
-
-<span class="sd">        :return: No value is returned.</span>
-<span class="sd">        :rtype: None</span>
-<span class="sd">        """</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">"abstract"</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="kn">from</span><span class="w"> </span><span class="nn">losalamos.documents</span><span class="w"> </span><span class="kn">import</span> <span class="n">escape_percent_latex</span>
-
-            <span class="n">text</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">"abstract"</span><span class="p">][:]</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">"abstract"</span><span class="p">]</span> <span class="o">=</span> <span class="n">escape_percent_latex</span><span class="p">(</span><span class="n">text</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="Reference.export_template">
