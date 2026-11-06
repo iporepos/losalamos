@@ -96,6 +96,11 @@ def escape_percent_latex(text: str) -> str:
     return re.sub(r"(?<!\\)%", r"\%", text)
 
 
+def unescape_percent_latex(text: str) -> str:
+    # Inverse of escape_percent_latex: \% -> %
+    return text.replace(r"\%", "%")
+
+
 # FUNCTIONS -- Module-level
 # =======================================================================
 

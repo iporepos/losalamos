@@ -671,6 +671,13 @@ class Reference(DataSet):
             {key: value.strip() for key, value in item.items()} for item in entries
         ]
 
+        # keep abstract raw; get_clean_data() re-escapes on bib output
+        from losalamos.documents import unescape_percent_latex
+
+        for item in stripped_data:
+            if "abstract" in item:
+                item["abstract"] = unescape_percent_latex(item["abstract"])
+
         return stripped_data
 
     @staticmethod
