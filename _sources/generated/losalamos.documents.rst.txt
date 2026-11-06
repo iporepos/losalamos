@@ -9,6 +9,7 @@
    .. autosummary::
    
       escape_percent_latex
+      unescape_percent_latex
    
    .. rubric:: Classes
 
